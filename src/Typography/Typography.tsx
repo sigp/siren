@@ -36,12 +36,10 @@ export interface TypographyProps {
   children: ReactNode | ReactNode[];
   as?: TagsSupported;
   type: TypographyType;
-  title?: string;
   isBold?: boolean;
+  fontWeight?: 'font-bold' | 'font-normal' | 'font-light';
   family?: TypographyFamily;
   dataTestId?: string;
-  textCenter?: boolean;
-  upperCase?: boolean;
 }
 
 const Typography: FC<TypographyProps> = ({
@@ -50,6 +48,7 @@ const Typography: FC<TypographyProps> = ({
    isBold,
    color = 'text-dark900',
    className,
+    fontWeight = 'font-normal',
    children,
     family = 'font-openSauce',
     ...props
@@ -59,7 +58,7 @@ const Typography: FC<TypographyProps> = ({
       as ? ELEMENT[as] : ELEMENT.p,
       {
         ...props,
-        className: `${className || ''} ${type} m-0 ${color} ${family} ${isBold ? 'font-semibold' : 'font-normal'}
+        className: `${className || ''} ${type} m-0 ${color} ${family} ${isBold ? 'font-bold' : fontWeight}
 `,
       },
       children
