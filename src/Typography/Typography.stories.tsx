@@ -66,5 +66,12 @@ PrimaryColorText.args = {
 export const LightColorText = Template.bind({});
 LightColorText.args = {
     children: 'Light Text Color',
-    color: 'text-dark300'
+    color: 'text-dark300',
+    fontWeight: 'font-light'
+};
+
+export const BoldText = Template.bind({});
+BoldText.args = {
+    children: 'Bold Text',
+    isBold: true,
 };

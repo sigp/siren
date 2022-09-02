@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "OpenSauce";
+    src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Light.ttf");
+    font-weight: 300;
+}
 
 @font-face {
     font-family: "OpenSauce";
     src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Regular.ttf");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "OpenSauce";
+    src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Bold.ttf");
+    font-weight: 700;
 }
 
 @font-face {
