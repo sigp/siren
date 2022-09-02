@@ -29,6 +29,7 @@ module.exports = {
         archivo: ["Archivo", "sans-serif"],
       },
       fontSize: {
+        tiny: '8px',
         title: '5.610rem',
         h1: '4.209rem',
         h2: '3.157rem',
@@ -38,6 +39,9 @@ module.exports = {
         body: '1rem',
         caption1: '.75rem',
         caption2: '.563rem'
+      },
+      maxWidth: {
+        tiny: '157px'
       }
     },
   },
