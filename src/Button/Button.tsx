@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from "react";
-import {TypographyFamily} from "../Typography/Typography";
+import {TypographyFamily, TypographyType} from "../Typography/Typography";
 
 export enum ButtonFace {
   PRIMARY = "PRIMARY",
@@ -11,13 +11,14 @@ export interface ButtonProps {
   type?: ButtonFace
   isDisabled?: boolean
   font?: TypographyFamily
+  fontType?: TypographyType
   children: ReactNode | ReactNode[]
   onClick?: () => void,
   href?: string,
   target?: '_self' | '_blank'
 }
 
-const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, target = '_self', font = 'font-openSauce', isDisabled}) => {
+const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled}) => {
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.TERTIARY:
@@ -30,7 +31,7 @@ const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, h
   }
 
   const renderButton = () => (
-      <button onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} box-border px-4 py-2 w-fit cursor-pointer flex space-x-2`}>
+      <button onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} ${fontType} box-border px-4 py-2 w-fit cursor-pointer flex space-x-2`}>
         {children}
       </button>
   )
