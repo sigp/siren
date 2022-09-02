@@ -31,3 +31,7 @@
     src: url("../assets/Fonts/Archivo/Archivo-Bold.ttf");
     font-weight: 700;
 }
+
+.flip {
+    transform: rotateY(180deg);
+}
