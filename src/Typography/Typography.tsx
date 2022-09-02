@@ -28,14 +28,14 @@ export type TypographyFamily = 'font-openSauce' | 'font-roboto' | 'font-archivo'
 
 export type TypographyColor = 'text-dark900' | 'text-dark500' | 'text-dark300' | 'text-primary'
 
-export type TypographyType = 'text-caption2' | 'text-caption1' | 'text-body' | 'text-subtitle2' | 'text-subtitle1' | 'text-h3' | 'text-h2' | 'text-h1' | 'text-title';
+export type TypographyType = 'text-caption2' | 'text-caption1' | 'text-body' | 'text-subtitle2' | 'text-subtitle1' | 'text-h3' | 'text-h2' | 'text-h1' | 'text-title' | 'text-tiny';
 
 export interface TypographyProps {
   className?: string;
   color?: TypographyColor;
   children: ReactNode | ReactNode[];
   as?: TagsSupported;
-  type: TypographyType;
+  type?: TypographyType;
   isBold?: boolean;
   fontWeight?: 'font-bold' | 'font-normal' | 'font-light';
   family?: TypographyFamily;
