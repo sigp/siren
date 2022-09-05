@@ -4,7 +4,8 @@ import {TypographyFamily, TypographyType} from "../Typography/Typography";
 export enum ButtonFace {
   PRIMARY = "PRIMARY",
   SECONDARY = "SECONDARY",
-  TERTIARY = "TERTIARY"
+  TERTIARY = "TERTIARY",
+  ICON = "ICON",
 }
 
 export interface ButtonProps {
@@ -21,6 +22,8 @@ export interface ButtonProps {
 const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled}) => {
   const formatFaceStyle = () => {
     switch (type) {
+      case ButtonFace.ICON:
+        return 'h-full w-11 dark:bg-dark900 text-dark300 dark:text-white';
       case ButtonFace.TERTIARY:
         return 'border border-primary text-primary';
       case ButtonFace.SECONDARY:
