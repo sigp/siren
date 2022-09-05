@@ -42,4 +42,4 @@ jobs:
           # Grab this from the Chromatic manage page
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
       - name: print
-        run: echo ${{visual-and-composition.publish.outputs.url}}
+        run: echo ${{steps.publish.outputs.url}}
