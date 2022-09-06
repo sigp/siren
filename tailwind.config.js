@@ -48,5 +48,9 @@ module.exports = {
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-scoped-groups")({
+      groups: ["sidebar"],
+    })
+  ],
 }
