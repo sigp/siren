@@ -8,7 +8,7 @@ export interface StatusProps {
 
 const Status:FC<StatusProps> = ({status}) => {
   return (
-      <div className={`h-5 w-5 ${status} rounded-full border-2 border-white drop-shadow-lg`} />
+      <div className={`h-5 w-5 ${status} rounded-full border-2 dark:border-black border-white drop-shadow-lg`} />
   )
 }
 

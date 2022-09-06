@@ -1,9 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: ["./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
+        darkFull: '#0F0F0F',
         dark950: '#141414',
         dark900: '#212121',
         dark800: '#292929',
@@ -17,6 +19,7 @@ module.exports = {
         dark50: '#F1F1F1',
         dark25: '#F8F8F8',
         primary: '#5E41D5',
+        darkPrimary: '#1E1E1E',
         secondary: '#A841D5',
         tertiary: '#D541B8',
         success: '#2ED47A',
@@ -41,7 +44,7 @@ module.exports = {
         caption2: '.563rem'
       },
       maxWidth: {
-        tiny: '157px'
+        tiny: '165px'
       }
     },
   },

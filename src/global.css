@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -34,4 +36,12 @@
 
 .flip {
     transform: rotateY(180deg);
+}
+
+.bi-siren {
+    background-image : url("../assets/images/siren.svg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    height: 44px;
+    width: 44px;
 }
