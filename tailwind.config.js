@@ -9,6 +9,7 @@ module.exports = {
         dark950: '#141414',
         dark900: '#212121',
         dark800: '#292929',
+        dark750: '#252525',
         dark700: '#303030',
         dark600: '#404040',
         dark500: '#6E6E6E',
@@ -18,6 +19,7 @@ module.exports = {
         dark100: '#E1E1E1',
         dark50: '#F1F1F1',
         dark25: '#F8F8F8',
+        dark10: '#F0F0F0',
         primary: '#5E41D5',
         darkPrimary: '#1E1E1E',
         secondary: '#A841D5',
@@ -45,8 +47,21 @@ module.exports = {
       },
       maxWidth: {
         tiny: '165px'
+      },
+      width: {
+        '14.5': '60px',
+        '34': '136px',
+        '42': '168px'
+      },
+      translate: {
+        '14.5': '60px',
+        '42': '168px'
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require("tailwindcss-scoped-groups")({
+      groups: ["sidebar"],
+    })
+  ],
 }
