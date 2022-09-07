@@ -22,6 +22,8 @@ module.exports = {
         dark10: '#F0F0F0',
         primary: '#5E41D5',
         darkPrimary: '#1E1E1E',
+        borderLight: '#EFEFEF',
+        borderDark: '#303030',
         secondary: '#A841D5',
         tertiary: '#D541B8',
         success: '#2ED47A',
