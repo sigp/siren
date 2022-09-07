@@ -1,5 +1,8 @@
 import '../src/global.css';
 import { themes } from '@storybook/theming'
+import {
+  RecoilRoot
+} from 'recoil';
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
@@ -21,3 +24,11 @@ export const parameters = {
 export const globalTypes = {
   darkMode: true,
 };
+
+const withRecoil = (StoryFn) => (
+    <RecoilRoot>
+      {StoryFn()}
+    </RecoilRoot>
+);
+
+export const decorators = [withRecoil];

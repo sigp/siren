@@ -6,31 +6,31 @@
 
 @font-face {
     font-family: "OpenSauce";
-    src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Light.ttf");
+    src: url("assets/Fonts/OpenSauce/OpenSauceOne-Light.ttf");
     font-weight: 300;
 }
 
 @font-face {
     font-family: "OpenSauce";
-    src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Regular.ttf");
+    src: url("assets/Fonts/OpenSauce/OpenSauceOne-Regular.ttf");
     font-weight: 400;
 }
 
 @font-face {
     font-family: "OpenSauce";
-    src: url("../assets/Fonts/OpenSauce/OpenSauceOne-Bold.ttf");
+    src: url("assets/Fonts/OpenSauce/OpenSauceOne-Bold.ttf");
     font-weight: 700;
 }
 
 @font-face {
     font-family: "Roboto";
-    src: url("../assets/Fonts/Roboto/Roboto-Regular.ttf");
+    src: url("assets/Fonts/Roboto/Roboto-Regular.ttf");
     font-weight: 300;
 }
 
 @font-face {
     font-family: "Archivo";
-    src: url("../assets/Fonts/Archivo/Archivo-Bold.ttf");
+    src: url("assets/Fonts/Archivo/Archivo-Bold.ttf");
     font-weight: 700;
 }
 
@@ -39,7 +39,7 @@
 }
 
 .bi-siren {
-    background-image : url("../assets/images/siren.svg");
+    background-image : url("assets/images/siren.svg");
     background-repeat: no-repeat;
     background-position: center center;
     height: 44px;

@@ -1,7 +1,7 @@
 import {FC} from "react";
 import Typography from "../Typography/Typography";
-import network from '../../../assets/images/network.svg'
-import darkNetwork from '../../../assets/images/darkNetwork.svg'
+import network from '../../assets/images/network.svg'
+import darkNetwork from '../../assets/images/darkNetwork.svg'
 import Status, {StatusType} from "../Status/Status";
 
 export interface DiagnosticCardProps {
