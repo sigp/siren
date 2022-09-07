@@ -17,9 +17,7 @@ const SideBar = () => {
 
     const changeView = (key: ContentView) => setView(key);
 
-    const toggleUiMode = () => {
-        setMode(mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT)
-    }
+    const toggleUiMode = () => setMode(mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT)
   return (
       <div className="relative group-sidebar w-14.5">
           <div className="flex flex-col justify-between z-10 relative w-full h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700">
@@ -29,14 +27,14 @@ const SideBar = () => {
                   </div>
                   <ul className="space-y-4">
                       {PRIMARY_VIEWS.map(({logoComponent, key}) => (
-                          <SideItem onClick={() => changeView(key)} isActive={view === key}>{createElement(logoComponent)}</SideItem>
+                          <SideItem key={key} onClick={() => changeView(key)} isActive={view === key}>{createElement(logoComponent)}</SideItem>
                       ))}
                   </ul>
               </div>
               <div className="w-full pb-4">
                   <ul className="space-y-4">
                       {SECONDARY_VIEWS.map(({logoComponent, key}) => (
-                          <SideItem onClick={() => changeView(key)} isActive={view === key}>{createElement(logoComponent)}</SideItem>
+                          <SideItem key={key} onClick={() => changeView(key)} isActive={view === key}>{createElement(logoComponent)}</SideItem>
                       ))}
                       <div className="w-full h-6 flex items-center justify-center">
                           <div onClick={toggleUiMode} className="w-4 h-4 cursor-pointer text-dark400">
@@ -46,21 +44,21 @@ const SideBar = () => {
                   </ul>
               </div>
           </div>
-          <div className="flex flex-col justify-between h-screen w-42 absolute top-0 left-0 bg-white -translate-x-44 group-sidebar-hover:translate-x-14.5 border dark:bg-dark750 border-dark10 dark:border-dark700  transition-all">
+          <div className="flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white -translate-x-44 group-sidebar-hover:translate-x-14.5 border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform">
               <div className="w-full">
                   <div className="w-full h-16 flex justify-center pt-1">
                       <LightHouseFullLogo className="w-34 text-black dark:text-white" />
                   </div>
                   <ul className="space-y-4 pl-4">
                       {PRIMARY_VIEWS.map(({title, key}) => (
-                          <SideBarText onClick={() => changeView(key)} isActive={view === key} text={title} />
+                          <SideBarText key={key} onClick={() => changeView(key)} isActive={view === key} text={title} />
                       ))}
                   </ul>
               </div>
               <div className="w-full py-4">
                   <ul className="space-y-4 pl-4">
                       {SECONDARY_VIEWS.map(({title, key}) => (
-                          <SideBarText onClick={() => changeView(key)} isActive={view === key} text={title} />
+                          <SideBarText key={key} onClick={() => changeView(key)} isActive={view === key} text={title} />
                       ))}
                       <SideBarText text="Theme" />
                   </ul>
