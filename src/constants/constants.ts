@@ -1,41 +1,43 @@
 import {FunctionComponent, SVGProps} from "react";
 
-import {ReactComponent as DashLogo} from "../../assets/images/dashboard.svg";
-import {ReactComponent as ValidatorLogo} from "../../assets/images/validators.svg";
-import {ReactComponent as LogsLogo} from "../../assets/images/logs.svg";
-import {ReactComponent as GrafanaLogo} from "../../assets/images/grafana.svg";
-import {ReactComponent as SettingsLogo} from "../../assets/images/settings.svg";
 import {ReactComponent as DashLogo} from "../assets/images/dashboard.svg";
 import {ReactComponent as ValidatorLogo} from "../assets/images/validators.svg";
 import {ReactComponent as LogsLogo} from "../assets/images/logs.svg";
 import {ReactComponent as GrafanaLogo} from "../assets/images/grafana.svg";
 import {ReactComponent as SettingsLogo} from "../assets/images/settings.svg";
+import {ContentView} from "./enums";
 
 export type ViewType = {
     title: string,
-    logoComponent: FunctionComponent<SVGProps<SVGSVGElement>>
+    logoComponent: FunctionComponent<SVGProps<SVGSVGElement>>,
+    key: ContentView
 }
 
 export const VIEW = {
     DASH: {
         title: 'Dashboard',
-        logoComponent: DashLogo
+        logoComponent: DashLogo,
+        key: ContentView.DASHBOARD
     },
     VALIDATORS: {
         title: 'Validator Management',
-        logoComponent: ValidatorLogo
+        logoComponent: ValidatorLogo,
+        key: ContentView.VALIDATORS,
     },
     LOGS: {
         title: 'Logs',
-        logoComponent: LogsLogo
+        logoComponent: LogsLogo,
+        key: ContentView.LOGS,
     },
     GRAFANA: {
         title: 'Grafana',
-        logoComponent: GrafanaLogo
+        logoComponent: GrafanaLogo,
+        key: ContentView.GRAFANA,
     },
     SETTINGS: {
         title: 'Settings',
-        logoComponent: SettingsLogo
+        logoComponent: SettingsLogo,
+        key: ContentView.SETTINGS
     }
 }
 
