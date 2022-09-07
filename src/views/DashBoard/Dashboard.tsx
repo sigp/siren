@@ -9,6 +9,7 @@ import Logs from "./Content/Logs";
 import Settings from "./Content/Settings";
 import Validators from "./Content/Validators";
 import Grafana from "./Content/Grafana";
+import TopBar from "../../components/TopBar/TopBar";
 
 const Dashboard = () => {
   const content = useRecoilValue(dashView)
@@ -30,6 +31,7 @@ const Dashboard = () => {
       <>
           <SideBar/>
           <div className="flex-1 flex flex-col bg-white dark:bg-dark750 items-center justify-center">
+              <TopBar/>
               <div className="flex-1">
                   {renderContent()}
               </div>
