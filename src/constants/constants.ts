@@ -5,6 +5,11 @@ import {ReactComponent as ValidatorLogo} from "../../assets/images/validators.sv
 import {ReactComponent as LogsLogo} from "../../assets/images/logs.svg";
 import {ReactComponent as GrafanaLogo} from "../../assets/images/grafana.svg";
 import {ReactComponent as SettingsLogo} from "../../assets/images/settings.svg";
+import {ReactComponent as DashLogo} from "../assets/images/dashboard.svg";
+import {ReactComponent as ValidatorLogo} from "../assets/images/validators.svg";
+import {ReactComponent as LogsLogo} from "../assets/images/logs.svg";
+import {ReactComponent as GrafanaLogo} from "../assets/images/grafana.svg";
+import {ReactComponent as SettingsLogo} from "../assets/images/settings.svg";
 
 export type ViewType = {
     title: string,
