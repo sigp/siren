@@ -1,18 +1,22 @@
-import {FC, useMemo} from "react";
+import {FC} from "react";
+
+export type ProgressColor = 'primary' | 'secondary';
+export type ProgressDirection = 'clock' | 'counter';
 
 export interface ProgressCircleProps {
     percent?: number
-    color?: 'primary' | 'secondary',
-    direction?: 'clock' | 'counter'
+    color?: ProgressColor,
+    direction?: ProgressDirection
+    id: string
 }
 
-const ProgressCircle:FC<ProgressCircleProps> = ({percent = 0, color = 'primary', direction = 'clock'}) => {
+const ProgressCircle:FC<ProgressCircleProps> = ({percent = 0, id, color = 'primary', direction = 'clock'}) => {
     const radius = 20;
     const circumference = radius * 2 * Math.PI;
     const formattedPercentage = percent < 0 ? 0 : percent > 100 ? 100 : percent
     const offset = circumference - formattedPercentage / 100 * circumference;
     const strokeWidth = 10;
-    
+
 
   return (
       <div
@@ -20,7 +24,7 @@ const ProgressCircle:FC<ProgressCircleProps> = ({percent = 0, color = 'primary',
       >
           <svg className="w-10 h-10">
               <circle
-                  className="text-gray-300"
+                  className="text-gray-300 dark:text-black"
                   strokeWidth={strokeWidth}
                   stroke="currentColor"
                   fill="transparent"
@@ -28,7 +32,7 @@ const ProgressCircle:FC<ProgressCircleProps> = ({percent = 0, color = 'primary',
                   cx="20"
                   cy="20"
               />
-              <linearGradient id="gradient">
+              <linearGradient id={id}>
                   {color === 'primary' ? (
                       <>
                           <stop offset="0%"  stopColor="#5E41D5"/>
@@ -47,7 +51,7 @@ const ProgressCircle:FC<ProgressCircleProps> = ({percent = 0, color = 'primary',
               strokeLinecap="butt"
               strokeDasharray={circumference}
               strokeDashoffset={offset}
-              stroke="url(#gradient)"
+              stroke={`url(#${id})`}
               fill="transparent"
               r={radius}
               cx="20"

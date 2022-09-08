@@ -1,0 +1,26 @@
+import {FC} from "react";
+import Typography from "../Typography/Typography";
+import {ReactComponent as WalletDefault} from "../../assets/images/wallet.svg";
+
+export interface WalletProps {
+    borderStyle?: string
+}
+
+const Wallet:FC<WalletProps> = ({borderStyle = 'border'}) => {
+  return (
+      <div className={`${borderStyle} flex items-center justify-between w-52 h-14 py-2 px-4 cursor-pointer max-h-full border-borderLight dark:border-borderDark`}>
+          <WalletDefault className="h-10 w-10 rounded-full"/>
+          <div>
+              <Typography isBold type="text-tiny" family="font-roboto">MAINNET</Typography>
+              <Typography isBold type="text-caption1" color="text-dark500" family="font-roboto">0xAddress</Typography>
+              <div className="flex space-x-2">
+                  <Typography isBold type="text-tiny" color="text-primary" family="font-roboto">Connected</Typography>
+                  <Typography isBold type="text-tiny" color="text-dark300" family="font-roboto">Disconnect</Typography>
+              </div>
+          </div>
+          <i className="bi bi-chevron-down text-caption1 dark:text-dark300" />
+      </div>
+  )
+}
+
+export default Wallet;

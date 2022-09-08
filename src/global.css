@@ -29,6 +29,12 @@
 }
 
 @font-face {
+    font-family: "Roboto";
+    src: url("assets/Fonts/Roboto/Roboto-Medium.ttf");
+    font-weight: 600;
+}
+
+@font-face {
     font-family: "Archivo";
     src: url("assets/Fonts/Archivo/Archivo-Bold.ttf");
     font-weight: 700;
