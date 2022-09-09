@@ -23,27 +23,27 @@ const AccountEarning = () => {
                   </div>
                   <div className="w-full mt-8 flex items-center">
                       <LightHouseLogo className="text-white w-16 h-16"/>
-                      <div className="flex-1 ml-16 flex justify-between">
+                      <div className="flex-1 ml-16 flex items-center justify-between">
                           <div>
                               <Typography color="text-white">Choose Currency</Typography>
                               <div className="flex justify-between items-center">
-                                  <Typography color="text-white">USD</Typography>
+                                  <Typography color="text-white" darkMode="dark:text-white">USD</Typography>
                                   <i className="bi bi-chevron-down text-white" />
                               </div>
                           </div>
                           <div>
                               <Typography type="text-tiny" color="text-dark300" className="uppercase" isBold>Current Rate</Typography>
-                              <Typography color="text-white">$4,000 USD/ETH</Typography>
+                              <Typography color="text-white" darkMode="dark:text-white">$4,000 USD/ETH</Typography>
                           </div>
                           <div>
                               <Typography type="text-tiny" color="text-dark300" className="uppercase" isBold>Total Balance</Typography>
-                              <Typography color="text-white">$512,000 USD</Typography>
+                              <Typography color="text-white" darkMode="dark:text-white">$512,000 USD</Typography>
                           </div>
                       </div>
                   </div>
                   <hr className="w-full h-px bg-white mt-4"/>
               </div>
-              <div className="bg-gradient-to-t via-transWhite from-white dark:from-dark750">
+              <div className="bg-gradient-to-t via-transWhite from-white dark:from-darkPrimary">
                   <div className="px-4 flex justify-between">
                       <Typography color="text-white">Earnings</Typography>
                       <div className="flex ml-8 space-x-1">
