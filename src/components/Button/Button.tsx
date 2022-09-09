@@ -6,6 +6,7 @@ export enum ButtonFace {
   SECONDARY = "SECONDARY",
   TERTIARY = "TERTIARY",
   ICON = "ICON",
+  LIGHT = "LIGHT"
 }
 
 export interface ButtonProps {
@@ -23,6 +24,8 @@ export interface ButtonProps {
 const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, className, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled}) => {
   const formatFaceStyle = () => {
     switch (type) {
+      case ButtonFace.LIGHT:
+        return 'bg-primary100 text-primary'
       case ButtonFace.ICON:
         return 'h-full w-11 dark:bg-dark900 text-dark300 dark:text-white';
       case ButtonFace.TERTIARY:

@@ -19,8 +19,8 @@ const SideBar = () => {
 
     const toggleUiMode = () => setMode(mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT)
   return (
-      <div className="relative group-sidebar w-14.5">
-          <div className="flex flex-col justify-between z-10 relative w-full h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700">
+      <div className="relative group-sidebar w-14.5 flex-shrink-0">
+          <div className="flex flex-col justify-between z-50 relative w-full h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700">
               <div className="w-full">
                   <div className="w-full h-16 flex justify-center pt-3.5">
                       <LightHouseLogo className="w-6 h-6 text-black dark:text-white" />
@@ -44,7 +44,7 @@ const SideBar = () => {
                   </ul>
               </div>
           </div>
-          <div className="flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white -translate-x-44 group-sidebar-hover:translate-x-14.5 border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform">
+          <div className="z-40 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white -translate-x-44 group-sidebar-hover:translate-x-14 border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform">
               <div className="w-full">
                   <div className="w-full h-16 flex justify-center pt-1">
                       <LightHouseFullLogo className="w-34 text-black dark:text-white" />
