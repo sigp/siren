@@ -4,11 +4,12 @@ export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error';
 
 export interface StatusProps {
   status: StatusType
+  size?: string
 }
 
-const Status:FC<StatusProps> = ({status}) => {
+const Status:FC<StatusProps> = ({status, size= 'h-5 w-5'}) => {
   return (
-      <div className={`h-5 w-5 ${status} rounded-full border-2 dark:border-black border-white drop-shadow-lg`} />
+      <div className={`${size} ${status} rounded-full border-2 dark:border-black border-white drop-shadow-lg`} />
   )
 }
 
