@@ -4,7 +4,7 @@ import AccountEarning from "../../../components/AccountEarnings/AccountEarning";
 const MainContent = () => {
   return (
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center">
-          <div className="col-span-5 h-full">
+          <div className="col-span-5 flex flex-col h-full">
               <div className="p-4 flex items-center justify-between">
                   <Typography type="text-h3" darkMode="dark:text-white" fontWeight="font-light">Hello Paul,</Typography>
                   <div className="flex space-x-16">
@@ -17,6 +17,7 @@ const MainContent = () => {
                   </div>
               </div>
               <AccountEarning/>
+              <div className="flex-1 min-h-60 w-full"/>
           </div>
           <div className="col-span-7 h-full">
 
