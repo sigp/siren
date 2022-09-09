@@ -20,6 +20,8 @@ module.exports = {
         dark50: '#F1F1F1',
         dark25: '#F8F8F8',
         dark10: '#F0F0F0',
+        transWhite: '#FFFFFF98',
+        primary100: '#CCAFFF',
         primary200: '#7C5FEB',
         primary: '#5E41D5',
         primaryBright: '#5200FF',
@@ -45,9 +47,13 @@ module.exports = {
         h3: '2.369rem',
         subtitle1: '1.777rem',
         subtitle2: '1.333rem',
+        subtitle3: '1.125rem',
         body: '1rem',
         caption1: '.75rem',
         caption2: '.563rem'
+      },
+      minHeight: {
+        '60': '15rem'
       },
       maxWidth: {
         tiny: '165px'
