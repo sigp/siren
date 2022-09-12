@@ -21,6 +21,7 @@ module.exports = {
         dark25: '#F8F8F8',
         dark10: '#F0F0F0',
         transWhite: '#FFFFFF98',
+        primary50: '#FFF5FF',
         primary100: '#CCAFFF',
         primary200: '#7C5FEB',
         primary: '#5E41D5',
@@ -55,8 +56,12 @@ module.exports = {
       minHeight: {
         '60': '15rem'
       },
+      maxHeight: {
+        '60.5': '15.063rem'
+      },
       maxWidth: {
-        tiny: '165px'
+        tiny: '165px',
+        'tr-11': '111px'
       },
       width: {
         '14.5': '60px',
