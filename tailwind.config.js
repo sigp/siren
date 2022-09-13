@@ -57,11 +57,18 @@ module.exports = {
         '60': '15rem'
       },
       maxHeight: {
+        '30': '7.313rem',
+        '32': '8.313rem',
         '60.5': '15.063rem'
+      },
+      minWidth: {
+        '316': '316px',
       },
       maxWidth: {
         tiny: '165px',
-        'tr-11': '111px'
+        '316': '316px',
+        '238': '238px',
+        'tr-11': '111px',
       },
       width: {
         '14.5': '60px',
