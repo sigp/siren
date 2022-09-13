@@ -10,6 +10,8 @@ export interface DiagnosticCardProps {
     metric: string
     subTitle: string
     border?: string,
+    maxHeight?: string,
+    isBackground?: boolean,
     size?: 'lg' | 'md' | 'sm'
 }
 
@@ -18,6 +20,8 @@ const DiagnosticCard:FC<DiagnosticCardProps> = ({
     metric,
     subTitle,
     status,
+    maxHeight,
+    isBackground = true,
     border = 'border border-dark200',
     size = 'md'
 }) => {
@@ -25,17 +29,17 @@ const DiagnosticCard:FC<DiagnosticCardProps> = ({
   const getContainerSize = () => {
       switch (size) {
           case 'lg':
-              return 'max-w-xs max-h-60 py-3 px-4 dark:border-dark500';
+              return `max-w-xs ${maxHeight || 'max-h-60'} py-3 px-4 dark:border-dark500`;
           case 'sm':
-              return 'max-h-11 max-w-tiny p-1 dark:border-none px-1.5'
+              return `${maxHeight || 'max-h-11'} max-w-tiny p-1 dark:border-none px-1.5`
           default:
-              return 'max-w-xs max-h-24 py-3 px-4 dark:border-dark500'
+              return `max-w-xs ${maxHeight || 'max-h-30'} py-3 px-4 dark:border-dark500`
       }
   }
 
   return (
       <div className={`w-full h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}>
-          {size !== 'sm' && (
+          {size !== 'sm' && isBackground && (
               <>
                   <img className="w-full absolute dark:hidden left-0 top-1/2 transform -translate-y-1/2" src={network} alt="network"/>
                   <img className="w-full absolute hidden dark:block left-0 top-1/2 transform -translate-y-1/2" src={darkNetwork} alt="network"/>
