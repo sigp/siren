@@ -20,8 +20,9 @@ const ValidatorTable = () => {
                   <th>
                       <Typography className="text-left">Validators</Typography>
                   </th>
-                  <th className="border-r-style500">
+                  <th className="relative border-r-style500 pr-2">
                       <Typography>{FAKE_VALIDATORS.length}</Typography>
+                      <div className="absolute right-0 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-primary"/>
                   </th>
                   <th className="pl-2">
                       <Typography color="text-dark500" type="text-tiny" className="text-left uppercase">PUBKEY</Typography>
