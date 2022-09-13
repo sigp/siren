@@ -1,0 +1,1 @@
+export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error';
