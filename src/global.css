@@ -40,6 +40,24 @@
     font-weight: 700;
 }
 
+@layer components {
+    .border-style {
+        @apply border border-borderLight dark:border-borderDark;
+    }
+
+    .border-style500 {
+        @apply border border-borderLight dark:border-dark500;
+    }
+
+    .border-r-style500 {
+        @apply border-r border-borderLight dark:border-dark500;
+    }
+
+    .border-t-style500 {
+        @apply border-t border-borderLight dark:border-dark500;
+    }
+}
+
 .flip {
     transform: rotateY(180deg);
 }

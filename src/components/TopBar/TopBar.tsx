@@ -15,11 +15,11 @@ const TopBar = () => {
               <SyncMetric id="ethMain" borderStyle="border-r" title="ETHEREUM MAINNET" amount={150435} color="secondary" total={212245}/>
               <SyncMetric id="beaconChain" borderStyle="border-r" title="BEACON CHAIN" amount={150435} total={212245} direction="counter"/>
               <div className="flex w-24 border-r border-borderLight dark:border-dark800 p-2">
-                  <div className="flex-1">
+                  <div className="flex-1 space-y-2">
                       <Typography family="font-roboto" type="text-tiny">Slasher</Typography>
-                      <Typography color="text-primary" isBold type="text-caption1" family="font-roboto">LIVE</Typography>
+                      <Typography color="text-primary" darkMode="dark:text-white" isBold type="text-caption1" family="font-roboto">LIVE</Typography>
                   </div>
-                  <SlasherLogo/>
+                  <SlasherLogo className="w-6 h-6 text-primary"/>
               </div>
           </div>
           <div className="h-full flex">

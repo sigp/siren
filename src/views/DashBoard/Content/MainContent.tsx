@@ -1,6 +1,7 @@
 import Typography from "../../../components/Typography/Typography";
 import AccountEarning from "../../../components/AccountEarnings/AccountEarning";
 import NetworkStats from "../../../components/NetworkStats/NetworkStats";
+import ValidatorTable from "../../../components/ValidatorTable/ValidatorTable";
 
 const MainContent = () => {
   return (
@@ -22,6 +23,7 @@ const MainContent = () => {
           </div>
           <div className="col-span-7 h-full p-2">
               <NetworkStats/>
+              <ValidatorTable/>
           </div>
       </div>
   )

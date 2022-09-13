@@ -6,6 +6,7 @@ import {ReactComponent as LogsLogo} from "../assets/images/logs.svg";
 import {ReactComponent as GrafanaLogo} from "../assets/images/grafana.svg";
 import {ReactComponent as SettingsLogo} from "../assets/images/settings.svg";
 import {ContentView} from "./enums";
+import {ValidatorStatus} from "../types/validator";
 
 export type ViewType = {
     title: string,
@@ -43,4 +44,67 @@ export const VIEW = {
 
 export const PRIMARY_VIEWS = [VIEW.DASH, VIEW.VALIDATORS, VIEW.LOGS, VIEW.GRAFANA] as ViewType[];
 export const SECONDARY_VIEWS = [VIEW.SETTINGS] as ViewType[];
+
+export const FAKE_VALIDATORS = [
+    {
+        title: 'Centipede Alien Miles Knightly',
+        id: 1,
+        pubKey: '0xb9d94c35',
+        balance: 32.0963,
+        rewards: 0.0963,
+        processed: 1,
+        missed: 0,
+        attested: 768,
+        aggregated: 560,
+        status: 'unknown' as ValidatorStatus
+    },
+    {
+        title: 'Doofus Rick',
+        id: 2,
+        pubKey: '0xb9da2c35',
+        balance: 2.0963,
+        rewards: 1.0963,
+        processed: 2,
+        missed: 1,
+        attested: 450,
+        aggregated: 160,
+        status: 'queue' as ValidatorStatus
+    },
+    {
+        title: 'Crocubot',
+        id: 3,
+        pubKey: '0xb9da2c35',
+        balance: 25.0963,
+        rewards: 1.0963,
+        processed: 2,
+        missed: 1,
+        attested: 450,
+        aggregated: 160,
+        status: 'active-slash' as ValidatorStatus
+    },
+    {
+        title: 'Two Crows',
+        id: 4,
+        pubKey: '0xb9da2c35',
+        balance: 22.0963,
+        rewards: 1.0963,
+        processed: 2,
+        missed: 1,
+        attested: 450,
+        aggregated: 160,
+        status: 'active' as ValidatorStatus
+    },
+    {
+        title: 'Pickle Rick',
+        id: 5,
+        pubKey: '0xb9da2c35',
+        balance: 12.0963,
+        rewards: 1.0963,
+        processed: 2,
+        missed: 1,
+        attested: 450,
+        aggregated: 160,
+        status: 'unknown' as ValidatorStatus
+    }
+]
 
