@@ -3,12 +3,13 @@ import Typography from "../Typography/Typography";
 import {ReactComponent as WalletDefault} from "../../assets/images/wallet.svg";
 
 export interface WalletProps {
-    borderStyle?: string
+    borderStyle?: string,
+    className?: string,
 }
 
-const Wallet:FC<WalletProps> = ({borderStyle = 'border'}) => {
+const Wallet:FC<WalletProps> = ({className = '', borderStyle = 'border'}) => {
   return (
-      <div className={`${borderStyle} flex items-center justify-between w-52 h-14 py-2 px-4 cursor-pointer max-h-full border-borderLight dark:border-borderDark`}>
+      <div className={`${borderStyle} ${className} items-center justify-between w-52 h-14 py-2 px-4 cursor-pointer max-h-full border-borderLight dark:border-borderDark`}>
           <WalletDefault className="h-10 w-10 rounded-full"/>
           <div>
               <Typography isBold type="text-tiny" family="font-roboto">MAINNET</Typography>

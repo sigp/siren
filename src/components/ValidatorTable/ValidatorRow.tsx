@@ -32,7 +32,7 @@ const ValidatorRow:FC<ValidatorRowProps> = ({validator}) => {
 
   return (
       <tr className="w-full border-t-style500 h-12">
-          <th>
+          <th className="px-2">
               <div className="w-full flex justify-center">
                   <div className="w-8 h-8 bg-gradient-to-br from-primaryBright via-primary to-secondary rounded-full"/>
               </div>
@@ -42,41 +42,41 @@ const ValidatorRow:FC<ValidatorRowProps> = ({validator}) => {
                   {title}
               </Typography>
           </th>
-          <th className="border-r-style500">
+          <th className="border-r-style500 px-2">
               <Typography color="text-dark500" type="text-caption1">{id}</Typography>
           </th>
-          <th className="pl-2">
+          <th className="px-2">
               <Typography color="text-dark500" type="text-caption1" className="text-left">{pubKey}</Typography>
           </th>
-          <th>
+          <th className="px-2">
               <Typography type="text-caption1" className="text-left" darkMode="dark:text-white" isBold>{balance}</Typography>
           </th>
-          <th>
+          <th className="px-2">
               <Typography color="text-dark500" type="text-caption1" className="uppercase">{rewards}</Typography>
           </th>
-          <th>
-              <Typography color="text-dark500" type="text-caption1" >{processed} / {missed}</Typography>
+          <th className="px-1">
+              <Typography color="text-dark500" type="text-caption1" className="whitespace-nowrap" >{processed} / {missed}</Typography>
           </th>
-          <th>
+          <th className="px-1">
               <Typography color="text-dark500" type="text-caption1">{attested}</Typography>
           </th>
-          <th>
+          <th className="px-1">
               <Typography color="text-dark500" type="text-caption1">{aggregated}</Typography>
           </th>
-          <th className="border-r-style500">
-              <div className="flex items-center justify-between flex-wrap w-full max-w-tiny pl-2 pr-6">
+          <th className="border-r-style500 px-4">
+              <div className="flex items-center justify-between flex-wrap w-full max-w-tiny">
                   <Typography color="text-dark500" type="text-tiny" className="uppercase">{status}</Typography>
                   {renderStatus()}
               </div>
           </th>
-          <th className="border-r-style500">
+          <th className="border-r-style500 px-2">
               <div className="w-full flex justify-center">
                   <div className="w-8 h-8 bg-primary50 dark:bg-dark750 rounded-full flex items-center justify-center">
                       <i className="bi bi-box-arrow-in-up-right text-primary"/>
                   </div>
               </div>
           </th>
-          <th>
+          <th className="px-2">
               <div className="w-full flex justify-center">
                   <div className="w-8 h-8 bg-primary50 dark:bg-dark750 rounded-full flex items-center justify-center">
                       <div className="w-4 h-4">

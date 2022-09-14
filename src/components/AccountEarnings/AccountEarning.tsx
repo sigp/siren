@@ -23,21 +23,21 @@ const AccountEarning = () => {
                   </div>
                   <div className="w-full mt-8 flex items-center">
                       <LightHouseLogo className="text-white w-16 h-16"/>
-                      <div className="flex-1 ml-16 flex items-center justify-between">
+                      <div className="flex-1 ml-12 flex items-center space-x-2 justify-between">
                           <div>
-                              <Typography color="text-white">Choose Currency</Typography>
+                              <Typography color="text-white" type="text-caption1" className="xl:text-body">Choose Currency</Typography>
                               <div className="flex justify-between items-center">
-                                  <Typography color="text-white" darkMode="dark:text-white">USD</Typography>
+                                  <Typography color="text-white" darkMode="dark:text-white" type="text-caption1" className="xl:text-body">USD</Typography>
                                   <i className="bi bi-chevron-down text-white" />
                               </div>
                           </div>
                           <div>
                               <Typography type="text-tiny" color="text-dark300" className="uppercase" isBold>Current Rate</Typography>
-                              <Typography color="text-white" darkMode="dark:text-white">$4,000 USD/ETH</Typography>
+                              <Typography color="text-white" darkMode="dark:text-white" type="text-caption1" className="xl:text-body">$4,000 USD/ETH</Typography>
                           </div>
                           <div>
                               <Typography type="text-tiny" color="text-dark300" className="uppercase" isBold>Total Balance</Typography>
-                              <Typography color="text-white" darkMode="dark:text-white">$512,000 USD</Typography>
+                              <Typography color="text-white" darkMode="dark:text-white" type="text-caption1" className="xl:text-body">$512,000 USD</Typography>
                           </div>
                       </div>
                   </div>
@@ -47,11 +47,11 @@ const AccountEarning = () => {
                   <div className="px-4 flex justify-between">
                       <Typography color="text-white">Earnings</Typography>
                       <div className="flex ml-8 space-x-1">
-                          <Button type={ButtonFace.LIGHT}>Hourly</Button>
-                          <Button type={ButtonFace.LIGHT}>Daily</Button>
-                          <Button type={ButtonFace.LIGHT}>Weekly</Button>
-                          <Button type={ButtonFace.LIGHT}>Monthly</Button>
-                          <Button type={ButtonFace.LIGHT}>Total</Button>
+                          <Button type={ButtonFace.LIGHT} padding="p-2 1.5xl:px-4 1.5xl:py-2">Hourly</Button>
+                          <Button type={ButtonFace.LIGHT} padding="p-2 1.5xl:px-4 1.5xl:py-2">Daily</Button>
+                          <Button type={ButtonFace.LIGHT} padding="p-2 1.5xl:px-4 1.5xl:py-2">Weekly</Button>
+                          <Button type={ButtonFace.LIGHT} padding="p-2 1.5xl:px-4 1.5xl:py-2">Monthly</Button>
+                          <Button type={ButtonFace.LIGHT} padding="p-2 1.5xl:px-4 1.5xl:py-2">Total</Button>
                       </div>
                   </div>
                   <div className="flex justify-between mt-2 p-4">

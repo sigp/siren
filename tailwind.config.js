@@ -78,6 +78,9 @@ module.exports = {
       translate: {
         '14.5': '60px',
         '42': '168px'
+      },
+      screens: {
+        '1.5xl': '1440px'
       }
     },
   },
