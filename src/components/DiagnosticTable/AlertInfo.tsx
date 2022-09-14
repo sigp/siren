@@ -5,7 +5,7 @@ const AlertInfo = () => {
   return (
       <div className="h-full w-full flex flex-col">
           <div className="w-full h-12 flex items-center justify-between px-4 border-l-0 border-style500">
-              <Typography type="text-caption1" color="text-primary" darkMode="dark:text-white" isBold>Logs</Typography>
+              <Typography type="text-caption1" color="text-primary" darkMode="dark:text-white" isBold>Alerts</Typography>
               <Typography type="text-tiny" className="uppercase" color="text-dark400">view all</Typography>
           </div>
           <AlertCard status="bg-success" count={3}
