@@ -8,29 +8,29 @@ import {UiMode} from "../../constants/enums";
 const NetworkStats = () => {
     const mode = useRecoilValue(uiMode);
   return (
-      <div className="w-full h-14 border border-borderLight shadow dark:border-dark500 flex">
-          <div className="py-2 px-4 h-full w-40 border-r border-borderLight dark:border-dark500">
+      <div className="w-full h-14 border-style500 shadow flex">
+          <div className="py-2 px-4 h-full w-40 border-r-style500">
               <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Process Uptime</Typography>
               <div className="flex space-x-4 pt-3">
                   <Typography color="text-dark300" type="text-caption2">Validator</Typography>
                   <Typography isBold darkMode="dark:text-white" type="text-caption2">15.6 HR</Typography>
               </div>
           </div>
-          <div className="py-2 px-4 h-full w-40 border-r border-borderLight dark:border-dark500">
+          <div className="py-2 px-4 h-full w-40 border-r-style500">
               <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Process Uptime</Typography>
               <div className="flex space-x-4 pt-3">
                   <Typography color="text-dark300" type="text-caption2">Beacon Chain</Typography>
                   <Typography isBold darkMode="dark:text-white" type="text-caption2">15.6 HR</Typography>
               </div>
           </div>
-          <div className="py-2 px-4 h-full w-40 border-r border-borderLight dark:border-dark500">
+          <div className="py-2 px-4 h-full w-40 border-r-style500">
               <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">AT Head Slot</Typography>
               <div className="flex items-center space-x-4 pt-1">
                   <Status size="h-4 w-4" status="bg-warning"/>
                   <Typography darkMode="dark:text-white" type="text-subtitle3">-2</Typography>
               </div>
           </div>
-          <div className="relative py-2 px-4 h-full w-52 border-r border-borderLight dark:border-dark500">
+          <div className="relative py-2 px-4 h-full w-52 border-r-style500">
               <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Connected Peers</Typography>
               <div className="flex items-center space-x-4 pt-1">
                   <Typography color="text-dark300" type="text-caption2">Node</Typography>

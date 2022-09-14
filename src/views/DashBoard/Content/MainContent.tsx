@@ -2,6 +2,7 @@ import Typography from "../../../components/Typography/Typography";
 import AccountEarning from "../../../components/AccountEarnings/AccountEarning";
 import NetworkStats from "../../../components/NetworkStats/NetworkStats";
 import ValidatorTable from "../../../components/ValidatorTable/ValidatorTable";
+import DiagnosticTable from "../../../components/DiagnosticTable/DiagnosticTable";
 
 const MainContent = () => {
   return (
@@ -21,9 +22,10 @@ const MainContent = () => {
               <AccountEarning/>
               <div className="flex-1 min-h-60 w-full"/>
           </div>
-          <div className="col-span-7 h-full p-2">
+          <div className="flex flex-col col-span-7 h-full py-2 px-4">
               <NetworkStats/>
               <ValidatorTable/>
+              <DiagnosticTable/>
           </div>
       </div>
   )
