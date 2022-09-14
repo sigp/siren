@@ -7,7 +7,7 @@ import Dashboard from "./views/DashBoard/Dashboard";
 function App() {
     const mode = useRecoilValue(uiMode);
   return (
-    <div className={`${mode === UiMode.DARK ? 'dark' : ''} h-screen w-screen overflow-hidden flex`}>
+    <div className={`${mode === UiMode.DARK ? 'dark' : ''} relative h-screen w-screen overflow-hidden flex`}>
         <Dashboard/>
     </div>
   );

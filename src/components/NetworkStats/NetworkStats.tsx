@@ -1,35 +1,17 @@
 import Typography from "../Typography/Typography";
-import Status from "../Status/Status";
 import ReactSpeedometer, {CustomSegmentLabelPosition} from "react-d3-speedometer"
 import {useRecoilValue} from "recoil";
 import {uiMode} from "../../recoil/atoms";
 import {UiMode} from "../../constants/enums";
+import NetworkStatBlock from "./NetworkStatBlock";
 
 const NetworkStats = () => {
     const mode = useRecoilValue(uiMode);
   return (
-      <div className="w-full h-14 border-style500 shadow flex">
-          <div className="py-2 px-4 h-full w-40 border-r-style500">
-              <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Process Uptime</Typography>
-              <div className="flex space-x-4 pt-3">
-                  <Typography color="text-dark300" type="text-caption2">Validator</Typography>
-                  <Typography isBold darkMode="dark:text-white" type="text-caption2">15.6 HR</Typography>
-              </div>
-          </div>
-          <div className="py-2 px-4 h-full w-40 border-r-style500">
-              <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Process Uptime</Typography>
-              <div className="flex space-x-4 pt-3">
-                  <Typography color="text-dark300" type="text-caption2">Beacon Chain</Typography>
-                  <Typography isBold darkMode="dark:text-white" type="text-caption2">15.6 HR</Typography>
-              </div>
-          </div>
-          <div className="py-2 px-4 h-full w-40 border-r-style500">
-              <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">AT Head Slot</Typography>
-              <div className="flex items-center space-x-4 pt-1">
-                  <Status size="h-4 w-4" status="bg-warning"/>
-                  <Typography darkMode="dark:text-white" type="text-subtitle3">-2</Typography>
-              </div>
-          </div>
+      <div className="w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex">
+          <NetworkStatBlock title="Process Uptime" subTitle="Validator" metric="15.6 HR"/>
+          <NetworkStatBlock title="Process Uptime" subTitle="Beacon Chain" metric="0.3 HR"/>
+          <NetworkStatBlock title="AT Head Slot" status="bg-warning" metricFontSize="text-subtitle3" metric="-2"/>
           <div className="relative py-2 px-4 h-full w-52 border-r-style500">
               <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Connected Peers</Typography>
               <div className="flex items-center space-x-4 pt-1">
@@ -61,13 +43,7 @@ const NetworkStats = () => {
                   </div>
               </div>
           </div>
-          <div className="py-2 px-4 h-full w-40">
-              <Typography type="text-tiny" className="uppercase" isBold darkMode="dark:text-white">Participation Rate</Typography>
-              <div className="flex items-center space-x-4 pt-1">
-                  <Status size="h-4 w-4" status="bg-success"/>
-                  <Typography darkMode="dark:text-white" type="text-subtitle3">98%</Typography>
-              </div>
-          </div>
+          <NetworkStatBlock title="Participation Rate" status="bg-success" metricFontSize="text-subtitle3" metric="98%"/>
       </div>
   )
 }

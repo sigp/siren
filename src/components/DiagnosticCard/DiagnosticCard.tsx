@@ -33,7 +33,7 @@ const DiagnosticCard:FC<DiagnosticCardProps> = ({
           case 'sm':
               return `${maxHeight || 'max-h-11'} max-w-tiny p-1 dark:border-none px-1.5`
           default:
-              return `max-w-xs ${maxHeight || 'max-h-30'} py-3 px-4 dark:border-dark500`
+              return `max-w-xs ${maxHeight || 'max-h-30'} py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
       }
   }
 
@@ -46,8 +46,8 @@ const DiagnosticCard:FC<DiagnosticCardProps> = ({
               </>
           )}
           <div className="w-full z-10 space-x-8 flex justify-between">
-              <Typography type={isSmall ? 'text-tiny' : 'text-body'}>{title}</Typography>
-              <Typography type={isSmall ? 'text-tiny' : 'text-subtitle2'}>{metric}</Typography>
+              <Typography type={isSmall ? 'text-tiny' : 'text-caption1'} className={!isSmall ? 'xl:text-body' : ''}>{title}</Typography>
+              <Typography type={isSmall ? 'text-tiny' : 'text-caption1'} className={!isSmall ? 'xl:text-subtitle2' : ''}>{metric}</Typography>
           </div>
           <div className="w-full z-10 space-x-8 flex items-center justify-between">
               <Typography type={isSmall ? 'text-tiny' : 'text-caption1'}>{subTitle}</Typography>

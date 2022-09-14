@@ -16,12 +16,13 @@ export interface ButtonProps {
   fontType?: TypographyType
   children: ReactNode | ReactNode[]
   onClick?: () => void,
+  padding?: string,
   className?: string,
   href?: string,
   target?: '_self' | '_blank'
 }
 
-const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, className, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled}) => {
+const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, className, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled, padding = 'px-4 py-2'}) => {
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.LIGHT:
@@ -38,7 +39,7 @@ const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, h
   }
 
   const renderButton = () => (
-      <button onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border px-4 py-2 w-fit cursor-pointer flex space-x-2`}>
+      <button onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}>
         {children}
       </button>
   )

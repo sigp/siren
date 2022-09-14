@@ -30,7 +30,7 @@ const Dashboard = () => {
   return (
       <>
           <SideBar/>
-          <div className="w-full flex flex-col bg-white dark:bg-darkPrimary items-center justify-center">
+          <div className="flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center">
               <TopBar/>
               <div className="flex-1 w-full overflow-scroll">
                   {renderContent()}
