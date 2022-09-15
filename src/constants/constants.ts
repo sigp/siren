@@ -106,5 +106,18 @@ export const FAKE_VALIDATORS = [
         aggregated: 160,
         status: 'unknown' as ValidatorStatus
     }
+];
+
+export const BALANCE_COLORS = [
+    'rgba(94, 65, 213, 1)',
+    'rgba(213, 65, 184, 1)',
+    'rgba(168, 65, 213, 1)',
+    'rgba(94, 65, 213, .6)',
+    'rgba(213, 65, 184, .6)',
+    'rgba(168, 65, 213, .6)',
+    'rgba(94, 65, 213, .3)',
+    'rgba(213, 65, 184, .3)',
+    'rgba(168, 65, 213, .3)',
+    'rgba(94, 65, 213, .1)',
 ]
 
