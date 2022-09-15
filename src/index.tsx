@@ -1,6 +1,5 @@
 import './global.css';
 import App from './App';
-import {StrictMode} from "react";
 import { createRoot } from 'react-dom/client';
 import {
     RecoilRoot
@@ -9,9 +8,7 @@ import {
 const container = document.getElementById('root');
 const root = createRoot(container!);
 root.render(
-    <StrictMode>
-        <RecoilRoot>
-            <App />
-        </RecoilRoot>
-    </StrictMode>
+    <RecoilRoot>
+        <App />
+    </RecoilRoot>
 );

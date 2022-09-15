@@ -3,13 +3,14 @@ import AccountEarning from "../../../components/AccountEarnings/AccountEarning";
 import NetworkStats from "../../../components/NetworkStats/NetworkStats";
 import ValidatorTable from "../../../components/ValidatorTable/ValidatorTable";
 import DiagnosticTable from "../../../components/DiagnosticTable/DiagnosticTable";
+import ValidatorBalances from "../../../components/ValidatorBalances/ValidatorBalances";
 
 const MainContent = () => {
   return (
       <div className="w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center">
           <div className="col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0">
               <div className="p-4 flex items-center justify-between">
-                  <Typography type="text-h3" darkMode="dark:text-white" fontWeight="font-light">Hello Rick,</Typography>
+                  <Typography type="text-subtitle1" darkMode="dark:text-white" className="xl:text-h3" fontWeight="font-light">Hello Rick,</Typography>
                   <div className="flex space-x-16">
                       <div>
                           <Typography type="text-tiny" family="font-roboto" darkMode="dark:text-white" isBold>LIGHTHOUSE VERSIONS</Typography>
@@ -20,7 +21,7 @@ const MainContent = () => {
                   </div>
               </div>
               <AccountEarning/>
-              <div className="flex-1 min-h-60 w-full"/>
+              <ValidatorBalances/>
           </div>
           <div className="flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4">
               <NetworkStats/>

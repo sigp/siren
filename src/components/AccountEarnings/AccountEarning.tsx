@@ -18,10 +18,10 @@ const AccountEarning = () => {
           <div className="relative z-30 w-full h-full">
               <div className="w-full p-4">
                   <Typography fontWeight="font-light" className="bg-gradient-to-r from-primaryBright via-primary to-secondary w-max bg-clip-text" color="text-transparent" type="text-subtitle1" darkMode="dark:text-white">Account</Typography>
-                  <div className="w-full flex justify-end pr-6 pt-8">
+                  <div className="w-full flex justify-end pr-6 pt-4">
                       <Typography color="text-white" isBold darkMode="dark:text-white" type="text-h2">128 ETH</Typography>
                   </div>
-                  <div className="w-full mt-8 flex items-center">
+                  <div className="w-full mt-6 flex items-center">
                       <LightHouseLogo className="text-white w-16 h-16"/>
                       <div className="flex-1 ml-12 flex items-center space-x-2 justify-between">
                           <div>
