@@ -7,6 +7,7 @@ import {ReactComponent as GrafanaLogo} from "../assets/images/grafana.svg";
 import {ReactComponent as SettingsLogo} from "../assets/images/settings.svg";
 import {ContentView} from "./enums";
 import {ValidatorStatus} from "../types/validator";
+import {ClientProvider} from "../types";
 
 export type ViewType = {
     title: string,
@@ -120,4 +121,37 @@ export const BALANCE_COLORS = [
     'rgba(168, 65, 213, .3)',
     'rgba(94, 65, 213, .1)',
 ]
+
+export const CLIENT_PROVIDERS = [
+    {
+        provider: 'GETH',
+        title: 'Decentralized Full Node',
+        subTitle: 'Ethereum Foundation',
+        language: 'Go',
+    },
+    {
+        provider: 'Open Ethereum',
+        title: 'Decentralized Lightclient',
+        subTitle: 'Parity / Open Ethereum',
+        language: 'Rust',
+    },
+    {
+        provider: 'Nethermind',
+        title: 'Enterprise Grade Full Node',
+        subTitle: 'Nethermind',
+        language: '.NET',
+    },
+    {
+        provider: 'Infura',
+        title: 'Centralized Cloud Provider',
+        subTitle: 'Consensys',
+        language: 'API',
+    },
+    {
+        provider: 'Besu',
+        title: 'Enterprise Public / Private Permission',
+        subTitle: 'Hyperledger',
+        language: 'Javascript',
+    }
+] as ClientProvider[]
 
