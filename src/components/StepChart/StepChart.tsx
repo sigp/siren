@@ -5,11 +5,9 @@ import {
   Chart as ChartJS,
   Chart,
   Filler,
-  Legend,
   LinearScale, LineController,
   LineElement,
   PointElement,
-  Title,
   Tooltip,
 } from 'chart.js';
 
@@ -19,9 +17,7 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
-    Title,
     Tooltip,
-    Legend,
     Filler,
 );
 
