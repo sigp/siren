@@ -10,3 +10,14 @@ export enum ContentView {
     GRAFANA = "GRAFANA",
     SETTINGS = "SETTINGS"
 }
+
+export enum AppView {
+    ONBOARD = "ONBOARD",
+    DASHBOARD = "DASHBOARD"
+}
+
+export enum OnboardView {
+    PROVIDER = "PROVIDER",
+    CONFIGURE = "CONFIGURE",
+    SETUP = "SETUP"
+}
