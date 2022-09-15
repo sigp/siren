@@ -29,12 +29,12 @@ const ValidatorBalances = () => {
   return (
       <div className="flex-1 flex h-24 w-full">
           <div className="p-1 h-full flex items-center justify-center">
-              <Typography type="text-tiny" color="text-primary" isBold className="-rotate-90">ETH</Typography>
+              <Typography type="text-tiny" color="text-primary" darkMode="dark:text-white" isBold className="-rotate-90">ETH</Typography>
           </div>
           <div className="relative flex-1">
               <div className="px-8 absolute z-10 top-0 left-0 w-full flex justify-between">
-                  <Typography color="text-primary">Validator Balance</Typography>
-                  <Typography color="text-primary">{validators.length}</Typography>
+                  <Typography color="text-primary" darkMode="dark:text-white">Validator Balance</Typography>
+                  <Typography color="text-primary" darkMode="dark:text-white">{validators.length}</Typography>
               </div>
               <StepChart data={balanceData}/>
           </div>

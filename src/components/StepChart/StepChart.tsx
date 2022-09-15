@@ -5,11 +5,15 @@ import {
   Chart as ChartJS,
   Chart,
   Filler,
-  LinearScale, LineController,
+  LinearScale,
+  LineController,
   LineElement,
   PointElement,
   Tooltip,
 } from 'chart.js';
+import {useRecoilValue} from "recoil";
+import {uiMode} from "../../recoil/atoms";
+import {UiMode} from "../../constants/enums";
 
 ChartJS.register(
     CategoryScale,
@@ -41,6 +45,7 @@ export interface StepChartProps {
 
 const StepChart:FC<StepChartProps> = ({data}) => {
   const chartEl = useRef(null);
+  const mode = useRecoilValue(uiMode);
 
   const [chart, setChart] = useState<Chart>();
 
@@ -61,6 +66,11 @@ const StepChart:FC<StepChartProps> = ({data}) => {
         plugins: {
           legend: {
             display: false
+          },
+          tooltip: {
+            backgroundColor: mode === UiMode.DARK ? 'rgba(0, 0, 0, .8)' : '#ffffff',
+            bodyColor: mode === UiMode.DARK ? '#ffffff' : '#000000',
+            titleColor: mode === UiMode.DARK ? '#ffffff' : '#000000'
           }
         },
         interaction: {
@@ -70,12 +80,12 @@ const StepChart:FC<StepChartProps> = ({data}) => {
         scales: {
           x: {
             grid: {
-              color: '#F3F5FB',
+              color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB'
             }
           },
           y: {
             grid: {
-              color: '#F3F5FB',
+              color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB'
             }
           }
         }
