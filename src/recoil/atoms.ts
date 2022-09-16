@@ -8,7 +8,7 @@ export const uiMode = atom<UiMode>({
 
 export const appView = atom<AppView>({
     key: 'AppView',
-    default: AppView.DASHBOARD
+    default: AppView.ONBOARD
 })
 
 export const dashView = atom<ContentView>({
@@ -18,5 +18,5 @@ export const dashView = atom<ContentView>({
 
 export const onBoardView = atom<OnboardView>({
     key: 'OnboardView',
-    default: OnboardView.PROVIDER
+    default: OnboardView.CONFIGURE
 })

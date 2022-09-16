@@ -21,3 +21,8 @@ export enum OnboardView {
     CONFIGURE = "CONFIGURE",
     SETUP = "SETUP"
 }
+
+export enum ConfigType {
+    BASIC = "BASIC",
+    ADVANCED = "ADVANCED"
+}
