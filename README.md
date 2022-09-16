@@ -20,6 +20,11 @@ $ make
 $ make install-lcli
 ```
 
+`ganache` is also required to be installed. This can be installed via `npm` or via the OS. If using `npm` it can be installed as:
+```
+$ npm install ganache --global
+```
+
 ## Starting the Testnet
 
 To start a local testnet, move into the `local-testnet` directory. Then run:
