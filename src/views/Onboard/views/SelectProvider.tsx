@@ -10,7 +10,7 @@ const SelectProvider = () => {
   return (
       <div className="flex-1 w-full flex flex-col relative justify-center bg-black">
           <div className="pl-3 md:pl-24 xl:pl-52 w-full">
-              <Typography type="text-subtitle1" color="text-transparent" fontWeight="font-light" className="bg-gradient-to-r from-primaryBright via-secondary to-tertiary w-max bg-clip-text">Configure Ethereum Provider</Typography>
+              <Typography type="text-subtitle1" color="text-transparent" fontWeight="font-light" className="primary-gradient-text">Configure Ethereum Provider</Typography>
               <Typography color="text-white" type="text-h3" className="mt-10" fontWeight="font-light">Select the Ethereum 1.0 client provider you wish to sync.</Typography>
           </div>
           <div className="w-full flex space-x-8 overflow-x-auto mt-16 pr-60 pl-3 md:pl-24 xl:pl-52">
