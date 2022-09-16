@@ -8,12 +8,12 @@ export const uiMode = atom<UiMode>({
 
 export const appView = atom<AppView>({
     key: 'AppView',
-    default: AppView.ONBOARD
+    default: AppView.DASHBOARD
 })
 
 export const dashView = atom<ContentView>({
     key: 'DashView',
-    default: ContentView.DASHBOARD
+    default: ContentView.MAIN
 })
 
 export const onBoardView = atom<OnboardView>({

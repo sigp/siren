@@ -19,7 +19,7 @@ export const VIEW = {
     DASH: {
         title: 'Dashboard',
         logoComponent: DashLogo,
-        key: ContentView.DASHBOARD
+        key: ContentView.MAIN
     },
     VALIDATORS: {
         title: 'Validator Management',
