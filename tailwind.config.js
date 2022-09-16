@@ -80,7 +80,8 @@ module.exports = {
       },
       translate: {
         '14.5': '60px',
-        '42': '168px'
+        '42': '168px',
+        'toggleWidth': '3rem'
       },
       screens: {
         '1.5xl': '1440px'
