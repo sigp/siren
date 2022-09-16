@@ -4,9 +4,20 @@ export enum UiMode {
 }
 
 export enum ContentView {
-    DASHBOARD = "DASHBOARD",
+    MAIN = "MAIN",
     VALIDATORS = "VALIDATORS",
     LOGS = "LOGS",
     GRAFANA = "GRAFANA",
     SETTINGS = "SETTINGS"
+}
+
+export enum AppView {
+    ONBOARD = "ONBOARD",
+    DASHBOARD = "DASHBOARD"
+}
+
+export enum OnboardView {
+    PROVIDER = "PROVIDER",
+    CONFIGURE = "CONFIGURE",
+    SETUP = "SETUP"
 }

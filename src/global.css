@@ -60,6 +60,10 @@
     .border-b-style500 {
         @apply border-b border-dark200 dark:border-dark500;
     }
+
+    .primary-gradient-text {
+        @apply bg-gradient-to-r from-primaryBright to-tertiary w-max bg-clip-text;
+    }
 }
 
 .flip {
