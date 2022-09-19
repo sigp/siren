@@ -26,3 +26,8 @@ export enum ConfigType {
     BASIC = "BASIC",
     ADVANCED = "ADVANCED"
 }
+
+export enum Protocol {
+    HTTP = "HTTP",
+    HTTPS = "HTTPS"
+}

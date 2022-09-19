@@ -1,13 +1,19 @@
 import {FC, useState} from "react";
-import {Control, useForm} from "react-hook-form";
+import {Control, useForm, UseFormGetValues} from "react-hook-form";
+import {ConfigType, Protocol} from "../constants/enums";
+import {UseFormSetValue} from "react-hook-form/dist/types/form";
+
+export type EndPointType = 'beaconNode' | 'validatorClient';
+
+export type Endpoint = {
+    protocol: Protocol,
+    address: string,
+    port: number
+}
 
 export interface ConnectionForm {
-    beaconNodeProtocol: string,
-    beaconNodeAddress: string,
-    beaconNodePort: string,
-    validatorClientProtocol: string,
-    validatorClientAddress: string,
-    validatorClientPort: string,
+    beaconNode: Endpoint,
+    validatorClient: Endpoint,
     apiToken: string,
     deviceName: string,
     userName: string
@@ -16,6 +22,10 @@ export interface ConnectionForm {
 
 export interface RenderProps {
     control: Control<ConnectionForm>
+    setValue: UseFormSetValue<ConnectionForm>
+    getValues: UseFormGetValues<ConnectionForm>
+    formType: ConfigType
+    changeFormType: (type: ConfigType) => void
     isDisabled: boolean
     isLoading: boolean
     onSubmit: () => void
@@ -27,18 +37,26 @@ export interface ConfigConnectionFormProps {
 
 const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
     const [isLoading, setLoading] = useState<boolean>(false);
+    const [formType, setType] = useState<ConfigType>(ConfigType.BASIC);
+    const endPointDefault = {
+        protocol: Protocol.HTTP,
+        address: '127.0.0.1',
+        port: 5052
+    }
 
     const {
         control,
+        setValue,
+        getValues,
+        reset,
         formState: {isValid}
     } = useForm({
         defaultValues: {
-            beaconNodeProtocol: '',
-            beaconNodeAddress: '',
-            beaconNodePort: '',
-            validatorClientProtocol: '',
-            validatorClientAddress: '',
-            validatorClientPort: '',
+            beaconNode: endPointDefault,
+            validatorClient: {
+                ...endPointDefault,
+                port: 5062
+            },
             apiToken: '',
             deviceName: '',
             userName: '',
@@ -46,17 +64,30 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
         }
     });
 
-    const onSubmit = () => {
-
+    const changeFormType = (type: ConfigType) => {
+        reset({
+            beaconNode: endPointDefault,
+            validatorClient: {
+                ...endPointDefault,
+                port: 5062
+            },
+        })
+        setType(type);
     }
+
+    const onSubmit = () => {}
 
   return (
       <form>
           {
               children && children({
                   control,
+                  setValue,
                   isLoading,
+                  getValues,
                   onSubmit,
+                  changeFormType,
+                  formType,
                   isDisabled: !isValid,
               })
           }
