@@ -40,16 +40,17 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
     }
     const onChangePort = (e: ChangeEvent<HTMLInputElement>) => {
         if(!type) return;
-        setValue(`${type}.port`, e.target.value ? Number(e.target.value) : 5432);
+        // @ts-ignore
+        setValue(`${type}.port`, e.target.value ? Number(e.target.value) : '');
     }
 
  return (
-     <div className="flex items-end justify-between border-b border-white w-full max-w-xl pb-4">
+     <div className="flex items-end justify-between border-b border-white w-full pb-4">
          <div className="flex space-x-4">
              <div className="space-y-4">
                  <div className="flex">
                      <Typography isBold color="text-dark500" className="w-16 flex-grow-0 uppercase" type="text-tiny">Protocol (http/https)</Typography>
-                     <i className="bi-question-circle-fill text-dark500" />
+                     <i className="bi-question-circle-fill text-caption1 text-dark500" />
                  </div>
                  <Controller
                      name={`${defaultType}.protocol`}
@@ -62,7 +63,7 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
              <div className="space-y-4">
                  <div className="flex space-x-2 items-center">
                      <Typography isBold color="text-dark500" className="flex-grow-0 uppercase" type="text-caption1">{`${type === 'validatorClient' ? 'VC' : 'Beacon'} ADDRESS`}</Typography>
-                     <i className="bi-question-circle-fill text-dark500" />
+                     <i className="bi-question-circle-fill text-caption1  text-dark500" />
                  </div>
                  <div className="flex w-44 items-center">
                      <Typography color="text-dark500" className="flex-grow-0 lowercase" type="text-subtitle2">{`${protocol}://`}</Typography>
@@ -81,7 +82,7 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
                          <div className="space-y-4">
                              <div className="flex space-x-2 items-center">
                                  <Typography isBold color="text-dark500" className="flex-grow-0 uppercase" type="text-caption1">BN Port</Typography>
-                                 <i className="bi-question-circle-fill text-dark500" />
+                                 <i className="bi-question-circle-fill text-caption1  text-dark500" />
                              </div>
                              <Controller
                                  name="beaconNode.port"
@@ -94,7 +95,7 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
                          <div className="space-y-4">
                              <div className="flex space-x-2 items-center">
                                  <Typography isBold color="text-dark500" className="flex-grow-0 uppercase" type="text-caption1">VC Port</Typography>
-                                 <i className="bi-question-circle-fill text-dark500" />
+                                 <i className="bi-question-circle-fill text-caption1  text-dark500" />
                              </div>
                              <Controller
                                  name="validatorClient.port"
@@ -109,7 +110,7 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
                      <div className="space-y-4">
                          <div className="flex space-x-2 items-center">
                              <Typography isBold color="text-dark500" className="flex-grow-0 uppercase" type="text-caption1">{`${type === 'beaconNode' ? 'BN' : 'VC'} Port`}</Typography>
-                             <i className="bi-question-circle-fill text-dark500" />
+                             <i className="bi-question-circle-fill text-caption1  text-dark500" />
                          </div>
                          <Controller
                              name={`${defaultType}.port`}
@@ -122,7 +123,7 @@ const ProtocolInput:FC<ProtocolInputProps> = ({id, control, setValue, getValues,
                  )
              }
          </div>
-         <i className={`bi-check-circle-fill text-subtitle1 ${isValid ? 'text-success' : 'text-dark500'}`} />
+         <i className={`bi-check-circle-fill text-subtitle2 ${isValid ? 'text-success' : 'text-dark500'}`} />
      </div>
  )
 }

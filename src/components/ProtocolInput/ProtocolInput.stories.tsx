@@ -11,7 +11,9 @@ const Template:Story<ProtocolInputProps> = ({type, id, isValid}) => (
     <ConfigConnectionForm>
         {({control, setValue, getValues}) => (
             <div className="h-screen w-screen bg-black flex flex-col items-center justify-center">
-                <ProtocolInput id={id} setValue={setValue} getValues={getValues} control={control} type={type} isValid={isValid} />
+                <div className="w-full max-w-xl">
+                    <ProtocolInput id={id} setValue={setValue} getValues={getValues} control={control} type={type} isValid={isValid} />
+                </div>
             </div>
         )}
     </ConfigConnectionForm>
