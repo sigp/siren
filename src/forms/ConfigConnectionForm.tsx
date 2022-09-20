@@ -2,6 +2,7 @@ import {FC, useState} from "react";
 import {Control, useForm, UseFormGetValues} from "react-hook-form";
 import {ConfigType, Protocol} from "../constants/enums";
 import {UseFormSetValue} from "react-hook-form/dist/types/form";
+import useApiValidation from "../hooks/useApiValidation";
 
 export type EndPointType = 'beaconNode' | 'validatorClient';
 
@@ -25,6 +26,8 @@ export interface RenderProps {
     setValue: UseFormSetValue<ConnectionForm>
     getValues: UseFormGetValues<ConnectionForm>
     formType: ConfigType
+    isValidBeaconNode: boolean
+    isValidValidatorClient: boolean
     changeFormType: (type: ConfigType) => void
     isDisabled: boolean
     isLoading: boolean
@@ -48,6 +51,7 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
         control,
         setValue,
         getValues,
+        watch,
         reset,
         formState: {isValid}
     } = useForm({
@@ -64,6 +68,12 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
         }
     });
 
+    const beaconNode = watch('beaconNode');
+    const validatorClient = watch('validatorClient');
+
+    const isValidBeaconNode = useApiValidation(beaconNode,  'eth/v1/node/version');
+    const isValidValidatorClient = useApiValidation(validatorClient,  'lighthouse/auth');
+
     const changeFormType = (type: ConfigType) => {
         reset({
             beaconNode: endPointDefault,
@@ -76,8 +86,7 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
     }
 
     const onSubmit = () => {}
-
-  return (
+    return (
       <form>
           {
               children && children({
@@ -87,6 +96,8 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
                   getValues,
                   onSubmit,
                   changeFormType,
+                  isValidBeaconNode,
+                  isValidValidatorClient,
                   formType,
                   isDisabled: !isValid,
               })
