@@ -52,6 +52,8 @@ exec lighthouse \
 	--enr-udp-port $network_port \
 	--enr-tcp-port $network_port \
 	--port $network_port \
+	--http \
+  --http-allow-origin "*" \
 	--http-port $http_port \
 	--disable-packet-filter \
 	--target-peers $((BN_COUNT - 1))
