@@ -28,6 +28,6 @@ export enum ConfigType {
 }
 
 export enum Protocol {
-    HTTP = "HTTP",
-    HTTPS = "HTTPS"
+    HTTP = "http",
+    HTTPS = "https"
 }
