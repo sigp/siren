@@ -6,7 +6,8 @@ export enum ButtonFace {
   SECONDARY = "SECONDARY",
   TERTIARY = "TERTIARY",
   ICON = "ICON",
-  LIGHT = "LIGHT"
+  LIGHT = "LIGHT",
+  WHITE = "WHITE"
 }
 
 export interface ButtonProps {
@@ -32,7 +33,9 @@ const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, h
       case ButtonFace.TERTIARY:
         return 'border border-primary text-primary';
       case ButtonFace.SECONDARY:
-        return 'bg-primary text-white'
+        return 'bg-primary text-white';
+      case ButtonFace.WHITE:
+        return 'bg-transparent disabled:border-dark300 disabled:text-dark300 disabled:cursor-default border border-white text-white'
       default:
         return 'border border-black text-black disabled:border-dark300 disabled:text-dark300 disabled:pointer-events-none'
     }
