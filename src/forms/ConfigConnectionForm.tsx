@@ -52,7 +52,7 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
         setValue,
         getValues,
         watch,
-        reset,
+        resetField,
         formState: {isValid}
     } = useForm({
         defaultValues: {
@@ -75,13 +75,11 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
     const isValidValidatorClient = useApiValidation(validatorClient,  'lighthouse/auth');
 
     const changeFormType = (type: ConfigType) => {
-        reset({
-            beaconNode: endPointDefault,
-            validatorClient: {
+        resetField('beaconNode', {defaultValue: endPointDefault});
+        resetField('validatorClient', {defaultValue: {
                 ...endPointDefault,
                 port: 5062
-            },
-        })
+            }});
         setType(type);
     }
 
