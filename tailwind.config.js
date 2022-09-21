@@ -73,10 +73,19 @@ module.exports = {
       width: {
         '14.5': '60px',
         '34': '136px',
-        '42': '168px'
+        '42': '168px',
+        '9/10': '90%',
       },
       height: {
         '11/20': '55%'
+      },
+      inset: {
+        35: '35%',
+        40: '40%',
+        45: '45%',
+      },
+      animation: {
+        'spin-slow': 'spin 240s linear infinite',
       },
       translate: {
         '14.5': '60px',
@@ -84,7 +93,8 @@ module.exports = {
         'toggleWidth': '3rem'
       },
       screens: {
-        '1.5xl': '1440px'
+        '1.5xl': '1440px',
+        '.85xl': '1024px'
       }
     },
   },
