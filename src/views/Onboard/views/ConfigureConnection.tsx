@@ -16,7 +16,7 @@ const ConfigureConnection = () => {
           <div className="h-full w-full overflow-scroll lg:max-w-xl xl:max-w-2xl 1.5xl:max-w-3xl p-6 pt-16 md:p-12 md:pt-24 lg:pl-18 lg:pr-0 xl:pl-24 1.5xl:pl-28">
               <Typography color="text-transparent" fontWeight="font-light" className="md:text-subtitle1 primary-gradient-text">Configure Connection</Typography>
               <ConfigConnectionForm>
-                  {({control, formType, isValidBeaconNode, isValidValidatorClient, changeFormType, ...props}) => (
+                  {({control, formType, onSubmit, isValidBeaconNode, isValidValidatorClient, changeFormType, ...props}) => (
                       <div className="space-y-8">
                           <div className="flex space-x-20 pt-6">
                               <TabOption onClick={() => changeFormType(ConfigType.BASIC)} text="basic settings" isActive={formType === ConfigType.BASIC}/>
@@ -66,7 +66,7 @@ const ConfigureConnection = () => {
                                   )}
                               />
                           </div>
-                          <Button isDisabled={!isValidBeaconNode || !isValidValidatorClient} type={ButtonFace.WHITE}>
+                          <Button onClick={onSubmit} isDisabled={!isValidBeaconNode || !isValidValidatorClient} type={ButtonFace.WHITE}>
                               Configure
                               <i className="ml-4 bi-arrow-right"/>
                           </Button>
