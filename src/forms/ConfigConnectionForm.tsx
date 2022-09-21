@@ -1,8 +1,11 @@
 import {FC, useState} from "react";
 import {Control, useForm, UseFormGetValues} from "react-hook-form";
-import {ConfigType, Protocol} from "../constants/enums";
+import {ConfigType, OnboardView, Protocol} from "../constants/enums";
 import {UseFormSetValue} from "react-hook-form/dist/types/form";
 import useApiValidation from "../hooks/useApiValidation";
+import useLocalStorage from "../hooks/useLocalStorage";
+import {useSetRecoilState} from "recoil";
+import {beaconNodeEndpoint, onBoardView, validatorClientEndpoint} from "../recoil/atoms";
 
 export type EndPointType = 'beaconNode' | 'validatorClient';
 
@@ -41,6 +44,13 @@ export interface ConfigConnectionFormProps {
 const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
     const [isLoading, setLoading] = useState<boolean>(false);
     const [formType, setType] = useState<ConfigType>(ConfigType.BASIC);
+    const setBeaconNode = useSetRecoilState(beaconNodeEndpoint);
+    const setView = useSetRecoilState(onBoardView);
+    const setValidatorClient = useSetRecoilState(validatorClientEndpoint);
+
+    const [ , storeBeaconNode ] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined);
+    const [ , storeValidatorClient ] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined);
+
     const endPointDefault = {
         protocol: Protocol.HTTP,
         address: '127.0.0.1',
@@ -83,7 +93,18 @@ const ConfigConnectionForm:FC<ConfigConnectionFormProps> = ({children}) => {
         setType(type);
     }
 
-    const onSubmit = () => {}
+    const onSubmit = () => {
+        const { isRemember } = getValues();
+
+        if(isRemember) {
+            storeBeaconNode(beaconNode);
+            storeValidatorClient(validatorClient);
+        }
+
+        setBeaconNode(beaconNode);
+        setValidatorClient(validatorClient);
+        setView(OnboardView.SETUP);
+    }
     return (
       <form>
           {

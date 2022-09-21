@@ -11,7 +11,7 @@ const Onboard = () => {
         case OnboardView.CONFIGURE:
             return <ConfigureConnection/>
         case OnboardView.SETUP:
-            return <div/>
+            return <div>Hello Setup</div>
         default:
             return <SelectProvider/>
     }
