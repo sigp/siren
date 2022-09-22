@@ -15,7 +15,7 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "chart.js": "^3.9.1",
-    "eslint": "8.22.0",
+    "eslint-import-resolver-typescript": "^3.5.1",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-d3-speedometer": "^1.0.2",
@@ -25,7 +25,7 @@
     "recoil": "^0.7.5",
     "tailwindcss": "^3.1.8",
     "tailwindcss-scoped-groups": "^2.0.0",
-    "typescript": "^4.4.2",
+    "typescript": "*",
     "web-vitals": "^2.1.0"
   },
   "scripts": {
@@ -35,7 +35,10 @@
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
-    "test-storybook": "test-storybook"
+    "test-storybook": "test-storybook",
+    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
+    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -79,11 +82,22 @@
     "@storybook/react": "^6.5.10",
     "@storybook/test-runner": "^0.7.0",
     "@storybook/testing-library": "^0.0.13",
+    "@typescript-eslint/eslint-plugin": "^5.38.0",
+    "@typescript-eslint/parser": "^5.38.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.8.1",
+    "eslint": "8.22.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.31.8",
     "jest": "27",
     "postcss": "^8",
+    "prettier": "^2.7.1",
     "prop-types": "^15.8.1",
     "storybook-dark-mode": "^1.1.0",
     "storybook-tailwind-dark-mode": "^1.0.15",
