@@ -1,5 +1,6 @@
 import {atom} from "recoil";
 import {AppView, ContentView, OnboardView, UiMode} from "../constants/enums";
+import {Endpoint} from "../forms/ConfigConnectionForm";
 
 export const uiMode = atom<UiMode>({
     key: 'UiMode',
@@ -8,7 +9,7 @@ export const uiMode = atom<UiMode>({
 
 export const appView = atom<AppView>({
     key: 'AppView',
-    default: AppView.DASHBOARD
+    default: AppView.ONBOARD
 })
 
 export const dashView = atom<ContentView>({
@@ -18,5 +19,15 @@ export const dashView = atom<ContentView>({
 
 export const onBoardView = atom<OnboardView>({
     key: 'OnboardView',
-    default: OnboardView.PROVIDER
-})
+    default: OnboardView.CONFIGURE
+});
+
+export const beaconNodeEndpoint = atom<Endpoint>({
+    key: 'BeaconNode',
+    default: undefined
+});
+
+export const validatorClientEndpoint = atom<Endpoint>({
+    key: 'ValidatorClient',
+    default: undefined
+});

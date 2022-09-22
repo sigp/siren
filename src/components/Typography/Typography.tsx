@@ -26,7 +26,7 @@ type TagsSupported = typeof tagsSupported[number];
 
 export type TypographyFamily = 'font-openSauce' | 'font-roboto' | 'font-archivo';
 
-export type TypographyColor = 'text-dark900' | 'text-dark500' | 'text-dark300' | 'text-dark400' |'text-primary' | 'text-white' | 'text-transparent' | 'text-success' | 'text-error'
+export type TypographyColor = 'text-dark900' | 'text-dark500' | 'text-dark300' | 'text-dark400' | 'text-dark200' | 'text-dark50' | 'text-dark100' | 'text-primary' | 'text-white' | 'text-transparent' | 'text-success' | 'text-error'
 
 export type TypographyType = 'text-caption2' | 'text-caption1' | 'text-body' | 'text-subtitle3' |'text-subtitle2' | 'text-subtitle1' | 'text-h3' | 'text-h2' | 'text-h1' | 'text-title' | 'text-tiny';
 

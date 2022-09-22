@@ -40,6 +40,12 @@
     font-weight: 700;
 }
 
+@font-face {
+    font-family: "Archivo";
+    src: url("assets/Fonts/Archivo/Archivo-Regular.ttf");
+    font-weight: 400;
+}
+
 @layer components {
     .border-style {
         @apply border border-borderLight dark:border-borderDark;
@@ -80,4 +86,12 @@
 
 .speedometer .segment-value {
     transform: translate(0, -30px)
+}
+
+@layer base {
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }

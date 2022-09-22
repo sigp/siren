@@ -1,4 +1,4 @@
-import React, {FC, ReactNode} from "react";
+import React, {ButtonHTMLAttributes, FC, ReactNode} from "react";
 import {TypographyFamily, TypographyType} from "../Typography/Typography";
 
 export enum ButtonFace {
@@ -6,7 +6,8 @@ export enum ButtonFace {
   SECONDARY = "SECONDARY",
   TERTIARY = "TERTIARY",
   ICON = "ICON",
-  LIGHT = "LIGHT"
+  LIGHT = "LIGHT",
+  WHITE = "WHITE"
 }
 
 export interface ButtonProps {
@@ -15,14 +16,15 @@ export interface ButtonProps {
   font?: TypographyFamily
   fontType?: TypographyType
   children: ReactNode | ReactNode[]
-  onClick?: () => void,
-  padding?: string,
-  className?: string,
-  href?: string,
+  onClick?: () => void
+  padding?: string
+  className?: string
+  renderAs?: 'submit' | 'reset' | 'button'
+  href?: string
   target?: '_self' | '_blank'
 }
 
-const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, className, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled, padding = 'px-4 py-2'}) => {
+const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, href, className, fontType = 'text-body', target = '_self', font = 'font-openSauce', isDisabled, padding = 'px-4 py-2', renderAs = 'button'}) => {
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.LIGHT:
@@ -32,14 +34,16 @@ const Button:FC<ButtonProps> = ({type = ButtonFace.PRIMARY, children, onClick, h
       case ButtonFace.TERTIARY:
         return 'border border-primary text-primary';
       case ButtonFace.SECONDARY:
-        return 'bg-primary text-white'
+        return 'bg-primary text-white';
+      case ButtonFace.WHITE:
+        return 'bg-transparent disabled:border-dark300 disabled:text-dark300 disabled:cursor-default border border-white text-white'
       default:
         return 'border border-black text-black disabled:border-dark300 disabled:text-dark300 disabled:pointer-events-none'
     }
   }
 
   const renderButton = () => (
-      <button onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}>
+      <button type={renderAs} onClick={onClick} disabled={isDisabled} className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}>
         {children}
       </button>
   )
