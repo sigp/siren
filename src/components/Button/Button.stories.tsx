@@ -1,42 +1,42 @@
-import Button, {ButtonFace, ButtonProps} from "./Button";
-import {ComponentMeta, Story} from "@storybook/react";
+import Button, { ButtonFace, ButtonProps } from './Button'
+import { ComponentMeta, Story } from '@storybook/react'
 
 export default {
-    title: 'Button',
-    component: Button,
-} as ComponentMeta<typeof Button>;
+  title: 'Button',
+  component: Button,
+} as ComponentMeta<typeof Button>
 
-const Template: Story<ButtonProps> = ({children, ...props}) => (
-    <Button {...props}>{children}</Button>
-);
+const Template: Story<ButtonProps> = ({ children, ...props }) => (
+  <Button {...props}>{children}</Button>
+)
 
-export const Base = Template.bind({});
+export const Base = Template.bind({})
 Base.args = {
-    children: 'Base Button',
+  children: 'Base Button',
 }
 
-export const BaseDisabled = Template.bind({});
+export const BaseDisabled = Template.bind({})
 BaseDisabled.args = {
-    children: 'Disabled Button',
-    isDisabled: true,
+  children: 'Disabled Button',
+  isDisabled: true,
 }
 
-export const Secondary = Template.bind({});
+export const Secondary = Template.bind({})
 Secondary.args = {
-    type: ButtonFace.SECONDARY,
-    children: 'Secondary Button'
+  type: ButtonFace.SECONDARY,
+  children: 'Secondary Button',
 }
 
-export const Tertiary = Template.bind({});
+export const Tertiary = Template.bind({})
 Tertiary.args = {
-    type: ButtonFace.TERTIARY,
-    children: 'I Understand and Accept'
+  type: ButtonFace.TERTIARY,
+  children: 'I Understand and Accept',
 }
 
-export const LinkButton = Template.bind({});
+export const LinkButton = Template.bind({})
 LinkButton.args = {
-    type: ButtonFace.PRIMARY,
-    children: 'Link Button',
-    href: 'https://www.google.com/',
-    target: '_blank'
+  type: ButtonFace.PRIMARY,
+  children: 'Link Button',
+  href: 'https://www.google.com/',
+  target: '_blank',
 }

@@ -1,19 +1,22 @@
-import {FC} from "react";
-import {StatusType} from "../../types";
+import { FC } from 'react'
+import { StatusType } from '../../types'
 
 export interface StatusBarProps {
-    count: 1 | 2 | 3,
-    status: StatusType
+  count: 1 | 2 | 3
+  status: StatusType
 }
 
-const StatusBar:FC<StatusBarProps> = ({count, status}) => {
+const StatusBar: FC<StatusBarProps> = ({ count, status }) => {
   return (
-      <div className="flex h-3 space-x-1">
-          {Array.from(Array(3).keys()).map((index) => (
-              <div key={index} className={`h-full w-1.5 ${status} ${index + 1 > count ? 'opacity-0' : ''}`}/>
-          ))}
-      </div>
+    <div className='flex h-3 space-x-1'>
+      {Array.from(Array(3).keys()).map((index) => (
+        <div
+          key={index}
+          className={`h-full w-1.5 ${status} ${index + 1 > count ? 'opacity-0' : ''}`}
+        />
+      ))}
+    </div>
   )
 }
 
-export default StatusBar;
+export default StatusBar

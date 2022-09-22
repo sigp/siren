@@ -1,15 +1,12 @@
-import FootBar from "./FootBar";
-import {Story} from "@storybook/react";
-
+import FootBar from './FootBar'
+import { Story } from '@storybook/react'
 
 export default {
-    key: 'FootBar',
-    component: FootBar
+  key: 'FootBar',
+  component: FootBar,
 }
 
-const Template:Story = () => (
-    <FootBar/>
-);
+const Template: Story = () => <FootBar />
 
-export const Base = Template.bind({});
-Base.args = {};
+export const Base = Template.bind({})
+Base.args = {}
