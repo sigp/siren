@@ -36,8 +36,8 @@
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "test-storybook": "test-storybook",
-    "lint": "eslint src/**/*.{js,jsx,ts,tsx,json}",
-    "lint:fix": "eslint --fix 'src/**/*.{js,jsx,ts,tsx,json}'",
+    "lint": "eslint src/**/*.{ts,tsx,json}",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx,json}'",
     "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc"
   },
   "eslintConfig": {
