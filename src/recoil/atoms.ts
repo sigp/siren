@@ -7,9 +7,9 @@ export const uiMode = atom<UiMode>({
   default: UiMode.LIGHT,
 })
 
-export const appView = atom<AppView>({
+export const appView = atom<AppView | undefined>({
   key: 'AppView',
-  default: AppView.ONBOARD,
+  default: undefined,
 })
 
 export const dashView = atom<ContentView>({

@@ -73,7 +73,7 @@ const ConfigureConnection = () => {
               <Controller
                 name='apiToken'
                 control={control}
-                render={({ field: { ...props } }) => (
+                render={({ field: { ref: _ref, ...props } }) => (
                   <Input
                     label='Api Token'
                     tooltip='api token tooltip'
@@ -87,14 +87,14 @@ const ConfigureConnection = () => {
                 <Controller
                   name='deviceName'
                   control={control}
-                  render={({ field: { ...props } }) => (
+                  render={({ field: { ref: _ref, ...props } }) => (
                     <Input label='Device Name' placeholder='Local Host' {...props} />
                   )}
                 />
                 <Controller
                   name='userName'
                   control={control}
-                  render={({ field: { ...props } }) => (
+                  render={({ field: { ref: _ref, ...props } }) => (
                     <Input label='What should I call you?' placeholder='Name' {...props} />
                   )}
                 />
@@ -114,7 +114,9 @@ const ConfigureConnection = () => {
                 <Controller
                   name='isRemember'
                   control={control}
-                  render={({ field: { ...props } }) => <Toggle id='isRemember' {...props} />}
+                  render={({ field: { ref: _ref, ...props } }) => (
+                    <Toggle id='isRemember' {...props} />
+                  )}
                 />
               </div>
               <Button

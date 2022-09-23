@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: 'class',
-  content: ["./src/**/*.{ts,tsx}"],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -35,10 +35,13 @@ module.exports = {
         warning: '#FFB800',
         error: '#FF4D00',
       },
+      backgroundImage: {
+        'lighthouse': 'url(\'./assets/images/lightHouseBg.png\')',
+      },
       fontFamily: {
-        openSauce: ["OpenSauce", "sans-serif"],
-        roboto: ["Roboto", "sans-serif"],
-        archivo: ["Archivo", "sans-serif"],
+        openSauce: ['OpenSauce', 'sans-serif'],
+        roboto: ['Roboto', 'sans-serif'],
+        archivo: ['Archivo', 'sans-serif'],
       },
       fontSize: {
         tiny: '8px',
@@ -84,8 +87,16 @@ module.exports = {
         40: '40%',
         45: '45%',
       },
+      keyframes: {
+        blink: {
+          '0%': {opacity: '100%'},
+          '50%': {opacity: '100%'},
+          '100%': {opacity: '0%'}
+        }
+      },
       animation: {
         'spin-slow': 'spin 240s linear infinite',
+        'blink': 'blink 1s linear infinite',
       },
       translate: {
         '14.5': '60px',
@@ -99,8 +110,8 @@ module.exports = {
     },
   },
   plugins: [
-    require("tailwindcss-scoped-groups")({
-      groups: ["sidebar"],
+    require('tailwindcss-scoped-groups')({
+      groups: ['sidebar'],
     })
   ],
 }
