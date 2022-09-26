@@ -3,6 +3,7 @@ import { onBoardView } from '../../recoil/atoms'
 import { OnboardView } from '../../constants/enums'
 import SelectProvider from './views/SelectProvider'
 import ConfigureConnection from './views/ConfigureConnection'
+import ValidatorSetup from './views/ValidatorSetup/ValidatorSetup'
 
 const Onboard = () => {
   const view = useRecoilValue(onBoardView)
@@ -11,7 +12,7 @@ const Onboard = () => {
     case OnboardView.CONFIGURE:
       return <ConfigureConnection />
     case OnboardView.SETUP:
-      return <div>Hello Setup</div>
+      return <ValidatorSetup />
     default:
       return <SelectProvider />
   }
