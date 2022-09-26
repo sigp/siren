@@ -44,11 +44,12 @@ export interface ConfigConnectionFormProps {
 const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
-  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setView = useSetRecoilState(onBoardView)
+  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
 
   const [, storeBeaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
+  const [, storeApiToken] = useLocalStorage<string | undefined>('api-token', undefined)
   const [, storeValidatorClient] = useLocalStorage<Endpoint | undefined>(
     'validatorClient',
     undefined,
@@ -99,11 +100,12 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   }
 
   const onSubmit = () => {
-    const { isRemember } = getValues()
+    const { isRemember, apiToken } = getValues()
 
     if (isRemember) {
       storeBeaconNode(beaconNode)
       storeValidatorClient(validatorClient)
+      storeApiToken(apiToken)
     }
 
     setBeaconNode(beaconNode)

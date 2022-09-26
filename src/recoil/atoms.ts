@@ -31,3 +31,8 @@ export const validatorClientEndpoint = atom<Endpoint>({
   key: 'ValidatorClient',
   default: undefined,
 })
+
+export const apiToken = atom<string>({
+  key: 'ApiToken',
+  default: undefined,
+})
