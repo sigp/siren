@@ -1,9 +1,7 @@
 import Typography from '../../../../../components/Typography/Typography'
-import DiagnosticSummaryCard from '../../../../../components/DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { DiagnosticRate, DiagnosticType } from '../../../../../constants/enums'
-import DiagnosticCard from '../../../../../components/DiagnosticCard/DiagnosticCard'
 import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth'
 import { Suspense } from 'react'
+import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth'
 
 const HealthCheck = () => {
   return (
@@ -27,30 +25,9 @@ const HealthCheck = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <DeviceHealth />
         </Suspense>
-        <div className='w-full h-24 flex space-x-2 mt-2'>
-          <DiagnosticSummaryCard type={DiagnosticType.NETWORK} rate={DiagnosticRate.GREAT} />
-          <DiagnosticCard
-            maxHeight='h-full'
-            title='Disk'
-            metric='511GB'
-            subTitle='22% Utilization'
-            status='bg-success'
-          />
-          <DiagnosticCard
-            maxHeight='h-full'
-            title='CPU'
-            metric='1.9GHZ'
-            subTitle='13% Utilization'
-            status='bg-warning'
-          />
-          <DiagnosticCard
-            maxHeight='h-full'
-            title='RAM'
-            metric='15.9GB'
-            subTitle='48% Utilization'
-            status='bg-error'
-          />
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <NetworkHealth />
+        </Suspense>
       </div>
     </div>
   )
