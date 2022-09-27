@@ -1,29 +1,19 @@
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import { useRecoilValue } from 'recoil'
-import { selectHeathDiagnostic } from '../../recoil/selectors/selectHeathDiagnostic'
-import { useMemo } from 'react'
-import formatGigBytes from '../../utilities/formatGigBytes'
-import getPercentage from '../../utilities/getPercentage'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 
 const DeviceHealth = () => {
-  const { mem_free, mem_used, mem_total } = useRecoilValue(selectHeathDiagnostic)
-
-  const diskUtilization = useMemo(
-    () => (mem_used && mem_total ? Math.round(getPercentage(mem_used, mem_total)) : 0),
-    [mem_used, mem_total],
-  )
-  const totalDiskFree = useMemo(() => formatGigBytes(mem_free), [mem_free])
-  const diskStatus = useMemo(
-    () =>
-      totalDiskFree > 300
-        ? 'bg-success'
-        : totalDiskFree > 200 && totalDiskFree < 300
-        ? 'bg-warning'
-        : 'bg-error',
-    [totalDiskFree],
-  )
+  const {
+    totalDiskSpace,
+    diskUtilization,
+    diskStatus,
+    totalMemory,
+    memoryUtilization,
+    ramStatus,
+    cpuUtilization,
+    cpuStatus,
+  } = useDeviceDiagnostics()
 
   return (
     <div className='w-full h-24 flex space-x-2'>
@@ -31,23 +21,23 @@ const DeviceHealth = () => {
       <DiagnosticCard
         maxHeight='h-full'
         title='Disk'
-        metric={`${totalDiskFree.toFixed(1)}GB`}
+        metric={`${totalDiskSpace.toFixed(1)}GB`}
         subTitle={`${diskUtilization}% Utilization`}
         status={diskStatus}
       />
       <DiagnosticCard
         maxHeight='h-full'
         title='CPU'
-        metric='1.9GHZ'
-        subTitle='13% Utilization'
-        status='bg-warning'
+        metric='- GHZ'
+        subTitle={`${cpuUtilization}% Utilization`}
+        status={cpuStatus}
       />
       <DiagnosticCard
         maxHeight='h-full'
         title='RAM'
-        metric='15.9GB'
-        subTitle='48% Utilization'
-        status='bg-error'
+        metric={`${totalMemory.toFixed(1)}GB`}
+        subTitle={`${memoryUtilization}% Utilization`}
+        status={ramStatus}
       />
     </div>
   )
