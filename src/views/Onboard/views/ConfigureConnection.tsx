@@ -29,6 +29,7 @@ const ConfigureConnection = () => {
             isValidBeaconNode,
             isValidValidatorClient,
             changeFormType,
+            isDisabled,
             ...props
           }) => (
             <div className='space-y-8'>
@@ -119,11 +120,7 @@ const ConfigureConnection = () => {
                   )}
                 />
               </div>
-              <Button
-                onClick={onSubmit}
-                isDisabled={!isValidBeaconNode || !isValidValidatorClient}
-                type={ButtonFace.WHITE}
-              >
+              <Button onClick={onSubmit} isDisabled={isDisabled} type={ButtonFace.WHITE}>
                 Configure
                 <i className='ml-4 bi-arrow-right' />
               </Button>
