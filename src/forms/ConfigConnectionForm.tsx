@@ -10,7 +10,6 @@ import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import axios, { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
-import setAxiosInterceptorHeader from '../utilities/setAxiosInterceptorHeader'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -132,10 +131,6 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
         headers: {
           authorization: `Bearer ${apiToken}`,
         },
-      })
-
-      setAxiosInterceptorHeader({
-        Authorization: `Bearer ${apiToken}`,
       })
 
       if (status !== 200) {

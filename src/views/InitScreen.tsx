@@ -12,7 +12,6 @@ import {
 } from '../recoil/atoms'
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
-import setAxiosInterceptorHeader from '../utilities/setAxiosInterceptorHeader'
 
 const InitScreen = () => {
   const [step, setStep] = useState<number>(0)
@@ -30,10 +29,6 @@ const InitScreen = () => {
       setView(AppView.ONBOARD)
       return
     }
-
-    setAxiosInterceptorHeader({
-      Authorization: `Bearer ${token}`,
-    })
 
     setBeaconNode(beaconNode)
     setValidatorClient(validatorClient)
