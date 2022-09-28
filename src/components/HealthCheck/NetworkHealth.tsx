@@ -1,15 +1,17 @@
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo';
-import { useMemo } from 'react';
-import secondsToShortHand from '../../utilities/secondsToShortHand';
+import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
+import { useMemo } from 'react'
+import secondsToShortHand from '../../utilities/secondsToShortHand'
 
 const NetworkHealth = () => {
-  const { beaconPercentage, beaconSyncTime } = useBeaconSyncInfo();
+  const { beaconPercentage, beaconSyncTime } = useBeaconSyncInfo()
 
-  const remainingBeaconTime = useMemo<string>(() =>
-    secondsToShortHand(beaconSyncTime || 0), [beaconSyncTime]);
+  const remainingBeaconTime = useMemo<string>(
+    () => secondsToShortHand(beaconSyncTime || 0),
+    [beaconSyncTime],
+  )
 
   return (
     <div className='w-full h-24 flex space-x-2 mt-2'>
@@ -18,7 +20,7 @@ const NetworkHealth = () => {
         maxHeight='h-full'
         title='Disk'
         isBackground={false}
-        subTitleHighlightColor="bg-warning"
+        subTitleHighlightColor='bg-warning'
         subTitle='Network Unavailable'
         status='bg-dark100'
       />

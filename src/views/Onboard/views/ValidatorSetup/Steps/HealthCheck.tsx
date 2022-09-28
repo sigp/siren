@@ -2,7 +2,7 @@ import Typography from '../../../../../components/Typography/Typography'
 import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth'
 import { Suspense } from 'react'
 import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth'
-import HealthOverview from '../../../../../components/HealthCheck/HealthOverview';
+import HealthOverview from '../../../../../components/HealthCheck/HealthOverview'
 
 const HealthCheck = () => {
   return (
@@ -30,7 +30,7 @@ const HealthCheck = () => {
           <NetworkHealth />
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
-          <HealthOverview/>
+          <HealthOverview />
         </Suspense>
       </div>
     </div>

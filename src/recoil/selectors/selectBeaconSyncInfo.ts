@@ -1,7 +1,7 @@
 import { selector } from 'recoil'
 import axios from 'axios'
 import { selectBeaconUrl } from './selectBeaconUrl'
-import { BeaconSyncResult } from '../../types/diagnostic';
+import { BeaconSyncResult } from '../../types/diagnostic'
 
 export const selectBeaconSyncInfo = selector<BeaconSyncResult>({
   key: 'BeaconSyncInfo',
@@ -12,7 +12,7 @@ export const selectBeaconSyncInfo = selector<BeaconSyncResult>({
     return {
       ...data.data,
       head_slot: Number(data.data.head_slot),
-      sync_distance: Number(data.data.sync_distance)
+      sync_distance: Number(data.data.sync_distance),
     }
   },
 })

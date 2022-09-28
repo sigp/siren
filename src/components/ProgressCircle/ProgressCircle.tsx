@@ -16,15 +16,15 @@ const ProgressCircle: FC<ProgressCircleProps> = ({
   id,
   color = 'primary',
   direction = 'clock',
-  size = 'md'
+  size = 'md',
 }) => {
-  const isSmall = size === 'sm';
-  const radius = isSmall ? 18 : 20;
+  const isSmall = size === 'sm'
+  const radius = isSmall ? 18 : 20
   const circumference = radius * 2 * Math.PI
   const formattedPercentage = percent < 0 ? 0 : percent > 100 ? 100 : percent
   const offset = circumference - (formattedPercentage / 100) * circumference
   const strokeWidth = 10
-  const xy = isSmall ? 16 : 20;
+  const xy = isSmall ? 16 : 20
 
   return (
     <div

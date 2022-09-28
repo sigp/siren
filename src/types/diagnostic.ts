@@ -12,15 +12,15 @@ export type HealthDiagnosticResult = {
 }
 
 export type BeaconSyncResult = {
-  head_slot: number,
+  head_slot: number
   is_optimistic: boolean
   is_syncing: boolean
   sync_distance: number
 }
 
 export type BeaconSyncInfo = {
-  headSlot: number,
-  slotDistance: number,
-  beaconPercentage: number,
+  headSlot: number
+  slotDistance: number
+  beaconPercentage: number
   beaconSyncTime: number // Time in seconds
 }
