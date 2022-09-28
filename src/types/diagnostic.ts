@@ -10,3 +10,17 @@ export type HealthDiagnosticResult = {
   root_fs_size: number // Disk Storage Size data
   uptime: number // Total Node-Client runtime
 }
+
+export type BeaconSyncResult = {
+  head_slot: number,
+  is_optimistic: boolean
+  is_syncing: boolean
+  sync_distance: number
+}
+
+export type BeaconSyncInfo = {
+  headSlot: number,
+  slotDistance: number,
+  beaconPercentage: number,
+  beaconSyncTime: number // Time in seconds
+}
