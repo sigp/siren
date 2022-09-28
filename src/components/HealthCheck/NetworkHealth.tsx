@@ -1,13 +1,15 @@
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import { useRecoilValue } from 'recoil'
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo';
+import { useMemo } from 'react';
+import secondsToShortHand from '../../utilities/secondsToShortHand';
 
 const NetworkHealth = () => {
-  const data = useRecoilValue(selectBeaconSyncInfo)
+  const { beaconPercentage, beaconSyncTime } = useBeaconSyncInfo();
 
-  console.log(data)
+  const remainingBeaconTime = useMemo<string>(() =>
+    secondsToShortHand(beaconSyncTime || 0), [beaconSyncTime]);
 
   return (
     <div className='w-full h-24 flex space-x-2 mt-2'>
@@ -15,23 +17,26 @@ const NetworkHealth = () => {
       <DiagnosticCard
         maxHeight='h-full'
         title='Disk'
-        metric='511GB'
-        subTitle='22% Utilization'
-        status='bg-success'
+        isBackground={false}
+        subTitleHighlightColor="bg-warning"
+        subTitle='Network Unavailable'
+        status='bg-dark100'
       />
       <DiagnosticCard
         maxHeight='h-full'
-        title='CPU'
-        metric='1.9GHZ'
-        subTitle='13% Utilization'
-        status='bg-warning'
+        title='Ethereum Geth'
+        metric='0H 01M'
+        percent={25}
+        isBackground={false}
+        subTitle='Connected Out of Sync'
       />
       <DiagnosticCard
         maxHeight='h-full'
-        title='RAM'
-        metric='15.9GB'
-        subTitle='48% Utilization'
-        status='bg-error'
+        title='Beacon Node'
+        metric={remainingBeaconTime}
+        percent={beaconPercentage}
+        isBackground={false}
+        subTitle={`Connected ${beaconPercentage < 100 ? 'Out of Sync' : 'In Sync'}`}
       />
     </div>
   )

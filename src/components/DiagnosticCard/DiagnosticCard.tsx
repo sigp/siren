@@ -1,15 +1,20 @@
 import { FC } from 'react'
 import Typography from '../Typography/Typography'
 import network from '../../assets/images/network.svg'
+import NA from '../../assets/images/NA.png'
 import darkNetwork from '../../assets/images/darkNetwork.svg'
 import Status, { StatusType } from '../Status/Status'
+import ProgressCircle from '../ProgressCircle/ProgressCircle';
+import generateId from '../../utilities/generateId';
 
 export interface DiagnosticCardProps {
-  status: StatusType
+  status?: StatusType
+  percent?: number
   title: string
-  metric: string
+  metric?: string
   subTitle: string
   border?: string
+  subTitleHighlightColor?: string
   maxHeight?: string
   isBackground?: boolean
   size?: 'lg' | 'md' | 'sm'
@@ -23,7 +28,9 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   maxHeight,
   isBackground = true,
   border = 'border border-dark200',
+  percent,
   size = 'md',
+  subTitleHighlightColor,
 }) => {
   const isSmall = size === 'sm'
   const getContainerSize = () => {
@@ -41,7 +48,13 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
     <div
       className={`w-full h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}
     >
-      {size !== 'sm' && isBackground && (
+      {!metric ? (
+        <img
+          className='absolute dark:hidden right-0 top-1/2 transform -translate-y-1/2'
+          src={NA}
+          alt='network'
+        />
+      ) : size !== 'sm' && isBackground && (
         <>
           <img
             className='w-full absolute dark:hidden left-0 top-1/2 transform -translate-y-1/2'
@@ -62,16 +75,24 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
         >
           {title}
         </Typography>
-        <Typography
-          type={isSmall ? 'text-tiny' : 'text-caption1'}
-          className={!isSmall ? 'xl:text-subtitle2' : ''}
-        >
-          {metric}
-        </Typography>
+        {
+          metric && (
+            <Typography
+              type={isSmall ? 'text-tiny' : 'text-caption1'}
+              className={!isSmall ? 'xl:text-subtitle2' : ''}
+            >
+              {metric}
+            </Typography>
+          )
+        }
       </div>
       <div className='w-full z-10 space-x-8 flex items-center justify-between'>
-        <Typography type={isSmall ? 'text-tiny' : 'text-caption1'}>{subTitle}</Typography>
-        <Status status={status} />
+        <Typography type={isSmall ? 'text-tiny' : 'text-caption1'} className={subTitleHighlightColor ? `${subTitleHighlightColor} px-1` : undefined}>{subTitle}</Typography>
+        {percent ? (
+          <ProgressCircle size="sm" id={generateId(12)} percent={percent}/>
+        ) : status && (
+          <Status status={status} />
+        )}
       </div>
     </div>
   )
