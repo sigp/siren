@@ -2,11 +2,12 @@ import Typography from '../../../../../components/Typography/Typography'
 import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth'
 import { Suspense } from 'react'
 import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth'
+import HealthOverview from '../../../../../components/HealthCheck/HealthOverview';
 
 const HealthCheck = () => {
   return (
     <div className='w-full h-full flex items-center justify-center'>
-      <div className='w-full max-w-6xl'>
+      <div className='w-full max-w-1142'>
         <div className='flex space-x-2 items-center'>
           <i className='text-caption2 bi-arrow-left' />
           <Typography type='text-caption2' className='uppercase'>
@@ -27,6 +28,9 @@ const HealthCheck = () => {
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
           <NetworkHealth />
+        </Suspense>
+        <Suspense fallback={<div>Loading...</div>}>
+          <HealthOverview/>
         </Suspense>
       </div>
     </div>

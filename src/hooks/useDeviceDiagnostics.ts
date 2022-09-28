@@ -61,6 +61,7 @@ const useDeviceDiagnostics = () => {
   return {
     totalDiskSpace,
     diskUtilization,
+    totalDiskFree,
     diskStatus,
     totalMemory,
     memoryUtilization,
