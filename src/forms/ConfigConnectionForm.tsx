@@ -5,7 +5,13 @@ import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
-import { beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms'
+import { apiToken, beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms'
+import { configValidation } from '../validation/configValidation'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AxiosError } from 'axios'
+import { toast } from 'react-toastify'
+import { fetchVersion } from '../api/lighthouse'
+import { ApiTokenStorage, EndpointStorage } from '../types/storage'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -44,15 +50,14 @@ export interface ConfigConnectionFormProps {
 const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
-  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setView = useSetRecoilState(onBoardView)
+  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  const setApiToken = useSetRecoilState(apiToken)
 
-  const [, storeBeaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
-  const [, storeValidatorClient] = useLocalStorage<Endpoint | undefined>(
-    'validatorClient',
-    undefined,
-  )
+  const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
+  const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
+  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -79,13 +84,15 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       userName: '',
       isRemember: false,
     },
+    mode: 'onChange',
+    resolver: yupResolver(configValidation),
   })
 
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
 
-  const isValidBeaconNode = useApiValidation(beaconNode, 'eth/v1/node/version')
-  const isValidValidatorClient = useApiValidation(validatorClient, 'lighthouse/auth')
+  const isValidBeaconNode = useApiValidation('eth/v1/node/version', beaconNode)
+  const isValidValidatorClient = useApiValidation('lighthouse/auth', validatorClient)
 
   const changeFormType = (type: ConfigType) => {
     resetField('beaconNode', { defaultValue: endPointDefault })
@@ -98,18 +105,48 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     setType(type)
   }
 
-  const onSubmit = () => {
-    const { isRemember } = getValues()
-
-    if (isRemember) {
-      storeBeaconNode(beaconNode)
-      storeValidatorClient(validatorClient)
+  const handleError = (e: unknown) => {
+    let message = 'Unknown Error'
+    if (e instanceof AxiosError && e.response?.status === 403) {
+      message = 'Invalid Api Token'
     }
 
-    setBeaconNode(beaconNode)
-    setValidatorClient(validatorClient)
-    setView(OnboardView.SETUP)
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 5000,
+      theme: 'colored',
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    })
   }
+
+  const onSubmit = async () => {
+    const { isRemember, apiToken } = getValues()
+
+    try {
+      const { status } = await fetchVersion(validatorClient, apiToken)
+
+      if (status !== 200) {
+        handleError('')
+        return
+      }
+
+      if (isRemember) {
+        storeBeaconNode(beaconNode)
+        storeValidatorClient(validatorClient)
+        storeApiToken(apiToken)
+      }
+
+      setApiToken(apiToken)
+      setBeaconNode(beaconNode)
+      setValidatorClient(validatorClient)
+      setView(OnboardView.SETUP)
+    } catch (e) {
+      handleError(e)
+    }
+  }
+
   return (
     <form>
       {children &&
@@ -123,7 +160,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           isValidBeaconNode,
           isValidValidatorClient,
           formType,
-          isDisabled: !isValid,
+          isDisabled: !isValid || !isValidBeaconNode || !isValidValidatorClient,
         })}
     </form>
   )

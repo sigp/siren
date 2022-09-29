@@ -7,6 +7,7 @@ export interface ProgressCircleProps {
   percent?: number
   color?: ProgressColor
   direction?: ProgressDirection
+  size?: 'sm' | 'md'
   id: string
 }
 
@@ -15,28 +16,31 @@ const ProgressCircle: FC<ProgressCircleProps> = ({
   id,
   color = 'primary',
   direction = 'clock',
+  size = 'md',
 }) => {
-  const radius = 20
+  const isSmall = size === 'sm'
+  const radius = isSmall ? 18 : 20
   const circumference = radius * 2 * Math.PI
   const formattedPercentage = percent < 0 ? 0 : percent > 100 ? 100 : percent
   const offset = circumference - (formattedPercentage / 100) * circumference
   const strokeWidth = 10
+  const xy = isSmall ? 16 : 20
 
   return (
     <div
-      className={`inline-flex items-center justify-center overflow-hidden rounded-full ${
+      className={`inline-flex flex-shrink-0 items-center justify-center overflow-hidden rounded-full ${
         direction === 'clock' ? 'rotate-90' : 'flip'
       }`}
     >
-      <svg className='w-10 h-10'>
+      <svg className={isSmall ? 'w-8 h-8' : 'w-10 h-10'}>
         <circle
           className='text-gray-300 dark:text-black'
           strokeWidth={strokeWidth}
           stroke='currentColor'
           fill='transparent'
           r={radius}
-          cx='20'
-          cy='20'
+          cx={xy}
+          cy={xy}
         />
         <linearGradient id={id}>
           {color === 'primary' ? (
@@ -60,8 +64,8 @@ const ProgressCircle: FC<ProgressCircleProps> = ({
           stroke={`url(#${id})`}
           fill='transparent'
           r={radius}
-          cx='20'
-          cy='20'
+          cx={xy}
+          cy={xy}
         />
       </svg>
     </div>

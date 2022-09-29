@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
+export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error' | 'bg-dark100'
 
 export interface StatusProps {
   status: StatusType

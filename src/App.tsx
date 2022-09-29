@@ -5,6 +5,8 @@ import { AppView, UiMode } from './constants/enums'
 import Dashboard from './views/DashBoard/Dashboard'
 import Onboard from './views/Onboard/Onboard'
 import InitScreen from './views/InitScreen'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.min.css'
 
 function App() {
   const mode = useRecoilValue(uiMode)
@@ -28,6 +30,7 @@ function App() {
       } relative h-screen w-screen overflow-hidden flex`}
     >
       {renderView()}
+      <ToastContainer />
     </div>
   )
 }

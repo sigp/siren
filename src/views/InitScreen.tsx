@@ -3,24 +3,58 @@ import useLocalStorage from '../hooks/useLocalStorage'
 import { Endpoint } from '../forms/ConfigConnectionForm'
 import { useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
-import { appView } from '../recoil/atoms'
-import { AppView } from '../constants/enums'
+import {
+  apiToken,
+  appView,
+  beaconNodeEndpoint,
+  onBoardView,
+  validatorClientEndpoint,
+} from '../recoil/atoms'
+import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import { fetchVersion } from '../api/lighthouse'
 
 const InitScreen = () => {
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
+  const setOnboardView = useSetRecoilState(onBoardView)
+  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
+  const setApiToken = useSetRecoilState(apiToken)
+  const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
+  const [token] = useLocalStorage<string | undefined>('api-token', undefined)
+
+  const moveToOnBoarding = () => {
+    setTimeout(() => {
+      setView(AppView.ONBOARD)
+    }, 1000)
+  }
 
   useEffect(() => {
-    if (!validatorClient || !beaconNode) {
-      setView(AppView.ONBOARD)
+    if (!validatorClient || !beaconNode || !token) {
+      moveToOnBoarding()
       return
     }
 
-    setStep((prev) => prev++)
-  }, [validatorClient, beaconNode])
+    ;(async () => {
+      try {
+        const { status } = await fetchVersion(validatorClient, token)
+
+        if (status === 200) {
+          setBeaconNode(beaconNode)
+          setValidatorClient(validatorClient)
+          setApiToken(token)
+
+          setStep((prev) => prev++)
+          setOnboardView(OnboardView.SETUP)
+          moveToOnBoarding()
+        }
+      } catch (e) {
+        moveToOnBoarding()
+      }
+    })()
+  }, [validatorClient, beaconNode, token])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>

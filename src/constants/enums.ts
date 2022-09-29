@@ -31,3 +31,19 @@ export enum Protocol {
   HTTP = 'http',
   HTTPS = 'https',
 }
+
+export enum DiagnosticType {
+  DEVICE = 'DEVICE',
+  NETWORK = 'NETWORK',
+}
+
+export enum DiagnosticRate {
+  FAIR = 'FAIR',
+  POOR = 'POOR',
+  GREAT = 'GREAT',
+}
+
+export enum SetupSteps {
+  HEALTH = 'HEALTH',
+  SYNC = 'SYNC',
+}
