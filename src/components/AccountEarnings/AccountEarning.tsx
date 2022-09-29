@@ -90,19 +90,19 @@ const AccountEarning = () => {
           <div className='px-4 flex justify-between'>
             <Typography color='text-white'>Earnings</Typography>
             <div className='flex ml-8 space-x-1'>
-              <Button type={ButtonFace.LIGHT} padding='p-2 1.5xl:px-4 1.5xl:py-2'>
+              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
                 Hourly
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 1.5xl:px-4 1.5xl:py-2'>
+              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
                 Daily
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 1.5xl:px-4 1.5xl:py-2'>
+              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
                 Weekly
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 1.5xl:px-4 1.5xl:py-2'>
+              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
                 Monthly
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 1.5xl:px-4 1.5xl:py-2'>
+              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
                 Total
               </Button>
             </div>

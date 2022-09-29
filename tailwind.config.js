@@ -105,8 +105,9 @@ module.exports = {
         'toggleWidth': '3rem'
       },
       screens: {
-        '1.5xl': '1440px',
-        '.85xl': '1024px'
+        '@1440': '1440px',
+        '@1024': '1024px',
+        '@1200': '1200px'
       }
     },
   },
