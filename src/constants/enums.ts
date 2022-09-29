@@ -42,3 +42,8 @@ export enum DiagnosticRate {
   POOR = 'POOR',
   GREAT = 'GREAT',
 }
+
+export enum SetupSteps {
+  HEALTH = 'HEALTH',
+  SYNC = 'SYNC'
+}

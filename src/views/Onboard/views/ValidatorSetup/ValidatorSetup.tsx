@@ -1,13 +1,36 @@
-import { useState } from 'react'
-import HealthCheck from './Steps/HealthCheck'
+import HealthCheck from './Steps/HealthCheck';
+import { SetupSteps } from '../../../../constants/enums';
+import { useRecoilState } from 'recoil';
+import { setupStep } from '../../../../recoil/atoms';
+import useLocalStorage from '../../../../hooks/useLocalStorage';
+import { useEffect } from 'react';
+import { HealthCheckStorage } from '../../../../types/storage';
 
 const ValidatorSetup = () => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [view, _setView] = useState('')
+  const [view, setView] = useRecoilState(setupStep);
+  const [healthCheck] = useLocalStorage<HealthCheckStorage>('health-check', undefined)
+
+  useEffect(() => {
+    if(view) return;
+
+    if(!healthCheck) {
+      setView(SetupSteps.HEALTH)
+      return
+    }
+
+    setView(SetupSteps.SYNC)
+
+  }, [view, healthCheck])
+
+
 
   switch (view) {
-    default:
+    case SetupSteps.SYNC:
+      return <div>Hello Sync</div>
+    case SetupSteps.HEALTH:
       return <HealthCheck />
+    default:
+      return null
   }
 }
 

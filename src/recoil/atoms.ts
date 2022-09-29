@@ -1,5 +1,5 @@
 import { atom } from 'recoil'
-import { AppView, ContentView, OnboardView, UiMode } from '../constants/enums'
+import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums';
 import { Endpoint } from '../forms/ConfigConnectionForm'
 
 export const uiMode = atom<UiMode>({
@@ -35,4 +35,9 @@ export const validatorClientEndpoint = atom<Endpoint>({
 export const apiToken = atom<string>({
   key: 'ApiToken',
   default: undefined,
+})
+
+export const setupStep = atom<SetupSteps | undefined>({
+  key: 'SetupStep',
+  default: undefined
 })
