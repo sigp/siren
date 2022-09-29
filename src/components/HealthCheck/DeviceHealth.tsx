@@ -16,24 +16,24 @@ const DeviceHealth = () => {
   } = useDeviceDiagnostics()
 
   return (
-    <div className='w-full h-24 flex space-x-2'>
+    <div className='w-full md:h-24 flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-2'>
       <DiagnosticSummaryCard type={DiagnosticType.DEVICE} rate={DiagnosticRate.FAIR} />
       <DiagnosticCard
-        maxHeight='h-full'
+        size="health"
         title='Disk'
         metric={`${totalDiskSpace.toFixed(1)}GB`}
         subTitle={`${diskUtilization}% Utilization`}
         status={diskStatus}
       />
       <DiagnosticCard
-        maxHeight='h-full'
+        size="health"
         title='CPU'
         metric='- GHZ'
         subTitle={`${cpuUtilization}% Utilization`}
         status={cpuStatus}
       />
       <DiagnosticCard
-        maxHeight='h-full'
+        size="health"
         title='RAM'
         metric={`${totalMemory.toFixed(1)}GB`}
         subTitle={`${memoryUtilization}% Utilization`}

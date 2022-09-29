@@ -17,7 +17,7 @@ export interface DiagnosticCardProps {
   subTitleHighlightColor?: string
   maxHeight?: string
   isBackground?: boolean
-  size?: 'lg' | 'md' | 'sm'
+  size?: 'lg' | 'md' | 'sm' | 'health'
 }
 
 const DiagnosticCard: FC<DiagnosticCardProps> = ({
@@ -38,7 +38,9 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       case 'lg':
         return `max-w-xs ${maxHeight || 'max-h-60'} py-3 px-4 dark:border-dark500`
       case 'sm':
-        return `${maxHeight || 'max-h-11'} max-w-tiny p-1 dark:border-none px-1.5`
+        return `max-w-tiny ${maxHeight || 'max-h-11'} p-1 dark:border-none px-1.5`
+      case 'health':
+        return 'h-24 md:h-full max-w-full md:max-w-xs py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500'
       default:
         return `max-w-xs ${maxHeight || 'max-h-30'} py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
     }
@@ -46,7 +48,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
 
   return (
     <div
-      className={`w-full h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}
+      className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}
     >
       {!metric ? (
         <img
