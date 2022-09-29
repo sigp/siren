@@ -12,6 +12,7 @@ import {
 } from '../recoil/atoms'
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import { fetchVersion } from '../api/lighthouse';
 
 const InitScreen = () => {
   const [step, setStep] = useState<number>(0)
@@ -24,19 +25,35 @@ const InitScreen = () => {
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
   const [token] = useLocalStorage<string | undefined>('api-token', undefined)
 
+  const moveToOnBoarding = () => {
+    setTimeout(() => {
+      setView(AppView.ONBOARD)
+    }, 1000);
+  }
+
   useEffect(() => {
     if (!validatorClient || !beaconNode || !token) {
-      setView(AppView.ONBOARD)
+      moveToOnBoarding();
       return
     }
 
-    setBeaconNode(beaconNode)
-    setValidatorClient(validatorClient)
-    setApiToken(token)
+    (async () => {
+      try {
+        const { status } = await fetchVersion(validatorClient, token);
 
-    setStep((prev) => prev++)
-    setOnboardView(OnboardView.SETUP)
-    setView(AppView.ONBOARD)
+        if(status === 200) {
+          setBeaconNode(beaconNode)
+          setValidatorClient(validatorClient)
+          setApiToken(token)
+
+          setStep((prev) => prev++)
+          setOnboardView(OnboardView.SETUP)
+          moveToOnBoarding();
+        }
+      } catch (e) {
+        moveToOnBoarding();
+      }
+    })();
   }, [validatorClient, beaconNode, token])
 
   return (

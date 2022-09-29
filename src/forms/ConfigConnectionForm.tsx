@@ -8,8 +8,9 @@ import { useSetRecoilState } from 'recoil'
 import { apiToken, beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms'
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
+import { fetchVersion } from '../api/lighthouse';
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -92,8 +93,8 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
 
-  const isValidBeaconNode = useApiValidation(beaconNode, 'eth/v1/node/version')
-  const isValidValidatorClient = useApiValidation(validatorClient, 'lighthouse/auth')
+  const isValidBeaconNode = useApiValidation('eth/v1/node/version', beaconNode)
+  const isValidValidatorClient = useApiValidation('lighthouse/auth', validatorClient)
 
   const changeFormType = (type: ConfigType) => {
     resetField('beaconNode', { defaultValue: endPointDefault })
@@ -124,14 +125,9 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
   const onSubmit = async () => {
     const { isRemember, apiToken } = getValues()
-    const { protocol, address, port } = validatorClient
 
     try {
-      const { status } = await axios.get(`${protocol}://${address}:${port}/lighthouse/version`, {
-        headers: {
-          authorization: `Bearer ${apiToken}`,
-        },
-      })
+      const { status } = await fetchVersion(validatorClient, apiToken);
 
       if (status !== 200) {
         handleError('')
