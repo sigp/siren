@@ -11,6 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse';
+import { ApiTokenStorage, EndpointStorage } from '../types/storage';
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -54,9 +55,9 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
 
-  const [, storeBeaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
-  const [, storeApiToken] = useLocalStorage<string | undefined>('api-token', undefined)
-  const [, storeValidatorClient] = useLocalStorage<Endpoint | undefined>(
+  const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
+  const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
+  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>(
     'validatorClient',
     undefined,
   )
