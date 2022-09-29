@@ -17,7 +17,7 @@ const NetworkHealth = () => {
     <div className='w-full md:h-24 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mt-8 md:mt-2'>
       <DiagnosticSummaryCard type={DiagnosticType.NETWORK} rate={DiagnosticRate.GREAT} />
       <DiagnosticCard
-        size="health"
+        size='health'
         title='Disk'
         isBackground={false}
         subTitleHighlightColor='bg-warning'
@@ -25,7 +25,7 @@ const NetworkHealth = () => {
         status='bg-dark100'
       />
       <DiagnosticCard
-        size="health"
+        size='health'
         title='Ethereum Geth'
         metric='0H 01M'
         percent={25}
@@ -33,7 +33,7 @@ const NetworkHealth = () => {
         subTitle='Connected Out of Sync'
       />
       <DiagnosticCard
-        size="health"
+        size='health'
         title='Beacon Node'
         metric={remainingBeaconTime}
         percent={beaconPercentage}

@@ -8,7 +8,7 @@ const useApiValidation = (path: string, data?: Endpoint) => {
 
   const testApi = useCallback(
     debounce(1000, async () => {
-      if(!data) return;
+      if (!data) return
 
       const { port, protocol, address } = data
       try {
@@ -24,7 +24,7 @@ const useApiValidation = (path: string, data?: Endpoint) => {
   )
 
   useEffect(() => {
-    if(!data) return;
+    if (!data) return
 
     const isComplete = Object.values(data).every((value) => !!value)
 

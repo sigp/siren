@@ -10,8 +10,8 @@ import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
-import { fetchVersion } from '../api/lighthouse';
-import { ApiTokenStorage, EndpointStorage } from '../types/storage';
+import { fetchVersion } from '../api/lighthouse'
+import { ApiTokenStorage, EndpointStorage } from '../types/storage'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -57,10 +57,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
   const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
-  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>(
-    'validatorClient',
-    undefined,
-  )
+  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -128,7 +125,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     const { isRemember, apiToken } = getValues()
 
     try {
-      const { status } = await fetchVersion(validatorClient, apiToken);
+      const { status } = await fetchVersion(validatorClient, apiToken)
 
       if (status !== 200) {
         handleError('')

@@ -1,18 +1,18 @@
-import Typography from '../../../../../components/Typography/Typography';
-import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth';
-import { Suspense } from 'react';
-import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth';
-import HealthOverview from '../../../../../components/HealthCheck/HealthOverview';
-import Button, { ButtonFace } from '../../../../../components/Button/Button';
-import { useSetRecoilState } from 'recoil';
-import { onBoardView, setupStep } from '../../../../../recoil/atoms';
-import { OnboardView, SetupSteps } from '../../../../../constants/enums';
-import useLocalStorage from '../../../../../hooks/useLocalStorage';
-import { HealthCheckStorage } from '../../../../../types/storage';
+import Typography from '../../../../../components/Typography/Typography'
+import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth'
+import { Suspense } from 'react'
+import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth'
+import HealthOverview from '../../../../../components/HealthCheck/HealthOverview'
+import Button, { ButtonFace } from '../../../../../components/Button/Button'
+import { useSetRecoilState } from 'recoil'
+import { onBoardView, setupStep } from '../../../../../recoil/atoms'
+import { OnboardView, SetupSteps } from '../../../../../constants/enums'
+import useLocalStorage from '../../../../../hooks/useLocalStorage'
+import { HealthCheckStorage } from '../../../../../types/storage'
 
 const HealthCheck = () => {
-  const setView = useSetRecoilState(onBoardView);
-  const setStep = useSetRecoilState(setupStep);
+  const setView = useSetRecoilState(onBoardView)
+  const setStep = useSetRecoilState(setupStep)
   const [, setHealthChecked] = useLocalStorage<HealthCheckStorage>('health-check', undefined)
 
   const viewConfig = () => setView(OnboardView.CONFIGURE)
@@ -48,9 +48,15 @@ const HealthCheck = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <HealthOverview />
         </Suspense>
-        <Button onClick={viewSync} className="mt-4 h-8 w-32 space-x-4 p-0 items-center justify-center" type={ButtonFace.SECONDARY}>
-          <Typography fontWeight="font-light" color="text-white">Continue</Typography>
-          <i className="bi-arrow-right" />
+        <Button
+          onClick={viewSync}
+          className='mt-4 h-8 w-32 space-x-4 p-0 items-center justify-center'
+          type={ButtonFace.SECONDARY}
+        >
+          <Typography fontWeight='font-light' color='text-white'>
+            Continue
+          </Typography>
+          <i className='bi-arrow-right' />
         </Button>
       </div>
     </div>

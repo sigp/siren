@@ -45,5 +45,5 @@ export enum DiagnosticRate {
 
 export enum SetupSteps {
   HEALTH = 'HEALTH',
-  SYNC = 'SYNC'
+  SYNC = 'SYNC',
 }
