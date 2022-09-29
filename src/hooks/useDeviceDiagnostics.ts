@@ -6,7 +6,7 @@ import formatGigBytes from '../utilities/formatGigBytes'
 import { StatusType } from '../types'
 
 const useDeviceDiagnostics = () => {
-  const { root_fs_avail, root_fs_size, mem_used, mem_total, mem_free, load_avg_one } =
+  const { root_fs_avail, root_fs_size, mem_used, mem_total, mem_free, load_avg_one, uptime } =
     useRecoilValue(selectHeathDiagnostic)
 
   const diskUtilization = useMemo(() => {
@@ -68,6 +68,7 @@ const useDeviceDiagnostics = () => {
     ramStatus,
     cpuStatus,
     cpuUtilization,
+    uptime,
   }
 }
 

@@ -9,7 +9,7 @@ export interface DiagnosticSummaryCardProps {
 
 const DiagnosticSummaryCard: FC<DiagnosticSummaryCardProps> = ({ type, rate }) => {
   return (
-    <div className='bg-dark25 flex flex-col justify-between h-full p-4 w-40 border border-dark400'>
+    <div className='bg-dark25 flex flex-col justify-between h-full p-4 w-full md:w-40 border border-dark400'>
       <div className='flex justify-between'>
         <Typography
           isBold
