@@ -1,13 +1,14 @@
-import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth'
-import { Suspense } from 'react'
-import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth'
-import HealthOverview from '../../../../../components/HealthCheck/HealthOverview'
-import { useSetRecoilState } from 'recoil'
-import { onBoardView, setupStep } from '../../../../../recoil/atoms'
-import { OnboardView, SetupSteps } from '../../../../../constants/enums'
-import useLocalStorage from '../../../../../hooks/useLocalStorage'
-import { HealthCheckStorage } from '../../../../../types/storage'
-import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
+import DeviceHealth from '../../../../../components/HealthCheck/DeviceHealth';
+import { Suspense } from 'react';
+import NetworkHealth from '../../../../../components/HealthCheck/NetworkHealth';
+import HealthOverview from '../../../../../components/HealthCheck/HealthOverview';
+import { useSetRecoilState } from 'recoil';
+import { onBoardView, setupStep } from '../../../../../recoil/atoms';
+import { OnboardView, SetupSteps } from '../../../../../constants/enums';
+import useLocalStorage from '../../../../../hooks/useLocalStorage';
+import { HealthCheckStorage } from '../../../../../types/storage';
+import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
+import { ButtonFace } from '../../../../../components/Button/Button';
 
 const HealthCheck = () => {
   const setView = useSetRecoilState(onBoardView)
@@ -28,6 +29,7 @@ const HealthCheck = () => {
       currentStep='health check'
       title='Validator Health Check'
       ctaText='Continue'
+      ctaType={ButtonFace.SECONDARY}
     >
       <Suspense fallback={<div>Loading...</div>}>
         <DeviceHealth />
