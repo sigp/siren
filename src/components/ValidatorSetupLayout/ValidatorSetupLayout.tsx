@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography';
-import Button, { ButtonFace } from '../Button/Button';
-import { FC, ReactNode } from 'react';
-import BreadCrumb from '../BreadCrumb/BreadCrumb';
+import Typography from '../Typography/Typography'
+import Button, { ButtonFace } from '../Button/Button'
+import { FC, ReactNode } from 'react'
+import BreadCrumb from '../BreadCrumb/BreadCrumb'
 
 export interface ValidatorSetupLayoutProps {
   children: ReactNode | ReactNode[]
@@ -12,13 +12,24 @@ export interface ValidatorSetupLayoutProps {
   previousStep: string
   ctaText: string
   ctaIcon?: string
+  mediaQuery?: string
 }
 
-const ValidatorSetupLayout:FC<ValidatorSetupLayoutProps> = ({children, title, onStepBack, onNext, currentStep, previousStep, ctaText, ctaIcon = 'bi-arrow-right'}) => {
+const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
+  children,
+  title,
+  onStepBack,
+  onNext,
+  currentStep,
+  previousStep,
+  ctaText,
+  ctaIcon = 'bi-arrow-right',
+  mediaQuery = '@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-center @1024:justify-center',
+}) => {
   return (
-    <div className='w-full h-full py-12 px-6 overflow-scroll @1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-center @1024:justify-center'>
+    <div className={`w-full h-full py-12 px-6 overflow-scroll ${mediaQuery}`}>
       <div className='w-full max-w-1142'>
-        <BreadCrumb onClick={onStepBack} current={currentStep} previous={previousStep}/>
+        <BreadCrumb onClick={onStepBack} current={currentStep} previous={previousStep} />
         <Typography
           type='text-subtitle2'
           fontWeight='font-light'
@@ -46,4 +57,4 @@ const ValidatorSetupLayout:FC<ValidatorSetupLayoutProps> = ({children, title, on
   )
 }
 
-export default ValidatorSetupLayout;
+export default ValidatorSetupLayout
