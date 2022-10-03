@@ -7,7 +7,7 @@ import { onBoardView, setupStep } from '../../../../../recoil/atoms'
 import { OnboardView, SetupSteps } from '../../../../../constants/enums'
 import useLocalStorage from '../../../../../hooks/useLocalStorage'
 import { HealthCheckStorage } from '../../../../../types/storage'
-import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
+import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
 
 const HealthCheck = () => {
   const setView = useSetRecoilState(onBoardView)
@@ -24,10 +24,10 @@ const HealthCheck = () => {
     <ValidatorSetupLayout
       onStepBack={viewConfig}
       onNext={viewSync}
-      previousStep="Configure"
-      currentStep="health check"
-      title="Validator Health Check"
-      ctaText="Continue"
+      previousStep='Configure'
+      currentStep='health check'
+      title='Validator Health Check'
+      ctaText='Continue'
     >
       <Suspense fallback={<div>Loading...</div>}>
         <DeviceHealth />
