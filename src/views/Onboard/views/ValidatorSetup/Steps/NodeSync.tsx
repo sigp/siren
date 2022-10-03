@@ -1,13 +1,13 @@
-import { useSetRecoilState } from 'recoil'
-import { setupStep } from '../../../../../recoil/atoms'
-import { SetupSteps } from '../../../../../constants/enums'
-import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
-import SyncCard from '../../../../../components/SyncCard/SyncCard'
-import useBeaconSyncInfo from '../../../../../hooks/useBeaconSyncInfo'
-import { useMemo } from 'react'
-import Typography from '../../../../../components/Typography/Typography'
-import secondsToShortHand from '../../../../../utilities/secondsToShortHand'
-import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures'
+import { useSetRecoilState } from 'recoil';
+import { appView, setupStep } from '../../../../../recoil/atoms';
+import { AppView, SetupSteps } from '../../../../../constants/enums';
+import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
+import SyncCard from '../../../../../components/SyncCard/SyncCard';
+import useBeaconSyncInfo from '../../../../../hooks/useBeaconSyncInfo';
+import { useMemo } from 'react';
+import Typography from '../../../../../components/Typography/Typography';
+import secondsToShortHand from '../../../../../utilities/secondsToShortHand';
+import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures';
 
 const NodeSync = () => {
   const { beaconPercentage, beaconSyncTime, headSlot, slotDistance } = useBeaconSyncInfo()
@@ -15,13 +15,16 @@ const NodeSync = () => {
     () => secondsToShortHand(beaconSyncTime || 0),
     [beaconSyncTime],
   )
+  const setView = useSetRecoilState(appView)
   const setStep = useSetRecoilState(setupStep)
 
   const viewHealth = () => setStep(SetupSteps.HEALTH)
 
+  const viewDashBoard = () => setView(AppView.DASHBOARD)
+
   return (
     <ValidatorSetupLayout
-      onNext={viewHealth}
+      onNext={viewDashBoard}
       onStepBack={viewHealth}
       previousStep='Health Check'
       currentStep='Syncing'
@@ -38,6 +41,7 @@ const NodeSync = () => {
           progress={0}
         />
         <SyncCard
+          type="beacon"
           title='Ethereum Beacon'
           subTitle='Lighthouse Node'
           timeRemaining={remainingBeaconTime}
