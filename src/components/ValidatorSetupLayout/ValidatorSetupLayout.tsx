@@ -13,6 +13,7 @@ export interface ValidatorSetupLayoutProps {
   ctaText: string
   ctaIcon?: string
   mediaQuery?: string
+  ctaType?: ButtonFace
 }
 
 const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
@@ -23,6 +24,7 @@ const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
   currentStep,
   previousStep,
   ctaText,
+  ctaType = ButtonFace.PRIMARY,
   ctaIcon = 'bi-arrow-right',
   mediaQuery = '@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-center @1024:justify-center',
 }) => {
@@ -44,13 +46,11 @@ const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
 
         <Button
           onClick={onNext}
-          className='mt-4 h-8 w-32 space-x-4 p-0 items-center justify-center'
-          type={ButtonFace.SECONDARY}
+          className='mt-4 h-8 w-32 p-0 items-center justify-center'
+          type={ctaType}
         >
-          <Typography fontWeight='font-light' color='text-white'>
-            {ctaText}
-          </Typography>
-          <i className={ctaIcon} />
+          {ctaText}
+          <i className={`ml-3 ${ctaIcon}`} />
         </Button>
       </div>
     </div>
