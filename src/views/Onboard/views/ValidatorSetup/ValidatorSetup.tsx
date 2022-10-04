@@ -3,7 +3,7 @@ import { SetupSteps } from '../../../../constants/enums'
 import { useRecoilState } from 'recoil'
 import { setupStep } from '../../../../recoil/atoms'
 import useLocalStorage from '../../../../hooks/useLocalStorage'
-import { Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import { HealthCheckStorage } from '../../../../types/storage'
 import NodeSync from './Steps/NodeSync'
 
@@ -25,9 +25,7 @@ const ValidatorSetup = () => {
   switch (view) {
     case SetupSteps.SYNC:
       return (
-        <Suspense fallback={<div>Loading...</div>}>
-          <NodeSync />
-        </Suspense>
+        <NodeSync />
       )
     case SetupSteps.HEALTH:
       return <HealthCheck />

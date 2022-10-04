@@ -3,18 +3,13 @@ import { appView, setupStep } from '../../../../../recoil/atoms';
 import { AppView, SetupSteps } from '../../../../../constants/enums';
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
 import SyncCard from '../../../../../components/SyncCard/SyncCard';
-import useBeaconSyncInfo from '../../../../../hooks/useBeaconSyncInfo';
-import { useMemo } from 'react';
 import Typography from '../../../../../components/Typography/Typography';
-import secondsToShortHand from '../../../../../utilities/secondsToShortHand';
 import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures';
+import { Suspense } from 'react';
+import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncCard';
+import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback';
 
 const NodeSync = () => {
-  const { beaconPercentage, beaconSyncTime, headSlot, slotDistance } = useBeaconSyncInfo()
-  const remainingBeaconTime = useMemo<string>(
-    () => secondsToShortHand(beaconSyncTime || 0),
-    [beaconSyncTime],
-  )
   const setView = useSetRecoilState(appView)
   const setStep = useSetRecoilState(setupStep)
 
@@ -40,14 +35,9 @@ const NodeSync = () => {
           status='No connection'
           progress={0}
         />
-        <SyncCard
-          type="beacon"
-          title='Ethereum Beacon'
-          subTitle='Lighthouse Node'
-          timeRemaining={remainingBeaconTime}
-          status={`${headSlot} / ${slotDistance}`}
-          progress={beaconPercentage}
-        />
+        <Suspense fallback={<SyncCardFallback/>}>
+          <BeaconSyncCard/>
+        </Suspense>
       </div>
       <div className='w-full border border-dark100 mt-4 space-y-4 p-4'>
         <Typography isBold type='text-caption1' className='uppercase'>
