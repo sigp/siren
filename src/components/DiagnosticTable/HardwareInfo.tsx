@@ -1,7 +1,19 @@
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import Typography from '../Typography/Typography'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
 
 const HardwareInfo = () => {
+  const {
+    totalDiskSpace,
+    diskUtilization,
+    diskStatus,
+    totalMemory,
+    memoryUtilization,
+    ramStatus,
+    cpuUtilization,
+    cpuStatus,
+  } = useDeviceDiagnostics()
+
   return (
     <div className='h-full w-full flex flex-col xl:min-w-316'>
       <div className='w-full h-12 border flex border-style500'>
@@ -25,26 +37,26 @@ const HardwareInfo = () => {
       <DiagnosticCard
         title='Disk'
         maxHeight='flex-1'
-        status='bg-success'
         border='border-t-0 border-style500'
-        subTitle='22% Utilization'
-        metric='511 GB'
+        metric={`${totalDiskSpace.toFixed(1)}GB`}
+        subTitle={`${diskUtilization}% Utilization`}
+        status={diskStatus}
       />
       <DiagnosticCard
         title='CPU'
         maxHeight='flex-1'
-        status='bg-warning'
         border='border-t-0 border-style500'
-        subTitle='13% Utilization'
-        metric='1.9 GHZ'
+        metric='- GHZ'
+        subTitle={`${cpuUtilization}% Utilization`}
+        status={cpuStatus}
       />
       <DiagnosticCard
         title='RAM'
         maxHeight='flex-1'
-        status='bg-error'
         border='border-t-0 border-style500'
-        subTitle='48% Utilization'
-        metric='16 GB'
+        metric={`${totalMemory.toFixed(1)}GB`}
+        subTitle={`${memoryUtilization}% Utilization`}
+        status={ramStatus}
       />
     </div>
   )
