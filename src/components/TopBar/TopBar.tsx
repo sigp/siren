@@ -4,6 +4,9 @@ import SyncMetric from '../SyncMetric/SyncMetric'
 import Typography from '../Typography/Typography'
 import Button, { ButtonFace } from '../Button/Button'
 import Wallet from '../Wallet/Wallet'
+import BeaconMetric from './BeaconMetric';
+import { Suspense } from 'react';
+import SyncMetricFallback from '../SyncMetric/SyncMetricFallback';
 
 const TopBar = () => {
   return (
@@ -20,14 +23,9 @@ const TopBar = () => {
           color='secondary'
           total={212245}
         />
-        <SyncMetric
-          id='beaconChain'
-          borderStyle='border-r'
-          title='BEACON CHAIN'
-          amount={150435}
-          total={212245}
-          direction='counter'
-        />
+        <Suspense fallback={<SyncMetricFallback/>}>
+          <BeaconMetric/>
+        </Suspense>
         <div className='hidden md:flex w-24 border-r border-borderLight dark:border-dark800 p-2'>
           <div className='flex-1 space-y-2'>
             <Typography family='font-roboto' type='text-tiny'>
