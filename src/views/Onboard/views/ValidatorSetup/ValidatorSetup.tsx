@@ -5,6 +5,7 @@ import { setupStep } from '../../../../recoil/atoms'
 import useLocalStorage from '../../../../hooks/useLocalStorage'
 import { useEffect } from 'react'
 import { HealthCheckStorage } from '../../../../types/storage'
+import NodeSync from './Steps/NodeSync'
 
 const ValidatorSetup = () => {
   const [view, setView] = useRecoilState(setupStep)
@@ -23,7 +24,9 @@ const ValidatorSetup = () => {
 
   switch (view) {
     case SetupSteps.SYNC:
-      return <div>Hello Sync</div>
+      return (
+        <NodeSync />
+      )
     case SetupSteps.HEALTH:
       return <HealthCheck />
     default:

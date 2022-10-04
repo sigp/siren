@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Typography from '../Typography/Typography'
 import network from '../../assets/images/network.svg'
-import NA from '../../assets/images/NA.png'
+import {ReactComponent as NotAvailable} from '../../assets/images/notAvalilable.svg';
 import darkNetwork from '../../assets/images/darkNetwork.svg'
 import Status, { StatusType } from '../Status/Status'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
@@ -51,11 +51,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}
     >
       {!metric ? (
-        <img
-          className='absolute dark:hidden right-0 top-1/2 transform -translate-y-1/2'
-          src={NA}
-          alt='network'
-        />
+          <NotAvailable className="absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2"/>
       ) : (
         size !== 'sm' &&
         isBackground && (

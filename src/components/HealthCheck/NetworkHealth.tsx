@@ -18,7 +18,7 @@ const NetworkHealth = () => {
       <DiagnosticSummaryCard type={DiagnosticType.NETWORK} rate={DiagnosticRate.GREAT} />
       <DiagnosticCard
         size='health'
-        title='Disk'
+        title='Network'
         isBackground={false}
         subTitleHighlightColor='bg-warning'
         subTitle='Network Unavailable'

@@ -5,6 +5,7 @@ import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
 import { useMemo } from 'react'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
+import ViewDisclosures from '../ViewDisclosures/ViewDisclosures';
 
 const HealthOverview = () => {
   const { totalDiskFree, uptime } = useDeviceDiagnostics()
@@ -37,18 +38,7 @@ const HealthOverview = () => {
             text='Please ensure your RAM is sufficient prior to starting validating.'
           />
         </div>
-        <div className='flex space-x-4 items-center cursor-pointer'>
-          <i className='bi-info-circle text-caption1 text-primary' />
-          <Typography
-            isBold
-            family='font-archivo'
-            color='text-primary'
-            type='text-caption1'
-            className='uppercase'
-          >
-            view important disclosures
-          </Typography>
-        </div>
+        <ViewDisclosures/>
       </div>
       <div className='relative z-10 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
         <div className='flex space-x-12'>

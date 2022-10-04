@@ -40,7 +40,7 @@ const useDeviceDiagnostics = () => {
     () =>
       totalMemoryFree > 15
         ? 'bg-success'
-        : totalDiskFree > 8 && totalDiskFree < 15
+        : totalMemoryFree > 4 && totalMemoryFree < 15
         ? 'bg-warning'
         : 'bg-error',
     [totalMemoryFree],
