@@ -9,6 +9,7 @@ import useLocalStorage from '../../../../../hooks/useLocalStorage';
 import { HealthCheckStorage } from '../../../../../types/storage';
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
 import { ButtonFace } from '../../../../../components/Button/Button';
+import HealthFallBack from '../../../../../components/HealthCheck/HealthFallBack';
 
 const HealthCheck = () => {
   const setView = useSetRecoilState(onBoardView)
@@ -31,13 +32,13 @@ const HealthCheck = () => {
       ctaText='Continue'
       ctaType={ButtonFace.SECONDARY}
     >
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<HealthFallBack/>}>
         <DeviceHealth />
       </Suspense>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<HealthFallBack/>}>
         <NetworkHealth />
       </Suspense>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<HealthFallBack size="lg"/>}>
         <HealthOverview />
       </Suspense>
     </ValidatorSetupLayout>

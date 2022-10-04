@@ -48,7 +48,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
 
   return (
     <div
-      className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col dark:bg-dark900 justify-between`}
+      className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col justify-between`}
     >
       {!metric ? (
           <NotAvailable className="absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2"/>
