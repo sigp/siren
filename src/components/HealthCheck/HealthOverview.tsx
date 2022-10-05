@@ -5,8 +5,10 @@ import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
 import ViewDisclosures from '../ViewDisclosures/ViewDisclosures';
+import { Trans, useTranslation } from 'react-i18next';
 
 const HealthOverview = () => {
+  const { t } = useTranslation()
   const { totalDiskFree, uptime, healthCondition, overallHealthStatus } = useDeviceDiagnostics()
 
   const upTimeShortHand = secondsToShortHand(uptime)
@@ -18,21 +20,19 @@ const HealthOverview = () => {
       <div className='relative z-10 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
         <div className='space-y-3'>
           <Typography isBold family='font-archivo' type='text-caption1'>
-            Diagnostics
-            <br />
-            overview —
+            <Trans i18nKey="vcHealthCheck.diagnosticOverview">
+              <br/>
+            </Trans> —
           </Typography>
           <DiagnosticOverviewText
             status={isSufficientSpace ? 'text-success' : 'text-error'}
-            text={`Disk ${
-              isSufficientSpace ? 'has' : 'does not have'
-            } the required 240GB for the full sync.`}
+            text={t(`vcHealthCheck.${isSufficientSpace ? 'hasDiskSpace' : 'noDiskSpace'}`)}
           />
-          <DiagnosticOverviewText status='text-success' text='Network is low latency.' />
-          <DiagnosticOverviewText status='text-warning' text='2.4GHZ is recommended for CPU.' />
+          <DiagnosticOverviewText status='text-success' text={t('vcHealthCheck.latency')} />
+          <DiagnosticOverviewText status='text-warning' text={t('vcHealthCheck.cpuRecommendation')} />
           <DiagnosticOverviewText
             status='text-error'
-            text='Please ensure your RAM is sufficient prior to starting validating.'
+            text={t('vcHealthCheck.checkLowRam')}
           />
         </div>
         <ViewDisclosures/>
@@ -40,16 +40,19 @@ const HealthOverview = () => {
       <div className='relative z-10 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
         <div className='flex space-x-12'>
           <div className='space-y-4'>
-            <Typography>Uptime</Typography>
+            <Typography>{t('uptime')}</Typography>
             <Typography color='text-dark400'>
-              — <br /> Nodes <br /> Syncing
+              — <br />
+              <Trans i18nKey="nodesSyncing">
+                <br/>
+              </Trans>
             </Typography>
           </div>
           <Typography type='text-subtitle2'>{upTimeShortHand}</Typography>
         </div>
         <div className='self-stretch w-full flex items-center justify-between'>
           <Typography isBold type='text-tiny' color='text-primary' className='uppercase'>
-            HEALTH CHECK — in {healthCondition} Condition.
+            {t('vcHealthCheck.healthCondition', {status: t(healthCondition.toLowerCase())})}
           </Typography>
           <Status status={overallHealthStatus} />
         </div>

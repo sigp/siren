@@ -8,8 +8,10 @@ import { AppView, OnboardView } from '../constants/enums';
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
 import { fetchVersion } from '../api/lighthouse';
 import { fetchSyncStatus } from '../api/beacon';
+import { useTranslation } from 'react-i18next';
 
 const InitScreen = () => {
+  const { t } = useTranslation()
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
   const setOnboardView = useSetRecoilState(onBoardView)
@@ -79,29 +81,29 @@ const InitScreen = () => {
       <div className='z-10 relative h-full pl-12 pb-12 pt-12 md:pt-32 md:pl-24 xl:pl-32 md:pb-32 flex flex-col justify-between'>
         <div className='space-y-4'>
           <Typography fontWeight='font-light' type='text-subtitle3' color='text-dark100'>
-            Initializing...
+            {`${t('initScreen.initializing')}...`}
           </Typography>
           <div className='opacity-40'>
             {step >= 0 && (
               <>
                 <Typography isBold type='text-tiny' color='text-dark100'>
-                  Fetching saved api endpoints...
+                  {`${t('initScreen.fetchingEndpoints')}...`}
                 </Typography>
                 <Typography isBold type='text-tiny' color='text-dark100'>
-                  Attempting to connect to Beacon Node...
+                  {`${t('initScreen.connectingBeacon')}...`}
                 </Typography>
                 <Typography isBold type='text-tiny' color='text-dark100'>
-                  Attempting to connect to Validator Client...
+                  {`${t('initScreen.connectingValidator')}...`}
                 </Typography>
               </>
             )}
             {step > 1 && (
               <Typography isBold type='text-tiny' color='text-dark100'>
-                Fetching beacon sync status...
+                {`${t('initScreen.fetchBeaconSync')}...`}
               </Typography>
             )}
             <Typography isBold type='text-tiny' color='text-dark100'>
-              ---
+              - - -
             </Typography>
             <div className='animate-blink h-3 w-1 bg-white text-dark100' />
           </div>
@@ -112,12 +114,12 @@ const InitScreen = () => {
               Ethereum Lighthouse
             </Typography>
             <Typography fontWeight='font-light' type='text-caption2' color='text-white'>
-              Validator Client --
+              {t('initScreen.validatorClient')} —
             </Typography>
           </div>
           <div className='opacity-40'>
             <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              Developed & Secured By:
+              {t('initScreen.developedBy')}
             </Typography>
             <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
               Sigma Prime
@@ -125,10 +127,10 @@ const InitScreen = () => {
           </div>
           <div className='opacity-40'>
             <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              Built on:
+              {t('initScreen.builtOn')}
             </Typography>
             <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              Rust Programming Language
+              {t('initScreen.rustLanguage')}
             </Typography>
           </div>
         </div>

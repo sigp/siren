@@ -10,8 +10,10 @@ import { HealthCheckStorage } from '../../../../../types/storage';
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout';
 import { ButtonFace } from '../../../../../components/Button/Button';
 import HealthFallBack from '../../../../../components/HealthCheck/HealthFallBack';
+import { useTranslation } from 'react-i18next';
 
 const HealthCheck = () => {
+  const { t } = useTranslation()
   const setView = useSetRecoilState(onBoardView)
   const setStep = useSetRecoilState(setupStep)
   const [, setHealthChecked] = useLocalStorage<HealthCheckStorage>('health-check', undefined)
@@ -26,10 +28,10 @@ const HealthCheck = () => {
     <ValidatorSetupLayout
       onStepBack={viewConfig}
       onNext={viewSync}
-      previousStep='Configure'
-      currentStep='health check'
-      title='Validator Health Check'
-      ctaText='Continue'
+      previousStep={t('configure')}
+      currentStep={t('healthCheck')}
+      title={t('vcHealthCheck.title')}
+      ctaText={t('continue')}
       ctaType={ButtonFace.SECONDARY}
     >
       <Suspense fallback={<HealthFallBack/>}>

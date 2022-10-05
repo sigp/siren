@@ -8,8 +8,10 @@ import { Controller } from 'react-hook-form'
 import Toggle from '../../../components/Toggle/Toggle'
 import Button, { ButtonFace } from '../../../components/Button/Button'
 import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
+import { useTranslation } from 'react-i18next';
 
 const ConfigureConnection = () => {
+  const {t} = useTranslation()
   return (
     <div className='flex-1 relative w-full flex flex-col relative justify-center bg-black'>
       <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' />
@@ -19,7 +21,7 @@ const ConfigureConnection = () => {
           fontWeight='font-light'
           className='md:text-subtitle1 primary-gradient-text'
         >
-          Configure Connection
+          {t('configScreen.configConnection')}
         </Typography>
         <ConfigConnectionForm>
           {({
@@ -36,13 +38,13 @@ const ConfigureConnection = () => {
               <div className='flex space-x-20 pt-6'>
                 <TabOption
                   onClick={() => changeFormType(ConfigType.BASIC)}
-                  text='basic settings'
+                  text={t('configScreen.basicSettings')}
                   isActive={formType === ConfigType.BASIC}
                 />
                 <TabOption
                   onClick={() => changeFormType(ConfigType.ADVANCED)}
                   toolTip='s'
-                  text='advanced settings'
+                  text={t('configScreen.advanceSettings')}
                   isActive={formType === ConfigType.ADVANCED}
                 />
               </div>
@@ -76,8 +78,8 @@ const ConfigureConnection = () => {
                 control={control}
                 render={({ field: { ref: _ref, ...props } }) => (
                   <Input
-                    label='Api Token'
-                    tooltip='api token tooltip'
+                    label={t('configScreen.apiToken')}
+                    tooltip={t('configScreen.apiTokenToolTip')}
                     placeholder='***-*****-******'
                     type='password'
                     {...props}
@@ -89,14 +91,14 @@ const ConfigureConnection = () => {
                   name='deviceName'
                   control={control}
                   render={({ field: { ref: _ref, ...props } }) => (
-                    <Input label='Device Name' placeholder='Local Host' {...props} />
+                    <Input label={t('configScreen.deviceName')} placeholder='Local Host' {...props} />
                   )}
                 />
                 <Controller
                   name='userName'
                   control={control}
                   render={({ field: { ref: _ref, ...props } }) => (
-                    <Input label='What should I call you?' placeholder='Name' {...props} />
+                    <Input label={t('configScreen.userNameLabel')} placeholder={t('configScreen.userNamePlaceholder')} {...props} />
                   )}
                 />
               </div>
@@ -108,7 +110,7 @@ const ConfigureConnection = () => {
                     family='font-archivo'
                     className='uppercase w-16'
                   >
-                    Save Data Auto Connect
+                    {t('configScreen.autoConnect')}
                   </Typography>
                   <i className='bi-question-circle-fill text-dark500 text-caption1' />
                 </div>
@@ -121,7 +123,7 @@ const ConfigureConnection = () => {
                 />
               </div>
               <Button onClick={onSubmit} isDisabled={isDisabled} type={ButtonFace.WHITE}>
-                Configure
+                {t('configure')}
                 <i className='ml-4 bi-arrow-right' />
               </Button>
             </div>

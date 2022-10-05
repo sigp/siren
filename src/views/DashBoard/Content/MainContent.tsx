@@ -4,8 +4,10 @@ import NetworkStats from '../../../components/NetworkStats/NetworkStats'
 import ValidatorTable from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
 import ValidatorBalances from '../../../components/ValidatorBalances/ValidatorBalances'
+import { useTranslation } from 'react-i18next';
 
 const MainContent = () => {
+  const { t } = useTranslation()
   return (
     <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
       <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
@@ -21,7 +23,7 @@ const MainContent = () => {
           <div className='flex space-x-16'>
             <div>
               <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
-                LIGHTHOUSE VERSIONS
+                {t('lighthouseVersion')}
               </Typography>
               <Typography type='text-tiny' color='text-dark400'>
                 Beacon — <span className='text-primary font-bold'>V1.3.0</span>-3a24ca5
