@@ -4,8 +4,9 @@ import { useMemo } from 'react'
 import getPercentage from '../utilities/getPercentage'
 import formatGigBytes from '../utilities/formatGigBytes'
 import { StatusType } from '../types'
+import { Diagnostics } from '../types/diagnostic';
 
-const useDeviceDiagnostics = () => {
+const useDeviceDiagnostics = ():Diagnostics => {
   const { root_fs_avail, root_fs_size, mem_used, mem_total, mem_free, load_avg_one, uptime } =
     useRecoilValue(selectHeathDiagnostic)
 
@@ -17,8 +18,9 @@ const useDeviceDiagnostics = () => {
     return Math.round(getPercentage(root_fs_size - root_fs_avail, root_fs_size))
   }, [root_fs_size, root_fs_avail])
 
-  const totalDiskSpace = useMemo(() => formatGigBytes(root_fs_size), [root_fs_size])
-  const totalDiskFree = useMemo(() => formatGigBytes(root_fs_avail), [root_fs_avail])
+  const totalDiskSpace = formatGigBytes(root_fs_size)
+  const totalDiskFree = formatGigBytes(root_fs_avail)
+
   const diskStatus = useMemo<StatusType>(
     () =>
       totalDiskFree > 300
@@ -29,12 +31,9 @@ const useDeviceDiagnostics = () => {
     [totalDiskFree],
   )
 
-  const memoryUtilization = useMemo(
-    () => (mem_used && mem_total ? Math.round(getPercentage(mem_used, mem_total)) : 0),
-    [mem_used, mem_total],
-  )
-  const totalMemoryFree = useMemo(() => formatGigBytes(mem_free), [mem_free])
-  const totalMemory = useMemo(() => formatGigBytes(mem_total), [mem_total])
+  const memoryUtilization = Math.round(getPercentage(mem_used, mem_total))
+  const totalMemoryFree = formatGigBytes(mem_free)
+  const totalMemory = formatGigBytes(mem_total)
 
   const ramStatus = useMemo<StatusType>(
     () =>
@@ -46,7 +45,7 @@ const useDeviceDiagnostics = () => {
     [totalMemoryFree],
   )
 
-  const cpuUtilization = useMemo(() => load_avg_one.toFixed(1), [load_avg_one])
+  const cpuUtilization = load_avg_one.toFixed(1)
 
   const cpuStatus = useMemo<StatusType>(
     () =>
@@ -57,6 +56,11 @@ const useDeviceDiagnostics = () => {
         : 'bg-error',
     [load_avg_one],
   )
+
+  const overallHealth = [diskStatus, cpuStatus, ramStatus];
+
+  const overallHealthStatus = overallHealth.includes('bg-error') ? 'bg-error' : overallHealth.includes('bg-warning') ? 'bg-warning' : 'bg-success';
+  const healthCondition = overallHealthStatus === 'bg-error' ? 'Poor' : overallHealthStatus === 'bg-warning' ? 'Fair' : 'Good'
 
   return {
     totalDiskSpace,
@@ -69,6 +73,8 @@ const useDeviceDiagnostics = () => {
     cpuStatus,
     cpuUtilization,
     uptime,
+    healthCondition,
+    overallHealthStatus
   }
 }
 
