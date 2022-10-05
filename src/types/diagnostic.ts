@@ -1,3 +1,5 @@
+import { StatusType } from './index';
+
 export type HealthDiagnosticResult = {
   cpu_temp: number
   load_avg_fifteen: number // CPU Usage percentage data
@@ -23,4 +25,21 @@ export type BeaconSyncInfo = {
   slotDistance: number
   beaconPercentage: number
   beaconSyncTime: number // Time in seconds
+}
+
+export type HealthCondition = 'Poor' | 'Fair' | 'Good'
+
+export type Diagnostics = {
+    totalDiskSpace: number,
+      diskUtilization: number,
+      totalDiskFree: number,
+      diskStatus: StatusType,
+      totalMemory: number,
+      memoryUtilization: number,
+      ramStatus: StatusType,
+      cpuStatus: StatusType,
+      cpuUtilization: string,
+      uptime: number,
+      healthCondition: HealthCondition,
+      overallHealthStatus: StatusType
 }
