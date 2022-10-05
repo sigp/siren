@@ -1,6 +1,7 @@
 import Typography from '../Typography/Typography'
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import Button, { ButtonFace } from '../Button/Button'
+import HealthMetric, { HealthMetricFallback } from './HealthMetric';
+import { Suspense } from 'react';
 
 const FootBar = () => {
   return (
@@ -18,14 +19,9 @@ const FootBar = () => {
         <i className='bi bi-siren' />
       </div>
       <div className='flex items-center space-x-4 w-max'>
-        <DiagnosticCard
-          border='border-x border-dark200'
-          title='Health Check'
-          metric='Uptime: 2H 44M'
-          status='bg-success'
-          subTitle='Good, Nodes Syncing..'
-          size='sm'
-        />
+        <Suspense fallback={<HealthMetricFallback/>}>
+          <HealthMetric/>
+        </Suspense>
         <div className='flex space-x-1'>
           <Button type={ButtonFace.ICON}>
             <i className='bi bi-discord' />

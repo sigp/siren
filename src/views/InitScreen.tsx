@@ -1,18 +1,13 @@
-import Typography from '../components/Typography/Typography'
-import useLocalStorage from '../hooks/useLocalStorage'
-import { Endpoint } from '../forms/ConfigConnectionForm'
-import { useEffect, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
-import {
-  apiToken,
-  appView,
-  beaconNodeEndpoint,
-  onBoardView,
-  validatorClientEndpoint,
-} from '../recoil/atoms'
-import { AppView, OnboardView } from '../constants/enums'
-import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
-import { fetchVersion } from '../api/lighthouse'
+import Typography from '../components/Typography/Typography';
+import useLocalStorage from '../hooks/useLocalStorage';
+import { Endpoint } from '../forms/ConfigConnectionForm';
+import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { apiToken, appView, beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms';
+import { AppView, OnboardView } from '../constants/enums';
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
+import { fetchVersion } from '../api/lighthouse';
+import { fetchSyncStatus } from '../api/beacon';
 
 const InitScreen = () => {
   const [step, setStep] = useState<number>(0)
@@ -25,35 +20,54 @@ const InitScreen = () => {
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
   const [token] = useLocalStorage<string | undefined>('api-token', undefined)
 
-  const moveToOnBoarding = () => {
+  const moveToView = (view: AppView) => {
     setTimeout(() => {
-      setView(AppView.ONBOARD)
+      setView(view)
     }, 1000)
+  }
+
+  const moveToOnboard = () => moveToView(AppView.ONBOARD)
+
+  const incrementStep = () => setStep((prev) => prev + 1);
+  const setNodeInfo = async (validatorClient: Endpoint, beaconNode: Endpoint, token: string) => {
+    try {
+      incrementStep();
+
+      const { status } = await fetchVersion(validatorClient, token)
+
+      if (status === 200) {
+        setBeaconNode(beaconNode)
+        setValidatorClient(validatorClient)
+        setApiToken(token)
+      }
+    } catch (e) {
+      moveToOnboard()
+    }
+  }
+  const checkSyncStatus = async (beaconNode: Endpoint) => {
+    try {
+      incrementStep();
+
+      const { data } = await fetchSyncStatus(beaconNode);
+
+      if(data.is_syncing) {
+        setOnboardView(OnboardView.SETUP)
+        moveToOnboard()
+        return
+      }
+
+      moveToView(AppView.DASHBOARD)
+    } catch (e) {
+      moveToOnboard()
+    }
   }
 
   useEffect(() => {
     if (!validatorClient || !beaconNode || !token) {
-      moveToOnBoarding()
+      moveToView(AppView.ONBOARD)
       return
     }
-
-    ;(async () => {
-      try {
-        const { status } = await fetchVersion(validatorClient, token)
-
-        if (status === 200) {
-          setBeaconNode(beaconNode)
-          setValidatorClient(validatorClient)
-          setApiToken(token)
-
-          setStep((prev) => prev++)
-          setOnboardView(OnboardView.SETUP)
-          moveToOnBoarding()
-        }
-      } catch (e) {
-        moveToOnBoarding()
-      }
-    })()
+    void setNodeInfo(validatorClient, beaconNode, token).then(() => checkSyncStatus(beaconNode))
   }, [validatorClient, beaconNode, token])
 
   return (
@@ -80,6 +94,11 @@ const InitScreen = () => {
                   Attempting to connect to Validator Client...
                 </Typography>
               </>
+            )}
+            {step > 1 && (
+              <Typography isBold type='text-tiny' color='text-dark100'>
+                Fetching beacon sync status...
+              </Typography>
             )}
             <Typography isBold type='text-tiny' color='text-dark100'>
               ---

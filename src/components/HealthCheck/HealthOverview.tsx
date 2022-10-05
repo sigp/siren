@@ -3,16 +3,13 @@ import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverview
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
-import { useMemo } from 'react'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
 import ViewDisclosures from '../ViewDisclosures/ViewDisclosures';
 
 const HealthOverview = () => {
-  const { totalDiskFree, uptime } = useDeviceDiagnostics()
+  const { totalDiskFree, uptime, healthCondition, overallHealthStatus } = useDeviceDiagnostics()
 
-  const upTimeShortHand = useMemo(() => {
-    return secondsToShortHand(uptime)
-  }, [uptime])
+  const upTimeShortHand = secondsToShortHand(uptime)
 
   const isSufficientSpace = totalDiskFree > 240
 
@@ -52,9 +49,9 @@ const HealthOverview = () => {
         </div>
         <div className='self-stretch w-full flex items-center justify-between'>
           <Typography isBold type='text-tiny' color='text-primary' className='uppercase'>
-            HEALTH CHECK — in Good Condition.
+            HEALTH CHECK — in {healthCondition} Condition.
           </Typography>
-          <Status status='bg-success' />
+          <Status status={overallHealthStatus} />
         </div>
       </div>
       <HealthSvg className='opacity-70 absolute right-2.5 bottom-0' />

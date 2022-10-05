@@ -22,6 +22,7 @@ const useBeaconSyncInfo = () => {
     slotDistance: data.head_slot + data.sync_distance,
     beaconPercentage,
     beaconSyncTime,
+    isSyncing: data.is_syncing
   }
 }
 
