@@ -1,10 +1,11 @@
-import { useRecoilValue } from 'recoil'
-import { selectHeathDiagnostic } from '../recoil/selectors/selectHeathDiagnostic'
-import { useMemo } from 'react'
-import getPercentage from '../utilities/getPercentage'
-import formatGigBytes from '../utilities/formatGigBytes'
-import { StatusType } from '../types'
+import { useRecoilValue } from 'recoil';
+import { selectHeathDiagnostic } from '../recoil/selectors/selectHeathDiagnostic';
+import { useMemo } from 'react';
+import getPercentage from '../utilities/getPercentage';
+import formatGigBytes from '../utilities/formatGigBytes';
+import { StatusType } from '../types';
 import { Diagnostics } from '../types/diagnostic';
+import { DiagnosticRate } from '../constants/enums';
 
 const useDeviceDiagnostics = ():Diagnostics => {
   const { root_fs_avail, root_fs_size, mem_used, mem_total, mem_free, load_avg_one, uptime } =
@@ -60,7 +61,7 @@ const useDeviceDiagnostics = ():Diagnostics => {
   const overallHealth = [diskStatus, cpuStatus, ramStatus];
 
   const overallHealthStatus = overallHealth.includes('bg-error') ? 'bg-error' : overallHealth.includes('bg-warning') ? 'bg-warning' : 'bg-success';
-  const healthCondition = overallHealthStatus === 'bg-error' ? 'Poor' : overallHealthStatus === 'bg-warning' ? 'Fair' : 'Good'
+  const healthCondition = overallHealthStatus === 'bg-error' ? DiagnosticRate.POOR : overallHealthStatus === 'bg-warning' ? DiagnosticRate.FAIR : DiagnosticRate.GOOD
 
   return {
     totalDiskSpace,

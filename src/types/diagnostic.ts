@@ -1,4 +1,5 @@
 import { StatusType } from './index';
+import { DiagnosticRate } from '../constants/enums';
 
 export type HealthDiagnosticResult = {
   cpu_temp: number
@@ -27,8 +28,6 @@ export type BeaconSyncInfo = {
   beaconSyncTime: number // Time in seconds
 }
 
-export type HealthCondition = 'Poor' | 'Fair' | 'Good'
-
 export type Diagnostics = {
     totalDiskSpace: number,
       diskUtilization: number,
@@ -40,6 +39,6 @@ export type Diagnostics = {
       cpuStatus: StatusType,
       cpuUtilization: string,
       uptime: number,
-      healthCondition: HealthCondition,
+      healthCondition: DiagnosticRate,
       overallHealthStatus: StatusType
 }
