@@ -7,6 +7,7 @@ import Wallet from '../Wallet/Wallet'
 import BeaconMetric from './BeaconMetric';
 import { Suspense } from 'react';
 import SyncMetricFallback from '../SyncMetric/SyncMetricFallback';
+import getPercentage from '../../utilities/getPercentage';
 
 const TopBar = () => {
   return (
@@ -19,6 +20,8 @@ const TopBar = () => {
           id='ethMain'
           borderStyle='border-r'
           title='ETHEREUM MAINNET'
+          subTitle="—"
+          percent={getPercentage(150435, 212245)}
           amount={150435}
           color='secondary'
           total={212245}
