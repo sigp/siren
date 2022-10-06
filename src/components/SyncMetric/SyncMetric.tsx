@@ -2,15 +2,12 @@ import { FC } from 'react'
 import Typography from '../Typography/Typography'
 import ProgressCircle, { ProgressCircleProps } from '../ProgressCircle/ProgressCircle'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
-import Spinner from '../Spinner/Spinner';
-
+import Spinner from '../Spinner/Spinner'
 
 export const SyncMetricFallback = () => {
   return (
-    <div
-      className="flex w-40 h-14 max-h-full bg-white flex items-center justify-center dark:bg-dark750 border border-borderLight dark:border-dark900"
-    >
-      <Spinner size="h-6 w-6"/>
+    <div className='flex w-40 h-14 max-h-full bg-white flex items-center justify-center dark:bg-dark750 border border-borderLight dark:border-dark900'>
+      <Spinner size='h-6 w-6' />
     </div>
   )
 }
@@ -18,7 +15,7 @@ export const SyncMetricFallback = () => {
 export interface SyncMetricProps extends ProgressCircleProps {
   total: number
   amount: number
-  subTitle: string,
+  subTitle: string
   title: string
   borderStyle?: string
 }
@@ -50,7 +47,7 @@ const SyncMetric: FC<SyncMetricProps> = ({
           type='text-caption2'
           family='font-roboto'
           color='text-dark400'
-          fontWeight="font-light"
+          fontWeight='font-light'
           className='uppercase'
         >
           {subTitle}
@@ -62,7 +59,9 @@ const SyncMetric: FC<SyncMetricProps> = ({
           isBold
           className='uppercase'
         >
-          {`${formatLocalCurrency(amount, { specificity: 0 })} / ${formatLocalCurrency(total, { specificity: 0 })}`}
+          {`${formatLocalCurrency(amount, { specificity: 0 })} / ${formatLocalCurrency(total, {
+            specificity: 0,
+          })}`}
         </Typography>
       </div>
       <div className='flex-1 flex items-center justify-center'>

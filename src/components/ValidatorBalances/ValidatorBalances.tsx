@@ -3,10 +3,10 @@ import { BALANCE_COLORS, FAKE_VALIDATORS } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const ValidatorBalances = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const { slots, data } = getFakeValidatorBalances()
 
   const validators = FAKE_VALIDATORS.map(({ title }, index) => ({

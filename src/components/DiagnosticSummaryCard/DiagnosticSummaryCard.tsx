@@ -1,7 +1,7 @@
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 export interface DiagnosticSummaryCardProps {
   type: DiagnosticType

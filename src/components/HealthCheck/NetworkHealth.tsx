@@ -3,7 +3,7 @@ import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
@@ -28,7 +28,7 @@ const NetworkHealth = () => {
         metric='0H 01M'
         percent={25}
         isBackground={false}
-        subTitle={t('connectedStatus', {status: t('outOfSync')})}
+        subTitle={t('connectedStatus', { status: t('outOfSync') })}
       />
       <DiagnosticCard
         size='health'
@@ -36,7 +36,9 @@ const NetworkHealth = () => {
         metric={remainingBeaconTime}
         percent={beaconPercentage}
         isBackground={false}
-        subTitle={t('connectedStatus', {status: beaconPercentage < 100 ? t('outOfSync') : t('inSync')})}
+        subTitle={t('connectedStatus', {
+          status: beaconPercentage < 100 ? t('outOfSync') : t('inSync'),
+        })}
       />
     </div>
   )

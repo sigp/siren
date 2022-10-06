@@ -1,13 +1,13 @@
 import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightHouseFull.svg'
 import { ReactComponent as SlasherLogo } from '../../assets/images/slasher.svg'
-import SyncMetric, {SyncMetricFallback} from '../SyncMetric/SyncMetric'
+import SyncMetric, { SyncMetricFallback } from '../SyncMetric/SyncMetric'
 import Typography from '../Typography/Typography'
 import Button, { ButtonFace } from '../Button/Button'
 import Wallet from '../Wallet/Wallet'
-import BeaconMetric from './BeaconMetric';
-import { Suspense } from 'react';
-import getPercentage from '../../utilities/getPercentage';
-import { useTranslation } from 'react-i18next';
+import BeaconMetric from './BeaconMetric'
+import { Suspense } from 'react'
+import getPercentage from '../../utilities/getPercentage'
+import { useTranslation } from 'react-i18next'
 
 const TopBar = () => {
   const { t } = useTranslation()
@@ -21,14 +21,14 @@ const TopBar = () => {
           id='ethMain'
           borderStyle='border-r'
           title='ETHEREUM MAINNET'
-          subTitle="—"
+          subTitle='—'
           percent={getPercentage(150435, 212245)}
           amount={150435}
           color='secondary'
           total={212245}
         />
-        <Suspense fallback={<SyncMetricFallback/>}>
-          <BeaconMetric/>
+        <Suspense fallback={<SyncMetricFallback />}>
+          <BeaconMetric />
         </Suspense>
         <div className='hidden md:flex w-24 border-r border-borderLight dark:border-dark800 p-2'>
           <div className='flex-1 space-y-2'>

@@ -6,14 +6,14 @@ import { ReactComponent as CheckIcon } from '../../assets/images/check.svg'
 import { ReactComponent as SlasherIcon } from '../../assets/images/slasher.svg'
 import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
 }
 
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const { id, title, pubKey, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
 

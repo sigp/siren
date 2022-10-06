@@ -2,7 +2,7 @@ import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCar
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const DeviceHealth = () => {
   const { t } = useTranslation()
@@ -24,21 +24,21 @@ const DeviceHealth = () => {
         size='health'
         title={t('disk')}
         metric={`${totalDiskSpace.toFixed(1)}GB`}
-        subTitle={t('utilization', {percent: diskUtilization})}
+        subTitle={t('utilization', { percent: diskUtilization })}
         status={diskStatus}
       />
       <DiagnosticCard
         size='health'
         title={t('cpu')}
         metric='- GHZ'
-        subTitle={t('utilization', {percent: cpuUtilization})}
+        subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
       <DiagnosticCard
         size='health'
         title={t('ram')}
         metric={`${totalMemory.toFixed(1)}GB`}
-        subTitle={t('utilization', {percent: memoryUtilization})}
+        subTitle={t('utilization', { percent: memoryUtilization })}
         status={ramStatus}
       />
     </div>

@@ -1,14 +1,20 @@
-import Typography from '../components/Typography/Typography';
-import useLocalStorage from '../hooks/useLocalStorage';
-import { Endpoint } from '../forms/ConfigConnectionForm';
-import { useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import { apiToken, appView, beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms';
-import { AppView, OnboardView } from '../constants/enums';
-import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner';
-import { fetchVersion } from '../api/lighthouse';
-import { fetchSyncStatus } from '../api/beacon';
-import { useTranslation } from 'react-i18next';
+import Typography from '../components/Typography/Typography'
+import useLocalStorage from '../hooks/useLocalStorage'
+import { Endpoint } from '../forms/ConfigConnectionForm'
+import { useEffect, useState } from 'react'
+import { useSetRecoilState } from 'recoil'
+import {
+  apiToken,
+  appView,
+  beaconNodeEndpoint,
+  onBoardView,
+  validatorClientEndpoint,
+} from '../recoil/atoms'
+import { AppView, OnboardView } from '../constants/enums'
+import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
+import { fetchVersion } from '../api/lighthouse'
+import { fetchSyncStatus } from '../api/beacon'
+import { useTranslation } from 'react-i18next'
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -30,10 +36,10 @@ const InitScreen = () => {
 
   const moveToOnboard = () => moveToView(AppView.ONBOARD)
 
-  const incrementStep = () => setStep((prev) => prev + 1);
+  const incrementStep = () => setStep((prev) => prev + 1)
   const setNodeInfo = async (validatorClient: Endpoint, beaconNode: Endpoint, token: string) => {
     try {
-      incrementStep();
+      incrementStep()
 
       const { status } = await fetchVersion(validatorClient, token)
 
@@ -48,11 +54,11 @@ const InitScreen = () => {
   }
   const checkSyncStatus = async (beaconNode: Endpoint) => {
     try {
-      incrementStep();
+      incrementStep()
 
-      const { data } = await fetchSyncStatus(beaconNode);
+      const { data } = await fetchSyncStatus(beaconNode)
 
-      if(data.is_syncing) {
+      if (data.is_syncing) {
         setOnboardView(OnboardView.SETUP)
         moveToOnboard()
         return

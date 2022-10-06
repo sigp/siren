@@ -1,6 +1,6 @@
-import SyncCard from '../SyncCard/SyncCard';
-import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo';
-import secondsToShortHand from '../../utilities/secondsToShortHand';
+import SyncCard from '../SyncCard/SyncCard'
+import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
+import secondsToShortHand from '../../utilities/secondsToShortHand'
 
 const BeaconSyncCard = () => {
   const { beaconPercentage, beaconSyncTime, headSlot, slotDistance } = useBeaconSyncInfo()
@@ -8,7 +8,7 @@ const BeaconSyncCard = () => {
 
   return (
     <SyncCard
-      type="beacon"
+      type='beacon'
       title='Ethereum Beacon'
       subTitle='Lighthouse Node'
       timeRemaining={remainingBeaconTime}
@@ -18,4 +18,4 @@ const BeaconSyncCard = () => {
   )
 }
 
-export default BeaconSyncCard;
+export default BeaconSyncCard

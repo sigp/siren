@@ -4,7 +4,7 @@ import NetworkStats from '../../../components/NetworkStats/NetworkStats'
 import ValidatorTable from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
 import ValidatorBalances from '../../../components/ValidatorBalances/ValidatorBalances'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -18,7 +18,7 @@ const MainContent = () => {
             className='xl:text-h3'
             fontWeight='font-light'
           >
-            {t('helloUser', {user: 'Mavrik'})}
+            {t('helloUser', { user: 'Mavrik' })}
           </Typography>
           <div className='flex space-x-16'>
             <div>

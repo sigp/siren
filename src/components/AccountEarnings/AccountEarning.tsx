@@ -4,10 +4,10 @@ import { ReactComponent as EthLogo } from '../../assets/images/eth.svg'
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Waves from '../../assets/images/waves.png'
 import Button, { ButtonFace } from '../Button/Button'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const AccountEarning = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className='w-full relative overflow-hidden'>
       <div className='w-full h-full bg-primaryBright absolute left-0 top-0 blur-3xl origin-center -rotate-45 translate-x-36 scale-125' />
@@ -92,19 +92,39 @@ const AccountEarning = () => {
           <div className='px-4 flex justify-between'>
             <Typography color='text-white'>{t('accountEarnings.earnings')}</Typography>
             <div className='flex ml-8 space-x-1'>
-              <Button className="capitalize" type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
                 {t('hourly')}
               </Button>
-              <Button className="capitalize" type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
                 {t('daily')}
               </Button>
-              <Button className="capitalize" type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
                 {t('weekly')}
               </Button>
-              <Button className="capitalize" type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
                 {t('monthly')}
               </Button>
-              <Button className="capitalize" type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
                 {t('total')}
               </Button>
             </div>
@@ -141,7 +161,7 @@ const AccountEarning = () => {
             </div>
             <div>
               <div className='flex space-x-2'>
-                <Typography type='text-caption1' className="capitalize" color='text-dark400'>
+                <Typography type='text-caption1' className='capitalize' color='text-dark400'>
                   {t('annualized')}
                 </Typography>
                 <i className='bi bi-info-circle text-caption1 text-dark400' />

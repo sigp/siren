@@ -1,9 +1,9 @@
 import Typography from '../Typography/Typography'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const LogsInfo = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-style500'>

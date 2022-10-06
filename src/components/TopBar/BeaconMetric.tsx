@@ -1,9 +1,9 @@
-import SyncMetric from '../SyncMetric/SyncMetric';
-import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo';
-import { useTranslation } from 'react-i18next';
+import SyncMetric from '../SyncMetric/SyncMetric'
+import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
+import { useTranslation } from 'react-i18next'
 
 const BeaconMetric = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const { headSlot, slotDistance, isSyncing, beaconPercentage } = useBeaconSyncInfo()
 
   return (
@@ -11,7 +11,7 @@ const BeaconMetric = () => {
       id='beaconChain'
       borderStyle='border-r'
       title='BEACON CHAIN'
-      subTitle={`${isSyncing ? t('syncing') : slotDistance ? t('synced'): ''} —`}
+      subTitle={`${isSyncing ? t('syncing') : slotDistance ? t('synced') : ''} —`}
       percent={beaconPercentage}
       amount={headSlot || 0}
       total={slotDistance || 0}
@@ -20,4 +20,4 @@ const BeaconMetric = () => {
   )
 }
 
-export default BeaconMetric;
+export default BeaconMetric

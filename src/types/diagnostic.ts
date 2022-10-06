@@ -1,5 +1,5 @@
-import { StatusType } from './index';
-import { DiagnosticRate } from '../constants/enums';
+import { StatusType } from './index'
+import { DiagnosticRate } from '../constants/enums'
 
 export type HealthDiagnosticResult = {
   cpu_temp: number
@@ -29,16 +29,16 @@ export type BeaconSyncInfo = {
 }
 
 export type Diagnostics = {
-    totalDiskSpace: number,
-      diskUtilization: number,
-      totalDiskFree: number,
-      diskStatus: StatusType,
-      totalMemory: number,
-      memoryUtilization: number,
-      ramStatus: StatusType,
-      cpuStatus: StatusType,
-      cpuUtilization: string,
-      uptime: number,
-      healthCondition: DiagnosticRate,
-      overallHealthStatus: StatusType
+  totalDiskSpace: number
+  diskUtilization: number
+  totalDiskFree: number
+  diskStatus: StatusType
+  totalMemory: number
+  memoryUtilization: number
+  ramStatus: StatusType
+  cpuStatus: StatusType
+  cpuUtilization: string
+  uptime: number
+  healthCondition: DiagnosticRate
+  overallHealthStatus: StatusType
 }

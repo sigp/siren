@@ -8,10 +8,10 @@ import { Controller } from 'react-hook-form'
 import Toggle from '../../../components/Toggle/Toggle'
 import Button, { ButtonFace } from '../../../components/Button/Button'
 import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const ConfigureConnection = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className='flex-1 relative w-full flex flex-col relative justify-center bg-black'>
       <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' />
@@ -91,14 +91,22 @@ const ConfigureConnection = () => {
                   name='deviceName'
                   control={control}
                   render={({ field: { ref: _ref, ...props } }) => (
-                    <Input label={t('configScreen.deviceName')} placeholder='Local Host' {...props} />
+                    <Input
+                      label={t('configScreen.deviceName')}
+                      placeholder='Local Host'
+                      {...props}
+                    />
                   )}
                 />
                 <Controller
                   name='userName'
                   control={control}
                   render={({ field: { ref: _ref, ...props } }) => (
-                    <Input label={t('configScreen.userNameLabel')} placeholder={t('configScreen.userNamePlaceholder')} {...props} />
+                    <Input
+                      label={t('configScreen.userNameLabel')}
+                      placeholder={t('configScreen.userNamePlaceholder')}
+                      {...props}
+                    />
                   )}
                 />
               </div>

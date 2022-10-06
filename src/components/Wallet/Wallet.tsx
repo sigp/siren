@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Typography from '../Typography/Typography'
 import { ReactComponent as WalletDefault } from '../../assets/images/wallet.svg'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 export interface WalletProps {
   borderStyle?: string
@@ -9,7 +9,7 @@ export interface WalletProps {
 }
 
 const Wallet: FC<WalletProps> = ({ className = '', borderStyle = 'border' }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div
       className={`${borderStyle} ${className} items-center justify-between w-52 h-14 py-2 px-4 cursor-pointer max-h-full border-borderLight dark:border-borderDark`}

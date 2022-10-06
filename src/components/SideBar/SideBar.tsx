@@ -10,10 +10,10 @@ import { createElement } from 'react'
 import { useRecoilState } from 'recoil'
 import { dashView, uiMode } from '../../recoil/atoms'
 import { ContentView, UiMode } from '../../constants/enums'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const SideBar = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const [mode, setMode] = useRecoilState(uiMode)
   const [view, setView] = useRecoilState(dashView)
 

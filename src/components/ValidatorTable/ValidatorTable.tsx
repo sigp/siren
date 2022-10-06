@@ -3,10 +3,10 @@ import { ReactComponent as ValidatorLogo } from '../../assets/images/validators.
 import { ReactComponent as SatelliteLogo } from '../../assets/images/satellite.svg'
 import { FAKE_VALIDATORS } from '../../constants/constants'
 import ValidatorRow from './ValidatorRow'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const ValidatorTable = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>
       <table className='relative table-auto w-full'>

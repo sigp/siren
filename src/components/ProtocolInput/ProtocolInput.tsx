@@ -5,7 +5,7 @@ import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import { ConnectionForm, EndPointType } from '../../forms/ConfigConnectionForm'
 import { Protocol } from '../../constants/enums'
 import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 export interface ProtocolInputProps {
   id: string
@@ -24,7 +24,7 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
   type,
   isValid,
 }) => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const defaultType = type || 'beaconNode'
   const protocol = getValues(`${defaultType}.protocol`)
   const onChangeProtocol = (value: boolean) => {
@@ -84,7 +84,9 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
               color='text-dark500'
               className='flex-grow-0 uppercase md:text-caption1'
               type='text-caption2'
-            >{t(`protocolInput.${type === 'validatorClient' ? 'vcAddress' : 'beaconAddress'}`)}</Typography>
+            >
+              {t(`protocolInput.${type === 'validatorClient' ? 'vcAddress' : 'beaconAddress'}`)}
+            </Typography>
             <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
           </div>
           <div className='relative flex w-28 md:w-44 items-center'>
@@ -165,7 +167,9 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
                 color='text-dark500'
                 className='flex-grow-0 uppercase md:text-caption1'
                 type='text-caption2'
-              >{t(`protocolInput.${type === 'beaconNode' ? 'beaconPort' : 'vcPort'}`)}</Typography>
+              >
+                {t(`protocolInput.${type === 'beaconNode' ? 'beaconPort' : 'vcPort'}`)}
+              </Typography>
               <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
             </div>
             <Controller

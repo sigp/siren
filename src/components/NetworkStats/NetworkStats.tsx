@@ -4,15 +4,23 @@ import { useRecoilValue } from 'recoil'
 import { uiMode } from '../../recoil/atoms'
 import { UiMode } from '../../constants/enums'
 import NetworkStatBlock from './NetworkStatBlock'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const NetworkStats = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
   return (
     <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex'>
-      <NetworkStatBlock title={t('networkStats.processUptime')} subTitle='Validator' metric='15.6 HR' />
-      <NetworkStatBlock title={t('networkStats.processUptime')} subTitle='Beacon Chain' metric='0.3 HR' />
+      <NetworkStatBlock
+        title={t('networkStats.processUptime')}
+        subTitle='Validator'
+        metric='15.6 HR'
+      />
+      <NetworkStatBlock
+        title={t('networkStats.processUptime')}
+        subTitle='Beacon Chain'
+        metric='0.3 HR'
+      />
       <NetworkStatBlock
         title={t('networkStats.headSlot')}
         status='bg-warning'

@@ -1,10 +1,10 @@
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import Typography from '../Typography/Typography'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
-import { useTranslation } from 'react-i18next';
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { useTranslation } from 'react-i18next'
 
 const HardwareInfo = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   const {
     totalDiskSpace,
     diskUtilization,
@@ -41,7 +41,7 @@ const HardwareInfo = () => {
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric={`${totalDiskSpace.toFixed(1)}GB`}
-        subTitle={t('utilization', {percent: diskUtilization})}
+        subTitle={t('utilization', { percent: diskUtilization })}
         status={diskStatus}
       />
       <DiagnosticCard
@@ -49,7 +49,7 @@ const HardwareInfo = () => {
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric='- GHZ'
-        subTitle={t('utilization', {percent: cpuUtilization})}
+        subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
       <DiagnosticCard
@@ -57,7 +57,7 @@ const HardwareInfo = () => {
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric={`${totalMemory.toFixed(1)}GB`}
-        subTitle={t('utilization', {percent: memoryUtilization})}
+        subTitle={t('utilization', { percent: memoryUtilization })}
         status={ramStatus}
       />
     </div>
