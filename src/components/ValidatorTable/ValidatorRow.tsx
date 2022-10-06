@@ -6,12 +6,14 @@ import { ReactComponent as CheckIcon } from '../../assets/images/check.svg'
 import { ReactComponent as SlasherIcon } from '../../assets/images/slasher.svg'
 import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
+import { useTranslation } from 'react-i18next';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
 }
 
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
+  const {t} = useTranslation()
   const { id, title, pubKey, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
 
@@ -81,7 +83,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
       <th className='border-r-style500 px-4'>
         <div className='flex items-center justify-between flex-wrap w-full max-w-tiny'>
           <Typography color='text-dark500' type='text-tiny' className='uppercase'>
-            {status}
+            {t(`validatorStatus.${status}`)}
           </Typography>
           {renderStatus()}
         </div>

@@ -18,7 +18,7 @@ const MainContent = () => {
             className='xl:text-h3'
             fontWeight='font-light'
           >
-            Hello Rick,
+            {t('helloUser', {user: 'Mavrik'})}
           </Typography>
           <div className='flex space-x-16'>
             <div>

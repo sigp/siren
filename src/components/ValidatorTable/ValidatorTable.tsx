@@ -3,8 +3,10 @@ import { ReactComponent as ValidatorLogo } from '../../assets/images/validators.
 import { ReactComponent as SatelliteLogo } from '../../assets/images/satellite.svg'
 import { FAKE_VALIDATORS } from '../../constants/constants'
 import ValidatorRow from './ValidatorRow'
+import { useTranslation } from 'react-i18next';
 
 const ValidatorTable = () => {
+  const {t} = useTranslation()
   return (
     <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>
       <table className='relative table-auto w-full'>
@@ -18,7 +20,7 @@ const ValidatorTable = () => {
               </div>
             </th>
             <th>
-              <Typography className='text-left'>Validators</Typography>
+              <Typography className='text-left capitalize'>{t('validators')}</Typography>
             </th>
             <th className='relative border-r-style500 pr-2'>
               <Typography>{FAKE_VALIDATORS.length}</Typography>
@@ -31,12 +33,12 @@ const ValidatorTable = () => {
             </th>
             <th>
               <Typography color='text-dark500' type='text-tiny' className='uppercase text-left'>
-                Balance
+                {t('balance')}
               </Typography>
             </th>
             <th>
               <Typography color='text-dark500' type='text-tiny' className='uppercase'>
-                Rewards
+                {t('rewards')}
               </Typography>
             </th>
             <th>
@@ -68,7 +70,7 @@ const ValidatorTable = () => {
             </th>
             <th className='border-r-style500 pl-2'>
               <Typography color='text-dark500' type='text-tiny' className='text-left uppercase'>
-                Status
+                {t('status')}
               </Typography>
             </th>
             <th className='border-r-style500'>

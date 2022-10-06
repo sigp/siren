@@ -85,7 +85,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           </Typography>
         )}
       </div>
-      <div className='w-full z-10 space-x-8 flex items-center justify-between'>
+      <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between'>
         <Typography
           type={isSmall ? 'text-tiny' : 'text-caption1'}
           className={subTitleHighlightColor ? `${subTitleHighlightColor} px-1` : undefined}
