@@ -1,6 +1,8 @@
 import Typography from '../Typography/Typography'
+import { useTranslation } from 'react-i18next'
 
 const ViewDisclosures = () => {
+  const { t } = useTranslation()
   return (
     <div className='flex space-x-4 items-center cursor-pointer'>
       <i className='bi-info-circle text-caption1 text-primary' />
@@ -11,7 +13,7 @@ const ViewDisclosures = () => {
         type='text-caption1'
         className='uppercase'
       >
-        view important disclosures
+        {t('viewDisclosures')}
       </Typography>
     </div>
   )

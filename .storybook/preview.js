@@ -1,3 +1,4 @@
+import '../src/i18n'
 import '../src/global.css';
 import { themes } from '@storybook/theming'
 import {

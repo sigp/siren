@@ -17,27 +17,27 @@ export type ViewType = {
 
 export const VIEW = {
   DASH: {
-    title: 'Dashboard',
+    title: 'sidebar.dashboard',
     logoComponent: DashLogo,
     key: ContentView.MAIN,
   },
   VALIDATORS: {
-    title: 'Validator Management',
+    title: 'sidebar.validatorManagement',
     logoComponent: ValidatorLogo,
     key: ContentView.VALIDATORS,
   },
   LOGS: {
-    title: 'Logs',
+    title: 'sidebar.logs',
     logoComponent: LogsLogo,
     key: ContentView.LOGS,
   },
   GRAFANA: {
-    title: 'Grafana',
+    title: 'sidebar.grafana',
     logoComponent: GrafanaLogo,
     key: ContentView.GRAFANA,
   },
   SETTINGS: {
-    title: 'Settings',
+    title: 'sidebar.settings',
     logoComponent: SettingsLogo,
     key: ContentView.SETTINGS,
   },

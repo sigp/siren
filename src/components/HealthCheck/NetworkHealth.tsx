@@ -2,26 +2,24 @@ import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCar
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
-import { useMemo } from 'react'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
+import { useTranslation } from 'react-i18next'
 
 const NetworkHealth = () => {
+  const { t } = useTranslation()
   const { beaconPercentage, beaconSyncTime } = useBeaconSyncInfo()
 
-  const remainingBeaconTime = useMemo<string>(
-    () => secondsToShortHand(beaconSyncTime || 0),
-    [beaconSyncTime],
-  )
+  const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
   return (
     <div className='w-full md:h-24 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mt-8 md:mt-2'>
       <DiagnosticSummaryCard type={DiagnosticType.NETWORK} rate={DiagnosticRate.GREAT} />
       <DiagnosticCard
         size='health'
-        title='Network'
+        title={t('network')}
         isBackground={false}
         subTitleHighlightColor='bg-warning'
-        subTitle='Network Unavailable'
+        subTitle={t('networkUnavailable')}
         status='bg-dark100'
       />
       <DiagnosticCard
@@ -30,7 +28,7 @@ const NetworkHealth = () => {
         metric='0H 01M'
         percent={25}
         isBackground={false}
-        subTitle='Connected Out of Sync'
+        subTitle={t('connectedStatus', { status: t('outOfSync') })}
       />
       <DiagnosticCard
         size='health'
@@ -38,7 +36,9 @@ const NetworkHealth = () => {
         metric={remainingBeaconTime}
         percent={beaconPercentage}
         isBackground={false}
-        subTitle={`Connected ${beaconPercentage < 100 ? 'Out of Sync' : 'In Sync'}`}
+        subTitle={t('connectedStatus', {
+          status: beaconPercentage < 100 ? t('outOfSync') : t('inSync'),
+        })}
       />
     </div>
   )

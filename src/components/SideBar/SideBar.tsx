@@ -10,8 +10,10 @@ import { createElement } from 'react'
 import { useRecoilState } from 'recoil'
 import { dashView, uiMode } from '../../recoil/atoms'
 import { ContentView, UiMode } from '../../constants/enums'
+import { useTranslation } from 'react-i18next'
 
 const SideBar = () => {
+  const { t } = useTranslation()
   const [mode, setMode] = useRecoilState(uiMode)
   const [view, setView] = useRecoilState(dashView)
 
@@ -59,7 +61,7 @@ const SideBar = () => {
                 key={key}
                 onClick={() => changeView(key)}
                 isActive={view === key}
-                text={title}
+                text={t(title)}
               />
             ))}
           </ul>
@@ -71,10 +73,10 @@ const SideBar = () => {
                 key={key}
                 onClick={() => changeView(key)}
                 isActive={view === key}
-                text={title}
+                text={t(title)}
               />
             ))}
-            <SideBarText text='Theme' />
+            <SideBarText text={t('sidebar.theme')} />
           </ul>
         </div>
       </div>

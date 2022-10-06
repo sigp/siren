@@ -4,26 +4,36 @@ import { useRecoilValue } from 'recoil'
 import { uiMode } from '../../recoil/atoms'
 import { UiMode } from '../../constants/enums'
 import NetworkStatBlock from './NetworkStatBlock'
+import { useTranslation } from 'react-i18next'
 
 const NetworkStats = () => {
+  const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
   return (
     <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex'>
-      <NetworkStatBlock title='Process Uptime' subTitle='Validator' metric='15.6 HR' />
-      <NetworkStatBlock title='Process Uptime' subTitle='Beacon Chain' metric='0.3 HR' />
       <NetworkStatBlock
-        title='AT Head Slot'
+        title={t('networkStats.processUptime')}
+        subTitle='Validator'
+        metric='15.6 HR'
+      />
+      <NetworkStatBlock
+        title={t('networkStats.processUptime')}
+        subTitle='Beacon Chain'
+        metric='0.3 HR'
+      />
+      <NetworkStatBlock
+        title={t('networkStats.headSlot')}
         status='bg-warning'
         metricFontSize='text-subtitle3'
         metric='-2'
       />
       <div className='relative py-2 px-4 h-full w-52 border-r-style500'>
         <Typography type='text-tiny' className='uppercase' isBold darkMode='dark:text-white'>
-          Connected Peers
+          {t('networkStats.connectedPeers')}
         </Typography>
         <div className='flex items-center space-x-4 pt-1'>
           <Typography color='text-dark300' type='text-caption2'>
-            Node
+            {t('node')}
           </Typography>
           <div className='absolute -bottom-6 right-0'>
             <Typography
@@ -62,7 +72,7 @@ const NetworkStats = () => {
         </div>
       </div>
       <NetworkStatBlock
-        title='Participation Rate'
+        title={t('networkStats.participationRate')}
         status='bg-success'
         metricFontSize='text-subtitle3'
         metric='98%'

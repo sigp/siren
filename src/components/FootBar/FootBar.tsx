@@ -1,7 +1,7 @@
 import Typography from '../Typography/Typography'
 import Button, { ButtonFace } from '../Button/Button'
-import HealthMetric, { HealthMetricFallback } from './HealthMetric';
-import { Suspense } from 'react';
+import HealthMetric, { HealthMetricFallback } from './HealthMetric'
+import { Suspense } from 'react'
 
 const FootBar = () => {
   return (
@@ -19,8 +19,8 @@ const FootBar = () => {
         <i className='bi bi-siren' />
       </div>
       <div className='flex items-center space-x-4 w-max'>
-        <Suspense fallback={<HealthMetricFallback/>}>
-          <HealthMetric/>
+        <Suspense fallback={<HealthMetricFallback />}>
+          <HealthMetric />
         </Suspense>
         <div className='flex space-x-1'>
           <Button type={ButtonFace.ICON}>

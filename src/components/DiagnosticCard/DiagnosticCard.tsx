@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Typography from '../Typography/Typography'
 import network from '../../assets/images/network.svg'
-import {ReactComponent as NotAvailable} from '../../assets/images/notAvalilable.svg';
+import { ReactComponent as NotAvailable } from '../../assets/images/notAvalilable.svg'
 import darkNetwork from '../../assets/images/darkNetwork.svg'
 import Status, { StatusType } from '../Status/Status'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
@@ -51,7 +51,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col justify-between`}
     >
       {!metric ? (
-          <NotAvailable className="absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2"/>
+        <NotAvailable className='absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2' />
       ) : (
         size !== 'sm' &&
         isBackground && (
@@ -85,7 +85,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           </Typography>
         )}
       </div>
-      <div className='w-full z-10 space-x-8 flex items-center justify-between'>
+      <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between'>
         <Typography
           type={isSmall ? 'text-tiny' : 'text-caption1'}
           className={subTitleHighlightColor ? `${subTitleHighlightColor} px-1` : undefined}

@@ -24,9 +24,7 @@ const ValidatorSetup = () => {
 
   switch (view) {
     case SetupSteps.SYNC:
-      return (
-        <NodeSync />
-      )
+      return <NodeSync />
     case SetupSteps.HEALTH:
       return <HealthCheck />
     default:

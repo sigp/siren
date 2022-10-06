@@ -4,8 +4,10 @@ import { ReactComponent as EthLogo } from '../../assets/images/eth.svg'
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Waves from '../../assets/images/waves.png'
 import Button, { ButtonFace } from '../Button/Button'
+import { useTranslation } from 'react-i18next'
 
 const AccountEarning = () => {
+  const { t } = useTranslation()
   return (
     <div className='w-full relative overflow-hidden'>
       <div className='w-full h-full bg-primaryBright absolute left-0 top-0 blur-3xl origin-center -rotate-45 translate-x-36 scale-125' />
@@ -17,7 +19,7 @@ const AccountEarning = () => {
       />
       <div className='p-4 bg-primary200 w-28 text-center absolute z-30 top-0 right-10'>
         <Typography color='text-white' type='text-caption1'>
-          Balance
+          {t('balance')}
         </Typography>
         <div className='w-full absolute h-1 bg-white bottom-0 left-0' />
       </div>
@@ -30,7 +32,7 @@ const AccountEarning = () => {
             type='text-subtitle1'
             darkMode='dark:text-white'
           >
-            Account
+            {t('account')}
           </Typography>
           <div className='w-full flex justify-end pr-6 pt-4'>
             <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
@@ -42,7 +44,7 @@ const AccountEarning = () => {
             <div className='flex-1 ml-12 flex items-center space-x-2 justify-between'>
               <div>
                 <Typography color='text-white' type='text-caption1' className='xl:text-body'>
-                  Choose Currency
+                  {t('accountEarnings.chooseCurrency')}
                 </Typography>
                 <div className='flex justify-between items-center'>
                   <Typography
@@ -58,7 +60,7 @@ const AccountEarning = () => {
               </div>
               <div>
                 <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
-                  Current Rate
+                  {t('accountEarnings.currentRate')}
                 </Typography>
                 <Typography
                   color='text-white'
@@ -71,7 +73,7 @@ const AccountEarning = () => {
               </div>
               <div>
                 <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
-                  Total Balance
+                  {t('accountEarnings.totalBalance')}
                 </Typography>
                 <Typography
                   color='text-white'
@@ -88,22 +90,42 @@ const AccountEarning = () => {
         </div>
         <div className='bg-gradient-to-t via-transWhite from-white dark:from-darkPrimary'>
           <div className='px-4 flex justify-between'>
-            <Typography color='text-white'>Earnings</Typography>
+            <Typography color='text-white'>{t('accountEarnings.earnings')}</Typography>
             <div className='flex ml-8 space-x-1'>
-              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
-                Hourly
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
+                {t('hourly')}
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
-                Daily
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
+                {t('daily')}
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
-                Weekly
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
+                {t('weekly')}
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
-                Monthly
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
+                {t('monthly')}
               </Button>
-              <Button type={ButtonFace.LIGHT} padding='p-2 @1440:px-4 @1440:py-2'>
-                Total
+              <Button
+                className='capitalize'
+                type={ButtonFace.LIGHT}
+                padding='p-2 @1440:px-4 @1440:py-2'
+              >
+                {t('total')}
               </Button>
             </div>
           </div>
@@ -139,8 +161,8 @@ const AccountEarning = () => {
             </div>
             <div>
               <div className='flex space-x-2'>
-                <Typography type='text-caption1' color='text-dark400'>
-                  Annualized
+                <Typography type='text-caption1' className='capitalize' color='text-dark400'>
+                  {t('annualized')}
                 </Typography>
                 <i className='bi bi-info-circle text-caption1 text-dark400' />
               </div>

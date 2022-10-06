@@ -1,8 +1,10 @@
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import Typography from '../Typography/Typography'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { useTranslation } from 'react-i18next'
 
 const HardwareInfo = () => {
+  const { t } = useTranslation()
   const {
     totalDiskSpace,
     diskUtilization,
@@ -25,37 +27,37 @@ const HardwareInfo = () => {
             darkMode='dark:text-white'
             isBold
           >
-            Hardware Usage
+            {t('hardwareInfo.usage')}
           </Typography>
         </div>
         <div className='flex-1 p-2 flex items-center justify-center cursor-pointer'>
           <Typography type='text-caption2' className='xl:text-caption1' color='text-dark500'>
-            Device Diagnostics
+            {t('hardwareInfo.diagnostics')}
           </Typography>
         </div>
       </div>
       <DiagnosticCard
-        title='Disk'
+        title={t('disk')}
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric={`${totalDiskSpace.toFixed(1)}GB`}
-        subTitle={`${diskUtilization}% Utilization`}
+        subTitle={t('utilization', { percent: diskUtilization })}
         status={diskStatus}
       />
       <DiagnosticCard
-        title='CPU'
+        title={t('cpu')}
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric='- GHZ'
-        subTitle={`${cpuUtilization}% Utilization`}
+        subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
       <DiagnosticCard
-        title='RAM'
+        title={t('ram')}
         maxHeight='flex-1'
         border='border-t-0 border-style500'
         metric={`${totalMemory.toFixed(1)}GB`}
-        subTitle={`${memoryUtilization}% Utilization`}
+        subTitle={t('utilization', { percent: memoryUtilization })}
         status={ramStatus}
       />
     </div>

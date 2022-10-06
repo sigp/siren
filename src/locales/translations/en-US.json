@@ -1,0 +1,160 @@
+{
+  "dates": {
+    "monthsShort": {
+      "january": "Jan",
+      "february": "Feb",
+      "march": "Mar",
+      "april": "Apr",
+      "may": "May",
+      "june": "Jun",
+      "july": "Jul",
+      "august": "Aug",
+      "september": "Sep",
+      "october": "Oct",
+      "november": "Nov",
+      "december": "Dec"
+    },
+    "weekdaysShort": {
+      "sunday": "Sun",
+      "monday": "Mon",
+      "tuesday": "Tue",
+      "wednesday": "Wed",
+      "thursday": "Thu",
+      "friday": "Fri",
+      "saturday": "Sat"
+    }
+  },
+  "helloUser": "Hello {{user}},",
+  "lighthouseVersion": "Lighthouse Version",
+  "configure": "Configure",
+  "continue": "Continue",
+  "disk": "Disk",
+  "cpu": "CPU",
+  "ram": "RAM",
+  "diagnostic": "Diagnostic",
+  "device": "Device",
+  "network": "Network",
+  "fair": "fair",
+  "poor": "poor",
+  "good": "good",
+  "great": "great",
+  "node": "Node",
+  "viewDisclosures": "view important disclosures",
+  "uptime": "Uptime",
+  "networkUnavailable": "Network Unavailable",
+  "outOfSync": "Out of Sync",
+  "inSync": "In Sync",
+  "nodesSyncing": "Nodes <0></0> Syncing",
+  "connectedStatus": "Connected {{status}}",
+  "utilization": "{{percent}}% Utilization",
+  "healthCheck": "Health Check",
+  "nodes": "Nodes",
+  "syncing": "Syncing",
+  "synced": "Synced",
+  "noConnection": "No Connection",
+  "live": "Live",
+  "slasher": "Slasher",
+  "connected": "Connected",
+  "disconnect": "Disconnect",
+  "balance": "Balance",
+  "rewards": "Rewards",
+  "status": "status",
+  "account": "Account",
+  "hourly": "hourly",
+  "daily": "daily",
+  "critical": "Critical",
+  "errors": "errors",
+  "monthly": "monthly",
+  "weekly": "weekly",
+  "total": "Total",
+  "validators": "Validators",
+  "validatorBalance": "Validator Balance",
+  "viewAll": "View All",
+  "hardwareInfo": {
+    "usage": "Hardware Usage",
+    "diagnostics": "Device Diagnostics"
+  },
+  "logInfo": {
+    "logs": "Logs",
+    "warnings": "Warnings",
+    "validatorLogs": "Validator Logs",
+    "criticalLogs": "Critical Logs Per Minute"
+  },
+  "alertInfo": {
+    "alerts": "Alerts",
+    "process": "Node / Validator: {{status}}",
+    "peerCount": "NODE: {{count}} Connected peers",
+    "participation": "Network: Participation rate below {{percent}}%"
+  },
+  "validatorStatus": {
+    "unknown": "Unknown",
+    "active": "Active",
+    "queue": "Queue",
+    "success": "Success",
+    "active-slash": "active-slash"
+  },
+  "accountEarnings": {
+    "annualized": "annualized",
+    "earnings": "Earnings",
+    "chooseCurrency": "Choose Currency",
+    "currentRate": "Current Rate",
+    "totalBalance": "Total Balance"
+  },
+  "networkStats": {
+    "processUptime": "Process Uptime",
+    "headSlot": "At head slot",
+    "connectedPeers": "Connected Peers",
+    "participationRate": "Participation Rate"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "validatorManagement": "Validator Management",
+    "logs": "Logs",
+    "grafana": "Grafana",
+    "settings": "Settings",
+    "theme": "Theme"
+  },
+  "nodeSync": {
+    "syncOverview": "Syncing <0></0> overview",
+    "syncWarning": "You are currently syncing to the Ethereum Geth and Beacon node. This may take a while..."
+  },
+  "vcHealthCheck": {
+    "title": "Validator Health Check",
+    "diagnosticOverview": "Diagnostics <0></0> overview",
+    "hasDiskSpace": "Disk has the required 240GB for the full sync.",
+    "noDiskSpace": "Disk does not have the required 240GB for the full sync.",
+    "latency": "Network is low latency.",
+    "cpuRecommendation": "2.4GHZ is recommended for CPU.",
+    "healthCondition": "HEALTH CHECK — in {{status}} Condition.",
+    "checkLowRam": "Please ensure your RAM is sufficient prior to starting validating."
+  },
+  "initScreen": {
+    "initializing": "Initializing",
+    "fetchingEndpoints": "Fetching saved api endpoints",
+    "connectingBeacon": "Attempting to connect to Beacon Node",
+    "connectingValidator": "Attempting to connect to Validator Client",
+    "validatorClient": "Validator Client",
+    "fetchBeaconSync": "Fetching beacon sync status",
+    "developedBy": "Developed & Secured By:",
+    "builtOn": "Built on:",
+    "rustLanguage": "Rust Programming Language"
+  },
+  "configScreen": {
+    "configConnection": "Configure Connection",
+    "basicSettings": "basic settings",
+    "advanceSettings": "advanced settings",
+    "apiToken": "Api Token",
+    "apiTokenToolTip": "api token tooltip",
+    "deviceName": "Device Name",
+    "userNameLabel": "What should I call you?",
+    "userNamePlaceholder": "Name",
+    "autoConnect": "Save Data Auto Connect"
+  },
+  "protocolInput": {
+    "httpProtocol": "Protocol (http/https)",
+    "vcAddress": "VC Address",
+    "beaconAddress": "Beacon Address",
+    "beaconPort": "BN Port",
+    "vcPort": "VC Port"
+  }
+}

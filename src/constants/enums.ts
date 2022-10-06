@@ -40,6 +40,7 @@ export enum DiagnosticType {
 export enum DiagnosticRate {
   FAIR = 'FAIR',
   POOR = 'POOR',
+  GOOD = 'GOOD',
   GREAT = 'GREAT',
 }
 

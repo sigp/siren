@@ -1,14 +1,16 @@
 import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightHouseFull.svg'
 import { ReactComponent as SlasherLogo } from '../../assets/images/slasher.svg'
-import SyncMetric from '../SyncMetric/SyncMetric'
+import SyncMetric, { SyncMetricFallback } from '../SyncMetric/SyncMetric'
 import Typography from '../Typography/Typography'
 import Button, { ButtonFace } from '../Button/Button'
 import Wallet from '../Wallet/Wallet'
-import BeaconMetric from './BeaconMetric';
-import { Suspense } from 'react';
-import SyncMetricFallback from '../SyncMetric/SyncMetricFallback';
+import BeaconMetric from './BeaconMetric'
+import { Suspense } from 'react'
+import getPercentage from '../../utilities/getPercentage'
+import { useTranslation } from 'react-i18next'
 
 const TopBar = () => {
+  const { t } = useTranslation()
   return (
     <div className='w-full h-14 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
       <div className='flex h-full'>
@@ -19,17 +21,19 @@ const TopBar = () => {
           id='ethMain'
           borderStyle='border-r'
           title='ETHEREUM MAINNET'
+          subTitle='—'
+          percent={getPercentage(150435, 212245)}
           amount={150435}
           color='secondary'
           total={212245}
         />
-        <Suspense fallback={<SyncMetricFallback/>}>
-          <BeaconMetric/>
+        <Suspense fallback={<SyncMetricFallback />}>
+          <BeaconMetric />
         </Suspense>
         <div className='hidden md:flex w-24 border-r border-borderLight dark:border-dark800 p-2'>
           <div className='flex-1 space-y-2'>
             <Typography family='font-roboto' type='text-tiny'>
-              Slasher
+              {t('slasher')}
             </Typography>
             <Typography
               color='text-primary'
@@ -38,7 +42,7 @@ const TopBar = () => {
               type='text-caption1'
               family='font-roboto'
             >
-              LIVE
+              {t('live')}
             </Typography>
           </div>
           <SlasherLogo className='w-6 h-6 text-primary' />

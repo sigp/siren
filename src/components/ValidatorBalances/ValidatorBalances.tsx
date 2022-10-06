@@ -3,8 +3,10 @@ import { BALANCE_COLORS, FAKE_VALIDATORS } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
+import { useTranslation } from 'react-i18next'
 
 const ValidatorBalances = () => {
+  const { t } = useTranslation()
   const { slots, data } = getFakeValidatorBalances()
 
   const validators = FAKE_VALIDATORS.map(({ title }, index) => ({
@@ -42,7 +44,7 @@ const ValidatorBalances = () => {
       <div className='relative flex-1'>
         <div className='px-8 absolute z-10 top-0 left-0 w-full flex justify-between'>
           <Typography color='text-primary' darkMode='dark:text-white'>
-            Validator Balance
+            {t('validatorBalance')}
           </Typography>
           <Typography color='text-primary' darkMode='dark:text-white'>
             {validators.length}
