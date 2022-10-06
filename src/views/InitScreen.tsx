@@ -10,7 +10,9 @@ import {
   onBoardView,
   validatorClientEndpoint,
 } from '../recoil/atoms'
-import { AppView, OnboardView } from '../constants/enums'
+import { AppView,
+  OnboardView
+} from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchSyncStatus } from '../api/beacon'
@@ -47,6 +49,8 @@ const InitScreen = () => {
         setBeaconNode(beaconNode)
         setValidatorClient(validatorClient)
         setApiToken(token)
+
+        await checkSyncStatus(beaconNode)
       }
     } catch (e) {
       moveToOnboard()
@@ -75,7 +79,7 @@ const InitScreen = () => {
       moveToView(AppView.ONBOARD)
       return
     }
-    void setNodeInfo(validatorClient, beaconNode, token).then(() => checkSyncStatus(beaconNode))
+    void setNodeInfo(validatorClient, beaconNode, token)
   }, [validatorClient, beaconNode, token])
 
   return (
