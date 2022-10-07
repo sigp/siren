@@ -91,7 +91,8 @@
     "active": "Active",
     "queue": "Queue",
     "success": "Success",
-    "active-slash": "active-slash"
+    "active-slash": "active-slash",
+    "active_ongoing": "Active Ongoing"
   },
   "accountEarnings": {
     "annualized": "annualized",
