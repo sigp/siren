@@ -42,7 +42,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       case 'health':
         return 'h-24 md:h-full max-w-full md:max-w-xs py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500'
       default:
-        return `max-w-xs ${maxHeight || 'max-h-30'} py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
+        return `max-w-xs ${maxHeight || 'max-h-30'} py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500 @1600:max-w-full`
     }
   }
 
