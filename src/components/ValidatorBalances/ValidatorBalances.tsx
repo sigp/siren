@@ -9,8 +9,8 @@ const ValidatorBalances = () => {
   const { t } = useTranslation()
   const { slots, data } = getFakeValidatorBalances()
 
-  const validators = FAKE_VALIDATORS.map(({ title }, index) => ({
-    label: title,
+  const validators = FAKE_VALIDATORS.map((val, index) => ({
+    label: 'fake-data',
     data: data[index],
     fill: true,
     pointRadius: 0,
