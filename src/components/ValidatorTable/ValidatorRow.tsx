@@ -7,6 +7,8 @@ import { ReactComponent as SlasherIcon } from '../../assets/images/slasher.svg'
 import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
+import formatEthAddress from '../../utilities/formatEthAddress';
+import { faker } from '@faker-js/faker';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -14,12 +16,14 @@ export interface ValidatorRowProps {
 
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
   const { t } = useTranslation()
-  const { id, title, pubKey, balance, rewards, processed, missed, attested, aggregated, status } =
+  const { pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
+
+  const id = (index + 1).toString().padStart(2, '0')
 
   const renderStatus = () => {
     switch (status) {
-      case 'active':
+      case 'active_ongoing':
         return <CheckIcon className='h-4 w-4 text-success' />
       case 'unknown':
         return <UnknownIcon className='h-4 w-4 text-warning' />
@@ -42,7 +46,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
       </th>
       <th className='w-28'>
         <Typography className='text-left' color='text-dark500' type='text-caption2'>
-          {title}
+          {faker.name.fullName()}
         </Typography>
       </th>
       <th className='border-r-style500 px-2'>
@@ -52,7 +56,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
       </th>
       <th className='px-2'>
         <Typography color='text-dark500' type='text-caption1' className='text-left'>
-          {pubKey}
+          {formatEthAddress(pubKey)}
         </Typography>
       </th>
       <th className='px-2'>
