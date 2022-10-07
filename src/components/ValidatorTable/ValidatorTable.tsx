@@ -13,11 +13,14 @@ export const TableFallback = () => (
   </div>
 )
 
-export const TableErrorFallback = () => (
-  <div className='w-full flex items-center justify-center h-60 overflow-scroll mt-2 border-style500'>
-    <Typography type="text-caption2" color="text-error" className="uppercase">Error Loading Validator Info...</Typography>
-  </div>
-)
+export const TableErrorFallback = () => {
+  const {t} = useTranslation()
+  return (
+    <div className='w-full flex items-center justify-center h-60 overflow-scroll mt-2 border-style500'>
+      <Typography type="text-caption2" color="text-error" className="uppercase">{t('error.validatorInfo')}</Typography>
+    </div>
+  )
+}
 
 const ValidatorTable = () => {
   const { t } = useTranslation()

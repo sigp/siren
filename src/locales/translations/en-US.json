@@ -157,5 +157,8 @@
     "beaconAddress": "Beacon Address",
     "beaconPort": "BN Port",
     "vcPort": "VC Port"
+  },
+  "error": {
+    "validatorInfo": "Error Loading Validator Info..."
   }
 }
