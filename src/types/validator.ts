@@ -1,14 +1,36 @@
-export type ValidatorStatus = 'success' | 'active' | 'queue' | 'unknown' | 'active-slash'
+export type ValidatorStatus = 'success' | 'active' | 'queue' | 'unknown' | 'active-slash' | 'active_ongoing'
 
 export type ValidatorInfo = {
-  title: string
-  id: number
-  pubKey: string
   balance: number
+  index: number
+  pubKey: string
   rewards: number
+  slashed: boolean
+  status: ValidatorStatus
   processed: number
   missed: number
   attested: number
   aggregated: number
-  status: ValidatorStatus
+}
+
+export type LighthouseValidatorResult = {
+  enabled: boolean,
+  description: string,
+  voting_pubkey: string,
+}
+
+export type BeaconValidatorResult = {
+  index: string,
+  balance: string,
+  status: string,
+  validator: {
+    activation_eligibility_epoch: string,
+    activation_epoch: string,
+    effective_balance: string,
+    exit_epoch: string,
+    pubkey: string,
+    slashed: boolean,
+    withdrawal_epoch: string,
+    withdrawal_credentials: string
+  }
 }

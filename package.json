@@ -17,6 +17,7 @@
     "bootstrap-icons": "^1.9.1",
     "chart.js": "^3.9.1",
     "eslint-import-resolver-typescript": "^3.5.1",
+    "ethers": "^5.7.1",
     "i18next": "^21.9.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
@@ -75,6 +76,7 @@
     ]
   },
   "devDependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
     "@storybook/addon-interactions": "^6.5.10",

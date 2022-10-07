@@ -1,10 +1,14 @@
 import Typography from '../../../components/Typography/Typography'
 import AccountEarning from '../../../components/AccountEarnings/AccountEarning'
 import NetworkStats from '../../../components/NetworkStats/NetworkStats'
-import ValidatorTable from '../../../components/ValidatorTable/ValidatorTable'
+import ValidatorTable, {
+  TableErrorFallback, TableFallback
+} from '../../../components/ValidatorTable/ValidatorTable';
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
 import ValidatorBalances from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -40,7 +44,11 @@ const MainContent = () => {
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
         <NetworkStats />
-        <ValidatorTable />
+        <ErrorBoundary fallback={<TableErrorFallback/>}>
+          <Suspense fallback={<TableFallback/>}>
+            <ValidatorTable />
+          </Suspense>
+        </ErrorBoundary>
         <DiagnosticTable />
       </div>
     </div>

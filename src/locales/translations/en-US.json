@@ -91,7 +91,8 @@
     "active": "Active",
     "queue": "Queue",
     "success": "Success",
-    "active-slash": "active-slash"
+    "active-slash": "active-slash",
+    "active_ongoing": "Active Ongoing"
   },
   "accountEarnings": {
     "annualized": "annualized",
@@ -156,5 +157,8 @@
     "beaconAddress": "Beacon Address",
     "beaconPort": "BN Port",
     "vcPort": "VC Port"
+  },
+  "error": {
+    "validatorInfo": "Error Loading Validator Info..."
   }
 }
