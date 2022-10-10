@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import { TypographyFamily, TypographyType } from '../Typography/Typography'
+import Spinner from '../Spinner/Spinner';
 
 export enum ButtonFace {
   PRIMARY = 'PRIMARY',
@@ -7,6 +8,7 @@ export enum ButtonFace {
   TERTIARY = 'TERTIARY',
   ICON = 'ICON',
   LIGHT = 'LIGHT',
+  LIGHT_ACTIVE = 'LIGHT_ACTIVE',
   WHITE = 'WHITE',
 }
 
@@ -22,6 +24,7 @@ export interface ButtonProps {
   renderAs?: 'submit' | 'reset' | 'button'
   href?: string
   target?: '_self' | '_blank'
+  isLoading?: boolean
 }
 
 const Button: FC<ButtonProps> = ({
@@ -36,9 +39,12 @@ const Button: FC<ButtonProps> = ({
   isDisabled,
   padding = 'px-4 py-2',
   renderAs = 'button',
+  isLoading,
 }) => {
   const formatFaceStyle = () => {
     switch (type) {
+      case ButtonFace.LIGHT_ACTIVE:
+        return 'bg-primary80 text-primary'
       case ButtonFace.LIGHT:
         return 'bg-primary100 text-primary'
       case ButtonFace.ICON:
@@ -61,7 +67,9 @@ const Button: FC<ButtonProps> = ({
       disabled={isDisabled}
       className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}
     >
-      {children}
+      {isLoading ? (
+        <Spinner size="h-6 w-6"/>
+      ) : children}
     </button>
   )
   return href ? (
