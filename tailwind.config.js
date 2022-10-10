@@ -22,6 +22,7 @@ module.exports = {
         dark10: '#F0F0F0',
         transWhite: '#FFFFFF98',
         primary50: '#FFF5FF',
+        primary80: 'rgba(255, 255, 255, 0.8)',
         primary100: '#CCAFFF',
         primary200: '#7C5FEB',
         primary: '#5E41D5',
@@ -81,6 +82,7 @@ module.exports = {
         '9/10': '90%',
       },
       height: {
+        '22': '5.688rem',
         '11/20': '55%'
       },
       inset: {
