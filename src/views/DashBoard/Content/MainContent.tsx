@@ -39,7 +39,9 @@ const MainContent = () => {
             <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
           </div>
         </div>
-        <AccountEarning />
+        <Suspense fallback={<div>loading...</div>}>
+          <AccountEarning />
+        </Suspense>
         <ValidatorBalances />
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
