@@ -1,21 +1,23 @@
 export type formatLocalCurrencyOptions = {
   locale?: string
   isStrict?: boolean
-  specificity?: number
+  min?: number
+  max?: number
 }
 
 export const formatLocalCurrency = (
   amount: string | number | undefined = 0,
   options?: formatLocalCurrencyOptions,
 ): string => {
-  const { isStrict, specificity = 2, locale = 'en-US' } = options || {}
+  const { isStrict, locale = 'en-US', min = 2, max = 2 } = options || {}
 
   const amountAsNumber = typeof amount === 'string' ? parseFloat(amount) : amount
 
-  const decimals = isStrict && amountAsNumber % 1 === 0 ? 0 : specificity
+  const minDecimals = isStrict && amountAsNumber % 1 === 0 ? 0 : min
+  const maxDecimals = isStrict && amountAsNumber % 1 === 0 ? 0 : max
 
   return amountAsNumber.toLocaleString(locale, {
-    minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals,
+    minimumFractionDigits: minDecimals,
+    maximumFractionDigits: maxDecimals,
   })
 }
