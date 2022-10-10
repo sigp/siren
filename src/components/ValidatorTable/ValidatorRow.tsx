@@ -61,12 +61,12 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
       </th>
       <th className='px-2'>
         <Typography type='text-caption1' className='text-left' darkMode='dark:text-white' isBold>
-          {balance}
+          {balance.toFixed(4)}
         </Typography>
       </th>
       <th className='px-2'>
         <Typography color='text-dark500' type='text-caption1' className='uppercase'>
-          {rewards}
+          {rewards.toFixed(4)}
         </Typography>
       </th>
       <th className='px-1'>
