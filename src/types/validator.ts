@@ -34,3 +34,8 @@ export type BeaconValidatorResult = {
     withdrawal_credentials: string
   }
 }
+
+export type EarningOption = {
+  title: string,
+  value: number
+}

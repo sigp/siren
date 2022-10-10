@@ -6,7 +6,7 @@ import { ReactComponent as LogsLogo } from '../assets/images/logs.svg'
 import { ReactComponent as GrafanaLogo } from '../assets/images/grafana.svg'
 import { ReactComponent as SettingsLogo } from '../assets/images/settings.svg'
 import { ContentView } from './enums'
-import { ValidatorStatus } from '../types/validator'
+import { EarningOption, ValidatorStatus } from '../types/validator';
 import { ClientProvider } from '../types'
 
 export type ViewType = {
@@ -154,3 +154,32 @@ export const CLIENT_PROVIDERS = [
     language: 'Javascript',
   },
 ] as ClientProvider[]
+
+export const secondsInSlot = 12;
+export const slotsInHour = 3600 / secondsInSlot;
+export const slotsInDay = slotsInHour * 24;
+export const slotsInWeek = slotsInDay * 7;
+export const slotsInMonth = slotsInDay * 30;
+
+export const EARNINGS_OPTIONS = [
+  {
+    title: 'hourly',
+    value: slotsInHour,
+  },
+  {
+    title: 'daily',
+    value: slotsInDay,
+  },
+  {
+    title: 'weekly',
+    value: slotsInWeek,
+  },
+  {
+    title: 'monthly',
+    value: slotsInMonth,
+  },
+  {
+    title: 'total',
+    value: 0
+  }
+] as EarningOption[]
