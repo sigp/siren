@@ -10,16 +10,29 @@ import { useState } from 'react';
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency';
 import useValidatorEarnings from '../../hooks/useValidatorEarnings';
 import Spinner from '../Spinner/Spinner';
+import { useRecoilValue } from 'recoil';
+import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates';
+import { CURRENCY_PREFIX } from '../../constants/currencies';
 
 const AccountEarning = () => {
   const { t } = useTranslation()
+  const [activeCurrency, setCurrency] = useState('EUR');
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
   const { total, fetchHistory } = useValidatorEarnings()
-  const [historicalAmount, setAmount] = useState(0);
+  const [historicalAmount, setAmount] = useState<number | undefined>(undefined);
+  const {rates} = useRecoilValue(selectEthExchangeRates);
+
+  const activeRate = rates[activeCurrency];
+  const formattedRate = activeRate ? Number(activeRate) : 0
+  const totalBalance = formattedRate * total;
+  const totalHistoricalBalance = formattedRate * (historicalAmount || total)
+
+  console.log(totalBalance)
 
   const viewEarnings = async (value: number) => {
     setOption(value);
+    setAmount(undefined);
 
     if(value > 0) {
       setLoading(true);
@@ -29,6 +42,9 @@ const AccountEarning = () => {
         setLoading(false)
       }
     }
+  }
+  const selectCurrency = () => {
+    setCurrency('AUD')
   }
 
   return (
@@ -57,17 +73,11 @@ const AccountEarning = () => {
           >
             {t('account')}
           </Typography>
-          {isLoading ? (
-            <div className="flex items-center justify-end pt-4 h-22">
-              <Spinner/>
-            </div>
-          ) : (
-            <div className='w-full flex justify-end pr-6 pt-4'>
-              <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
-                {formatLocalCurrency(activeOption > 0 ? historicalAmount : total, {max: 3})} ETH
-              </Typography>
-            </div>
-          )}
+          <div className='w-full flex justify-end pr-6 pt-4'>
+            <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
+              {formatLocalCurrency(total, {max: 3})} ETH
+            </Typography>
+          </div>
           <div className='w-full mt-6 flex items-center'>
             <LightHouseLogo className='text-white w-16 h-16' />
             <div className='flex-1 ml-12 flex items-center space-x-2 justify-between'>
@@ -75,14 +85,14 @@ const AccountEarning = () => {
                 <Typography color='text-white' type='text-caption1' className='xl:text-body'>
                   {t('accountEarnings.chooseCurrency')}
                 </Typography>
-                <div className='flex justify-between items-center'>
+                <div onClick={selectCurrency} className='flex justify-between items-center'>
                   <Typography
                     color='text-white'
                     darkMode='dark:text-white'
                     type='text-caption1'
                     className='xl:text-body'
                   >
-                    USD
+                    {activeCurrency}
                   </Typography>
                   <i className='bi bi-chevron-down text-white' />
                 </div>
@@ -97,7 +107,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  $4,000 USD/ETH
+                  {`$${formattedRate.toFixed(2)} ${activeCurrency}/ETH`}
                 </Typography>
               </div>
               <div>
@@ -110,7 +120,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  $512,000 USD
+                  {`$${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
                 </Typography>
               </div>
             </div>
@@ -144,9 +154,15 @@ const AccountEarning = () => {
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
                 </div>
-                <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
-                  0.001 ETH
-                </Typography>
+                {isLoading ? (
+                  <div className="flex h-1/2 w-24 items-center justify-center">
+                    <Spinner size="w-3 h-3"/>
+                  </div>
+                ) : (
+                  <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
+                    {formatLocalCurrency(historicalAmount || total, {max: 4})} ETH
+                  </Typography>
+                )}
               </div>
             </div>
             <div className='flex space-x-4'>
@@ -158,9 +174,15 @@ const AccountEarning = () => {
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
                 </div>
-                <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
-                  0.30 USD
-                </Typography>
+                {isLoading ? (
+                  <div className="flex h-1/2 w-24 items-center justify-center">
+                    <Spinner size="w-3 h-3"/>
+                  </div>
+                ) : (
+                  <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
+                    {CURRENCY_PREFIX[activeCurrency] || ''}{totalHistoricalBalance.toFixed(2)} {activeCurrency}
+                  </Typography>
+                )}
               </div>
               <i className='bi bi-chevron-down text-caption1 text-dark400' />
             </div>
