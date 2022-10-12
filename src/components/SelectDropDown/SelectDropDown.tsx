@@ -44,7 +44,7 @@ const SelectDropDown:FC<SelectDropDownProps> = ({options, onSelect, value, color
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`}/>
         </button>
         <div id="dropdown" className={`${isOpen ? 'absolute' : 'hidden'} animate-fadeSlideIn mt-2 top-full left-0 z-10 w-full bg-white rounded divide-y divide-gray-100 shadow dark:bg-black`}>
-          <ul className="text-sm max-h-48 overflow-scroll text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
+          <ul className="text-sm max-h-32 overflow-scroll text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
             {
               options.map(({title, value}, index) => (
                 <li onClick={() => makeSelection(value !== undefined ? value : title)} className="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white" key={index}>
