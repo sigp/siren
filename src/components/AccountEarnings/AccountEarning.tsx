@@ -2,7 +2,6 @@ import Typography from '../Typography/Typography';
 import { ReactComponent as LightHouseLogo } from '../../assets/images/lightHouse.svg';
 import { ReactComponent as EthLogo } from '../../assets/images/eth.svg';
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg';
-import Waves from '../../assets/images/waves.png';
 import Button, { ButtonFace } from '../Button/Button';
 import { useTranslation } from 'react-i18next';
 import { EARNINGS_OPTIONS } from '../../constants/constants';
@@ -14,6 +13,15 @@ import { useRecoilValue } from 'recoil';
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates';
 import { CURRENCY_PREFIX } from '../../constants/currencies';
 import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown';
+import EarningsLayout from './EarningsLayout';
+
+export const AccountEarningFallback = () => {
+  return (
+    <EarningsLayout className="h-full flex items-center justify-center max-h-396">
+      <Spinner/>
+    </EarningsLayout>
+  )
+}
 
 const AccountEarning = () => {
   const { t } = useTranslation()
@@ -29,7 +37,8 @@ const AccountEarning = () => {
   const totalBalance = formattedRate * total;
   const totalHistoricalBalance = formattedRate * (historicalAmount || total)
 
-  const prefix = CURRENCY_PREFIX[activeCurrency] || '';
+  const prefix = CURRENCY_PREFIX[activeCurrency];
+  const formattedPrefix = prefix && prefix.length === 1 ? prefix : ''
 
   const currencyOptions = [...currencies].sort().map(currency => ({title: currency}))
 
@@ -46,19 +55,10 @@ const AccountEarning = () => {
       }
     }
   }
-  const selectCurrency = (option: OptionType) => {
-    setCurrency(option as string)
-  }
+  const selectCurrency = (option: OptionType) => setCurrency(option as string)
 
   return (
-    <div className='w-full relative overflow-hidden'>
-      <div className='w-full h-full bg-primaryBright absolute left-0 top-0 blur-3xl origin-center -rotate-45 translate-x-36 scale-125' />
-      <div className='z-20 w-full h-36 absolute left-0 bottom-0 bg-gradient-to-t dark:from-dark750 from-white to-transparent' />
-      <img
-        alt='waves'
-        src={Waves}
-        className='z-10 w-full h-full absolute left-0 top-0 opacity-10'
-      />
+    <EarningsLayout>
       <div className='p-4 bg-primary200 w-28 text-center absolute z-30 top-0 right-10'>
         <Typography color='text-white' type='text-caption1'>
           {t('balance')}
@@ -97,7 +97,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`${prefix}${formatLocalCurrency(formattedRate)} ${activeCurrency}/ETH`}
+                  {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${activeCurrency}/ETH`}
                 </Typography>
               </div>
               <div>
@@ -110,7 +110,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`${prefix}${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
+                  {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
                 </Typography>
               </div>
             </div>
@@ -170,7 +170,7 @@ const AccountEarning = () => {
                   </div>
                 ) : (
                   <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
-                    {prefix}{formatLocalCurrency(totalHistoricalBalance)} {activeCurrency}
+                    {formattedPrefix}{formatLocalCurrency(totalHistoricalBalance)} {activeCurrency}
                   </Typography>
                 )}
               </div>
@@ -195,7 +195,7 @@ const AccountEarning = () => {
           </div>
         </div>
       </div>
-    </div>
+    </EarningsLayout>
   )
 }
 
