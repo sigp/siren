@@ -22,6 +22,7 @@ module.exports = {
         dark10: '#F0F0F0',
         transWhite: '#FFFFFF98',
         primary50: '#FFF5FF',
+        primary80: 'rgba(255, 255, 255, 0.8)',
         primary100: '#CCAFFF',
         primary200: '#7C5FEB',
         primary: '#5E41D5',
@@ -62,7 +63,8 @@ module.exports = {
       maxHeight: {
         '30': '7.313rem',
         '32': '8.313rem',
-        '60.5': '15.063rem'
+        '60.5': '15.063rem',
+        '396': '24.75rem'
       },
       minWidth: {
         '316': '316px',
@@ -81,6 +83,7 @@ module.exports = {
         '9/10': '90%',
       },
       height: {
+        '22': '5.688rem',
         '11/20': '55%'
       },
       inset: {
@@ -93,11 +96,22 @@ module.exports = {
           '0%': {opacity: '100%'},
           '50%': {opacity: '100%'},
           '100%': {opacity: '0%'}
+        },
+        fadeSlideIn: {
+          '0%': {
+            opacity: '0%',
+            transform: 'translateY(-5%);'
+          },
+          '100%': {
+            opacity: '100%',
+            transform: 'translateY(0);'
+          }
         }
       },
       animation: {
         'spin-slow': 'spin 240s linear infinite',
         'blink': 'blink 1s linear infinite',
+        fadeSlideIn: 'fadeSlideIn 150ms ease-in',
       },
       translate: {
         '14.5': '60px',

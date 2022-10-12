@@ -59,9 +59,7 @@ const SyncMetric: FC<SyncMetricProps> = ({
           isBold
           className='uppercase'
         >
-          {`${formatLocalCurrency(amount, { specificity: 0 })} / ${formatLocalCurrency(total, {
-            specificity: 0,
-          })}`}
+          {`${formatLocalCurrency(amount, { isStrict: true })} / ${formatLocalCurrency(total, { isStrict: true })}`}
         </Typography>
       </div>
       <div className='flex-1 flex items-center justify-center'>

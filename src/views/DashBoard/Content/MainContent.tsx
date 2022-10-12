@@ -1,5 +1,5 @@
 import Typography from '../../../components/Typography/Typography'
-import AccountEarning from '../../../components/AccountEarnings/AccountEarning'
+import AccountEarning, { AccountEarningFallback } from '../../../components/AccountEarnings/AccountEarning';
 import NetworkStats from '../../../components/NetworkStats/NetworkStats'
 import ValidatorTable, {
   TableErrorFallback, TableFallback
@@ -39,7 +39,11 @@ const MainContent = () => {
             <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
           </div>
         </div>
-        <AccountEarning />
+        <Suspense fallback={
+          <AccountEarningFallback/>
+        }>
+          <AccountEarning />
+        </Suspense>
         <ValidatorBalances />
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
