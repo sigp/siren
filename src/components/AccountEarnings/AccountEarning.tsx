@@ -13,22 +13,25 @@ import Spinner from '../Spinner/Spinner';
 import { useRecoilValue } from 'recoil';
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates';
 import { CURRENCY_PREFIX } from '../../constants/currencies';
+import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown';
 
 const AccountEarning = () => {
   const { t } = useTranslation()
-  const [activeCurrency, setCurrency] = useState('EUR');
+  const [activeCurrency, setCurrency] = useState('USD');
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
   const { total, fetchHistory } = useValidatorEarnings()
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined);
-  const {rates} = useRecoilValue(selectEthExchangeRates);
+  const {rates, currencies} = useRecoilValue(selectEthExchangeRates);
 
   const activeRate = rates[activeCurrency];
   const formattedRate = activeRate ? Number(activeRate) : 0
   const totalBalance = formattedRate * total;
   const totalHistoricalBalance = formattedRate * (historicalAmount || total)
 
-  console.log(totalBalance)
+  const prefix = CURRENCY_PREFIX[activeCurrency] || '';
+
+  const currencyOptions = [...currencies].sort().map(currency => ({title: currency}))
 
   const viewEarnings = async (value: number) => {
     setOption(value);
@@ -43,8 +46,8 @@ const AccountEarning = () => {
       }
     }
   }
-  const selectCurrency = () => {
-    setCurrency('AUD')
+  const selectCurrency = (option: OptionType) => {
+    setCurrency(option as string)
   }
 
   return (
@@ -82,20 +85,7 @@ const AccountEarning = () => {
             <LightHouseLogo className='text-white w-16 h-16' />
             <div className='flex-1 ml-12 flex items-center space-x-2 justify-between'>
               <div>
-                <Typography color='text-white' type='text-caption1' className='xl:text-body'>
-                  {t('accountEarnings.chooseCurrency')}
-                </Typography>
-                <div onClick={selectCurrency} className='flex justify-between items-center'>
-                  <Typography
-                    color='text-white'
-                    darkMode='dark:text-white'
-                    type='text-caption1'
-                    className='xl:text-body'
-                  >
-                    {activeCurrency}
-                  </Typography>
-                  <i className='bi bi-chevron-down text-white' />
-                </div>
+                <SelectDropDown color="text-white" label={t('accountEarnings.chooseCurrency')} value={activeCurrency} onSelect={selectCurrency} options={currencyOptions}/>
               </div>
               <div>
                 <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
@@ -107,7 +97,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`$${formattedRate.toFixed(2)} ${activeCurrency}/ETH`}
+                  {`${prefix}${formatLocalCurrency(formattedRate)} ${activeCurrency}/ETH`}
                 </Typography>
               </div>
               <div>
@@ -120,7 +110,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`$${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
+                  {`${prefix}${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
                 </Typography>
               </div>
             </div>
@@ -180,7 +170,7 @@ const AccountEarning = () => {
                   </div>
                 ) : (
                   <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
-                    {CURRENCY_PREFIX[activeCurrency] || ''}{totalHistoricalBalance.toFixed(2)} {activeCurrency}
+                    {prefix}{formatLocalCurrency(totalHistoricalBalance)} {activeCurrency}
                   </Typography>
                 )}
               </div>
