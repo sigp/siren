@@ -95,11 +95,22 @@ module.exports = {
           '0%': {opacity: '100%'},
           '50%': {opacity: '100%'},
           '100%': {opacity: '0%'}
+        },
+        fadeSlideIn: {
+          '0%': {
+            opacity: '0%',
+            transform: 'translateY(-5%);'
+          },
+          '100%': {
+            opacity: '100%',
+            transform: 'translateY(0);'
+          }
         }
       },
       animation: {
         'spin-slow': 'spin 240s linear infinite',
         'blink': 'blink 1s linear infinite',
+        fadeSlideIn: 'fadeSlideIn 150ms ease-in',
       },
       translate: {
         '14.5': '60px',
