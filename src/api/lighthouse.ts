@@ -8,6 +8,6 @@ export const fetchVersion = async ({ protocol, address, port }: Endpoint, apiTok
     },
   })
 
-export const fetchValidatorValidatorInfo = async (baseValidatorUrl: string, token: string) => await axios.get(`${baseValidatorUrl}/validators`, {
+export const fetchValidators = async (baseValidatorUrl: string, token: string) => await axios.get(`${baseValidatorUrl}/validators`, {
   headers: { Authorization: `Bearer ${token}` },
 })

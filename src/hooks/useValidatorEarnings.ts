@@ -1,14 +1,14 @@
 import { useRecoilValue } from 'recoil';
-import { selectValidators } from '../recoil/selectors/selectValidators';
+import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos';
 import { useMemo } from 'react';
 import useBeaconSyncInfo from './useBeaconSyncInfo';
-import { fetchValidators } from '../api/beacon';
+import { fetchValidatorStatuses } from '../api/beacon';
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl';
 import { BeaconValidatorResult } from '../types/validator';
 import { formatUnits } from 'ethers/lib/utils';
 
 const useValidatorEarnings = () => {
-  const validators = useRecoilValue(selectValidators);
+  const validators = useRecoilValue(selectValidatorInfos);
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl);
   const { headSlot } = useBeaconSyncInfo()
 
@@ -27,9 +27,9 @@ const useValidatorEarnings = () => {
 
     if (!baseBeaconUrl) return;
 
-    const {data} = await fetchValidators(baseBeaconUrl, validatorKeys, (headSlot - distance).toString());
+    const {data} = await fetchValidatorStatuses(baseBeaconUrl, validatorKeys, (headSlot - distance).toString());
 
-    const previousEarning = data.data.map((info: BeaconValidatorResult) => Number(formatUnits(Number(info.balance) - Number(info.validator.effective_balance), 'gwei'))).reduce((a: number, b: number) => a + b, 0);
+    const previousEarning = data.data.map((info: BeaconValidatorResult) => Number(formatUnits(Number(info.balance), 'gwei')) - 32).reduce((a: number, b: number) => a + b, 0);
 
     return total - previousEarning;
   }

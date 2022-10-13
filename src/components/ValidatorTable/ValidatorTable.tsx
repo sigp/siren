@@ -4,7 +4,7 @@ import { ReactComponent as SatelliteLogo } from '../../assets/images/satellite.s
 import ValidatorRow from './ValidatorRow'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil';
-import { selectValidators } from '../../recoil/selectors/selectValidators';
+import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos';
 import Spinner from '../Spinner/Spinner';
 
 export const TableFallback = () => (
@@ -25,7 +25,7 @@ export const TableErrorFallback = () => {
 const ValidatorTable = () => {
   const { t } = useTranslation()
 
-  const validators = useRecoilValue(selectValidators)
+  const validators = useRecoilValue(selectValidatorInfos)
 
   return (
     <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>
