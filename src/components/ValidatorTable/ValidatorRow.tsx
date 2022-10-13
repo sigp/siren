@@ -8,7 +8,6 @@ import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../utilities/formatEthAddress';
-import { faker } from '@faker-js/faker';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -16,7 +15,7 @@ export interface ValidatorRowProps {
 
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
   const { t } = useTranslation()
-  const { pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
+  const { name, pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
 
   const id = (index + 1).toString().padStart(2, '0')
@@ -46,7 +45,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
       </th>
       <th className='w-28'>
         <Typography className='text-left' color='text-dark500' type='text-caption2'>
-          {faker.name.fullName()}
+          {name}
         </Typography>
       </th>
       <th className='border-r-style500 px-2'>
