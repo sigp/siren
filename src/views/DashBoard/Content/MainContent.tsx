@@ -1,14 +1,17 @@
 import Typography from '../../../components/Typography/Typography'
-import AccountEarning, { AccountEarningFallback } from '../../../components/AccountEarnings/AccountEarning';
+import AccountEarning, {
+  AccountEarningFallback,
+} from '../../../components/AccountEarnings/AccountEarning'
 import NetworkStats from '../../../components/NetworkStats/NetworkStats'
 import ValidatorTable, {
-  TableErrorFallback, TableFallback
-} from '../../../components/ValidatorTable/ValidatorTable';
+  TableErrorFallback,
+  TableFallback,
+} from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
 import ValidatorBalances from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -39,9 +42,7 @@ const MainContent = () => {
             <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
           </div>
         </div>
-        <Suspense fallback={
-          <AccountEarningFallback/>
-        }>
+        <Suspense fallback={<AccountEarningFallback />}>
           <AccountEarning />
         </Suspense>
         <Suspense fallback={<div>Loading...</div>}>
@@ -50,8 +51,8 @@ const MainContent = () => {
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
         <NetworkStats />
-        <ErrorBoundary fallback={<TableErrorFallback/>}>
-          <Suspense fallback={<TableFallback/>}>
+        <ErrorBoundary fallback={<TableErrorFallback />}>
+          <Suspense fallback={<TableFallback />}>
             <ValidatorTable />
           </Suspense>
         </ErrorBoundary>

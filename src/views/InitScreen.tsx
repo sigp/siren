@@ -10,9 +10,7 @@ import {
   onBoardView,
   validatorClientEndpoint,
 } from '../recoil/atoms'
-import { AppView,
-  OnboardView
-} from '../constants/enums'
+import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchSyncStatus } from '../api/beacon'

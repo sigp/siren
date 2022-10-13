@@ -1,35 +1,43 @@
-import { BALANCE_COLORS, secondsInEpoch } from '../../constants/constants';
+import { BALANCE_COLORS, secondsInEpoch } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil';
-import { selectValidatorEpochs } from '../../recoil/selectors/selectValidatorEpochs';
-import moment from 'moment/moment';
+import { useRecoilValue } from 'recoil'
+import { selectValidatorEpochs } from '../../recoil/selectors/selectValidatorEpochs'
+import moment from 'moment/moment'
 
 const ValidatorBalances = () => {
   const { t } = useTranslation()
-  const validatorEpochs = useRecoilValue(selectValidatorEpochs);
+  const validatorEpochs = useRecoilValue(selectValidatorEpochs)
 
-  const labels = Array.from(Array(10).keys()).map((_, i) => moment().subtract(secondsInEpoch * i, 's').format('hh:mm')).reverse()
+  const labels = Array.from(Array(10).keys())
+    .map((_, i) =>
+      moment()
+        .subtract(secondsInEpoch * i, 's')
+        .format('hh:mm'),
+    )
+    .reverse()
 
-  const validators = validatorEpochs.map(({name, data}) => {
-    if(data.length < labels.length) {
-      const missingEpochs = labels.length - data.length;
+  const validators = validatorEpochs
+    .map(({ name, data }) => {
+      if (data.length < labels.length) {
+        const missingEpochs = labels.length - data.length
 
-      const fillData = Array.from(Array(missingEpochs).keys()).map(() => 32)
+        const fillData = Array.from(Array(missingEpochs).keys()).map(() => 32)
 
-      data = [...fillData, ...data]
-    }
+        data = [...fillData, ...data]
+      }
 
-    return {
-      label: name,
-      data,
-      fill: true,
-      pointRadius: 0,
-      stepped: 'after',
-    }
-  }).sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
+      return {
+        label: name,
+        data,
+        fill: true,
+        pointRadius: 0,
+        stepped: 'after',
+      }
+    })
+    .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
 
   const datasets = validators.map((data, index) => ({
     ...data,

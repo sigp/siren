@@ -7,7 +7,7 @@ import { ReactComponent as SlasherIcon } from '../../assets/images/slasher.svg'
 import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
-import formatEthAddress from '../../utilities/formatEthAddress';
+import formatEthAddress from '../../utilities/formatEthAddress'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
