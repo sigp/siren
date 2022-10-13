@@ -44,7 +44,9 @@ const MainContent = () => {
         }>
           <AccountEarning />
         </Suspense>
-        <ValidatorBalances />
+        <Suspense fallback={<div>Loading...</div>}>
+          <ValidatorBalances />
+        </Suspense>
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
         <NetworkStats />

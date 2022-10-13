@@ -1,6 +1,17 @@
 export type ValidatorStatus = 'success' | 'active' | 'queue' | 'unknown' | 'active-slash' | 'active_ongoing'
 
+export type Validator = {
+  pubKey: string,
+  name: string
+}
+
+export type ValidatorEpochData = {
+  name: string,
+  data: number[]
+}
+
 export type ValidatorInfo = {
+  name: string
   balance: number
   index: number
   pubKey: string

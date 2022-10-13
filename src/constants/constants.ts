@@ -150,12 +150,14 @@ export const CLIENT_PROVIDERS = [
   {
     provider: 'Besu',
     title: 'Enterprise Public / Private Permission',
+
     subTitle: 'Hyperledger',
     language: 'Javascript',
   },
 ] as ClientProvider[]
 
 export const secondsInSlot = 12;
+export const secondsInEpoch = secondsInSlot * 32;
 export const slotsInHour = 3600 / secondsInSlot;
 export const slotsInDay = slotsInHour * 24;
 export const slotsInWeek = slotsInDay * 7;

@@ -6,7 +6,7 @@ const getFakeValidatorBalances = () => {
   const now = moment()
 
   const labels = Array.from(Array(10).keys())
-  const slots = labels.map(() => now.subtract(10, 's').format('hh:ss'))
+  const slots = labels.map(() => now.subtract(10, 's').format('hh:mm'))
 
   const data = FAKE_VALIDATORS.map(() => {
     let startEth = getRandBetween(32, 69)
