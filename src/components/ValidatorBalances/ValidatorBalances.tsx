@@ -1,4 +1,4 @@
-import { BALANCE_COLORS, initialEthDeposit, secondsInEpoch } from '../../constants/constants';
+import { BALANCE_COLORS, initialEthDeposit, secondsInEpoch } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'

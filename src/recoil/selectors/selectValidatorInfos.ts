@@ -4,7 +4,7 @@ import { selectBeaconUrl } from './selectBeaconUrl'
 import { formatUnits } from 'ethers/lib/utils'
 import { fetchValidatorStatuses } from '../../api/beacon'
 import { selectValidators } from './selectValidators'
-import { initialEthDeposit } from '../../constants/constants';
+import { initialEthDeposit } from '../../constants/constants'
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
