@@ -30,7 +30,7 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
         validator && {
           ...validator,
           balance: Number(formatUnits(info.balance, 'gwei')),
-          rewards: Number(formatUnits(Number(info.balance), 'gwei')) - initialEthDeposit,
+          rewards: Number(formatUnits(info.balance, 'gwei')) - initialEthDeposit,
           index: Number(info.index),
           slashed: info.validator.slashed,
           status: info.status,

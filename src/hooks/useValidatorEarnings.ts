@@ -37,7 +37,7 @@ const useValidatorEarnings = () => {
     const previousEarning = data.data
       .map(
         (info: BeaconValidatorResult) =>
-          Number(formatUnits(Number(info.balance), 'gwei')) - initialEthDeposit,
+          Number(formatUnits(info.balance, 'gwei')) - initialEthDeposit,
       )
       .reduce((a: number, b: number) => a + b, 0)
 
