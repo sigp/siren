@@ -4,6 +4,7 @@ import { selectBeaconUrl } from './selectBeaconUrl'
 import { formatUnits } from 'ethers/lib/utils'
 import { fetchValidatorStatuses } from '../../api/beacon'
 import { selectValidators } from './selectValidators'
+import { initialEthDeposit } from '../../constants/constants';
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
@@ -29,7 +30,7 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
         validator && {
           ...validator,
           balance: Number(formatUnits(info.balance, 'gwei')),
-          rewards: Number(formatUnits(Number(info.balance), 'gwei')) - 32,
+          rewards: Number(formatUnits(Number(info.balance), 'gwei')) - initialEthDeposit,
           index: Number(info.index),
           slashed: info.validator.slashed,
           status: info.status,

@@ -5,6 +5,7 @@ import { selectBeaconUrl } from './selectBeaconUrl'
 import { BeaconValidatorResult, ValidatorEpochData } from '../../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { selectValidators } from './selectValidators'
+import { initialEthDeposit } from '../../constants/constants';
 
 export const selectValidatorEpochs = selector<ValidatorEpochData[]>({
   key: 'ValidatorEpochs',
@@ -15,7 +16,7 @@ export const selectValidatorEpochs = selector<ValidatorEpochData[]>({
 
     if (!baseBeaconUrl) return []
 
-    const slotByEpoch = Array.from(Array(10).keys()).map((i) => head_slot - 32 * i)
+    const slotByEpoch = Array.from(Array(10).keys()).map((i) => head_slot - (initialEthDeposit * i))
 
     const results = await Promise.all(
       slotByEpoch.map((epoch) => {

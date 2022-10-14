@@ -6,6 +6,7 @@ import { fetchValidatorStatuses } from '../api/beacon'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { BeaconValidatorResult } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
+import { initialEthDeposit } from '../constants/constants';
 
 const useValidatorEarnings = () => {
   const validators = useRecoilValue(selectValidatorInfos)
@@ -34,7 +35,7 @@ const useValidatorEarnings = () => {
     )
 
     const previousEarning = data.data
-      .map((info: BeaconValidatorResult) => Number(formatUnits(Number(info.balance), 'gwei')) - 32)
+      .map((info: BeaconValidatorResult) => Number(formatUnits(Number(info.balance), 'gwei')) - initialEthDeposit)
       .reduce((a: number, b: number) => a + b, 0)
 
     return total - previousEarning

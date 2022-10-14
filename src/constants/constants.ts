@@ -156,6 +156,8 @@ export const CLIENT_PROVIDERS = [
   },
 ] as ClientProvider[]
 
+
+export const initialEthDeposit = 32;
 export const secondsInSlot = 12
 export const secondsInEpoch = secondsInSlot * 32
 export const slotsInHour = 3600 / secondsInSlot
