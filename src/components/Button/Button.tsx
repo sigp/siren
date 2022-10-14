@@ -1,6 +1,6 @@
 import React, { FC, ReactNode } from 'react'
 import { TypographyFamily, TypographyType } from '../Typography/Typography'
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner/Spinner'
 
 export enum ButtonFace {
   PRIMARY = 'PRIMARY',
@@ -67,9 +67,7 @@ const Button: FC<ButtonProps> = ({
       disabled={isDisabled}
       className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}
     >
-      {isLoading ? (
-        <Spinner size="h-6 w-6"/>
-      ) : children}
+      {isLoading ? <Spinner size='h-6 w-6' /> : children}
     </button>
   )
   return href ? (

@@ -3,21 +3,23 @@ import { ReactComponent as ValidatorLogo } from '../../assets/images/validators.
 import { ReactComponent as SatelliteLogo } from '../../assets/images/satellite.svg'
 import ValidatorRow from './ValidatorRow'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil';
-import { selectValidators } from '../../recoil/selectors/selectValidators';
-import Spinner from '../Spinner/Spinner';
+import { useRecoilValue } from 'recoil'
+import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
+import Spinner from '../Spinner/Spinner'
 
 export const TableFallback = () => (
   <div className='w-full flex items-center justify-center h-60 overflow-scroll mt-2 border-style500'>
-    <Spinner/>
+    <Spinner />
   </div>
 )
 
 export const TableErrorFallback = () => {
-  const {t} = useTranslation()
+  const { t } = useTranslation()
   return (
     <div className='w-full flex items-center justify-center h-60 overflow-scroll mt-2 border-style500'>
-      <Typography type="text-caption2" color="text-error" className="uppercase">{t('error.validatorInfo')}</Typography>
+      <Typography type='text-caption2' color='text-error' className='uppercase'>
+        {t('error.validatorInfo')}
+      </Typography>
     </div>
   )
 }
@@ -25,7 +27,7 @@ export const TableErrorFallback = () => {
 const ValidatorTable = () => {
   const { t } = useTranslation()
 
-  const validators = useRecoilValue(selectValidators)
+  const validators = useRecoilValue(selectValidatorInfos)
 
   return (
     <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>

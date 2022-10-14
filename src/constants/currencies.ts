@@ -1,5 +1,5 @@
 interface Prefix {
-  [key: string]: string;
+  [key: string]: string
 }
 
 export const CURRENCY_PREFIX = {

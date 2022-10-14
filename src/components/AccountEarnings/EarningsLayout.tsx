@@ -1,12 +1,12 @@
-import Waves from '../../assets/images/waves.png';
-import { FC, ReactElement } from 'react';
+import Waves from '../../assets/images/waves.png'
+import { FC, ReactElement } from 'react'
 
 export interface EarningsLayoutProps {
-  children: ReactElement | ReactElement[],
-  className?: string,
+  children: ReactElement | ReactElement[]
+  className?: string
 }
 
-const EarningsLayout:FC<EarningsLayoutProps> = ({children, className}) => {
+const EarningsLayout: FC<EarningsLayoutProps> = ({ children, className }) => {
   return (
     <div className={`${className || ''} w-full relative overflow-hidden`}>
       <div className='w-full h-full bg-primaryBright absolute left-0 top-0 blur-3xl origin-center -rotate-45 translate-x-36 scale-125' />
@@ -21,4 +21,4 @@ const EarningsLayout:FC<EarningsLayoutProps> = ({children, className}) => {
   )
 }
 
-export default EarningsLayout;
+export default EarningsLayout

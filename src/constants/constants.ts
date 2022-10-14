@@ -6,7 +6,7 @@ import { ReactComponent as LogsLogo } from '../assets/images/logs.svg'
 import { ReactComponent as GrafanaLogo } from '../assets/images/grafana.svg'
 import { ReactComponent as SettingsLogo } from '../assets/images/settings.svg'
 import { ContentView } from './enums'
-import { EarningOption, ValidatorStatus } from '../types/validator';
+import { EarningOption, ValidatorStatus } from '../types/validator'
 import { ClientProvider } from '../types'
 
 export type ViewType = {
@@ -150,16 +150,19 @@ export const CLIENT_PROVIDERS = [
   {
     provider: 'Besu',
     title: 'Enterprise Public / Private Permission',
+
     subTitle: 'Hyperledger',
     language: 'Javascript',
   },
 ] as ClientProvider[]
 
-export const secondsInSlot = 12;
-export const slotsInHour = 3600 / secondsInSlot;
-export const slotsInDay = slotsInHour * 24;
-export const slotsInWeek = slotsInDay * 7;
-export const slotsInMonth = slotsInDay * 30;
+export const initialEthDeposit = 32
+export const secondsInSlot = 12
+export const secondsInEpoch = secondsInSlot * 32
+export const slotsInHour = 3600 / secondsInSlot
+export const slotsInDay = slotsInHour * 24
+export const slotsInWeek = slotsInDay * 7
+export const slotsInMonth = slotsInDay * 30
 
 export const EARNINGS_OPTIONS = [
   {
@@ -180,6 +183,6 @@ export const EARNINGS_OPTIONS = [
   },
   {
     title: 'total',
-    value: 0
-  }
+    value: 0,
+  },
 ] as EarningOption[]
