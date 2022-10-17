@@ -1,23 +1,22 @@
 import { selector } from 'recoil'
-import axios from 'axios'
-import { selectBeaconUrl } from './selectBeaconUrl'
-import { BeaconSyncResult } from '../../types/diagnostic'
+import { beaconSyncInfo } from '../atoms';
+import getPercentage from '../../utilities/getPercentage';
+import { BeaconSyncInfo } from '../../types/diagnostic';
 
-export const selectBeaconSyncInfo = selector<BeaconSyncResult>({
-  key: 'BeaconSyncInfo',
-  get: async ({ get }) => {
-    const baseBeaconUrl = get(selectBeaconUrl)
-    try {
-      const { data } = await axios.get(`${baseBeaconUrl}/v1/node/syncing`)
+export const selectBeaconSyncInfo = selector<BeaconSyncInfo>({
+  key: 'formattedBeaconSyncInfo',
+  get: ({ get }) => {
+    const data = get(beaconSyncInfo)
 
-      return {
-        ...data.data,
-        head_slot: Number(data.data.head_slot),
-        sync_distance: Number(data.data.sync_distance),
-      }
-    } catch (e) {
-      console.log(e)
-      return {}
+    const { head_slot = 0, sync_distance = 0, is_syncing = false } = data || {}
+    const distance = head_slot + sync_distance
+
+    return {
+      headSlot: head_slot,
+      slotDistance: head_slot + sync_distance,
+      beaconPercentage: getPercentage(head_slot, distance),
+      beaconSyncTime: sync_distance * 12,
+      isSyncing: is_syncing,
     }
   },
 })

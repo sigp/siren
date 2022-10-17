@@ -25,6 +25,7 @@ export type BeaconSyncInfo = {
   headSlot: number
   slotDistance: number
   beaconPercentage: number
+  isSyncing: boolean
   beaconSyncTime: number // Time in seconds
 }
 

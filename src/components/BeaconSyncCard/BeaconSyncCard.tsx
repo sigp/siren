@@ -1,9 +1,10 @@
 import SyncCard from '../SyncCard/SyncCard'
-import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
+import { useRecoilValue } from 'recoil';
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo';
 
 const BeaconSyncCard = () => {
-  const { beaconPercentage, beaconSyncTime, headSlot, slotDistance } = useBeaconSyncInfo()
+  const { headSlot, slotDistance, beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo);
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
   return (

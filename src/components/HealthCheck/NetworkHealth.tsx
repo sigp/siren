@@ -1,13 +1,14 @@
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import useBeaconSyncInfo from '../../hooks/useBeaconSyncInfo'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil';
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo';
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
-  const { beaconPercentage, beaconSyncTime } = useBeaconSyncInfo()
+  const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo);
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 

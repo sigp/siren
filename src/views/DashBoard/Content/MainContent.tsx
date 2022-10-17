@@ -8,7 +8,7 @@ import ValidatorTable, {
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
-import ValidatorBalances from '../../../components/ValidatorBalances/ValidatorBalances'
+import ValidatorBalances, {ValidatorBalanceFallback} from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
@@ -45,7 +45,7 @@ const MainContent = () => {
         <Suspense fallback={<AccountEarningFallback />}>
           <AccountEarning />
         </Suspense>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<ValidatorBalanceFallback/>}>
           <ValidatorBalances />
         </Suspense>
       </div>

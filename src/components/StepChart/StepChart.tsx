@@ -48,6 +48,7 @@ export interface StepChartProps {
 const StepChart: FC<StepChartProps> = ({ data }) => {
   const chartEl = useRef(null)
   const mode = useRecoilValue(uiMode)
+  const [hasAnimated, toggleAnimated] = useState(false)
 
   const [chart, setChart] = useState<Chart>()
 
@@ -65,6 +66,14 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
       data,
       options: {
         responsive: true,
+        animation: {
+          duration: hasAnimated ? 0 : 1500,
+          onComplete: () => {
+            if (data.datasets.length) {
+              toggleAnimated(true)
+            }
+          },
+        },
         plugins: {
           legend: {
             display: false,
@@ -100,7 +109,7 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
       chart?.destroy()
       setChart(undefined)
     }
-  }, [chartEl, data])
+  }, [chartEl, data, hasAnimated])
 
   return <canvas ref={chartEl} width='100%' height={45} />
 }
