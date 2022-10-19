@@ -1,17 +1,17 @@
-import { FC, ReactNode, useEffect } from 'react';
-import { selectBeaconUrl } from '../../recoil/selectors/selectBeaconUrl';
-import { selectValidators } from '../../recoil/selectors/selectValidators';
-import { fetchValidatorStatuses } from '../../api/beacon';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import usePollingInterval from '../../hooks/usePollingInterval';
-import { validatorStateInfo } from '../../recoil/atoms';
-import { secondsInSlot } from '../../constants/constants';
+import { FC, ReactNode, useEffect } from 'react'
+import { selectBeaconUrl } from '../../recoil/selectors/selectBeaconUrl'
+import { selectValidators } from '../../recoil/selectors/selectValidators'
+import { fetchValidatorStatuses } from '../../api/beacon'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import usePollingInterval from '../../hooks/usePollingInterval'
+import { validatorStateInfo } from '../../recoil/atoms'
+import { secondsInSlot } from '../../constants/constants'
 
 export interface ValidatorInfoSyncProps {
   children?: ReactNode | ReactNode[]
 }
 
-const ValidatorInfoSync: FC<ValidatorInfoSyncProps> = ({children}) => {
+const ValidatorInfoSync: FC<ValidatorInfoSyncProps> = ({ children }) => {
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
   const validators = useRecoilValue(selectValidators)
   const setStateInfo = useSetRecoilState(validatorStateInfo)
@@ -31,13 +31,9 @@ const ValidatorInfoSync: FC<ValidatorInfoSyncProps> = ({children}) => {
     void fetchValidatorInfo()
   }, [])
 
-  usePollingInterval(fetchValidatorInfo, (secondsInSlot) * 1000);
+  usePollingInterval(fetchValidatorInfo, secondsInSlot * 1000)
 
-  return (
-    <>
-      {children}
-    </>
-  )
+  return <>{children}</>
 }
 
-export default ValidatorInfoSync;
+export default ValidatorInfoSync

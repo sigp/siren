@@ -8,11 +8,13 @@ import ValidatorTable, {
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
-import ValidatorBalances, {ValidatorBalanceFallback} from '../../../components/ValidatorBalances/ValidatorBalances'
+import ValidatorBalances, {
+  ValidatorBalanceFallback,
+} from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import ValidatorInfoSync from '../../../components/ValidatorInfoSync/ValidatorInfoSync';
+import ValidatorInfoSync from '../../../components/ValidatorInfoSync/ValidatorInfoSync'
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -47,7 +49,7 @@ const MainContent = () => {
           <Suspense fallback={<AccountEarningFallback />}>
             <AccountEarning />
           </Suspense>
-          <Suspense fallback={<ValidatorBalanceFallback/>}>
+          <Suspense fallback={<ValidatorBalanceFallback />}>
             <ValidatorBalances />
           </Suspense>
         </div>
@@ -61,8 +63,8 @@ const MainContent = () => {
           <DiagnosticTable />
         </div>
       </div>
-      <Suspense fallback={<div/>}>
-        <ValidatorInfoSync/>
+      <Suspense fallback={<div />}>
+        <ValidatorInfoSync />
       </Suspense>
     </>
   )

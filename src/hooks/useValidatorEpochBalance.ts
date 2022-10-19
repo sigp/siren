@@ -6,12 +6,12 @@ import { fetchValidatorStatuses } from '../api/beacon'
 import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { secondsInEpoch } from '../constants/constants'
-import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo';
+import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 
 const useValidatorEpochBalance = () => {
   const validators = useRecoilValue(selectValidators)
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
-  const { headSlot } = useRecoilValue(selectBeaconSyncInfo);
+  const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
 
   const [epochs, setEpochs] = useState<ValidatorEpochData[]>([])
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>()

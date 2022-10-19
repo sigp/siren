@@ -3,8 +3,7 @@ import { BeaconValidatorResult, ValidatorInfo } from '../../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { selectValidators } from './selectValidators'
 import { initialEthDeposit } from '../../constants/constants'
-import { validatorStateInfo } from '../atoms';
-
+import { validatorStateInfo } from '../atoms'
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
@@ -12,9 +11,9 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
   // @ts-ignore
   get: ({ get }) => {
     const validators = get(selectValidators)
-    const validatorStates = get(validatorStateInfo);
+    const validatorStates = get(validatorStateInfo)
 
-    if(!validatorStates) return [];
+    if (!validatorStates) return []
 
     const validatorInfo = [...validatorStates].sort(
       (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(b.index) - Number(a.index),

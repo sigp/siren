@@ -6,10 +6,10 @@ import { useTranslation } from 'react-i18next'
 import moment from 'moment/moment'
 import useValidatorEpochBalance from '../../hooks/useValidatorEpochBalance'
 import { useMemo } from 'react'
-import Spinner from '../Spinner/Spinner';
+import Spinner from '../Spinner/Spinner'
 
 export const ValidatorBalanceFallback = () => (
-  <div className="flex-1 flex h-24 w-full justify-center items-center">
+  <div className='flex-1 flex h-24 w-full justify-center items-center'>
     <Spinner />
   </div>
 )
@@ -82,15 +82,13 @@ const ValidatorBalances = () => {
             {datasets.length}
           </Typography>
         </div>
-        {
-          datasets.length > 0 ? (
-            <StepChart data={balanceData} />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center">
-              <Spinner />
-            </div>
-          )
-        }
+        {datasets.length > 0 ? (
+          <StepChart data={balanceData} />
+        ) : (
+          <div className='w-full h-full flex items-center justify-center'>
+            <Spinner />
+          </div>
+        )}
       </div>
     </div>
   )
