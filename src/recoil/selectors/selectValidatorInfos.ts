@@ -1,25 +1,22 @@
 import { selector } from 'recoil'
 import { BeaconValidatorResult, ValidatorInfo } from '../../types/validator'
-import { selectBeaconUrl } from './selectBeaconUrl'
 import { formatUnits } from 'ethers/lib/utils'
-import { fetchValidatorStatuses } from '../../api/beacon'
 import { selectValidators } from './selectValidators'
 import { initialEthDeposit } from '../../constants/constants'
+import { validatorStateInfo } from '../atoms';
+
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
-  get: async ({ get }) => {
-    const baseBeaconUrl = get(selectBeaconUrl)
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  get: ({ get }) => {
     const validators = get(selectValidators)
+    const validatorStates = get(validatorStateInfo);
 
-    if (!baseBeaconUrl) return
+    if(!validatorStates) return [];
 
-    const beaconValidators = await fetchValidatorStatuses(
-      baseBeaconUrl,
-      validators.map((validator) => validator.pubKey).join(','),
-    )
-
-    const validatorInfo = beaconValidators.data.data.sort(
+    const validatorInfo = [...validatorStates].sort(
       (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(b.index) - Number(a.index),
     )
 

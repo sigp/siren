@@ -2,6 +2,7 @@ import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
 import { Endpoint } from '../forms/ConfigConnectionForm'
 import { BeaconSyncResult } from '../types/diagnostic'
+import { BeaconValidatorResult } from '../types/validator';
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
@@ -45,6 +46,11 @@ export const setupStep = atom<SetupSteps | undefined>({
 
 export const beaconSyncInfo = atom<BeaconSyncResult>({
   key: 'beaconSyncInfos',
+  default: undefined,
+})
+
+export const validatorStateInfo = atom<BeaconValidatorResult[]>({
+  key: 'validatorStateInfo',
   default: undefined,
 })
 

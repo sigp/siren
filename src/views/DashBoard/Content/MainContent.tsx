@@ -12,53 +12,59 @@ import ValidatorBalances, {ValidatorBalanceFallback} from '../../../components/V
 import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import ValidatorInfoSync from '../../../components/ValidatorInfoSync/ValidatorInfoSync';
 
 const MainContent = () => {
   const { t } = useTranslation()
   return (
-    <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
-      <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
-        <div className='p-4 flex items-center justify-between'>
-          <Typography
-            type='text-subtitle1'
-            darkMode='dark:text-white'
-            className='xl:text-h3'
-            fontWeight='font-light'
-          >
-            {t('helloUser', { user: 'Mavrik' })}
-          </Typography>
-          <div className='flex space-x-16'>
-            <div>
-              <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
-                {t('lighthouseVersion')}
-              </Typography>
-              <Typography type='text-tiny' color='text-dark400'>
-                Beacon — <span className='text-primary font-bold'>V1.3.0</span>-3a24ca5
-              </Typography>
-              <Typography type='text-tiny' color='text-dark400'>
-                Validator — <span className='text-primary font-bold'>V1.3.0</span>-3a24ca5
-              </Typography>
+    <>
+      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
+        <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
+          <div className='p-4 flex items-center justify-between'>
+            <Typography
+              type='text-subtitle1'
+              darkMode='dark:text-white'
+              className='xl:text-h3'
+              fontWeight='font-light'
+            >
+              {t('helloUser', { user: 'Mavrik' })}
+            </Typography>
+            <div className='flex space-x-16'>
+              <div>
+                <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
+                  {t('lighthouseVersion')}
+                </Typography>
+                <Typography type='text-tiny' color='text-dark400'>
+                  Beacon — <span className='text-primary font-bold'>V1.3.0</span>-3a24ca5
+                </Typography>
+                <Typography type='text-tiny' color='text-dark400'>
+                  Validator — <span className='text-primary font-bold'>V1.3.0</span>-3a24ca5
+                </Typography>
+              </div>
+              <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
             </div>
-            <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
           </div>
-        </div>
-        <Suspense fallback={<AccountEarningFallback />}>
-          <AccountEarning />
-        </Suspense>
-        <Suspense fallback={<ValidatorBalanceFallback/>}>
-          <ValidatorBalances />
-        </Suspense>
-      </div>
-      <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
-        <NetworkStats />
-        <ErrorBoundary fallback={<TableErrorFallback />}>
-          <Suspense fallback={<TableFallback />}>
-            <ValidatorTable />
+          <Suspense fallback={<AccountEarningFallback />}>
+            <AccountEarning />
           </Suspense>
-        </ErrorBoundary>
-        <DiagnosticTable />
+          <Suspense fallback={<ValidatorBalanceFallback/>}>
+            <ValidatorBalances />
+          </Suspense>
+        </div>
+        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
+          <NetworkStats />
+          <ErrorBoundary fallback={<TableErrorFallback />}>
+            <Suspense fallback={<TableFallback />}>
+              <ValidatorTable />
+            </Suspense>
+          </ErrorBoundary>
+          <DiagnosticTable />
+        </div>
       </div>
-    </div>
+      <Suspense fallback={<div/>}>
+        <ValidatorInfoSync/>
+      </Suspense>
+    </>
   )
 }
 
