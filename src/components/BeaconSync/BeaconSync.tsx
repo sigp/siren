@@ -1,8 +1,9 @@
-import React, { FC, ReactNode, useEffect } from 'react'
+import React, { FC, ReactNode, useEffect } from 'react';
 import { secondsInSlot } from '../../constants/constants'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { beaconNodeEndpoint, beaconSyncInfo, beaconSyncIntervalId } from '../../recoil/atoms';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { beaconNodeEndpoint, beaconSyncInfo } from '../../recoil/atoms';
 import { fetchSyncStatus } from '../../api/beacon'
+import usePollingInterval from '../../hooks/usePollingInterval';
 
 export interface BeaconSyncProps {
   children: ReactNode | ReactNode[]
@@ -11,9 +12,8 @@ export interface BeaconSyncProps {
 const BeaconSync: FC<BeaconSyncProps> = ({ children }) => {
   const beaconNode = useRecoilValue(beaconNodeEndpoint)
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo);
-  const [intervalId, setIntervalId] = useRecoilState(beaconSyncIntervalId)
 
-  const fetchSyncInfo = async () => {
+  const fetchBeaconInfo =  async () => {
     try {
       const { data } = await fetchSyncStatus(beaconNode)
 
@@ -28,21 +28,10 @@ const BeaconSync: FC<BeaconSyncProps> = ({ children }) => {
   }
 
   useEffect(() => {
-    if(!intervalId) {
-      void fetchSyncInfo()
-      const id = setInterval(() => fetchSyncInfo(), secondsInSlot * 1000)
-      setIntervalId(id);
+    void fetchBeaconInfo();
+  }, [])
 
-      return () => {
-        if(intervalId) {
-          clearInterval(intervalId)
-          setIntervalId(undefined);
-        }
-      }
-    }
-
-
-  }, [intervalId])
+  usePollingInterval(fetchBeaconInfo, secondsInSlot * 1000)
 
   return (
     <>
