@@ -29,7 +29,7 @@ const ValidatorTable = () => {
 
   const validators = useRecoilValue(selectValidatorInfos)
 
-  return (
+  return validators.length ? (
     <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>
       <table className='relative table-auto w-full'>
         <thead className='sticky top-0 left-0 bg-white dark:bg-darkPrimary'>
@@ -122,6 +122,8 @@ const ValidatorTable = () => {
         </tbody>
       </table>
     </div>
+  ) : (
+    <TableFallback/>
   )
 }
 
