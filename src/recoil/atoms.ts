@@ -53,8 +53,3 @@ export const validatorStateInfo = atom<BeaconValidatorResult[]>({
   key: 'validatorStateInfo',
   default: undefined,
 })
-
-export const beaconSyncIntervalId = atom<NodeJS.Timer | undefined>({
-  key: 'beaconSyncIntervalId',
-  default: undefined,
-})
