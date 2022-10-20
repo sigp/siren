@@ -1,12 +1,13 @@
 import { useRecoilValue } from 'recoil'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { selectValidators } from '../recoil/selectors/selectValidators'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { fetchValidatorStatuses } from '../api/beacon'
 import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
-import { secondsInEpoch } from '../constants/constants'
+import { secondsInSlot } from '../constants/constants'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
+import usePollingInterval from './usePollingInterval'
 
 const useValidatorEpochBalance = () => {
   const validators = useRecoilValue(selectValidators)
@@ -14,9 +15,8 @@ const useValidatorEpochBalance = () => {
   const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
 
   const [epochs, setEpochs] = useState<ValidatorEpochData[]>([])
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>()
 
-  const fetchEpochBalances = useCallback(async () => {
+  const fetchEpochBalances = async () => {
     if (!baseBeaconUrl || !validators.length) return
 
     const slotByEpoch = Array.from(Array(10).keys()).map((i) => headSlot - 32 * i)
@@ -50,24 +50,15 @@ const useValidatorEpochBalance = () => {
           .reverse(),
       })),
     )
-  }, [validators, baseBeaconUrl, headSlot])
+  }
+
+  usePollingInterval(fetchEpochBalances, secondsInSlot * 3 * 1000)
 
   useEffect(() => {
-    if (!intervalId && headSlot > 0) {
+    if (!epochs.length && headSlot) {
       void fetchEpochBalances()
-      const intervalId = setInterval(() => fetchEpochBalances(), secondsInEpoch * 1000)
-      setIntervalId(intervalId)
     }
-  }, [intervalId, headSlot])
-
-  useEffect(() => {
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId)
-        setIntervalId(undefined)
-      }
-    }
-  }, [intervalId])
+  }, [headSlot, epochs])
 
   return {
     epochs,

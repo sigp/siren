@@ -8,7 +8,7 @@ export const selectBeaconSyncInfo = selector<BeaconSyncInfo>({
   get: ({ get }) => {
     const data = get(beaconSyncInfo)
 
-    const { head_slot = 0, sync_distance = 0, is_syncing = false } = data || {}
+    const { head_slot, sync_distance, is_syncing } = data || {}
     const distance = head_slot + sync_distance
 
     return {

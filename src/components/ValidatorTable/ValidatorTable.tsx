@@ -123,7 +123,7 @@ const ValidatorTable = () => {
       </table>
     </div>
   ) : (
-    <TableFallback/>
+    <TableFallback />
   )
 }
 

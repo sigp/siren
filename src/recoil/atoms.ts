@@ -58,3 +58,8 @@ export const validatorInfoInterval = atom<NodeJS.Timer | undefined>({
   key: 'validatorInfoInterval',
   default: undefined,
 })
+
+export const beaconSyncInterval = atom<NodeJS.Timer | undefined>({
+  key: 'beaconSyncInterval',
+  default: undefined,
+})

@@ -10,10 +10,12 @@ import Settings from './Content/Settings'
 import Validators from './Content/Validators'
 import Grafana from './Content/Grafana'
 import TopBar from '../../components/TopBar/TopBar'
-import BeaconSync from '../../components/BeaconSync/BeaconSync'
+import useBeaconSyncPolling from '../../hooks/useBeaconSyncPolling'
 
 const Dashboard = () => {
   const content = useRecoilValue(dashView)
+  useBeaconSyncPolling()
+
   const renderContent = () => {
     switch (content) {
       case ContentView.GRAFANA:
@@ -29,14 +31,14 @@ const Dashboard = () => {
     }
   }
   return (
-    <BeaconSync>
+    <>
       <SideBar />
       <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar />
         <div className='flex-1 w-full overflow-scroll'>{renderContent()}</div>
         <FootBar />
       </div>
-    </BeaconSync>
+    </>
   )
 }
 
