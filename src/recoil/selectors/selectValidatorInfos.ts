@@ -17,7 +17,7 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
       (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(b.index) - Number(a.index),
     )
 
-    return validatorInfo.map(({validator, index, status, balance}: BeaconValidatorResult) => {
+    return validatorInfo.map(({ validator, index, status, balance }: BeaconValidatorResult) => {
       const baseInfo = validators.find((v) => v.pubKey === validator.pubkey)
 
       return {
