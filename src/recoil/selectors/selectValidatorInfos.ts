@@ -7,8 +7,6 @@ import { validatorStateInfo } from '../atoms'
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   get: ({ get }) => {
     const validators = get(selectValidators)
     const validatorStates = get(validatorStateInfo)
@@ -19,23 +17,22 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
       (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(b.index) - Number(a.index),
     )
 
-    return validatorInfo.map((info: BeaconValidatorResult) => {
-      const validator = validators.find((validator) => validator.pubKey === info.validator.pubkey)
+    return validatorInfo.map(({validator, index, status, balance}: BeaconValidatorResult) => {
+      const baseInfo = validators.find((v) => v.pubKey === validator.pubkey)
 
-      return (
-        validator && {
-          ...validator,
-          balance: Number(formatUnits(info.balance, 'gwei')),
-          rewards: Number(formatUnits(info.balance, 'gwei')) - initialEthDeposit,
-          index: Number(info.index),
-          slashed: info.validator.slashed,
-          status: info.status,
-          processed: 0,
-          missed: 0,
-          attested: 0,
-          aggregated: 0,
-        }
-      )
+      return {
+        name: baseInfo?.name || '',
+        pubKey: validator.pubkey,
+        balance: Number(formatUnits(balance, 'gwei')),
+        rewards: Number(formatUnits(balance, 'gwei')) - initialEthDeposit,
+        index: Number(index),
+        slashed: validator.slashed,
+        status: status,
+        processed: 0,
+        missed: 0,
+        attested: 0,
+        aggregated: 0,
+      }
     })
   },
 })
