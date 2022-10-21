@@ -5,7 +5,7 @@ import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { fetchValidatorStatuses } from '../api/beacon'
 import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
-import { secondsInSlot } from '../constants/constants'
+import { secondsInEpoch } from '../constants/constants';
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 import usePollingInterval from './usePollingInterval'
 
@@ -52,7 +52,7 @@ const useValidatorEpochBalance = () => {
     )
   }
 
-  usePollingInterval(fetchEpochBalances, secondsInSlot * 3 * 1000)
+  usePollingInterval(fetchEpochBalances, secondsInEpoch * 1000)
 
   useEffect(() => {
     if (!epochs.length && headSlot) {
