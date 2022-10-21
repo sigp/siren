@@ -48,3 +48,7 @@ export enum SetupSteps {
   HEALTH = 'HEALTH',
   SYNC = 'SYNC',
 }
+
+export enum Storage {
+  UI = 'UI'
+}

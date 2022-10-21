@@ -2,15 +2,17 @@ import SideBar from '../../components/SideBar/SideBar';
 import FootBar from '../../components/FootBar/FootBar';
 import React, { useEffect, useState } from 'react';
 import MainContent from './Content/MainContent';
-import { useRecoilValue } from 'recoil';
-import { dashView } from '../../recoil/atoms';
-import { ContentView } from '../../constants/enums';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { dashView, uiMode } from '../../recoil/atoms';
+import { ContentView, Storage, UiMode } from '../../constants/enums';
 import Logs from './Content/Logs';
 import Settings from './Content/Settings';
 import Validators from './Content/Validators';
 import Grafana from './Content/Grafana';
 import TopBar from '../../components/TopBar/TopBar';
 import useBeaconSyncPolling from '../../hooks/useBeaconSyncPolling';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { UiThemeStorage } from '../../types/storage';
 
 const Sync = () => {
   useBeaconSyncPolling()
@@ -24,6 +26,15 @@ const Dashboard = () => {
   useEffect(() => {
     setSync(true)
   }, [])
+
+  const [uiTheme, setUiTheme] = useRecoilState(uiMode);
+
+  const [uiThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined);
+
+  useEffect(() => {
+    if(uiTheme) return;
+    setUiTheme(uiThemeStorage || UiMode.LIGHT);
+  }, [uiTheme, uiThemeStorage])
 
   const renderContent = () => {
     switch (content) {
