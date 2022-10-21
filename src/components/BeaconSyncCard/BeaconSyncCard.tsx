@@ -2,6 +2,7 @@ import SyncCard from '../SyncCard/SyncCard'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import { formatLocalCurrency } from '../../utilities/formatLocalCurrency';
 
 const BeaconSyncCard = () => {
   const { headSlot, slotDistance, beaconPercentage, beaconSyncTime } =
@@ -14,7 +15,7 @@ const BeaconSyncCard = () => {
       title='Ethereum Beacon'
       subTitle='Lighthouse Node'
       timeRemaining={remainingBeaconTime}
-      status={`${headSlot} / ${slotDistance}`}
+      status={`${formatLocalCurrency(headSlot, {isStrict: true})} / ${formatLocalCurrency(slotDistance, {isStrict: true})}`}
       progress={beaconPercentage}
     />
   )

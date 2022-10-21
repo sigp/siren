@@ -9,8 +9,10 @@ import { Suspense } from 'react'
 import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncCard'
 import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback'
 import { Trans, useTranslation } from 'react-i18next'
+import useBeaconSyncPolling from '../../../../../hooks/useBeaconSyncPolling';
 
 const NodeSync = () => {
+  useBeaconSyncPolling()
   const { t } = useTranslation()
   const setView = useSetRecoilState(appView)
   const setStep = useSetRecoilState(setupStep)
