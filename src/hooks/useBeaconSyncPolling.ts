@@ -10,6 +10,7 @@ const useBeaconSyncPolling = () => {
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo)
 
   const [interval, setIntervalId] = useRecoilState(beaconSyncInterval)
+  const onClearInterval = () => setIntervalId(undefined)
   const isSkip = Boolean(interval)
 
   const fetchBeaconInfo = async () => {
@@ -26,7 +27,7 @@ const useBeaconSyncPolling = () => {
     }
   }
 
-  const { intervalId } = usePollingInterval(fetchBeaconInfo, secondsInSlot * 1000, { isSkip })
+  const { intervalId } = usePollingInterval(fetchBeaconInfo, secondsInSlot * 1000, { isSkip, onClearInterval })
 
   useEffect(() => {
     if (intervalId) {
