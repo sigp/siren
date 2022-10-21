@@ -33,7 +33,7 @@ const useValidatorInfoPolling = () => {
     }
   }, [state])
 
-  const { intervalId } = usePollingInterval(fetchValidatorInfo, secondsInSlot * 2 * 1000, {
+  const { intervalId } = usePollingInterval(fetchValidatorInfo, secondsInSlot * 2000, {
     isSkip,
     onClearInterval,
   })
