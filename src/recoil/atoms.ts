@@ -6,7 +6,7 @@ import { BeaconValidatorResult } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
-  default: UiMode.LIGHT,
+  default: undefined,
 })
 
 export const appView = atom<AppView | undefined>({
