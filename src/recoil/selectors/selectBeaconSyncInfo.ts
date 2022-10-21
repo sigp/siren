@@ -1,14 +1,14 @@
 import { selector } from 'recoil'
-import { beaconSyncInfo } from '../atoms';
-import getPercentage from '../../utilities/getPercentage';
-import { BeaconSyncInfo } from '../../types/diagnostic';
+import { beaconSyncInfo } from '../atoms'
+import getPercentage from '../../utilities/getPercentage'
+import { BeaconSyncInfo } from '../../types/diagnostic'
 
 export const selectBeaconSyncInfo = selector<BeaconSyncInfo>({
   key: 'formattedBeaconSyncInfo',
   get: ({ get }) => {
     const data = get(beaconSyncInfo)
 
-    const { head_slot = 0, sync_distance = 0, is_syncing = false } = data || {}
+    const { head_slot, sync_distance, is_syncing } = data || {}
     const distance = head_slot + sync_distance
 
     return {

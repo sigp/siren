@@ -8,13 +8,18 @@ import ValidatorTable, {
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
 import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
-import ValidatorBalances, {ValidatorBalanceFallback} from '../../../components/ValidatorBalances/ValidatorBalances'
+import ValidatorBalances, {
+  ValidatorBalanceFallback,
+} from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
 
 const MainContent = () => {
   const { t } = useTranslation()
+  useValidatorInfoPolling()
+
   return (
     <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
       <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
@@ -45,7 +50,7 @@ const MainContent = () => {
         <Suspense fallback={<AccountEarningFallback />}>
           <AccountEarning />
         </Suspense>
-        <Suspense fallback={<ValidatorBalanceFallback/>}>
+        <Suspense fallback={<ValidatorBalanceFallback />}>
           <ValidatorBalances />
         </Suspense>
       </div>

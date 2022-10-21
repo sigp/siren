@@ -3,12 +3,12 @@ import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil';
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo';
+import { useRecoilValue } from 'recoil'
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
-  const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo);
+  const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 

@@ -39,7 +39,7 @@ export type LighthouseValidatorResult = {
 export type BeaconValidatorResult = {
   index: string
   balance: string
-  status: string
+  status: ValidatorStatus
   validator: {
     activation_eligibility_epoch: string
     activation_epoch: string

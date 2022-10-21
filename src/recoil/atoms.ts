@@ -2,6 +2,7 @@ import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
 import { Endpoint } from '../forms/ConfigConnectionForm'
 import { BeaconSyncResult } from '../types/diagnostic'
+import { BeaconValidatorResult } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
@@ -48,7 +49,17 @@ export const beaconSyncInfo = atom<BeaconSyncResult>({
   default: undefined,
 })
 
-export const beaconSyncIntervalId = atom<NodeJS.Timer | undefined>({
-  key: 'beaconSyncIntervalId',
-  default: undefined
+export const validatorStateInfo = atom<BeaconValidatorResult[]>({
+  key: 'validatorStateInfo',
+  default: undefined,
+})
+
+export const validatorInfoInterval = atom<NodeJS.Timer | undefined>({
+  key: 'validatorInfoInterval',
+  default: undefined,
+})
+
+export const beaconSyncInterval = atom<NodeJS.Timer | undefined>({
+  key: 'beaconSyncInterval',
+  default: undefined,
 })
