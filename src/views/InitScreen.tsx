@@ -7,14 +7,15 @@ import {
   apiToken,
   appView,
   beaconNodeEndpoint,
-  onBoardView,
-  validatorClientEndpoint,
-} from '../recoil/atoms'
+  onBoardView, userName,
+  validatorClientEndpoint
+} from '../recoil/atoms';
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
+import { UsernameStorage } from '../types/storage';
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -23,10 +24,12 @@ const InitScreen = () => {
   const setOnboardView = useSetRecoilState(onBoardView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
+  const setUserName = useSetRecoilState(userName)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
   const [token] = useLocalStorage<string | undefined>('api-token', undefined)
+  const [username] = useLocalStorage<UsernameStorage>('username', undefined)
 
   const moveToView = (view: AppView) => {
     setTimeout(() => {
@@ -73,10 +76,11 @@ const InitScreen = () => {
   }
 
   useEffect(() => {
-    if (!validatorClient || !beaconNode || !token) {
+    if (!validatorClient || !beaconNode || !token || !username) {
       moveToView(AppView.ONBOARD)
       return
     }
+    setUserName(username)
     void setNodeInfo(validatorClient, beaconNode, token)
   }, [validatorClient, beaconNode, token])
 

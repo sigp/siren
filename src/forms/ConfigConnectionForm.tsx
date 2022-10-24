@@ -5,13 +5,13 @@ import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
-import { apiToken, beaconNodeEndpoint, onBoardView, validatorClientEndpoint } from '../recoil/atoms'
+import { apiToken, beaconNodeEndpoint, onBoardView, userName, validatorClientEndpoint } from '../recoil/atoms';
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
-import { ApiTokenStorage, EndpointStorage } from '../types/storage'
+import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage';
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -54,10 +54,12 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
+  const setUserName = useSetRecoilState(userName);
 
   const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
   const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
+  const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -122,7 +124,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   }
 
   const onSubmit = async () => {
-    const { isRemember, apiToken } = getValues()
+    const { isRemember, apiToken, userName } = getValues()
 
     try {
       const { status } = await fetchVersion(validatorClient, apiToken)
@@ -136,8 +138,10 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
         storeBeaconNode(beaconNode)
         storeValidatorClient(validatorClient)
         storeApiToken(apiToken)
+        storeUserName(userName)
       }
 
+      setUserName(userName)
       setApiToken(apiToken)
       setBeaconNode(beaconNode)
       setValidatorClient(validatorClient)

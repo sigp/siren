@@ -63,3 +63,10 @@ export const beaconSyncInterval = atom<NodeJS.Timer | undefined>({
   key: 'beaconSyncInterval',
   default: undefined,
 })
+
+export const userName = atom<string>(
+  {
+    key: 'userName',
+    default: undefined
+  }
+)

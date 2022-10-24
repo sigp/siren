@@ -15,9 +15,12 @@ import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
+import { useRecoilValue } from 'recoil';
+import { userName } from '../../../recoil/atoms';
 
 const MainContent = () => {
   const { t } = useTranslation()
+  const name = useRecoilValue(userName)
   useValidatorInfoPolling()
 
   return (
@@ -30,7 +33,7 @@ const MainContent = () => {
             className='xl:text-h3'
             fontWeight='font-light'
           >
-            {t('helloUser', { user: 'Mavrik' })}
+            {t('helloUser', { user: name })}
           </Typography>
           <div className='flex space-x-16'>
             <div>
