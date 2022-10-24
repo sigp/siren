@@ -46,8 +46,10 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, ...props }) => {
             } text-dark500 absolute right-0 top-1/2 -translate-y-1/2`}
           />
         )}
-        <div className="absolute -bottom-6 left-0">
-          <Typography type="text-caption2" color="text-error" className="capitalize">{error}</Typography>
+        <div className='absolute -bottom-6 left-0'>
+          <Typography type='text-caption2' color='text-error' className='capitalize'>
+            {error}
+          </Typography>
         </div>
       </div>
     </div>

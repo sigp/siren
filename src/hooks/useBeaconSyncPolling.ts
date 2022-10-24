@@ -27,7 +27,10 @@ const useBeaconSyncPolling = () => {
     }
   }
 
-  const { intervalId } = usePollingInterval(fetchBeaconInfo, secondsInSlot * 1000, { isSkip, onClearInterval })
+  const { intervalId } = usePollingInterval(fetchBeaconInfo, secondsInSlot * 1000, {
+    isSkip,
+    onClearInterval,
+  })
 
   useEffect(() => {
     if (intervalId) {

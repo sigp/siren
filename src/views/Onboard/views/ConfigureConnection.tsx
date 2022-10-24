@@ -76,7 +76,7 @@ const ConfigureConnection = () => {
               <Controller
                 name='apiToken'
                 control={control}
-                render={({ field: { ref: _ref,...props }, fieldState: {error} }) => (
+                render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
                   <Input
                     label={t('configScreen.apiToken')}
                     tooltip={t('configScreen.apiTokenToolTip')}
@@ -102,7 +102,7 @@ const ConfigureConnection = () => {
                 <Controller
                   name='userName'
                   control={control}
-                  render={({ field: { ref: _ref,...props }, fieldState: {error} }) => (
+                  render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
                     <Input
                       label={t('configScreen.userNameLabel')}
                       placeholder={t('configScreen.userNamePlaceholder')}

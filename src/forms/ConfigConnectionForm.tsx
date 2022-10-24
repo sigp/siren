@@ -5,13 +5,19 @@ import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
-import { apiToken, beaconNodeEndpoint, onBoardView, userName, validatorClientEndpoint } from '../recoil/atoms';
+import {
+  apiToken,
+  beaconNodeEndpoint,
+  onBoardView,
+  userName,
+  validatorClientEndpoint,
+} from '../recoil/atoms'
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
-import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage';
+import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -54,7 +60,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
-  const setUserName = useSetRecoilState(userName);
+  const setUserName = useSetRecoilState(userName)
 
   const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)

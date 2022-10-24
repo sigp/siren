@@ -1,5 +1,5 @@
 import { Endpoint } from '../forms/ConfigConnectionForm'
-import { UiMode } from '../constants/enums';
+import { UiMode } from '../constants/enums'
 
 export type EndpointStorage = Endpoint | undefined
 export type ApiTokenStorage = string | undefined

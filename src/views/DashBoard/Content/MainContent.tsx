@@ -15,8 +15,8 @@ import { useTranslation } from 'react-i18next'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
-import { useRecoilValue } from 'recoil';
-import { userName } from '../../../recoil/atoms';
+import { useRecoilValue } from 'recoil'
+import { userName } from '../../../recoil/atoms'
 
 const MainContent = () => {
   const { t } = useTranslation()

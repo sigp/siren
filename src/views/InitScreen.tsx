@@ -7,15 +7,16 @@ import {
   apiToken,
   appView,
   beaconNodeEndpoint,
-  onBoardView, userName,
-  validatorClientEndpoint
-} from '../recoil/atoms';
+  onBoardView,
+  userName,
+  validatorClientEndpoint,
+} from '../recoil/atoms'
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
-import { UsernameStorage } from '../types/storage';
+import { UsernameStorage } from '../types/storage'
 
 const InitScreen = () => {
   const { t } = useTranslation()

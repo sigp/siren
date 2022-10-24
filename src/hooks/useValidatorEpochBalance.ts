@@ -5,7 +5,7 @@ import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { fetchValidatorStatuses } from '../api/beacon'
 import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
-import { secondsInEpoch } from '../constants/constants';
+import { secondsInEpoch } from '../constants/constants'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 import usePollingInterval from './usePollingInterval'
 
