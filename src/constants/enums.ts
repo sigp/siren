@@ -50,5 +50,5 @@ export enum SetupSteps {
 }
 
 export enum Storage {
-  UI = 'UI'
+  UI = 'UI',
 }

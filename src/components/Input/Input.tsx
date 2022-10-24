@@ -7,7 +7,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string
 }
 
-const Input: FC<InputProps> = ({ label, tooltip, type, ...props }) => {
+const Input: FC<InputProps> = ({ label, tooltip, type, error, ...props }) => {
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
 
@@ -46,6 +46,11 @@ const Input: FC<InputProps> = ({ label, tooltip, type, ...props }) => {
             } text-dark500 absolute right-0 top-1/2 -translate-y-1/2`}
           />
         )}
+        <div className='absolute -bottom-6 left-0'>
+          <Typography type='text-caption2' color='text-error' className='capitalize'>
+            {error}
+          </Typography>
+        </div>
       </div>
     </div>
   )

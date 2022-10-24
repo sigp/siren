@@ -9,23 +9,23 @@ import { PRIMARY_VIEWS, SECONDARY_VIEWS } from '../../constants/constants'
 import { createElement } from 'react'
 import { useRecoilState } from 'recoil'
 import { dashView, uiMode } from '../../recoil/atoms'
-import { ContentView, Storage, UiMode } from '../../constants/enums';
+import { ContentView, Storage, UiMode } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { UiThemeStorage } from '../../types/storage';
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { UiThemeStorage } from '../../types/storage'
 
 const SideBar = () => {
   const { t } = useTranslation()
   const [mode, setMode] = useRecoilState(uiMode)
   const [view, setView] = useRecoilState(dashView)
-  const [, setThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined);
+  const [, setThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
 
   const changeView = (key: ContentView) => setView(key)
 
   const toggleUiMode = () => {
-    const theme = mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT;
-    setMode(theme);
-    setThemeStorage(theme);
+    const theme = mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT
+    setMode(theme)
+    setThemeStorage(theme)
   }
   return (
     <div className='relative group-sidebar hidden md:block w-14.5 flex-shrink-0'>
