@@ -18,47 +18,43 @@ const ValidatorBalances = () => {
   const { t } = useTranslation()
   const { epochs } = useValidatorEpochBalance()
 
-  const labels = useMemo(() => {
-    return Array.from(Array(10).keys())
+  const balanceData = useMemo(() => {
+    const labels = Array.from(Array(10).keys())
       .map((_, i) =>
         moment()
           .subtract(secondsInEpoch * i, 's')
           .format('HH:mm'),
       )
       .reverse()
+
+    return {
+      labels,
+      datasets: epochs
+        .map(({ name, data }) => {
+          if (data.length < labels.length) {
+            const missingEpochs = labels.length - data.length
+
+            const fillData = Array.from(Array(missingEpochs).keys()).map(() => initialEthDeposit)
+
+            data = [...fillData, ...data]
+          }
+
+          return {
+            label: name,
+            data,
+            fill: true,
+            pointRadius: 0,
+            stepped: 'after',
+          }
+        })
+        .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
+        .map((data, index) => ({
+          ...data,
+          borderColor: BALANCE_COLORS[index],
+          backgroundColor: BALANCE_COLORS[index],
+        })),
+    }
   }, [epochs])
-
-  const datasets = useMemo(() => {
-    return epochs
-      .map(({ name, data }) => {
-        if (data.length < labels.length) {
-          const missingEpochs = labels.length - data.length
-
-          const fillData = Array.from(Array(missingEpochs).keys()).map(() => initialEthDeposit)
-
-          data = [...fillData, ...data]
-        }
-
-        return {
-          label: name,
-          data,
-          fill: true,
-          pointRadius: 0,
-          stepped: 'after',
-        }
-      })
-      .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
-      .map((data, index) => ({
-        ...data,
-        borderColor: BALANCE_COLORS[index],
-        backgroundColor: BALANCE_COLORS[index],
-      }))
-  }, [epochs])
-
-  const balanceData = {
-    labels,
-    datasets,
-  }
 
   return (
     <div className='flex-1 flex h-24 w-full'>
@@ -79,10 +75,10 @@ const ValidatorBalances = () => {
             {t('validatorBalance')}
           </Typography>
           <Typography color='text-primary' darkMode='dark:text-white'>
-            {datasets.length}
+            {balanceData.datasets.length}
           </Typography>
         </div>
-        {datasets.length > 0 ? (
+        {balanceData.datasets.length > 0 ? (
           <StepChart data={balanceData} />
         ) : (
           <div className='w-full h-full flex items-center justify-center'>
