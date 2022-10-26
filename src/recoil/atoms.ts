@@ -78,3 +78,13 @@ export const validatorIncrementTimestamp = atom<number | undefined>({
   key: 'validatorIncrementTimestamp',
   default: undefined
 })
+
+export const validatorVersionData = atom<string | undefined>({
+  key: 'validatorVersionData',
+  default: undefined
+})
+
+export const beaconVersionData = atom<string | undefined>({
+  key: 'beaconVersionData',
+  default: undefined
+})

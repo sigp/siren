@@ -7,3 +7,8 @@ export type ClientProvider = {
   subTitle: string
   language: string
 }
+
+export type NodeVersion = {
+  version: string
+  id: string
+}
