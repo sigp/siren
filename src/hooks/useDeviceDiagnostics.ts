@@ -8,19 +8,19 @@ import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
 
 const useDeviceDiagnostics = (): Diagnostics => {
-  const { root_fs_avail, root_fs_size, mem_used, mem_total, mem_free, load_avg_one, uptime } =
+  const { disk_bytes_free, disk_bytes_total, used_memory, total_memory, free_memory, sys_loadavg_1, app_uptime } =
     useRecoilValue(selectHeathDiagnostic)
 
   const diskUtilization = useMemo(() => {
-    if (!root_fs_size || !root_fs_avail) {
+    if (!disk_bytes_total || !disk_bytes_free) {
       return 0
     }
 
-    return Math.round(getPercentage(root_fs_size - root_fs_avail, root_fs_size))
-  }, [root_fs_size, root_fs_avail])
+    return Math.round(getPercentage(disk_bytes_total - disk_bytes_free, disk_bytes_total))
+  }, [disk_bytes_total, disk_bytes_free])
 
-  const totalDiskSpace = formatGigBytes(root_fs_size)
-  const totalDiskFree = formatGigBytes(root_fs_avail)
+  const totalDiskSpace = formatGigBytes(disk_bytes_total)
+  const totalDiskFree = formatGigBytes(disk_bytes_free)
 
   const diskStatus = useMemo<StatusType>(
     () =>
@@ -32,9 +32,9 @@ const useDeviceDiagnostics = (): Diagnostics => {
     [totalDiskFree],
   )
 
-  const memoryUtilization = Math.round(getPercentage(mem_used, mem_total))
-  const totalMemoryFree = formatGigBytes(mem_free)
-  const totalMemory = formatGigBytes(mem_total)
+  const memoryUtilization = Math.round(getPercentage(used_memory, total_memory))
+  const totalMemoryFree = formatGigBytes(free_memory)
+  const totalMemory = formatGigBytes(total_memory)
 
   const ramStatus = useMemo<StatusType>(
     () =>
@@ -46,16 +46,16 @@ const useDeviceDiagnostics = (): Diagnostics => {
     [totalMemoryFree],
   )
 
-  const cpuUtilization = load_avg_one.toFixed(1)
+  const cpuUtilization = sys_loadavg_1.toFixed(1)
 
   const cpuStatus = useMemo<StatusType>(
     () =>
-      load_avg_one >= 2.5
+      sys_loadavg_1 >= 2.5
         ? 'bg-success'
-        : load_avg_one > 1.5 && load_avg_one < 2.4
+        : sys_loadavg_1 > 1.5 && sys_loadavg_1 < 2.4
         ? 'bg-warning'
         : 'bg-error',
-    [load_avg_one],
+    [sys_loadavg_1],
   )
 
   const overallHealth = [diskStatus, cpuStatus, ramStatus]
@@ -82,7 +82,7 @@ const useDeviceDiagnostics = (): Diagnostics => {
     ramStatus,
     cpuStatus,
     cpuUtilization,
-    uptime,
+    uptime: app_uptime,
     healthCondition,
     overallHealthStatus,
   }
