@@ -5,7 +5,11 @@ import { fetchValidatorStatuses } from '../api/beacon'
 import { useEffect } from 'react'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { selectValidators } from '../recoil/selectors/selectValidators'
-import { validatorInfoInterval, validatorIntervalIncrement, validatorStateInfo } from '../recoil/atoms';
+import {
+  validatorInfoInterval,
+  validatorIntervalIncrement,
+  validatorStateInfo
+} from '../recoil/atoms';
 import { Validator } from '../types/validator'
 
 const useValidatorInfoPolling = () => {

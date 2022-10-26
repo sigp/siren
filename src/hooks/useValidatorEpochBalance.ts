@@ -1,4 +1,4 @@
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { useEffect,
   useMemo,
   useState } from 'react';
@@ -10,14 +10,16 @@ import { BeaconValidatorResult,
 } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
-import { validatorIntervalIncrement, validatorStateInfo } from '../recoil/atoms';
-import { slotsInEpoc } from '../constants/constants';
+import { validatorIncrementTimestamp, validatorIntervalIncrement, validatorStateInfo } from '../recoil/atoms';
+import { secondsInEpoch, slotsInEpoc } from '../constants/constants';
+import moment from 'moment';
 
 const useValidatorEpochBalance = () => {
   const validators = useRecoilValue(selectValidators)
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
   const validatorInfo = useRecoilValue(validatorStateInfo)
   const validatorIncrement = useRecoilValue(validatorIntervalIncrement)
+  const [timestamp, setTimeStamp] = useRecoilState(validatorIncrementTimestamp)
   const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
 
   const [epochs, setEpochs] = useState<BeaconValidatorResult[][]>([])
@@ -59,6 +61,14 @@ const useValidatorEpochBalance = () => {
         .reverse(),
     })) : []
   }, [epochs, validators])
+
+  useEffect(() => {
+    if(moment().diff(moment(timestamp), 'seconds') > secondsInEpoch) {
+      void fetchEpochBalances()
+    }
+
+    setTimeStamp(moment.now)
+  }, [epochs, timestamp])
 
   useEffect(() => {
     if(validatorIncrement === slotsInEpoc) {
