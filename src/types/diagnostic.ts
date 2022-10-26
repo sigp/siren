@@ -2,16 +2,26 @@ import { StatusType } from './index'
 import { DiagnosticRate } from '../constants/enums'
 
 export type HealthDiagnosticResult = {
-  cpu_temp: number
-  load_avg_fifteen: number // CPU Usage percentage data
-  load_avg_five: number // CPU Usage percentage data
-  load_avg_one: number // CPU Usage percentage data
-  mem_free: number // RAM Memory data
-  mem_total: number // RAM Memory data
-  mem_used: number // RAM Memory data
-  root_fs_avail: number // Disk Storage Size data
-  root_fs_size: number // Disk Storage Size data
-  uptime: number // Total Node-Client runtime
+  app_uptime: number
+  cpu_cores: number
+  cpu_threads: number
+  disk_bytes_free: number
+  disk_bytes_total: number
+  global_cpu_frequency: number
+  host_name: string
+  kernel_version: string
+  network_bytes_total_received: number
+  network_bytes_total_transmit: number
+  network_name: string
+  os_version: string
+  sys_loadavg_1: number // CPU Usage percentage data
+  sys_loadavg_5: number // CPU Usage percentage data
+  sys_loadavg_15: number // CPU Usage percentage data
+  system_name: string
+  system_uptime: number
+  free_memory: number // RAM Memory data
+  total_memory: number // RAM Memory data
+  used_memory: number // RAM Memory data
 }
 
 export type BeaconSyncResult = {

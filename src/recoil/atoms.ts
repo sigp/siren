@@ -68,3 +68,13 @@ export const userName = atom<string>({
   key: 'userName',
   default: undefined,
 })
+
+export const validatorIntervalIncrement = atom<number>({
+  key: 'validatorIntervalIncrement',
+  default: 0
+})
+
+export const validatorIncrementTimestamp = atom<number | undefined>({
+  key: 'validatorIncrementTimestamp',
+  default: undefined
+})
