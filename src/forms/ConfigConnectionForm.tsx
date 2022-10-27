@@ -7,17 +7,18 @@ import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
 import {
   apiToken,
-  beaconNodeEndpoint,
+  beaconNodeEndpoint, beaconVersionData,
   onBoardView,
   userName,
-  validatorClientEndpoint,
-} from '../recoil/atoms'
+  validatorClientEndpoint, validatorVersionData
+} from '../recoil/atoms';
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
 import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
+import { fetchBeaconVersion } from '../api/beacon';
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -59,8 +60,10 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setView = useSetRecoilState(onBoardView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  const setValidatorVersion = useSetRecoilState(validatorVersionData)
   const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
+  const setBeaconVersion = useSetRecoilState(beaconVersionData)
 
   const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
@@ -133,12 +136,15 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     const { isRemember, apiToken, userName } = getValues()
 
     try {
-      const { status } = await fetchVersion(validatorClient, apiToken)
+      const [vcResult, beaconResult] = await Promise.all([fetchVersion(validatorClient, apiToken), fetchBeaconVersion(beaconNode)])
 
-      if (status !== 200) {
+      if (vcResult.status !== 200 && beaconResult.status !== 200) {
         handleError('')
         return
       }
+
+      setValidatorVersion(vcResult.data.data.version)
+      setBeaconVersion(beaconResult.data.data.version)
 
       if (isRemember) {
         storeBeaconNode(beaconNode)

@@ -6,26 +6,29 @@ import { useSetRecoilState } from 'recoil'
 import {
   apiToken,
   appView,
-  beaconNodeEndpoint,
+  beaconNodeEndpoint, beaconVersionData,
   onBoardView,
   userName,
-  validatorClientEndpoint,
-} from '../recoil/atoms'
+  validatorClientEndpoint, validatorVersionData
+} from '../recoil/atoms';
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
-import { fetchSyncStatus } from '../api/beacon'
+import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon';
 import { useTranslation } from 'react-i18next'
 import { UsernameStorage } from '../types/storage'
 
 const InitScreen = () => {
   const { t } = useTranslation()
+  const [isReady, setReady] = useState(false);
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
   const setOnboardView = useSetRecoilState(onBoardView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
+  const setBeaconVersion = useSetRecoilState(beaconVersionData)
+  const setValidatorVersion = useSetRecoilState(validatorVersionData)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
@@ -45,9 +48,11 @@ const InitScreen = () => {
     try {
       incrementStep()
 
-      const { status } = await fetchVersion(validatorClient, token)
+      const [vcResult, beaconResult] = await Promise.all([fetchVersion(validatorClient, token), fetchBeaconVersion(beaconNode)])
 
-      if (status === 200) {
+      if (vcResult.status === 200 && beaconResult.status === 200) {
+        setBeaconVersion(beaconResult.data.data.version)
+        setValidatorVersion(vcResult.data.data.version)
         setBeaconNode(beaconNode)
         setValidatorClient(validatorClient)
         setApiToken(token)
@@ -77,13 +82,16 @@ const InitScreen = () => {
   }
 
   useEffect(() => {
+    if(isReady) return;
+
     if (!validatorClient || !beaconNode || !token || !username) {
       moveToView(AppView.ONBOARD)
       return
     }
     setUserName(username)
     void setNodeInfo(validatorClient, beaconNode, token)
-  }, [validatorClient, beaconNode, token])
+    setReady(true)
+  }, [validatorClient, beaconNode, token, isReady])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
