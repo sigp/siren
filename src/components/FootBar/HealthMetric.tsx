@@ -14,13 +14,13 @@ export const HealthMetricFallback = () => (
 const HealthMetric = () => {
   const { t } = useTranslation()
   const { isSyncing } = useRecoilValue(selectBeaconSyncInfo)
-  const { healthCondition, overallHealthStatus } = useDeviceDiagnostics()
+  const { healthCondition, overallHealthStatus, uptime } = useDeviceDiagnostics()
 
   return (
     <DiagnosticCard
       border='border-x border-dark200'
       title={t('healthCheck')}
-      metric={`${t('uptime')} 2H 44M`}
+      metric={`${t('uptime')} ${uptime}`}
       status={overallHealthStatus}
       subTitle={`${t(healthCondition.toLowerCase())}, ${t('nodes')} ${
         isSyncing ? t('syncing') : t('synced')
