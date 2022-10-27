@@ -6,6 +6,7 @@ import formatGigBytes from '../utilities/formatGigBytes'
 import { StatusType } from '../types'
 import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
+import secondsToShortHand from '../utilities/secondsToShortHand';
 
 const useDeviceDiagnostics = (): Diagnostics => {
   const { disk_bytes_free, disk_bytes_total, used_memory, total_memory, free_memory, sys_loadavg_1, app_uptime } =
@@ -82,7 +83,7 @@ const useDeviceDiagnostics = (): Diagnostics => {
     ramStatus,
     cpuStatus,
     cpuUtilization,
-    uptime: app_uptime,
+    uptime: secondsToShortHand(app_uptime || 0),
     healthCondition,
     overallHealthStatus,
   }

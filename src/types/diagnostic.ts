@@ -49,7 +49,7 @@ export type Diagnostics = {
   ramStatus: StatusType
   cpuStatus: StatusType
   cpuUtilization: string
-  uptime: number
+  uptime: string
   healthCondition: DiagnosticRate
   overallHealthStatus: StatusType
 }

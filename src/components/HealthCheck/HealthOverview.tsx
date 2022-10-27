@@ -3,15 +3,12 @@ import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverview
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
-import secondsToShortHand from '../../utilities/secondsToShortHand'
 import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 import { Trans, useTranslation } from 'react-i18next'
 
 const HealthOverview = () => {
   const { t } = useTranslation()
   const { totalDiskFree, uptime, healthCondition, overallHealthStatus } = useDeviceDiagnostics()
-
-  const upTimeShortHand = secondsToShortHand(uptime)
 
   const isSufficientSpace = totalDiskFree > 240
 
@@ -49,7 +46,7 @@ const HealthOverview = () => {
               </Trans>
             </Typography>
           </div>
-          <Typography type='text-subtitle2'>{upTimeShortHand}</Typography>
+          <Typography type='text-subtitle2'>{uptime}</Typography>
         </div>
         <div className='self-stretch w-full flex items-center justify-between'>
           <Typography isBold type='text-tiny' color='text-primary' className='uppercase'>
