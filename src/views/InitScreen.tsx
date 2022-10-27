@@ -48,8 +48,7 @@ const InitScreen = () => {
     try {
       incrementStep()
 
-      const vcResult = await fetchVersion(validatorClient, token)
-      const beaconResult = await fetchBeaconVersion(beaconNode)
+      const [vcResult, beaconResult] = await Promise.all([fetchVersion(validatorClient, token), fetchBeaconVersion(beaconNode)])
 
       if (vcResult.status === 200 && beaconResult.status === 200) {
         setBeaconVersion(beaconResult.data.data.version)
