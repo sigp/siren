@@ -12,14 +12,25 @@ import ValidatorBalances, {
   ValidatorBalanceFallback,
 } from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
+import { useRecoilState } from 'recoil';
 import { userName } from '../../../recoil/atoms'
+import AppVersion from '../../../components/AppVersion/AppVersion';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import { UsernameStorage } from '../../../types/storage';
 
 const MainContent = () => {
   const { t } = useTranslation()
-  const name = useRecoilValue(userName)
+  const [username] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [name, setUsername] = useRecoilState(userName)
+
+  useEffect(() => {
+    if(username) {
+      setUsername(username)
+    }
+  }, [username])
 
   useValidatorInfoPolling()
 
