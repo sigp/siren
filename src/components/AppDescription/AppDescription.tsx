@@ -21,12 +21,12 @@ const AppDescription:FC<AppDescriptionProps> = ({view}) => {
           Ethereum Lighthouse
         </Typography>
         <Typography fontWeight='font-light' type='text-caption2' isBold={isSettingsView} className={largerText} color={lightTextColor}>
-          {t('initScreen.validatorClient')} —
+          {t('appDescription.validatorClient')} —
         </Typography>
       </div>
       <div className={opacityText}>
         <Typography fontWeight='font-light' type='text-caption2' className={largerText} color={darkerTextColor}>
-          {t('initScreen.developedBy')}
+          {t('appDescription.developedBy')}
         </Typography>
         <Typography fontWeight='font-light' type='text-caption2' isBold={isSettingsView} className={largerText} color={darkerTextColor}>
           Sigma Prime
@@ -34,10 +34,10 @@ const AppDescription:FC<AppDescriptionProps> = ({view}) => {
       </div>
       <div className={opacityText}>
         <Typography fontWeight='font-light' type='text-caption2' className={largerText} color={darkerTextColor}>
-          {t('initScreen.builtOn')}
+          {t('appDescription.builtOn')}
         </Typography>
         <Typography fontWeight='font-light' type='text-caption2' isBold={isSettingsView} className={largerText} color={darkerTextColor}>
-          {t('initScreen.rustLanguage')}
+          {t('appDescription.rustLanguage')}
         </Typography>
       </div>
     </div>
