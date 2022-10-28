@@ -1,13 +1,16 @@
-import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react'
-import Typography from '../Typography/Typography'
+import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react';
+import Typography from '../Typography/Typography';
+import { UiMode } from '../../constants/enums';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   tooltip?: string
   error?: string
+  className?: string
+  uiMode?: UiMode
 }
 
-const Input: FC<InputProps> = ({ label, tooltip, type, error, ...props }) => {
+const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode, ...props }) => {
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
 
@@ -36,7 +39,7 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, ...props }) => {
           type={inputType}
           className={`${
             isPasswordType ? 'pr-5' : ''
-          } pb-2 w-full bg-transparent placeholder:text-dark500 font-light font-openSauce outline-none text-white border-b border-white text-body md:text-subtitle1`}
+          } ${className ? className : ''} pb-2 w-full ${uiMode === UiMode.LIGHT ? 'text-dark500 bg-dark10 border-dark500' : 'bg-transparent border-white placeholder:text-dark500'} font-light font-openSauce outline-none text-white border-b text-body md:text-subtitle1`}
         />
         {isPasswordType && (
           <i
@@ -47,7 +50,7 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, ...props }) => {
           />
         )}
         <div className='absolute -bottom-6 left-0'>
-          <Typography type='text-caption2' color='text-error' className='capitalize'>
+          <Typography type='text-caption2' color='text-error' darkMode="dark:text-error" className='capitalize'>
             {error}
           </Typography>
         </div>
