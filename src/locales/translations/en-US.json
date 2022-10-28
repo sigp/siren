@@ -165,5 +165,17 @@
       "maxLength": "Name cannot exceed 14 characters",
       "required": "User name is required"
     }
+  },
+  "settings": {
+    "general": "General",
+    "currentVersion": "Current Version",
+    "developedBy": "Developed & Maintained By",
+    "updates": {
+      "nonAvailable": "No Updates Available"
+    },
+    "links": {
+      "website": "Website",
+      "documentation": "Documentation"
+    }
   }
 }
