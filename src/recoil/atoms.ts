@@ -88,6 +88,17 @@ export const beaconVersionData = atom<string | undefined>({
   key: 'beaconVersionData',
   default: undefined
 })
+
+export const validatorHealthResult = atom<HealthDiagnosticResult | undefined>({
+  key: 'validatorHealthResult',
+  default: undefined
+})
+
+export const validatorHealthSyncInterval = atom<NodeJS.Timer | undefined>({
+  key: 'validatorHealthSyncInterval',
+  default: undefined,
+})
+
 export const beaconHealthResult = atom<HealthDiagnosticResult | undefined>({
   key: 'beaconHealthResult',
   default: undefined

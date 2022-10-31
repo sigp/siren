@@ -20,6 +20,7 @@ import { userName } from '../../../recoil/atoms'
 import AppVersion from '../../../components/AppVersion/AppVersion';
 import useLocalStorage from '../../../hooks/useLocalStorage';
 import { UsernameStorage } from '../../../types/storage';
+import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling';
 import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling';
 
 const MainContent = () => {
@@ -34,6 +35,7 @@ const MainContent = () => {
   }, [username])
 
   useValidatorInfoPolling()
+  useValidatorHealthPolling()
   useBeaconHealthPolling()
 
   return (
