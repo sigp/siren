@@ -1,4 +1,6 @@
+import { RecoilState } from 'recoil';
 import { Protocol } from '../constants/enums';
+
 export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
 
 export type ClientProvider = {
@@ -13,6 +15,15 @@ export type NodeVersion = {
   version: string
   id: string
 }
+
+export type ApiPollConfig = {
+  time: number,
+  isReady: boolean,
+  intervalState: RecoilState<NodeJS.Timer | undefined>
+  url?: string,
+  apiToken?: string
+}
+
 export type Endpoint = {
   protocol: Protocol
   address: string
