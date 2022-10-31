@@ -19,14 +19,9 @@ import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
 import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon';
+import { Endpoint } from '../types';
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
-
-export type Endpoint = {
-  protocol: Protocol
-  address: string
-  port: number
-}
 
 export interface ConnectionForm {
   beaconNode: Endpoint

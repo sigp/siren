@@ -1,4 +1,4 @@
-import { Endpoint } from '../forms/ConfigConnectionForm'
+import { Endpoint } from '../types';
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from '../utilities/debounce'
 import axios from 'axios'

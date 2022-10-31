@@ -1,3 +1,4 @@
+import { Protocol } from '../constants/enums';
 export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
 
 export type ClientProvider = {
@@ -11,4 +12,9 @@ export type ClientProvider = {
 export type NodeVersion = {
   version: string
   id: string
+}
+export type Endpoint = {
+  protocol: Protocol
+  address: string
+  port: number
 }
