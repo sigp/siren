@@ -1,5 +1,4 @@
 import { useRecoilValue } from 'recoil'
-import { selectHeathDiagnostic } from '../recoil/selectors/selectHeathDiagnostic'
 import { useMemo } from 'react'
 import getPercentage from '../utilities/getPercentage'
 import formatGigBytes from '../utilities/formatGigBytes'
@@ -7,10 +6,11 @@ import { StatusType } from '../types'
 import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
 import secondsToShortHand from '../utilities/secondsToShortHand';
+import { beaconHealthResult } from '../recoil/atoms';
 
 const useDeviceDiagnostics = (): Diagnostics => {
-  const { disk_bytes_free, disk_bytes_total, used_memory, total_memory, free_memory, sys_loadavg_1, app_uptime } =
-    useRecoilValue(selectHeathDiagnostic)
+  const result = useRecoilValue(beaconHealthResult)
+  const { disk_bytes_free = 0, disk_bytes_total = 0, used_memory = 0, total_memory = 0, free_memory = 0, sys_loadavg_1 = 0, app_uptime = 0 } = result || {};
 
   const diskUtilization = useMemo(() => {
     if (!disk_bytes_total || !disk_bytes_free) {
