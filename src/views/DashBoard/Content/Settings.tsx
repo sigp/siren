@@ -27,7 +27,7 @@ const Settings = () => {
     setError(undefined)
 
     if(!value) {
-      setError('User Name Required')
+      setError(t('error.userName.required'))
     }
 
     if(value) {
