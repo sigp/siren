@@ -17,6 +17,7 @@ import { fetchVersion } from '../api/lighthouse'
 import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon';
 import { useTranslation } from 'react-i18next'
 import { UsernameStorage } from '../types/storage'
+import AppDescription from '../components/AppDescription/AppDescription';
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -129,32 +130,7 @@ const InitScreen = () => {
             <div className='animate-blink h-3 w-1 bg-white text-dark100' />
           </div>
         </div>
-        <div className='flex items-center space-x-10 md:space-x-20'>
-          <div>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-white'>
-              Ethereum Lighthouse
-            </Typography>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-white'>
-              {t('initScreen.validatorClient')} —
-            </Typography>
-          </div>
-          <div className='opacity-40'>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              {t('initScreen.developedBy')}
-            </Typography>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              Sigma Prime
-            </Typography>
-          </div>
-          <div className='opacity-40'>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              {t('initScreen.builtOn')}
-            </Typography>
-            <Typography fontWeight='font-light' type='text-caption2' color='text-dark100'>
-              {t('initScreen.rustLanguage')}
-            </Typography>
-          </div>
-        </div>
+        <AppDescription view="init"/>
       </div>
     </div>
   )

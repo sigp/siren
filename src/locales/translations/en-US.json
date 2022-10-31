@@ -129,16 +129,18 @@
     "healthCondition": "HEALTH CHECK — in {{status}} Condition.",
     "checkLowRam": "Please ensure your RAM is sufficient prior to starting validating."
   },
+  "appDescription": {
+    "developedBy": "Developed & Secured By:",
+    "builtOn": "Built on:",
+    "rustLanguage": "Rust Programming Language",
+    "validatorClient": "Validator Client"
+  },
   "initScreen": {
     "initializing": "Initializing",
     "fetchingEndpoints": "Fetching saved api endpoints",
     "connectingBeacon": "Attempting to connect to Beacon Node",
     "connectingValidator": "Attempting to connect to Validator Client",
-    "validatorClient": "Validator Client",
-    "fetchBeaconSync": "Fetching beacon sync status",
-    "developedBy": "Developed & Secured By:",
-    "builtOn": "Built on:",
-    "rustLanguage": "Rust Programming Language"
+    "fetchBeaconSync": "Fetching beacon sync status"
   },
   "configScreen": {
     "configConnection": "Configure Connection",
@@ -164,6 +166,18 @@
     "userName": {
       "maxLength": "Name cannot exceed 14 characters",
       "required": "User name is required"
+    }
+  },
+  "settings": {
+    "general": "General",
+    "currentVersion": "Current Version",
+    "developedBy": "Developed & Maintained By",
+    "updates": {
+      "nonAvailable": "No Updates Available"
+    },
+    "links": {
+      "website": "Website",
+      "documentation": "Documentation"
     }
   }
 }

@@ -12,19 +12,25 @@ import ValidatorBalances, {
   ValidatorBalanceFallback,
 } from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState } from 'recoil';
 import { userName } from '../../../recoil/atoms'
-import { selectValidatorVersion } from '../../../recoil/selectors/selectValidatorVersion';
-import { selectBeaconVersion } from '../../../recoil/selectors/selectBeaconVersion';
+import AppVersion from '../../../components/AppVersion/AppVersion';
+import useLocalStorage from '../../../hooks/useLocalStorage';
+import { UsernameStorage } from '../../../types/storage';
 
 const MainContent = () => {
   const { t } = useTranslation()
-  const name = useRecoilValue(userName)
-  const vcVersion = useRecoilValue(selectValidatorVersion)
-  const beaconVersion = useRecoilValue(selectBeaconVersion)
+  const [username] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [name, setUsername] = useRecoilState(userName)
+
+  useEffect(() => {
+    if(username) {
+      setUsername(username)
+    }
+  }, [username])
 
   useValidatorInfoPolling()
 
@@ -45,12 +51,7 @@ const MainContent = () => {
               <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
                 {t('lighthouseVersion')}
               </Typography>
-              <Typography type='text-tiny' color='text-dark400'>
-                Beacon — {beaconVersion && (<><span className='text-primary font-bold uppercase'>{beaconVersion.version}</span>-<span>{beaconVersion.id}</span></>)}
-              </Typography>
-              <Typography type='text-tiny' color='text-dark400'>
-                Validator — {vcVersion && (<><span className='text-primary font-bold uppercase'>{vcVersion.version}</span>-<span>{vcVersion.id}</span></>)}
-              </Typography>
+              <AppVersion/>
             </div>
             <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
           </div>

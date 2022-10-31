@@ -1,32 +1,24 @@
 import { ReactComponent as LightHouseLogo } from '../../assets/images/lightHouse.svg'
 import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightHouseFull.svg'
-import { ReactComponent as ToggleSun } from '../../assets/images/sun.svg'
-import { ReactComponent as ToggleMoon } from '../../assets/images/moon.svg'
 
 import SideItem from './SideItem'
 import SideBarText from './SideBarText'
 import { PRIMARY_VIEWS, SECONDARY_VIEWS } from '../../constants/constants'
 import { createElement } from 'react'
 import { useRecoilState } from 'recoil'
-import { dashView, uiMode } from '../../recoil/atoms'
-import { ContentView, Storage, UiMode } from '../../constants/enums'
+import { dashView } from '../../recoil/atoms'
+import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import { UiThemeStorage } from '../../types/storage'
+import useUiMode from '../../hooks/useUiMode';
+import UiModeIcon from '../UiModeIcon/UiModeIcon';
 
 const SideBar = () => {
   const { t } = useTranslation()
-  const [mode, setMode] = useRecoilState(uiMode)
   const [view, setView] = useRecoilState(dashView)
-  const [, setThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
+  const { mode, toggleUiMode } = useUiMode()
 
   const changeView = (key: ContentView) => setView(key)
 
-  const toggleUiMode = () => {
-    const theme = mode === UiMode.LIGHT ? UiMode.DARK : UiMode.LIGHT
-    setMode(theme)
-    setThemeStorage(theme)
-  }
   return (
     <div className='relative group-sidebar hidden md:block w-14.5 flex-shrink-0'>
       <div className='flex flex-col justify-between z-50 relative w-full h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700'>
@@ -50,9 +42,7 @@ const SideBar = () => {
               </SideItem>
             ))}
             <div className='w-full h-6 flex items-center justify-center'>
-              <div onClick={toggleUiMode} className='w-4 h-4 cursor-pointer text-dark400'>
-                {mode === UiMode.LIGHT ? <ToggleSun /> : <ToggleMoon />}
-              </div>
+              <UiModeIcon onClick={toggleUiMode} mode={mode}/>
             </div>
           </ul>
         </div>
