@@ -124,7 +124,6 @@
     "diagnosticOverview": "Diagnostics <0></0> overview",
     "hasDiskSpace": "Disk has the required 240GB for the full sync.",
     "noDiskSpace": "Disk does not have the required 240GB for the full sync.",
-    "latency": "Network is low latency.",
     "cpuRecommendation": "2.4GHZ is recommended for CPU.",
     "healthCondition": "HEALTH CHECK — in {{status}} Condition.",
     "checkLowRam": "Please ensure your RAM is sufficient prior to starting validating."
