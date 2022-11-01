@@ -13,9 +13,11 @@ import TopBar from '../../components/TopBar/TopBar'
 import useBeaconSyncPolling from '../../hooks/useBeaconSyncPolling'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { UiThemeStorage } from '../../types/storage'
+import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling';
 
 const Sync = () => {
   useBeaconSyncPolling()
+  useValidatorSyncPolling()
   return null
 }
 
