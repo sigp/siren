@@ -26,7 +26,7 @@ const NetworkStats = () => {
   const beaconHealth = useRecoilValue(beaconHealthResult)
   const genesisTime = useRecoilValue(selectGenesisBlock)
 
-  const atHeadSlot = genesisTime ? headSlot - Math.floor((moment().unix() - genesisTime) / 12) : undefined
+  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - genesisTime) / 12) : undefined
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
 
   const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
