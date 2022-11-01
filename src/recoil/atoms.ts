@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
 import {Endpoint} from '../types';
-import { BeaconSyncResult, HealthDiagnosticResult } from '../types/diagnostic';
+import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic';
 import { BeaconValidatorResult } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
@@ -41,6 +41,16 @@ export const apiToken = atom<string>({
 
 export const setupStep = atom<SetupSteps | undefined>({
   key: 'SetupStep',
+  default: undefined,
+})
+
+export const validatorSyncInfo = atom<ValidatorSyncResult>({
+  key: 'validatorSyncInfo',
+  default: undefined
+})
+
+export const validatorSyncInterval = atom<NodeJS.Timer | undefined>({
+  key: 'validatorSyncInterval',
   default: undefined,
 })
 

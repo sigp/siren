@@ -5,10 +5,12 @@ import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo';
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
   const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
+  const  { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
@@ -27,9 +29,9 @@ const NetworkHealth = () => {
         size='health'
         title='Ethereum Geth'
         metric='0H 01M'
-        percent={25}
+        percent={syncPercentage}
         isBackground={false}
-        subTitle={t('connectedStatus', { status: t('outOfSync') })}
+        subTitle={t('connectedStatus', { status: isReady ? t('inSync') : t('outOfSync') })}
       />
       <DiagnosticCard
         size='health'

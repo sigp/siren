@@ -11,6 +11,7 @@ import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout
 import { ButtonFace } from '../../../../../components/Button/Button'
 import HealthFallBack from '../../../../../components/HealthCheck/HealthFallBack'
 import { useTranslation } from 'react-i18next'
+import useBeaconHealthPolling from '../../../../../hooks/useBeaconHealthPolling';
 
 const HealthCheck = () => {
   const { t } = useTranslation()
@@ -23,6 +24,8 @@ const HealthCheck = () => {
     setHealthChecked(true)
     setStep(SetupSteps.SYNC)
   }
+
+  useBeaconHealthPolling()
 
   return (
     <ValidatorSetupLayout

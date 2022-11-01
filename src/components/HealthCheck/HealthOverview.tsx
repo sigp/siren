@@ -26,7 +26,6 @@ const HealthOverview = () => {
             status={isSufficientSpace ? 'text-success' : 'text-error'}
             text={t(`vcHealthCheck.${isSufficientSpace ? 'hasDiskSpace' : 'noDiskSpace'}`)}
           />
-          <DiagnosticOverviewText status='text-success' text={t('vcHealthCheck.latency')} />
           <DiagnosticOverviewText
             status='text-warning'
             text={t('vcHealthCheck.cpuRecommendation')}

@@ -2,7 +2,6 @@ import { useSetRecoilState } from 'recoil'
 import { appView, setupStep } from '../../../../../recoil/atoms'
 import { AppView, SetupSteps } from '../../../../../constants/enums'
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
-import SyncCard from '../../../../../components/SyncCard/SyncCard'
 import Typography from '../../../../../components/Typography/Typography'
 import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures'
 import { Suspense } from 'react'
@@ -10,6 +9,7 @@ import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncC
 import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback'
 import { Trans, useTranslation } from 'react-i18next'
 import useBeaconSyncPolling from '../../../../../hooks/useBeaconSyncPolling'
+import ValidatorSyncCard from '../../../../../components/ValidatorSyncCard/ValidatorSyncCard';
 
 const NodeSync = () => {
   useBeaconSyncPolling()
@@ -32,13 +32,9 @@ const NodeSync = () => {
       mediaQuery='@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-start @1024:justify-center @1200:items-center'
     >
       <div className='w-full flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-2'>
-        <SyncCard
-          title='Ethereum Mainnet'
-          subTitle='Geth Node'
-          timeRemaining='0H 0M'
-          status={t('noConnection')}
-          progress={0}
-        />
+        <Suspense fallback={<SyncCardFallback />}>
+          <ValidatorSyncCard/>
+        </Suspense>
         <Suspense fallback={<SyncCardFallback />}>
           <BeaconSyncCard />
         </Suspense>
