@@ -1,13 +1,13 @@
 import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightHouseFull.svg'
 import { ReactComponent as SlasherLogo } from '../../assets/images/slasher.svg'
-import SyncMetric, { SyncMetricFallback } from '../SyncMetric/SyncMetric'
+import { SyncMetricFallback } from '../SyncMetric/SyncMetric'
 import Typography from '../Typography/Typography'
 import Button, { ButtonFace } from '../Button/Button'
 import Wallet from '../Wallet/Wallet'
 import BeaconMetric from './BeaconMetric'
 import { Suspense } from 'react'
-import getPercentage from '../../utilities/getPercentage'
 import { useTranslation } from 'react-i18next'
+import ValidatorMetric from './ValidatorMetric';
 
 const TopBar = () => {
   const { t } = useTranslation()
@@ -17,16 +17,9 @@ const TopBar = () => {
         <div className='items-center hidden lg:flex w-42 border-r border-borderLight dark:border-borderDark px-4'>
           <LightHouseFullLogo className='w-full text-black dark:text-white' />
         </div>
-        <SyncMetric
-          id='ethMain'
-          borderStyle='border-r'
-          title='ETHEREUM MAINNET'
-          subTitle='—'
-          percent={getPercentage(150435, 212245)}
-          amount={150435}
-          color='secondary'
-          total={212245}
-        />
+        <Suspense fallback={<SyncMetricFallback/>}>
+          <ValidatorMetric/>
+        </Suspense>
         <Suspense fallback={<SyncMetricFallback />}>
           <BeaconMetric />
         </Suspense>

@@ -31,6 +31,26 @@ export type BeaconSyncResult = {
   sync_distance: number
 }
 
+export type ValidatorSyncResult = {
+  head_block_number: string,
+  head_block_timestamp: string,
+  latest_cached_block_number: string,
+  latest_cached_block_timestamp: string,
+  voting_target_timestamp: string,
+  eth1_node_sync_status_percentage: string,
+  lighthouse_is_cached_and_ready: boolean
+}
+
+export type ValidatorSyncInfo = {
+  headSlot: number,
+  headTimestamp: string,
+  cachedHeadSlot: number,
+  cachedHeadTimestamp: string,
+  votingTimestamp: string,
+  syncPercentage: number,
+  isReady: boolean
+}
+
 export type BeaconSyncInfo = {
   headSlot: number
   slotDistance: number
