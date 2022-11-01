@@ -1,25 +1,32 @@
 import Typography from '../Typography/Typography'
 import ReactSpeedometer, { CustomSegmentLabelPosition } from 'react-d3-speedometer'
 import { useRecoilValue } from 'recoil'
-import { uiMode } from '../../recoil/atoms'
+import { beaconHealthResult, uiMode, validatorHealthResult } from '../../recoil/atoms';
 import { UiMode } from '../../constants/enums'
 import NetworkStatBlock from './NetworkStatBlock'
 import { useTranslation } from 'react-i18next'
+import secondsToShortHand from '../../utilities/secondsToShortHand';
 
 const NetworkStats = () => {
   const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
+  const validatorHealth = useRecoilValue(validatorHealthResult)
+  const beaconHealth = useRecoilValue(beaconHealthResult)
+
+  const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
+  const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
+
   return (
     <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex'>
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Validator'
-        metric='15.6 HR'
+        metric={validatorUpTime}
       />
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Beacon Chain'
-        metric='0.3 HR'
+        metric={beaconUpTime}
       />
       <NetworkStatBlock
         title={t('networkStats.headSlot')}

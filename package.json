@@ -6,7 +6,7 @@
     "@hookform/resolvers": "^2.9.8",
     "@storybook/theming": "^6.5.10",
     "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
+    "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.2.1",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.13",
@@ -107,6 +107,7 @@
     "postcss": "^8",
     "prettier": "^2.7.1",
     "prop-types": "^15.8.1",
+    "react-test-renderer": "^18.2.0",
     "storybook-dark-mode": "^1.1.0",
     "storybook-tailwind-dark-mode": "^1.0.15",
     "webpack": "^5.74.0"

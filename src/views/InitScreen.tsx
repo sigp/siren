@@ -1,6 +1,6 @@
 import Typography from '../components/Typography/Typography'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { Endpoint } from '../forms/ConfigConnectionForm'
+import { Endpoint } from '../types';
 import { useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import {
