@@ -2,7 +2,7 @@ import Typography from '../../../components/Typography/Typography'
 import AccountEarning, {
   AccountEarningFallback,
 } from '../../../components/AccountEarnings/AccountEarning'
-import NetworkStats from '../../../components/NetworkStats/NetworkStats'
+import NetworkStats, { NetworkStatsFallback } from '../../../components/NetworkStats/NetworkStats';
 import ValidatorTable, {
   TableErrorFallback,
   TableFallback,
@@ -68,7 +68,9 @@ const MainContent = () => {
         </Suspense>
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
-        <NetworkStats />
+        <Suspense fallback={<NetworkStatsFallback/>}>
+          <NetworkStats />
+        </Suspense>
         <ErrorBoundary fallback={<TableErrorFallback />}>
           <Suspense fallback={<TableFallback />}>
             <ValidatorTable />
