@@ -8,11 +8,22 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string
   className?: string
   uiMode?: UiMode
+  inputStyle?: 'primary' | 'secondary'
+  icon?: string
 }
 
-const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode, ...props }) => {
+const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode, inputStyle = 'primary', icon,  ...props }) => {
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
+
+  const generateInputStyle = () => {
+    switch (inputStyle) {
+      case 'secondary':
+        return 'text-dark500 border-style p-2 bg-transparent'
+      default:
+        return `${uiMode === UiMode.LIGHT ? 'text-dark500 bg-dark10 border-dark500' : 'bg-transparent border-white placeholder:text-dark500'} font-light text-white border-b text-body md:text-subtitle1`
+    }
+  }
 
   const togglePassword = () => setType((prev) => (prev === 'password' ? 'text' : 'password'))
   return (
@@ -38,17 +49,19 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode,
           {...props}
           type={inputType}
           className={`${
-            isPasswordType ? 'pr-5' : ''
-          } ${className ? className : ''} pb-2 w-full ${uiMode === UiMode.LIGHT ? 'text-dark500 bg-dark10 border-dark500' : 'bg-transparent border-white placeholder:text-dark500'} font-light font-openSauce outline-none text-white border-b text-body md:text-subtitle1`}
+            isPasswordType || icon ? 'pr-5' : ''
+          } ${className ? className : ''} pb-2 w-full font-openSauce outline-none ${generateInputStyle()}`}
         />
-        {isPasswordType && (
+        {isPasswordType ? (
           <i
             onClick={togglePassword}
             className={`cursor-pointer text-caption1 md:text-body ${
               inputType === 'password' ? 'bi-eye-slash-fill' : 'bi-eye-fill'
             } text-dark500 absolute right-0 top-1/2 -translate-y-1/2`}
           />
-        )}
+        ) : icon ? (
+          <i className={`text-caption1 ${icon} text-dark500 absolute right-3 top-1/2 -translate-y-1/2`} />
+        ) : null}
         <div className='absolute -bottom-6 left-0'>
           <Typography type='text-caption2' color='text-error' darkMode="dark:text-error" className='capitalize'>
             {error}
