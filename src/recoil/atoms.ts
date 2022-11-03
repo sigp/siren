@@ -119,3 +119,8 @@ export const beaconHealthSyncInterval = atom<NodeJS.Timer | undefined>({
   default: undefined
 })
 
+export const validatorSearch = atom<string>({
+  key: 'validatorSearch',
+  default: ''
+})
+
