@@ -8,12 +8,15 @@ import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../utilities/formatEthAddress'
+import { TableView } from './ValidatorTable';
+import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
+  view?: TableView,
 }
 
-const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
+const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { t } = useTranslation()
   const { name, pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
@@ -91,16 +94,40 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator }) => {
           {renderStatus()}
         </div>
       </th>
-      <th className='border-r-style500 px-2'>
+      {
+        view === 'full' && (
+          <>
+            <th className='px-2'>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon size="text-xs" border="border border-error" icon="bi-x-lg" color="text-error"/>
+              </div>
+            </th>
+            <th className='px-2'>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon border="border border-primary100 dark:border-primary" icon="bi-arrow-down-circle"/>
+              </div>
+            </th>
+            <th className='px-2'>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon border="border border-dark700" color="text-dark700 dark:text-dark400" icon="bi-box-arrow-right"/>
+              </div>
+            </th>
+            <th className='px-2'>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon border="border border-primary100 dark:border-primary" icon="bi-key-fill"/>
+              </div>
+            </th>
+          </>
+        )
+      }
+      <th className="border-r-style500 px-2">
         <div className='w-full flex justify-center'>
-          <div className='w-8 h-8 bg-primary50 dark:bg-dark750 rounded-full flex items-center justify-center'>
-            <i className='bi bi-box-arrow-in-up-right text-primary' />
-          </div>
+          <ValidatorActionIcon icon="bi-box-arrow-in-up-right"/>
         </div>
       </th>
       <th className='px-2'>
         <div className='w-full flex justify-center'>
-          <div className='w-8 h-8 bg-primary50 dark:bg-dark750 rounded-full flex items-center justify-center'>
+          <div className='w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
             <div className='w-4 h-4'>
               <ValidatorLogo className='text-primary' />
             </div>
