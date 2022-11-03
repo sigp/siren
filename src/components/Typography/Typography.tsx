@@ -52,6 +52,8 @@ export interface TypographyProps {
   as?: TagsSupported
   type?: TypographyType
   isBold?: boolean
+  isUpperCase?: boolean
+  isCapitalize?: boolean
   fontWeight?: 'font-bold' | 'font-normal' | 'font-light'
   family?: TypographyFamily
   dataTestId?: string
@@ -66,6 +68,8 @@ const Typography: FC<TypographyProps> = ({
   className,
   fontWeight = 'font-normal',
   children,
+  isUpperCase,
+  isCapitalize,
   family = 'font-openSauce',
   ...props
 }) => {
@@ -73,7 +77,7 @@ const Typography: FC<TypographyProps> = ({
     as ? ELEMENT[as] : ELEMENT.p,
     {
       ...props,
-      className: `${className || ''} ${type} m-0 ${darkMode} ${color} ${family} ${
+      className: `${className || ''} ${type} ${isUpperCase ? 'uppercase' : isCapitalize ? 'capitalize' : 'normal-case'} m-0 ${darkMode} ${color} ${family} ${
         isBold ? 'font-bold' : fontWeight
       }
 `,

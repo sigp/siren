@@ -31,6 +31,8 @@
   "disk": "Disk",
   "cpu": "CPU",
   "ram": "RAM",
+  "search": "Search...",
+  "noResultsFound": "No Results Found",
   "diagnostic": "Diagnostic",
   "device": "Device",
   "network": "Network",
@@ -177,6 +179,25 @@
     "links": {
       "website": "Website",
       "documentation": "Documentation"
+    }
+  },
+  "validatorManagement": {
+    "search": "search",
+    "title": "Validator Management",
+    "overview": "Overview",
+    "day": "Day",
+    "summary": {
+      "active": "active",
+      "totalBalance": "Total Balance",
+      "locked": "Locked",
+      "totalIncome": "Total Income",
+      "queue": "Queue",
+      "networkValidators": "Network Validators",
+      "avgEffectiveness": "Avg Effectiveness"
+    },
+    "actions": {
+      "deposit": "Deposit",
+      "add": "Add"
     }
   }
 }

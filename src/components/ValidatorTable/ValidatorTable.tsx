@@ -61,17 +61,17 @@ const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) =>
               <div className='absolute right-0 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-primary' />
             </th>
             <th className='pl-2'>
-              <Typography color='text-dark500' type='text-tiny' className='text-left uppercase'>
+              <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-left'>
                 PUBKEY
               </Typography>
             </th>
             <th>
-              <Typography color='text-dark500' type='text-tiny' className='uppercase text-left'>
+              <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-left'>
                 {t('balance')}
               </Typography>
             </th>
             <th>
-              <Typography color='text-dark500' type='text-tiny' className='uppercase'>
+              <Typography color='text-dark500' type='text-tiny' isUpperCase>
                 {t('rewards')}
               </Typography>
             </th>
@@ -103,29 +103,29 @@ const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) =>
               </div>
             </th>
             <th className={`${view === 'partial' ? 'border-r-style500' : ''} pl-2`}>
-              <Typography color='text-dark500' type='text-tiny' className='text-left uppercase'>
+              <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-left'>
                 {t('status')}
               </Typography>
             </th>
             {view === 'full' && (
               <>
                 <th className='pl-2'>
-                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                  <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-center'>
                     {t('run')}
                   </Typography>
                 </th>
                 <th className='pl-2'>
-                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                  <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-center'>
                     {t('deposit')}
                   </Typography>
                 </th>
                 <th className='pl-2'>
-                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                  <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-center'>
                     {t('exit')}
                   </Typography>
                 </th>
                 <th className='pl-2'>
-                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                  <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-center'>
                     {t('keys')}
                   </Typography>
                 </th>
@@ -160,7 +160,7 @@ const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) =>
     </div>
   ) : isFilter ? (
     <div className="w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700 min-h-60 opacity-70">
-      <Typography>No Results Found</Typography>
+      <Typography>{t('noResultsFound')}</Typography>
     </div>
     ) : (
     <TableFallback />
