@@ -59,6 +59,10 @@
         @apply border-r border-dark200 dark:border-dark500;
     }
 
+    .border-l-style500 {
+        @apply border-l border-dark200 dark:border-dark500;
+    }
+
     .border-t-style500 {
         @apply border-t border-dark200 dark:border-dark500;
     }
