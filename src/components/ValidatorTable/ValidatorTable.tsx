@@ -6,6 +6,15 @@ import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
 import Spinner from '../Spinner/Spinner'
+import { FC } from 'react';
+import { selectFilteredValidators } from '../../recoil/selectors/selectFilteredValidators';
+
+export type TableView = 'partial' | 'full'
+
+export interface ValidatorTableProps {
+  view?: TableView,
+  isFilter?: boolean
+}
 
 export const TableFallback = () => (
   <div className='w-full flex items-center justify-center h-60 overflow-scroll mt-2 border-style500'>
@@ -24,13 +33,16 @@ export const TableErrorFallback = () => {
   )
 }
 
-const ValidatorTable = () => {
+const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) => {
   const { t } = useTranslation()
 
   const validators = useRecoilValue(selectValidatorInfos)
+  const filteredValidators = useRecoilValue(selectFilteredValidators)
 
-  return validators.length ? (
-    <div className='w-full max-h-60.5 overflow-scroll mt-2 border-style500'>
+  const data = isFilter ? filteredValidators : validators
+
+  return data.length ? (
+    <div className={`w-full ${view === 'partial' ? 'max-h-60.5' : ''} overflow-scroll mt-2 border-style500`}>
       <table className='relative table-auto w-full'>
         <thead className='sticky top-0 left-0 bg-white dark:bg-darkPrimary'>
           <tr className='w-full h-12'>
@@ -45,7 +57,7 @@ const ValidatorTable = () => {
               <Typography className='text-left capitalize'>{t('validators')}</Typography>
             </th>
             <th className='relative border-r-style500 pr-2'>
-              <Typography>{validators.length}</Typography>
+              <Typography>{data.length}</Typography>
               <div className='absolute right-0 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-primary' />
             </th>
             <th className='pl-2'>
@@ -90,12 +102,36 @@ const ValidatorTable = () => {
                 </div>
               </div>
             </th>
-            <th className='border-r-style500 pl-2'>
+            <th className={`${view === 'partial' ? 'border-r-style500' : ''} pl-2`}>
               <Typography color='text-dark500' type='text-tiny' className='text-left uppercase'>
                 {t('status')}
               </Typography>
             </th>
-            <th className='border-r-style500'>
+            {view === 'full' && (
+              <>
+                <th className='pl-2'>
+                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                    {t('run')}
+                  </Typography>
+                </th>
+                <th className='pl-2'>
+                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                    {t('deposit')}
+                  </Typography>
+                </th>
+                <th className='pl-2'>
+                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                    {t('exit')}
+                  </Typography>
+                </th>
+                <th className='pl-2'>
+                  <Typography color='text-dark500' type='text-tiny' className='text-center text-left uppercase'>
+                    {t('keys')}
+                  </Typography>
+                </th>
+              </>
+            )}
+            <th className={`border-r-style500 ${view === 'full' ? 'border-l-style500' : ''}`}>
               <div className='w-full flex justify-center'>
                 <div className='w-8 h-8 bg-dark300 dark:bg-dark600 rounded-full flex items-center justify-center'>
                   <div className='w-4 h-4'>
@@ -116,13 +152,17 @@ const ValidatorTable = () => {
           </tr>
         </thead>
         <tbody>
-          {validators.map((validator, index) => (
-            <ValidatorRow validator={validator} key={index} />
+          {data.map((validator, index) => (
+            <ValidatorRow view={view} validator={validator} key={index} />
           ))}
         </tbody>
       </table>
     </div>
-  ) : (
+  ) : isFilter ? (
+    <div className="w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700 min-h-60 opacity-70">
+      <Typography>No Results Found</Typography>
+    </div>
+    ) : (
     <TableFallback />
   )
 }
