@@ -2,7 +2,7 @@ import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilSta
 import usePollingInterval from './usePollingInterval'
 import { secondsInSlot, slotsInEpoc } from '../constants/constants';
 import { fetchValidatorStatuses } from '../api/beacon'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react';
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { selectValidators } from '../recoil/selectors/selectValidators'
 import {
@@ -14,11 +14,16 @@ import { Validator } from '../types/validator'
 
 const useValidatorInfoPolling = () => {
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
+  const [isReady, setReady] = useState(false)
   const { contents: validators, state } = useRecoilValueLoadable(selectValidators)
   const setStateInfo = useSetRecoilState(validatorStateInfo)
   const setIncrement = useSetRecoilState(validatorIntervalIncrement)
   const [validatorInterval, setInterval] = useRecoilState(validatorInfoInterval)
-  const isSkip = Boolean(validatorInterval)
+  const isSkip = Boolean(validatorInterval) && isReady
+
+  useEffect(() => {
+    setReady(true)
+  }, [])
 
   const fetchValidatorInfo = async () => {
     if (!baseBeaconUrl || !validators) return
@@ -37,10 +42,10 @@ const useValidatorInfoPolling = () => {
   const onClearInterval = () => setInterval(undefined)
 
   useEffect(() => {
-    if (state === 'hasValue') {
+    if (state === 'hasValue' && isReady) {
       void fetchValidatorInfo()
     }
-  }, [state])
+  }, [state, isReady])
 
   const { intervalId } = usePollingInterval(fetchValidatorInfo, secondsInSlot * 1000, {
     isSkip,
