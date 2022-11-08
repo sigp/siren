@@ -124,3 +124,8 @@ export const validatorSearch = atom<string>({
   default: ''
 })
 
+export const validatorIndex = atom<number | undefined>({
+  key: 'validatorIndex',
+  default: undefined
+})
+

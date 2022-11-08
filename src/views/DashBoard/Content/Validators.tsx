@@ -1,12 +1,13 @@
-import Typography from '../../../components/Typography/Typography';
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling';
-import ValidatorTable, { TableErrorFallback, TableFallback } from '../../../components/ValidatorTable/ValidatorTable';
 import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import ValidatorSummary from '../../../components/ValidatorSummary/ValidatorSummary';
-import Button, { ButtonFace } from '../../../components/Button/Button';
-import ValidatorSearchInput from '../../../components/ValidatorSearchInput/ValidatorSearchInput';
 import { useTranslation } from 'react-i18next';
+import Typography from '../../../components/Typography/Typography';
+import ValidatorSummary from '../../../components/ValidatorSummary/ValidatorSummary';
+import ValidatorSearchInput from '../../../components/ValidatorSearchInput/ValidatorSearchInput';
+import Button, { ButtonFace } from '../../../components/Button/Button';
+import { ErrorBoundary } from 'react-error-boundary';
+import ValidatorTable, { TableErrorFallback, TableFallback } from '../../../components/ValidatorTable/ValidatorTable';
+import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal';
 
 const Validators = () => {
   const { t } = useTranslation()
@@ -35,6 +36,7 @@ const Validators = () => {
           <ValidatorTable isFilter view="full" />
         </Suspense>
       </ErrorBoundary>
+      <ValidatorModal/>
     </div>
   )
 }

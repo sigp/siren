@@ -99,3 +99,7 @@
         margin: 0;
     }
 }
+
+.rodal-dialog {
+    padding: 0!important;
+}
