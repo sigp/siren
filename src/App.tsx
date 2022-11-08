@@ -7,6 +7,7 @@ import Onboard from './views/Onboard/Onboard'
 import InitScreen from './views/InitScreen'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
+import 'rodal/lib/rodal.css';
 
 function App() {
   const mode = useRecoilValue(uiMode)
