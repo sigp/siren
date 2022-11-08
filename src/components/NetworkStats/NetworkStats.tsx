@@ -23,7 +23,7 @@ const NetworkStats = () => {
   const beaconHealth = useRecoilValue(beaconHealthResult)
   const genesisTime = useRecoilValue(selectGenesisBlock)
 
-  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - genesisTime) / 12) : undefined
+  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - (genesisTime + 6)) / 12) : undefined
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
 
   const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
@@ -45,7 +45,7 @@ const NetworkStats = () => {
         title={t('networkStats.headSlot')}
         status={headSlotStatus}
         metricFontSize='text-subtitle3'
-        metric={atHeadSlot !== undefined ? String(atHeadSlot) : '---'}
+        metric={atHeadSlot !== undefined ? String(atHeadSlot === 1 ? 0 : atHeadSlot) : '---'}
       />
       <NetworkPeerSpeedometer/>
       <NetworkStatBlock
