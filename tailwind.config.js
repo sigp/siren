@@ -68,6 +68,7 @@ module.exports = {
       },
       minWidth: {
         '316': '316px',
+        '20': '80px'
       },
       maxWidth: {
         tiny: '165px',
@@ -86,7 +87,7 @@ module.exports = {
       },
       height: {
         '22': '5.688rem',
-        '11/20': '55%'
+        '11/20': '55%',
       },
       inset: {
         35: '35%',
