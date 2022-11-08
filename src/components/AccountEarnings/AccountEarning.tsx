@@ -14,6 +14,7 @@ import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchange
 import { CURRENCY_PREFIX } from '../../constants/currencies'
 import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import EarningsLayout from './EarningsLayout'
+import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos';
 
 export const AccountEarningFallback = () => {
   return (
@@ -25,10 +26,11 @@ export const AccountEarningFallback = () => {
 
 const AccountEarning = () => {
   const { t } = useTranslation()
+  const validators = useRecoilValue(selectValidatorInfos)
   const [activeCurrency, setCurrency] = useState('USD')
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
-  const { total, fetchHistory } = useValidatorEarnings()
+  const { total, fetchHistory } = useValidatorEarnings(validators)
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
 
