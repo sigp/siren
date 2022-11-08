@@ -187,3 +187,5 @@ export const EARNINGS_OPTIONS = [
     value: 0,
   },
 ] as EarningOption[]
+
+export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
