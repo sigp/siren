@@ -9,6 +9,10 @@ export const selectFilteredValidators = selector<ValidatorInfo[]>({
     const validators = get(selectValidatorInfos)
     const searchValue = get(validatorSearch)
 
-    return validators.filter(validator => validator.name.toLowerCase().includes(searchValue.toLowerCase()))
+    return validators.filter(validator => {
+      const query = searchValue.toLowerCase()
+
+      return validator.name.toLowerCase().includes(query) || query.length > 3 && validator.pubKey.toLowerCase().includes(query) || validator.index.toString().includes(query)
+    })
   },
 })
