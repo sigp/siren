@@ -3,15 +3,16 @@ import Typography from '../Typography/Typography';
 import { FC } from 'react';
 
 export interface ValidatorCardActionProps {
+  className?: string
   icon: string
   title: string
   onClick?: () => void
 }
 
 
-const ValidatorCardAction:FC<ValidatorCardActionProps> = ({icon, title, onClick}) => {
+const ValidatorCardAction:FC<ValidatorCardActionProps> = ({icon, title, onClick, className}) => {
   return (
-    <div onClick={onClick} className="flex-1 border p-4 space-y-2">
+    <div onClick={onClick} className={`border p-4 space-y-2 ${className}`}>
       <ValidatorActionIcon icon={icon} color="text-primary"/>
       <div>
         <Typography>—</Typography>

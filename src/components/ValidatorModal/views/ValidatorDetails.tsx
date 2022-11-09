@@ -15,6 +15,7 @@ import ValidatorGraffitiInput from '../../ValidatorGraffitiInput/ValidatorGraffi
 import ValidatorCardAction from '../ValidatorCardAction';
 import ViewDisclosures from '../../ViewDisclosures/ViewDisclosures';
 import { BeaconChaValidatorUrl } from '../../../constants/constants';
+import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable';
 
 const ValidatorDetails = () => {
   const {t} = useTranslation()
@@ -24,7 +25,7 @@ const ValidatorDetails = () => {
   const { rates } = useRecoilValue(selectEthExchangeRates)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0);
-  const income = balance ? balance - 32 : 0
+
 
   useEffect(() => {
     return () => {
@@ -34,8 +35,8 @@ const ValidatorDetails = () => {
 
   return validator ? (
     <div className="w-full">
-      <div className="w-full flex">
-        <div className="w-80 h-60 border-r px-8  py-4 relative">
+      <div className="w-full flex flex-col lg:flex-row">
+        <div className="w-full lg:w-80 h-60 border-r px-8  py-4 relative">
           <img
             alt='waves'
             src={Waves}
@@ -70,10 +71,10 @@ const ValidatorDetails = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1 flex justify-center items-center">
+        <div className="flex-1 flex py-4 justify-center items-center">
           <div className="w-11/12 space-y-2">
-            <div className="w-full flex shadow">
-              <div className="p-3 border-r space-y-4">
+            <div className="w-full flex flex-col lg:flex-row shadow">
+              <div className="p-3 flex lg:flex-col lg:border-r space-y-4">
                 <div className="space-y-2">
                   <Typography isBold type="text-caption1">Balance</Typography>
                   <div className="flex w-full space-x-4 justify-between">
@@ -81,7 +82,7 @@ const ValidatorDetails = () => {
                     <Typography type="text-caption1" isBold>${formatLocalCurrency(usdBalance)}</Typography>
                   </div>
                 </div>
-                <div className="space-y-2">
+                <div className="space-y-2 px-6 lg:px-0">
                   <Typography type="text-caption2" isBold isUpperCase>{t('validatorManagement.summary.avgEffectiveness')}</Typography>
                   <div className="flex space-x-8">
                     <Status status="bg-success"/>
@@ -89,14 +90,14 @@ const ValidatorDetails = () => {
                   </div>
                 </div>
               </div>
-              <div className="px-3 border-r flex flex-col justify-between">
-                <ValidatorIncomeSummary validators={[validator]} className="pt-4 space-y-2 w-42"/>
-                <div className="w-full flex">
-                  <div className="space-y-3 flex-1 border-r pr-2 pb-2">
+              <div className="space-y-4 border-t lg:border-t-0 lg:border-r flex flex-col justify-between">
+                <ValidatorIncomeSummary validators={[validator]} className="pt-4 px-2 space-y-2 w-42"/>
+                <div className="w-full flex border-t lg:border-none">
+                  <div className="space-y-3 flex-1 pt-4 lg:pt-0 border-r px-2 pb-2">
                     <Typography isBold type="text-caption2">Slots Behind</Typography>
                     <Typography className="text-right">0</Typography>
                   </div>
-                  <div className="space-y-3 flex-1 pl-2 pb-2">
+                  <div className="space-y-3 flex-1 pt-4 lg:pt-0 px-2 pb-2">
                     <Typography isBold type="text-caption2">Epochs</Typography>
                     <div className="w-full flex justify-between">
                       <Typography>Node</Typography>
@@ -132,69 +133,16 @@ const ValidatorDetails = () => {
         </div>
       </div>
       <ValidatorGraffitiInput/>
-      <div className="border-t w-full">
-        <div className="w-full flex">
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Balance</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Income</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Proposed</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Attested</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Aggregated</Typography>
-          </div>
-          <div className="w-12 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>In</Typography>
-          </div>
-          <div className="w-24 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Effectiveness</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Apr</Typography>
-          </div>
-        </div>
-        <div className="border-t w-full flex">
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">{balance?.toFixed(4)}</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1" color={income > 0 ? 'text-success' : 'text-error'}>{income.toFixed(4)}</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
-          </div>
-          <div className="w-12 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
-          </div>
-          <div className="w-24 py-4 px-6">
-            <Typography type="text-caption1">100%</Typography>
-          </div>
-          <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">10%</Typography>
-          </div>
-        </div>
-      </div>
+      <ValidatorDetailTable validator={validator}/>
       <div className="w-full border-t space-y-4 opacity-60 p-4">
         <Typography type="text-caption1">Validator Management</Typography>
-        <div className="w-full flex space-x-3">
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
-          <ValidatorCardAction icon="bi-arrow-down-circle" title="Deposit Funds"/>
+        <div className="w-full flex flex-wrap lg:space-x-3">
+          <ValidatorCardAction className="w-32 @425:w-36 sm:w-96 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
+          <ValidatorCardAction className="w-32 @425:w-36 sm:w-96 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
+          <ValidatorCardAction className="w-32 @425:w-36 md:w-95 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
+          <ValidatorCardAction className="w-32 @425:w-36 md:w-95 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
+          <ValidatorCardAction className="w-32 @425:w-36 md:w-95 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
+          <ValidatorCardAction className="w-32 @425:w-36 md:w-95 mr-3 mb-2 lg:flex-1" icon="bi-arrow-down-circle" title="Deposit Funds"/>
         </div>
       </div>
       <div className="p-3 border-t">
