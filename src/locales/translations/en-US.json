@@ -197,7 +197,26 @@
     },
     "actions": {
       "deposit": "Deposit",
-      "add": "Add"
+      "add": "Add",
+      "depositFunds": "Deposit Funds",
+      "backupKeys": "Backup Keys",
+      "stopValidator": "Stop Validator",
+      "exportValidator": "Export Validator",
+      "exitValidator": "Exit Validator",
+      "withdrawValidator": "Withdraw Validator"
+    },
+    "details": {
+      "validatorBalance": "Validator Balance",
+      "index": "Index",
+      "balance": "Balance",
+      "slotsBehind": "Slots Behind",
+      "exploreBeaconChai": "Explore more on beaconchai.in dashbaoard",
+      "explore": "Explore",
+      "status": "Status",
+      "deposit": "Deposit",
+      "pending": "Pending",
+      "active": "Active",
+      "exit": "Exit"
     }
   }
 }
