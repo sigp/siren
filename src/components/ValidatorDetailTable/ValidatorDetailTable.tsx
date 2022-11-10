@@ -9,10 +9,11 @@ export interface ValidatorDetailTableProps {
 export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) => {
   const { balance } = validator;
   const income = balance ? balance - 32 : 0
+  const incomeColor = income > 0 ? 'text-success' : 'text-error';
   return (
     <>
       <div className="w-full lg:hidden">
-        <div className="border-t w-full">
+        <div className="border-t-style100 w-full">
           <div className="w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
               <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Balance</Typography>
@@ -27,7 +28,7 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
               <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Attested</Typography>
             </div>
           </div>
-          <div className="border-t w-full flex">
+          <div className="border-t-style100 w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
               <Typography type="text-caption1">{balance?.toFixed(4)}</Typography>
             </div>
@@ -42,7 +43,7 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
             </div>
           </div>
         </div>
-        <div className="border-t w-full">
+        <div className="border-t-style100 w-full">
           <div className="w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
               <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Aggregated</Typography>
@@ -57,7 +58,7 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
               <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Apr</Typography>
             </div>
           </div>
-          <div className="border-t w-full flex">
+          <div className="border-t-style100 w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
               <Typography type="text-caption1">0</Typography>
             </div>
@@ -73,7 +74,7 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
           </div>
         </div>
       </div>
-      <div className="hidden lg:block border-t w-full">
+      <div className="hidden lg:block border-t-style100 w-full">
         <div className="w-full flex">
           <div className="w-20 py-4 px-6">
             <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Balance</Typography>
@@ -100,12 +101,12 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
             <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Apr</Typography>
           </div>
         </div>
-        <div className="border-t w-full flex">
+        <div className="border-t-style100 w-full flex">
           <div className="w-20 py-4 px-6">
             <Typography type="text-caption1">{balance?.toFixed(4)}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1" color={income > 0 ? 'text-success' : 'text-error'}>{income.toFixed(4)}</Typography>
+            <Typography type="text-caption1" color={incomeColor} darkMode={incomeColor}>{income.toFixed(4)}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
             <Typography type="text-caption1">0</Typography>

@@ -71,6 +71,26 @@
         @apply border-b border-dark200 dark:border-dark500;
     }
 
+    .border-style100 {
+        @apply border border-dark10 dark:border-dark500;
+    }
+
+    .border-r-style100 {
+        @apply border-r border-dark10 dark:border-dark500;
+    }
+
+    .border-l-style100 {
+        @apply border-l border-dark10 dark:border-dark500;
+    }
+
+    .border-t-style100 {
+        @apply border-t border-dark10 dark:border-dark500;
+    }
+
+    .border-b-style100 {
+        @apply border-b border-dark10 dark:border-dark500;
+    }
+
     .primary-gradient-text {
         @apply bg-gradient-to-r from-primaryBright to-tertiary w-max bg-clip-text;
     }
