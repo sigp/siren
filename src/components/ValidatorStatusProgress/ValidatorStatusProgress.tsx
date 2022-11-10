@@ -4,12 +4,14 @@ import Typography from '../Typography/Typography';
 import ProgressIcon from './ProgressIcon';
 import getValidatorStatusStage from '../../utilities/getValidatorStatusStage';
 import ProgressBar from './ProgressBar';
+import { useTranslation } from 'react-i18next';
 
 export interface ValidatorStatusProgressProps {
   status: ValidatorStatus
 }
 
 const ValidatorStatusProgress:FC<ValidatorStatusProgressProps> = ({status}) => {
+  const {t} = useTranslation()
   const stage = getValidatorStatusStage(status)
   const isDeposit = stage >= 1
   const isPending = stage >= 2
@@ -19,22 +21,22 @@ const ValidatorStatusProgress:FC<ValidatorStatusProgressProps> = ({status}) => {
   return (
     <div className="w-full flex items-center">
       <div className="flex flex-col items-center">
-        <Typography type="text-caption2" color="text-dark300"><i className="bi-1-circle text-tiny"/> Deposit</Typography>
+        <Typography type="text-caption2" color="text-dark300"><i className="bi-1-circle text-tiny"/> {t('validatorManagement.details.deposit')}</Typography>
         <ProgressIcon isActive={isDeposit} className="text-subtitle2"/>
       </div>
       <ProgressBar isActive={isDeposit}/>
       <div className="flex flex-col items-center">
-        <Typography type="text-caption2" color="text-dark300"><i className="bi-2-circle text-tiny"/> Pending</Typography>
+        <Typography type="text-caption2" color="text-dark300"><i className="bi-2-circle text-tiny"/> {t('validatorManagement.details.pending')}</Typography>
         <ProgressIcon isActive={isPending} className="text-subtitle2"/>
       </div>
       <ProgressBar isActive={isPending}/>
       <div className="flex flex-col items-center">
-        <Typography type="text-caption2" color="text-dark300"><i className="bi-3-circle text-tiny"/> Active</Typography>
+        <Typography type="text-caption2" color="text-dark300"><i className="bi-3-circle text-tiny"/> {t('validatorManagement.details.active')}</Typography>
         <ProgressIcon isActive={isActive} className="text-subtitle2"/>
       </div>
       <ProgressBar isActive={isExit}/>
       <div className="flex flex-col items-center ml-1">
-        <Typography type="text-caption2" color="text-dark300"><i className="bi-4-circle text-tiny"/> Exit</Typography>
+        <Typography type="text-caption2" color="text-dark300"><i className="bi-4-circle text-tiny"/> {t('validatorManagement.details.exit')}</Typography>
         <ProgressIcon isActive={isExit} className="text-subtitle2"/>
       </div>
     </div>

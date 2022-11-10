@@ -18,30 +18,30 @@ const ValidatorSummary = () => {
     <div className="w-full max-w-850 flex flex-col lg:space-x-4 shadow lg:flex-row lg:divide-x divide-y lg:divide-y-0 dark:divide-dark600 dark:border dark:border-dark600">
       <div className="p-3 space-y-2">
         <Typography type="text-caption2" isBold isUpperCase>{t('validators')}</Typography>
-        <div className="flex space-x-8">
+        <div className="flex justify-between lg:justify-start lg:space-x-8">
           <Typography color="text-dark300" type="text-caption1" isCapitalize>{t('validatorManagement.summary.active')}</Typography>
           <Typography isBold type="text-caption1">{validators.length}</Typography>
         </div>
       </div>
       <div className="p-3 space-y-2">
         <Typography type="text-caption2" isBold isUpperCase>{t('validatorManagement.summary.totalBalance')}</Typography>
-        <div className="flex space-x-8">
+        <div className="flex justify-between lg:justify-start lg:space-x-8">
           <Typography color="text-dark300" type="text-caption1">{t('validatorManagement.summary.locked')}</Typography>
           <Typography isBold type="text-caption1">{totalBalance.toFixed(3)} ETH</Typography>
         </div>
       </div>
-      <ValidatorIncomeSummary validators={validators} className="p-3 space-y-2 w-42"/>
+      <ValidatorIncomeSummary validators={validators} className="p-3 space-y-2 w-full lg:w-42"/>
       <div className="p-3 space-y-2">
         <Typography type="text-caption2" isBold isUpperCase>{t('validatorManagement.summary.avgEffectiveness')}</Typography>
-        <div className="flex space-x-8">
+        <div className="flex justify-between lg:justify-start lg:space-x-8">
           <Status status="bg-success"/>
           <Typography isBold type="text-caption1">100%</Typography>
         </div>
       </div>
       <div className="p-3 space-y-2">
         <Typography type="text-caption2" isBold isUpperCase>{t('validatorManagement.summary.networkValidators')}</Typography>
-        <div className="flex space-x-2">
-          <Typography color="text-dark300" type="text-caption1">{t('validatorManagement.summary.active')}</Typography>
+        <div className="flex justify-between lg:justify-start lg:space-x-2">
+          <Typography color="text-dark300" isCapitalize type="text-caption1">{t('validatorManagement.summary.active')}</Typography>
           <Typography isBold type="text-caption1">138,847</Typography>
         </div>
       </div>

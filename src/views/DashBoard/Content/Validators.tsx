@@ -16,7 +16,7 @@ const Validators = () => {
   return (
     <div className='w-full grid grid-cols-1 lg:block lg:h-full p-4 mb-28 lg:mb-0'>
       <div className="w-full space-y-6 mb-6">
-        <div className="w-full flex justify-between">
+        <div className="w-full flex flex-col space-y-8 justify-between">
           <Typography fontWeight="font-light" type="text-subtitle1" className="capitalize">{t('validatorManagement.title')}</Typography>
           <ValidatorSummary/>
         </div>
