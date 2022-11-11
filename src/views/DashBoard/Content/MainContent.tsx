@@ -73,7 +73,7 @@ const MainContent = () => {
         </Suspense>
         <ErrorBoundary fallback={<TableErrorFallback />}>
           <Suspense fallback={<TableFallback />}>
-            <ValidatorTable />
+            <ValidatorTable className="mt-8 lg:mt-2" />
           </Suspense>
         </ErrorBoundary>
         <DiagnosticTable />

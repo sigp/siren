@@ -3,17 +3,22 @@ import { ReactComponent as ValidatorLogo } from '../../assets/images/validators.
 import { ReactComponent as SatelliteLogo } from '../../assets/images/satellite.svg'
 import ValidatorRow from './ValidatorRow'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
 import Spinner from '../Spinner/Spinner'
 import { FC } from 'react';
 import { selectFilteredValidators } from '../../recoil/selectors/selectFilteredValidators';
+import useMediaQuery from '../../hooks/useMediaQuery';
+import ValidatorInfoCard from '../ValidatorInfoCard/ValidatorInfoCard';
+import { ContentView } from '../../constants/enums';
+import { dashView, validatorIndex } from '../../recoil/atoms';
 
 export type TableView = 'partial' | 'full'
 
 export interface ValidatorTableProps {
   view?: TableView,
   isFilter?: boolean
+  className?: string
 }
 
 export const TableFallback = () => (
@@ -33,18 +38,30 @@ export const TableErrorFallback = () => {
   )
 }
 
-const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) => {
+const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter, className}) => {
   const { t } = useTranslation()
 
+  const isTablet = useMediaQuery('(max-width: 768px)')
   const validators = useRecoilValue(selectValidatorInfos)
   const filteredValidators = useRecoilValue(selectFilteredValidators)
 
+  const setDashView = useSetRecoilState(dashView)
+  const setValidatorIndex = useSetRecoilState(validatorIndex)
+
   const data = isFilter ? filteredValidators : validators
 
+  const viewValidator = (index: number) => {
+    setValidatorIndex(index)
+    setDashView(ContentView.VALIDATORS)
+  }
+
   return data.length ? (
-    <div className={`w-full ${view === 'partial' ? 'max-h-60.5' : ''} overflow-scroll mt-2 border-style500`}>
-      <table className='relative table-auto w-full'>
-        <thead className='sticky top-0 left-0 bg-white dark:bg-darkPrimary'>
+    <div className={`${className || ''} w-full ${view === 'partial' ? 'lg:max-h-60.5' : ''} ${isTablet ? 'flex flex-wrap space-y-4' : 'overflow-scroll mt-2 border-style500'}`}>
+      {isTablet ? data.map((validator, index) => (
+        <ValidatorInfoCard onClick={() => viewValidator(validator.index)} className="shadow cursor-pointer" key={index} validator={validator}/>
+      )) : (
+        <table className='relative table-auto w-full'>
+          <thead className='sticky top-0 left-0 bg-white dark:bg-darkPrimary'>
           <tr className='w-full h-12'>
             <th>
               <div className='w-full flex justify-center'>
@@ -150,13 +167,14 @@ const ValidatorTable:FC<ValidatorTableProps> = ({view = 'partial', isFilter}) =>
               </div>
             </th>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           {data.map((validator, index) => (
             <ValidatorRow view={view} validator={validator} key={index} />
           ))}
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      )}
     </div>
   ) : isFilter ? (
     <div className="w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700 min-h-60 opacity-70">
