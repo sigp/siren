@@ -46,6 +46,10 @@
     font-weight: 400;
 }
 
+.rodal-close {
+    z-index: 99;
+}
+
 @layer components {
     .border-style {
         @apply border border-borderLight dark:border-borderDark;
