@@ -11,6 +11,7 @@ import { dashView, validatorIndex } from '../../recoil/atoms';
 import { ContentView } from '../../constants/enums';
 import StatusIcon from '../StatusIcon/StatusIcon';
 import { BeaconChaValidatorUrl } from '../../constants/constants';
+import formatBalanceColor from '../../utilities/formatBalanceColor';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -23,6 +24,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const { name, pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
     validator
+  const rewardColor = formatBalanceColor(rewards)
 
   const viewValidator = () => {
     setValidatorIndex(index)
@@ -59,7 +61,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         </Typography>
       </th>
       <th className='px-2'>
-        <Typography color='text-dark500' type='text-caption1' className='uppercase'>
+        <Typography color={rewardColor} darkMode={rewardColor} type='text-caption1' className='uppercase'>
           {rewards.toFixed(4)}
         </Typography>
       </th>

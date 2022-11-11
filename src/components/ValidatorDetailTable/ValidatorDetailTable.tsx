@@ -1,6 +1,7 @@
 import Typography from '../Typography/Typography';
 import { FC } from 'react';
 import { ValidatorInfo } from '../../types/validator';
+import formatBalanceColor from '../../utilities/formatBalanceColor';
 
 export interface ValidatorDetailTableProps {
   validator: ValidatorInfo
@@ -9,7 +10,7 @@ export interface ValidatorDetailTableProps {
 export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) => {
   const { balance } = validator;
   const income = balance ? balance - 32 : 0
-  const incomeColor = income > 0 ? 'text-success' : 'text-error';
+  const incomeColor = formatBalanceColor(income);
   return (
     <>
       <div className="w-full lg:hidden">
@@ -109,22 +110,22 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
             <Typography type="text-caption1" color={incomeColor} darkMode={incomeColor}>{income.toFixed(4)}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
+            <Typography color="text-dark400" type="text-caption1">0</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
+            <Typography color="text-dark400" type="text-caption1">0</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
+            <Typography color="text-dark400" type="text-caption1">0</Typography>
           </div>
           <div className="w-12 py-4 px-6">
-            <Typography type="text-caption1">0</Typography>
+            <Typography color="text-dark400" type="text-caption1">0</Typography>
           </div>
           <div className="w-24 py-4 px-6">
-            <Typography type="text-caption1">100%</Typography>
+            <Typography color="text-dark400" type="text-caption1">100%</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption1">10%</Typography>
+            <Typography color="text-dark400" type="text-caption1">10%</Typography>
           </div>
         </div>
       </div>
