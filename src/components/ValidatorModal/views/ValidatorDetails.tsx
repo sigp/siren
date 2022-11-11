@@ -3,7 +3,6 @@ import { validatorIndex } from '../../../recoil/atoms';
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails';
 import { useEffect } from 'react';
 import Typography from '../../Typography/Typography';
-import Waves from '../../../assets/images/waves.png';
 import { selectEthExchangeRates } from '../../../recoil/selectors/selectEthExchangeRates';
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency';
 import Status from '../../Status/Status';
@@ -16,12 +15,13 @@ import ValidatorCardAction from '../ValidatorCardAction';
 import ViewDisclosures from '../../ViewDisclosures/ViewDisclosures';
 import { BeaconChaValidatorUrl } from '../../../constants/constants';
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable';
+import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard';
 
 const ValidatorDetails = () => {
   const {t} = useTranslation()
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const validator = useRecoilValue(selectValidatorDetail)
-  const { index, name, pubKey, balance, status } = validator || {}
+  const { index, balance, status } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0);
@@ -36,41 +36,7 @@ const ValidatorDetails = () => {
   return validator ? (
     <div className="w-full">
       <div className="w-full flex flex-col lg:flex-row">
-        <div className="w-full lg:w-80 h-60 border-r-style100 px-8 lg:px-6 py-4 relative">
-          <img
-            alt='waves'
-            src={Waves}
-            className='z-10 w-full h-full absolute left-0 top-0 opacity-10'
-          />
-          <div className="w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative">
-            <div className="w-full flex justify-between">
-              <div className="bg-gradient-to-br from-primaryBright via-primary to-secondary h-36 w-36 rounded-full"/>
-              <div className="text-right flex-1 flex flex-col justify-between">
-                <div>
-                  <Typography type="text-caption1" color="text-dark300">{index}</Typography>
-                  <Typography>{name}</Typography>
-                </div>
-                <div className="space-y-2">
-                  <div>
-                    <Typography color="text-dark300">—</Typography>
-                    <Typography type="text-caption2" color="text-dark300" isBold isUpperCase>{t('validatorManagement.details.validatorBalance')}</Typography>
-                  </div>
-                  <Typography isBold>{balance?.toFixed(4)}</Typography>
-                </div>
-              </div>
-            </div>
-            <div className="w-full flex">
-              <div className="flex-1 space-y-2">
-                <Typography type="text-caption2" color="text-dark300" isUpperCase>Pubkey</Typography>
-                <Typography type="text-caption1" isBold >{`${pubKey?.substring(0, 12)}...`}</Typography>
-              </div>
-              <div className="flex-1 space-y-2">
-                <Typography type="text-caption2" color="text-dark300" isUpperCase>{t('validatorManagement.details.index')}</Typography>
-                <Typography type="text-caption1" isBold >{index}</Typography>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ValidatorInfoCard validator={validator}/>
         <div className="flex-1 flex py-4 justify-center items-center">
           <div className="w-11/12 space-y-2">
             <div className="w-full flex flex-col border-style100 lg:flex-row lg:shadow">
