@@ -30,7 +30,7 @@ const NetworkStats = () => {
   const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
 
   return (
-    <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex'>
+    <div className='w-full h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex'>
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Validator'
@@ -49,6 +49,7 @@ const NetworkStats = () => {
       />
       <NetworkPeerSpeedometer/>
       <NetworkStatBlock
+        className="border-none"
         title={t('networkStats.participationRate')}
         status='bg-success'
         metricFontSize='text-subtitle3'
