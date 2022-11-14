@@ -23,7 +23,7 @@ const TopBar = () => {
         <Suspense fallback={<SyncMetricFallback />}>
           <BeaconMetric />
         </Suspense>
-        <div className='hidden md:flex w-24 border-r border-borderLight dark:border-dark800 p-2'>
+        <div className='hidden w-24 border-r border-borderLight dark:border-dark800 p-2'>
           <div className='flex-1 space-y-2'>
             <Typography family='font-roboto' type='text-tiny'>
               {t('slasher')}
@@ -42,7 +42,7 @@ const TopBar = () => {
         </div>
       </div>
       <div className='h-full flex'>
-        <Wallet className='hidden lg:flex' borderStyle='border-l' />
+        <Wallet className='hidden lg:flex opacity-20' borderStyle='border-l' />
         <Button
           className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
           type={ButtonFace.ICON}

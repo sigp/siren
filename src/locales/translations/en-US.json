@@ -31,6 +31,8 @@
   "disk": "Disk",
   "cpu": "CPU",
   "ram": "RAM",
+  "search": "Search...",
+  "noResultsFound": "No Results Found",
   "diagnostic": "Diagnostic",
   "device": "Device",
   "network": "Network",
@@ -58,6 +60,12 @@
   "disconnect": "Disconnect",
   "balance": "Balance",
   "rewards": "Rewards",
+  "income": "Income",
+  "proposed": "Proposed",
+  "attested": "Attested",
+  "aggregated": "Aggregated",
+  "in": "In",
+  "effectiveness": "Effectiveness",
   "status": "status",
   "account": "Account",
   "hourly": "hourly",
@@ -70,6 +78,8 @@
   "validators": "Validators",
   "validatorBalance": "Validator Balance",
   "viewAll": "View All",
+  "validatorGraffiti": "Validator Graffiti",
+  "graffitiGoesHere": "Graffiti goes here",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
@@ -177,6 +187,44 @@
     "links": {
       "website": "Website",
       "documentation": "Documentation"
+    }
+  },
+  "validatorManagement": {
+    "search": "search",
+    "title": "Validator Management",
+    "overview": "Overview",
+    "day": "Day",
+    "summary": {
+      "active": "active",
+      "totalBalance": "Total Balance",
+      "locked": "Locked",
+      "totalIncome": "Total Income",
+      "queue": "Queue",
+      "networkValidators": "Network Validators",
+      "avgEffectiveness": "Avg Effectiveness"
+    },
+    "actions": {
+      "deposit": "Deposit",
+      "add": "Add",
+      "depositFunds": "Deposit Funds",
+      "backupKeys": "Backup Keys",
+      "stopValidator": "Stop Validator",
+      "exportValidator": "Export Validator",
+      "exitValidator": "Exit Validator",
+      "withdrawValidator": "Withdraw Validator"
+    },
+    "details": {
+      "validatorBalance": "Validator Balance",
+      "index": "Index",
+      "balance": "Balance",
+      "slotsBehind": "Slots Behind",
+      "exploreBeaconChai": "Explore more on beaconchai.in dashbaoard",
+      "explore": "Explore",
+      "status": "Status",
+      "deposit": "Deposit",
+      "pending": "Pending",
+      "active": "Active",
+      "exit": "Exit"
     }
   }
 }

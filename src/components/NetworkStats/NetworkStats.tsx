@@ -23,14 +23,14 @@ const NetworkStats = () => {
   const beaconHealth = useRecoilValue(beaconHealthResult)
   const genesisTime = useRecoilValue(selectGenesisBlock)
 
-  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - genesisTime) / 12) : undefined
+  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - (genesisTime + 6)) / 12) : undefined
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
 
   const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
   const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
 
   return (
-    <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex'>
+    <div className='w-full h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex'>
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Validator'
@@ -45,10 +45,11 @@ const NetworkStats = () => {
         title={t('networkStats.headSlot')}
         status={headSlotStatus}
         metricFontSize='text-subtitle3'
-        metric={atHeadSlot !== undefined ? String(atHeadSlot) : '---'}
+        metric={atHeadSlot !== undefined ? String(atHeadSlot === 1 ? 0 : atHeadSlot) : '---'}
       />
       <NetworkPeerSpeedometer/>
       <NetworkStatBlock
+        className="border-none"
         title={t('networkStats.participationRate')}
         status='bg-success'
         metricFontSize='text-subtitle3'

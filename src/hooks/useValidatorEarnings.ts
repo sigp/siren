@@ -1,15 +1,13 @@
 import { useRecoilValue } from 'recoil'
-import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 import { useMemo } from 'react'
 import { fetchValidatorStatuses } from '../api/beacon'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
-import { BeaconValidatorResult } from '../types/validator'
+import { BeaconValidatorResult, ValidatorInfo } from '../types/validator';
 import { formatUnits } from 'ethers/lib/utils'
 import { initialEthDeposit } from '../constants/constants'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 
-const useValidatorEarnings = () => {
-  const validators = useRecoilValue(selectValidatorInfos)
+const useValidatorEarnings = (validators: ValidatorInfo[]) => {
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
   const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
 

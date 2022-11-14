@@ -11,7 +11,7 @@ const ViewDisclosures = () => {
         family='font-archivo'
         color='text-primary'
         type='text-caption1'
-        className='uppercase'
+        isUpperCase
       >
         {t('viewDisclosures')}
       </Typography>

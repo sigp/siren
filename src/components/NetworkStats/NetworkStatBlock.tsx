@@ -7,6 +7,7 @@ export interface NetworkStatBlockProps {
   metric: string
   subTitle?: string
   status?: StatusType
+  className?: string
   metricFontSize?: 'text-caption2' | 'text-subtitle3'
 }
 
@@ -14,11 +15,12 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
   title,
   subTitle,
   metric,
+  className,
   metricFontSize = 'text-caption2',
   status,
 }) => {
   return (
-    <div className='py-2 px-2 xl:px-4 h-full flex flex-col justify-between w-40 @1600:w-auto @1600:flex-1 border-r-style500'>
+    <div className={`${className} py-2 px-2 xl:px-4 h-full flex flex-col justify-between w-40 @1600:w-auto @1600:flex-1 border-r-style500`}>
       <Typography type='text-tiny' className='uppercase' isBold darkMode='dark:text-white'>
         {title}
       </Typography>
