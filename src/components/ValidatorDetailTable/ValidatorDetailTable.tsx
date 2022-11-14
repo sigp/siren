@@ -2,12 +2,14 @@ import Typography from '../Typography/Typography';
 import { FC } from 'react';
 import { ValidatorInfo } from '../../types/validator';
 import formatBalanceColor from '../../utilities/formatBalanceColor';
+import { useTranslation } from 'react-i18next';
 
 export interface ValidatorDetailTableProps {
   validator: ValidatorInfo
 }
 
 export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) => {
+  const {t} = useTranslation()
   const { balance } = validator;
   const income = balance ? balance - 32 : 0
   const incomeColor = formatBalanceColor(income);
@@ -17,16 +19,16 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
         <div className="border-t-style100 w-full">
           <div className="w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Balance</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('balance')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Income</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('income')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Proposed</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('proposed')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Attested</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('attested')}</Typography>
             </div>
           </div>
           <div className="border-t-style100 w-full flex">
@@ -47,13 +49,13 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
         <div className="border-t-style100 w-full">
           <div className="w-full flex">
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Aggregated</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('aggregated')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>In</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('in')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
-              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Effectiveness</Typography>
+              <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('effectiveness')}</Typography>
             </div>
             <div className="flex-1 py-2 px-2 md:py-4 md:px-6">
               <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Apr</Typography>
@@ -78,25 +80,25 @@ export const ValidatorDetailTable:FC<ValidatorDetailTableProps> = ({validator}) 
       <div className="hidden lg:block border-t-style100 w-full">
         <div className="w-full flex">
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Balance</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('balance')}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Income</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('income')}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Proposed</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('proposed')}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Attested</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('attested')}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Aggregated</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('aggregated')}</Typography>
           </div>
           <div className="w-12 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>In</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('in')}</Typography>
           </div>
           <div className="w-24 py-4 px-6">
-            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Effectiveness</Typography>
+            <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>{t('effectiveness')}</Typography>
           </div>
           <div className="w-20 py-4 px-6">
             <Typography type="text-caption2" color="text-dark500" isBold isUpperCase>Apr</Typography>

@@ -60,6 +60,12 @@
   "disconnect": "Disconnect",
   "balance": "Balance",
   "rewards": "Rewards",
+  "income": "Income",
+  "proposed": "Proposed",
+  "attested": "Attested",
+  "aggregated": "Aggregated",
+  "in": "In",
+  "effectiveness": "Effectiveness",
   "status": "status",
   "account": "Account",
   "hourly": "hourly",
@@ -72,6 +78,8 @@
   "validators": "Validators",
   "validatorBalance": "Validator Balance",
   "viewAll": "View All",
+  "validatorGraffiti": "Validator Graffiti",
+  "graffitiGoesHere": "Graffiti goes here",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
