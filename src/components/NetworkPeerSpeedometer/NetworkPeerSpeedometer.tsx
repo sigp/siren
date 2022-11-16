@@ -36,7 +36,7 @@ const NetworkPeerSpeedometer = () => {
   }, [beaconEndpoint])
 
   return (
-    <div className='relative py-2 px-4 h-full w-52 border-r-style500'>
+    <div className='relative py-6 md:py-2 px-4 h-full w-full md:w-52 border-b-style500 md:border-b-0 md:border-r-style500'>
       <Typography type='text-tiny' className='uppercase' isBold darkMode='dark:text-white'>
         {t('networkStats.connectedPeers')}
       </Typography>

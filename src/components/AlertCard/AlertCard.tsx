@@ -8,7 +8,7 @@ export interface AlertCardProps extends StatusBarProps {
 
 const AlertCard: FC<AlertCardProps> = ({ text, subText, ...props }) => {
   return (
-    <div className='w-full h-14 border-t-0 border-l-0 border-style500 flex justify-between items-center space-x-2 p-2'>
+    <div className='w-full h-14 border-t-0 md:border-l-0 border-style500 flex justify-between items-center space-x-2 p-2'>
       <StatusBar {...props} />
       <div className='w-full max-w-tiny'>
         <Typography type='text-caption2'>{text}</Typography>

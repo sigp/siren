@@ -41,16 +41,17 @@ const MainContent = () => {
   return (
     <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
       <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
-        <div className='p-4 flex items-center justify-between'>
+        <div className='py-4 md:px-4 flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between'>
           <Typography
             type='text-subtitle1'
             darkMode='dark:text-white'
-            className='xl:text-h3 capitalize'
+            className='xl:text-h3'
+            isCapitalize
             fontWeight='font-light'
           >
             {t('helloUser', { user: name })}
           </Typography>
-          <div className='flex space-x-16'>
+          <div className='flex w-full md:w-auto justify-between md:justify-start md:space-x-16'>
             <div>
               <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
                 {t('lighthouseVersion')}

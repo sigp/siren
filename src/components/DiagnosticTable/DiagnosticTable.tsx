@@ -6,7 +6,7 @@ import TableColumnFallback from './TableColumnFallback'
 
 const DiagnosticTable = () => {
   return (
-    <div className='flex-1 flex mt-2 w-full'>
+    <div className='flex-1 flex flex-col space-y-4 md:space-y-0 md:flex-row mt-2 w-full'>
       <Suspense fallback={<TableColumnFallback size='lg' />}>
         <HardwareInfo />
       </Suspense>
