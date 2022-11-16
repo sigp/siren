@@ -6,7 +6,7 @@ const AlertInfo = () => {
   const { t } = useTranslation()
   return (
     <div className='h-full w-full flex flex-col'>
-      <div className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-style500'>
+      <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>
         <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
           {t('alertInfo.alerts')}
         </Typography>
@@ -38,7 +38,7 @@ const AlertInfo = () => {
         subText={t('good')}
         text={t('alertInfo.participation', { percent: 68 })}
       />
-      <div className='flex-1 border-l-0 border-t-0 border-style500 flex items-center justify-center'>
+      <div className='flex-1 md:border-l-0 border-t-0 border-style500 flex items-center justify-center'>
         <i className='bi bi-lightning-fill text-primary text-h3 opacity-20' />
       </div>
     </div>

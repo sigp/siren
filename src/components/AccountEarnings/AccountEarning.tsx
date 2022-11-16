@@ -84,8 +84,8 @@ const AccountEarning = () => {
             </Typography>
           </div>
           <div className='w-full mt-6 flex items-center'>
-            <LightHouseLogo className='text-white w-16 h-16' />
-            <div className='flex-1 ml-12 flex items-center space-x-2 justify-between'>
+            <LightHouseLogo className='hidden md:block text-white w-16 h-16' />
+            <div className='flex-1 ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
               <div>
                 <SelectDropDown
                   color='text-white'
@@ -126,8 +126,8 @@ const AccountEarning = () => {
           <hr className='w-full h-px bg-white mt-4' />
         </div>
         <div className='bg-gradient-to-t via-transWhite from-white dark:from-darkPrimary'>
-          <div className='px-4 flex justify-between'>
-            <Typography color='text-white'>{t('accountEarnings.earnings')}</Typography>
+          <div className='md:px-4 flex justify-between'>
+            <Typography className="hidden md:block" color='text-white'>{t('accountEarnings.earnings')}</Typography>
             <div className='flex ml-8 space-x-1'>
               {EARNINGS_OPTIONS.map(({ value, title }) => (
                 <Button
@@ -142,7 +142,7 @@ const AccountEarning = () => {
               ))}
             </div>
           </div>
-          <div className='flex justify-between mt-2 p-4'>
+          <div className='flex justify-between space-x-2 md:space-x-0 mt-2 p-4'>
             <div className='flex space-x-4'>
               <EthLogo className='h-10 w-10' />
               <div>
@@ -157,7 +157,7 @@ const AccountEarning = () => {
                     <Spinner size='w-3 h-3' />
                   </div>
                 ) : (
-                  <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
+                  <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
                     {formatLocalCurrency(historicalAmount || total, { max: 4 })} ETH
                   </Typography>
                 )}
@@ -167,7 +167,7 @@ const AccountEarning = () => {
               <UsdcLogo className='h-10 w-10' />
               <div>
                 <div className='flex space-x-2'>
-                  <Typography type='text-caption1' className='uppercase' color='text-dark400'>
+                  <Typography type='text-caption1' isUpperCase color='text-dark400'>
                     USD
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
@@ -177,7 +177,7 @@ const AccountEarning = () => {
                     <Spinner size='w-3 h-3' />
                   </div>
                 ) : (
-                  <Typography type='text-subtitle3' darkMode='dark:text-white' family='font-roboto'>
+                  <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
                     {formattedPrefix}
                     {formatLocalCurrency(totalHistoricalBalance)} {activeCurrency}
                   </Typography>
