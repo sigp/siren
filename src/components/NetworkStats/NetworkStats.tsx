@@ -3,12 +3,10 @@ import { beaconHealthResult, validatorHealthResult } from '../../recoil/atoms';
 import NetworkStatBlock from './NetworkStatBlock'
 import { useTranslation } from 'react-i18next'
 import secondsToShortHand from '../../utilities/secondsToShortHand';
-import { selectGenesisBlock } from '../../recoil/selectors/selectGenesisBlock';
 import Spinner from '../Spinner/Spinner';
-import moment from 'moment';
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo';
 import formatAtHeadSlotStatus from '../../utilities/formatAtHeadSlotStatus';
 import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer';
+import { selectAtHeadSlot } from '../../recoil/selectors/selectAtHeadSlot';
 
 export const NetworkStatsFallback = () => (
   <div className="w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center">
@@ -18,12 +16,10 @@ export const NetworkStatsFallback = () => (
 
 const NetworkStats = () => {
   const { t } = useTranslation()
-  const {headSlot} = useRecoilValue(selectBeaconSyncInfo)
   const validatorHealth = useRecoilValue(validatorHealthResult)
   const beaconHealth = useRecoilValue(beaconHealthResult)
-  const genesisTime = useRecoilValue(selectGenesisBlock)
 
-  const atHeadSlot = genesisTime && headSlot ? headSlot - Math.floor((moment().unix() - (genesisTime + 6)) / 12) : undefined
+  const atHeadSlot = useRecoilValue(selectAtHeadSlot)
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
 
   const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
