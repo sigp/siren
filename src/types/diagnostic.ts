@@ -13,6 +13,7 @@ export type HealthDiagnosticResult = {
   network_bytes_total_received: number
   network_bytes_total_transmit: number
   network_name: string
+  nat_open: boolean
   os_version: string
   sys_loadavg_1: number // CPU Usage percentage data
   sys_loadavg_5: number // CPU Usage percentage data
@@ -69,6 +70,8 @@ export type Diagnostics = {
   ramStatus: StatusType
   cpuStatus: StatusType
   cpuUtilization: string
+  networkName?: string
+  natOpen: boolean
   uptime: string
   healthCondition: DiagnosticRate
   overallHealthStatus: StatusType
