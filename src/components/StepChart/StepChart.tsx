@@ -109,7 +109,7 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
       chart?.destroy()
       setChart(undefined)
     }
-  }, [chartEl, data, hasAnimated])
+  }, [chartEl, data, hasAnimated, mode])
 
   return <canvas ref={chartEl} width='100%' height={45} />
 }
