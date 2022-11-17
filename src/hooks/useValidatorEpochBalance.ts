@@ -13,6 +13,7 @@ import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 import { validatorIncrementTimestamp, validatorIntervalIncrement, validatorStateInfo } from '../recoil/atoms';
 import { secondsInEpoch, slotsInEpoc } from '../constants/constants';
 import moment from 'moment';
+import { selectAtHeadSlot } from '../recoil/selectors/selectAtHeadSlot';
 
 const useValidatorEpochBalance = () => {
   const validators = useRecoilValue(selectValidators)
@@ -21,8 +22,15 @@ const useValidatorEpochBalance = () => {
   const validatorIncrement = useRecoilValue(validatorIntervalIncrement)
   const [timestamp, setTimeStamp] = useRecoilState(validatorIncrementTimestamp)
   const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
+  const atHeadSlot = useRecoilValue(selectAtHeadSlot)
 
   const [epochs, setEpochs] = useState<BeaconValidatorResult[][]>([])
+
+  useEffect(() => {
+    if((atHeadSlot || 0) < -5) {
+      void fetchEpochBalances()
+    }
+  }, [atHeadSlot])
 
   const fetchEpochBalances = async () => {
     if (!baseBeaconUrl || !validators.length) return
