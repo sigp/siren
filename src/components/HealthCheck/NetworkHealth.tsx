@@ -6,11 +6,16 @@ import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
 import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo';
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
   const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
   const  { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
+  const {
+    networkName,
+    natOpen
+  } = useDeviceDiagnostics()
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
@@ -21,14 +26,15 @@ const NetworkHealth = () => {
         size='health'
         title={t('network')}
         isBackground={false}
+        metric={networkName ? ' ' : undefined}
         subTitleHighlightColor='bg-warning'
-        subTitle={t('networkUnavailable')}
-        status='bg-dark100'
+        subTitle={networkName ? networkName : t('networkUnavailable')}
+        status={natOpen ? 'bg-success' : 'bg-dark100'}
       />
       <DiagnosticCard
         size='health'
         title='Ethereum Geth'
-        metric='0H 01M'
+        metric=' '
         percent={syncPercentage}
         isBackground={false}
         subTitle={t('connectedStatus', { status: isReady ? t('inSync') : t('outOfSync') })}
