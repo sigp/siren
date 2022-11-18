@@ -129,3 +129,8 @@ export const validatorIndex = atom<number | undefined>({
   default: undefined
 })
 
+export const validatorPeerCount = atom<number | undefined>({
+  key: 'validatorPeerCount',
+  default: undefined
+})
+

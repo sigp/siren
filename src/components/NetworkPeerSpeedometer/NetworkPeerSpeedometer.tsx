@@ -1,39 +1,14 @@
 import ReactSpeedometer, { CustomSegmentLabelPosition } from 'react-d3-speedometer'
 import { UiMode } from '../../constants/enums';
 import { useRecoilValue } from 'recoil';
-import { beaconNodeEndpoint, uiMode } from '../../recoil/atoms';
-import { useEffect, useState } from 'react';
-import { fetchPeerCount } from '../../api/beacon';
-import usePollingInterval from '../../hooks/usePollingInterval';
+import { uiMode, validatorPeerCount } from '../../recoil/atoms';
 import Typography from '../Typography/Typography';
 import { useTranslation } from 'react-i18next';
-import { secondsInSlot } from '../../constants/constants';
 
 const NetworkPeerSpeedometer = () => {
   const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
-  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
-  const [peers, setPeers] = useState<number>(0)
-
-  const fetchPeers = async () => {
-    if(!beaconEndpoint) return;
-
-    try {
-      const {data} = await fetchPeerCount(beaconEndpoint);
-
-      setPeers(Number(data.data.connected))
-    } catch (e) {
-      console.error(e)
-    }
-  }
-
-  usePollingInterval(fetchPeers, secondsInSlot * 2000)
-
-  useEffect(() => {
-    if(beaconEndpoint) {
-      void fetchPeers()
-    }
-  }, [beaconEndpoint])
+  const peers = useRecoilValue(validatorPeerCount)
 
   return (
     <div className='relative py-6 md:py-2 px-4 h-full w-full md:w-52 border-b-style500 md:border-b-0 md:border-r-style500'>

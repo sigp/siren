@@ -22,6 +22,7 @@ import useLocalStorage from '../../../hooks/useLocalStorage';
 import { UsernameStorage } from '../../../types/storage';
 import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling';
 import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling';
+import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling';
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -37,6 +38,7 @@ const MainContent = () => {
   useValidatorInfoPolling()
   useValidatorHealthPolling()
   useBeaconHealthPolling()
+  useValidatorPeerPolling()
 
   return (
     <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
