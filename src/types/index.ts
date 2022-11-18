@@ -29,3 +29,9 @@ export type Endpoint = {
   address: string
   port: number
 }
+
+export type Alert = {
+  message: string
+  subText: string
+  severity: StatusType
+}

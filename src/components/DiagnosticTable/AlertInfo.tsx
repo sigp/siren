@@ -1,9 +1,11 @@
 import Typography from '../Typography/Typography'
 import AlertCard from '../AlertCard/AlertCard'
 import { useTranslation } from 'react-i18next'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts';
 
 const AlertInfo = () => {
   const { t } = useTranslation()
+  const { natAlert, peerCountAlert } = useDiagnosticAlerts()
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>
@@ -14,30 +16,22 @@ const AlertInfo = () => {
           {t('viewAll')}
         </Typography>
       </div>
-      <AlertCard
-        status='bg-success'
-        count={3}
-        subText={t('good')}
-        text={t('alertInfo.participation', { percent: 66 })}
-      />
-      <AlertCard
-        status='bg-warning'
-        count={1}
-        subText={t('fair')}
-        text={t('alertInfo.process', { status: 'Process Down' })}
-      />
-      <AlertCard
-        status='bg-success'
-        count={3}
-        subText={t('good')}
-        text={t('alertInfo.peerCount', { count: 32 })}
-      />
-      <AlertCard
-        status='bg-success'
-        count={3}
-        subText={t('good')}
-        text={t('alertInfo.participation', { percent: 68 })}
-      />
+      {natAlert && (
+        <AlertCard
+          status={natAlert.severity}
+          count={3}
+          subText={natAlert.subText}
+          text={natAlert.message}
+        />
+      )}
+      {peerCountAlert && (
+        <AlertCard
+          status={peerCountAlert.severity}
+          count={2}
+          subText={peerCountAlert.subText}
+          text={peerCountAlert.message}
+        />
+      )}
       <div className='flex-1 md:border-l-0 border-t-0 border-style500 flex items-center justify-center'>
         <i className='bi bi-lightning-fill text-primary text-h3 opacity-20' />
       </div>
