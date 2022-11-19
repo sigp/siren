@@ -226,5 +226,14 @@
       "active": "Active",
       "exit": "Exit"
     }
+  },
+  "alert": {
+    "type": {
+      "nodeValidator": "Node / Validator",
+      "network": "Network"
+    },
+    "natClosedStatus": "{{type}}: Nat status is closed",
+    "peerCountLow": "{{type}}: Peer count extremely low",
+    "peerCountMedium": "{{type}}: Peer count reaching low levels"
   }
 }

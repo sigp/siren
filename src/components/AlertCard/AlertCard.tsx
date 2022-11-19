@@ -12,7 +12,7 @@ const AlertCard: FC<AlertCardProps> = ({ text, subText, ...props }) => {
       <StatusBar {...props} />
       <div className='w-full max-w-tiny'>
         <Typography type='text-caption2'>{text}</Typography>
-        <Typography type='text-caption2' className='uppercase'>
+        <Typography type='text-caption2' isUpperCase>
           {subText}
         </Typography>
       </div>
