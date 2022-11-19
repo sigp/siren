@@ -3,8 +3,10 @@ import { useRecoilValue } from 'recoil';
 import { validatorPeerCount } from '../recoil/atoms';
 import { useMemo } from 'react';
 import { Alert } from '../types';
+import { useTranslation } from 'react-i18next';
 
 const useDiagnosticAlerts = () => {
+  const {t} = useTranslation()
   const {
     natOpen
   } = useDeviceDiagnostics()
@@ -14,8 +16,8 @@ const useDiagnosticAlerts = () => {
     if(natOpen) return
 
     return {
-      message: 'Network: NAT status is closed.',
-      subText: 'Poor',
+      message: t('alert.natClosedStatus', {type: t('alert.type.network')}),
+      subText: t('poor'),
       severity: 'bg-error'
     }
   }, [natOpen])
@@ -26,14 +28,14 @@ const useDiagnosticAlerts = () => {
     switch (true) {
       case peers < 20:
         return {
-          message: 'Node / Validator: Peer count extremely low',
-          subText: 'Poor',
+          message: t('alert.peerCountLow', {type: t('alert.type.nodeValidator')}),
+          subText: t('poor'),
           severity: 'bg-error'
         }
       case peers > 20 && peers < 50:
         return {
-          message: 'Node / Validator: Peer count reaching low levels',
-          subText: 'Fair',
+          message: t('alert.peerCountMedium', {type: t('alert.type.nodeValidator')}),
+          subText: t('fair'),
           severity: 'bg-warning'
       }
       default:
