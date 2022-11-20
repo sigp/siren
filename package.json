@@ -1,4 +1,8 @@
 {
+  "main": "src/main.ts",
+  "description": "Electron Forge & Create React App Template",
+  "license": "MIT",
+  "homepage": "./",
   "name": "lighthouse-ui",
   "version": "0.1.0",
   "private": true,
@@ -16,6 +20,7 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "chart.js": "^3.9.1",
+    "electron-squirrel-startup": "^1.0.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "ethers": "^5.7.1",
     "i18next": "^21.9.2",
@@ -41,12 +46,19 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "electron": "WEB_URL=http://localhost:3000 electron .",
+    "electron-prd": "electron .",
+    "electron-forge": "WEB_URL=http://localhost:3000 electron-forge start",
+    "electron-forge-prd": "electron-forge start",
+    "build-all": "npm run build; npm run make",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "test-storybook": "test-storybook",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
-    "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc"
+    "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -77,6 +89,11 @@
     ]
   },
   "devDependencies": {
+    "@electron-forge/cli": "^6.0.3",
+    "@electron-forge/maker-deb": "^6.0.3",
+    "@electron-forge/maker-rpm": "^6.0.3",
+    "@electron-forge/maker-squirrel": "^6.0.3",
+    "@electron-forge/maker-zip": "^6.0.3",
     "@faker-js/faker": "^7.5.0",
     "@storybook/addon-actions": "^6.5.10",
     "@storybook/addon-essentials": "^6.5.10",
@@ -95,6 +112,7 @@
     "@typescript-eslint/parser": "^5.38.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.8.1",
+    "electron": "^21.3.0",
     "eslint": "8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
@@ -104,6 +122,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.8",
+    "foreman": "^3.0.1",
     "jest": "27",
     "postcss": "^8",
     "prettier": "^2.7.1",

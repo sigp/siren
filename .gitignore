@@ -28,3 +28,4 @@ build-storybook.log
 
 # local-testnet
 /local-testnet/testnet-data
+/out
