@@ -15,6 +15,7 @@ const HardwareInfo = () => {
     ramStatus,
     cpuUtilization,
     cpuStatus,
+    frequency
   } = useDeviceDiagnostics()
 
   const isMobile = useMediaQuery('(max-width: 425px)')
@@ -55,7 +56,7 @@ const HardwareInfo = () => {
         maxHeight='flex-1'
         size={size}
         border='border-t-0 border-style500'
-        metric='- GHZ'
+        metric={frequency ? frequency : ' '}
         subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />

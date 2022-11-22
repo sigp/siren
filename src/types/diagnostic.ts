@@ -67,6 +67,7 @@ export type Diagnostics = {
   diskStatus: StatusType
   totalMemory: number
   memoryUtilization: number
+  frequency?: string
   ramStatus: StatusType
   cpuStatus: StatusType
   cpuUtilization: string
