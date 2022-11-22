@@ -35,7 +35,7 @@ const AccountEarning = () => {
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
   const initialEth = validators.length * initialEthDeposit;
-  const annualizedPercent = totalRewards > 0 ? (Math.pow(((total) / initialEth), 1) - 1) * 100 : 0
+  const annualizedPercent = (Math.pow(((total) / initialEth), 1) - 1) * 100
 
   const activeRate = rates[activeCurrency]
   const formattedRate = activeRate ? Number(activeRate) : 0
