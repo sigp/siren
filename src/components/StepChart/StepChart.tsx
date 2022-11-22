@@ -66,6 +66,7 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
       data,
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         animation: {
           duration: hasAnimated ? 0 : 1500,
           onComplete: () => {
@@ -111,7 +112,11 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
     }
   }, [chartEl, data, hasAnimated, mode])
 
-  return <canvas ref={chartEl} width='100%' height={45} />
+  return (
+    <div className="w-full h-full relative">
+      <canvas ref={chartEl} />
+    </div>
+  )
 }
 
 export default StepChart
