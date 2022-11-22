@@ -16,12 +16,16 @@ const useValidatorEarnings = (validators: ValidatorInfo[]) => {
   }, [validators])
 
   const total = useMemo(() => {
+    return validators.map(validator => validator.balance).reduce((a, b) => a + b, 0)
+  }, [validators])
+
+  const totalRewards = useMemo(() => {
     return validators.map((validator) => validator.rewards).reduce((a, b) => a + b, 0)
   }, [validators])
 
   const fetchHistory = async (distance: number) => {
     if (distance > headSlot) {
-      return total
+      return totalRewards
     }
 
     if (!baseBeaconUrl) return
@@ -39,11 +43,12 @@ const useValidatorEarnings = (validators: ValidatorInfo[]) => {
       )
       .reduce((a: number, b: number) => a + b, 0)
 
-    return total - previousEarning
+    return totalRewards - previousEarning
   }
 
   return {
     total,
+    totalRewards,
     fetchHistory,
   }
 }
