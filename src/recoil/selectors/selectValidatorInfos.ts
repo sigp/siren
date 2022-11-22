@@ -14,7 +14,7 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
     if (!validatorStates) return []
 
     const validatorInfo = [...validatorStates].sort(
-      (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(b.index) - Number(a.index),
+      (a: BeaconValidatorResult, b: BeaconValidatorResult) => Number(a.index) - Number(b.index),
     )
 
     return validatorInfo.map(({ validator, index, status, balance }: BeaconValidatorResult) => {
