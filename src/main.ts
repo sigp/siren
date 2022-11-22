@@ -11,7 +11,6 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     webPreferences: {
-      devTools: false,
       nodeIntegration: true,
       contextIsolation: false,
     },
@@ -20,16 +19,13 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   const startUrl =
-    process.env.WEB_URL ||
+    process.env.ELECTRON_START_URL ||
     url.format({
       pathname: path.join(__dirname, '../build/index.html'),
       protocol: 'file',
       slashes: true,
     })
   mainWindow.loadURL(startUrl)
-
-  // Open the DevTools.
-  mainWindow.webContents.openDevTools()
 }
 
 app.on('ready', createWindow)

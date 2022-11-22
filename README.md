@@ -59,3 +59,22 @@ subdirectories will create a new testnet when running these commands again.
 ## Logs and Errors
 
 Logs and errors can be found in the `./local-testnet/testnet-data` directory.
+
+
+# Running Local Electron App
+You can run this app locally with react scripts and electronJs. 
+
+## Requirements
+`Node v16.16.0` and `yarn`
+
+## How to setup and run local
+
+CD into root of the project and run to setup node modules
+```bash 
+yarn
+```
+
+Then run local server and electron by running:
+```bash 
+yarn dev
+```
