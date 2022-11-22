@@ -41,8 +41,8 @@ const TopBar = () => {
           <SlasherLogo className='w-6 h-6 text-primary' />
         </div>
       </div>
-      <div className='h-full flex'>
-        <Wallet className='hidden lg:flex opacity-20' borderStyle='border-l' />
+      <div className='h-full flex opacity-20'>
+        <Wallet className='hidden lg:flex' borderStyle='border-l' />
         <Button
           className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
           type={ButtonFace.ICON}
@@ -55,9 +55,9 @@ const TopBar = () => {
         >
           <i className='bi bi-bell-fill text-2xl text-dark300' />
         </Button>
-        <div className='h-full w-8 bg-gradient-to-b from-primary to-secondary flex items-center justify-center cursor-pointer'>
-          <i className='bi bi-three-dots-vertical text-white text-3xl' />
-        </div>
+        {/* <div className='h-full w-8 bg-gradient-to-b from-primary to-secondary flex items-center justify-center cursor-pointer'> */}
+        {/*   <i className='bi bi-three-dots-vertical text-white text-3xl' /> */}
+        {/* </div> */}
       </div>
     </div>
   )
