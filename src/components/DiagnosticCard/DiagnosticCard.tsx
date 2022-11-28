@@ -90,6 +90,8 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between'>
         <Typography
           type={isSmall ? 'text-tiny' : 'text-caption1'}
+          color={subTitleHighlightColor ? 'text-dark900' : undefined}
+          darkMode={subTitleHighlightColor ? 'dark:text-dark900' : undefined}
           className={subTitleHighlightColor ? `${subTitleHighlightColor} px-1` : undefined}
         >
           {subTitle}
