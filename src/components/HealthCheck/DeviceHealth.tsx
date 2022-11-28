@@ -31,7 +31,7 @@ const DeviceHealth = () => {
       <DiagnosticCard
         size='health'
         title={t('cpu')}
-        metric={frequency ? frequency : ' '}
+        metric={Number(frequency) ? frequency : ' '}
         subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
