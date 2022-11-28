@@ -8,3 +8,5 @@ declare module '*.svg' {
 declare module '*.png';
 
 declare module 'rodal';
+
+declare module 'svg-identicon'

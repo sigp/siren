@@ -35,10 +35,12 @@
     "react-toastify": "^9.0.8",
     "recoil": "^0.7.5",
     "rodal": "^2.0.0",
+    "svg-identicon": "^1.0.1",
     "tailwindcss": "^3.1.8",
     "tailwindcss-scoped-groups": "^2.0.0",
     "typescript": "*",
     "web-vitals": "^2.1.0",
+    "xmlbuilder": "^15.1.1",
     "yup": "^0.32.11"
   },
   "scripts": {
