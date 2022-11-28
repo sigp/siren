@@ -12,6 +12,7 @@ import { ContentView } from '../../constants/enums';
 import StatusIcon from '../StatusIcon/StatusIcon';
 import { BeaconChaValidatorUrl } from '../../constants/constants';
 import formatBalanceColor from '../../utilities/formatBalanceColor';
+import IdenticonIcon from '../IdenticonIcon/IdenticonIcon';
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -35,7 +36,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     <tr className='w-full border-t-style500 h-12'>
       <th className='px-2'>
         <div className='w-full flex justify-center'>
-          <div className='w-8 h-8 bg-gradient-to-br from-primaryBright via-primary to-secondary rounded-full' />
+          <IdenticonIcon size={32} type="CIRCULAR" hash={pubKey}/>
         </div>
       </th>
       <th className='w-28'>

@@ -3,6 +3,7 @@ import Typography from '../Typography/Typography';
 import { FC } from 'react';
 import { ValidatorInfo } from '../../types/validator';
 import { useTranslation } from 'react-i18next';
+import IdenticonIcon from '../IdenticonIcon/IdenticonIcon';
 
 export interface ValidatorInfoCardProps {
   validator: ValidatorInfo
@@ -23,7 +24,7 @@ const ValidatorInfoCard:FC<ValidatorInfoCardProps> = ({validator, className, onC
       />
       <div className="w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative">
         <div className="w-full flex justify-between">
-          <div className="bg-gradient-to-br from-primaryBright via-primary to-secondary h-36 w-36 rounded-full"/>
+          <IdenticonIcon size={144} type="CIRCULAR" hash={pubKey}/>
           <div className="text-right flex-1 flex flex-col justify-between">
             <div>
               <Typography type="text-caption1" color="text-dark300">{index}</Typography>
