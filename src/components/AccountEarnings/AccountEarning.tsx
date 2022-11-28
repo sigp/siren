@@ -46,6 +46,7 @@ const AccountEarning = () => {
   const formattedPrefix = prefix && prefix.length === 1 ? prefix : ''
 
   const currencyOptions = [...currencies].sort().map((currency) => ({ title: currency }))
+  const annualizedTextColor = formatBalanceColor(annualizedPercent)
 
   const viewEarnings = async (value: number) => {
     setOption(value)
@@ -196,8 +197,8 @@ const AccountEarning = () => {
               </div>
               <Typography
                 type='text-subtitle3'
-                color={formatBalanceColor(annualizedPercent)}
-                darkMode='dark:text-success'
+                color={annualizedTextColor}
+                darkMode={annualizedTextColor}
                 family='font-roboto'
               >
                 {annualizedPercent.toFixed(2)}%
