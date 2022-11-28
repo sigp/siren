@@ -57,7 +57,7 @@ const useValidatorEpochBalance = () => {
   }
 
   const formattedEpochData = useMemo<ValidatorEpochData[]>(() => {
-    return epochs.length ? validators.map(({ pubKey, name }) => ({
+    return epochs.length ? validators.slice(0, 10).map(({ pubKey, name }) => ({
       name,
       data: epochs
         .map((epoch) =>

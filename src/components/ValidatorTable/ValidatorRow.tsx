@@ -31,8 +31,6 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     setDashView(ContentView.VALIDATORS)
   }
 
-  const id = (index + 1).toString().padStart(2, '0')
-
   return (
     <tr className='w-full border-t-style500 h-12'>
       <th className='px-2'>
@@ -47,7 +45,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='border-r-style500 px-2'>
         <Typography color='text-dark500' type='text-caption1'>
-          {id}
+          {index}
         </Typography>
       </th>
       <th className='px-2'>

@@ -12,8 +12,9 @@ const ValidatorSyncCard = () => {
   return (
     <SyncCard
       title='Ethereum Mainnet'
-      subTitle='Geth Node'
-      timeRemaining='0H 0M'
+      subTitle='Execution Node'
+      type="geth"
+      timeRemaining=' '
       status={cachedHeadSlot ? `${formatLocalCurrency(cachedHeadSlot, {isStrict: true}) } / ${formatLocalCurrency(headSlot, {isStrict: true})}` :  t('noConnection')}
       progress={syncPercentage}
     />

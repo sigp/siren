@@ -42,7 +42,7 @@ const NetworkHealth = () => {
       <DiagnosticCard
         size='health'
         title='Beacon Node'
-        metric={remainingBeaconTime}
+        metric={beaconSyncTime === 0 ? ' ' :remainingBeaconTime}
         percent={beaconPercentage}
         isBackground={false}
         subTitle={t('connectedStatus', {

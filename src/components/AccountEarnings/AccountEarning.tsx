@@ -4,7 +4,7 @@ import { ReactComponent as EthLogo } from '../../assets/images/eth.svg'
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation } from 'react-i18next'
-import { EARNINGS_OPTIONS } from '../../constants/constants'
+import { EARNINGS_OPTIONS, initialEthDeposit } from '../../constants/constants';
 import { useState } from 'react'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import useValidatorEarnings from '../../hooks/useValidatorEarnings'
@@ -15,6 +15,7 @@ import { CURRENCY_PREFIX } from '../../constants/currencies'
 import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import EarningsLayout from './EarningsLayout'
 import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos';
+import formatBalanceColor from '../../utilities/formatBalanceColor';
 
 export const AccountEarningFallback = () => {
   return (
@@ -30,19 +31,22 @@ const AccountEarning = () => {
   const [activeCurrency, setCurrency] = useState('USD')
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
-  const { total, fetchHistory } = useValidatorEarnings(validators)
+  const { total, totalRewards, fetchHistory } = useValidatorEarnings(validators)
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
+  const initialEth = validators.length * initialEthDeposit;
+  const annualizedPercent = (Math.pow(((total) / initialEth), 1) - 1) * 100
 
   const activeRate = rates[activeCurrency]
   const formattedRate = activeRate ? Number(activeRate) : 0
-  const totalBalance = formattedRate * total
-  const totalHistoricalBalance = formattedRate * (historicalAmount || total)
+  const totalBalance = formattedRate * totalRewards
+  const totalHistoricalBalance = formattedRate * (historicalAmount || totalRewards)
 
   const prefix = CURRENCY_PREFIX[activeCurrency]
   const formattedPrefix = prefix && prefix.length === 1 ? prefix : ''
 
   const currencyOptions = [...currencies].sort().map((currency) => ({ title: currency }))
+  const annualizedTextColor = formatBalanceColor(annualizedPercent)
 
   const viewEarnings = async (value: number) => {
     setOption(value)
@@ -80,7 +84,7 @@ const AccountEarning = () => {
           </Typography>
           <div className='w-full flex justify-end pr-6 pt-4'>
             <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
-              {formatLocalCurrency(total, { max: 3 })} ETH
+              {formatLocalCurrency(totalRewards, { max: 3 })} ETH
             </Typography>
           </div>
           <div className='w-full mt-6 flex items-center'>
@@ -158,7 +162,7 @@ const AccountEarning = () => {
                   </div>
                 ) : (
                   <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
-                    {formatLocalCurrency(historicalAmount || total, { max: 4 })} ETH
+                    {formatLocalCurrency(historicalAmount || totalRewards, { max: 4 })} ETH
                   </Typography>
                 )}
               </div>
@@ -183,7 +187,6 @@ const AccountEarning = () => {
                   </Typography>
                 )}
               </div>
-              <i className='bi bi-chevron-down text-caption1 text-dark400' />
             </div>
             <div>
               <div className='flex space-x-2'>
@@ -194,11 +197,11 @@ const AccountEarning = () => {
               </div>
               <Typography
                 type='text-subtitle3'
-                color='text-success'
-                darkMode='dark:text-success'
+                color={annualizedTextColor}
+                darkMode={annualizedTextColor}
                 family='font-roboto'
               >
-                +0.92%
+                {annualizedPercent.toFixed(2)}%
               </Typography>
             </div>
           </div>

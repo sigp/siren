@@ -15,6 +15,7 @@ const DeviceHealth = () => {
     ramStatus,
     cpuUtilization,
     cpuStatus,
+    frequency
   } = useDeviceDiagnostics()
 
   return (
@@ -30,7 +31,7 @@ const DeviceHealth = () => {
       <DiagnosticCard
         size='health'
         title={t('cpu')}
-        metric='- GHZ'
+        metric={frequency ? frequency : ' '}
         subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
