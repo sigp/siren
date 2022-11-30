@@ -98,6 +98,7 @@ const AccountEarning = () => {
             <div className='flex-1 ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
               <div>
                 <SelectDropDown
+                  isFilter
                   color='text-white'
                   label={t('accountEarnings.chooseCurrency')}
                   value={currency}
