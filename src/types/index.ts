@@ -35,3 +35,8 @@ export type Alert = {
   subText: string
   severity: StatusType
 }
+
+export type CurrencyPrefix = {
+  prefix: string,
+  formattedPrefix?: string
+}

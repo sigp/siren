@@ -51,4 +51,5 @@ export enum SetupSteps {
 
 export enum Storage {
   UI = 'UI',
+  CURRENCY = 'CURRENCY'
 }

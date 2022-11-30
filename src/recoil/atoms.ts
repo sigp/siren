@@ -134,3 +134,8 @@ export const validatorPeerCount = atom<number | undefined>({
   default: undefined
 })
 
+export const activeCurrency = atom<string>({
+  key: 'activeCurrency',
+  default: undefined
+})
+
