@@ -5,17 +5,21 @@ import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation } from 'react-i18next'
 import { EARNINGS_OPTIONS, initialEthDeposit } from '../../constants/constants';
-import { useState } from 'react'
+import { useState } from 'react';
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import useValidatorEarnings from '../../hooks/useValidatorEarnings'
 import Spinner from '../Spinner/Spinner'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
-import { CURRENCY_PREFIX } from '../../constants/currencies'
 import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import EarningsLayout from './EarningsLayout'
 import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos';
 import formatBalanceColor from '../../utilities/formatBalanceColor';
+import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix';
+import { activeCurrency } from '../../recoil/atoms';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { ActiveCurrencyStorage } from '../../types/storage';
+import { Storage } from '../../constants/enums';
 
 export const AccountEarningFallback = () => {
   return (
@@ -28,22 +32,21 @@ export const AccountEarningFallback = () => {
 const AccountEarning = () => {
   const { t } = useTranslation()
   const validators = useRecoilValue(selectValidatorInfos)
-  const [activeCurrency, setCurrency] = useState('USD')
+  const [currency, setCurrency] = useRecoilState(activeCurrency)
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
+  const [, storeActiveCurrency] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, undefined)
   const { total, totalRewards, fetchHistory } = useValidatorEarnings(validators)
+  const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
   const initialEth = validators.length * initialEthDeposit;
   const annualizedPercent = (Math.pow(((total) / initialEth), 1) - 1) * 100
 
-  const activeRate = rates[activeCurrency]
+  const activeRate = rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
   const totalBalance = formattedRate * totalRewards
   const totalHistoricalBalance = formattedRate * (historicalAmount || totalRewards)
-
-  const prefix = CURRENCY_PREFIX[activeCurrency]
-  const formattedPrefix = prefix && prefix.length === 1 ? prefix : ''
 
   const currencyOptions = [...currencies].sort().map((currency) => ({ title: currency }))
   const annualizedTextColor = formatBalanceColor(annualizedPercent)
@@ -61,7 +64,10 @@ const AccountEarning = () => {
       }
     }
   }
-  const selectCurrency = (option: OptionType) => setCurrency(option as string)
+  const selectCurrency = (option: OptionType) => {
+    storeActiveCurrency(option as string)
+    setCurrency(option as string)
+  }
 
   return (
     <EarningsLayout>
@@ -94,7 +100,7 @@ const AccountEarning = () => {
                 <SelectDropDown
                   color='text-white'
                   label={t('accountEarnings.chooseCurrency')}
-                  value={activeCurrency}
+                  value={currency}
                   onSelect={selectCurrency}
                   options={currencyOptions}
                 />
@@ -109,7 +115,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${activeCurrency}/ETH`}
+                  {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/ETH`}
                 </Typography>
               </div>
               <div>
@@ -122,7 +128,7 @@ const AccountEarning = () => {
                   type='text-caption1'
                   className='xl:text-body'
                 >
-                  {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${activeCurrency}`}
+                  {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${currency}`}
                 </Typography>
               </div>
             </div>
@@ -183,7 +189,7 @@ const AccountEarning = () => {
                 ) : (
                   <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
                     {formattedPrefix}
-                    {formatLocalCurrency(totalHistoricalBalance)} {activeCurrency}
+                    {formatLocalCurrency(totalHistoricalBalance)} {String(currency)}
                   </Typography>
                 )}
               </div>

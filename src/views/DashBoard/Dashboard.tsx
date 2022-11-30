@@ -3,7 +3,7 @@ import FootBar from '../../components/FootBar/FootBar'
 import React, { useEffect, useState } from 'react'
 import MainContent from './Content/MainContent'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { dashView, uiMode } from '../../recoil/atoms'
+import { activeCurrency, dashView, uiMode } from '../../recoil/atoms';
 import { ContentView, Storage, UiMode } from '../../constants/enums'
 import Logs from './Content/Logs'
 import Settings from './Content/Settings'
@@ -12,7 +12,7 @@ import Grafana from './Content/Grafana'
 import TopBar from '../../components/TopBar/TopBar'
 import useBeaconSyncPolling from '../../hooks/useBeaconSyncPolling'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import { UiThemeStorage } from '../../types/storage'
+import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage';
 import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling';
 
 const Sync = () => {
@@ -30,13 +30,21 @@ const Dashboard = () => {
   }, [])
 
   const [uiTheme, setUiTheme] = useRecoilState(uiMode)
+  const [currency, setActiveCurrency] = useRecoilState(activeCurrency)
 
   const [uiThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
+  const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, undefined)
 
   useEffect(() => {
     if (uiTheme) return
     setUiTheme(uiThemeStorage || UiMode.LIGHT)
   }, [uiTheme, uiThemeStorage])
+
+  useEffect(() => {
+    if(currency) return
+
+    setActiveCurrency(activeCurrencyStorage || 'USD')
+  }, [activeCurrencyStorage, currency])
 
   const renderContent = () => {
     switch (content) {
