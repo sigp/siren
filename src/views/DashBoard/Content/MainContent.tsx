@@ -23,6 +23,7 @@ import { UsernameStorage } from '../../../types/storage';
 import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling';
 import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling';
 import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling';
+import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions';
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -60,7 +61,7 @@ const MainContent = () => {
               </Typography>
               <AppVersion/>
             </div>
-            <i className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2' />
+            <DashboardOptions/>
           </div>
         </div>
         <Suspense fallback={<AccountEarningFallback />}>

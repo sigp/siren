@@ -1,6 +1,7 @@
 import { ChangeEvent, FC, useMemo, useState } from 'react';
 import useClickOutside from '../../hooks/useClickOutside'
 import Typography, { TypographyColor } from '../Typography/Typography'
+import DropDown from '../DropDown/DropDown';
 
 export type OptionType = string | number
 
@@ -76,21 +77,13 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
           </Typography>
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`} />
         </button>
-        <div
-          id='dropdown'
-          className={`${
-            isOpen ? 'absolute' : 'hidden'
-          } animate-fadeSlideIn mt-2 top-full left-0 z-10 w-full bg-white rounded divide-y divide-gray-100 shadow dark:bg-black`}
-        >
-          {isFilter && (
-            <div className="w-full">
-              <input onChange={setFilter} value={query} type="text" placeholder="Search..." className="w-full p-2 border-none outline-none bg-transparent dark:text-white" />
-            </div>
-          )}
-          <ul
-            className={`text-sm max-h-32 overflow-scroll text-gray-700 dark:text-gray-200 ${filteredOptions.length >=4 ? 'pb-6' : ''}`}
-            aria-labelledby='dropdownDefault'
-          >
+        <DropDown className="mt-2" isOpen={isOpen}>
+          <>
+            {isFilter && (
+              <div className="w-full bg-white dark:bg-black sticky top-0">
+                <input onChange={setFilter} value={query} type="text" placeholder="Search..." className="w-full p-2 border-b-style500 outline-none bg-transparent dark:text-white" />
+              </div>
+            )}
             {filteredOptions.map(({ title, value }, index) => (
               <li
                 onClick={() => makeSelection(value !== undefined ? value : title)}
@@ -100,8 +93,8 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
                 <Typography className='capitalize'>{title}</Typography>
               </li>
             ))}
-          </ul>
-        </div>
+          </>
+        </DropDown>
       </div>
     </div>
   )
