@@ -23,7 +23,7 @@ const DashboardOptions = () => {
   return (
     <div ref={ref} className="relative">
       <i onClick={openOptions} className='bi bi-three-dots dark:text-white flex-grow-0 -mt-2 cursor-pointer' />
-      <DropDown position="top-full -left-12 z-50 " width="w-28" isOpen={isOpen}>
+      <DropDown position="top-full -left-24 lg:-left-12 z-50 " width="w-28" isOpen={isOpen}>
         <DropDownItem text={t('sidebar.settings')} onClick={viewSettings}/>
       </DropDown>
     </div>
