@@ -1,9 +1,9 @@
 import ReactSpeedometer, { CustomSegmentLabelPosition } from 'react-d3-speedometer'
-import { UiMode } from '../../constants/enums';
-import { useRecoilValue } from 'recoil';
-import { uiMode, validatorPeerCount } from '../../recoil/atoms';
-import Typography from '../Typography/Typography';
-import { useTranslation } from 'react-i18next';
+import { UiMode } from '../../constants/enums'
+import { useRecoilValue } from 'recoil'
+import { uiMode, validatorPeerCount } from '../../recoil/atoms'
+import Typography from '../Typography/Typography'
+import { useTranslation } from 'react-i18next'
 
 const NetworkPeerSpeedometer = () => {
   const { t } = useTranslation()
@@ -58,4 +58,4 @@ const NetworkPeerSpeedometer = () => {
   )
 }
 
-export default NetworkPeerSpeedometer;
+export default NetworkPeerSpeedometer

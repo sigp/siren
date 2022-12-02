@@ -4,7 +4,7 @@ const formatNodeVersion = (data: string) => {
 
   return {
     version: split[0],
-    id: split[1]
+    id: split[1],
   }
 }
 

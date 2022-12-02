@@ -1,6 +1,6 @@
-import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react';
-import Typography from '../Typography/Typography';
-import { UiMode } from '../../constants/enums';
+import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react'
+import Typography from '../Typography/Typography'
+import { UiMode } from '../../constants/enums'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -12,7 +12,17 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: string
 }
 
-const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode, inputStyle = 'primary', icon,  ...props }) => {
+const Input: FC<InputProps> = ({
+  label,
+  tooltip,
+  type,
+  error,
+  className,
+  uiMode,
+  inputStyle = 'primary',
+  icon,
+  ...props
+}) => {
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
 
@@ -21,7 +31,11 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode,
       case 'secondary':
         return 'text-dark500 border-style p-2 bg-transparent'
       default:
-        return `${uiMode === UiMode.LIGHT ? 'text-dark500 bg-dark10 border-dark500' : 'bg-transparent border-white placeholder:text-dark500'} font-light text-white border-b text-body md:text-subtitle1`
+        return `${
+          uiMode === UiMode.LIGHT
+            ? 'text-dark500 bg-dark10 border-dark500'
+            : 'bg-transparent border-white placeholder:text-dark500'
+        } font-light text-white border-b text-body md:text-subtitle1`
     }
   }
 
@@ -48,9 +62,9 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode,
         <input
           {...props}
           type={inputType}
-          className={`${
-            isPasswordType || icon ? 'pr-5' : ''
-          } ${className ? className : ''} pb-2 w-full font-openSauce outline-none ${generateInputStyle()}`}
+          className={`${isPasswordType || icon ? 'pr-5' : ''} ${
+            className ? className : ''
+          } pb-2 w-full font-openSauce outline-none ${generateInputStyle()}`}
         />
         {isPasswordType ? (
           <i
@@ -60,10 +74,17 @@ const Input: FC<InputProps> = ({ label, tooltip, type, error, className, uiMode,
             } text-dark500 absolute right-0 top-1/2 -translate-y-1/2`}
           />
         ) : icon ? (
-          <i className={`text-caption1 ${icon} text-dark500 absolute right-3 top-1/2 -translate-y-1/2`} />
+          <i
+            className={`text-caption1 ${icon} text-dark500 absolute right-3 top-1/2 -translate-y-1/2`}
+          />
         ) : null}
         <div className='absolute -bottom-6 left-0'>
-          <Typography type='text-caption2' color='text-error' darkMode="dark:text-error" className='capitalize'>
+          <Typography
+            type='text-caption2'
+            color='text-error'
+            darkMode='dark:text-error'
+            className='capitalize'
+          >
             {error}
           </Typography>
         </div>

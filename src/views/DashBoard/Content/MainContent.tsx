@@ -2,7 +2,7 @@ import Typography from '../../../components/Typography/Typography'
 import AccountEarning, {
   AccountEarningFallback,
 } from '../../../components/AccountEarnings/AccountEarning'
-import NetworkStats, { NetworkStatsFallback } from '../../../components/NetworkStats/NetworkStats';
+import NetworkStats, { NetworkStatsFallback } from '../../../components/NetworkStats/NetworkStats'
 import ValidatorTable, {
   TableErrorFallback,
   TableFallback,
@@ -12,18 +12,18 @@ import ValidatorBalances, {
   ValidatorBalanceFallback,
 } from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
-import { Suspense, useEffect } from 'react';
+import { Suspense, useEffect } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
-import { useRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil'
 import { userName } from '../../../recoil/atoms'
-import AppVersion from '../../../components/AppVersion/AppVersion';
-import useLocalStorage from '../../../hooks/useLocalStorage';
-import { UsernameStorage } from '../../../types/storage';
-import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling';
-import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling';
-import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling';
-import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions';
+import AppVersion from '../../../components/AppVersion/AppVersion'
+import useLocalStorage from '../../../hooks/useLocalStorage'
+import { UsernameStorage } from '../../../types/storage'
+import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling'
+import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling'
+import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling'
+import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -31,7 +31,7 @@ const MainContent = () => {
   const [name, setUsername] = useRecoilState(userName)
 
   useEffect(() => {
-    if(username) {
+    if (username) {
       setUsername(username)
     }
   }, [username])
@@ -59,9 +59,9 @@ const MainContent = () => {
               <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
                 {t('lighthouseVersion')}
               </Typography>
-              <AppVersion/>
+              <AppVersion />
             </div>
-            <DashboardOptions/>
+            <DashboardOptions />
           </div>
         </div>
         <Suspense fallback={<AccountEarningFallback />}>
@@ -72,12 +72,12 @@ const MainContent = () => {
         </Suspense>
       </div>
       <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
-        <Suspense fallback={<NetworkStatsFallback/>}>
+        <Suspense fallback={<NetworkStatsFallback />}>
           <NetworkStats />
         </Suspense>
         <ErrorBoundary fallback={<TableErrorFallback />}>
           <Suspense fallback={<TableFallback />}>
-            <ValidatorTable className="mt-8 lg:mt-2" />
+            <ValidatorTable className='mt-8 lg:mt-2' />
           </Suspense>
         </ErrorBoundary>
         <DiagnosticTable />

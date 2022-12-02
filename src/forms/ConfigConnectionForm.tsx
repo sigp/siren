@@ -7,19 +7,21 @@ import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
 import {
   apiToken,
-  beaconNodeEndpoint, beaconVersionData,
+  beaconNodeEndpoint,
+  beaconVersionData,
   onBoardView,
   userName,
-  validatorClientEndpoint, validatorVersionData
-} from '../recoil/atoms';
+  validatorClientEndpoint,
+  validatorVersionData,
+} from '../recoil/atoms'
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
 import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
-import { fetchBeaconVersion } from '../api/beacon';
-import { Endpoint } from '../types';
+import { fetchBeaconVersion } from '../api/beacon'
+import { Endpoint } from '../types'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -131,7 +133,10 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     const { isRemember, apiToken, userName } = getValues()
 
     try {
-      const [vcResult, beaconResult] = await Promise.all([fetchVersion(validatorClient, apiToken), fetchBeaconVersion(beaconNode)])
+      const [vcResult, beaconResult] = await Promise.all([
+        fetchVersion(validatorClient, apiToken),
+        fetchBeaconVersion(beaconNode),
+      ])
 
       if (vcResult.status !== 200 && beaconResult.status !== 200) {
         handleError('')

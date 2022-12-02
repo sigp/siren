@@ -3,7 +3,7 @@ import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next'
 
 const BeaconSyncCard = () => {
   const { t } = useTranslation()

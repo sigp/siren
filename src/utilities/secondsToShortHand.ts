@@ -7,7 +7,7 @@ const secondsToShortHand = (seconds: number) => {
     return '0M 0S'
   }
 
-  if(time.days > 0) {
+  if (time.days > 0) {
     return `${time.days}D ${time.hours}H`
   }
 

@@ -15,7 +15,7 @@ const DeviceHealth = () => {
     ramStatus,
     cpuUtilization,
     cpuStatus,
-    frequency
+    frequency,
   } = useDeviceDiagnostics()
 
   return (

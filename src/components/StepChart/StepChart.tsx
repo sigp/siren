@@ -113,7 +113,7 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
   }, [chartEl, data, hasAnimated, mode])
 
   return (
-    <div className="w-full h-full relative">
+    <div className='w-full h-full relative'>
       <canvas ref={chartEl} />
     </div>
   )

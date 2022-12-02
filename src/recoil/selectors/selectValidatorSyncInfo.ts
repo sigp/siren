@@ -1,13 +1,21 @@
 import { selector } from 'recoil'
-import { validatorSyncInfo } from '../atoms';
-import { ValidatorSyncInfo } from '../../types/diagnostic';
+import { validatorSyncInfo } from '../atoms'
+import { ValidatorSyncInfo } from '../../types/diagnostic'
 
 export const selectValidatorSyncInfo = selector<ValidatorSyncInfo>({
   key: 'selectValidatorSyncInfo',
   get: ({ get }) => {
     const data = get(validatorSyncInfo)
 
-    const { head_block_number, head_block_timestamp, latest_cached_block_number, latest_cached_block_timestamp, voting_target_timestamp, eth1_node_sync_status_percentage, lighthouse_is_cached_and_ready } = data || {}
+    const {
+      head_block_number,
+      head_block_timestamp,
+      latest_cached_block_number,
+      latest_cached_block_timestamp,
+      voting_target_timestamp,
+      eth1_node_sync_status_percentage,
+      lighthouse_is_cached_and_ready,
+    } = data || {}
 
     return {
       headSlot: Number(head_block_number || 0),
@@ -16,7 +24,7 @@ export const selectValidatorSyncInfo = selector<ValidatorSyncInfo>({
       cachedHeadTimestamp: latest_cached_block_timestamp,
       votingTimestamp: voting_target_timestamp,
       syncPercentage: Number(eth1_node_sync_status_percentage || 0),
-      isReady: lighthouse_is_cached_and_ready
+      isReady: lighthouse_is_cached_and_ready,
     }
   },
 })

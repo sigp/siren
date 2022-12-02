@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Endpoint } from '../types';
+import { Endpoint } from '../types'
 
 export const fetchVersion = async ({ protocol, address, port }: Endpoint, apiToken: string) =>
   await axios.get(`${protocol}://${address}:${port}/lighthouse/version`, {

@@ -1,4 +1,4 @@
-import { Endpoint } from './index';
+import { Endpoint } from './index'
 import { UiMode } from '../constants/enums'
 
 export type EndpointStorage = Endpoint | undefined

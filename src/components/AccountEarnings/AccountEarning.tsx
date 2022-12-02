@@ -4,22 +4,22 @@ import { ReactComponent as EthLogo } from '../../assets/images/eth.svg'
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation } from 'react-i18next'
-import { EARNINGS_OPTIONS, initialEthDeposit } from '../../constants/constants';
-import { useState } from 'react';
+import { EARNINGS_OPTIONS, initialEthDeposit } from '../../constants/constants'
+import { useState } from 'react'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import useValidatorEarnings from '../../hooks/useValidatorEarnings'
 import Spinner from '../Spinner/Spinner'
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil'
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import EarningsLayout from './EarningsLayout'
-import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos';
-import formatBalanceColor from '../../utilities/formatBalanceColor';
-import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix';
-import { activeCurrency } from '../../recoil/atoms';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import { ActiveCurrencyStorage } from '../../types/storage';
-import { Storage } from '../../constants/enums';
+import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
+import formatBalanceColor from '../../utilities/formatBalanceColor'
+import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
+import { activeCurrency } from '../../recoil/atoms'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { ActiveCurrencyStorage } from '../../types/storage'
+import { Storage } from '../../constants/enums'
 
 export const AccountEarningFallback = () => {
   return (
@@ -35,13 +35,16 @@ const AccountEarning = () => {
   const [currency, setCurrency] = useRecoilState(activeCurrency)
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
-  const [, storeActiveCurrency] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, undefined)
+  const [, storeActiveCurrency] = useLocalStorage<ActiveCurrencyStorage>(
+    Storage.CURRENCY,
+    undefined,
+  )
   const { total, totalRewards, fetchHistory } = useValidatorEarnings(validators)
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
-  const initialEth = validators.length * initialEthDeposit;
-  const annualizedPercent = (Math.pow(((total) / initialEth), 1) - 1) * 100
+  const initialEth = validators.length * initialEthDeposit
+  const annualizedPercent = (Math.pow(total / initialEth, 1) - 1) * 100
 
   const activeRate = rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
@@ -138,7 +141,9 @@ const AccountEarning = () => {
         </div>
         <div className='bg-gradient-to-t via-transWhite from-white dark:from-darkPrimary'>
           <div className='md:px-4 flex justify-between'>
-            <Typography className="hidden md:block" color='text-white'>{t('accountEarnings.earnings')}</Typography>
+            <Typography className='hidden md:block' color='text-white'>
+              {t('accountEarnings.earnings')}
+            </Typography>
             <div className='flex ml-8 space-x-1'>
               {EARNINGS_OPTIONS.map(({ value, title }) => (
                 <Button
@@ -168,7 +173,12 @@ const AccountEarning = () => {
                     <Spinner size='w-3 h-3' />
                   </div>
                 ) : (
-                  <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
+                  <Typography
+                    type='text-caption1'
+                    className='md:text-subtitle3'
+                    darkMode='dark:text-white'
+                    family='font-roboto'
+                  >
                     {formatLocalCurrency(historicalAmount || totalRewards, { max: 4 })} ETH
                   </Typography>
                 )}
@@ -188,7 +198,12 @@ const AccountEarning = () => {
                     <Spinner size='w-3 h-3' />
                   </div>
                 ) : (
-                  <Typography type='text-caption1' className="md:text-subtitle3" darkMode='dark:text-white' family='font-roboto'>
+                  <Typography
+                    type='text-caption1'
+                    className='md:text-subtitle3'
+                    darkMode='dark:text-white'
+                    family='font-roboto'
+                  >
                     {formattedPrefix}
                     {formatLocalCurrency(totalHistoricalBalance)} {String(currency)}
                   </Typography>

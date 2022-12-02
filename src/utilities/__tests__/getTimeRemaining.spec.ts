@@ -1,5 +1,4 @@
-import getTimeRemaining from '../getTimeRemaining';
-
+import getTimeRemaining from '../getTimeRemaining'
 
 describe('Get time remaining util', () => {
   it('should return correct times', () => {

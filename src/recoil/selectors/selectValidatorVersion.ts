@@ -1,7 +1,7 @@
-import { selector } from 'recoil';
-import { validatorVersionData } from '../atoms';
-import { NodeVersion } from '../../types';
-import formatNodeVersion from '../../utilities/formatNodeVersion';
+import { selector } from 'recoil'
+import { validatorVersionData } from '../atoms'
+import { NodeVersion } from '../../types'
+import formatNodeVersion from '../../utilities/formatNodeVersion'
 
 export const selectValidatorVersion = selector<NodeVersion | undefined>({
   key: 'selectValidatorVersion',

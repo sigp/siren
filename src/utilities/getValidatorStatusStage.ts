@@ -1,16 +1,16 @@
-import { ValidatorStatus } from '../types/validator';
+import { ValidatorStatus } from '../types/validator'
 
-const getValidatorStatusStage = (status: ValidatorStatus) : number => {
+const getValidatorStatusStage = (status: ValidatorStatus): number => {
   switch (true) {
     case status.includes('exit'):
-      return 4;
+      return 4
     case status.includes('active'):
-      return 3;
+      return 3
     case status.includes('pending'):
-      return 2;
+      return 2
     default:
-      return 1;
+      return 1
   }
 }
 
-export default getValidatorStatusStage;
+export default getValidatorStatusStage

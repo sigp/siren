@@ -1,12 +1,12 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { beaconNodeEndpoint, beaconSyncInfo, beaconSyncInterval } from '../recoil/atoms';
+import { beaconNodeEndpoint, beaconSyncInfo, beaconSyncInterval } from '../recoil/atoms'
 import { useEffect } from 'react'
 import { secondsInSlot } from '../constants/constants'
-import usePollApi from './usePollApi';
+import usePollApi from './usePollApi'
 
 const useBeaconSyncPolling = (time = secondsInSlot * 1000) => {
   const beaconNode = useRecoilValue(beaconNodeEndpoint)
-  const { protocol, address, port } = beaconNode || {};
+  const { protocol, address, port } = beaconNode || {}
   const url = beaconNode ? `${protocol}://${address}:${port}/eth/v1/node/syncing` : undefined
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo)
 
@@ -14,13 +14,13 @@ const useBeaconSyncPolling = (time = secondsInSlot * 1000) => {
     time,
     isReady: !!url,
     intervalState: beaconSyncInterval,
-    url
-  });
+    url,
+  })
 
   useEffect(() => {
-    if(!response) return
+    if (!response) return
 
-    const data = response.data.data;
+    const data = response.data.data
 
     setBeaconSyncInfo({
       ...data,

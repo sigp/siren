@@ -6,8 +6,8 @@ import useLocalStorage from '../../../../hooks/useLocalStorage'
 import { useEffect } from 'react'
 import { HealthCheckStorage } from '../../../../types/storage'
 import NodeSync from './Steps/NodeSync'
-import useBeaconSyncPolling from '../../../../hooks/useBeaconSyncPolling';
-import useValidatorSyncPolling from '../../../../hooks/useValidatorSyncPolling';
+import useBeaconSyncPolling from '../../../../hooks/useBeaconSyncPolling'
+import useValidatorSyncPolling from '../../../../hooks/useValidatorSyncPolling'
 
 const ValidatorSetup = () => {
   const [view, setView] = useRecoilState(setupStep)

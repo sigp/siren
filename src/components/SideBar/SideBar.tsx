@@ -9,8 +9,8 @@ import { useRecoilState } from 'recoil'
 import { dashView } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
-import useUiMode from '../../hooks/useUiMode';
-import UiModeIcon from '../UiModeIcon/UiModeIcon';
+import useUiMode from '../../hooks/useUiMode'
+import UiModeIcon from '../UiModeIcon/UiModeIcon'
 
 const SideBar = () => {
   const { t } = useTranslation()
@@ -42,7 +42,7 @@ const SideBar = () => {
               </SideItem>
             ))}
             <div className='w-full h-6 flex items-center justify-center'>
-              <UiModeIcon onClick={toggleUiMode} mode={mode}/>
+              <UiModeIcon onClick={toggleUiMode} mode={mode} />
             </div>
           </ul>
         </div>

@@ -7,7 +7,7 @@ import Wallet from '../Wallet/Wallet'
 import BeaconMetric from './BeaconMetric'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
-import ValidatorMetric from './ValidatorMetric';
+import ValidatorMetric from './ValidatorMetric'
 
 const TopBar = () => {
   const { t } = useTranslation()
@@ -17,8 +17,8 @@ const TopBar = () => {
         <div className='items-center hidden lg:flex w-42 border-r border-borderLight dark:border-borderDark px-4'>
           <LightHouseFullLogo className='w-full text-black dark:text-white' />
         </div>
-        <Suspense fallback={<SyncMetricFallback/>}>
-          <ValidatorMetric/>
+        <Suspense fallback={<SyncMetricFallback />}>
+          <ValidatorMetric />
         </Suspense>
         <Suspense fallback={<SyncMetricFallback />}>
           <BeaconMetric />

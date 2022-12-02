@@ -1,15 +1,15 @@
 import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil'
 import usePollingInterval from './usePollingInterval'
-import { secondsInSlot, slotsInEpoc } from '../constants/constants';
+import { secondsInSlot, slotsInEpoc } from '../constants/constants'
 import { fetchValidatorStatuses } from '../api/beacon'
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { selectValidators } from '../recoil/selectors/selectValidators'
 import {
   validatorInfoInterval,
   validatorIntervalIncrement,
-  validatorStateInfo
-} from '../recoil/atoms';
+  validatorStateInfo,
+} from '../recoil/atoms'
 import { Validator } from '../types/validator'
 
 const useValidatorInfoPolling = () => {
@@ -34,8 +34,8 @@ const useValidatorInfoPolling = () => {
     )
 
     setStateInfo(beaconValidators.data.data)
-    setIncrement(prev => {
-      const nextInterval = prev + 1;
+    setIncrement((prev) => {
+      const nextInterval = prev + 1
       return nextInterval > slotsInEpoc ? 1 : nextInterval
     })
   }

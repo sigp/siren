@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil'
 import { useMemo } from 'react'
 import { fetchValidatorStatuses } from '../api/beacon'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
-import { BeaconValidatorResult, ValidatorInfo } from '../types/validator';
+import { BeaconValidatorResult, ValidatorInfo } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { initialEthDeposit } from '../constants/constants'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
@@ -16,7 +16,7 @@ const useValidatorEarnings = (validators: ValidatorInfo[]) => {
   }, [validators])
 
   const total = useMemo(() => {
-    return validators.map(validator => validator.balance).reduce((a, b) => a + b, 0)
+    return validators.map((validator) => validator.balance).reduce((a, b) => a + b, 0)
   }, [validators])
 
   const totalRewards = useMemo(() => {

@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
-import {Endpoint} from '../types';
-import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic';
+import { Endpoint } from '../types'
+import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
@@ -46,7 +46,7 @@ export const setupStep = atom<SetupSteps | undefined>({
 
 export const validatorSyncInfo = atom<ValidatorSyncResult>({
   key: 'validatorSyncInfo',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorSyncInterval = atom<NodeJS.Timer | undefined>({
@@ -81,27 +81,27 @@ export const userName = atom<string>({
 
 export const validatorIntervalIncrement = atom<number>({
   key: 'validatorIntervalIncrement',
-  default: 0
+  default: 0,
 })
 
 export const validatorIncrementTimestamp = atom<number | undefined>({
   key: 'validatorIncrementTimestamp',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorVersionData = atom<string | undefined>({
   key: 'validatorVersionData',
-  default: undefined
+  default: undefined,
 })
 
 export const beaconVersionData = atom<string | undefined>({
   key: 'beaconVersionData',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorHealthResult = atom<HealthDiagnosticResult | undefined>({
   key: 'validatorHealthResult',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorHealthSyncInterval = atom<NodeJS.Timer | undefined>({
@@ -111,31 +111,30 @@ export const validatorHealthSyncInterval = atom<NodeJS.Timer | undefined>({
 
 export const beaconHealthResult = atom<HealthDiagnosticResult | undefined>({
   key: 'beaconHealthResult',
-  default: undefined
+  default: undefined,
 })
 
 export const beaconHealthSyncInterval = atom<NodeJS.Timer | undefined>({
   key: 'beaconHealthSyncInterval',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorSearch = atom<string>({
   key: 'validatorSearch',
-  default: ''
+  default: '',
 })
 
 export const validatorIndex = atom<number | undefined>({
   key: 'validatorIndex',
-  default: undefined
+  default: undefined,
 })
 
 export const validatorPeerCount = atom<number | undefined>({
   key: 'validatorPeerCount',
-  default: undefined
+  default: undefined,
 })
 
 export const activeCurrency = atom<string>({
   key: 'activeCurrency',
-  default: undefined
+  default: undefined,
 })
-

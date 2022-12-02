@@ -1,7 +1,7 @@
-import { ChangeEvent, FC, useMemo, useState } from 'react';
+import { ChangeEvent, FC, useMemo, useState } from 'react'
 import useClickOutside from '../../hooks/useClickOutside'
 import Typography, { TypographyColor } from '../Typography/Typography'
-import DropDown from '../DropDown/DropDown';
+import DropDown from '../DropDown/DropDown'
 
 export type OptionType = string | number
 
@@ -29,7 +29,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   isFilter,
   placeholder,
 }) => {
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState('')
   const [isOpen, toggle] = useState(false)
 
   const toggleDropdown = () => toggle((prevState) => !prevState)
@@ -49,11 +49,11 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   const activeSelection = options.find((option) => (option.value || option.title) === value)
 
   const filteredOptions = useMemo(() => {
-    return options.filter(option => {
+    return options.filter((option) => {
       const formattedQuery = query.toLowerCase()
       const isValue = option?.value?.toLocaleString().toLowerCase().includes(formattedQuery)
       const isTitle = option.title.toLowerCase().includes(formattedQuery)
-      return query ? (isTitle || isValue) : true
+      return query ? isTitle || isValue : true
     })
   }, [query, options])
 
@@ -77,11 +77,17 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
           </Typography>
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`} />
         </button>
-        <DropDown className="mt-2" isOpen={isOpen}>
+        <DropDown className='mt-2' isOpen={isOpen}>
           <>
             {isFilter && (
-              <div className="w-full bg-white dark:bg-black sticky top-0">
-                <input onChange={setFilter} value={query} type="text" placeholder="Search..." className="w-full p-2 border-b-style500 outline-none bg-transparent dark:text-white" />
+              <div className='w-full bg-white dark:bg-black sticky top-0'>
+                <input
+                  onChange={setFilter}
+                  value={query}
+                  type='text'
+                  placeholder='Search...'
+                  className='w-full p-2 border-b-style500 outline-none bg-transparent dark:text-white'
+                />
               </div>
             )}
             {filteredOptions.map(({ title, value }, index) => (

@@ -1,7 +1,7 @@
 import Typography from '../Typography/Typography'
 import AlertCard from '../AlertCard/AlertCard'
 import { useTranslation } from 'react-i18next'
-import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts';
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 
 const AlertInfo = () => {
   const { t } = useTranslation()
