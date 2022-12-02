@@ -9,7 +9,7 @@ import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncC
 import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback'
 import { Trans, useTranslation } from 'react-i18next'
 import useBeaconSyncPolling from '../../../../../hooks/useBeaconSyncPolling'
-import ValidatorSyncCard from '../../../../../components/ValidatorSyncCard/ValidatorSyncCard';
+import ValidatorSyncCard from '../../../../../components/ValidatorSyncCard/ValidatorSyncCard'
 
 const NodeSync = () => {
   useBeaconSyncPolling()
@@ -33,7 +33,7 @@ const NodeSync = () => {
     >
       <div className='w-full flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-2'>
         <Suspense fallback={<SyncCardFallback />}>
-          <ValidatorSyncCard/>
+          <ValidatorSyncCard />
         </Suspense>
         <Suspense fallback={<SyncCardFallback />}>
           <BeaconSyncCard />

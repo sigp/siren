@@ -5,12 +5,23 @@ import formatGigBytes from '../utilities/formatGigBytes'
 import { StatusType } from '../types'
 import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
-import secondsToShortHand from '../utilities/secondsToShortHand';
-import { beaconHealthResult } from '../recoil/atoms';
+import secondsToShortHand from '../utilities/secondsToShortHand'
+import { beaconHealthResult } from '../recoil/atoms'
 
 const useDeviceDiagnostics = (): Diagnostics => {
   const result = useRecoilValue(beaconHealthResult)
-  const { disk_bytes_free = 0, disk_bytes_total = 0, used_memory = 0, total_memory = 0, free_memory = 0, sys_loadavg_1 = 0, app_uptime = 0, network_name, nat_open = false, global_cpu_frequency } = result || {};
+  const {
+    disk_bytes_free = 0,
+    disk_bytes_total = 0,
+    used_memory = 0,
+    total_memory = 0,
+    free_memory = 0,
+    sys_loadavg_1 = 0,
+    app_uptime = 0,
+    network_name,
+    nat_open = false,
+    global_cpu_frequency,
+  } = result || {}
 
   const diskUtilization = useMemo(() => {
     if (!disk_bytes_total || !disk_bytes_free) {

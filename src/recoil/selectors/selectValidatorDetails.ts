@@ -1,7 +1,7 @@
 import { selector } from 'recoil'
 import { ValidatorInfo } from '../../types/validator'
-import { validatorIndex } from '../atoms';
-import { selectValidatorInfos } from './selectValidatorInfos';
+import { validatorIndex } from '../atoms'
+import { selectValidatorInfos } from './selectValidatorInfos'
 
 export const selectValidatorDetail = selector<ValidatorInfo | undefined>({
   key: 'selectValidatorDetail',
@@ -9,6 +9,6 @@ export const selectValidatorDetail = selector<ValidatorInfo | undefined>({
     const validators = get(selectValidatorInfos)
     const index = get(validatorIndex)
 
-    return validators.find(validator => Number(validator.index) === index)
+    return validators.find((validator) => Number(validator.index) === index)
   },
 })

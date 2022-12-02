@@ -5,17 +5,14 @@ import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
-import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo';
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
+import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
   const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
-  const  { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
-  const {
-    networkName,
-    natOpen
-  } = useDeviceDiagnostics()
+  const { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
+  const { networkName, natOpen } = useDeviceDiagnostics()
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
@@ -42,7 +39,7 @@ const NetworkHealth = () => {
       <DiagnosticCard
         size='health'
         title='Beacon Node'
-        metric={beaconSyncTime === 0 ? ' ' :remainingBeaconTime}
+        metric={beaconSyncTime === 0 ? ' ' : remainingBeaconTime}
         percent={beaconPercentage}
         isBackground={false}
         subTitle={t('connectedStatus', {

@@ -1,13 +1,12 @@
-import SyncMetric from '../SyncMetric/SyncMetric';
-import { useRecoilValue } from 'recoil';
-import { useTranslation } from 'react-i18next';
-import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo';
+import SyncMetric from '../SyncMetric/SyncMetric'
+import { useRecoilValue } from 'recoil'
+import { useTranslation } from 'react-i18next'
+import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
 
 const ValidatorMetric = () => {
   const { t } = useTranslation()
   const syncInfo = useRecoilValue(selectValidatorSyncInfo)
-  const { headSlot, cachedHeadSlot,
-    syncPercentage, isReady } = syncInfo;
+  const { headSlot, cachedHeadSlot, syncPercentage, isReady } = syncInfo
 
   return (
     <SyncMetric
@@ -23,4 +22,4 @@ const ValidatorMetric = () => {
   )
 }
 
-export default ValidatorMetric;
+export default ValidatorMetric

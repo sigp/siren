@@ -1,4 +1,4 @@
-import secondsToShortHand from '../secondsToShortHand';
+import secondsToShortHand from '../secondsToShortHand'
 
 describe('Seconds to shorthand util', () => {
   it('should return zeros if out of time', () => {
@@ -12,5 +12,5 @@ describe('Seconds to shorthand util', () => {
   })
   it('should return correct days and hours', () => {
     expect(secondsToShortHand(90000)).toBe('1D 1H')
-  });
+  })
 })

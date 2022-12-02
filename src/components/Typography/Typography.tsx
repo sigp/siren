@@ -77,9 +77,9 @@ const Typography: FC<TypographyProps> = ({
     as ? ELEMENT[as] : ELEMENT.p,
     {
       ...props,
-      className: `${className || ''} ${type} ${isUpperCase ? 'uppercase' : isCapitalize ? 'capitalize' : 'normal-case'} m-0 ${darkMode} ${color} ${family} ${
-        isBold ? 'font-bold' : fontWeight
-      }
+      className: `${className || ''} ${type} ${
+        isUpperCase ? 'uppercase' : isCapitalize ? 'capitalize' : 'normal-case'
+      } m-0 ${darkMode} ${color} ${family} ${isBold ? 'font-bold' : fontWeight}
 `,
     },
     children,

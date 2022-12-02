@@ -100,7 +100,7 @@
   },
   "lint-staged": {
     "*.{ts,js,tsx,jsx}": [
-      "prettier --write",
+      "prettier --write --config ./.prettierrc",
       "eslint --fix"
     ]
   },

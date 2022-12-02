@@ -1,7 +1,7 @@
-import { StatusType } from '../types';
+import { StatusType } from '../types'
 
 const formatAtHeadSlotStatus = (status?: number): StatusType | 'bg-dark100' => {
-  if(status === undefined) return 'bg-dark100'
+  if (status === undefined) return 'bg-dark100'
 
   switch (true) {
     case status >= -1:
@@ -15,4 +15,4 @@ const formatAtHeadSlotStatus = (status?: number): StatusType | 'bg-dark100' => {
   }
 }
 
-export default formatAtHeadSlotStatus;
+export default formatAtHeadSlotStatus

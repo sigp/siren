@@ -1,12 +1,12 @@
-import Typography from '../Typography/Typography';
-import React, { FC } from 'react';
+import Typography from '../Typography/Typography'
+import React, { FC } from 'react'
 
 export interface DropDownItemProps {
   onClick: () => void
   text: string
 }
 
-const DropDownItem:FC<DropDownItemProps> = ({onClick, text}) => {
+const DropDownItem: FC<DropDownItemProps> = ({ onClick, text }) => {
   return (
     <li
       onClick={onClick}

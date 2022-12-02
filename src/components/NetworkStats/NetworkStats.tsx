@@ -1,16 +1,16 @@
 import { useRecoilValue } from 'recoil'
-import { beaconHealthResult, validatorHealthResult } from '../../recoil/atoms';
+import { beaconHealthResult, validatorHealthResult } from '../../recoil/atoms'
 import NetworkStatBlock from './NetworkStatBlock'
 import { useTranslation } from 'react-i18next'
-import secondsToShortHand from '../../utilities/secondsToShortHand';
-import Spinner from '../Spinner/Spinner';
-import formatAtHeadSlotStatus from '../../utilities/formatAtHeadSlotStatus';
-import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer';
-import { selectAtHeadSlot } from '../../recoil/selectors/selectAtHeadSlot';
+import secondsToShortHand from '../../utilities/secondsToShortHand'
+import Spinner from '../Spinner/Spinner'
+import formatAtHeadSlotStatus from '../../utilities/formatAtHeadSlotStatus'
+import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer'
+import { selectAtHeadSlot } from '../../recoil/selectors/selectAtHeadSlot'
 
 export const NetworkStatsFallback = () => (
-  <div className="w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center">
-    <Spinner/>
+  <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center'>
+    <Spinner />
   </div>
 )
 
@@ -43,9 +43,9 @@ const NetworkStats = () => {
         metricFontSize='text-subtitle3'
         metric={atHeadSlot !== undefined ? String(atHeadSlot === 1 ? 0 : atHeadSlot) : '---'}
       />
-      <NetworkPeerSpeedometer/>
+      <NetworkPeerSpeedometer />
       <NetworkStatBlock
-        className="border-none"
+        className='border-none'
         title={t('networkStats.participationRate')}
         status='bg-success'
         metricFontSize='text-subtitle3'

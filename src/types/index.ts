@@ -1,5 +1,5 @@
-import { RecoilState } from 'recoil';
-import { Protocol } from '../constants/enums';
+import { RecoilState } from 'recoil'
+import { Protocol } from '../constants/enums'
 
 export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
 
@@ -17,10 +17,10 @@ export type NodeVersion = {
 }
 
 export type ApiPollConfig = {
-  time: number,
-  isReady: boolean,
+  time: number
+  isReady: boolean
   intervalState: RecoilState<NodeJS.Timer | undefined>
-  url?: string,
+  url?: string
   apiToken?: string
 }
 
@@ -37,6 +37,6 @@ export type Alert = {
 }
 
 export type CurrencyPrefix = {
-  prefix: string,
+  prefix: string
   formattedPrefix?: string
 }

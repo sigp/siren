@@ -3,7 +3,7 @@ import FootBar from '../../components/FootBar/FootBar'
 import React, { useEffect, useState } from 'react'
 import MainContent from './Content/MainContent'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { activeCurrency, dashView, uiMode } from '../../recoil/atoms';
+import { activeCurrency, dashView, uiMode } from '../../recoil/atoms'
 import { ContentView, Storage, UiMode } from '../../constants/enums'
 import Logs from './Content/Logs'
 import Settings from './Content/Settings'
@@ -12,8 +12,8 @@ import Grafana from './Content/Grafana'
 import TopBar from '../../components/TopBar/TopBar'
 import useBeaconSyncPolling from '../../hooks/useBeaconSyncPolling'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage';
-import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling';
+import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage'
+import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling'
 
 const Sync = () => {
   useBeaconSyncPolling()
@@ -33,7 +33,10 @@ const Dashboard = () => {
   const [currency, setActiveCurrency] = useRecoilState(activeCurrency)
 
   const [uiThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
-  const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, undefined)
+  const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(
+    Storage.CURRENCY,
+    undefined,
+  )
 
   useEffect(() => {
     if (uiTheme) return
@@ -41,7 +44,7 @@ const Dashboard = () => {
   }, [uiTheme, uiThemeStorage])
 
   useEffect(() => {
-    if(currency) return
+    if (currency) return
 
     setActiveCurrency(activeCurrencyStorage || 'USD')
   }, [activeCurrencyStorage, currency])

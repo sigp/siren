@@ -1,20 +1,20 @@
-import Typography from '../Typography/Typography';
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics';
-import { useTranslation } from 'react-i18next';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import { useRecoilValue } from 'recoil';
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo';
-import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo';
-import secondsToShortHand from '../../utilities/secondsToShortHand';
-import { useState } from 'react';
-import { DiagnosticType } from '../../constants/enums';
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard';
+import Typography from '../Typography/Typography'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { useTranslation } from 'react-i18next'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import { useRecoilValue } from 'recoil'
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
+import secondsToShortHand from '../../utilities/secondsToShortHand'
+import { useState } from 'react'
+import { DiagnosticType } from '../../constants/enums'
+import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 
 const HardwareInfo = () => {
   const { t } = useTranslation()
   const [view, setView] = useState<DiagnosticType>(DiagnosticType.DEVICE)
   const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
-  const  { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
+  const { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
   const {
     totalDiskSpace,
     diskUtilization,
@@ -26,13 +26,13 @@ const HardwareInfo = () => {
     cpuStatus,
     frequency,
     networkName,
-    natOpen
+    natOpen,
   } = useDeviceDiagnostics()
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
   const isMobile = useMediaQuery('(max-width: 425px)')
 
-  const size = isMobile ? 'health' : 'md';
+  const size = isMobile ? 'health' : 'md'
   const isDeviceView = view === DiagnosticType.DEVICE
   const isNetworkView = view === DiagnosticType.NETWORK
 
@@ -69,7 +69,7 @@ const HardwareInfo = () => {
               status={ramStatus}
             />
           </>
-        );
+        )
       case DiagnosticType.NETWORK:
         return (
           <>
@@ -96,7 +96,7 @@ const HardwareInfo = () => {
               size={size}
               maxHeight='flex-1'
               title='Beacon Node'
-              metric={beaconSyncTime === 0 ? ' ' :remainingBeaconTime}
+              metric={beaconSyncTime === 0 ? ' ' : remainingBeaconTime}
               percent={beaconPercentage}
               isBackground={false}
               subTitle={t('connectedStatus', {
@@ -114,7 +114,10 @@ const HardwareInfo = () => {
   return (
     <div className='h-full w-full flex flex-col xl:min-w-316'>
       <div className='w-full h-12 border flex border-style500'>
-        <div onClick={viewDeviceInfo} className='flex-1 p-2 flex items-center justify-center cursor-pointer'>
+        <div
+          onClick={viewDeviceInfo}
+          className='flex-1 p-2 flex items-center justify-center cursor-pointer'
+        >
           <Typography
             type='text-caption2'
             className='xl:text-caption1'
@@ -125,8 +128,17 @@ const HardwareInfo = () => {
             {t('hardwareInfo.usage')}
           </Typography>
         </div>
-        <div onClick={viewNetworkInfo} className='flex-1 p-2 flex items-center justify-center cursor-pointer'>
-          <Typography isBold={isNetworkView} type='text-caption2' className='xl:text-caption1' color={isNetworkView ? 'text-primary' : 'text-dark500'} darkMode={isNetworkView ? 'dark:text-white' : undefined}>
+        <div
+          onClick={viewNetworkInfo}
+          className='flex-1 p-2 flex items-center justify-center cursor-pointer'
+        >
+          <Typography
+            isBold={isNetworkView}
+            type='text-caption2'
+            className='xl:text-caption1'
+            color={isNetworkView ? 'text-primary' : 'text-dark500'}
+            darkMode={isNetworkView ? 'dark:text-white' : undefined}
+          >
             {t('hardwareInfo.diagnostics')}
           </Typography>
         </div>

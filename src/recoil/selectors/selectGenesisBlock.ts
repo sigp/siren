@@ -1,6 +1,6 @@
-import { selector } from 'recoil';
-import { fetchGenesisBlock } from '../../api/beacon';
-import { beaconNodeEndpoint } from '../atoms';
+import { selector } from 'recoil'
+import { fetchGenesisBlock } from '../../api/beacon'
+import { beaconNodeEndpoint } from '../atoms'
 
 export const selectGenesisBlock = selector({
   key: 'selectGenesisBlock',

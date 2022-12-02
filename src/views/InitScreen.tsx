@@ -1,27 +1,29 @@
 import Typography from '../components/Typography/Typography'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { Endpoint } from '../types';
+import { Endpoint } from '../types'
 import { useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import {
   apiToken,
   appView,
-  beaconNodeEndpoint, beaconVersionData,
+  beaconNodeEndpoint,
+  beaconVersionData,
   onBoardView,
   userName,
-  validatorClientEndpoint, validatorVersionData
-} from '../recoil/atoms';
+  validatorClientEndpoint,
+  validatorVersionData,
+} from '../recoil/atoms'
 import { AppView, OnboardView } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
-import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon';
+import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
 import { UsernameStorage } from '../types/storage'
-import AppDescription from '../components/AppDescription/AppDescription';
+import AppDescription from '../components/AppDescription/AppDescription'
 
 const InitScreen = () => {
   const { t } = useTranslation()
-  const [isReady, setReady] = useState(false);
+  const [isReady, setReady] = useState(false)
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
   const setOnboardView = useSetRecoilState(onBoardView)
@@ -49,7 +51,10 @@ const InitScreen = () => {
     try {
       incrementStep()
 
-      const [vcResult, beaconResult] = await Promise.all([fetchVersion(validatorClient, token), fetchBeaconVersion(beaconNode)])
+      const [vcResult, beaconResult] = await Promise.all([
+        fetchVersion(validatorClient, token),
+        fetchBeaconVersion(beaconNode),
+      ])
 
       if (vcResult.status === 200 && beaconResult.status === 200) {
         setBeaconVersion(beaconResult.data.data.version)
@@ -83,7 +88,7 @@ const InitScreen = () => {
   }
 
   useEffect(() => {
-    if(isReady) return;
+    if (isReady) return
 
     if (!validatorClient || !beaconNode || !token || !username) {
       moveToView(AppView.ONBOARD)
@@ -130,7 +135,7 @@ const InitScreen = () => {
             <div className='animate-blink h-3 w-1 bg-white text-dark100' />
           </div>
         </div>
-        <AppDescription view="init"/>
+        <AppDescription view='init' />
       </div>
     </div>
   )

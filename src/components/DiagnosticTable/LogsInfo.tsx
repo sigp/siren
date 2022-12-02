@@ -1,13 +1,13 @@
 import Typography from '../Typography/Typography'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import { useTranslation } from 'react-i18next'
-import useMediaQuery from '../../hooks/useMediaQuery';
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 const LogsInfo = () => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery('(max-width: 425px)')
 
-  const size = isMobile ? 'health' : 'md';
+  const size = isMobile ? 'health' : 'md'
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>

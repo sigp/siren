@@ -37,8 +37,8 @@ const SyncCard: FC<SyncCardProps> = ({
           {type === 'beacon' ? (
             <LightEth className='h-24 text-dark100' />
           ) : type === 'geth' ? (
-            <EthOutline className='h-24 text-dark100'/>
-            ) : (
+            <EthOutline className='h-24 text-dark100' />
+          ) : (
             <NotAvailable className='h-16 text-dark100' />
           )}
         </div>

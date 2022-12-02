@@ -1,10 +1,10 @@
-import { useRecoilState } from 'recoil';
-import { uiMode } from '../recoil/atoms';
-import useLocalStorage from './useLocalStorage';
-import { UiThemeStorage } from '../types/storage';
-import { Storage, UiMode } from '../constants/enums';
+import { useRecoilState } from 'recoil'
+import { uiMode } from '../recoil/atoms'
+import useLocalStorage from './useLocalStorage'
+import { UiThemeStorage } from '../types/storage'
+import { Storage, UiMode } from '../constants/enums'
 
-const useUiMode = (): {mode: UiMode, toggleUiMode: () => void} => {
+const useUiMode = (): { mode: UiMode; toggleUiMode: () => void } => {
   const [mode, setMode] = useRecoilState(uiMode)
   const [, setThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
 
@@ -14,11 +14,10 @@ const useUiMode = (): {mode: UiMode, toggleUiMode: () => void} => {
     setThemeStorage(theme)
   }
 
-
   return {
     mode,
-    toggleUiMode
+    toggleUiMode,
   }
 }
 
-export default useUiMode;
+export default useUiMode
