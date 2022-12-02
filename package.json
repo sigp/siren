@@ -23,7 +23,9 @@
     "electron-squirrel-startup": "^1.0.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "ethers": "^5.7.1",
+    "husky": "^8.0.2",
     "i18next": "^21.9.2",
+    "lint-staged": "^13.0.4",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-d3-speedometer": "^1.0.2",
@@ -89,6 +91,17 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "echo hello world"
+    }
+  },
+  "lint-staged": {
+    "*.{ts,js,tsx,jsx}": [
+      "prettier --write",
+      "eslint --fix"
     ]
   },
   "devDependencies": {
