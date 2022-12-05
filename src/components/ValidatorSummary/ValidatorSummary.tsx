@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import Status from '../Status/Status'
 import { useTranslation } from 'react-i18next'
 import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
+import ActiveValidatorCount from '../ActiveValidatorCount/ActiveValidatorCount'
 
 const ValidatorSummary = () => {
   const { t } = useTranslation()
@@ -58,14 +59,7 @@ const ValidatorSummary = () => {
         <Typography type='text-caption2' isBold isUpperCase>
           {t('validatorManagement.summary.networkValidators')}
         </Typography>
-        <div className='flex justify-between lg:justify-start lg:space-x-2'>
-          <Typography color='text-dark300' isCapitalize type='text-caption1'>
-            {t('validatorManagement.summary.active')}
-          </Typography>
-          <Typography isBold type='text-caption1'>
-            138,847
-          </Typography>
-        </div>
+        <ActiveValidatorCount />
       </div>
       <div className='p-3 space-y-2'>
         <Typography type='text-caption2' isBold isUpperCase>
