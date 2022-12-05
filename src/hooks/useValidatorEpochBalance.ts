@@ -35,7 +35,9 @@ const useValidatorEpochBalance = () => {
   const fetchEpochBalances = async () => {
     if (!baseBeaconUrl || !validators.length) return
 
-    const slotByEpoch = Array.from(Array(10).keys()).map((i) => headSlot - 32 * i)
+	// Need to obtain the value of the head slot on each epoch boundary.
+	const closest_epoch_slot = Math.floor(headSlot/32)*32
+    const slotByEpoch = Array.from(Array(10).keys()).map((i) => closest_epoch_slot - 32 * i)
 
     const results = await Promise.all(
       slotByEpoch.map((epoch) => {
