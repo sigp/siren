@@ -189,3 +189,15 @@ export const EARNINGS_OPTIONS = [
 ] as EarningOption[]
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
+
+export const DEFAULT_VALIDATOR_COUNT = {
+  active_exiting: 0,
+  active_ongoing: 0,
+  active_slashed: 0,
+  exited_slashed: 0,
+  exited_unslashed: 0,
+  pending_initialized: 0,
+  pending_queued: 0,
+  withdrawal_done: 0,
+  withdrawal_possible: 0,
+}
