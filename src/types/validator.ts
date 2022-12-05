@@ -63,3 +63,15 @@ export type EarningOption = {
   title: string
   value: number
 }
+
+export type ValidatorCountResult = {
+  active_exiting: number
+  active_ongoing: number
+  active_slashed: number
+  exited_slashed: number
+  exited_unslashed: number
+  pending_initialized: number
+  pending_queued: number
+  withdrawal_done: number
+  withdrawal_possible: number
+}
