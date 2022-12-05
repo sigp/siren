@@ -20,6 +20,3 @@ export const fetchValidatorStatuses = async (
 
 export const fetchGenesisBlock = async ({ protocol, address, port }: Endpoint) =>
   await axios.get(`${protocol}://${address}:${port}/eth/v1/beacon/genesis`)
-
-export const fetchPeerCount = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/eth/v1/node/peer_count`)
