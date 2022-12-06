@@ -1,0 +1,17 @@
+ARG node_version=16.16
+ARG node_image=node:${node_version}
+FROM $node_image AS builder
+
+ENV NODE_ENV=production
+
+COPY . /app/
+WORKDIR /app
+
+RUN yarn install
+## fails currently because of eslint warnings
+RUN yarn build
+
+## stage2
+FROM nginx:alpine
+
+COPY --from=builder /app/build/* /usr/share/nginx/html/

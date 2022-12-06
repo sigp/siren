@@ -7,7 +7,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@faker-js/faker": "^7.5.0",
     "@hookform/resolvers": "^2.9.8",
+    "@storybook/react": "^6.5.10",
     "@storybook/theming": "^6.5.10",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.4.0",

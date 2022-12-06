@@ -78,3 +78,13 @@ Then run local server and electron by running:
 ```bash 
 yarn dev
 ```
+
+## Run webapp in docker
+
+build image:  
+`docker build -t lighthouse-ui-dev -f Dockerfile.dev .`
+
+run it:  
+`docker run --rm -ti -p 5000:5000 lighthouse-ui-dev`
+
+a Dockerfile for a production build is provided but fails on linting warnings, we'll fix that when we need it. 
