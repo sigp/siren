@@ -1,9 +1,8 @@
-import { BALANCE_COLORS, initialEthDeposit, secondsInEpoch } from '../../constants/constants'
+import { BALANCE_COLORS, initialEthDeposit } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
-import moment from 'moment/moment'
 import useValidatorEpochBalance from '../../hooks/useValidatorEpochBalance'
 import { useMemo } from 'react'
 import Spinner from '../Spinner/Spinner'
@@ -16,23 +15,15 @@ export const ValidatorBalanceFallback = () => (
 
 const ValidatorBalances = () => {
   const { t } = useTranslation()
-  const { epochs } = useValidatorEpochBalance()
+  const { epochs, timestamps } = useValidatorEpochBalance()
 
   const balanceData = useMemo(() => {
-    const labels = Array.from(Array(10).keys())
-      .map((_, i) =>
-        moment()
-          .subtract(secondsInEpoch * i, 's')
-          .format('HH:mm'),
-      )
-      .reverse()
-
     return {
-      labels,
+      labels: timestamps,
       datasets: epochs
         .map(({ name, data }) => {
-          if (data.length < labels.length) {
-            const missingEpochs = labels.length - data.length
+          if (data.length < timestamps.length) {
+            const missingEpochs = timestamps.length - data.length
 
             const fillData = Array.from(Array(missingEpochs).keys()).map(() => initialEthDeposit)
 
@@ -54,7 +45,7 @@ const ValidatorBalances = () => {
           backgroundColor: BALANCE_COLORS[index],
         })),
     }
-  }, [epochs])
+  }, [epochs, timestamps])
 
   return (
     <div className='flex-1 flex h-full w-full'>
