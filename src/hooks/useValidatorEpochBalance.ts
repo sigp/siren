@@ -1,4 +1,4 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { useEffect, useMemo, useState } from 'react'
 import { selectValidators } from '../recoil/selectors/selectValidators'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
@@ -6,25 +6,22 @@ import { fetchValidatorStatuses } from '../api/beacon'
 import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
-import {
-  validatorIncrementTimestamp,
-  validatorIntervalIncrement,
-  validatorStateInfo,
-} from '../recoil/atoms'
+import { validatorIntervalIncrement, validatorStateInfo } from '../recoil/atoms'
 import { secondsInEpoch, slotsInEpoc } from '../constants/constants'
-import moment from 'moment'
 import { selectAtHeadSlot } from '../recoil/selectors/selectAtHeadSlot'
+import moment from 'moment'
 
 const useValidatorEpochBalance = () => {
   const validators = useRecoilValue(selectValidators)
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
   const validatorInfo = useRecoilValue(validatorStateInfo)
   const validatorIncrement = useRecoilValue(validatorIntervalIncrement)
-  const [timestamp, setTimeStamp] = useRecoilState(validatorIncrementTimestamp)
   const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
   const atHeadSlot = useRecoilValue(selectAtHeadSlot)
 
-  const [epochs, setEpochs] = useState<BeaconValidatorResult[][]>([])
+  const [epochs, setEpochs] = useState<{ epochs: BeaconValidatorResult[]; timestamp?: string }[]>(
+    [],
+  )
 
   useEffect(() => {
     if ((atHeadSlot || 0) < -5) {
@@ -32,25 +29,47 @@ const useValidatorEpochBalance = () => {
     }
   }, [atHeadSlot])
 
+  const fetchStatus = async (
+    baseBeaconUrl: string,
+    validatorKeys: string,
+    epoch: string,
+    timestamp: string,
+  ) => {
+    const { data } = await fetchValidatorStatuses(baseBeaconUrl, validatorKeys, epoch)
+
+    return {
+      data,
+      timestamp,
+    }
+  }
+
   const fetchEpochBalances = async () => {
     if (!baseBeaconUrl || !validators.length) return
 
-    const slotByEpoch = Array.from(Array(10).keys()).map((i) => headSlot - 32 * i)
+    // Need to obtain the value of the head slot on each epoch boundary.
+    const closest_epoch_slot = Math.floor(headSlot / 32) * 32
+    const slotByEpoch = Array.from(Array(10).keys()).map((i) => ({
+      epoch: closest_epoch_slot - 32 * i,
+      timestamp: moment()
+        .subtract(secondsInEpoch * i, 's')
+        .format('HH:mm'),
+    }))
 
     const results = await Promise.all(
-      slotByEpoch.map((epoch) => {
+      slotByEpoch.map(({ epoch, timestamp }) => {
         return epoch > 0
-          ? fetchValidatorStatuses(
+          ? fetchStatus(
               baseBeaconUrl,
               validators.map((validator) => validator.pubKey).join(),
               epoch.toString(),
+              timestamp,
             )
-          : { data: [] }
+          : { data: [], timestamp: undefined }
       }),
     )
 
     const validatorsEpochs = results
-      .map((data) => data.data.data)
+      .map((data) => ({ epochs: data.data.data, timestamp: data?.timestamp }))
       .filter((data) => data !== undefined)
 
     setEpochs(validatorsEpochs)
@@ -61,8 +80,8 @@ const useValidatorEpochBalance = () => {
       ? validators.slice(0, 10).map(({ pubKey, name }) => ({
           name,
           data: epochs
-            .map((epoch) =>
-              epoch
+            .map((data) =>
+              data.epochs
                 .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
                 .map((data: BeaconValidatorResult) => Number(formatUnits(data.balance, 'gwei'))),
             )
@@ -71,18 +90,16 @@ const useValidatorEpochBalance = () => {
         }))
       : []
   }, [epochs, validators])
-
-  useEffect(() => {
-    if (moment().diff(moment(timestamp), 'seconds') > secondsInEpoch) {
-      void fetchEpochBalances()
-    }
-
-    setTimeStamp(moment.now)
-  }, [epochs, timestamp])
+  const formattedTimestamps = useMemo(() => {
+    return epochs.map((data) => data.timestamp).reverse() as string[]
+  }, [epochs])
 
   useEffect(() => {
     if (validatorIncrement === slotsInEpoc) {
-      setEpochs((prev) => [validatorInfo, ...prev.slice(1)])
+      setEpochs((prev) => [
+        { epochs: validatorInfo, timestamp: moment().format('HH:mm') },
+        ...prev.slice(0, -1),
+      ])
     }
   }, [validatorIncrement, validatorInfo])
 
@@ -94,6 +111,7 @@ const useValidatorEpochBalance = () => {
 
   return {
     epochs: formattedEpochData,
+    timestamps: formattedTimestamps,
   }
 }
 

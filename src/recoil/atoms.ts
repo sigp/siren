@@ -84,11 +84,6 @@ export const validatorIntervalIncrement = atom<number>({
   default: 0,
 })
 
-export const validatorIncrementTimestamp = atom<number | undefined>({
-  key: 'validatorIncrementTimestamp',
-  default: undefined,
-})
-
 export const validatorVersionData = atom<string | undefined>({
   key: 'validatorVersionData',
   default: undefined,
