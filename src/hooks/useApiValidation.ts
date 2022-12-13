@@ -2,8 +2,12 @@ import { Endpoint } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from '../utilities/debounce'
 import axios from 'axios'
+import { toast } from 'react-toastify'
+import { ApiType } from '../constants/enums'
+import { useTranslation } from 'react-i18next'
 
-const useApiValidation = (path: string, data?: Endpoint) => {
+const useApiValidation = (path: string, type: ApiType, data?: Endpoint) => {
+  const { t } = useTranslation()
   const [isValid, setValidApi] = useState<boolean>(false)
 
   const testApi = useCallback(
@@ -16,11 +20,21 @@ const useApiValidation = (path: string, data?: Endpoint) => {
         if (status === 200) {
           setValidApi(true)
         }
-      } catch (e) {
+      } catch ({ code }) {
+        if (code === 'ERR_NETWORK') {
+          toast.error(t('error.cors', { type }), {
+            position: 'top-right',
+            autoClose: 5000,
+            theme: 'colored',
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+          })
+        }
         setValidApi(false)
       }
     }),
-    [data, path],
+    [data, path, type],
   )
 
   useEffect(() => {

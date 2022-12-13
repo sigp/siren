@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Control, useForm, UseFormGetValues } from 'react-hook-form'
-import { ConfigType, OnboardView, Protocol } from '../constants/enums'
+import { ApiType, ConfigType, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
@@ -99,8 +99,12 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
 
-  const isValidBeaconNode = useApiValidation('eth/v1/node/version', beaconNode)
-  const isValidValidatorClient = useApiValidation('lighthouse/auth', validatorClient)
+  const isValidBeaconNode = useApiValidation('eth/v1/node/version', ApiType.BEACON, beaconNode)
+  const isValidValidatorClient = useApiValidation(
+    'lighthouse/auth',
+    ApiType.VALIDATOR,
+    validatorClient,
+  )
 
   const changeFormType = (type: ConfigType) => {
     resetField('beaconNode', { defaultValue: endPointDefault })

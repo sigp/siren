@@ -170,6 +170,7 @@
     "vcPort": "VC Port"
   },
   "error": {
+    "cors": "{{type}} NODE CORS ERROR: Use --http-allow-origin \"*\" in {{type}} config",
     "validatorInfo": "Error Loading Validator Info...",
     "apiTokenRequired": "Api Token is required",
     "userName": {
