@@ -36,6 +36,12 @@ const HardwareInfo = () => {
   const isDeviceView = view === DiagnosticType.DEVICE
   const isNetworkView = view === DiagnosticType.NETWORK
 
+  const metric = networkName
+    ? natOpen
+      ? t('vcHealthCheck.natOpen')
+      : t('vcHealthCheck.natClosed')
+    : undefined
+
   const renderView = () => {
     switch (view) {
       case DiagnosticType.DEVICE:
@@ -78,9 +84,14 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               title={t('network')}
               isBackground={false}
-              metric={networkName ? ' ' : undefined}
+              metricTextSize='text-caption2'
+              metric={metric?.toUpperCase()}
               subTitleHighlightColor='bg-warning'
-              subTitle={networkName ? networkName : t('networkUnavailable')}
+              subTitle={
+                networkName
+                  ? t('vcHealthCheck.networkName', { network: networkName })
+                  : t('networkUnavailable')
+              }
               status={natOpen ? 'bg-success' : 'bg-dark100'}
             />
             <DiagnosticCard
