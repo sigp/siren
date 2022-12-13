@@ -50,9 +50,9 @@ const useDeviceDiagnostics = (): Diagnostics => {
 
   const ramStatus = useMemo<StatusType>(
     () =>
-      totalMemoryFree > 15
+      totalMemoryFree > 4
         ? 'bg-success'
-        : totalMemoryFree > 4 && totalMemoryFree < 15
+        : totalMemoryFree > 2 && totalMemoryFree < 4
         ? 'bg-warning'
         : 'bg-error',
     [totalMemoryFree],
