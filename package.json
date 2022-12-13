@@ -53,6 +53,7 @@
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
+    "coverage": "jest --coverage",
     "eject": "react-scripts eject",
     "electron": "WEB_URL=http://localhost:3000 electron .",
     "electron-prd": "electron .",
