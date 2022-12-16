@@ -9,9 +9,15 @@ import Toggle from '../../../components/Toggle/Toggle'
 import Button, { ButtonFace } from '../../../components/Button/Button'
 import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
 import { useTranslation } from 'react-i18next'
+import SelectDropDown from '../../../components/SelectDropDown/SelectDropDown'
 
 const ConfigureConnection = () => {
   const { t } = useTranslation()
+
+  const selectDevice = () => {
+    console.log('oky')
+  }
+
   return (
     <div className='flex-1 relative w-full flex flex-col relative justify-center bg-black'>
       <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' />
@@ -31,7 +37,9 @@ const ConfigureConnection = () => {
             isValidBeaconNode,
             isValidValidatorClient,
             changeFormType,
+            deviceInfos,
             isDisabled,
+            // isValidDeviceName,
             ...props
           }) => (
             <div className='space-y-8'>
@@ -88,17 +96,35 @@ const ConfigureConnection = () => {
                 )}
               />
               <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
-                <Controller
-                  name='deviceName'
-                  control={control}
-                  render={({ field: { ref: _ref, ...props } }) => (
-                    <Input
-                      label={t('configScreen.deviceName')}
-                      placeholder='Local Host'
-                      {...props}
-                    />
-                  )}
-                />
+                {deviceInfos && (
+                  <SelectDropDown
+                    bgColor='bg-dark950'
+                    uiMode='dark'
+                    isBoldLabel
+                    labelType='text-caption1'
+                    labelFont='font-archivo'
+                    color='text-dark500'
+                    label={t('configScreen.deviceName')}
+                    className='w-full flex flex-col justify-between pb-3 border-b-style500'
+                    onSelect={selectDevice}
+                    options={deviceInfos.map(({ deviceName }) => ({
+                      title: deviceName,
+                      value: deviceName,
+                    }))}
+                  />
+                )}
+                {/* <Controller */}
+                {/*   name='deviceName' */}
+                {/*   control={control} */}
+                {/*   render={({ field: { ref: _ref, ...props } }) => ( */}
+                {/*     <Input */}
+                {/*       label={t('configScreen.deviceName')} */}
+                {/*       placeholder='Local Host' */}
+                {/*       error={!isValidDeviceName ? t('error.deviceExists') : undefined} */}
+                {/*       {...props} */}
+                {/*     /> */}
+                {/*   )} */}
+                {/* /> */}
                 <Controller
                   name='userName'
                   control={control}

@@ -4,6 +4,7 @@ export interface DropDownProps {
   isOpen: boolean
   children: ReactElement | ReactElement[]
   width?: string
+  bgColor?: string
   className?: string
   position?: string
 }
@@ -12,6 +13,7 @@ const DropDown: FC<DropDownProps> = ({
   children,
   isOpen,
   width,
+  bgColor = 'dark:bg-black bg-white',
   className = '',
   position = 'top-full left-0 z-50',
 }) => {
@@ -22,7 +24,7 @@ const DropDown: FC<DropDownProps> = ({
       id='dropdown'
       className={`${isOpen ? 'absolute' : 'hidden'} ${
         width || 'w-full'
-      } ${className} ${position} animate-fadeSlideIn bg-white rounded divide-y divide-gray-100 shadow dark:bg-black`}
+      } ${className} ${position} animate-fadeSlideIn rounded divide-y divide-gray-100 shadow ${bgColor}`}
     >
       <ul
         className={`text-sm max-h-32 overflow-scroll relative text-gray-700 dark:text-gray-200 ${

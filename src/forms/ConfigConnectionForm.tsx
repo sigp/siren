@@ -1,17 +1,22 @@
 import React, { FC, useState } from 'react'
 import { Control, useForm, UseFormGetValues } from 'react-hook-form'
-import { ApiType, ConfigType, OnboardView, Protocol } from '../constants/enums'
+import {
+  ApiType,
+  ConfigType,
+  // OnboardView,
+  Protocol,
+} from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
 import {
-  apiToken,
-  beaconNodeEndpoint,
+  // apiToken,
+  // beaconNodeEndpoint,
   beaconVersionData,
-  onBoardView,
-  userName,
-  validatorClientEndpoint,
+  // onBoardView,
+  // userName,
+  // validatorClientEndpoint,
   validatorVersionData,
 } from '../recoil/atoms'
 import { configValidation } from '../validation/configValidation'
@@ -19,9 +24,9 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
-import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
+import { ApiTokenStorage, DeviceStorage, EndpointStorage, UsernameStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
-import { Endpoint } from '../types'
+import { DeviceInfo, Endpoint } from '../types'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -40,6 +45,8 @@ export interface RenderProps {
   getValues: UseFormGetValues<ConnectionForm>
   formType: ConfigType
   isValidBeaconNode: boolean
+  isValidDeviceName: boolean
+  deviceInfos?: DeviceInfo[]
   isValidValidatorClient: boolean
   changeFormType: (type: ConfigType) => void
   isDisabled: boolean
@@ -54,18 +61,21 @@ export interface ConfigConnectionFormProps {
 const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
-  const setView = useSetRecoilState(onBoardView)
-  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
-  const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  // const setView = useSetRecoilState(onBoardView)
+  // const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
+  // const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
-  const setApiToken = useSetRecoilState(apiToken)
-  const setUserName = useSetRecoilState(userName)
+  // const setApiToken = useSetRecoilState(apiToken)
+  // const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
 
   const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
   const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
   const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [devices, storeDevices] = useLocalStorage<DeviceStorage>('devices', undefined)
+
+  const deviceInfos = devices && JSON.parse(devices)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -98,6 +108,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
+  const deviceName = watch('deviceName')
 
   const isValidBeaconNode = useApiValidation('eth/v1/node/version', ApiType.BEACON, beaconNode)
   const isValidValidatorClient = useApiValidation(
@@ -133,8 +144,13 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     })
   }
 
+  const isValidDeviceName =
+    deviceInfos && deviceName
+      ? !deviceInfos.find((device: DeviceInfo) => device.deviceName === deviceName)
+      : true
+
   const onSubmit = async () => {
-    const { isRemember, apiToken, userName } = getValues()
+    const { isRemember, apiToken, userName, deviceName } = getValues()
 
     try {
       const [vcResult, beaconResult] = await Promise.all([
@@ -157,11 +173,20 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
         storeUserName(userName)
       }
 
-      setUserName(userName)
-      setApiToken(apiToken)
-      setBeaconNode(beaconNode)
-      setValidatorClient(validatorClient)
-      setView(OnboardView.SETUP)
+      const device = {
+        beaconNode,
+        validatorClient,
+        apiToken,
+        deviceName,
+      }
+
+      storeDevices(JSON.stringify([device, ...deviceInfos]))
+
+      // setUserName(userName)
+      // setApiToken(apiToken)
+      // setBeaconNode(beaconNode)
+      // setValidatorClient(validatorClient)
+      // setView(OnboardView.SETUP)
     } catch (e) {
       handleError(e)
     }
@@ -176,11 +201,14 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           isLoading,
           getValues,
           onSubmit,
+          deviceInfos,
           changeFormType,
           isValidBeaconNode,
           isValidValidatorClient,
+          isValidDeviceName,
           formType,
-          isDisabled: !isValid || !isValidBeaconNode || !isValidValidatorClient,
+          isDisabled:
+            !isValid || !isValidBeaconNode || !isValidValidatorClient || !isValidDeviceName,
         })}
     </form>
   )

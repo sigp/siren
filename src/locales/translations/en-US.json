@@ -177,6 +177,7 @@
     "unknownError": "Unknown {{type}} NODE error.",
     "validatorInfo": "Error Loading Validator Info...",
     "apiTokenRequired": "Api Token is required",
+    "deviceExists": "Device with this name already exists!",
     "userName": {
       "maxLength": "Name cannot exceed 14 characters",
       "required": "User name is required"

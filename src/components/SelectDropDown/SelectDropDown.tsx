@@ -1,6 +1,10 @@
 import { ChangeEvent, FC, useMemo, useState } from 'react'
 import useClickOutside from '../../hooks/useClickOutside'
-import Typography, { TypographyColor } from '../Typography/Typography'
+import Typography, {
+  TypographyColor,
+  TypographyFamily,
+  TypographyType,
+} from '../Typography/Typography'
 import DropDown from '../DropDown/DropDown'
 
 export type OptionType = string | number
@@ -15,8 +19,14 @@ export interface SelectDropDownProps {
   label?: string
   placeholder?: string
   value?: OptionType
+  uiMode?: 'dark' | 'light'
   color?: TypographyColor
+  bgColor?: string
+  labelType?: TypographyType
+  isBoldLabel?: boolean
+  labelFont?: TypographyFamily
   isFilter?: boolean
+  className?: string
   onSelect: (selection: OptionType) => void
 }
 
@@ -26,6 +36,12 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   value,
   color,
   label,
+  labelFont,
+  uiMode,
+  bgColor,
+  isBoldLabel,
+  labelType = 'text-caption1',
+  className = 'w-36',
   isFilter,
   placeholder,
 }) => {
@@ -58,9 +74,15 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   }, [query, options])
 
   return (
-    <div className='w-36'>
+    <div className={className}>
       {label && (
-        <Typography type='text-caption1' color={color} className='xl:text-body'>
+        <Typography
+          isBold={isBoldLabel}
+          family={labelFont}
+          type={labelType}
+          color={color}
+          className={!labelType ? 'xl:text-body' : undefined}
+        >
           {label}
         </Typography>
       )}
@@ -77,7 +99,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
           </Typography>
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`} />
         </button>
-        <DropDown className='mt-2' isOpen={isOpen}>
+        <DropDown bgColor={bgColor} className='mt-2' isOpen={isOpen}>
           <>
             {isFilter && (
               <div className='w-full bg-white dark:bg-black sticky top-0'>
@@ -93,10 +115,16 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
             {filteredOptions.map(({ title, value }, index) => (
               <li
                 onClick={() => makeSelection(value !== undefined ? value : title)}
-                className='block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white'
+                className={`text-body font-openSauce font-normal block cursor-pointer capitalize py-2 px-4 ${
+                  uiMode
+                    ? uiMode === 'dark'
+                      ? 'text-dark500 hover:bg-dark750 hover:text-white'
+                      : 'bg-gray-100'
+                    : 'text-dark900 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white'
+                }`}
                 key={index}
               >
-                <Typography className='capitalize'>{title}</Typography>
+                {title}
               </li>
             ))}
           </>

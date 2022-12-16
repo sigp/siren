@@ -40,3 +40,10 @@ export type CurrencyPrefix = {
   prefix: string
   formattedPrefix?: string
 }
+
+export type DeviceInfo = {
+  beaconNode: Endpoint
+  validatorClient: Endpoint
+  apiToken: string
+  deviceName: string
+}
