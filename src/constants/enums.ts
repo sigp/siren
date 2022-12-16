@@ -53,3 +53,8 @@ export enum Storage {
   UI = 'UI',
   CURRENCY = 'CURRENCY',
 }
+
+export enum ApiType {
+  VALIDATOR = 'VALIDATOR',
+  BEACON = 'BEACON',
+}
