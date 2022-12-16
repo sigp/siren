@@ -75,21 +75,43 @@ const useValidatorEpochBalance = () => {
     setEpochs(validatorsEpochs)
   }
 
+  const currentValidatorStatus = useMemo(() => {
+    return epochs.length
+      ? validators.map(({ pubKey }) => {
+          const latestEpoch = epochs[0].epochs.find(
+            (data: BeaconValidatorResult) => data.validator.pubkey === pubKey,
+          )?.status
+          return {
+            pubKey,
+            isActive: latestEpoch?.includes('active') && !latestEpoch?.includes('slashed'),
+          }
+        })
+      : []
+  }, [epochs])
+
   const formattedEpochData = useMemo<ValidatorEpochData[]>(() => {
     return epochs.length
-      ? validators.slice(0, 10).map(({ pubKey, name }) => ({
-          name,
-          data: epochs
-            .map((data) =>
-              data.epochs
-                .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
-                .map((data: BeaconValidatorResult) => Number(formatUnits(data.balance, 'gwei'))),
-            )
-            .flat()
-            .reverse(),
-        }))
+      ? validators
+          .slice(0, 10)
+          .filter(
+            (data) =>
+              currentValidatorStatus.find((validator) => validator.pubKey === data.pubKey)
+                ?.isActive,
+          )
+          .map(({ pubKey, name }) => ({
+            name,
+            status: epochs[0].epochs[0].status,
+            data: epochs
+              .map((data) =>
+                data.epochs
+                  .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
+                  .map((data: BeaconValidatorResult) => Number(formatUnits(data.balance, 'gwei'))),
+              )
+              .flat()
+              .reverse(),
+          }))
       : []
-  }, [epochs, validators])
+  }, [epochs, validators, currentValidatorStatus])
   const formattedTimestamps = useMemo(() => {
     return epochs.map((data) => data.timestamp).reverse() as string[]
   }, [epochs])
