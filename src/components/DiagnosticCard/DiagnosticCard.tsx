@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import Typography from '../Typography/Typography'
+import Typography, { TypographyType } from '../Typography/Typography'
 import network from '../../assets/images/network.svg'
 import { ReactComponent as NotAvailable } from '../../assets/images/notAvalilable.svg'
 import darkNetwork from '../../assets/images/darkNetwork.svg'
@@ -12,6 +12,7 @@ export interface DiagnosticCardProps {
   percent?: number
   title: string
   metric?: string
+  metricTextSize?: TypographyType
   subTitle: string
   border?: string
   subTitleHighlightColor?: string
@@ -26,6 +27,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   subTitle,
   status,
   maxHeight,
+  metricTextSize,
   isBackground = true,
   border = 'border border-dark200',
   percent,
@@ -80,8 +82,8 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
         </Typography>
         {metric && (
           <Typography
-            type={isSmall ? 'text-tiny' : 'text-caption1'}
-            className={!isSmall ? 'xl:text-subtitle2' : ''}
+            type={isSmall ? 'text-tiny' : metricTextSize ? metricTextSize : 'text-caption1'}
+            className={!isSmall && !metricTextSize ? 'xl:text-subtitle2' : ''}
           >
             {metric}
           </Typography>

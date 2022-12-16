@@ -16,6 +16,12 @@ const NetworkHealth = () => {
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 
+  const metric = networkName
+    ? natOpen
+      ? t('vcHealthCheck.natOpen')
+      : t('vcHealthCheck.natClosed')
+    : undefined
+
   return (
     <div className='w-full md:h-24 flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-2 mt-8 md:mt-2'>
       <DiagnosticSummaryCard type={DiagnosticType.NETWORK} rate={DiagnosticRate.GREAT} />
@@ -23,9 +29,14 @@ const NetworkHealth = () => {
         size='health'
         title={t('network')}
         isBackground={false}
-        metric={networkName ? ' ' : undefined}
+        metricTextSize='text-caption2'
+        metric={metric?.toUpperCase()}
         subTitleHighlightColor='bg-warning'
-        subTitle={networkName ? networkName : t('networkUnavailable')}
+        subTitle={
+          networkName
+            ? t('vcHealthCheck.networkName', { network: networkName })
+            : t('networkUnavailable')
+        }
         status={natOpen ? 'bg-success' : 'bg-dark100'}
       />
       <DiagnosticCard

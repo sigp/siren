@@ -130,6 +130,9 @@
     "syncWarning": "You are currently syncing to the Ethereum Geth and Beacon node. This may take a while..."
   },
   "vcHealthCheck": {
+    "networkName": "Name: {{network}}",
+    "natOpen": "NAT Open",
+    "natClosed": "NAT Closed",
     "title": "Validator Health Check",
     "diagnosticOverview": "Diagnostics <0></0> overview",
     "hasDiskSpace": "Disk has the required 240GB for the full sync.",
