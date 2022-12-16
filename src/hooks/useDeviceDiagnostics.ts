@@ -16,7 +16,7 @@ const useDeviceDiagnostics = (): Diagnostics => {
     used_memory = 0,
     total_memory = 0,
     free_memory = 0,
-    sys_loadavg_1 = 0,
+    sys_loadavg_5 = 0,
     app_uptime = 0,
     network_name,
     nat_open = false,
@@ -50,7 +50,7 @@ const useDeviceDiagnostics = (): Diagnostics => {
 
   const ramStatus = useMemo<StatusType>(
     () =>
-      totalMemoryFree > 4
+      totalMemoryFree >= 4
         ? 'bg-success'
         : totalMemoryFree > 2 && totalMemoryFree < 4
         ? 'bg-warning'
@@ -58,16 +58,16 @@ const useDeviceDiagnostics = (): Diagnostics => {
     [totalMemoryFree],
   )
 
-  const cpuUtilization = sys_loadavg_1.toFixed(1)
+  const cpuUtilization = sys_loadavg_5.toFixed(1)
 
   const cpuStatus = useMemo<StatusType>(
     () =>
-      sys_loadavg_1 >= 2.5
+      sys_loadavg_5 <= 80
         ? 'bg-success'
-        : sys_loadavg_1 > 1.5 && sys_loadavg_1 < 2.4
+        : sys_loadavg_5 > 80 && sys_loadavg_5 < 90
         ? 'bg-warning'
         : 'bg-error',
-    [sys_loadavg_1],
+    [sys_loadavg_5],
   )
 
   const overallHealth = [diskStatus, cpuStatus, ramStatus]
