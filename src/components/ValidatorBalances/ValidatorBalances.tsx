@@ -15,7 +15,7 @@ export const ValidatorBalanceFallback = () => (
 
 const ValidatorBalances = () => {
   const { t } = useTranslation()
-  const { epochs, timestamps } = useValidatorEpochBalance()
+  const { epochs, timestamps, isSufficientData } = useValidatorEpochBalance()
 
   const balanceData = useMemo(() => {
     return {
@@ -69,11 +69,22 @@ const ValidatorBalances = () => {
             {balanceData.datasets.length}
           </Typography>
         </div>
-        {balanceData.datasets.length > 0 ? (
-          <StepChart data={balanceData} />
+        {isSufficientData ? (
+          balanceData.datasets.length > 0 ? (
+            <StepChart data={balanceData} />
+          ) : (
+            <div className='w-full h-full flex items-center justify-center'>
+              <Spinner />
+            </div>
+          )
         ) : (
-          <div className='w-full h-full flex items-center justify-center'>
-            <Spinner />
+          <div className='w-full h-full flex flex-col items-center justify-center'>
+            <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
+              Insufficient Data
+            </Typography>
+            <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
+              Please check again later
+            </Typography>
           </div>
         )}
       </div>
