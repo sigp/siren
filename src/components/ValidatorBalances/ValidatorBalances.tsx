@@ -80,10 +80,10 @@ const ValidatorBalances = () => {
         ) : (
           <div className='w-full h-full flex flex-col items-center justify-center'>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
-              Insufficient Data
+              {t('insufficientData')}
             </Typography>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
-              Please check again later
+              {t('pleaseCheckBack')}
             </Typography>
           </div>
         )}

@@ -80,6 +80,8 @@
   "viewAll": "View All",
   "validatorGraffiti": "Validator Graffiti",
   "graffitiGoesHere": "Graffiti goes here",
+  "insufficientData": "Insufficient Data",
+  "pleaseCheckBack": "Please check again later",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
