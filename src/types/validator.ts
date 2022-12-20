@@ -18,6 +18,11 @@ export type Validator = {
   name: string
 }
 
+export type ValidatorStatusInfo = {
+  pubKey: string
+  status: ValidatorStatus
+}
+
 export type ValidatorEpochData = {
   name: string
   data: number[]
