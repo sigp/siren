@@ -70,14 +70,8 @@ const ValidatorBalances = () => {
           </Typography>
         </div>
         {isSufficientData ? (
-          balanceData.datasets.length > 0 ? (
-            <StepChart data={balanceData} />
-          ) : (
-            <div className='w-full h-full flex items-center justify-center'>
-              <Spinner />
-            </div>
-          )
-        ) : (
+          <StepChart data={balanceData} />
+        ) : epochs.length ? (
           <div className='w-full h-full flex flex-col items-center justify-center'>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
               {t('insufficientData')}
@@ -85,6 +79,10 @@ const ValidatorBalances = () => {
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
               {t('pleaseCheckBack')}
             </Typography>
+          </div>
+        ) : (
+          <div className='w-full h-full flex items-center justify-center'>
+            <Spinner />
           </div>
         )}
       </div>
