@@ -75,15 +75,19 @@ const useValidatorEpochBalance = () => {
     setEpochs(validatorsEpochs)
   }
 
+  const isSufficientData = epochs.filter((epoch) => !!epoch?.epochs).length > 2
+
   const formattedEpochData = useMemo<ValidatorEpochData[]>(() => {
     return epochs.length
       ? validators.slice(0, 10).map(({ pubKey, name }) => ({
           name,
           data: epochs
             .map((data) =>
-              data.epochs
-                .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
-                .map((data: BeaconValidatorResult) => Number(formatUnits(data.balance, 'gwei'))),
+              data?.epochs
+                ? data.epochs
+                    .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
+                    .map((data: BeaconValidatorResult) => Number(formatUnits(data.balance, 'gwei')))
+                : [],
             )
             .flat()
             .reverse(),
@@ -112,6 +116,7 @@ const useValidatorEpochBalance = () => {
   return {
     epochs: formattedEpochData,
     timestamps: formattedTimestamps,
+    isSufficientData,
   }
 }
 
