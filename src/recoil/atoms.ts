@@ -79,11 +79,6 @@ export const userName = atom<string>({
   default: undefined,
 })
 
-export const validatorIntervalIncrement = atom<number>({
-  key: 'validatorIntervalIncrement',
-  default: 0,
-})
-
 export const validatorVersionData = atom<string | undefined>({
   key: 'validatorVersionData',
   default: undefined,
