@@ -1,0 +1,27 @@
+import { HealthDiagnosticResult } from '../types/diagnostic'
+
+export const mockBeaconHealthResult = {
+  app_uptime: 340758,
+  connected_peers: 1,
+  cpu_cores: 10,
+  cpu_threads: 10,
+  disk_bytes_free: 713859991843,
+  disk_bytes_total: 994662584320,
+  free_memory: 79151104,
+  global_cpu_frequency: 0,
+  host_name: 'Mavrik.Home',
+  kernel_version: '21.6.0',
+  nat_open: true,
+  network_bytes_total_received: 2919946240,
+  network_bytes_total_transmit: 1949522944,
+  network_name: 'en0',
+  os_version: 'MacOS 12.6 ',
+  sync_state: 'Synced',
+  sys_loadavg_1: 15.125,
+  sys_loadavg_5: 13.01318359375,
+  sys_loadavg_15: 13.34716796875,
+  system_name: 'Darwin',
+  system_uptime: 4171307,
+  total_memory: 17179869184,
+  used_memory: 17100718080,
+} as HealthDiagnosticResult

@@ -1,5 +1,3 @@
-const getPercentage = (amount: number, total: number) => {
-  return (100 * amount) / total
-}
+const getPercentage = (amount: number, total: number) => ~~((amount / total) * 100)
 
 export default getPercentage
