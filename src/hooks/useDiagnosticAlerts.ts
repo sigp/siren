@@ -21,7 +21,7 @@ const useDiagnosticAlerts = () => {
   }, [natOpen])
 
   const peerCountAlert = useMemo<Alert | undefined>(() => {
-    if (!peers) return undefined
+    if (!peers && peers !== 0) return undefined
 
     switch (true) {
       case peers < 20:
