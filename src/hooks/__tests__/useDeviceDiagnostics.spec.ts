@@ -1,16 +1,11 @@
 import useDeviceDiagnostics from '../useDeviceDiagnostics'
 import { renderHook } from '@testing-library/react-hooks'
-import { useRecoilValue } from 'recoil'
 import formatGigBytes from '../../utilities/formatGigBytes'
 import { mockBeaconHealthResult } from '../../mocks/beaconHealthResult'
+import { mockedRecoilValue } from '../../../test.helpers'
 
 jest.mock('../../utilities/formatGigBytes', () => jest.fn())
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  atom: jest.fn(),
-}))
 
-const mockedRecoilValue = useRecoilValue as jest.MockedFn<typeof useRecoilValue>
 const mockedFormatGigBytes = formatGigBytes as jest.MockedFn<typeof formatGigBytes>
 
 describe('useDeviceDiagnostics', () => {

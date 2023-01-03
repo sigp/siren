@@ -1,6 +1,11 @@
 export const mockT = jest.fn((str: string): string => str)
 import { renderNodes } from './test.helpers'
 
+jest.mock('recoil', () => ({
+  useRecoilValue: jest.fn(),
+  atom: jest.fn(),
+}))
+
 jest.mock('i18next', () => ({
   t: mockT,
 }))
