@@ -6,11 +6,6 @@ import { mockedRecoilValue } from '../../../test.helpers'
 
 jest.mock('../useDeviceDiagnostics', () => jest.fn())
 
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  atom: jest.fn(),
-}))
-
 export const mockedUseDeviceDiagnostics = useDeviceDiagnostics as jest.MockedFn<
   typeof useDeviceDiagnostics
 >
