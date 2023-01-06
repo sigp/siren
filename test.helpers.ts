@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React from 'react'
-import { useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 
 export * from '@testing-library/react'
 
@@ -41,3 +41,4 @@ export const timezoneMock = function (locale: string, zone: string) {
 }
 
 export const mockedRecoilValue = useRecoilValue as jest.MockedFn<typeof useRecoilValue>
+export const mockedRecoilState = useRecoilState as jest.MockedFn<typeof useRecoilState>
