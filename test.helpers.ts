@@ -40,5 +40,13 @@ export const timezoneMock = function (locale: string, zone: string) {
     .mockImplementation((l, options) => new DateTimeFormat(locale, { ...options, timeZone: zone }))
 }
 
+export const mockResponse = {
+  status: 200,
+  statusText: '',
+  headers: {},
+  config: {},
+  data: [],
+}
+
 export const mockedRecoilValue = useRecoilValue as jest.MockedFn<typeof useRecoilValue>
 export const mockedRecoilState = useRecoilState as jest.MockedFn<typeof useRecoilState>
