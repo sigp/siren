@@ -13,21 +13,27 @@ const usePollingInterval = (
   }, [callback])
 
   useEffect(() => {
+    if (intervalId) {
+      return () => {
+        options?.onClearInterval?.()
+        clearInterval(intervalId)
+        setId(undefined)
+      }
+    }
+  }, [intervalId])
+
+  useEffect(() => {
     if (options?.isSkip) return
 
     function tick() {
       savedCallback.current?.()
     }
     if (delay !== null) {
+      tick()
       const id = setInterval(tick, delay)
       setId(id)
-      return () => {
-        options?.onClearInterval?.()
-        clearInterval(id)
-        setId(undefined)
-      }
     }
-  }, [delay])
+  }, [delay, options?.isSkip])
 
   return {
     intervalId,
