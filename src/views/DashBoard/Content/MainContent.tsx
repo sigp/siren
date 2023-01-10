@@ -24,11 +24,18 @@ import useValidatorHealthPolling from '../../../hooks/useValidatorHealthPolling'
 import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling'
 import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling'
 import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
+import useValidatorInfo from '../../../hooks/useValidatorInfo'
 
 const MainContent = () => {
   const { t } = useTranslation()
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
   const [name, setUsername] = useRecoilState(userName)
+
+  const { fetchValidatorInfo } = useValidatorInfo()
+
+  useEffect(() => {
+    void fetchValidatorInfo()
+  }, [])
 
   useEffect(() => {
     if (username) {
