@@ -1,6 +1,6 @@
 import SideBar from '../../components/SideBar/SideBar'
 import FootBar from '../../components/FootBar/FootBar'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense } from 'react'
 import MainContent from './Content/MainContent'
 import { useRecoilState, useRecoilValue } from 'recoil'
 import { activeCurrency, dashView, uiMode } from '../../recoil/atoms'
@@ -69,7 +69,9 @@ const Dashboard = () => {
       <SideBar />
       <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar />
-        <div className='flex-1 w-full overflow-scroll'>{renderContent()}</div>
+        <Suspense fallback={<div className='w-full flex-1'>...</div>}>
+          <div className='flex-1 w-full overflow-scroll'>{renderContent()}</div>
+        </Suspense>
         <FootBar />
       </div>
     </>
