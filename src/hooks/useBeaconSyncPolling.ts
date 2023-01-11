@@ -3,16 +3,18 @@ import { beaconNodeEndpoint, beaconSyncInfo, beaconSyncInterval } from '../recoi
 import { useEffect } from 'react'
 import { secondsInSlot } from '../constants/constants'
 import usePollApi from './usePollApi'
+import useNextSlotDelay from './useNextSlotDelay'
 
 const useBeaconSyncPolling = (time = secondsInSlot * 1000) => {
   const beaconNode = useRecoilValue(beaconNodeEndpoint)
   const { protocol, address, port } = beaconNode || {}
   const url = beaconNode ? `${protocol}://${address}:${port}/eth/v1/node/syncing` : undefined
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo)
+  const { isDelayed } = useNextSlotDelay()
 
   const { response } = usePollApi({
     time,
-    isReady: !!url,
+    isReady: !!url || !isDelayed,
     intervalState: beaconSyncInterval,
     url,
   })
