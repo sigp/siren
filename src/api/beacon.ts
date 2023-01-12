@@ -12,7 +12,7 @@ export const fetchValidatorStatuses = async (
   validatorKeys: string,
   head = 'head',
 ) =>
-  await axios.get(`${baseBeaconUrl}/v1/beacon/states/${head}/validators`, {
+  await axios.get(`${baseBeaconUrl}/eth/v1/beacon/states/${head}/validators`, {
     params: {
       id: validatorKeys,
     },
