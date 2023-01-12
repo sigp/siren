@@ -1,156 +1,76 @@
 import { useRecoilValue } from 'recoil'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { selectValidators } from '../recoil/selectors/selectValidators'
-import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
-import { fetchValidatorStatuses } from '../api/beacon'
-import { BeaconValidatorResult, ValidatorEpochData } from '../types/validator'
+import { fetchValidatorBalanceCache } from '../api/beacon'
+import { ValidatorCacheResults } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
-import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
-import { validatorStateInfo } from '../recoil/atoms'
+import { beaconNodeEndpoint, validatorStateInfo } from '../recoil/atoms'
 import { secondsInSlot, slotsInEpoc } from '../constants/constants'
 import moment from 'moment'
 import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
-import usePrevious from './usePrevious'
-import getAtHeadSlot from '../utilities/getAtHeadSlot'
+import usePollingInterval from './usePollingInterval'
 
 const useValidatorEpochBalance = () => {
+  const [validatorData, setData] = useState<ValidatorCacheResults>()
   const validators = useRecoilValue(selectValidators)
-  const baseBeaconUrl = useRecoilValue(selectBeaconUrl) as string
+  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
   const validatorInfo = useRecoilValue(validatorStateInfo)
-  const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
   const genesisBlock = useRecoilValue(selectGenesisBlock) as number
-  const [isChartRefresh, setIsRefresh] = useState(false)
-
-  const prevHeadSlot = usePrevious(headSlot)
-
-  const getPrevAtHeadSlot = useCallback(
-    (prevHead: number) => {
-      return getAtHeadSlot(genesisBlock, prevHead)
-    },
-    [genesisBlock],
-  )
-
-  const [epochs, setEpochs] = useState<{ epochs: BeaconValidatorResult[]; timestamp?: string }[]>(
-    [],
-  )
-
-  const updateEpochs = useCallback(() => {
-    setEpochs((prev) => [
-      { epochs: validatorInfo, timestamp: moment().format('HH:mm') },
-      ...prev.slice(0, -1),
-    ])
-  }, [validatorInfo, genesisBlock])
 
   const activeValidators = useMemo(() => {
     return validatorInfo
-      ?.map(({ status, validator }) => ({ status, pubKey: validator.pubkey }))
+      ?.map(({ status, validator, index }) => {
+        const { name, pubKey } = validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
+        return { status, pubKey, index, name }
+      })
       .filter(({ status }) => status.includes('active') && !status?.includes('slashed'))
-  }, [validatorInfo])
+  }, [validatorInfo, validators])
 
-  const fetchStatus = async (
-    baseBeaconUrl: string,
-    validatorKeys: string,
-    epoch: string,
-    timestamp: string,
-  ) => {
-    const { data } = await fetchValidatorStatuses(baseBeaconUrl, validatorKeys, epoch)
+  const fetchValidatorBalances = useCallback(async () => {
+    const activeIndices = activeValidators?.map((validator) => Number(validator.index))
 
-    return {
-      data,
-      timestamp,
+    if (!activeIndices) return
+
+    const { data } = await fetchValidatorBalanceCache(beaconEndpoint, activeIndices)
+
+    if (data) {
+      setData(data.data.validators)
     }
-  }
+  }, [activeValidators])
 
-  const fetchEpochBalances = useCallback(async () => {
-    // Need to obtain the value of the head slot on each epoch boundary.
-    const closest_epoch_slot = Math.floor(headSlot / slotsInEpoc) * slotsInEpoc
-    const slotByEpoch = Array.from(Array(10).keys()).map((i) => {
-      const epoch = closest_epoch_slot - slotsInEpoc * i
-      return {
-        epoch,
-        timestamp: moment((genesisBlock + epoch * secondsInSlot) * 1000).format('HH:mm'),
-      }
-    })
+  useEffect(() => {
+    if (activeValidators && beaconEndpoint && !validatorData) {
+      void fetchValidatorBalances()
+    }
+  }, [activeValidators, beaconEndpoint, validatorData])
 
-    const results = await Promise.all(
-      slotByEpoch.map(({ epoch, timestamp }) => {
-        return epoch > 0
-          ? fetchStatus(
-              baseBeaconUrl,
-              activeValidators.map((validator) => validator.pubKey).join(),
-              epoch.toString(),
-              timestamp,
-            )
-          : { data: [], timestamp: undefined }
-      }),
-    )
-
-    const validatorsEpochs = results
-      .map((data) => ({ epochs: data.data.data, timestamp: data?.timestamp }))
-      .filter((data) => data !== undefined)
-
-    setEpochs(validatorsEpochs)
-  }, [activeValidators, baseBeaconUrl, headSlot])
-
-  const isSufficientData = epochs.filter((epoch) => !!epoch?.epochs).length > 2
-
-  const formattedEpochData = useMemo<ValidatorEpochData[]>(() => {
-    return epochs.length
-      ? validators
-          .filter(
-            (validator) =>
-              activeValidators.filter(({ pubKey }) => pubKey === validator.pubKey).length,
-          )
-          .slice(0, 10)
-          .map(({ pubKey, name }) => ({
+  const formattedEpochData = useMemo(() => {
+    return validatorData
+      ? activeValidators?.map(({ index, name }) => {
+          const data = validatorData[index as any].info
+          return {
             name,
-            data: epochs
-              .map((data) =>
-                data?.epochs
-                  ? data.epochs
-                      .filter((data: BeaconValidatorResult) => data.validator.pubkey === pubKey)
-                      .map((data: BeaconValidatorResult) =>
-                        Number(formatUnits(data.balance, 'gwei')),
-                      )
-                  : [],
-              )
-              .flat()
-              .reverse(),
-          }))
+            data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
+          }
+        })
       : []
-  }, [epochs, validators, activeValidators])
+  }, [activeValidators, validatorData])
+
   const formattedTimestamps = useMemo(() => {
-    return epochs.map((data) => data.timestamp).reverse() as string[]
-  }, [epochs])
+    return validatorData
+      ? validatorData[0].info.map(({ epoch }) => {
+          const slot = epoch * slotsInEpoc
 
-  useEffect(() => {
-    if (!epochs.length && headSlot && !!activeValidators) {
-      void fetchEpochBalances()
-    }
-  }, [headSlot, epochs, activeValidators])
+          return moment((genesisBlock + slot * secondsInSlot) * 1000).format('HH:mm')
+        })
+      : []
+  }, [validatorData, genesisBlock])
 
-  useEffect(() => {
-    if (headSlot % slotsInEpoc === 0) {
-      updateEpochs()
-    }
-  }, [headSlot])
+  const isSufficientData = formattedTimestamps.length > 3
 
-  useEffect(() => {
-    if (isChartRefresh && Boolean(headSlot && prevHeadSlot) && headSlot === prevHeadSlot) {
-      void fetchEpochBalances()
-      setIsRefresh(false)
-    }
-  }, [headSlot, prevHeadSlot, isChartRefresh])
-
-  useEffect(() => {
-    if (!prevHeadSlot || !headSlot) return
-    const isLateSlot = (getPrevAtHeadSlot(prevHeadSlot) || 0) < -5
-
-    if (isLateSlot && prevHeadSlot !== headSlot) {
-      console.log(getPrevAtHeadSlot(prevHeadSlot))
-      setIsRefresh(true)
-    }
-  }, [prevHeadSlot, headSlot])
+  usePollingInterval(fetchValidatorBalances, 60000, {
+    isSkip: Boolean(activeValidators && activeValidators.length),
+  })
 
   return {
     epochs: formattedEpochData,

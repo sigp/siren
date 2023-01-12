@@ -20,3 +20,8 @@ export const fetchValidatorStatuses = async (
 
 export const fetchGenesisBlock = async ({ protocol, address, port }: Endpoint) =>
   await axios.get(`${protocol}://${address}:${port}/eth/v1/beacon/genesis`)
+
+export const fetchValidatorBalanceCache = async (
+  { protocol, address, port }: Endpoint,
+  indices: number[],
+) => await axios.post(`${protocol}://${address}:${port}/lighthouse/ui/validator_info`, { indices })
