@@ -57,7 +57,7 @@ const useValidatorEpochBalance = () => {
   }, [activeValidators, validatorData])
 
   const formattedTimestamps = useMemo(() => {
-    return validatorData
+    return validatorData && validatorData[0]
       ? validatorData[0].info.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
 
