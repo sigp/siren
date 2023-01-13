@@ -178,9 +178,13 @@
     "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin in {{type}} config",
     "unknownError": "Unknown {{type}} NODE error.",
     "validatorInfo": "Error Loading Validator Info...",
+    "missingValidatorData": "Invalid Validator Node Data",
     "apiTokenRequired": "Api Token is required",
+    "invalidApiToken": "Invalid Api Token",
+    "beaconDataRequired": "Beacon Node requires protocol, address and port",
+    "validatorDataRequired": "Validator Node requires protocol, address and port",
     "userName": {
-      "maxLength": "Name cannot exceed 14 characters",
+      "maxLength": "Username cannot exceed 14 characters",
       "required": "User name is required"
     }
   },
