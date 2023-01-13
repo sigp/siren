@@ -9,6 +9,6 @@ export const selectBeaconUrl = selector({
 
     const { protocol, address, port } = beaconNode
 
-    return `${protocol}://${address}:${port}/eth`
+    return `${protocol}://${address}:${port}`
   },
 })

@@ -80,3 +80,16 @@ export type ValidatorCountResult = {
   withdrawal_done: number
   withdrawal_possible: number
 }
+
+export type ValidatorCacheResults = {
+  [key: number]: ValidatorCacheData
+}
+
+export type ValidatorCacheData = {
+  info: ValidatorEpochResult[]
+}
+
+export type ValidatorEpochResult = {
+  epoch: number
+  total_balance: number
+}

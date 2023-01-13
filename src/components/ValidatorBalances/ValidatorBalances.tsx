@@ -1,4 +1,4 @@
-import { BALANCE_COLORS, initialEthDeposit } from '../../constants/constants'
+import { BALANCE_COLORS } from '../../constants/constants'
 import getAverageValue from '../../utilities/getAverageValue'
 import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
@@ -22,16 +22,8 @@ const ValidatorBalances = () => {
       labels: timestamps,
       datasets: epochs
         .map(({ name, data }) => {
-          if (data.length < timestamps.length) {
-            const missingEpochs = timestamps.length - data.length
-
-            const fillData = Array.from(Array(missingEpochs).keys()).map(() => initialEthDeposit)
-
-            data = [...fillData, ...data]
-          }
-
           return {
-            label: name,
+            label: name as string,
             data,
             fill: true,
             pointRadius: 0,

@@ -56,4 +56,5 @@ exec lighthouse \
   --http-allow-origin "*" \
 	--http-port $http_port \
 	--disable-packet-filter \
-	--target-peers $((BN_COUNT - 1))
+	--target-peers $((BN_COUNT - 1)) \
+	--gui
