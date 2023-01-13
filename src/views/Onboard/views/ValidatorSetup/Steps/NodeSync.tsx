@@ -1,21 +1,29 @@
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { appView, setupStep } from '../../../../../recoil/atoms'
 import { AppView, SetupSteps } from '../../../../../constants/enums'
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
 import Typography from '../../../../../components/Typography/Typography'
 import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures'
-import { Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncCard'
 import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback'
 import { Trans, useTranslation } from 'react-i18next'
 import useBeaconSyncPolling from '../../../../../hooks/useBeaconSyncPolling'
 import ValidatorSyncCard from '../../../../../components/ValidatorSyncCard/ValidatorSyncCard'
+import { selectBeaconSyncInfo } from '../../../../../recoil/selectors/selectBeaconSyncInfo'
 
 const NodeSync = () => {
   useBeaconSyncPolling()
   const { t } = useTranslation()
   const setView = useSetRecoilState(appView)
   const setStep = useSetRecoilState(setupStep)
+  const beaconHealth = useRecoilValue(selectBeaconSyncInfo)
+
+  useEffect(() => {
+    if (beaconHealth.beaconPercentage >= 95) {
+      setView(AppView.DASHBOARD)
+    }
+  }, [beaconHealth])
 
   const viewHealth = () => setStep(SetupSteps.HEALTH)
 
