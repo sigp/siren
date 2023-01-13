@@ -66,7 +66,7 @@ const useValidatorEpochBalance = () => {
       : []
   }, [validatorData, genesisBlock])
 
-  const isSufficientData = formattedTimestamps.length > 3
+  const isSufficientData = formattedTimestamps.length >= 3
 
   usePollingInterval(fetchValidatorBalances, 60000, {
     isSkip: Boolean(activeValidators && activeValidators.length),
