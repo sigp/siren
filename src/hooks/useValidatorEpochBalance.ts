@@ -19,17 +19,20 @@ const useValidatorEpochBalance = () => {
 
   const activeValidators = useMemo(() => {
     return validatorInfo
-      ?.map(({ status, validator, index }) => {
-        const { name, pubKey } = validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
-        return { status, pubKey, index, name }
-      })
-      .filter(({ status }) => status.includes('active') && !status?.includes('slashed'))
+      ? validatorInfo
+          .map(({ status, validator, index }) => {
+            const { name, pubKey } =
+              validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
+            return { status, pubKey, index, name }
+          })
+          .filter(({ status }) => status.includes('active') && !status.includes('slashed'))
+      : []
   }, [validatorInfo, validators])
 
   const fetchValidatorBalances = useCallback(async () => {
-    const activeIndices = activeValidators?.map((validator) => Number(validator.index))
+    const activeIndices = activeValidators.map((validator) => Number(validator.index))
 
-    if (!activeIndices) return
+    if (!activeIndices.length) return
 
     const { data } = await fetchValidatorBalanceCache(beaconEndpoint, activeIndices)
 
@@ -39,14 +42,14 @@ const useValidatorEpochBalance = () => {
   }, [activeValidators])
 
   useEffect(() => {
-    if (activeValidators && beaconEndpoint && !validatorData) {
+    if (activeValidators.length && beaconEndpoint && !validatorData) {
       void fetchValidatorBalances()
     }
   }, [activeValidators, beaconEndpoint, validatorData])
 
   const formattedEpochData = useMemo(() => {
-    return validatorData
-      ? activeValidators?.map(({ index, name }) => {
+    return validatorData && activeValidators.length
+      ? activeValidators.map(({ index, name }) => {
           const data = validatorData[index as any].info
           return {
             name,

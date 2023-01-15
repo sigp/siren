@@ -5,6 +5,7 @@ jest.mock('recoil', () => ({
   useRecoilValue: jest.fn(),
   useRecoilState: jest.fn(),
   atom: jest.fn(),
+  selector: jest.fn(),
 }))
 
 jest.mock('i18next', () => ({
