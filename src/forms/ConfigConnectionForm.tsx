@@ -22,6 +22,7 @@ import { fetchVersion } from '../api/lighthouse'
 import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
 import { Endpoint } from '../types'
+import { useTranslation } from 'react-i18next'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -42,7 +43,6 @@ export interface RenderProps {
   isValidBeaconNode: boolean
   isValidValidatorClient: boolean
   changeFormType: (type: ConfigType) => void
-  isDisabled: boolean
   isLoading: boolean
   onSubmit: () => void
 }
@@ -52,6 +52,7 @@ export interface ConfigConnectionFormProps {
 }
 
 const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
+  const { t } = useTranslation()
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
   const setView = useSetRecoilState(onBoardView)
@@ -73,14 +74,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     port: 5052,
   }
 
-  const {
-    control,
-    setValue,
-    getValues,
-    watch,
-    resetField,
-    formState: { isValid },
-  } = useForm({
+  const { control, setValue, getValues, watch, resetField, trigger } = useForm({
     defaultValues: {
       beaconNode: endPointDefault,
       validatorClient: {
@@ -119,8 +113,27 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
   const handleError = (e: unknown) => {
     let message = 'Unknown Error'
+    const requiredErrors = [
+      'beaconDataRequired',
+      'validatorDataRequired',
+      'userName.required',
+      'apiTokenRequired',
+      'userName.maxLength',
+    ]
+    const invalidNodeErrors = ['invalidBeacon', 'invalidValidator']
+
+    if (requiredErrors.includes(e as string)) {
+      message = t(`error.${e}`)
+    }
+
+    if (invalidNodeErrors.includes(e as string)) {
+      message = t('error.networkError', {
+        type: e === 'invalidBeacon' ? ApiType.BEACON : ApiType.VALIDATOR,
+      })
+    }
+
     if (e instanceof AxiosError && e.response?.status === 403) {
-      message = 'Invalid Api Token'
+      message = t('error.invalidApiToken')
     }
 
     toast.error(message, {
@@ -133,19 +146,54 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     })
   }
 
+  const validationErrors = (values: ConnectionForm) => {
+    const { apiToken, userName, beaconNode, validatorClient } = values
+    const errors = []
+
+    const isValidBeacon = Object.values(beaconNode).every((v) => Boolean(v))
+    const isValidValidator = Object.values(validatorClient).every((v) => Boolean(v))
+
+    if (!isValidBeacon) {
+      errors.push('beaconDataRequired')
+    }
+
+    if (!isValidValidator) {
+      errors.push('validatorDataRequired')
+    }
+
+    if (!userName) {
+      errors.push('userName.required')
+    }
+
+    if (userName?.length > 14) {
+      errors.push('userName.maxLength')
+    }
+
+    if (!apiToken) {
+      errors.push('apiTokenRequired')
+    }
+
+    return errors
+  }
+
   const onSubmit = async () => {
-    const { isRemember, apiToken, userName } = getValues()
+    const values = getValues()
+
+    const errors = validationErrors(values)
+
+    if (errors.length) {
+      errors.forEach((error) => handleError(error))
+      await trigger()
+      return
+    }
+
+    const { isRemember, apiToken, userName, beaconNode, validatorClient } = values
 
     try {
       const [vcResult, beaconResult] = await Promise.all([
         fetchVersion(validatorClient, apiToken),
         fetchBeaconVersion(beaconNode),
       ])
-
-      if (vcResult.status !== 200 && beaconResult.status !== 200) {
-        handleError('')
-        return
-      }
 
       setValidatorVersion(vcResult.data.data.version)
       setBeaconVersion(beaconResult.data.data.version)
@@ -163,6 +211,16 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       setValidatorClient(validatorClient)
       setView(OnboardView.SETUP)
     } catch (e) {
+      if (!isValidBeaconNode || !isValidValidatorClient) {
+        if (!isValidBeaconNode) {
+          handleError('invalidBeacon')
+        }
+
+        if (!isValidValidatorClient) {
+          handleError('invalidValidator')
+        }
+        return
+      }
       handleError(e)
     }
   }
@@ -180,7 +238,6 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           isValidBeaconNode,
           isValidValidatorClient,
           formType,
-          isDisabled: !isValid || !isValidBeaconNode || !isValidValidatorClient,
         })}
     </form>
   )
