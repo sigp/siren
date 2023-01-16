@@ -96,6 +96,9 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
             },
           },
           y: {
+            ticks: {
+              precision: 0.0001,
+            },
             grid: {
               color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB',
             },
