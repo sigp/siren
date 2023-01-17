@@ -3,7 +3,7 @@ import { renderNodes } from './test.helpers'
 
 jest.mock('recoil', () => ({
   useRecoilValue: jest.fn(),
-  useRecoilState: jest.fn(),
+  useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
   atom: jest.fn(),
   selector: jest.fn(),
 }))
