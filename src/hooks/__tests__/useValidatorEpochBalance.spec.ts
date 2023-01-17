@@ -19,6 +19,7 @@ jest.mock('../../recoil/selectors/selectValidators', () => ({
 jest.mock('../../recoil/atoms', () => ({
   beaconNodeEndpoint: 'beaconNodeEndpoint',
   validatorStateInfo: 'validatorStateInfo',
+  beaconEpochInterval: 'beaconEpochInterval',
 }))
 
 jest.mock('ethers/lib/utils', () => ({

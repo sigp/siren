@@ -2,10 +2,14 @@ import useUiMode from '../useUiMode'
 import { renderHook } from '@testing-library/react-hooks'
 import { mockedRecoilState } from '../../../test.helpers'
 import { UiMode } from '../../constants/enums'
+import clearAllMocks = jest.clearAllMocks
 
 const toggleUiMode = () => jest.fn()
 
 describe('useUiMode hook', () => {
+  beforeEach(() => {
+    clearAllMocks()
+  })
   it('should return default values', () => {
     mockedRecoilState.mockReturnValue([undefined, toggleUiMode])
     const { result } = renderHook(() => useUiMode())
