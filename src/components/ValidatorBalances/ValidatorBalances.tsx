@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import useValidatorEpochBalance from '../../hooks/useValidatorEpochBalance'
 import { useMemo } from 'react'
 import Spinner from '../Spinner/Spinner'
+import LoadingDots from '../LoadingDots/LoadingDots'
 
 export const ValidatorBalanceFallback = () => (
   <div className='flex-1 flex h-24 w-full justify-center items-center'>
@@ -66,11 +67,12 @@ const ValidatorBalances = () => {
         ) : epochs.length ? (
           <div className='w-full h-full flex flex-col items-center justify-center'>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
-              {t('insufficientData')}
+              {t('nodesCachingData')}
             </Typography>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
-              {t('pleaseCheckBack')}
+              {t('thisCouldTakeTime')}
             </Typography>
+            <LoadingDots />
           </div>
         ) : (
           <div className='w-full h-full flex items-center justify-center'>

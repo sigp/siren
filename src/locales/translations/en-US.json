@@ -80,8 +80,8 @@
   "viewAll": "View All",
   "validatorGraffiti": "Validator Graffiti",
   "graffitiGoesHere": "Graffiti goes here",
-  "insufficientData": "Insufficient Data",
-  "pleaseCheckBack": "Please check again later",
+  "nodesCachingData": "Node caching data...",
+  "thisCouldTakeTime": "This could take approximately 20 minutes.",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
