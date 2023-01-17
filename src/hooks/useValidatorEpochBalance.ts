@@ -48,9 +48,9 @@ const useValidatorEpochBalance = () => {
   }, [activeValidators, beaconEndpoint, validatorData])
 
   const formattedEpochData = useMemo(() => {
-    return validatorData && activeValidators.length
+    return validatorData && activeValidators.length && Object.values(validatorData).length
       ? activeValidators.map(({ index, name }) => {
-          const data = validatorData[index as any].info
+          const data = validatorData[index as any]?.info
           return {
             name,
             data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
