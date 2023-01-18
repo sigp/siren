@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+// eslint-disable-next-line no-undef
 module.exports = {
   darkMode: 'class',
   content: ['./src/**/*.{ts,tsx}'],
@@ -37,7 +38,7 @@ module.exports = {
         error: '#FF4D00',
       },
       backgroundImage: {
-        'lighthouse': 'url(\'./assets/images/lightHouseBg.png\')',
+        lighthouse: 'url(\'./assets/images/lightHouseBg.png\')',
       },
       fontFamily: {
         openSauce: ['OpenSauce', 'sans-serif'],
@@ -55,41 +56,41 @@ module.exports = {
         subtitle3: '1.125rem',
         body: '1rem',
         caption1: '.75rem',
-        caption2: '.563rem'
+        caption2: '.563rem',
       },
       minHeight: {
-        '60': '15rem'
+        60: '15rem',
       },
       maxHeight: {
-        '30': '7.313rem',
-        '32': '8.313rem',
-        '60.5': '15.063rem',
-        '396': '24.75rem'
+        30: '7.313rem',
+        32: '8.313rem',
+        60.5: '15.063rem',
+        396: '24.75rem',
       },
       minWidth: {
-        '316': '316px',
-        '20': '80px'
+        316: '316px',
+        20: '80px',
       },
       maxWidth: {
         95: '95px',
         tiny: '165px',
-        '316': '316px',
-        '238': '238px',
-        '850': '850px',
+        316: '316px',
+        238: '238px',
+        850: '850px',
         'tr-11': '111px',
-        '1142': '1142px',
-        '1440': '1440px',
-        '848': '848px',
+        1142: '1142px',
+        1440: '1440px',
+        848: '848px',
       },
       width: {
-        '14.5': '60px',
-        '34': '136px',
-        '42': '168px',
+        14.5: '60px',
+        34: '136px',
+        42: '168px',
         '9/10': '90%',
       },
       height: {
         640: '640px',
-        '22': '5.688rem',
+        22: '5.688rem',
         '11/20': '55%',
       },
       inset: {
@@ -99,43 +100,46 @@ module.exports = {
       },
       keyframes: {
         blink: {
-          '0%': {opacity: '100%'},
-          '50%': {opacity: '100%'},
-          '100%': {opacity: '0%'}
+          '0%': { opacity: '100%' },
+          '50%': { opacity: '100%' },
+          '100%': { opacity: '0%' },
         },
         fadeSlideIn: {
           '0%': {
             opacity: '0%',
-            transform: 'translateY(-5%);'
+            transform: 'translateY(-5%);',
           },
           '100%': {
             opacity: '100%',
-            transform: 'translateY(0);'
-          }
-        }
+            transform: 'translateY(0);',
+          },
+        },
       },
       animation: {
         'spin-slow': 'spin 240s linear infinite',
-        'blink': 'blink 1s linear infinite',
+        blink: 'blink 1s linear infinite',
         fadeSlideIn: 'fadeSlideIn 150ms ease-in',
+        bounce200: 'bounce 1s infinite 200ms',
+        bounce400: 'bounce 1s infinite 400ms',
       },
       translate: {
-        '14.5': '60px',
-        '42': '168px',
-        'toggleWidth': '3rem'
+        14.5: '60px',
+        42: '168px',
+        toggleWidth: '3rem',
       },
       screens: {
         '@425': '425px',
         '@1440': '1440px',
         '@1024': '1024px',
         '@1200': '1200px',
-        '@1600': '1600px'
-      }
+        '@1600': '1600px',
+      },
     },
   },
   plugins: [
+    // eslint-disable-next-line @typescript-eslint/no-var-requires,no-undef
     require('tailwindcss-scoped-groups')({
       groups: ['sidebar'],
-    })
+    }),
   ],
 }
