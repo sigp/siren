@@ -201,3 +201,17 @@ export const DEFAULT_VALIDATOR_COUNT = {
   withdrawal_done: 0,
   withdrawal_possible: 0,
 }
+
+export const CURRENCIES = [
+  'AUD',
+  'USD',
+  'EUR',
+  'JPY',
+  'GBP',
+  'CAD',
+  'CHF',
+  'CNH',
+  'BTC',
+  'HKD',
+  'NZD',
+]
