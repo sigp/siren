@@ -18,7 +18,6 @@ const CurrencySelect = () => {
   )
 
   const selectCurrency = (option: OptionType) => {
-    console.log(option)
     storeActiveCurrency(option as string)
     setCurrency(option as string)
   }
