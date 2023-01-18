@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useMemo, useState } from 'react'
 import useClickOutside from '../../hooks/useClickOutside'
 import Typography, { TypographyColor } from '../Typography/Typography'
 import DropDown from '../DropDown/DropDown'
+import { useTranslation } from 'react-i18next'
 
 export type OptionType = string | number
 
@@ -29,6 +30,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   isFilter,
   placeholder,
 }) => {
+  const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [isOpen, toggle] = useState(false)
 
@@ -73,7 +75,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
           type='button'
         >
           <Typography color={color} className='capitalize'>
-            {activeSelection ? activeSelection.title : placeholder || 'make selection'}
+            {activeSelection ? activeSelection.title : placeholder || t('makeSelection')}
           </Typography>
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`} />
         </button>
@@ -95,6 +97,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
                 onClick={() => makeSelection(value !== undefined ? value : title)}
                 className='block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white'
                 key={index}
+                data-testid='option'
               >
                 <Typography className='capitalize'>{title}</Typography>
               </li>
