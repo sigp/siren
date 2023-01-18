@@ -1,5 +1,6 @@
 export const mockT = jest.fn((str: string): string => str)
 import { renderNodes } from './test.helpers'
+import '@testing-library/jest-dom'
 
 jest.mock('recoil', () => ({
   useRecoilValue: jest.fn(),
