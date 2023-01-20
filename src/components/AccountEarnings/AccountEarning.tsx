@@ -9,17 +9,14 @@ import { useState } from 'react'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import useValidatorEarnings from '../../hooks/useValidatorEarnings'
 import Spinner from '../Spinner/Spinner'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilValue } from 'recoil'
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
-import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import EarningsLayout from './EarningsLayout'
 import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
 import { activeCurrency } from '../../recoil/atoms'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import { ActiveCurrencyStorage } from '../../types/storage'
-import { Storage } from '../../constants/enums'
+import CurrencySelect from '../CurrencySelect/CurrencySelect'
 
 export const AccountEarningFallback = () => {
   return (
@@ -32,17 +29,13 @@ export const AccountEarningFallback = () => {
 const AccountEarning = () => {
   const { t } = useTranslation()
   const validators = useRecoilValue(selectValidatorInfos)
-  const [currency, setCurrency] = useRecoilState(activeCurrency)
+  const currency = useRecoilValue(activeCurrency)
   const [isLoading, setLoading] = useState(false)
   const [activeOption, setOption] = useState(0)
-  const [, storeActiveCurrency] = useLocalStorage<ActiveCurrencyStorage>(
-    Storage.CURRENCY,
-    undefined,
-  )
   const { total, totalRewards, fetchHistory } = useValidatorEarnings(validators)
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
   const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
-  const { rates, currencies } = useRecoilValue(selectEthExchangeRates)
+  const { rates } = useRecoilValue(selectEthExchangeRates)
   const initialEth = validators.length * initialEthDeposit
   const annualizedPercent = (Math.pow(total / initialEth, 1) - 1) * 100
 
@@ -51,7 +44,6 @@ const AccountEarning = () => {
   const totalBalance = formattedRate * totalRewards
   const totalHistoricalBalance = formattedRate * (historicalAmount || totalRewards)
 
-  const currencyOptions = [...currencies].sort().map((currency) => ({ title: currency }))
   const annualizedTextColor = formatBalanceColor(annualizedPercent)
 
   const viewEarnings = async (value: number) => {
@@ -66,10 +58,6 @@ const AccountEarning = () => {
         setLoading(false)
       }
     }
-  }
-  const selectCurrency = (option: OptionType) => {
-    storeActiveCurrency(option as string)
-    setCurrency(option as string)
   }
 
   return (
@@ -99,16 +87,7 @@ const AccountEarning = () => {
           <div className='w-full mt-6 flex items-center'>
             <LightHouseLogo className='hidden md:block text-white w-16 h-16' />
             <div className='flex-1 ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
-              <div>
-                <SelectDropDown
-                  isFilter
-                  color='text-white'
-                  label={t('accountEarnings.chooseCurrency')}
-                  value={currency}
-                  onSelect={selectCurrency}
-                  options={currencyOptions}
-                />
-              </div>
+              <CurrencySelect />
               <div>
                 <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
                   {t('accountEarnings.currentRate')}

@@ -82,6 +82,7 @@
   "graffitiGoesHere": "Graffiti goes here",
   "nodesCachingData": "Node caching data...",
   "thisCouldTakeTime": "This could take approximately 20 minutes.",
+  "makeSelection": "make selection",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
