@@ -107,7 +107,11 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
       },
     }
 
-    setChart(new ChartJS(ctx, config as never))
+    try {
+      setChart(new ChartJS(ctx, config as never))
+    } catch (e) {
+      console.error(e)
+    }
 
     return () => {
       chart?.destroy()
