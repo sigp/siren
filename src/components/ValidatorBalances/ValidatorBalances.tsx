@@ -40,6 +40,14 @@ const ValidatorBalances = () => {
     }
   }, [epochs, timestamps])
 
+  const stepSize = useMemo(() => {
+    const data = balanceData.datasets
+      .map((data) => data.data)
+      .flat()
+      .sort()
+    return balanceData.datasets.length ? (data[data.length - 1] - data[0]) / 8 : 0
+  }, [balanceData])
+
   return (
     <div className='flex-1 flex h-full w-full'>
       <div className='p-1 h-full flex items-center justify-center'>
@@ -63,7 +71,7 @@ const ValidatorBalances = () => {
           </Typography>
         </div>
         {isSufficientData ? (
-          <StepChart data={balanceData} />
+          <StepChart stepSize={stepSize} data={balanceData} />
         ) : epochs.length ? (
           <div className='w-full h-full flex flex-col items-center justify-center'>
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>

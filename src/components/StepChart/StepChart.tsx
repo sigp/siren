@@ -43,9 +43,10 @@ export type ChartData = {
 
 export interface StepChartProps {
   data: ChartData
+  stepSize?: number
 }
 
-const StepChart: FC<StepChartProps> = ({ data }) => {
+const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
   const chartEl = useRef(null)
   const mode = useRecoilValue(uiMode)
   const [hasAnimated, toggleAnimated] = useState(false)
@@ -97,7 +98,7 @@ const StepChart: FC<StepChartProps> = ({ data }) => {
           },
           y: {
             ticks: {
-              precision: 0.0001,
+              stepSize,
             },
             grid: {
               color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB',
