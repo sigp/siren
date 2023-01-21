@@ -51,13 +51,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
   const mode = useRecoilValue(uiMode)
   const [hasAnimated, toggleAnimated] = useState(false)
 
-  const [chart, setChart] = useState<Chart>()
-
   useEffect(() => {
-    if (chart) {
-      chart.destroy()
-      setChart(undefined)
-    }
     const ctx = chartEl.current
 
     if (!ctx) return
@@ -109,20 +103,21 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
     }
 
     try {
-      setChart(new ChartJS(ctx, config as never))
+      new ChartJS(ctx, config as never)
     } catch (e) {
       console.error(e)
+      Chart.getChart('stepChart')?.destroy()
+      new ChartJS(ctx, config as never)
     }
 
     return () => {
-      chart?.destroy()
-      setChart(undefined)
+      Chart.getChart('stepChart')?.destroy()
     }
   }, [chartEl, data, hasAnimated, mode])
 
   return (
     <div className='w-full h-full relative'>
-      <canvas ref={chartEl} />
+      <canvas id='stepChart' ref={chartEl} />
     </div>
   )
 }
