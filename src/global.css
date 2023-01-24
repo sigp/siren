@@ -104,26 +104,32 @@
     transform: rotateY(180deg);
 }
 
+input[type="checkbox"]:not(:checked) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
 .bi-siren {
-    background-image : url("assets/images/siren.svg");
-    background-repeat: no-repeat;
-    background-position: center center;
-    height: 44px;
-    width: 44px;
+background-image : url("assets/images/siren.svg");
+background-repeat: no-repeat;
+background-position: center center;
+height: 44px;
+width: 44px;
 }
 
 .speedometer .segment-value {
-    transform: translate(0, -30px)
+transform: translate(0, -30px)
 }
 
 @layer base {
-    input[type="number"]::-webkit-inner-spin-button,
-    input[type="number"]::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 }
 
 .rodal-dialog {
-    padding: 0!important;
+padding: 0!important;
 }
