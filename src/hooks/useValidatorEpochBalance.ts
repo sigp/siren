@@ -5,10 +5,11 @@ import { fetchValidatorBalanceCache } from '../api/beacon'
 import { ValidatorCacheResults } from '../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
 import { beaconEpochInterval, beaconNodeEndpoint, validatorStateInfo } from '../recoil/atoms'
-import { secondsInSlot, slotsInEpoc } from '../constants/constants'
+import { BALANCE_COLORS, secondsInSlot, slotsInEpoc } from '../constants/constants'
 import moment from 'moment'
 import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
 import usePollingInterval from './usePollingInterval'
+import getAverageValue from '../utilities/getAverageValue'
 
 const useValidatorEpochBalance = () => {
   const [validatorData, setData] = useState<ValidatorCacheResults>()
@@ -27,6 +28,7 @@ const useValidatorEpochBalance = () => {
             return { status, pubKey, index, name }
           })
           .filter(({ status }) => status.includes('active') && !status.includes('slashed'))
+          .slice(0, 10)
       : []
   }, [validatorInfo, validators])
 
@@ -50,13 +52,20 @@ const useValidatorEpochBalance = () => {
 
   const formattedEpochData = useMemo(() => {
     return validatorData && activeValidators.length && Object.values(validatorData).length
-      ? activeValidators.map(({ index, name }) => {
-          const data = validatorData[index as any]?.info
-          return {
-            name,
-            data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
-          }
-        })
+      ? activeValidators
+          .map(({ index, name }) => {
+            const data = validatorData[index as any]?.info
+            return {
+              index,
+              name,
+              data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
+            }
+          })
+          .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
+          .map((data, index) => ({
+            ...data,
+            color: BALANCE_COLORS[index],
+          }))
       : []
   }, [activeValidators, validatorData])
 
