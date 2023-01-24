@@ -20,7 +20,7 @@
     "autoprefixer": "^9",
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
-    "chart.js": "^3.9.1",
+    "chart.js": "^4.2.0",
     "electron-squirrel-startup": "^1.0.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "ethers": "^5.7.1",
