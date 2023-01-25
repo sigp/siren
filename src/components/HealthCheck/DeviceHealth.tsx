@@ -3,6 +3,7 @@ import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { useTranslation } from 'react-i18next'
+import addSuffixString from '../../utilities/addSuffixString'
 
 const DeviceHealth = () => {
   const { t } = useTranslation()
@@ -24,21 +25,21 @@ const DeviceHealth = () => {
       <DiagnosticCard
         size='health'
         title={t('disk')}
-        metric={`${totalDiskSpace.toFixed(1)}GB`}
+        metric={addSuffixString(totalDiskSpace.toFixed(1), 'GB')}
         subTitle={t('utilization', { percent: diskUtilization })}
         status={diskStatus}
       />
       <DiagnosticCard
         size='health'
         title={t('cpu')}
-        metric={Number(frequency) ? frequency : ' '}
+        metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
         subTitle={t('utilization', { percent: cpuUtilization })}
         status={cpuStatus}
       />
       <DiagnosticCard
         size='health'
         title={t('ram')}
-        metric={`${totalMemory.toFixed(1)}GB`}
+        metric={addSuffixString(totalMemory.toFixed(1), 'GB')}
         subTitle={t('utilization', { percent: memoryUtilization })}
         status={ramStatus}
       />
