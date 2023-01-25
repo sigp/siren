@@ -92,7 +92,7 @@ const ValidatorBalances = () => {
         >
           <div className='w-full h-full flex flex-col'>
             <div className='w-full p-4 border-b-style500'>
-              <Typography isBold>Validator Legend</Typography>
+              <Typography isBold>{t('validatorLegend')}</Typography>
             </div>
             <ul className='w-full flex-1 overflow-scroll'>
               {epochs.map(({ name, index, color }, key) => (
