@@ -7,6 +7,7 @@ import {
   Filler,
   LinearScale,
   LineController,
+  LogarithmicScale,
   LineElement,
   PointElement,
   Tooltip,
@@ -14,10 +15,12 @@ import {
 import { useRecoilValue } from 'recoil'
 import { uiMode } from '../../recoil/atoms'
 import { UiMode } from '../../constants/enums'
+import addClassString from '../../utilities/addClassString'
 
 Chart.register(
   CategoryScale,
   LineController,
+  LogarithmicScale,
   LinearScale,
   PointElement,
   LineElement,
@@ -43,9 +46,11 @@ export type ChartData = {
 export interface StepChartProps {
   data: ChartData
   stepSize?: number
+  onClick?: () => void
+  className?: string
 }
 
-const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
+const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) => {
   const chartEl = useRef(null)
   const mode = useRecoilValue(uiMode)
   const [hasAnimated, toggleAnimated] = useState(false)
@@ -77,6 +82,19 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
             backgroundColor: mode === UiMode.DARK ? 'rgba(0, 0, 0, .8)' : '#ffffff',
             bodyColor: mode === UiMode.DARK ? '#ffffff' : '#000000',
             titleColor: mode === UiMode.DARK ? '#ffffff' : '#000000',
+            callbacks: {
+              label: function (context: any) {
+                let label = context.dataset.label || ''
+
+                if (label) {
+                  label += ': '
+                }
+                if (context.parsed.y !== null) {
+                  label += context.raw
+                }
+                return label
+              },
+            },
           },
         },
         interaction: {
@@ -90,6 +108,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
             },
           },
           y: {
+            type: 'logarithmic',
             ticks: {
               stepSize,
             },
@@ -115,7 +134,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize }) => {
   }, [chartEl, data, hasAnimated, mode])
 
   return (
-    <div className='w-full h-full relative'>
+    <div onClick={onClick} className={addClassString('w-full h-full relative', className)}>
       <canvas id='stepChart' ref={chartEl} />
     </div>
   )

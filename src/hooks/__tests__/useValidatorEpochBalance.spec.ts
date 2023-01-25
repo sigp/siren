@@ -84,11 +84,11 @@ describe('useValidatorEpochBalance', () => {
 
     await waitFor(() => {
       expect(result.current.epochs).toStrictEqual([
-        { name: 'mvk-1', data: [32, 32, 32] },
-        { name: 'mvk-2', data: [32, 32, 32] },
-        { name: 'mvk-3', data: [32, 32, 32] },
-        { name: 'mvk-4', data: [32, 32, 32] },
-        { name: 'mvk-5', data: [32, 32, 32] },
+        { name: 'mvk-1', data: [32, 32, 32], color: 'rgba(94, 65, 213, 1)', index: 0 },
+        { name: 'mvk-2', data: [32, 32, 32], color: 'rgba(213, 65, 184, 1)', index: 1 },
+        { name: 'mvk-3', data: [32, 32, 32], color: 'rgba(168, 65, 213, 1)', index: 2 },
+        { name: 'mvk-4', data: [32, 32, 32], color: 'rgba(94, 65, 213, .6)', index: 3 },
+        { name: 'mvk-5', data: [32, 32, 32], color: 'rgba(213, 65, 184, .6)', index: 4 },
       ])
     })
   })
