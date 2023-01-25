@@ -9,6 +9,7 @@ import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useState } from 'react'
 import { DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import addSuffixString from '../../utilities/addSuffixString'
 
 const HardwareInfo = () => {
   const { t } = useTranslation()
@@ -52,7 +53,7 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               size={size}
               border='border-t-0 border-style500'
-              metric={`${totalDiskSpace.toFixed(1)}GB`}
+              metric={addSuffixString(totalDiskSpace.toFixed(1), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskStatus}
             />
@@ -61,7 +62,7 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               size={size}
               border='border-t-0 border-style500'
-              metric={Number(frequency) ? frequency : ' '}
+              metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
             />
@@ -70,7 +71,7 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               size={size}
               border='border-t-0 border-style500'
-              metric={`${totalMemory.toFixed(1)}GB`}
+              metric={addSuffixString(totalMemory.toFixed(1), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
             />
