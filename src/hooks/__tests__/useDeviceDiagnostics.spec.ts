@@ -43,7 +43,7 @@ describe('useDeviceDiagnostics', () => {
       totalMemory: 16.5,
       memoryUtilization: 99,
       frequency: '0',
-      ramStatus: 'bg-success',
+      ramStatus: 'bg-error',
       cpuStatus: 'bg-success',
       cpuUtilization: '13.0',
       networkName: 'en0',
