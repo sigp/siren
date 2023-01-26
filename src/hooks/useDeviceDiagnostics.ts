@@ -15,7 +15,6 @@ const useDeviceDiagnostics = (): Diagnostics => {
     disk_bytes_total = 0,
     used_memory = 0,
     total_memory = 0,
-    free_memory = 0,
     sys_loadavg_5 = 0,
     app_uptime = 0,
     network_name,
@@ -45,14 +44,16 @@ const useDeviceDiagnostics = (): Diagnostics => {
   )
 
   const memoryUtilization = Math.round(getPercentage(used_memory, total_memory))
-  const totalMemoryFree = formatGigBytes(free_memory)
   const totalMemory = formatGigBytes(total_memory)
+  const usedMemory = formatGigBytes(used_memory)
+
+  const totalMemoryFree = totalMemory - usedMemory
 
   const ramStatus = useMemo<StatusType>(
     () =>
-      totalMemoryFree >= 4
+      totalMemoryFree >= 3
         ? 'bg-success'
-        : totalMemoryFree > 2 && totalMemoryFree < 4
+        : totalMemoryFree > 1 && totalMemoryFree < 3
         ? 'bg-warning'
         : 'bg-error',
     [totalMemoryFree],
