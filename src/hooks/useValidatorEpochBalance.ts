@@ -1,60 +1,23 @@
-import { useRecoilState, useRecoilValue } from 'recoil'
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { selectValidators } from '../recoil/selectors/selectValidators'
-import { fetchValidatorBalanceCache } from '../api/beacon'
-import { ValidatorCacheResults } from '../types/validator'
+import { useRecoilValue } from 'recoil'
+import { useMemo } from 'react'
 import { formatUnits } from 'ethers/lib/utils'
-import { beaconEpochInterval, beaconNodeEndpoint, validatorStateInfo } from '../recoil/atoms'
+import { validatorCacheBalanceResult } from '../recoil/atoms'
 import { BALANCE_COLORS, secondsInSlot, slotsInEpoc } from '../constants/constants'
 import moment from 'moment'
 import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
-import usePollingInterval from './usePollingInterval'
 import getAverageValue from '../utilities/getAverageValue'
+import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
 
 const useValidatorEpochBalance = () => {
-  const [validatorData, setData] = useState<ValidatorCacheResults>()
-  const validators = useRecoilValue(selectValidators)
-  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
-  const validatorInfo = useRecoilValue(validatorStateInfo)
+  const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
+  const activeValidators = useRecoilValue(selectActiveValidators)
   const genesisBlock = useRecoilValue(selectGenesisBlock) as number
-  const [epochInterval, setInterval] = useRecoilState(beaconEpochInterval)
-
-  const activeValidators = useMemo(() => {
-    return validatorInfo
-      ? validatorInfo
-          .map(({ status, validator, index }) => {
-            const { name, pubKey } =
-              validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
-            return { status, pubKey, index, name }
-          })
-          .filter(({ status }) => status.includes('active') && !status.includes('slashed'))
-          .slice(0, 10)
-      : []
-  }, [validatorInfo, validators])
-
-  const fetchValidatorBalances = useCallback(async () => {
-    const activeIndices = activeValidators.map((validator) => Number(validator.index))
-
-    if (!activeIndices.length) return
-
-    const { data } = await fetchValidatorBalanceCache(beaconEndpoint, activeIndices)
-
-    if (data) {
-      setData(data.data.validators)
-    }
-  }, [activeValidators])
-
-  useEffect(() => {
-    if (activeValidators.length && beaconEndpoint && !validatorData) {
-      void fetchValidatorBalances()
-    }
-  }, [activeValidators, beaconEndpoint, validatorData])
 
   const formattedEpochData = useMemo(() => {
-    return validatorData && activeValidators.length && Object.values(validatorData).length
+    return validatorCacheData && activeValidators.length && Object.values(validatorCacheData).length
       ? activeValidators
           .map(({ index, name }) => {
-            const data = validatorData[index as any]?.info
+            const data = validatorCacheData[index as any]?.info
             return {
               index,
               name,
@@ -67,10 +30,10 @@ const useValidatorEpochBalance = () => {
             color: BALANCE_COLORS[index],
           }))
       : []
-  }, [activeValidators, validatorData])
+  }, [activeValidators, validatorCacheData])
 
   const formattedTimestamps = useMemo(() => {
-    const data = validatorData && Object.values(validatorData)[0]
+    const data = validatorCacheData && Object.values(validatorCacheData)[0]
     return data
       ? data.info.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
@@ -78,22 +41,9 @@ const useValidatorEpochBalance = () => {
           return moment((genesisBlock + slot * secondsInSlot) * 1000).format('HH:mm')
         })
       : []
-  }, [validatorData, genesisBlock])
+  }, [validatorCacheData, genesisBlock])
 
   const isSufficientData = formattedTimestamps.length >= 3
-
-  const onClearInterval = () => setInterval(undefined)
-
-  const { intervalId } = usePollingInterval(fetchValidatorBalances, 60000, {
-    isSkip: Boolean(activeValidators && activeValidators.length) && Boolean(epochInterval),
-    onClearInterval,
-  })
-
-  useEffect(() => {
-    if (intervalId) {
-      setInterval(intervalId)
-    }
-  }, [intervalId])
 
   return {
     epochs: formattedEpochData,

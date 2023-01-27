@@ -93,3 +93,10 @@ export type ValidatorEpochResult = {
   epoch: number
   total_balance: number
 }
+
+export type activeValidatorDetail = {
+  status: ValidatorStatus
+  pubKey?: string
+  index: string
+  name?: string
+}
