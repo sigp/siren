@@ -132,7 +132,7 @@ const ValidatorBalances = () => {
             <Typography color='text-primary' type='text-caption1' darkMode='dark:text-white'>
               {t('thisCouldTakeTime')}
             </Typography>
-            <LoadingDots />
+            <LoadingDots className='mt-4' />
           </div>
         ) : (
           <div className='w-full h-full flex items-center justify-center'>
