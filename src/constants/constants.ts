@@ -160,31 +160,30 @@ export const initialEthDeposit = 32
 export const secondsInSlot = 12
 export const slotsInEpoc = 32
 export const secondsInEpoch = secondsInSlot * 32
-export const slotsInHour = 3600 / secondsInSlot
-export const slotsInDay = slotsInHour * 24
-export const slotsInWeek = slotsInDay * 7
-export const slotsInMonth = slotsInDay * 30
+export const secondsInHour = 3600
+export const secondsInDay = 86400
+export const secondsInWeek = 604800
 
 export const EARNINGS_OPTIONS = [
   {
     title: 'hourly',
-    value: slotsInHour,
+    value: 0,
   },
   {
     title: 'daily',
-    value: slotsInDay,
+    value: 1,
   },
   {
     title: 'weekly',
-    value: slotsInWeek,
+    value: 2,
   },
   {
     title: 'monthly',
-    value: slotsInMonth,
+    value: 3,
   },
   {
     title: 'total',
-    value: 0,
+    value: undefined,
   },
 ] as EarningOption[]
 
