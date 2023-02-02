@@ -38,6 +38,7 @@
     "react-i18next": "^11.18.6",
     "react-scripts": "5.0.1",
     "react-toastify": "^9.0.8",
+    "react-tooltip": "^5.7.2",
     "recoil": "^0.7.5",
     "rodal": "^2.0.0",
     "svg-identicon": "^1.0.1",
