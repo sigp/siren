@@ -248,5 +248,11 @@
     "natClosedStatus": "{{type}}: Nat status is closed",
     "peerCountLow": "{{type}}: Peer count extremely low",
     "peerCountMedium": "{{type}}: Peer count reaching low levels"
+  },
+  "tooltip": {
+    "ethEstimate": "Estimated {{time}} ETH earnings of all validators under current network and device conditions.",
+    "ethTotal": "Total ETH earnings of all validators",
+    "fiatEstimate": "Estimated {{time}} earnings converted to selected fiat currency exchange rate.",
+    "fiatTotal": "Total earnings converted to selected fiat currency exchange rate."
   }
 }

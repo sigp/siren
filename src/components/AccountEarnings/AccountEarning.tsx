@@ -15,6 +15,7 @@ import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefi
 import { activeCurrency } from '../../recoil/atoms'
 import CurrencySelect from '../CurrencySelect/CurrencySelect'
 import useEarningsEstimate from '../../hooks/useEarningsEstimate'
+import Tooltip from '../ToolTip/Tooltip'
 
 export const AccountEarningFallback = () => {
   return (
@@ -36,6 +37,8 @@ const AccountEarning = () => {
   const formattedRate = activeRate ? Number(activeRate) : 0
   const totalBalance = formattedRate * totalEarnings
   const estimatedRateConversion = formattedRate * estimate
+  const isEstimate = estimateSelection !== undefined
+  const timeFrame = isEstimate ? EARNINGS_OPTIONS[estimateSelection]?.title : undefined
 
   const annualizedTextColor = formatBalanceColor(annualizedEarningsPercent)
 
@@ -121,12 +124,23 @@ const AccountEarning = () => {
           <div className='flex justify-between space-x-2 md:space-x-0 mt-2 p-4'>
             <div className='flex space-x-4'>
               <EthLogo className='h-10 w-10' />
-              <div>
+              <Tooltip
+                className='cursor-pointer'
+                id='ethInfo'
+                maxWidth={200}
+                text={
+                  isEstimate ? t('tooltip.ethEstimate', { time: timeFrame }) : t('tooltip.ethTotal')
+                }
+              >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' className='uppercase' color='text-dark400'>
                     Eth
                   </Typography>
-                  <i className='bi bi-info-circle text-caption1 text-dark400' />
+                  <i
+                    id='tooltip'
+                    data-tooltip-content='hello world'
+                    className='bi bi-info-circle text-caption1 text-dark400'
+                  />
                 </div>
                 <Typography
                   type='text-caption1'
@@ -136,11 +150,20 @@ const AccountEarning = () => {
                 >
                   {formatLocalCurrency(estimate, { max: 4 })} ETH
                 </Typography>
-              </div>
+              </Tooltip>
             </div>
             <div className='flex space-x-4'>
               <UsdcLogo className='h-10 w-10' />
-              <div>
+              <Tooltip
+                className='cursor-pointer'
+                id='fiatInfo'
+                maxWidth={200}
+                text={
+                  isEstimate
+                    ? t('tooltip.fiatEstimate', { time: timeFrame })
+                    : t('tooltip.fiatTotal')
+                }
+              >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' isUpperCase color='text-dark400'>
                     USD
@@ -156,7 +179,7 @@ const AccountEarning = () => {
                   {formattedPrefix}
                   {formatLocalCurrency(estimatedRateConversion)} {String(currency)}
                 </Typography>
-              </div>
+              </Tooltip>
             </div>
             <div>
               <div className='flex space-x-2'>
