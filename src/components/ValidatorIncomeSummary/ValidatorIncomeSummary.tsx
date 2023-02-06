@@ -1,9 +1,9 @@
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
-import useValidatorEarnings from '../../hooks/useValidatorEarnings'
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import { EARNINGS_OPTIONS } from '../../constants/constants'
 import { ValidatorInfo } from '../../types/validator'
+import useEarningsEstimate from '../../hooks/useEarningsEstimate'
 
 export interface ValidatorIncomeSummaryProps {
   className?: string
@@ -12,35 +12,30 @@ export interface ValidatorIncomeSummaryProps {
 
 const ValidatorIncomeSummary: FC<ValidatorIncomeSummaryProps> = ({ className, validators }) => {
   const { t } = useTranslation()
-  const [timeFrameIndex, setIndex] = useState(1)
+  const indices = validators.map(({ index }) => String(index))
+  const { estimate, estimateSelection, selectEstimate } = useEarningsEstimate(indices)
 
-  const activeIncomeTimeFrame = EARNINGS_OPTIONS[timeFrameIndex]
+  const activeIncomeTimeFrame = EARNINGS_OPTIONS.find(
+    ({ value }) => value === estimateSelection,
+  )?.title
 
-  const { fetchHistory } = useValidatorEarnings(validators)
-  const [income, setIncome] = useState('0')
+  const incrementIndex = () =>
+    selectEstimate(
+      estimateSelection !== undefined
+        ? estimateSelection + 1 <= 3
+          ? estimateSelection + 1
+          : undefined
+        : 0,
+    )
 
-  const fetchIncome = async (time: number) => {
-    const earnings = await fetchHistory(time)
-
-    if (earnings) {
-      setIncome(earnings.toFixed(3))
-    }
-  }
-
-  const incrementIndex = () => {
-    setIndex((prev) => {
-      const nextIndex = prev + 1
-      return nextIndex <= EARNINGS_OPTIONS.length - 1 ? nextIndex : 0
-    })
-  }
-
-  const decrementIndex = () => {
-    setIndex((prev) => (prev > 0 ? prev - 1 : EARNINGS_OPTIONS.length - 1))
-  }
-
-  useEffect(() => {
-    void fetchIncome(activeIncomeTimeFrame.value)
-  }, [activeIncomeTimeFrame])
+  const decrementIndex = () =>
+    selectEstimate(
+      estimateSelection !== undefined
+        ? estimateSelection - 1 > -1
+          ? estimateSelection - 1
+          : undefined
+        : 3,
+    )
 
   return (
     <div className={className}>
@@ -61,16 +56,16 @@ const ValidatorIncomeSummary: FC<ValidatorIncomeSummaryProps> = ({ className, va
       </div>
       <div className='flex items-center justify-between'>
         <Typography color='text-dark300' isCapitalize type='text-caption1'>
-          {t(activeIncomeTimeFrame.title)}
+          {activeIncomeTimeFrame ? t(activeIncomeTimeFrame) : ''}
         </Typography>
         <div className='flex items-center space-x-1'>
           <i
             className={`text-sm ${
-              Number(income) > 0 ? 'bi-chevron-up text-success' : 'bi-chevron-down text-error'
+              Number(estimate) > 0 ? 'bi-chevron-up text-success' : 'bi-chevron-down text-error'
             }`}
           />
           <Typography isBold type='text-caption1'>
-            {income} ETH
+            {estimate.toFixed(4)} ETH
           </Typography>
         </div>
       </div>

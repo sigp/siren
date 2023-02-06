@@ -1,40 +1,24 @@
 import useValidatorEpochBalance from '../useValidatorEpochBalance'
 import { renderHook } from '@testing-library/react-hooks'
-import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
-import { Protocol } from '../../constants/enums'
-import {
-  mockValidatorCacheResults,
-  mockValidatorInfo,
-  mockValidators,
-} from '../../mocks/validatorResults'
-import { fetchValidatorBalanceCache } from '../../api/beacon'
+import { mockedRecoilValue } from '../../../test.helpers'
+import { mockActiveValidators, mockValidatorCacheResults } from '../../mocks/validatorResults'
 import { waitFor } from '@testing-library/react'
 import { formatUnits } from 'ethers/lib/utils'
 import clearAllMocks = jest.clearAllMocks
 
-jest.mock('../../recoil/selectors/selectValidators', () => ({
-  selectValidators: 'selectValidators',
+jest.mock('../../recoil/selectors/selectActiveValidators', () => ({
+  selectActiveValidators: 'selectActiveValidators',
 }))
 
 jest.mock('../../recoil/atoms', () => ({
-  beaconNodeEndpoint: 'beaconNodeEndpoint',
-  validatorStateInfo: 'validatorStateInfo',
-  beaconEpochInterval: 'beaconEpochInterval',
+  validatorCacheBalanceResult: 'validatorCacheBalanceResult',
 }))
 
 jest.mock('ethers/lib/utils', () => ({
   formatUnits: jest.fn(),
 }))
 
-jest.mock('../../api/beacon', () => ({
-  fetchValidatorBalanceCache: jest.fn(),
-}))
-
 const mockedFormatUnits = formatUnits as jest.MockedFn<typeof formatUnits>
-
-const mockedFetchValidatorBalanceCache = fetchValidatorBalanceCache as jest.MockedFn<
-  typeof fetchValidatorBalanceCache
->
 
 describe('useValidatorEpochBalance', () => {
   beforeEach(() => {
@@ -53,30 +37,13 @@ describe('useValidatorEpochBalance', () => {
     mockedRecoilValue.mockImplementation((data) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (data === 'selectValidators') return mockValidators
+      if (data === 'selectActiveValidators') return mockActiveValidators
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (data === 'beaconNodeEndpoint')
-        return {
-          protocol: Protocol.HTTP,
-          address: 'mock-address',
-          port: 8001,
-        }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (data === 'validatorStateInfo') return mockValidatorInfo
+      if (data === 'validatorCacheBalanceResult') return mockValidatorCacheResults
 
       return 678909292
     })
-
-    mockedFetchValidatorBalanceCache.mockReturnValue(
-      Promise.resolve({
-        ...mockResponse,
-        data: {
-          data: mockValidatorCacheResults,
-        },
-      }),
-    )
 
     mockedFormatUnits.mockReturnValue('32.000')
 
@@ -91,28 +58,5 @@ describe('useValidatorEpochBalance', () => {
         { name: 'mvk-5', data: [32, 32, 32], color: 'rgba(213, 65, 184, .6)', index: 4 },
       ])
     })
-  })
-  it('should not call fetch function if no active indices', () => {
-    mockedRecoilValue.mockImplementation((data) => {
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (data === 'selectValidators') return mockValidators
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (data === 'beaconNodeEndpoint')
-        return {
-          protocol: Protocol.HTTP,
-          address: 'mock-address',
-          port: 8001,
-        }
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      if (data === 'validatorStateInfo') return []
-
-      return 678909292
-    })
-    renderHook(() => useValidatorEpochBalance())
-
-    expect(mockedFetchValidatorBalanceCache).toBeCalledTimes(0)
   })
 })

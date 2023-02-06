@@ -4,19 +4,18 @@ import { ReactComponent as EthLogo } from '../../assets/images/eth.svg'
 import { ReactComponent as UsdcLogo } from '../../assets/images/usdc.svg'
 import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation } from 'react-i18next'
-import { EARNINGS_OPTIONS, initialEthDeposit } from '../../constants/constants'
-import { useState } from 'react'
+import { EARNINGS_OPTIONS } from '../../constants/constants'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
-import useValidatorEarnings from '../../hooks/useValidatorEarnings'
 import Spinner from '../Spinner/Spinner'
 import { useRecoilValue } from 'recoil'
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import EarningsLayout from './EarningsLayout'
-import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
 import { activeCurrency } from '../../recoil/atoms'
 import CurrencySelect from '../CurrencySelect/CurrencySelect'
+import useEarningsEstimate from '../../hooks/useEarningsEstimate'
+import Tooltip from '../ToolTip/Tooltip'
 
 export const AccountEarningFallback = () => {
   return (
@@ -28,37 +27,22 @@ export const AccountEarningFallback = () => {
 
 const AccountEarning = () => {
   const { t } = useTranslation()
-  const validators = useRecoilValue(selectValidatorInfos)
   const currency = useRecoilValue(activeCurrency)
-  const [isLoading, setLoading] = useState(false)
-  const [activeOption, setOption] = useState(0)
-  const { total, totalRewards, fetchHistory } = useValidatorEarnings(validators)
+  const { estimate, totalEarnings, annualizedEarningsPercent, estimateSelection, selectEstimate } =
+    useEarningsEstimate()
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
-  const [historicalAmount, setAmount] = useState<number | undefined>(undefined)
   const { rates } = useRecoilValue(selectEthExchangeRates)
-  const initialEth = validators.length * initialEthDeposit
-  const annualizedPercent = (Math.pow(total / initialEth, 1) - 1) * 100
 
   const activeRate = rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
-  const totalBalance = formattedRate * totalRewards
-  const totalHistoricalBalance = formattedRate * (historicalAmount || totalRewards)
+  const totalBalance = formattedRate * totalEarnings
+  const estimatedRateConversion = formattedRate * estimate
+  const isEstimate = estimateSelection !== undefined
+  const timeFrame = isEstimate ? EARNINGS_OPTIONS[estimateSelection]?.title : undefined
 
-  const annualizedTextColor = formatBalanceColor(annualizedPercent)
+  const annualizedTextColor = formatBalanceColor(annualizedEarningsPercent)
 
-  const viewEarnings = async (value: number) => {
-    setOption(value)
-    setAmount(undefined)
-
-    if (value > 0) {
-      setLoading(true)
-      const data = await fetchHistory(value)
-      if (data) {
-        setAmount(data)
-        setLoading(false)
-      }
-    }
-  }
+  const viewEarnings = async (value: number) => selectEstimate(value)
 
   return (
     <EarningsLayout>
@@ -81,7 +65,7 @@ const AccountEarning = () => {
           </Typography>
           <div className='w-full flex justify-end pr-6 pt-4'>
             <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
-              {formatLocalCurrency(totalRewards, { max: 3 })} ETH
+              {formatLocalCurrency(totalEarnings, { max: 3 })} ETH
             </Typography>
           </div>
           <div className='w-full mt-6 flex items-center'>
@@ -124,12 +108,12 @@ const AccountEarning = () => {
               {t('accountEarnings.earnings')}
             </Typography>
             <div className='flex ml-8 space-x-1'>
-              {EARNINGS_OPTIONS.map(({ value, title }) => (
+              {EARNINGS_OPTIONS.map(({ value, title }, index) => (
                 <Button
-                  key={value}
+                  key={index}
                   onClick={() => viewEarnings(value)}
                   className={'capitalize'}
-                  type={activeOption === value ? ButtonFace.LIGHT_ACTIVE : ButtonFace.LIGHT}
+                  type={estimateSelection === value ? ButtonFace.LIGHT_ACTIVE : ButtonFace.LIGHT}
                   padding='p-2 @1440:px-4 @1440:py-2'
                 >
                   {t(title)}
@@ -140,54 +124,62 @@ const AccountEarning = () => {
           <div className='flex justify-between space-x-2 md:space-x-0 mt-2 p-4'>
             <div className='flex space-x-4'>
               <EthLogo className='h-10 w-10' />
-              <div>
+              <Tooltip
+                className='cursor-pointer'
+                id='ethInfo'
+                maxWidth={200}
+                text={
+                  isEstimate ? t('tooltip.ethEstimate', { time: timeFrame }) : t('tooltip.ethTotal')
+                }
+              >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' className='uppercase' color='text-dark400'>
                     Eth
                   </Typography>
-                  <i className='bi bi-info-circle text-caption1 text-dark400' />
+                  <i
+                    id='tooltip'
+                    data-tooltip-content='hello world'
+                    className='bi bi-info-circle text-caption1 text-dark400'
+                  />
                 </div>
-                {isLoading ? (
-                  <div className='flex h-1/2 w-24 items-center justify-center'>
-                    <Spinner size='w-3 h-3' />
-                  </div>
-                ) : (
-                  <Typography
-                    type='text-caption1'
-                    className='md:text-subtitle3'
-                    darkMode='dark:text-white'
-                    family='font-roboto'
-                  >
-                    {formatLocalCurrency(historicalAmount || totalRewards, { max: 4 })} ETH
-                  </Typography>
-                )}
-              </div>
+                <Typography
+                  type='text-caption1'
+                  className='md:text-subtitle3'
+                  darkMode='dark:text-white'
+                  family='font-roboto'
+                >
+                  {formatLocalCurrency(estimate, { max: 4 })} ETH
+                </Typography>
+              </Tooltip>
             </div>
             <div className='flex space-x-4'>
               <UsdcLogo className='h-10 w-10' />
-              <div>
+              <Tooltip
+                className='cursor-pointer'
+                id='fiatInfo'
+                maxWidth={200}
+                text={
+                  isEstimate
+                    ? t('tooltip.fiatEstimate', { time: timeFrame })
+                    : t('tooltip.fiatTotal')
+                }
+              >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' isUpperCase color='text-dark400'>
                     USD
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
                 </div>
-                {isLoading ? (
-                  <div className='flex h-1/2 w-24 items-center justify-center'>
-                    <Spinner size='w-3 h-3' />
-                  </div>
-                ) : (
-                  <Typography
-                    type='text-caption1'
-                    className='md:text-subtitle3'
-                    darkMode='dark:text-white'
-                    family='font-roboto'
-                  >
-                    {formattedPrefix}
-                    {formatLocalCurrency(totalHistoricalBalance)} {String(currency)}
-                  </Typography>
-                )}
-              </div>
+                <Typography
+                  type='text-caption1'
+                  className='md:text-subtitle3'
+                  darkMode='dark:text-white'
+                  family='font-roboto'
+                >
+                  {formattedPrefix}
+                  {formatLocalCurrency(estimatedRateConversion)} {String(currency)}
+                </Typography>
+              </Tooltip>
             </div>
             <div>
               <div className='flex space-x-2'>
@@ -202,7 +194,7 @@ const AccountEarning = () => {
                 darkMode={annualizedTextColor}
                 family='font-roboto'
               >
-                {annualizedPercent.toFixed(2)}%
+                {annualizedEarningsPercent.toFixed(2)}%
               </Typography>
             </div>
           </div>

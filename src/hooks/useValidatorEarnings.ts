@@ -1,55 +1,97 @@
 import { useRecoilValue } from 'recoil'
-import { useMemo } from 'react'
-import { fetchValidatorStatuses } from '../api/beacon'
-import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
-import { BeaconValidatorResult, ValidatorInfo } from '../types/validator'
-import { formatUnits } from 'ethers/lib/utils'
-import { initialEthDeposit } from '../constants/constants'
-import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
+import { useEffect, useMemo, useState } from 'react'
+import { FormattedValidatorCache } from '../types/validator'
+import {
+  initialEthDeposit,
+  secondsInDay,
+  secondsInHour,
+  secondsInWeek,
+} from '../constants/constants'
+import calculateEpochEstimate from '../utilities/calculateEpochEstimate'
+import { validatorCacheBalanceResult } from '../recoil/atoms'
+import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 
-const useValidatorEarnings = (validators: ValidatorInfo[]) => {
-  const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
-  const { headSlot } = useRecoilValue(selectBeaconSyncInfo)
+const useValidatorEarnings = (indices?: string[]) => {
+  const validators = useRecoilValue(selectValidatorInfos)
+  const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
 
-  const validatorKeys = useMemo(() => {
-    return validators.map((validator) => validator.pubKey).join(',')
-  }, [validators])
+  const filteredCacheData = useMemo(() => {
+    if (!validatorCacheData) return undefined
+
+    if (!indices) return validatorCacheData
+
+    return Object.keys(validatorCacheData)
+      .filter((key) => indices.includes(key))
+      .reduce((obj, key: string) => {
+        return Object.assign(obj, {
+          [key]: validatorCacheData[Number(key)],
+        })
+      }, {})
+  }, [validatorCacheData, indices])
+  const filteredValidators = useMemo(() => {
+    return indices ? validators.filter(({ index }) => indices.includes(String(index))) : validators
+  }, [validators, indices])
+
+  const formattedEpochs = useMemo(() => {
+    if (!filteredCacheData) return undefined
+
+    return Object.values(filteredCacheData)
+      .map((cache) => cache.info)
+      .flat()
+      .reduce(function (r, a) {
+        r[a.epoch] = r[a.epoch] || []
+        r[a.epoch].push(a.total_balance)
+        return r
+      }, Object.create(null))
+  }, [filteredCacheData])
+  const epochKeys = formattedEpochs ? Object.keys(formattedEpochs) : undefined
+  const lastEpoch = epochKeys ? epochKeys[epochKeys.length - 1] : undefined
+
+  const [epochCaches, setCaches] = useState<FormattedValidatorCache | undefined>()
+
+  useEffect(() => {
+    setCaches((prev) => Object.assign({}, prev, formattedEpochs))
+  }, [lastEpoch])
 
   const total = useMemo(() => {
-    return validators.map((validator) => validator.balance).reduce((a, b) => a + b, 0)
-  }, [validators])
+    return filteredValidators.map((validator) => validator.balance).reduce((a, b) => a + b, 0)
+  }, [filteredValidators])
 
-  const totalRewards = useMemo(() => {
-    return validators.map((validator) => validator.rewards).reduce((a, b) => a + b, 0)
-  }, [validators])
+  const totalEarnings = useMemo(() => {
+    return filteredValidators.map((validator) => validator.rewards).reduce((a, b) => a + b, 0)
+  }, [filteredValidators])
 
-  const fetchHistory = async (distance: number) => {
-    if (distance > headSlot) {
-      return totalRewards
-    }
+  const hourlyEstimate = useMemo(
+    () => calculateEpochEstimate(secondsInHour, epochCaches),
+    [epochCaches],
+  )
 
-    if (!baseBeaconUrl) return
+  const dailyEstimate = useMemo(
+    () => calculateEpochEstimate(secondsInDay, epochCaches),
+    [epochCaches],
+  )
 
-    const { data } = await fetchValidatorStatuses(
-      baseBeaconUrl,
-      validatorKeys,
-      (headSlot - distance).toString(),
-    )
+  const weeklyEstimate = useMemo(
+    () => calculateEpochEstimate(secondsInWeek, epochCaches),
+    [epochCaches],
+  )
 
-    const previousEarning = data.data
-      .map(
-        (info: BeaconValidatorResult) =>
-          Number(formatUnits(info.balance, 'gwei')) - initialEthDeposit,
-      )
-      .reduce((a: number, b: number) => a + b, 0)
+  const monthlyEstimate = useMemo(
+    () => calculateEpochEstimate(secondsInWeek * 4, epochCaches),
+    [epochCaches],
+  )
 
-    return totalRewards - previousEarning
-  }
+  const initialEth = filteredValidators.length * initialEthDeposit
+  const annualizedEarningsPercent = (Math.pow(total / initialEth, 1) - 1) * 100
 
   return {
     total,
-    totalRewards,
-    fetchHistory,
+    totalEarnings,
+    annualizedEarningsPercent,
+    hourlyEstimate,
+    dailyEstimate,
+    weeklyEstimate,
+    monthlyEstimate,
   }
 }
 

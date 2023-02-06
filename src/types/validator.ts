@@ -18,16 +18,6 @@ export type Validator = {
   name: string
 }
 
-export type ValidatorStatusInfo = {
-  pubKey: string
-  status: ValidatorStatus
-}
-
-export type ValidatorEpochData = {
-  name: string
-  data: number[]
-}
-
 export type ValidatorInfo = {
   name: string
   balance: number
@@ -81,6 +71,10 @@ export type ValidatorCountResult = {
   withdrawal_possible: number
 }
 
+export type FormattedValidatorCache = {
+  [key: number]: number[]
+}
+
 export type ValidatorCacheResults = {
   [key: number]: ValidatorCacheData
 }
@@ -92,4 +86,11 @@ export type ValidatorCacheData = {
 export type ValidatorEpochResult = {
   epoch: number
   total_balance: number
+}
+
+export type activeValidatorDetail = {
+  status: ValidatorStatus
+  pubKey?: string
+  index: string
+  name?: string
 }

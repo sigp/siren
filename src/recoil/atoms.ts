@@ -2,7 +2,7 @@ import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
 import { Endpoint } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
-import { BeaconValidatorResult } from '../types/validator'
+import { BeaconValidatorResult, ValidatorCacheResults } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
@@ -131,5 +131,10 @@ export const validatorPeerCount = atom<number | undefined>({
 
 export const activeCurrency = atom<string>({
   key: 'activeCurrency',
+  default: undefined,
+})
+
+export const validatorCacheBalanceResult = atom<ValidatorCacheResults | undefined>({
+  key: 'validatorCacheBalanceResult',
   default: undefined,
 })

@@ -11,10 +11,12 @@ import ValidatorTable, {
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
 import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
+import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
 
 const Validators = () => {
   const { t } = useTranslation()
   useValidatorInfoPolling()
+  useValidatorCachePolling()
 
   return (
     <div className='w-full grid grid-cols-1 lg:block lg:h-full p-4 mb-28 lg:mb-0'>
