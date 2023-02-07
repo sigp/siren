@@ -147,32 +147,32 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
               {income.toFixed(4)}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               0
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               0
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               0
             </Typography>
           </div>
-          <div className='w-12 py-4 px-6'>
+          <div className='w-12 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               0
             </Typography>
           </div>
-          <div className='w-24 py-4 px-6'>
+          <div className='w-24 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               100%
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               10%
             </Typography>

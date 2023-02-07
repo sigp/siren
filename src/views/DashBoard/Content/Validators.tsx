@@ -12,6 +12,7 @@ import ValidatorTable, {
 } from '../../../components/ValidatorTable/ValidatorTable'
 import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
 import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
+import DisabledTooltip from '../../../components/DisabledTooltip/DisabledTooltip'
 
 const Validators = () => {
   const { t } = useTranslation()
@@ -40,13 +41,17 @@ const Validators = () => {
           <div className='flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4'>
             <ValidatorSearchInput />
             <div className='flex justify-center lg:justify-start space-x-4'>
-              <Button type={ButtonFace.SECONDARY}>
-                {t('validatorManagement.actions.deposit')}{' '}
-                <i className='bi-arrow-down-circle ml-3' />
-              </Button>
-              <Button type={ButtonFace.SECONDARY}>
-                {t('validatorManagement.actions.add')} <i className='bi-plus-circle-fill ml-3' />
-              </Button>
+              <DisabledTooltip>
+                <Button type={ButtonFace.SECONDARY}>
+                  {t('validatorManagement.actions.deposit')}{' '}
+                  <i className='bi-arrow-down-circle ml-3' />
+                </Button>
+              </DisabledTooltip>
+              <DisabledTooltip>
+                <Button type={ButtonFace.SECONDARY}>
+                  {t('validatorManagement.actions.add')} <i className='bi-plus-circle-fill ml-3' />
+                </Button>
+              </DisabledTooltip>
             </div>
           </div>
         </div>

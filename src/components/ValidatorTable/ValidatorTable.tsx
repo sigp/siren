@@ -12,6 +12,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import ValidatorInfoCard from '../ValidatorInfoCard/ValidatorInfoCard'
 import { ContentView } from '../../constants/enums'
 import { dashView, validatorIndex } from '../../recoil/atoms'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 
 export type TableView = 'partial' | 'full'
 
@@ -104,31 +105,37 @@ const ValidatorTable: FC<ValidatorTableProps> = ({ view = 'partial', isFilter, c
                 </Typography>
               </th>
               <th>
-                <div className='w-full flex justify-center'>
-                  <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                    <Typography color='text-dark500' type='text-tiny'>
-                      PR
-                    </Typography>
+                <DisabledTooltip>
+                  <div className='w-full flex justify-center'>
+                    <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
+                      <Typography color='text-dark500' type='text-tiny'>
+                        PR
+                      </Typography>
+                    </div>
                   </div>
-                </div>
+                </DisabledTooltip>
               </th>
               <th>
-                <div className='w-full flex justify-center'>
-                  <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                    <Typography color='text-dark500' type='text-tiny'>
-                      AT
-                    </Typography>
+                <DisabledTooltip>
+                  <div className='w-full flex justify-center'>
+                    <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
+                      <Typography color='text-dark500' type='text-tiny'>
+                        AT
+                      </Typography>
+                    </div>
                   </div>
-                </div>
+                </DisabledTooltip>
               </th>
               <th>
-                <div className='w-full flex justify-center'>
-                  <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                    <Typography color='text-dark500' type='text-tiny'>
-                      AG
-                    </Typography>
+                <DisabledTooltip>
+                  <div className='w-full flex justify-center'>
+                    <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
+                      <Typography color='text-dark500' type='text-tiny'>
+                        AG
+                      </Typography>
+                    </div>
                   </div>
-                </div>
+                </DisabledTooltip>
               </th>
               <th className={`${view === 'partial' ? 'border-r-style500' : ''} pl-2`}>
                 <Typography color='text-dark500' type='text-tiny' isUpperCase className='text-left'>
