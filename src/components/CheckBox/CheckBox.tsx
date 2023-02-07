@@ -11,7 +11,7 @@ export interface CheckBoxProps {
 }
 
 const CheckBox: FC<CheckBoxProps> = ({ id, className, label, value, checked, onChange }) => {
-  const classes = addClassString('flex items-center', className)
+  const classes = addClassString('flex items-center', [className])
   return (
     <div className={classes}>
       <input
