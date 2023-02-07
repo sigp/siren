@@ -27,8 +27,13 @@ const SideBar = () => {
             <LightHouseLogo className='w-6 h-6 text-black dark:text-white' />
           </div>
           <ul className='space-y-4'>
-            {PRIMARY_VIEWS.map(({ logoComponent, key }) => (
-              <SideItem key={key} onClick={() => changeView(key)} isActive={view === key}>
+            {PRIMARY_VIEWS.map(({ logoComponent, key, isDisabled }) => (
+              <SideItem
+                key={key}
+                onClick={() => changeView(key)}
+                isDisabled={isDisabled}
+                isActive={view === key}
+              >
                 {createElement(logoComponent)}
               </SideItem>
             ))}
@@ -36,8 +41,13 @@ const SideBar = () => {
         </div>
         <div className='w-full pb-4'>
           <ul className='space-y-4'>
-            {SECONDARY_VIEWS.map(({ logoComponent, key }) => (
-              <SideItem key={key} onClick={() => changeView(key)} isActive={view === key}>
+            {SECONDARY_VIEWS.map(({ logoComponent, key, isDisabled }) => (
+              <SideItem
+                key={key}
+                onClick={() => changeView(key)}
+                isDisabled={isDisabled}
+                isActive={view === key}
+              >
                 {createElement(logoComponent)}
               </SideItem>
             ))}
@@ -53,9 +63,10 @@ const SideBar = () => {
             <LightHouseFullLogo className='w-34 text-black dark:text-white' />
           </div>
           <ul className='space-y-4 pl-4'>
-            {PRIMARY_VIEWS.map(({ title, key }) => (
+            {PRIMARY_VIEWS.map(({ title, key, isDisabled }) => (
               <SideBarText
                 key={key}
+                isDisabled={isDisabled}
                 onClick={() => changeView(key)}
                 isActive={view === key}
                 text={t(title)}
@@ -65,8 +76,9 @@ const SideBar = () => {
         </div>
         <div className='w-full py-4'>
           <ul className='space-y-4 pl-4'>
-            {SECONDARY_VIEWS.map(({ title, key }) => (
+            {SECONDARY_VIEWS.map(({ title, key, isDisabled }) => (
               <SideBarText
+                isDisabled={isDisabled}
                 key={key}
                 onClick={() => changeView(key)}
                 isActive={view === key}
