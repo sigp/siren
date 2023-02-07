@@ -1,6 +1,7 @@
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import useValidatorCount from '../../hooks/useValidatorCount'
+import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 
 const ActiveValidatorCount = () => {
   const { t } = useTranslation()
@@ -13,7 +14,7 @@ const ActiveValidatorCount = () => {
         {t('validatorManagement.summary.active')}
       </Typography>
       <Typography isBold type='text-caption1'>
-        {active_ongoing}
+        {formatLocalCurrency(active_ongoing, { isStrict: true })}
       </Typography>
     </div>
   )

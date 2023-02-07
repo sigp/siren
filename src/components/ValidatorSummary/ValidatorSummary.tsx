@@ -61,7 +61,7 @@ const ValidatorSummary = () => {
         </Typography>
         <ActiveValidatorCount />
       </div>
-      <div className='p-3 space-y-2'>
+      <div className='p-3 space-y-2 opacity-20'>
         <Typography type='text-caption2' isBold isUpperCase>
           {t('validatorManagement.summary.queue')}
         </Typography>

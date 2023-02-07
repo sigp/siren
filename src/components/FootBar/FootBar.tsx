@@ -23,12 +23,16 @@ const FootBar = () => {
           <HealthMetric />
         </Suspense>
         <div className='flex space-x-1'>
-          <Button type={ButtonFace.ICON}>
-            <i className='bi bi-discord' />
-          </Button>
-          <Button type={ButtonFace.ICON}>
-            <i className='bi bi-question-circle-fill' />
-          </Button>
+          <a href='https://discord.gg/rbGCdFwH' target='_blank' rel='noreferrer'>
+            <Button type={ButtonFace.ICON}>
+              <i className='bi bi-discord' />
+            </Button>
+          </a>
+          <a href='https://lighthouse-book.sigmaprime.io/' target='_blank' rel='noreferrer'>
+            <Button type={ButtonFace.ICON}>
+              <i className='bi bi-question-circle-fill' />
+            </Button>
+          </a>
         </div>
       </div>
     </div>

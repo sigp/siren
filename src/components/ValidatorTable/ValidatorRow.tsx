@@ -13,6 +13,7 @@ import StatusIcon from '../StatusIcon/StatusIcon'
 import { BeaconChaValidatorUrl } from '../../constants/constants'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -69,17 +70,17 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           {rewards.toFixed(4)}
         </Typography>
       </th>
-      <th className='px-1'>
+      <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1' className='whitespace-nowrap'>
           {processed} / {missed}
         </Typography>
       </th>
-      <th className='px-1'>
+      <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1'>
           {attested}
         </Typography>
       </th>
-      <th className='px-1'>
+      <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1'>
           {aggregated}
         </Typography>
@@ -94,40 +95,48 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       {view === 'full' && (
         <>
-          <th className='px-2 pointer-events-none opacity-20'>
-            <div className='w-full flex justify-center'>
-              <ValidatorActionIcon
-                size='text-xs'
-                border='border border-error'
-                icon='bi-x-lg'
-                color='text-error'
-              />
-            </div>
+          <th className='px-2'>
+            <DisabledTooltip>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon
+                  size='text-xs'
+                  border='border border-error'
+                  icon='bi-x-lg'
+                  color='text-error'
+                />
+              </div>
+            </DisabledTooltip>
           </th>
-          <th className='px-2 pointer-events-none opacity-20'>
-            <div className='w-full flex justify-center'>
-              <ValidatorActionIcon
-                border='border border-primary100 dark:border-primary'
-                icon='bi-arrow-down-circle'
-              />
-            </div>
+          <th className='px-2'>
+            <DisabledTooltip>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon
+                  border='border border-primary100 dark:border-primary'
+                  icon='bi-arrow-down-circle'
+                />
+              </div>
+            </DisabledTooltip>
           </th>
-          <th className='px-2 pointer-events-none opacity-20'>
-            <div className='w-full flex justify-center'>
-              <ValidatorActionIcon
-                border='border border-dark700'
-                color='text-dark700 dark:text-dark400'
-                icon='bi-box-arrow-right'
-              />
-            </div>
+          <th className='px-2'>
+            <DisabledTooltip>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon
+                  border='border border-dark700'
+                  color='text-dark700 dark:text-dark400'
+                  icon='bi-box-arrow-right'
+                />
+              </div>
+            </DisabledTooltip>
           </th>
-          <th className='px-2 pointer-events-none opacity-20'>
-            <div className='w-full flex justify-center'>
-              <ValidatorActionIcon
-                border='border border-primary100 dark:border-primary'
-                icon='bi-key-fill'
-              />
-            </div>
+          <th className='px-2'>
+            <DisabledTooltip>
+              <div className='w-full flex justify-center'>
+                <ValidatorActionIcon
+                  border='border border-primary100 dark:border-primary'
+                  icon='bi-key-fill'
+                />
+              </div>
+            </DisabledTooltip>
           </th>
         </>
       )}

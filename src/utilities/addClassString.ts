@@ -1,8 +1,8 @@
-const addClassString = (baseClasses: string, addOn?: string) => {
+const addClassString = (baseClasses: string, addOns: (string | undefined | boolean)[]) => {
   let classes = baseClasses
 
-  if (addOn) {
-    classes += ` ${addOn}`
+  if (addOns.length) {
+    classes += ` ${addOns.filter((value) => Boolean(value)).join(' ')}`
   }
 
   return classes

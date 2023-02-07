@@ -16,6 +16,7 @@ import ViewDisclosures from '../../ViewDisclosures/ViewDisclosures'
 import { BeaconChaValidatorUrl } from '../../../constants/constants'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
+import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
@@ -53,7 +54,7 @@ const ValidatorDetails = () => {
                     </Typography>
                   </div>
                 </div>
-                <div className='space-y-2 px-6 lg:px-0'>
+                <div className='space-y-2 px-6 lg:px-0 opacity-20'>
                   <Typography type='text-caption2' isBold isUpperCase>
                     {t('validatorManagement.summary.avgEffectiveness')}
                   </Typography>
@@ -71,13 +72,13 @@ const ValidatorDetails = () => {
                   className='pt-4 px-2 space-y-2 w-42'
                 />
                 <div className='w-full flex border-t lg:border-none'>
-                  <div className='space-y-3 flex-1 pt-4 lg:pt-0 border-r px-2 pb-2'>
+                  <div className='space-y-3 flex-1 pt-4 lg:pt-0 border-r px-2 pb-2 opacity-20'>
                     <Typography isBold type='text-caption2'>
                       {t('validatorManagement.details.slotsBehind')}
                     </Typography>
                     <Typography className='text-right'>0</Typography>
                   </div>
-                  <div className='space-y-3 flex-1 pt-4 lg:pt-0 px-2 pb-2'>
+                  <div className='space-y-3 flex-1 pt-4 lg:pt-0 px-2 pb-2 opacity-20'>
                     <Typography isBold type='text-caption2'>
                       Epochs
                     </Typography>
@@ -124,33 +125,45 @@ const ValidatorDetails = () => {
       </div>
       <ValidatorGraffitiInput />
       <ValidatorDetailTable validator={validator} />
-      <div className='w-full border-t-style100 space-y-4 opacity-60 p-4'>
+      <div className='w-full border-t-style100 space-y-4 p-4'>
         <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
         <div className='w-full flex flex-wrap lg:space-x-3'>
-          <ValidatorCardAction
-            icon='bi-arrow-down-circle'
-            title={t('validatorManagement.actions.depositFunds')}
-          />
-          <ValidatorCardAction
-            icon='bi-key-fill'
-            title={t('validatorManagement.actions.backupKeys')}
-          />
-          <ValidatorCardAction
-            icon='bi-power'
-            title={t('validatorManagement.actions.stopValidator')}
-          />
-          <ValidatorCardAction
-            icon='bi-arrow-right-square'
-            title={t('validatorManagement.actions.exportValidator')}
-          />
-          <ValidatorCardAction
-            icon='bi-arrow-right-square'
-            title={t('validatorManagement.actions.exitValidator')}
-          />
-          <ValidatorCardAction
-            icon='bi-arrow-right-square'
-            title={t('validatorManagement.actions.withdrawValidator')}
-          />
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-arrow-down-circle'
+              title={t('validatorManagement.actions.depositFunds')}
+            />
+          </DisabledTooltip>
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-key-fill'
+              title={t('validatorManagement.actions.backupKeys')}
+            />
+          </DisabledTooltip>
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-power'
+              title={t('validatorManagement.actions.stopValidator')}
+            />
+          </DisabledTooltip>
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-arrow-right-square'
+              title={t('validatorManagement.actions.exportValidator')}
+            />
+          </DisabledTooltip>
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-arrow-right-square'
+              title={t('validatorManagement.actions.exitValidator')}
+            />
+          </DisabledTooltip>
+          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
+            <ValidatorCardAction
+              icon='bi-arrow-right-square'
+              title={t('validatorManagement.actions.withdrawValidator')}
+            />
+          </DisabledTooltip>
         </div>
       </div>
       <div className='p-3 border-t-style100'>

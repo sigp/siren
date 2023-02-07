@@ -11,6 +11,7 @@ import { ClientProvider } from '../types'
 
 export type ViewType = {
   title: string
+  isDisabled?: boolean
   logoComponent: FunctionComponent<SVGProps<SVGSVGElement>>
   key: ContentView
 }
@@ -30,11 +31,13 @@ export const VIEW = {
     title: 'sidebar.logs',
     logoComponent: LogsLogo,
     key: ContentView.LOGS,
+    isDisabled: true,
   },
   GRAFANA: {
     title: 'sidebar.grafana',
     logoComponent: GrafanaLogo,
     key: ContentView.GRAFANA,
+    isDisabled: true,
   },
   SETTINGS: {
     title: 'sidebar.settings',
