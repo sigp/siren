@@ -7,9 +7,12 @@ import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
 import secondsToShortHand from '../utilities/secondsToShortHand'
 import { beaconHealthResult } from '../recoil/atoms'
+import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 
 const useDeviceDiagnostics = (): Diagnostics => {
   const result = useRecoilValue(beaconHealthResult)
+  const { isSyncing } = useRecoilValue(selectBeaconSyncInfo)
+
   const {
     disk_bytes_free = 0,
     disk_bytes_total = 0,
@@ -33,15 +36,16 @@ const useDeviceDiagnostics = (): Diagnostics => {
   const totalDiskSpace = formatGigBytes(disk_bytes_total)
   const totalDiskFree = formatGigBytes(disk_bytes_free)
 
-  const diskStatus = useMemo<StatusType>(
-    () =>
-      totalDiskFree > 300
-        ? 'bg-success'
-        : totalDiskFree > 200 && totalDiskFree < 300
-        ? 'bg-warning'
-        : 'bg-error',
-    [totalDiskFree],
-  )
+  const diskStatus = useMemo<StatusType>(() => {
+    const bigFree = isSyncing ? 300 : 100
+    const midFree = isSyncing ? 200 : 50
+
+    return totalDiskFree > bigFree
+      ? 'bg-success'
+      : totalDiskFree >= midFree && totalDiskFree < bigFree
+      ? 'bg-warning'
+      : 'bg-error'
+  }, [totalDiskFree, isSyncing])
 
   const memoryUtilization = Math.round(getPercentage(used_memory, total_memory))
   const totalMemory = formatGigBytes(total_memory)
