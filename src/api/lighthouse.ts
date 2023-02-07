@@ -15,3 +15,8 @@ export const fetchValidators = async (baseValidatorUrl: string, token: string) =
 
 export const fetchValidatorCount = async ({ protocol, address, port }: Endpoint) =>
   await axios.get(`${protocol}://${address}:${port}/lighthouse/ui/validator_count`)
+
+export const fetchValidatorGraffiti = async (baseValidatorUrl: string, token: string) =>
+  await axios.get(`${baseValidatorUrl}/ui/graffiti`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
