@@ -1,3 +1,5 @@
+import { ValidatorStatus } from '../types/validator'
+
 export const mockActiveValidators = [
   {
     pubKey: 'mock-pub-key-1',
@@ -112,4 +114,18 @@ export const mockValidatorCacheResults = {
       },
     ],
   },
+}
+
+export const mockValidatorInfo = {
+  name: 'mock-validator',
+  balance: 32000000,
+  index: 0,
+  pubKey: 'mock-pub-key',
+  rewards: 1000000,
+  slashed: false,
+  status: 'active_ongoing' as ValidatorStatus,
+  processed: 1,
+  missed: 0,
+  attested: 0,
+  aggregated: 0,
 }

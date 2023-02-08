@@ -10,11 +10,9 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
   const token = useRecoilValue(apiToken)
   const [results, setResults] = useState<ValidatorGraffitiResults | undefined>()
 
-  const fetchGraffiti = async () => {
-    if (!validatorUrl) return
-
+  const fetchGraffiti = async (url: string, token: string) => {
     try {
-      const { data } = await fetchValidatorGraffiti(validatorUrl, token)
+      const { data } = await fetchValidatorGraffiti(url, token)
 
       if (data) {
         setResults(data.data)
@@ -26,7 +24,7 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
 
   useEffect(() => {
     if (validatorUrl && token) {
-      void fetchGraffiti()
+      void fetchGraffiti(validatorUrl, token)
     }
   }, [token, validatorUrl])
 
