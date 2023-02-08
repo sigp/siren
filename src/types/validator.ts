@@ -94,3 +94,7 @@ export type activeValidatorDetail = {
   index: string
   name?: string
 }
+
+export type ValidatorGraffitiResults = {
+  [key: string]: string
+}

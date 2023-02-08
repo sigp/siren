@@ -17,6 +17,7 @@ import { BeaconChaValidatorUrl } from '../../../constants/constants'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
 import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
+import useValidatorGraffiti from '../../../hooks/useValidatorGraffiti'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
@@ -24,6 +25,8 @@ const ValidatorDetails = () => {
   const validator = useRecoilValue(selectValidatorDetail)
   const { index, balance, status } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
+
+  const { graffiti } = useValidatorGraffiti(validator)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0)
 
@@ -123,7 +126,7 @@ const ValidatorDetails = () => {
           </div>
         </div>
       </div>
-      <ValidatorGraffitiInput />
+      <ValidatorGraffitiInput value={graffiti} />
       <ValidatorDetailTable validator={validator} />
       <div className='w-full border-t-style100 space-y-4 p-4'>
         <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
