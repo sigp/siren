@@ -7,6 +7,8 @@ import Spinner from '../Spinner/Spinner'
 import formatAtHeadSlotStatus from '../../utilities/formatAtHeadSlotStatus'
 import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer'
 import { selectAtHeadSlot } from '../../recoil/selectors/selectAtHeadSlot'
+import useParticipationRate from '../../hooks/useParticipationRate'
+import Tooltip from '../ToolTip/Tooltip'
 
 export const NetworkStatsFallback = () => (
   <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center'>
@@ -19,6 +21,8 @@ const NetworkStats = () => {
   const validatorHealth = useRecoilValue(validatorHealthResult)
   const beaconHealth = useRecoilValue(beaconHealthResult)
 
+  const { rate, isInsufficientData } = useParticipationRate()
+
   const atHeadSlot = useRecoilValue(selectAtHeadSlot)
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
 
@@ -26,7 +30,7 @@ const NetworkStats = () => {
   const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
 
   return (
-    <div className='w-full h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
+    <div className='w-full z-50 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Validator'
@@ -44,13 +48,24 @@ const NetworkStats = () => {
         metric={atHeadSlot !== undefined ? String(atHeadSlot === 1 ? 0 : atHeadSlot) : '---'}
       />
       <NetworkPeerSpeedometer />
-      <NetworkStatBlock
-        className='border-none'
-        title={t('networkStats.participationRate')}
-        status='bg-success'
-        metricFontSize='text-subtitle3'
-        metric='98%'
-      />
+      {isInsufficientData || rate === undefined ? (
+        <Tooltip id='participationRate' text='Insufficient Data' place='bottom'>
+          <NetworkStatBlock
+            className='border-none opacity-20 pointer-events-none'
+            title={t('networkStats.participationRate')}
+            metricFontSize='text-subtitle3'
+            metric='---'
+          />
+        </Tooltip>
+      ) : (
+        <NetworkStatBlock
+          className='border-none'
+          title={t('networkStats.participationRate')}
+          status='bg-success'
+          metricFontSize='text-subtitle3'
+          metric={`${rate}%`}
+        />
+      )}
     </div>
   )
 }

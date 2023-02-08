@@ -25,3 +25,12 @@ export const fetchValidatorBalanceCache = async (
   { protocol, address, port }: Endpoint,
   indices: number[],
 ) => await axios.post(`${protocol}://${address}:${port}/lighthouse/ui/validator_info`, { indices })
+
+export const fetchValidatorInclusion = async (
+  baseBeaconUrl: string,
+  epoch: number,
+  validatorId?: string,
+) =>
+  await axios.get(
+    `${baseBeaconUrl}/lighthouse/validator_inclusion/${epoch}/${validatorId || 'global'}`,
+  )
