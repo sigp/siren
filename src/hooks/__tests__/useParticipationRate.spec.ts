@@ -31,11 +31,23 @@ jest.mock('recoil', () => ({
 }))
 
 describe('useParticipationRate hook', () => {
+  afterEach(() => {
+    jest.clearAllMocks()
+  })
+  it('should call fetchValidatorInclusion', () => {
+    mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconSyncResult, head_slot: 1234567 })
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
+
+    renderHook(() => useParticipationRate())
+
+    expect(mockedFetchValidatorInclusion).toBeCalled()
+  })
   it('should return default values', () => {
     const { result } = renderHook(() => useParticipationRate())
     expect(result.current).toEqual({
       isInsufficientData: false,
       rate: undefined,
+      status: 'bg-error',
     })
   })
   it('should return participation rate', () => {
@@ -45,16 +57,41 @@ describe('useParticipationRate hook', () => {
     const { result } = renderHook(() => useParticipationRate())
     expect(result.current).toEqual({
       isInsufficientData: false,
-      rate: 71,
+      rate: 82,
+      status: 'bg-warning',
     })
   })
-  it('should call fetchValidatorInclusion', () => {
-    mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconSyncResult, head_slot: 1234567 })
-    mockedRecoilValue.mockReturnValueOnce('mocked-url')
+  it('should return error status', () => {
+    jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
+    jest
+      .spyOn(React, 'useState')
+      .mockReturnValueOnce([
+        { ...mockParticipationResult, previous_epoch_target_attesting_gwei: 1000002000000000 },
+        jest.fn(),
+      ])
 
-    renderHook(() => useParticipationRate())
+    const { result } = renderHook(() => useParticipationRate())
+    expect(result.current).toEqual({
+      isInsufficientData: false,
+      rate: 8,
+      status: 'bg-error',
+    })
+  })
+  it('should return success status', () => {
+    jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
+    jest
+      .spyOn(React, 'useState')
+      .mockReturnValueOnce([
+        { ...mockParticipationResult, previous_epoch_target_attesting_gwei: 12676372000000000 },
+        jest.fn(),
+      ])
 
-    expect(mockedFetchValidatorInclusion).toBeCalled()
+    const { result } = renderHook(() => useParticipationRate())
+    expect(result.current).toEqual({
+      isInsufficientData: false,
+      rate: 97,
+      status: 'bg-success',
+    })
   })
   it('should set mock data', () => {
     mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconSyncResult, head_slot: 1234567 })

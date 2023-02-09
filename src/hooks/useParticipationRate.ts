@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { fetchValidatorInclusion } from '../api/beacon'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { BeaconValidatorInclusionResults } from '../types/beacon'
+import { StatusType } from '../types'
 
 const useParticipationRate = () => {
   const { head_slot } = useRecoilValue(beaconSyncInfo) || {}
@@ -33,14 +34,29 @@ const useParticipationRate = () => {
     }
   }, [closestEpochSlot, url])
 
-  const { previous_epoch_head_attesting_gwei, previous_epoch_active_gwei } = vcInclusionData || {}
+  const { previous_epoch_target_attesting_gwei, previous_epoch_active_gwei } = vcInclusionData || {}
+
+  const ratePercentage =
+    previous_epoch_target_attesting_gwei && previous_epoch_active_gwei
+      ? Math.round((previous_epoch_target_attesting_gwei / previous_epoch_active_gwei) * 100)
+      : undefined
+
+  const getStatus = (rate?: number) => {
+    if (!rate) return 'bg-error'
+    switch (true) {
+      case rate >= 95:
+        return 'bg-success'
+      case rate < 95 && rate > 75:
+        return 'bg-warning'
+      default:
+        return 'bg-error'
+    }
+  }
 
   return {
     isInsufficientData,
-    rate:
-      previous_epoch_head_attesting_gwei && previous_epoch_active_gwei
-        ? Math.round((previous_epoch_head_attesting_gwei / previous_epoch_active_gwei) * 100)
-        : undefined,
+    rate: ratePercentage,
+    status: getStatus(ratePercentage) as StatusType,
   }
 }
 

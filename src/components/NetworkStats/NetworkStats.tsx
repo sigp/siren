@@ -21,7 +21,7 @@ const NetworkStats = () => {
   const validatorHealth = useRecoilValue(validatorHealthResult)
   const beaconHealth = useRecoilValue(beaconHealthResult)
 
-  const { rate, isInsufficientData } = useParticipationRate()
+  const { rate, isInsufficientData, status } = useParticipationRate()
 
   const atHeadSlot = useRecoilValue(selectAtHeadSlot)
   const headSlotStatus = formatAtHeadSlotStatus(atHeadSlot)
@@ -61,7 +61,7 @@ const NetworkStats = () => {
         <NetworkStatBlock
           className='border-none'
           title={t('networkStats.participationRate')}
-          status='bg-success'
+          status={status}
           metricFontSize='text-subtitle3'
           metric={`${rate}%`}
         />
