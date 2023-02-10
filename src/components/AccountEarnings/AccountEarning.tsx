@@ -70,33 +70,35 @@ const AccountEarning = () => {
           </div>
           <div className='w-full mt-6 flex items-center'>
             <LightHouseLogo className='hidden md:block text-white w-16 h-16' />
-            <div className='flex-1 ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
+            <div className='flex-1 ml-2 md:ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
               <CurrencySelect />
-              <div>
-                <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
-                  {t('accountEarnings.currentRate')}
-                </Typography>
-                <Typography
-                  color='text-white'
-                  darkMode='dark:text-white'
-                  type='text-caption1'
-                  className='xl:text-body'
-                >
-                  {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/ETH`}
-                </Typography>
-              </div>
-              <div>
-                <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
-                  {t('accountEarnings.totalBalance')}
-                </Typography>
-                <Typography
-                  color='text-white'
-                  darkMode='dark:text-white'
-                  type='text-caption1'
-                  className='xl:text-body'
-                >
-                  {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${currency}`}
-                </Typography>
+              <div className='flex items-center flex-wrap justify-end md:justify-start md:text-left text-right space-y-4 md:space-y-0 md:space-x-4'>
+                <div>
+                  <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
+                    {t('accountEarnings.currentRate')}
+                  </Typography>
+                  <Typography
+                    color='text-white'
+                    darkMode='dark:text-white'
+                    type='text-caption1'
+                    className='xl:text-body'
+                  >
+                    {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/ETH`}
+                  </Typography>
+                </div>
+                <div>
+                  <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
+                    {t('accountEarnings.totalBalance')}
+                  </Typography>
+                  <Typography
+                    color='text-white'
+                    darkMode='dark:text-white'
+                    type='text-caption1'
+                    className='xl:text-body'
+                  >
+                    {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${currency}`}
+                  </Typography>
+                </div>
               </div>
             </div>
           </div>
@@ -107,12 +109,12 @@ const AccountEarning = () => {
             <Typography className='hidden md:block' color='text-white'>
               {t('accountEarnings.earnings')}
             </Typography>
-            <div className='flex ml-8 space-x-1'>
+            <div className='flex ml-8 mr-2 sm:mr-0 flex-wrap justify-end sm:justify-start sm:flex-nowrap'>
               {EARNINGS_OPTIONS.map(({ value, title }, index) => (
                 <Button
                   key={index}
                   onClick={() => viewEarnings(value)}
-                  className={'capitalize'}
+                  className='capitalize mr-1 mb-1'
                   type={estimateSelection === value ? ButtonFace.LIGHT_ACTIVE : ButtonFace.LIGHT}
                   padding='p-2 @1440:px-4 @1440:py-2'
                 >

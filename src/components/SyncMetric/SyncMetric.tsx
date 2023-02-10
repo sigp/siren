@@ -3,6 +3,7 @@ import Typography from '../Typography/Typography'
 import ProgressCircle, { ProgressCircleProps } from '../ProgressCircle/ProgressCircle'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import Spinner from '../Spinner/Spinner'
+import addClassString from '../../utilities/addClassString'
 
 export const SyncMetricFallback = () => {
   return (
@@ -18,6 +19,7 @@ export interface SyncMetricProps extends ProgressCircleProps {
   subTitle: string
   title: string
   borderStyle?: string
+  className?: string
 }
 
 const SyncMetric: FC<SyncMetricProps> = ({
@@ -27,12 +29,15 @@ const SyncMetric: FC<SyncMetricProps> = ({
   subTitle,
   borderStyle = 'border',
   percent,
+  className,
   ...props
 }) => {
+  const classes = addClassString(
+    'flex h-14 max-h-full bg-white dark:bg-dark750 border-borderLight dark:border-dark900',
+    [borderStyle, className],
+  )
   return (
-    <div
-      className={`flex w-40 h-14 max-h-full bg-white dark:bg-dark750 ${borderStyle} border-borderLight dark:border-dark900`}
-    >
+    <div className={classes}>
       <div className='p-1.5'>
         <Typography
           type='text-tiny'
@@ -64,7 +69,7 @@ const SyncMetric: FC<SyncMetricProps> = ({
           })}`}
         </Typography>
       </div>
-      <div className='flex-1 flex items-center justify-center'>
+      <div className='hidden md:flex flex-1 ml-4 items-center justify-center'>
         <ProgressCircle {...props} percent={percent || 0} />
       </div>
     </div>

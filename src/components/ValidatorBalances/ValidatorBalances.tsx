@@ -62,7 +62,7 @@ const ValidatorBalances = () => {
 
   return (
     <div className='flex-1 flex h-full w-full'>
-      <div className='p-1 h-full flex items-center justify-center'>
+      <div className='p-1 h-full hidden md:flex items-center justify-center'>
         <Typography
           type='text-tiny'
           color='text-primary'
@@ -73,8 +73,8 @@ const ValidatorBalances = () => {
           ETH
         </Typography>
       </div>
-      <div className='relative flex-1 flex items-center justify-center'>
-        <div className='px-8 absolute z-10 top-0 left-0 w-full flex justify-between'>
+      <div className='relative flex-1 flex flex-col pb-2 items-center justify-center'>
+        <div className='pl-1 pr-4 mb-2 z-10 top-0 left-0 w-full flex justify-between'>
           <Typography color='text-primary' darkMode='dark:text-white'>
             {t('validatorBalance')}
           </Typography>
