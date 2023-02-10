@@ -60,6 +60,11 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
 
     if (!ctx) return
 
+    const createChart = () => {
+      Chart.getChart('stepChart')?.destroy()
+      new Chart(ctx, config as never)
+    }
+
     const config = {
       type: 'line' as ChartType,
       data,
@@ -121,15 +126,16 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
     }
 
     try {
-      new Chart(ctx, config as never)
+      createChart()
+      window.addEventListener('resize', createChart)
     } catch (e) {
       console.error(e)
-      Chart.getChart('stepChart')?.destroy()
-      new Chart(ctx, config as never)
+      createChart()
     }
 
     return () => {
       Chart.getChart('stepChart')?.destroy()
+      window.removeEventListener('resize', createChart)
     }
   }, [chartEl, data, hasAnimated, mode])
 
