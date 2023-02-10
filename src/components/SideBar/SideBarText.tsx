@@ -7,14 +7,16 @@ export interface SideBarTextProps {
   isActive?: boolean
   isDisabled?: boolean
   onClick?: () => void
+  className?: string
 }
 
-const SideBarText: FC<SideBarTextProps> = ({ text, isActive, onClick, isDisabled }) => {
+const SideBarText: FC<SideBarTextProps> = ({ text, isActive, onClick, isDisabled, className }) => {
   return (
     <li
       onClick={onClick}
       className={addClassString('flex items-center h-6 w-full cursor-pointer', [
         isDisabled && 'opacity-20 pointer-events-none',
+        className,
       ])}
     >
       <Typography

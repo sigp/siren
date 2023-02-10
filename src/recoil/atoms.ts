@@ -138,3 +138,8 @@ export const validatorCacheBalanceResult = atom<ValidatorCacheResults | undefine
   key: 'validatorCacheBalanceResult',
   default: undefined,
 })
+
+export const isSideBarOpen = atom<boolean>({
+  key: 'isSideBarOpen',
+  default: false,
+})

@@ -8,14 +8,26 @@ import BeaconMetric from './BeaconMetric'
 import { Suspense } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorMetric from './ValidatorMetric'
+import { useSetRecoilState } from 'recoil'
+import { isSideBarOpen } from '../../recoil/atoms'
 
 const TopBar = () => {
   const { t } = useTranslation()
+  const toggleSideBar = useSetRecoilState(isSideBarOpen)
+
+  const openSideBar = () => toggleSideBar(true)
+
   return (
     <div className='w-full h-14 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
       <div className='flex h-full'>
-        <div className='items-center hidden lg:flex w-42 border-r border-borderLight dark:border-borderDark px-4'>
-          <LightHouseFullLogo className='w-full text-black dark:text-white' />
+        <div className='flex items-center md:w-42 border-r border-borderLight dark:border-borderDark px-4'>
+          <div
+            onClick={openSideBar}
+            className='w-full h-full flex md:hidden items-center justify-center cursor-pointer'
+          >
+            <i className='bi-list text-dark900 dark:text-dark300 text-2xl' />
+          </div>
+          <LightHouseFullLogo className='hidden w-full md:flex text-black dark:text-white' />
         </div>
         <Suspense fallback={<SyncMetricFallback />}>
           <ValidatorMetric />
