@@ -4,24 +4,53 @@ import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightH
 import SideItem from './SideItem'
 import SideBarText from './SideBarText'
 import { PRIMARY_VIEWS, SECONDARY_VIEWS } from '../../constants/constants'
-import { createElement } from 'react'
+import { createElement, useCallback } from 'react'
 import { useRecoilState } from 'recoil'
-import { dashView } from '../../recoil/atoms'
+import { dashView, isSideBarOpen } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
 import useUiMode from '../../hooks/useUiMode'
 import UiModeIcon from '../UiModeIcon/UiModeIcon'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import addClassString from '../../utilities/addClassString'
+import useClickOutside from '../../hooks/useClickOutside'
 
 const SideBar = () => {
   const { t } = useTranslation()
   const [view, setView] = useRecoilState(dashView)
+  const [showSideBar, toggleSideBar] = useRecoilState(isSideBarOpen)
   const { mode, toggleUiMode } = useUiMode()
+  const isMobile = useMediaQuery('(max-width: 425px)')
 
-  const changeView = (key: ContentView) => setView(key)
+  const sideBarClasses = addClassString(
+    'z-40 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform',
+    [
+      !isMobile && '-translate-x-44 group-sidebar-hover:translate-x-14',
+      isMobile && !showSideBar && '-translate-x-44',
+    ],
+  )
+
+  const closeSideBar = useCallback(() => {
+    if (isMobile) {
+      toggleSideBar(false)
+    }
+  }, [isMobile])
+
+  const { ref } = useClickOutside<HTMLDivElement>(closeSideBar)
+
+  const changeView = (key: ContentView) => {
+    setView(key)
+    closeSideBar()
+  }
+
+  const toggleUi = () => {
+    toggleUiMode()
+    closeSideBar()
+  }
 
   return (
-    <div className='relative group-sidebar hidden md:block w-14.5 flex-shrink-0'>
-      <div className='flex flex-col justify-between z-50 relative w-full h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700'>
+    <div className='relative group-sidebar'>
+      <div className='flex-col justify-between z-50 relative hidden md:flex w-14.5 flex-shrink-0 h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700'>
         <div className='w-full'>
           <div className='w-full h-16 flex justify-center pt-3.5'>
             <LightHouseLogo className='w-6 h-6 text-black dark:text-white' />
@@ -57,7 +86,7 @@ const SideBar = () => {
           </ul>
         </div>
       </div>
-      <div className='z-40 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white -translate-x-44 group-sidebar-hover:translate-x-14 border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform'>
+      <div ref={ref} className={sideBarClasses}>
         <div className='w-full'>
           <div className='w-full h-16 flex justify-center pt-1'>
             <LightHouseFullLogo className='w-34 text-black dark:text-white' />
@@ -85,7 +114,10 @@ const SideBar = () => {
                 text={t(title)}
               />
             ))}
-            <SideBarText text={t('sidebar.theme')} />
+            <div onClick={toggleUi} className='w-full flex items-center'>
+              <SideBarText className='w-auto mr-4' text={t('sidebar.theme')} />
+              <UiModeIcon className='md:hidden' mode={mode} />
+            </div>
           </ul>
         </div>
       </div>

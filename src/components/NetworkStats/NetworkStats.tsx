@@ -30,7 +30,7 @@ const NetworkStats = () => {
   const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
 
   return (
-    <div className='w-full z-50 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
+    <div className='w-full z-10 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
       <NetworkStatBlock
         title={t('networkStats.processUptime')}
         subTitle='Validator'
