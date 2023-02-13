@@ -19,33 +19,39 @@ const LogsInfo = () => {
         </Typography>
       </div>
       <DiagnosticCard
+        isDisabled
+        toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.criticalLogs')}
         maxHeight='flex-1'
-        status='bg-success'
+        status='bg-dark100'
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('critical')}
-        metric='0.01'
+        metric='---'
       />
       <DiagnosticCard
+        isDisabled
         isBackground={false}
+        toolTipText={t('logInfo.comingSoon')}
         title={t('errors')}
         maxHeight='flex-1'
-        status='bg-success'
+        status='bg-dark100'
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric='0.94 / HR'
+        metric='---'
       />
       <DiagnosticCard
+        isDisabled
         isBackground={false}
+        toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.warnings')}
         maxHeight='flex-1'
-        status='bg-success'
+        status='bg-dark100'
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric='0.33 / HR'
+        metric='---'
       />
     </div>
   )

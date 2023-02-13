@@ -72,7 +72,7 @@
   "hourly": "hourly",
   "daily": "daily",
   "critical": "Critical",
-  "errors": "errors",
+  "errors": "Errors",
   "monthly": "monthly",
   "weekly": "weekly",
   "total": "Total",
@@ -93,7 +93,8 @@
     "logs": "Logs",
     "warnings": "Warnings",
     "validatorLogs": "Validator Logs",
-    "criticalLogs": "Critical Logs Per Minute"
+    "criticalLogs": "Critical Logs Per Minute",
+    "comingSoon": "Logs Coming Soon"
   },
   "alertInfo": {
     "alerts": "Alerts",
