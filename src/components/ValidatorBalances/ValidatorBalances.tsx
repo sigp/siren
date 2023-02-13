@@ -2,12 +2,14 @@ import StepChart from '../StepChart/StepChart'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import useValidatorEpochBalance from '../../hooks/useValidatorEpochBalance'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Rodal from 'rodal'
 import Spinner from '../Spinner/Spinner'
 import LoadingDots from '../LoadingDots/LoadingDots'
 import useUiMode from '../../hooks/useUiMode'
 import CheckBox from '../CheckBox/CheckBox'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { ValidatorIndicesStorage } from '../../types/storage'
 
 export const ValidatorBalanceFallback = () => (
   <div className='flex-1 flex h-24 w-full justify-center items-center'>
@@ -21,6 +23,17 @@ const ValidatorBalances = () => {
   const [hiddenValidators, setHiddenValidators] = useState<string[]>([])
   const [isLegendModal, toggleModal] = useState(false)
   const { epochs, timestamps, isSufficientData } = useValidatorEpochBalance()
+  const [hiddenIndices, storeHiddenValidators] = useLocalStorage<ValidatorIndicesStorage>(
+    'hiddenValidatorIndices',
+    undefined,
+  )
+
+  useEffect(() => {
+    const persistedValidators = hiddenIndices && JSON.parse(hiddenIndices)
+    if (!hiddenValidators.length && persistedValidators?.length) {
+      setHiddenValidators(persistedValidators)
+    }
+  }, [hiddenIndices, hiddenValidators])
 
   const balanceData = useMemo(() => {
     return {
@@ -51,11 +64,12 @@ const ValidatorBalances = () => {
 
   const onClose = () => toggleModal(false)
   const toggleValidator = (index: string) => {
-    if (hiddenValidators.includes(index)) {
-      setHiddenValidators((prev) => prev.filter((prevIndex) => prevIndex !== index))
-    } else {
-      setHiddenValidators((prev) => [...prev, index])
-    }
+    const indices = hiddenValidators.includes(index)
+      ? hiddenValidators.filter((prevIndex) => prevIndex !== index)
+      : [...hiddenValidators, index]
+
+    setHiddenValidators(indices)
+    storeHiddenValidators(JSON.stringify(indices))
   }
 
   const viewBalanceLegend = () => toggleModal(true)
