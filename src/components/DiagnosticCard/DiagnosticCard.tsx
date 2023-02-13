@@ -6,6 +6,9 @@ import darkNetwork from '../../assets/images/darkNetwork.svg'
 import Status, { StatusType } from '../Status/Status'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
 import generateId from '../../utilities/generateId'
+import Tooltip from '../ToolTip/Tooltip'
+import { ITooltip } from 'react-tooltip'
+import addClassString from '../../utilities/addClassString'
 
 export interface DiagnosticCardProps {
   status?: StatusType
@@ -19,6 +22,9 @@ export interface DiagnosticCardProps {
   maxHeight?: string
   isBackground?: boolean
   size?: 'lg' | 'md' | 'sm' | 'health'
+  toolTipText?: string
+  toolTipPosition?: ITooltip['place']
+  isDisabled?: boolean
 }
 
 const DiagnosticCard: FC<DiagnosticCardProps> = ({
@@ -33,7 +39,11 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   percent,
   size = 'md',
   subTitleHighlightColor,
+  toolTipText,
+  toolTipPosition,
+  isDisabled,
 }) => {
+  const toolTipId = Math.random().toString()
   const isSmall = size === 'sm'
   const getContainerSize = () => {
     switch (size) {
@@ -49,11 +59,11 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
         } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500 @1600:max-w-full`
     }
   }
-
-  return (
-    <div
-      className={`w-full overflow-hidden h-full ${getContainerSize()} ${border} relative flex flex-col justify-between`}
-    >
+  const contentClass = addClassString('flex flex-col justify-between h-full', [
+    isDisabled && 'opacity-20',
+  ])
+  const renderContent = () => (
+    <div className={contentClass}>
       {!metric ? (
         <NotAvailable className='absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2' />
       ) : (
@@ -104,6 +114,18 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           status && <Status status={status} />
         )}
       </div>
+    </div>
+  )
+
+  return (
+    <div className={`w-full h-full ${getContainerSize()} ${border} relative`}>
+      {toolTipText ? (
+        <Tooltip className='h-full' id={toolTipId} place={toolTipPosition} text={toolTipText}>
+          {renderContent()}
+        </Tooltip>
+      ) : (
+        renderContent()
+      )}
     </div>
   )
 }
