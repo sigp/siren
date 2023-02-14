@@ -24,8 +24,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { t } = useTranslation()
   const setDashView = useSetRecoilState(dashView)
   const setValidatorIndex = useSetRecoilState(validatorIndex)
-  const { name, pubKey, index, balance, rewards, processed, missed, attested, aggregated, status } =
-    validator
+  const { name, pubKey, index, balance, rewards, status } = validator
   const rewardColor = formatBalanceColor(rewards)
 
   const viewValidator = () => {
@@ -72,17 +71,17 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1' className='whitespace-nowrap'>
-          {processed} / {missed}
+          {/* {processed} / {missed} */}-
         </Typography>
       </th>
       <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1'>
-          {attested}
+          {/* {attested} */}-
         </Typography>
       </th>
       <th className='px-1 opacity-20'>
         <Typography color='text-dark500' type='text-caption1'>
-          {aggregated}
+          {/* {aggregated} */}-
         </Typography>
       </th>
       <th className='border-r-style500 px-4'>

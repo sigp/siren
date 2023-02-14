@@ -62,9 +62,9 @@ const ValidatorDetails = () => {
                     {t('validatorManagement.summary.avgEffectiveness')}
                   </Typography>
                   <div className='flex space-x-8'>
-                    <Status status='bg-success' />
+                    <Status status='bg-dark100' />
                     <Typography isBold type='text-caption1'>
-                      100%
+                      -
                     </Typography>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ const ValidatorDetails = () => {
                     <Typography isBold type='text-caption2'>
                       {t('validatorManagement.details.slotsBehind')}
                     </Typography>
-                    <Typography className='text-right'>0</Typography>
+                    <Typography className='text-right'>-</Typography>
                   </div>
                   <div className='space-y-3 flex-1 pt-4 lg:pt-0 px-2 pb-2 opacity-20'>
                     <Typography isBold type='text-caption2'>
@@ -87,7 +87,7 @@ const ValidatorDetails = () => {
                     </Typography>
                     <div className='w-full flex justify-between'>
                       <Typography>Node</Typography>
-                      <Typography>0</Typography>
+                      <Typography>-</Typography>
                     </div>
                   </div>
                 </div>
