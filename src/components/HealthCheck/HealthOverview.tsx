@@ -8,9 +8,12 @@ import { Trans, useTranslation } from 'react-i18next'
 
 const HealthOverview = () => {
   const { t } = useTranslation()
-  const { totalDiskFree, uptime, healthCondition, overallHealthStatus } = useDeviceDiagnostics()
+  const { totalDiskFree, uptime, healthCondition, overallHealthStatus, ramStatus, cpuStatus } =
+    useDeviceDiagnostics()
 
   const isSufficientSpace = totalDiskFree > 240
+  const isSufficientRam = ramStatus === 'bg-success'
+  const isSufficientCpu = cpuStatus === 'bg-success'
 
   return (
     <div className='relative overflow-hidden mt-4 w-full md:h-64 flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between p-4 border border-dark200'>
@@ -27,10 +30,15 @@ const HealthOverview = () => {
             text={t(`vcHealthCheck.${isSufficientSpace ? 'hasDiskSpace' : 'noDiskSpace'}`)}
           />
           <DiagnosticOverviewText
-            status='text-warning'
-            text={t('vcHealthCheck.cpuRecommendation')}
+            status={isSufficientCpu ? 'text-success' : 'text-warning'}
+            text={
+              isSufficientCpu ? t('vcHealthCheck.hasCpuReq') : t('vcHealthCheck.cpuRecommendation')
+            }
           />
-          <DiagnosticOverviewText status='text-error' text={t('vcHealthCheck.checkLowRam')} />
+          <DiagnosticOverviewText
+            status={ramStatus === 'bg-success' ? 'text-success' : 'text-error'}
+            text={isSufficientRam ? t('vcHealthCheck.hasRam') : t('vcHealthCheck.checkLowRam')}
+          />
         </div>
         <ViewDisclosures />
       </div>

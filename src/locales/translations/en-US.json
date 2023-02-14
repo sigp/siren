@@ -144,8 +144,10 @@
     "hasDiskSpace": "Disk has the required 240GB for the full sync.",
     "noDiskSpace": "Disk does not have the required 240GB for the full sync.",
     "cpuRecommendation": "2.4GHZ is recommended for CPU.",
+    "hasCpuReq": "CPU has recommended frequency.",
     "healthCondition": "HEALTH CHECK — in {{status}} Condition.",
-    "checkLowRam": "Please ensure your RAM is sufficient prior to starting validating."
+    "checkLowRam": "Please ensure your RAM is sufficient prior to start validating.",
+    "hasRam": "Node has sufficient memory."
   },
   "appDescription": {
     "developedBy": "Developed & Secured By:",
