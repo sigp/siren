@@ -1,6 +1,8 @@
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import Status, { StatusType } from '../Status/Status'
+import Tooltip from '../ToolTip/Tooltip'
+import addClassString from '../../utilities/addClassString'
 
 export interface NetworkStatBlockProps {
   title: string
@@ -8,6 +10,9 @@ export interface NetworkStatBlockProps {
   subTitle?: string
   status?: StatusType
   className?: string
+  toolTipId?: string
+  toolTipText?: string
+  toolTipWidth?: number
   metricFontSize?: 'text-caption2' | 'text-subtitle3'
 }
 
@@ -17,15 +22,26 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
   metric,
   className,
   metricFontSize = 'text-caption2',
+  toolTipId,
+  toolTipText,
+  toolTipWidth = 150,
   status,
 }) => {
-  return (
-    <div
-      className={`${className} py-4 px-4 md:py-2 md:px-2 xl:px-4 h-full flex flex-col justify-between w-full space-y-6 md:space-y-0 border-b-style500 md:border-b-0 md:w-40 @1600:w-auto @1600:flex-1 md:border-r-style500`}
-    >
-      <Typography type='text-tiny' className='uppercase' isBold darkMode='dark:text-white'>
-        {title}
-      </Typography>
+  const isToolTip = toolTipId && toolTipText
+  const classes = addClassString(
+    'py-4 px-4 md:py-2 md:px-2 xl:px-4 flex flex-col justify-between h-full w-full space-y-6 md:space-y-0 border-b-style500 md:border-b-0 md:w-40 @1600:w-auto @1600:flex-1 md:border-r-style500',
+    [className, isToolTip && 'cursor-help'],
+  )
+  const renderContent = () => (
+    <>
+      <div className='flex space-x-2 items-center'>
+        <Typography isUpperCase type='text-tiny' isBold darkMode='dark:text-white'>
+          {title}
+        </Typography>
+        {isToolTip && (
+          <i className='bi-info-circle text-caption1.5 text-dark400 dark:text-dark300' />
+        )}
+      </div>
       <div
         className={`flex items-center justify-between md:justify-start md:space-x-4 ${
           status ? 'justify-between' : ''
@@ -42,7 +58,14 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
           {metric}
         </Typography>
       </div>
-    </div>
+    </>
+  )
+  return isToolTip ? (
+    <Tooltip className={classes} id={toolTipId} maxWidth={toolTipWidth} text={toolTipText}>
+      {renderContent()}
+    </Tooltip>
+  ) : (
+    <div className={classes}>{renderContent()}</div>
   )
 }
 
