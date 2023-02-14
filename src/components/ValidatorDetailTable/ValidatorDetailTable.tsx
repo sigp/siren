@@ -49,10 +49,10 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
               </Typography>
             </div>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>0</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>0</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
           </div>
         </div>
@@ -81,16 +81,16 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
           </div>
           <div className='border-t-style100 w-full flex'>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>0</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>0</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>100%</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
             <div className='flex-1 py-2 px-2 md:py-4 md:px-6'>
-              <Typography type='text-caption1'>10%</Typography>
+              <Typography type='text-caption1'>-</Typography>
             </div>
           </div>
         </div>
@@ -149,32 +149,32 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
           </div>
           <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              0
+              -
             </Typography>
           </div>
           <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              0
+              -
             </Typography>
           </div>
           <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              0
+              -
             </Typography>
           </div>
           <div className='w-12 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              0
+              -
             </Typography>
           </div>
           <div className='w-24 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              100%
+              -
             </Typography>
           </div>
           <div className='w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
-              10%
+              -
             </Typography>
           </div>
         </div>

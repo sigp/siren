@@ -66,7 +66,7 @@ const ValidatorSummary = () => {
           {t('validatorManagement.summary.queue')}
         </Typography>
         <Typography isBold type='text-caption1'>
-          0
+          -
         </Typography>
       </div>
     </div>
