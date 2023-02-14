@@ -82,9 +82,11 @@ yarn dev
 ## Run webapp in docker
 
 build image:  
-`docker build -t lighthouse-ui-dev -f Dockerfile.dev .`
+`docker build -t lighthouse-ui -f Dockerfile .`
 
 run it:  
-`docker run --rm -ti -p 5000:5000 lighthouse-ui-dev`
+`docker run --rm -ti -name lh-ui -p 80:80 lighthouse-ui`
 
-a Dockerfile for a production build is provided but fails on linting warnings, we'll fix that when we need it. 
+If you're diskspace-constrained, make sure to clear your builder cache (when using buildx) or prune images (regular build) since the intermediate image is quite large (3.5 - 4.5GB to be reclaimed).  
+
+a Dockerfile for a dev environment is also provided: `Dockerfile.dev`
