@@ -123,6 +123,7 @@
     "connectedPeers": "Connected Peers",
     "participationRate": "Participation Rate",
     "toolTips": {
+      "peerCount": "The number of peers connected to the beacon node",
       "vcTime": "The time that validator client has been running",
       "bnTime": "The time that the beacon node has been running",
       "slotBehind": "Number of slots the beacon node is behind. This indicates if the beacon node is at the head of the chain",
