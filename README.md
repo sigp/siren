@@ -78,3 +78,15 @@ Then run local server and electron by running:
 ```bash 
 yarn dev
 ```
+
+## Run webapp in docker
+
+build image:  
+`docker build -t lighthouse-ui -f Dockerfile .`
+
+run it:  
+`docker run --rm -ti -name lh-ui -p 80:80 lighthouse-ui`
+
+If you're diskspace-constrained, make sure to clear your builder cache (when using buildx) or prune images (regular build) since the intermediate image is quite large (3.5 - 4.5GB to be reclaimed).  
+
+a Dockerfile for a dev environment is also provided: `Dockerfile.dev`
