@@ -30,7 +30,7 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
   const isToolTip = toolTipId && toolTipText
   const classes = addClassString(
     'py-4 px-4 md:py-2 md:px-2 xl:px-4 flex flex-col justify-between h-full w-full space-y-6 md:space-y-0 border-b-style500 md:border-b-0 md:w-40 @1600:w-auto @1600:flex-1 md:border-r-style500',
-    [className, isToolTip && 'cursor-help'],
+    [className],
   )
   const renderContent = () => (
     <>
