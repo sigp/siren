@@ -56,6 +56,7 @@ module.exports = {
         subtitle3: '1.125rem',
         body: '1rem',
         caption1: '.75rem',
+        'caption1.5': '.6rem',
         caption2: '.563rem',
       },
       minHeight: {

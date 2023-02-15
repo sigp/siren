@@ -20,10 +20,11 @@ const Tooltip: FC<TooltipProps> = ({ id, text, children, className, maxWidth, pl
     <div id={id} className={className} data-tooltip-content={text}>
       {children}
       <TooltipComponent
+        className='shadow-xl'
         place={place}
         style={{
           maxWidth,
-          backgroundColor: isDarkMode ? '#1E1E1E' : '#F5F5F5',
+          backgroundColor: isDarkMode ? '#7C5FEB' : '#FFFFFF',
           color: isDarkMode ? 'white' : 'black',
         }}
         anchorId={id}
