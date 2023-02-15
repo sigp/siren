@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Control, useForm, UseFormGetValues } from 'react-hook-form'
-import { ApiType, ConfigType, OnboardView, Protocol } from '../constants/enums'
+import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
@@ -9,6 +9,7 @@ import {
   apiToken,
   beaconNodeEndpoint,
   beaconVersionData,
+  dashView,
   onBoardView,
   userName,
   validatorClientEndpoint,
@@ -56,6 +57,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
   const setView = useSetRecoilState(onBoardView)
+  const setDashView = useSetRecoilState(dashView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
@@ -70,6 +72,9 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     undefined,
   )
   const [storedName, storeUserName] = useLocalStorage<string>('username', '')
+
+  const hasCache =
+    Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedToken) && Boolean(storedName)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -89,7 +94,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       apiToken: storedToken,
       deviceName: '',
       userName: storedName,
-      isRemember: false,
+      isRemember: hasCache,
     },
     mode: 'onChange',
     resolver: yupResolver(configValidation),
@@ -214,6 +219,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       setApiToken(apiToken)
       setBeaconNode(beaconNode)
       setValidatorClient(validatorClient)
+      setDashView(ContentView.MAIN)
       setView(OnboardView.SETUP)
     } catch (e) {
       if (!isValidBeaconNode || !isValidValidatorClient) {
