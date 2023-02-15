@@ -29,10 +29,8 @@ const NetworkStats = () => {
   const validatorUpTime = secondsToShortHand(validatorHealth?.app_uptime || 0)
   const beaconUpTime = secondsToShortHand(beaconHealth?.app_uptime || 0)
 
-  const hasParticipation = !isInsufficientData || rate !== undefined
-  const participationClasses = addClassString('border-none', [
-    !hasParticipation && 'opacity-20 pointer-events-none',
-  ])
+  const hasParticipation = !isInsufficientData && rate !== undefined
+  const participationClasses = addClassString('border-none', [!hasParticipation && 'opacity-20'])
 
   return (
     <div className='w-full z-10 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
@@ -61,13 +59,13 @@ const NetworkStats = () => {
       />
       <NetworkPeerSpeedometer />
       <NetworkStatBlock
-        status={status}
+        status={hasParticipation ? status : 'bg-dark100'}
         toolTipId='participationRate'
         toolTipWidth={200}
         toolTipText={
           hasParticipation
             ? t('networkStats.toolTips.participation')
-            : 'networkStats.toolTips.noData'
+            : t('networkStats.toolTips.noData')
         }
         className={participationClasses}
         title={t('networkStats.participationRate')}
