@@ -119,9 +119,16 @@
   },
   "networkStats": {
     "processUptime": "Process Uptime",
-    "headSlot": "At head slot",
+    "blockBehind": "Blocks behind",
     "connectedPeers": "Connected Peers",
-    "participationRate": "Participation Rate"
+    "participationRate": "Participation Rate",
+    "toolTips": {
+      "vcTime": "The time that validator client has been running",
+      "bnTime": "The time that the beacon node has been running",
+      "slotBehind": "Number of slots the beacon node is behind. This indicates if the beacon node is at the head of the chain",
+      "participation": "The percentage of active validators that performed their duties last epoch.",
+      "noData": "Insufficient Data"
+    }
   },
   "sidebar": {
     "dashboard": "Dashboard",
