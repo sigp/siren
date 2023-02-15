@@ -53,7 +53,7 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               size={size}
               border='border-t-0 border-style500'
-              metric={addSuffixString(totalDiskSpace.toFixed(1), 'GB')}
+              metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskStatus}
             />
@@ -71,7 +71,7 @@ const HardwareInfo = () => {
               maxHeight='flex-1'
               size={size}
               border='border-t-0 border-style500'
-              metric={addSuffixString(totalMemory.toFixed(1), 'GB')}
+              metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
             />

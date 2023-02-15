@@ -25,7 +25,7 @@ const DeviceHealth = () => {
       <DiagnosticCard
         size='health'
         title={t('disk')}
-        metric={addSuffixString(totalDiskSpace.toFixed(1), 'GB')}
+        metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
         subTitle={t('utilization', { percent: diskUtilization })}
         status={diskStatus}
       />
@@ -39,7 +39,7 @@ const DeviceHealth = () => {
       <DiagnosticCard
         size='health'
         title={t('ram')}
-        metric={addSuffixString(totalMemory.toFixed(1), 'GB')}
+        metric={addSuffixString(Math.round(totalMemory), 'GB')}
         subTitle={t('utilization', { percent: memoryUtilization })}
         status={ramStatus}
       />

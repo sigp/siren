@@ -1,3 +1,3 @@
-const addSuffixString = (text: string, suffix: string) => `${text} ${suffix}`
+const addSuffixString = (text: string | number, suffix: string) => `${text} ${suffix}`
 
 export default addSuffixString
