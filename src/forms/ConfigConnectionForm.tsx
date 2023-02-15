@@ -19,7 +19,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
-import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
+import { EndpointStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
 import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
@@ -63,10 +63,13 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
 
-  const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
-  const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
-  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
-  const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
+  const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
+  const [storedVc, storeValidatorClient] = useLocalStorage<EndpointStorage>(
+    'validatorClient',
+    undefined,
+  )
+  const [storedName, storeUserName] = useLocalStorage<string>('username', '')
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -74,16 +77,18 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     port: 5052,
   }
 
+  const vcDefaultEndpoint = {
+    ...endPointDefault,
+    port: 5062,
+  }
+
   const { control, setValue, getValues, watch, resetField, trigger } = useForm({
     defaultValues: {
-      beaconNode: endPointDefault,
-      validatorClient: {
-        ...endPointDefault,
-        port: 5062,
-      },
-      apiToken: '',
+      beaconNode: storedBnNode || endPointDefault,
+      validatorClient: storedVc || vcDefaultEndpoint,
+      apiToken: storedToken,
       deviceName: '',
-      userName: '',
+      userName: storedName,
       isRemember: false,
     },
     mode: 'onChange',
