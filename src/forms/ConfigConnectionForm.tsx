@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import { Control, useForm, UseFormGetValues } from 'react-hook-form'
-import { ApiType, ConfigType, OnboardView, Protocol } from '../constants/enums'
+import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
@@ -9,6 +9,7 @@ import {
   apiToken,
   beaconNodeEndpoint,
   beaconVersionData,
+  dashView,
   onBoardView,
   userName,
   validatorClientEndpoint,
@@ -19,7 +20,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
-import { ApiTokenStorage, EndpointStorage, UsernameStorage } from '../types/storage'
+import { EndpointStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
 import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
@@ -56,6 +57,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
   const setView = useSetRecoilState(onBoardView)
+  const setDashView = useSetRecoilState(dashView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
@@ -63,10 +65,16 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
 
-  const [, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
-  const [, storeApiToken] = useLocalStorage<ApiTokenStorage>('api-token', undefined)
-  const [, storeValidatorClient] = useLocalStorage<EndpointStorage>('validatorClient', undefined)
-  const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
+  const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
+  const [storedVc, storeValidatorClient] = useLocalStorage<EndpointStorage>(
+    'validatorClient',
+    undefined,
+  )
+  const [storedName, storeUserName] = useLocalStorage<string>('username', '')
+
+  const hasCache =
+    Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedToken) && Boolean(storedName)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -74,17 +82,19 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     port: 5052,
   }
 
+  const vcDefaultEndpoint = {
+    ...endPointDefault,
+    port: 5062,
+  }
+
   const { control, setValue, getValues, watch, resetField, trigger } = useForm({
     defaultValues: {
-      beaconNode: endPointDefault,
-      validatorClient: {
-        ...endPointDefault,
-        port: 5062,
-      },
-      apiToken: '',
+      beaconNode: storedBnNode || endPointDefault,
+      validatorClient: storedVc || vcDefaultEndpoint,
+      apiToken: storedToken,
       deviceName: '',
-      userName: '',
-      isRemember: false,
+      userName: storedName,
+      isRemember: hasCache,
     },
     mode: 'onChange',
     resolver: yupResolver(configValidation),
@@ -209,6 +219,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       setApiToken(apiToken)
       setBeaconNode(beaconNode)
       setValidatorClient(validatorClient)
+      setDashView(ContentView.MAIN)
       setView(OnboardView.SETUP)
     } catch (e) {
       if (!isValidBeaconNode || !isValidValidatorClient) {
