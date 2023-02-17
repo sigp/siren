@@ -16,7 +16,8 @@ const TabOption: FC<TabOptionProps> = ({ text, toolTip, isActive, onClick }) => 
           family='font-archivo'
           color={isActive ? 'text-white' : 'text-dark200'}
           type='text-caption2'
-          className='md:text-caption1 group-hover:text-white uppercase'
+          isUpperCase
+          className='md:text-caption1 group-hover:text-white'
         >
           {text}
         </Typography>
