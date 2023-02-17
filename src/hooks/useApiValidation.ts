@@ -32,10 +32,9 @@ const useApiValidation = (path: string, type: ApiType, data?: Endpoint) => {
 
         if (code === 'ERR_NETWORK') {
           toast.error(t('error.networkError', { type }), options)
-          return
+        } else {
+          toast.error(t('error.unknownError', { type }), options)
         }
-
-        toast.error(t('error.unknownError', { type }), options)
 
         setValidApi(false)
       }
