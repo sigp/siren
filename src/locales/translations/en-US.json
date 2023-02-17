@@ -26,6 +26,7 @@
   },
   "helloUser": "Hello {{user}},",
   "lighthouseVersion": "Lighthouse Version",
+  "lighthouseUiVersion": "Lighthouse UI Version",
   "configure": "Configure",
   "continue": "Continue",
   "comingSoon": "Coming Soon",
