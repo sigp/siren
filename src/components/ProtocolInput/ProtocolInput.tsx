@@ -189,7 +189,7 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
       </div>
       <i
         className={`bi-check-circle-fill text-body md:text-subtitle2 ${
-          isValid ? 'text-success' : 'text-dark500'
+          isValid ? 'text-success' : 'text-dark500 opacity-20'
         }`}
       />
     </div>
