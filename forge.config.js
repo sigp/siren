@@ -1,5 +1,8 @@
+// eslint-disable-next-line no-undef
 module.exports = {
-  packagerConfig: {},
+  packagerConfig: {
+    icon: 'src/assets/images/sigma', // no file extension required
+  },
   rebuildConfig: {},
   makers: [
     {
@@ -19,4 +22,4 @@ module.exports = {
       config: {},
     },
   ],
-};
+}
