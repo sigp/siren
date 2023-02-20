@@ -1,7 +1,7 @@
 import Typography from '../../../components/Typography/Typography'
 import ConfigConnectionForm from '../../../forms/ConfigConnectionForm'
 import TabOption from '../../../components/TabOption/TabOption'
-import { ConfigType } from '../../../constants/enums'
+import { ConfigType, UiMode } from '../../../constants/enums'
 import ProtocolInput from '../../../components/ProtocolInput/ProtocolInput'
 import Input from '../../../components/Input/Input'
 import { Controller } from 'react-hook-form'
@@ -9,6 +9,7 @@ import Toggle from '../../../components/Toggle/Toggle'
 import Button, { ButtonFace } from '../../../components/Button/Button'
 import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
 import { useTranslation } from 'react-i18next'
+import Tooltip from '../../../components/ToolTip/Tooltip'
 
 const ConfigureConnection = () => {
   const { t } = useTranslation()
@@ -43,9 +44,8 @@ const ConfigureConnection = () => {
                 <TabOption
                   onClick={() => changeFormType(ConfigType.ADVANCED)}
                   toolTipId='advance'
+                  toolTipMode={UiMode.DARK}
                   toolTip={t('configScreen.advanceSettingsToolTip')}
-                  toolTipBg='#7C5FEB'
-                  toolTipTextColor='white'
                   text={t('configScreen.advanceSettings')}
                   isActive={formType === ConfigType.ADVANCED}
                 />
@@ -81,6 +81,9 @@ const ConfigureConnection = () => {
                 render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
                   <Input
                     label={t('configScreen.apiToken')}
+                    toolTipId='apiToken'
+                    toolTipMode={UiMode.DARK}
+                    toolTipMaxWidth={350}
                     tooltip={t('configScreen.apiTokenToolTip')}
                     placeholder='***-*****-******'
                     type='password'
@@ -115,17 +118,24 @@ const ConfigureConnection = () => {
                 />
               </div>
               <div className='w-full flex justify-between'>
-                <div className='flex space-x-2'>
-                  <Typography
-                    type='text-tiny'
-                    color='text-dark500'
-                    family='font-archivo'
-                    className='uppercase w-16'
-                  >
-                    {t('configScreen.autoConnect')}
-                  </Typography>
-                  <i className='bi-question-circle-fill text-dark500 text-caption1' />
-                </div>
+                <Tooltip
+                  id='autoConnect'
+                  toolTipMode={UiMode.DARK}
+                  maxWidth={300}
+                  text={t('configScreen.autoConnectToolTip')}
+                >
+                  <div className='flex space-x-2'>
+                    <Typography
+                      type='text-tiny'
+                      color='text-dark500'
+                      family='font-archivo'
+                      className='uppercase w-16'
+                    >
+                      {t('configScreen.autoConnect')}
+                    </Typography>
+                    <i className='bi-question-circle-fill text-dark500 text-caption1' />
+                  </div>
+                </Tooltip>
                 <Controller
                   name='isRemember'
                   control={control}

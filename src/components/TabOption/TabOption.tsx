@@ -1,13 +1,13 @@
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import Tooltip from '../ToolTip/Tooltip'
+import { UiMode } from '../../constants/enums'
 
 export interface TabOptionProps {
   toolTipId?: string
   toolTip?: string
-  toolTipBg?: string
-  toolTipTextColor?: string
   isActive?: boolean
+  toolTipMode?: UiMode
   text: string
   onClick?: () => void
 }
@@ -16,9 +16,8 @@ const TabOption: FC<TabOptionProps> = ({
   text,
   toolTip,
   toolTipId,
-  toolTipBg,
-  toolTipTextColor,
   isActive,
+  toolTipMode,
   onClick,
 }) => {
   return (
@@ -34,13 +33,7 @@ const TabOption: FC<TabOptionProps> = ({
           {text}
         </Typography>
         {toolTip && toolTipId && (
-          <Tooltip
-            maxWidth={250}
-            textColor={toolTipTextColor}
-            bgColor={toolTipBg}
-            id={toolTipId}
-            text={toolTip}
-          >
+          <Tooltip maxWidth={250} toolTipMode={toolTipMode} id={toolTipId} text={toolTip}>
             <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-white' />
           </Tooltip>
         )}
