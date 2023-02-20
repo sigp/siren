@@ -42,7 +42,10 @@ const ConfigureConnection = () => {
                 />
                 <TabOption
                   onClick={() => changeFormType(ConfigType.ADVANCED)}
-                  toolTip='s'
+                  toolTipId='advance'
+                  toolTip={t('configScreen.advanceSettingsToolTip')}
+                  toolTipBg='#7C5FEB'
+                  toolTipTextColor='white'
                   text={t('configScreen.advanceSettings')}
                   isActive={formType === ConfigType.ADVANCED}
                 />

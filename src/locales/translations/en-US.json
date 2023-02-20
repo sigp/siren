@@ -175,6 +175,7 @@
     "configConnection": "Configure Connection",
     "basicSettings": "basic settings",
     "advanceSettings": "advanced settings",
+    "advanceSettingsToolTip": "Setup configuration settings for nodes using different protocols or addresses",
     "apiToken": "Api Token",
     "apiTokenToolTip": "api token tooltip",
     "deviceName": "Device Name",
