@@ -3,11 +3,14 @@ import React, { FC, ReactNode } from 'react'
 import { UiMode } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Button, { ButtonFace } from '../Button/Button'
+import { useTranslation } from 'react-i18next'
 
 export interface DisclosureModalProps {
   isOpen: boolean
   backgroundImage: string
   onClose: () => void
+  externalUrl?: string
+  externalTarget?: '_self' | '_blank'
   mode?: UiMode
   children: ReactNode
 }
@@ -17,8 +20,11 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
   backgroundImage,
   mode,
   onClose,
+  externalUrl,
+  externalTarget,
   children,
 }) => {
+  const { t } = useTranslation()
   const isTablet = useMediaQuery('(max-width: 1024px)')
 
   return (
@@ -28,7 +34,7 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
         backgroundColor: mode ? '#1E1E1E' : 'white',
         width: '100%',
         maxWidth: isTablet ? '448px' : '949px',
-        height: isTablet ? 'max-content' : '461px',
+        height: 'max-content',
         overflow: 'scroll',
         zIndex: 999,
       }}
@@ -45,9 +51,11 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
         />
         <div className='p-10 flex flex-col justify-between'>
           <div>{children}</div>
-          <Button type={ButtonFace.SECONDARY}>
-            Learn More <i className='bi-arrow-right ml-2' />
-          </Button>
+          {externalUrl && (
+            <Button target={externalTarget} href={externalUrl} type={ButtonFace.SECONDARY}>
+              {t('learnMore')} <i className='bi-arrow-right ml-2' />
+            </Button>
+          )}
         </div>
       </div>
     </Rodal>
