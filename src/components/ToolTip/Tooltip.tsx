@@ -9,11 +9,22 @@ export interface TooltipProps {
   text: string
   className?: string
   maxWidth?: number
+  bgColor?: string
+  textColor?: string
   place?: ITooltip['place']
   children?: React.ReactNode
 }
 
-const Tooltip: FC<TooltipProps> = ({ id, text, children, className, maxWidth, place }) => {
+const Tooltip: FC<TooltipProps> = ({
+  id,
+  text,
+  children,
+  className,
+  bgColor,
+  textColor,
+  maxWidth,
+  place,
+}) => {
   const { mode } = useUiMode()
 
   const isDarkMode = mode === UiMode.DARK
@@ -26,8 +37,8 @@ const Tooltip: FC<TooltipProps> = ({ id, text, children, className, maxWidth, pl
         place={place}
         style={{
           maxWidth,
-          backgroundColor: isDarkMode ? '#7C5FEB' : '#FFFFFF',
-          color: isDarkMode ? 'white' : 'black',
+          backgroundColor: bgColor || isDarkMode ? '#7C5FEB' : '#FFFFFF',
+          color: textColor || isDarkMode ? 'white' : 'black',
         }}
         anchorId={id}
       />
