@@ -9,8 +9,7 @@ export interface TooltipProps {
   text: string
   className?: string
   maxWidth?: number
-  bgColor?: string
-  textColor?: string
+  toolTipMode?: UiMode
   place?: ITooltip['place']
   children?: React.ReactNode
 }
@@ -20,14 +19,16 @@ const Tooltip: FC<TooltipProps> = ({
   text,
   children,
   className,
-  bgColor,
-  textColor,
   maxWidth,
+  toolTipMode,
   place,
 }) => {
   const { mode } = useUiMode()
 
-  const isDarkMode = mode === UiMode.DARK
+  const scheme = toolTipMode || mode
+
+  const isDarkMode = scheme === UiMode.DARK
+
   const classes = addClassString('cursor-help', [className])
   return (
     <div id={id} className={classes} data-tooltip-content={text}>
@@ -37,8 +38,8 @@ const Tooltip: FC<TooltipProps> = ({
         place={place}
         style={{
           maxWidth,
-          backgroundColor: bgColor || isDarkMode ? '#7C5FEB' : '#FFFFFF',
-          color: textColor || isDarkMode ? 'white' : 'black',
+          backgroundColor: isDarkMode ? '#7C5FEB' : '#FFFFFF',
+          color: isDarkMode ? 'white' : 'black',
         }}
         anchorId={id}
       />
