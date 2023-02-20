@@ -44,6 +44,28 @@
   "great": "great",
   "node": "Node",
   "viewDisclosures": "view important disclosures",
+  "learnMore": "Learn More",
+  "disclosure": {
+    "healthCheck": {
+      "title": "Health Check Disclosure",
+      "text1": "This is a rough guildeline and basic recommendations for hardware requirements to run a beacon node. These requirements are set for a beacon node only.",
+      "text2": "Beacon Node requires a dedicated Execution client and system requirements are not accounted for running the execution clients on the same machine. Additional resources may be required.",
+      "recommended": "The recommend resources for a running a beacon node are:",
+      "item1": "A multi-core CPU with at least 1GHZ speed",
+      "item2": "200 GB of free disk space",
+      "item3": "8GB or more of RAM"
+    },
+    "nodeSync": {
+      "title": "Sync Disclosure",
+      "text1": "A Validator Client can only participate in the network once connected to a fully synced Lighthouse Beacon Node and subsequent Execution Client.",
+      "text2": "It is recommended to wait until both of these clients have fully downloaded the chain history and are showing the \"synced\" status. It is however possible to view out-of-date validator metrics whilst the nodes sync and it is therefore safe to progress from this screen."
+    },
+    "validator": {
+      "title": "Validator Returns Disclosure",
+      "text1": "The returns of a validator are based on the local performance of the node, the network as a whole and also the current active validators on the network.",
+      "text2": "Therefore predictions of future return in this application should be taken as a rough guide as these factors cannot be predicted in advance."
+    }
+  },
   "uptime": "Uptime",
   "networkUnavailable": "Network Unavailable",
   "outOfSync": "Out of Sync",

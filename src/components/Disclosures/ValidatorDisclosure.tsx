@@ -3,8 +3,10 @@ import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
 import Typography from '../Typography/Typography'
+import { useTranslation } from 'react-i18next'
 
 const ValidatorDisclosure = () => {
+  const { t } = useTranslation()
   const [isOpen, toggleModal] = useState(false)
 
   const closeModal = () => toggleModal(false)
@@ -15,18 +17,16 @@ const ValidatorDisclosure = () => {
       <ViewDisclosures onClick={openModal} />
       <DisclosureModal backgroundImage={validatorDisclosure} onClose={closeModal} isOpen={isOpen}>
         <Typography type='text-subtitle2' fontWeight='font-light' className='mb-8'>
-          Validator Disclosure
+          {t('disclosure.validator.title')}
         </Typography>
         <div className='mb-6'>
           <Typography color='text-dark500' fontWeight='font-light'>
-            You are currently syncing to the Ethereum Geth and Beacon node. This may take a while...
-            None of this information is supposed to be taken as a guarantee.
+            {t('disclosure.validator.text1')}
           </Typography>
         </div>
         <div className='mb-12'>
           <Typography color='text-dark500' fontWeight='font-light'>
-            The only way to become a validator is to make a one-way GöETH transaction to the deposit
-            contract on the current Ethereum chain.
+            {t('disclosure.validator.text2')}
           </Typography>
         </div>
       </DisclosureModal>

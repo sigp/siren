@@ -3,8 +3,10 @@ import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import syncDisclosure from '../../assets/images/syncDisclosure.png'
 import Typography from '../Typography/Typography'
+import { useTranslation } from 'react-i18next'
 
 const SyncDisclosure = () => {
+  const { t } = useTranslation()
   const [isOpen, toggleModal] = useState(false)
 
   const closeModal = () => toggleModal(false)
@@ -13,20 +15,24 @@ const SyncDisclosure = () => {
   return (
     <>
       <ViewDisclosures onClick={openModal} />
-      <DisclosureModal backgroundImage={syncDisclosure} onClose={closeModal} isOpen={isOpen}>
+      <DisclosureModal
+        externalTarget='_blank'
+        externalUrl='https://lighthouse-book.sigmaprime.io/run_a_node.html'
+        backgroundImage={syncDisclosure}
+        onClose={closeModal}
+        isOpen={isOpen}
+      >
         <Typography type='text-subtitle2' fontWeight='font-light' className='mb-8'>
-          Sync Disclosure
+          {t('disclosure.nodeSync.title')}
         </Typography>
         <div className='mb-6'>
           <Typography color='text-dark500' fontWeight='font-light'>
-            You are currently syncing to the Ethereum Geth and Beacon node. This may take a while...
-            None of this information is supposed to be taken as a guarantee.
+            {t('disclosure.nodeSync.text1')}
           </Typography>
         </div>
         <div className='mb-12'>
           <Typography color='text-dark500' fontWeight='font-light'>
-            The only way to become a validator is to make a one-way GöETH transaction to the deposit
-            contract on the current Ethereum chain.
+            {t('disclosure.nodeSync.text2')}
           </Typography>
         </div>
       </DisclosureModal>
