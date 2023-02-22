@@ -9,14 +9,26 @@ export interface TooltipProps {
   text: string
   className?: string
   maxWidth?: number
+  toolTipMode?: UiMode
   place?: ITooltip['place']
   children?: React.ReactNode
 }
 
-const Tooltip: FC<TooltipProps> = ({ id, text, children, className, maxWidth, place }) => {
+const Tooltip: FC<TooltipProps> = ({
+  id,
+  text,
+  children,
+  className,
+  maxWidth,
+  toolTipMode,
+  place,
+}) => {
   const { mode } = useUiMode()
 
-  const isDarkMode = mode === UiMode.DARK
+  const scheme = toolTipMode || mode
+
+  const isDarkMode = scheme === UiMode.DARK
+
   const classes = addClassString('cursor-help', [className])
   return (
     <div id={id} className={classes} data-tooltip-content={text}>
