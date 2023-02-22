@@ -1,10 +1,15 @@
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import { FC } from 'react'
 
-const ViewDisclosures = () => {
+export interface ViewDisclosuresProps {
+  onClick?: () => void
+}
+
+const ViewDisclosures: FC<ViewDisclosuresProps> = ({ onClick }) => {
   const { t } = useTranslation()
   return (
-    <div className='flex space-x-4 items-center cursor-pointer'>
+    <div onClick={onClick} className='flex space-x-4 items-center cursor-pointer'>
       <i className='bi-info-circle text-caption1 text-primary' />
       <Typography
         isBold

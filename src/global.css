@@ -131,5 +131,8 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 
 .rodal-dialog {
-padding: 0!important;
+    padding: 0!important;
+}
+.rodal {
+    margin-top: 0!important;
 }

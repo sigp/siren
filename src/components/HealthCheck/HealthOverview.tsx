@@ -3,8 +3,8 @@ import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverview
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
-import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 import { Trans, useTranslation } from 'react-i18next'
+import HealthDisclosure from '../Disclosures/HealthDisclosure'
 
 const HealthOverview = () => {
   const { t } = useTranslation()
@@ -17,7 +17,7 @@ const HealthOverview = () => {
 
   return (
     <div className='relative overflow-hidden mt-4 w-full md:h-64 flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between p-4 border border-dark200'>
-      <div className='relative z-10 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
+      <div className='relative z-20 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
         <div className='space-y-3'>
           <Typography isBold family='font-archivo' type='text-caption1'>
             <Trans i18nKey='vcHealthCheck.diagnosticOverview'>
@@ -40,7 +40,7 @@ const HealthOverview = () => {
             text={isSufficientRam ? t('vcHealthCheck.hasRam') : t('vcHealthCheck.checkLowRam')}
           />
         </div>
-        <ViewDisclosures />
+        <HealthDisclosure />
       </div>
       <div className='relative z-10 h-full flex flex-col space-y-4 md:space-y-0 justify-between'>
         <div className='flex space-x-12'>
