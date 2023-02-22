@@ -1,3 +1,3 @@
-const reduceAddNum = (acc: number, a: number) => acc + Number(a)
+const reduceAddNum = (acc: number, a: number) => Number(acc) + Number(a)
 
 export default reduceAddNum
