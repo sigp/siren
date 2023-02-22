@@ -31,7 +31,7 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
     <Rodal
       visible={isOpen}
       customStyles={{
-        backgroundColor: mode ? '#1E1E1E' : 'white',
+        backgroundColor: mode === UiMode.DARK ? '#1E1E1E' : 'white',
         width: '100%',
         maxWidth: isTablet ? '448px' : '949px',
         height: 'max-content',

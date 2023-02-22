@@ -4,9 +4,11 @@ import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import useUiMode from '../../hooks/useUiMode'
 
 const ValidatorDisclosure = () => {
   const { t } = useTranslation()
+  const { mode } = useUiMode()
   const [isOpen, toggleModal] = useState(false)
 
   const closeModal = () => toggleModal(false)
@@ -15,7 +17,12 @@ const ValidatorDisclosure = () => {
   return (
     <>
       <ViewDisclosures onClick={openModal} />
-      <DisclosureModal backgroundImage={validatorDisclosure} onClose={closeModal} isOpen={isOpen}>
+      <DisclosureModal
+        mode={mode}
+        backgroundImage={validatorDisclosure}
+        onClose={closeModal}
+        isOpen={isOpen}
+      >
         <Typography type='text-subtitle2' fontWeight='font-light' className='mb-8'>
           {t('disclosure.validator.title')}
         </Typography>
