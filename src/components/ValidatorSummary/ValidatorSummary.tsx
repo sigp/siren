@@ -6,6 +6,7 @@ import Status from '../Status/Status'
 import { useTranslation } from 'react-i18next'
 import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
 import ActiveValidatorCount from '../ActiveValidatorCount/ActiveValidatorCount'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 
 const ValidatorSummary = () => {
   const { t } = useTranslation()
@@ -44,17 +45,19 @@ const ValidatorSummary = () => {
         </div>
       </div>
       <ValidatorIncomeSummary validators={validators} className='p-3 space-y-2 w-full lg:w-42' />
-      <div className='p-3 space-y-2'>
-        <Typography type='text-caption2' isBold isUpperCase>
-          {t('validatorManagement.summary.avgEffectiveness')}
-        </Typography>
-        <div className='flex justify-between lg:justify-start lg:space-x-8'>
-          <Status status='bg-success' />
-          <Typography isBold type='text-caption1'>
-            100%
+      <DisabledTooltip>
+        <div className='p-3 space-y-2'>
+          <Typography type='text-caption2' isBold isUpperCase>
+            {t('validatorManagement.summary.avgEffectiveness')}
           </Typography>
+          <div className='flex justify-between lg:justify-start lg:space-x-8'>
+            <Status status='bg-dark100' />
+            <Typography isBold type='text-caption1'>
+              ---
+            </Typography>
+          </div>
         </div>
-      </div>
+      </DisabledTooltip>
       <div className='p-3 space-y-2'>
         <Typography type='text-caption2' isBold isUpperCase>
           {t('validatorManagement.summary.networkValidators')}
