@@ -1,4 +1,4 @@
-# lighthouse-ui
+# Siren
 User interface for Lighthouse
 
 
