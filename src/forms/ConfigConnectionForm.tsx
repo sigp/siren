@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { Control, useForm, UseFormGetValues } from 'react-hook-form'
 import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
@@ -43,7 +43,7 @@ export interface RenderProps {
   formType: ConfigType
   isValidBeaconNode: boolean
   isValidValidatorClient: boolean
-  changeFormType: (type: ConfigType) => void
+  setType: (type: ConfigType) => void
   isLoading: boolean
   onSubmit: () => void
 }
@@ -64,6 +64,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
+  const [isInitialApiCheck, setIsInitialApiCheck] = useState(true)
 
   const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
@@ -87,7 +88,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     port: 5062,
   }
 
-  const { control, setValue, getValues, watch, resetField, trigger } = useForm({
+  const { control, setValue, getValues, watch, trigger } = useForm({
     defaultValues: {
       beaconNode: storedBnNode || endPointDefault,
       validatorClient: storedVc || vcDefaultEndpoint,
@@ -103,23 +104,22 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
 
-  const isValidBeaconNode = useApiValidation('eth/v1/node/version', ApiType.BEACON, beaconNode)
+  useEffect(() => {
+    setIsInitialApiCheck(false)
+  }, [beaconNode, validatorClient])
+
+  const isValidBeaconNode = useApiValidation(
+    'eth/v1/node/version',
+    ApiType.BEACON,
+    !isInitialApiCheck,
+    beaconNode,
+  )
   const isValidValidatorClient = useApiValidation(
     'lighthouse/auth',
     ApiType.VALIDATOR,
+    !isInitialApiCheck,
     validatorClient,
   )
-
-  const changeFormType = (type: ConfigType) => {
-    resetField('beaconNode', { defaultValue: endPointDefault })
-    resetField('validatorClient', {
-      defaultValue: {
-        ...endPointDefault,
-        port: 5062,
-      },
-    })
-    setType(type)
-  }
 
   const handleError = (e: unknown) => {
     let message = 'Unknown Error'
@@ -245,7 +245,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           isLoading,
           getValues,
           onSubmit,
-          changeFormType,
+          setType,
           isValidBeaconNode,
           isValidValidatorClient,
           formType,

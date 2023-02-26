@@ -31,18 +31,18 @@ const ConfigureConnection = () => {
             onSubmit,
             isValidBeaconNode,
             isValidValidatorClient,
-            changeFormType,
+            setType,
             ...props
           }) => (
             <div className='space-y-8'>
               <div className='flex space-x-20 pt-6'>
                 <TabOption
-                  onClick={() => changeFormType(ConfigType.BASIC)}
+                  onClick={() => setType(ConfigType.BASIC)}
                   text={t('configScreen.basicSettings')}
                   isActive={formType === ConfigType.BASIC}
                 />
                 <TabOption
-                  onClick={() => changeFormType(ConfigType.ADVANCED)}
+                  onClick={() => setType(ConfigType.ADVANCED)}
                   toolTipId='advance'
                   toolTipMode={UiMode.DARK}
                   toolTip={t('configScreen.advanceSettingsToolTip')}
