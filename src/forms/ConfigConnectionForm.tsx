@@ -64,6 +64,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
+  const [isInitialApiCheck, setIsInitialApiCheck] = useState(true)
 
   const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
@@ -103,10 +104,20 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const beaconNode = watch('beaconNode')
   const validatorClient = watch('validatorClient')
 
-  const isValidBeaconNode = useApiValidation('eth/v1/node/version', ApiType.BEACON, beaconNode)
+  useEffect(() => {
+    setIsInitialApiCheck(false)
+  }, [beaconNode, validatorClient])
+
+  const isValidBeaconNode = useApiValidation(
+    'eth/v1/node/version',
+    ApiType.BEACON,
+    !isInitialApiCheck,
+    beaconNode,
+  )
   const isValidValidatorClient = useApiValidation(
     'lighthouse/auth',
     ApiType.VALIDATOR,
+    !isInitialApiCheck,
     validatorClient,
   )
 

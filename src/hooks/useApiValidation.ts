@@ -6,7 +6,7 @@ import { toast, ToastOptions } from 'react-toastify'
 import { ApiType } from '../constants/enums'
 import { useTranslation } from 'react-i18next'
 
-const useApiValidation = (path: string, type: ApiType, data?: Endpoint) => {
+const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, data?: Endpoint) => {
   const { t } = useTranslation()
   const [isValid, setValidApi] = useState<boolean>(false)
 
@@ -21,6 +21,10 @@ const useApiValidation = (path: string, type: ApiType, data?: Endpoint) => {
           setValidApi(true)
         }
       } catch ({ code }) {
+        setValidApi(false)
+
+        if (!isToastAlert) return
+
         const options = {
           position: 'top-right',
           autoClose: 5000,
@@ -35,11 +39,9 @@ const useApiValidation = (path: string, type: ApiType, data?: Endpoint) => {
         } else {
           toast.error(t('error.unknownError', { type }), options)
         }
-
-        setValidApi(false)
       }
     }),
-    [data, path, type],
+    [data, path, type, isToastAlert],
   )
 
   useEffect(() => {
