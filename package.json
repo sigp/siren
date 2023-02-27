@@ -58,7 +58,7 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "eject": "react-scripts eject",
-    "build-all": "npm run build; npm run make",
+    "build-all": "yarn build; yarn make",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "test-storybook": "test-storybook",
