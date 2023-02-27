@@ -1,7 +1,8 @@
 {
   "main": "src/main.ts",
   "description": "Electron Forge & Create React App Template",
-  "license": "MIT",
+  "license": "APACHE2",
+  "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
   "version": "0.1.0",
