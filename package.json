@@ -4,7 +4,7 @@
   "license": "MIT",
   "homepage": "./",
   "name": "Siren",
-  "version": "0.1.0",
+  "version": "0.1.0-beta.1",
   "private": true,
   "dependencies": {
     "@electron-forge/maker-dmg": "^6.0.5",
