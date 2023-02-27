@@ -98,7 +98,7 @@ const HardwareInfo = () => {
             <DiagnosticCard
               size={size}
               maxHeight='flex-1'
-              title='Ethereum Geth'
+              title='Ethereum Mainnet'
               metric=' '
               percent={syncPercentage}
               isBackground={false}
