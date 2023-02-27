@@ -35,9 +35,9 @@ const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, da
         } as ToastOptions
 
         if (code === 'ERR_NETWORK') {
-          toast.error(t('error.networkError', { type }), options)
+          toast.error(t('error.networkError', { type }) as string, options)
         } else {
-          toast.error(t('error.unknownError', { type }), options)
+          toast.error(t('error.unknownError', { type }) as string, options)
         }
       }
     }),
