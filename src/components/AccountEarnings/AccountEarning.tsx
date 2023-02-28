@@ -136,7 +136,7 @@ const AccountEarning = () => {
               >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' className='uppercase' color='text-dark400'>
-                    Eth
+                    ETH
                   </Typography>
                   <i
                     id='tooltip'

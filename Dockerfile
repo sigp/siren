@@ -1,4 +1,4 @@
-ARG node_version=16.16
+ARG node_version=18
 ARG node_image=node:${node_version}
 
 # STAGE 1: builder
@@ -9,7 +9,7 @@ WORKDIR /app
 
 ENV NODE_ENV=development
 # install (dev) deps
-RUN yarn 
+RUN yarn
 
 ENV NODE_ENV=production
 # build (prod) app

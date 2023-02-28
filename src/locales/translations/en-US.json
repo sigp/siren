@@ -26,6 +26,7 @@
   },
   "helloUser": "Hello {{user}},",
   "lighthouseVersion": "Lighthouse Version",
+  "lighthouseUiVersion": "Lighthouse UI Version",
   "configure": "Configure",
   "continue": "Continue",
   "comingSoon": "Coming Soon",
@@ -43,6 +44,28 @@
   "great": "great",
   "node": "Node",
   "viewDisclosures": "view important disclosures",
+  "learnMore": "Learn More",
+  "disclosure": {
+    "healthCheck": {
+      "title": "Health Check Disclosure",
+      "text1": "This is a rough guildeline and basic recommendations for hardware requirements to run a beacon node. These requirements are set for a beacon node only.",
+      "text2": "Beacon Node requires a dedicated Execution client and system requirements are not accounted for running the execution clients on the same machine. Additional resources may be required.",
+      "recommended": "The recommend resources for a running a beacon node are:",
+      "item1": "A multi-core CPU with at least 1GHZ speed",
+      "item2": "200 GB of free disk space",
+      "item3": "8GB or more of RAM"
+    },
+    "nodeSync": {
+      "title": "Sync Disclosure",
+      "text1": "A Validator Client can only participate in the network once connected to a fully synced Lighthouse Beacon Node and subsequent Execution Client.",
+      "text2": "It is recommended to wait until both of these clients have fully downloaded the chain history and are showing the \"synced\" status. It is however possible to view out-of-date validator metrics whilst the nodes sync and it is therefore safe to progress from this screen."
+    },
+    "validator": {
+      "title": "Validator Returns Disclosure",
+      "text1": "The returns of a validator are based on the local performance of the node, the network as a whole and also the current active validators on the network.",
+      "text2": "Therefore predictions of future return in this application should be taken as a rough guide as these factors cannot be predicted in advance."
+    }
+  },
   "uptime": "Uptime",
   "networkUnavailable": "Network Unavailable",
   "outOfSync": "Out of Sync",
@@ -119,9 +142,17 @@
   },
   "networkStats": {
     "processUptime": "Process Uptime",
-    "headSlot": "At head slot",
+    "blockBehind": "Blocks behind",
     "connectedPeers": "Connected Peers",
-    "participationRate": "Participation Rate"
+    "participationRate": "Participation Rate",
+    "toolTips": {
+      "peerCount": "The number of peers connected to the beacon node",
+      "vcTime": "The time that validator client has been running",
+      "bnTime": "The time that the beacon node has been running",
+      "slotBehind": "Number of slots the beacon node is behind. This indicates if the beacon node is at the head of the chain",
+      "participation": "The percentage of active validators that performed their duties last epoch.",
+      "noData": "Insufficient Data"
+    }
   },
   "sidebar": {
     "dashboard": "Dashboard",
@@ -166,15 +197,22 @@
     "configConnection": "Configure Connection",
     "basicSettings": "basic settings",
     "advanceSettings": "advanced settings",
+    "advanceSettingsToolTip": "Setup configuration settings for nodes using different protocols or IP addresses",
     "apiToken": "Api Token",
-    "apiTokenToolTip": "api token tooltip",
+    "autoConnectToolTip": "Store device data in local storage and allow device to connect automatically.",
+    "apiTokenToolTip": "This is the token emitted by the validator client. Its located by default at: ~/.lighthouse/<network>/validators/api-token.txt",
     "deviceName": "Device Name",
     "userNameLabel": "What should I call you?",
     "userNamePlaceholder": "Name",
     "autoConnect": "Save Data Auto Connect"
   },
   "protocolInput": {
+    "ipBnToolTip": "The IP address of the beacon node",
+    "ipVCToolTip": "The IP address of the validator client",
     "httpProtocol": "Protocol (http/https)",
+    "httpToolTip": "The type of transport, http is default",
+    "bNPortToolTip": "The port number of the Beacon Node HTTP API (5052 default). Beacon node should be configured with the --http or --gui flag",
+    "vCPortToolTip": "The port number of the Validator Client HTTP API (5062 default).",
     "vcAddress": "VC Address",
     "beaconAddress": "Beacon Address",
     "beaconPort": "BN Port",

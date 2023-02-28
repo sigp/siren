@@ -1,11 +1,15 @@
 import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react'
 import Typography from '../Typography/Typography'
 import { UiMode } from '../../constants/enums'
+import Tooltip from '../ToolTip/Tooltip'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
   tooltip?: string
   error?: string
+  toolTipId?: string
+  toolTipMode?: UiMode
+  toolTipMaxWidth?: number
   className?: string
   uiMode?: UiMode
   inputStyle?: 'primary' | 'secondary'
@@ -20,6 +24,9 @@ const Input: FC<InputProps> = ({
   className,
   uiMode,
   inputStyle = 'primary',
+  toolTipId,
+  toolTipMode,
+  toolTipMaxWidth = 250,
   icon,
   ...props
 }) => {
@@ -53,8 +60,15 @@ const Input: FC<InputProps> = ({
           >
             {label}
           </Typography>
-          {tooltip && (
-            <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-dark500' />
+          {tooltip && toolTipId && (
+            <Tooltip
+              toolTipMode={toolTipMode}
+              maxWidth={toolTipMaxWidth}
+              id={toolTipId}
+              text={tooltip}
+            >
+              <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-dark500' />
+            </Tooltip>
           )}
         </div>
       )}

@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil'
 import { uiMode, validatorPeerCount } from '../../recoil/atoms'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import Tooltip from '../ToolTip/Tooltip'
 
 const NetworkPeerSpeedometer = () => {
   const { t } = useTranslation()
@@ -11,10 +12,18 @@ const NetworkPeerSpeedometer = () => {
   const peers = useRecoilValue(validatorPeerCount)
 
   return (
-    <div className='relative py-6 md:py-2 px-4 h-full w-full md:w-52 border-b-style500 md:border-b-0 md:border-r-style500'>
-      <Typography type='text-tiny' className='uppercase' isBold darkMode='dark:text-white'>
-        {t('networkStats.connectedPeers')}
-      </Typography>
+    <Tooltip
+      id='peerCount'
+      maxWidth={200}
+      text={t('networkStats.toolTips.peerCount')}
+      className='relative py-6 md:py-2 px-4 h-full w-full md:w-52 border-b-style500 md:border-b-0 md:border-r-style500'
+    >
+      <div className='flex space-x-2'>
+        <Typography type='text-tiny' isUpperCase isBold darkMode='dark:text-white'>
+          {t('networkStats.connectedPeers')}
+        </Typography>
+        <i className='bi-info-circle text-caption1.5 text-dark400 dark:text-dark300' />
+      </div>
       <div className='flex items-center space-x-4 pt-1'>
         <Typography color='text-dark300' type='text-caption2'>
           {t('node')}
@@ -54,7 +63,7 @@ const NetworkPeerSpeedometer = () => {
           />
         </div>
       </div>
-    </div>
+    </Tooltip>
   )
 }
 

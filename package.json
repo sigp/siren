@@ -3,10 +3,11 @@
   "description": "Electron Forge & Create React App Template",
   "license": "MIT",
   "homepage": "./",
-  "name": "lighthouse-ui",
-  "version": "0.1.0",
+  "name": "Siren",
+  "version": "0.1.0-beta.1",
   "private": true,
   "dependencies": {
+    "@electron-forge/maker-dmg": "^6.0.5",
     "@hookform/resolvers": "^2.9.8",
     "@storybook/theming": "^6.5.10",
     "@testing-library/jest-dom": "^5.14.1",
@@ -51,17 +52,13 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "dev": "nf start",
+    "dev": "electron .",
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
     "coverage": "jest --coverage",
     "eject": "react-scripts eject",
-    "electron": "WEB_URL=http://localhost:3000 electron .",
-    "electron-prd": "electron .",
-    "electron-forge": "WEB_URL=http://localhost:3000 electron-forge start",
-    "electron-forge-prd": "electron-forge start",
-    "build-all": "npm run build; npm run make",
+    "build-all": "yarn build && yarn make",
     "storybook": "start-storybook -p 6006 -s public",
     "build-storybook": "build-storybook -s public",
     "test-storybook": "test-storybook",
@@ -69,7 +66,7 @@
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make --arch=x64,arm64"
   },
   "eslintConfig": {
     "extends": [

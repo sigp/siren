@@ -10,6 +10,7 @@ const url = require('url')
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon: './assets/images/sigma.png',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,

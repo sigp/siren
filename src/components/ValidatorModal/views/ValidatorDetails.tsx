@@ -12,12 +12,12 @@ import StatusIcon from '../../StatusIcon/StatusIcon'
 import ValidatorStatusProgress from '../../ValidatorStatusProgress/ValidatorStatusProgress'
 import ValidatorGraffitiInput from '../../ValidatorGraffitiInput/ValidatorGraffitiInput'
 import ValidatorCardAction from '../ValidatorCardAction'
-import ViewDisclosures from '../../ViewDisclosures/ViewDisclosures'
 import { BeaconChaValidatorUrl } from '../../../constants/constants'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
 import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
 import useValidatorGraffiti from '../../../hooks/useValidatorGraffiti'
+import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
@@ -170,7 +170,7 @@ const ValidatorDetails = () => {
         </div>
       </div>
       <div className='p-3 border-t-style100'>
-        <ViewDisclosures />
+        <ValidatorDisclosure />
       </div>
     </div>
   ) : null

@@ -3,7 +3,6 @@ import { appView, setupStep } from '../../../../../recoil/atoms'
 import { AppView, SetupSteps } from '../../../../../constants/enums'
 import ValidatorSetupLayout from '../../../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
 import Typography from '../../../../../components/Typography/Typography'
-import ViewDisclosures from '../../../../../components/ViewDisclosures/ViewDisclosures'
 import { Suspense, useEffect } from 'react'
 import BeaconSyncCard from '../../../../../components/BeaconSyncCard/BeaconSyncCard'
 import SyncCardFallback from '../../../../../components/SyncCard/SyncCardFallback'
@@ -11,6 +10,7 @@ import { Trans, useTranslation } from 'react-i18next'
 import useBeaconSyncPolling from '../../../../../hooks/useBeaconSyncPolling'
 import ValidatorSyncCard from '../../../../../components/ValidatorSyncCard/ValidatorSyncCard'
 import { selectBeaconSyncInfo } from '../../../../../recoil/selectors/selectBeaconSyncInfo'
+import SyncDisclosure from '../../../../../components/Disclosures/SyncDisclosure'
 
 const NodeSync = () => {
   useBeaconSyncPolling()
@@ -55,7 +55,7 @@ const NodeSync = () => {
           —
         </Typography>
         <Typography color='text-dark300'>{t('nodeSync.syncWarning')}</Typography>
-        <ViewDisclosures />
+        <SyncDisclosure />
       </div>
     </ValidatorSetupLayout>
   )

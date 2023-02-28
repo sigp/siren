@@ -25,6 +25,7 @@ import useBeaconHealthPolling from '../../../hooks/useBeaconHealthPolling'
 import useValidatorPeerPolling from '../../../hooks/useValidatorPeerPolling'
 import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
 import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
+import PillIcon from '../../../components/PillIcon/PillIcon'
 
 const MainContent = () => {
   const { t } = useTranslation()
@@ -57,11 +58,19 @@ const MainContent = () => {
             {t('helloUser', { user: name })}
           </Typography>
           <div className='flex w-full md:w-auto justify-between md:justify-start md:space-x-16'>
-            <div>
-              <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
-                {t('lighthouseVersion')}
-              </Typography>
-              <AppVersion />
+            <div className='flex space-x-6'>
+              <div className='space-y-1'>
+                <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
+                  {t('lighthouseUiVersion')}
+                </Typography>
+                <PillIcon text='BETA' />
+              </div>
+              <div>
+                <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
+                  {t('lighthouseVersion')}
+                </Typography>
+                <AppVersion />
+              </div>
             </div>
             <DashboardOptions />
           </div>

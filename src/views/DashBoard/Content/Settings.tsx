@@ -1,26 +1,38 @@
 import Typography from '../../../components/Typography/Typography'
 import AppVersion from '../../../components/AppVersion/AppVersion'
 import useUiMode from '../../../hooks/useUiMode'
-import { UiMode } from '../../../constants/enums'
+import { AppView, OnboardView, UiMode } from '../../../constants/enums'
 import Toggle from '../../../components/Toggle/Toggle'
 import UiModeIcon from '../../../components/UiModeIcon/UiModeIcon'
 import SocialIcon from '../../../components/SocialIcon/SocialIcon'
 import Input from '../../../components/Input/Input'
-import { useRecoilState } from 'recoil'
-import { userName } from '../../../recoil/atoms'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { appView, onBoardView, userName } from '../../../recoil/atoms'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import { UsernameStorage } from '../../../types/storage'
 import { ReactComponent as LighthouseSvg } from '../../../assets/images/lighthouse-black.svg'
 import { useTranslation } from 'react-i18next'
 import AppDescription from '../../../components/AppDescription/AppDescription'
 import { useState } from 'react'
+import Button, { ButtonFace } from '../../../components/Button/Button'
+import addClassString from '../../../utilities/addClassString'
 
 const Settings = () => {
   const { t } = useTranslation()
   const { mode, toggleUiMode } = useUiMode()
   const [userNameError, setError] = useState<string | undefined>()
   const [username, setUsername] = useRecoilState(userName)
+  const setView = useSetRecoilState(onBoardView)
+  const setAppView = useSetRecoilState(appView)
   const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
+  const svgClasses = addClassString('hidden md:block absolute top-14 right-10', [
+    mode === UiMode.DARK ? 'opacity-20' : 'opacity-40',
+  ])
+
+  const viewConfig = () => {
+    setView(OnboardView.CONFIGURE)
+    setAppView(AppView.ONBOARD)
+  }
 
   const handleUserNameChange = (e: any) => {
     const value = e.target.value
@@ -39,11 +51,17 @@ const Settings = () => {
 
   return (
     <div className='relative w-full max-w-1440 px-5 py-8'>
-      <LighthouseSvg className='absolute hidden top-14 right-10' />
+      <LighthouseSvg className={svgClasses} />
       <div className='relative z-10 w-full pb-20 lg:pb-0'>
-        <Typography type='text-subtitle1' className='capitalize' fontWeight='font-light'>
-          {t('sidebar.settings')}
-        </Typography>
+        <div className='w-full flex items-center justify-between pr-12'>
+          <Typography type='text-subtitle1' className='capitalize' fontWeight='font-light'>
+            {t('sidebar.settings')}
+          </Typography>
+          <Button onClick={viewConfig} type={ButtonFace.TERTIARY}>
+            <i className='bi-box-arrow-left mr-2' />
+            Configuration
+          </Button>
+        </div>
         <div className='w-full flex flex-col lg:flex-row pt-8'>
           <div className='flex-1'>
             <div className='w-full flex max-w-xl justify-between'>

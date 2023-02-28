@@ -69,7 +69,7 @@ const SyncMetric: FC<SyncMetricProps> = ({
           })}`}
         </Typography>
       </div>
-      <div className='hidden md:flex flex-1 ml-4 items-center justify-center'>
+      <div className='hidden md:flex flex-1 ml-4 mr-2 items-center justify-center'>
         <ProgressCircle {...props} percent={percent || 0} />
       </div>
     </div>

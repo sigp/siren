@@ -3,9 +3,10 @@ import Toggle from '../Toggle/Toggle'
 import { ChangeEvent, FC } from 'react'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import { ConnectionForm, EndPointType } from '../../forms/ConfigConnectionForm'
-import { Protocol } from '../../constants/enums'
+import { Protocol, UiMode } from '../../constants/enums'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import Tooltip from '../ToolTip/Tooltip'
 
 export interface ProtocolInputProps {
   id: string
@@ -27,6 +28,8 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
   const { t } = useTranslation()
   const defaultType = type || 'beaconNode'
   const protocol = getValues(`${defaultType}.protocol`)
+  const isValidatorClient = type === 'validatorClient'
+  const uiMode = UiMode.DARK
   const onChangeProtocol = (value: boolean) => {
     const protocolValue = value ? Protocol.HTTPS : Protocol.HTTP
     if (type) {
@@ -47,11 +50,48 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
     setValue('beaconNode.address', value)
     setValue('validatorClient.address', value)
   }
-  const onChangePort = (e: ChangeEvent<HTMLInputElement>) => {
-    if (!type) return
+  const onChangePort = (e: ChangeEvent<HTMLInputElement>, type: EndPointType) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     setValue(`${type}.port`, e.target.value ? Number(e.target.value) : '')
+  }
+
+  const renderPortInput = (type: EndPointType) => {
+    const isBnNode = type === 'beaconNode'
+    return (
+      <div className='space-y-4'>
+        <div className='flex space-x-2 items-center'>
+          <Typography
+            isBold
+            color='text-dark500'
+            className='flex-grow-0 uppercase md:text-caption1'
+            type='text-caption2'
+          >
+            {t(`protocolInput.${isBnNode ? 'beaconPort' : 'vcPort'}`)}
+          </Typography>
+          <Tooltip
+            id={`${type}-port-tooltip`}
+            toolTipMode={UiMode.DARK}
+            maxWidth={isBnNode ? 350 : 200}
+            text={t(`protocolInput.${isBnNode ? 'bNPortToolTip' : 'vCPortToolTip'}`)}
+          >
+            <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
+          </Tooltip>
+        </div>
+        <Controller
+          name={`${isBnNode ? 'beaconNode' : 'validatorClient'}.port`}
+          control={control}
+          render={({ field: { ...props } }) => (
+            <input
+              className='text-body md:text-subtitle2 w-20 bg-transparent text-white outline-none appearance-none'
+              type='number'
+              {...props}
+              onChange={(e) => onChangePort(e, type)}
+            />
+          )}
+        />
+      </div>
+    )
   }
 
   return (
@@ -67,7 +107,14 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
             >
               {t('protocolInput.httpProtocol')}
             </Typography>
-            <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-dark500' />
+            <Tooltip
+              toolTipMode={uiMode}
+              id={`${id}-protocol-tooltip`}
+              maxWidth={200}
+              text={t('protocolInput.httpToolTip')}
+            >
+              <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-dark500' />
+            </Tooltip>
           </div>
           <Controller
             name={`${defaultType}.protocol`}
@@ -85,9 +132,18 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
               className='flex-grow-0 uppercase md:text-caption1'
               type='text-caption2'
             >
-              {t(`protocolInput.${type === 'validatorClient' ? 'vcAddress' : 'beaconAddress'}`)}
+              {t(`protocolInput.${isValidatorClient ? 'vcAddress' : 'beaconAddress'}`)}
             </Typography>
-            <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
+            <Tooltip
+              maxWidth={isValidatorClient ? 200 : 150}
+              toolTipMode={uiMode}
+              id={`${id}-ip-tooltip`}
+              text={
+                isValidatorClient ? t('protocolInput.ipVCToolTip') : t('protocolInput.ipBnToolTip')
+              }
+            >
+              <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
+            </Tooltip>
           </div>
           <div className='relative flex w-28 md:w-44 items-center'>
             <Typography
@@ -95,7 +151,7 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
               className='flex-grow-0 lowercase md:text-subtitle2'
             >{`${protocol}://`}</Typography>
             <Controller
-              name={`${type || 'beaconNode'}.address`}
+              name={`${defaultType}.address`}
               control={control}
               render={({ field: { value } }) => (
                 <input
@@ -110,86 +166,16 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
         </div>
         {!type ? (
           <>
-            <div className='space-y-4'>
-              <div className='flex space-x-2 items-center'>
-                <Typography
-                  isBold
-                  color='text-dark500'
-                  className='flex-grow-0 uppercase md:text-caption1'
-                  type='text-caption2'
-                >
-                  {t('protocolInput.beaconPort')}
-                </Typography>
-                <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
-              </div>
-              <Controller
-                name='beaconNode.port'
-                control={control}
-                render={({ field: { ...props } }) => (
-                  <input
-                    className='text-body md:text-subtitle2 w-20 bg-transparent text-white outline-none appearance-none'
-                    type='number'
-                    {...props}
-                  />
-                )}
-              />
-            </div>
-            <div className='space-y-4'>
-              <div className='flex space-x-2 items-center'>
-                <Typography
-                  isBold
-                  color='text-dark500'
-                  className='flex-grow-0 uppercase md:text-caption1'
-                  type='text-caption2'
-                >
-                  {t('protocolInput.vcPort')}
-                </Typography>
-                <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
-              </div>
-              <Controller
-                name='validatorClient.port'
-                control={control}
-                render={({ field: { ...props } }) => (
-                  <input
-                    className='text-body md:text-subtitle2 w-20 bg-transparent text-white outline-none appearance-none'
-                    type='number'
-                    {...props}
-                  />
-                )}
-              />
-            </div>
+            {renderPortInput('beaconNode')}
+            {renderPortInput('validatorClient')}
           </>
         ) : (
-          <div className='space-y-4'>
-            <div className='flex space-x-2 items-center'>
-              <Typography
-                isBold
-                color='text-dark500'
-                className='flex-grow-0 uppercase md:text-caption1'
-                type='text-caption2'
-              >
-                {t(`protocolInput.${type === 'beaconNode' ? 'beaconPort' : 'vcPort'}`)}
-              </Typography>
-              <i className='bi-question-circle-fill text-caption2 md:text-caption1  text-dark500' />
-            </div>
-            <Controller
-              name={`${defaultType}.port`}
-              control={control}
-              render={({ field: { value } }) => (
-                <input
-                  className='text-body md:text-subtitle2 w-20 bg-transparent text-white outline-none appearance-none'
-                  type='number'
-                  value={value}
-                  onChange={onChangePort}
-                />
-              )}
-            />
-          </div>
+          renderPortInput(defaultType)
         )}
       </div>
       <i
         className={`bi-check-circle-fill text-body md:text-subtitle2 ${
-          isValid ? 'text-success' : 'text-dark500'
+          isValid ? 'text-success' : 'text-dark500 opacity-20'
         }`}
       />
     </div>
