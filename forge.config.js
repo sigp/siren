@@ -17,11 +17,7 @@ module.exports = {
     },
     {
       name: '@electron-forge/maker-deb',
-      config: {
-        options: {
-          icon: 'src/assets/images/sigma',
-        },
-      },
+      config: {},
     },
     {
       name: '@electron-forge/maker-rpm',
