@@ -3,6 +3,13 @@ name: 'UI Tests'
 on: push
 
 jobs:
+  target-branch-check:
+    name: target-branch-check
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+        - name: Check that the pull request is not targeting the stable branch
+          run: test ${{ github.base_ref }} != "stable"
   # Run interaction and accessibility tests
   build-storybook:
     runs-on: ubuntu-latest
