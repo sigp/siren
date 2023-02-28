@@ -16,7 +16,7 @@ const ConfigureConnection = () => {
   return (
     <div className='flex-1 relative w-full flex flex-col relative justify-center bg-black'>
       <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' />
-      <div className='h-full w-full overflow-scroll lg:max-w-xl xl:max-w-2xl @1440:max-w-3xl p-6 pt-16 md:p-12 md:pt-24 lg:pl-18 lg:pr-0 xl:pl-24 @1440:pl-28'>
+      <div className='h-full w-full overflow-scroll scrollbar-hide lg:max-w-xl xl:max-w-2xl @1440:max-w-3xl p-6 pt-16 md:p-12 md:pt-24 lg:pl-18 lg:pr-0 xl:pl-24 @1440:pl-28'>
         <Typography
           color='text-transparent'
           fontWeight='font-light'
