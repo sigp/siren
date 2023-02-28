@@ -21,7 +21,7 @@ developers. Specifically the [Lighthouse UI](https://lighthouse-book.sigmaprime.
 
 ### Requirements
 
-Building from source requires `Node v16.16.0` and `yarn`. 
+Building from source requires `Node v18` and `yarn`. 
 
 ### Building From Source
 
