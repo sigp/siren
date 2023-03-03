@@ -131,7 +131,18 @@
     "queue": "Queue",
     "success": "Success",
     "active-slash": "active-slash",
-    "active_ongoing": "Active Ongoing"
+    "active_ongoing": "Active Ongoing",
+    "pending_initialized": "Init Pending",
+    "pending_queued": "Queue Pending",
+    "active_exiting": "Active Exiting",
+    "active_slashed": "Active Slashed",
+    "exited_slashed": "Exited Slashed",
+    "exited_unslashed": "Exited Unslashed",
+    "withdrawal_possible": "Withdrawal Possible",
+    "withdrawal_done": "Withdrawal Done",
+    "pending": "Pending",
+    "exited": "Exited",
+    "withdrawal": "Withdrawal"
   },
   "accountEarnings": {
     "annualized": "annualized",
