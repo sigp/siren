@@ -34,3 +34,6 @@ export const fetchValidatorInclusion = async (
   await axios.get(
     `${baseBeaconUrl}/lighthouse/validator_inclusion/${epoch}/${validatorId || 'global'}`,
   )
+
+export const fetchBnSpec = async ({ protocol, address, port }: Endpoint) =>
+  await axios.get(`${protocol}://${address}:${port}/eth/v1/config/spec`)
