@@ -22,6 +22,7 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "chart.js": "^4.2.0",
+    "dotenv": "^16.0.3",
     "concurrently": "5.2.0",
     "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
