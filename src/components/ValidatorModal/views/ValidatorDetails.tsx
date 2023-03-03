@@ -12,12 +12,12 @@ import StatusIcon from '../../StatusIcon/StatusIcon'
 import ValidatorStatusProgress from '../../ValidatorStatusProgress/ValidatorStatusProgress'
 import ValidatorGraffitiInput from '../../ValidatorGraffitiInput/ValidatorGraffitiInput'
 import ValidatorCardAction from '../ValidatorCardAction'
-import { BeaconChaValidatorUrl } from '../../../constants/constants'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
 import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
 import useValidatorGraffiti from '../../../hooks/useValidatorGraffiti'
 import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
+import BeaconChaLink from '../../BeaconChaLink/BeaconChaLink'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
@@ -92,22 +92,7 @@ const ValidatorDetails = () => {
                   </div>
                 </div>
               </div>
-              <a target='_blank' rel='noreferrer' href={`${BeaconChaValidatorUrl}/${index}`}>
-                <div className='cursor-pointer dark:bg-dark700 bg-dark25 flex-1 space-y-3 p-3'>
-                  <Typography type='text-caption1' isBold className='uppercase'>
-                    Beacon <br /> Cha.in
-                  </Typography>
-                  <Typography color='text-dark400' fontWeight='font-light' type='text-caption2'>
-                    {t('validatorManagement.details.exploreBeaconChai')}
-                  </Typography>
-                  <div className='w-full flex items-center justify-between'>
-                    <Typography fontWeight='font-light' className='uppercase'>
-                      {t('validatorManagement.details.explore')}
-                    </Typography>
-                    <i className='bi-arrow-up-right text-primary' />
-                  </div>
-                </div>
-              </a>
+              {index && <BeaconChaLink index={index} />}
             </div>
             <div className='w-full flex border-style100 shadow py-2 px-4'>
               <div className='space-y-2 mr-4'>
