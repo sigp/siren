@@ -1,10 +1,8 @@
-import { BeaconChaValidatorUrl, GoerliBeaconChaValidatorUrl } from '../../constants/constants'
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
-import { selectBnChain } from '../../recoil/selectors/selectBnChain'
-import { Network } from '../../constants/enums'
+import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 
 export interface BeaconChaLinkProps {
   index: number
@@ -12,10 +10,7 @@ export interface BeaconChaLinkProps {
 
 const BeaconChaLink: FC<BeaconChaLinkProps> = ({ index }) => {
   const { t } = useTranslation()
-  const bnNetwork = useRecoilValue(selectBnChain)
-
-  const baseUrl =
-    bnNetwork === Network.Mainnet ? BeaconChaValidatorUrl : GoerliBeaconChaValidatorUrl
+  const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
 
   return (
     <a target='_blank' rel='noreferrer' href={`${baseUrl}/${index}`}>
