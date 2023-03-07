@@ -191,6 +191,7 @@ export const EARNINGS_OPTIONS = [
 ] as EarningOption[]
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
+export const GoerliBeaconChaValidatorUrl = 'https://goerli.beaconcha.in/validator'
 
 export const DEFAULT_VALIDATOR_COUNT = {
   active_exiting: 0,

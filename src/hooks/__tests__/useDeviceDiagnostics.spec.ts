@@ -6,13 +6,6 @@ import { mockedRecoilValue } from '../../../test.helpers'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
 import clearAllMocks = jest.clearAllMocks
 
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
-  atom: jest.fn(),
-  selector: jest.fn(),
-}))
-
 jest.mock('../../utilities/formatGigBytes', () => jest.fn())
 
 const mockedFormatGigBytes = formatGigBytes as jest.MockedFn<typeof formatGigBytes>

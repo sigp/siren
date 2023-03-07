@@ -5,3 +5,10 @@ export type BeaconValidatorInclusionResults = {
   previous_epoch_head_attesting_gwei: number
   previous_epoch_target_attesting_gwei: number
 }
+
+export type BeaconNodeSpecResults = {
+  CONFIG_NAME: string
+  DEPOSIT_CHAIN_ID: string
+  DEPOSIT_CONTRACT_ADDRESS: string
+  DEPOSIT_NETWORK_ID: string
+}
