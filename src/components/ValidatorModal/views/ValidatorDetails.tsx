@@ -116,7 +116,7 @@ const ValidatorDetails = () => {
                 </Typography>
                 <div className='flex space-x-2'>
                   <Typography type='text-caption2' isUpperCase color='text-dark300'>
-                    {status}
+                    {t(`validatorStatus.${status}`)}
                   </Typography>
                   {status && <StatusIcon status={status} />}
                 </div>
