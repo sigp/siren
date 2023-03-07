@@ -6,7 +6,10 @@ const BeaconNetwork = () => {
   const bnNetwork = useRecoilValue(selectBnChain)
 
   return bnNetwork ? (
-    <div className='flex flex-col h-full py-1.5 pl-2 pr-4 justify-between border-l border-r border-borderLight dark:border-borderDark'>
+    <div
+      data-testid='beaconNetwork'
+      className='flex flex-col h-full py-1.5 pl-2 pr-4 justify-between border-l border-r border-borderLight dark:border-borderDark'
+    >
       <Typography type='text-tiny' darkMode='dark:text-white' isUpperCase isBold>
         Network
       </Typography>
