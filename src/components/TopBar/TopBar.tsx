@@ -54,7 +54,7 @@ const TopBar = () => {
           <SlasherLogo className='w-6 h-6 text-primary' />
         </div>
       </div>
-      <div className='h-full flex items-center space-x-2'>
+      <div className='h-full flex'>
         <Suspense fallback={<div />}>
           <BeaconNetwork />
         </Suspense>
