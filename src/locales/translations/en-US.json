@@ -108,6 +108,7 @@
   "nodesCachingData": "Node caching data...",
   "thisCouldTakeTime": "This could take approximately 20 minutes.",
   "makeSelection": "make selection",
+  "lighthouseVersionError": "Lighthouse version {{major}}.{{minor}}.{{patch}} is required. Please update dependency and retry.",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
