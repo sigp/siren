@@ -226,7 +226,7 @@ export const CURRENCIES = [
 
 export const REQUIRED_VALIDATOR_VERSION = {
   major: 3,
-  minor: 6,
+  minor: 5,
   patch: 0,
 }
 
