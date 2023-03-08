@@ -56,3 +56,9 @@ export type PollingInterval = {
   intervalId: NodeJS.Timer | undefined
   clearPoll: (id: NodeJS.Timer) => void
 }
+
+export type SemanticVersion = {
+  major: number
+  minor: number
+  patch: number
+}
