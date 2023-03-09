@@ -4,9 +4,15 @@ const usePollingInterval = (
   callback: () => void,
   delay: number,
   options?: { isSkip: boolean; onClearInterval?: () => void },
-): { intervalId: NodeJS.Timer | undefined } => {
+): { intervalId: NodeJS.Timer | undefined; clearPoll: (id: NodeJS.Timer) => void } => {
   const [intervalId, setId] = useState<NodeJS.Timer>()
   const savedCallback = useRef<() => void>()
+
+  const clearPoll = (id: NodeJS.Timer) => {
+    options?.onClearInterval?.()
+    clearInterval(id)
+    setId(undefined)
+  }
 
   useEffect(() => {
     savedCallback.current = callback
@@ -22,15 +28,14 @@ const usePollingInterval = (
       const id = setInterval(tick, delay)
       setId(id)
       return () => {
-        options?.onClearInterval?.()
-        clearInterval(id)
-        setId(undefined)
+        clearPoll(id)
       }
     }
   }, [delay])
 
   return {
     intervalId,
+    clearPoll,
   }
 }
 

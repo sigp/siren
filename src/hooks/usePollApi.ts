@@ -4,8 +4,18 @@ import { useRecoilState } from 'recoil'
 import usePollingInterval from './usePollingInterval'
 import axios, { AxiosResponse } from 'axios'
 
-const usePollApi = ({ time, isReady, intervalState, url, apiToken }: ApiPollConfig) => {
+const usePollApi = ({
+  time,
+  isReady,
+  intervalState,
+  url,
+  apiToken,
+  maxErrors = 4,
+  onMaxError,
+}: ApiPollConfig) => {
   const [response, setResponse] = useState<AxiosResponse | undefined>()
+  const [errorMessage, setError] = useState<string | undefined>(undefined)
+  const [errorCount, setErrorCount] = useState<number>(0)
   const [interval, setIntervalId] = useRecoilState(intervalState)
   const onClearInterval = () => setIntervalId(undefined)
   const isSkip = !isReady || !!interval
@@ -13,19 +23,33 @@ const usePollApi = ({ time, isReady, intervalState, url, apiToken }: ApiPollConf
   const fetchApi = async () => {
     if (!url) return
 
-    const result = await axios.get(
-      url,
-      apiToken
-        ? {
-            headers: { Authorization: `Bearer ${apiToken}` },
-          }
-        : undefined,
-    )
+    setError(undefined)
 
-    setResponse(result)
+    try {
+      const result = await axios.get(
+        url,
+        apiToken
+          ? {
+              headers: { Authorization: `Bearer ${apiToken}` },
+            }
+          : undefined,
+      )
+
+      if (result) {
+        setError(undefined)
+        setErrorCount(0)
+        setResponse(result)
+      }
+    } catch (e) {
+      if (e instanceof Error) {
+        console.error(e.message)
+        setError(e.message)
+        setErrorCount((prev) => prev + 1)
+      }
+    }
   }
 
-  const { intervalId } = usePollingInterval(fetchApi, time, {
+  const { intervalId, clearPoll } = usePollingInterval(fetchApi, time, {
     isSkip,
     onClearInterval,
   })
@@ -42,8 +66,17 @@ const usePollApi = ({ time, isReady, intervalState, url, apiToken }: ApiPollConf
     }
   }, [isReady])
 
+  useEffect(() => {
+    if (maxErrors && errorCount >= maxErrors && intervalId) {
+      onMaxError?.()
+      clearPoll(intervalId)
+    }
+  }, [errorCount, maxErrors, onMaxError, intervalId])
+
   return {
     response,
+    error: errorMessage,
+    errorCount,
   }
 }
 
