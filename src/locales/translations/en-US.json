@@ -307,5 +307,13 @@
     "ethTotal": "Total ETH earnings of all validators",
     "fiatEstimate": "Estimated {{time}} earnings converted to selected fiat currency exchange rate.",
     "fiatTotal": "Total earnings converted to selected fiat currency exchange rate."
+  },
+  "networkErrorModal": {
+    "title": "Network Error",
+    "beaconAndValidator": "Beacon Node and Validator Client",
+    "beaconNode": "Beacon Node",
+    "validatorClient": "Validator Client",
+    "affectedNetworks": "Siren failed to maintain connection to the designated <0>{{network}}</0>.",
+    "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
   }
 }
