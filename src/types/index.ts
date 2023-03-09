@@ -22,6 +22,8 @@ export type ApiPollConfig = {
   intervalState: RecoilState<NodeJS.Timer | undefined>
   url?: string
   apiToken?: string
+  maxErrors?: number
+  onMaxError?: () => void
 }
 
 export type Endpoint = {
