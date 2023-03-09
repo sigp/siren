@@ -192,6 +192,11 @@ export const EARNINGS_OPTIONS = [
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
 export const GoerliBeaconChaValidatorUrl = 'https://goerli.beaconcha.in/validator'
+export const DiscordUrl = 'https://discord.gg/mB3VZQpYvN'
+export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'
+export const SigPGithubUrl = 'https://github.com/sigp'
+export const SigPTwitter = 'https://twitter.com/sigp_io'
+export const SigPIoUrl = 'https://sigmaprime.io/'
 
 export const DEFAULT_VALIDATOR_COUNT = {
   active_exiting: 0,
