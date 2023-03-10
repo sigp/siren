@@ -223,3 +223,5 @@ export const CURRENCIES = [
   'HKD',
   'NZD',
 ]
+
+export const DEFAULT_MAX_NETWORK_ERROR = 3

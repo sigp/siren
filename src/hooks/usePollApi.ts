@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import usePollingInterval from './usePollingInterval'
 import axios, { AxiosResponse } from 'axios'
+import { DEFAULT_MAX_NETWORK_ERROR } from '../constants/constants'
 
 const usePollApi = ({
   time,
@@ -10,8 +11,11 @@ const usePollApi = ({
   intervalState,
   url,
   apiToken,
-  maxErrors = 4,
+  maxErrors = DEFAULT_MAX_NETWORK_ERROR,
   onMaxError,
+  params,
+  method = 'get',
+  data,
 }: ApiPollConfig) => {
   const [response, setResponse] = useState<AxiosResponse | undefined>()
   const [errorMessage, setError] = useState<string | undefined>(undefined)
@@ -26,14 +30,13 @@ const usePollApi = ({
     setError(undefined)
 
     try {
-      const result = await axios.get(
+      const result = await axios({
+        method,
         url,
-        apiToken
-          ? {
-              headers: { Authorization: `Bearer ${apiToken}` },
-            }
-          : undefined,
-      )
+        headers: apiToken ? { Authorization: `Bearer ${apiToken}` } : undefined,
+        params,
+        data,
+      })
 
       if (result) {
         setError(undefined)
