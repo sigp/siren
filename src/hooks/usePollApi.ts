@@ -45,7 +45,7 @@ const usePollApi = ({
       }
     } catch (e) {
       if (e instanceof Error) {
-        console.error(e.message)
+        console?.error(e.message)
         setError(e.message)
         setErrorCount((prev) => prev + 1)
       }
