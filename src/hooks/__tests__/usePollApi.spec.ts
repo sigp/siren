@@ -8,13 +8,6 @@ import React from 'react'
 
 jest.mock('axios')
 
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
-  atom: jest.fn(),
-  selector: jest.fn(),
-}))
-
 jest.mock('../usePollingInterval', () => jest.fn())
 
 const mockIntervalState = atom<NodeJS.Timer | undefined>({
