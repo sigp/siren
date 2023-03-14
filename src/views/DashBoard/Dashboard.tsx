@@ -36,6 +36,7 @@ const DashboardFallback = () => (
 )
 
 const Dashboard = () => {
+  const mode = useRecoilValue(uiMode)
   const content = useRecoilValue(dashView)
   const [isReadySync, setSync] = useState(false)
   const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
@@ -87,7 +88,11 @@ const Dashboard = () => {
     }
   }
   return (
-    <>
+    <div
+      className={`${
+        mode === UiMode.DARK ? 'dark' : ''
+      } w-screen h-screen flex overflow-hidden relative`}
+    >
       {isReadySync && <Sync />}
       <SideBar />
       <NetworkErrorModal />
@@ -98,7 +103,7 @@ const Dashboard = () => {
         </div>
         <FootBar />
       </div>
-    </>
+    </div>
   )
 }
 
