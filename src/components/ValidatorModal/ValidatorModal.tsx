@@ -34,7 +34,7 @@ const ValidatorModal = () => {
       {validator ? (
         renderContent()
       ) : (
-        <div className='w-full h-640 flex items-center justify-center'>
+        <div className='w-500 h-640 flex items-center justify-center'>
           <Spinner />
         </div>
       )}
