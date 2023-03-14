@@ -1,5 +1,6 @@
 import { RecoilState } from 'recoil'
 import { Protocol } from '../constants/enums'
+import { Method } from 'axios'
 
 export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
 
@@ -22,6 +23,11 @@ export type ApiPollConfig = {
   intervalState: RecoilState<NodeJS.Timer | undefined>
   url?: string
   apiToken?: string
+  maxErrors?: number
+  onMaxError?: () => void
+  params?: { [key: string]: any }
+  data?: { [key: string]: any }
+  method?: Method
 }
 
 export type Endpoint = {
@@ -39,4 +45,14 @@ export type Alert = {
 export type CurrencyPrefix = {
   prefix: string
   formattedPrefix?: string
+}
+
+export type PollingIntervalOptions = {
+  isSkip: boolean
+  onClearInterval?: () => void
+}
+
+export type PollingInterval = {
+  intervalId: NodeJS.Timer | undefined
+  clearPoll: (id: NodeJS.Timer) => void
 }

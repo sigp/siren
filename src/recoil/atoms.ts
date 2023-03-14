@@ -143,3 +143,13 @@ export const isSideBarOpen = atom<boolean>({
   key: 'isSideBarOpen',
   default: false,
 })
+
+export const validatorNetworkError = atom<boolean>({
+  key: 'validatorNetworkError',
+  default: false,
+})
+
+export const beaconNetworkError = atom<boolean>({
+  key: 'beaconNetworkError',
+  default: false,
+})
