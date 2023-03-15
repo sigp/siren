@@ -10,6 +10,7 @@ import {
 import calculateEpochEstimate from '../utilities/calculateEpochEstimate'
 import { validatorCacheBalanceResult } from '../recoil/atoms'
 import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
+import calculateAprPercentage from '../utilities/calculateAprPercentage'
 
 const useValidatorEarnings = (indices?: string[]) => {
   const validators = useRecoilValue(selectValidatorInfos)
@@ -82,7 +83,7 @@ const useValidatorEarnings = (indices?: string[]) => {
   )
 
   const initialEth = filteredValidators.length * initialEthDeposit
-  const annualizedEarningsPercent = (Math.pow(total / initialEth, 1) - 1) * 100
+  const annualizedEarningsPercent = calculateAprPercentage(total, initialEth)
 
   return {
     total,
