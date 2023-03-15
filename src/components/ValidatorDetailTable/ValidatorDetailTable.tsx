@@ -3,6 +3,8 @@ import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { useTranslation } from 'react-i18next'
+import calculateAprPercentage from '../../utilities/calculateAprPercentage'
+import { initialEthDeposit } from '../../constants/constants'
 
 export interface ValidatorDetailTableProps {
   validator: ValidatorInfo
@@ -13,6 +15,8 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
   const { balance } = validator
   const income = balance ? balance - 32 : 0
   const incomeColor = formatBalanceColor(income)
+  const aprPercentage = calculateAprPercentage(balance, initialEthDeposit)
+  const annualizedTextColor = formatBalanceColor(aprPercentage)
   return (
     <>
       <div className='w-full lg:hidden'>
@@ -172,9 +176,13 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
               -
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
-              -
+          <div className='py-4 px-6'>
+            <Typography
+              darkMode={`dark:${annualizedTextColor}`}
+              color={annualizedTextColor}
+              type='text-caption1'
+            >
+              {`${aprPercentage.toFixed(2)} %`}
             </Typography>
           </div>
         </div>
