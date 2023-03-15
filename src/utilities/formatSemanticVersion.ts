@@ -7,7 +7,10 @@ const formatSemanticVersion = (version: string): SemanticVersion | undefined => 
     vString = version.replace('v', '')
   }
 
-  const formattedVersion = vString.split('.').map((i) => parseInt(i))
+  const formattedVersion = vString
+    .replace(/[^\d.-]/g, '')
+    .split('.')
+    .map((i) => parseInt(i))
 
   if (formattedVersion.length !== 3) return
 
