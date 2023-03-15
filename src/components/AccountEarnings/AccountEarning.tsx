@@ -185,7 +185,7 @@ const AccountEarning = () => {
             </div>
             <div>
               <div className='flex space-x-2'>
-                <Typography type='text-caption1' className='capitalize' color='text-dark400'>
+                <Typography type='text-caption1' isCapitalize color='text-dark400'>
                   {t('annualized')}
                 </Typography>
                 <i className='bi bi-info-circle text-caption1 text-dark400' />
