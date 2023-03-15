@@ -184,12 +184,14 @@ const AccountEarning = () => {
               </Tooltip>
             </div>
             <div>
-              <div className='flex space-x-2'>
-                <Typography type='text-caption1' isCapitalize color='text-dark400'>
-                  {t('annualized')}
-                </Typography>
-                <i className='bi bi-info-circle text-caption1 text-dark400' />
-              </div>
+              <Tooltip id='overallApr' maxWidth={200} text={t('tooltip.annualApr')}>
+                <div className='flex space-x-2'>
+                  <Typography type='text-caption1' isCapitalize color='text-dark400'>
+                    {t('annualized')}
+                  </Typography>
+                  <i className='bi bi-info-circle text-caption1 text-dark400' />
+                </div>
+              </Tooltip>
               <Typography
                 type='text-subtitle3'
                 color={annualizedTextColor}
