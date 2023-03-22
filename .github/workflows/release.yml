@@ -44,6 +44,8 @@ jobs:
               uses: actions/setup-node@v3
               with:
                 node-version: 18
+            - name: Configure Yarn Timeout
+              run: yarn config set network-timeout 300000
 
             # ==============================
             # Linux dependencies
