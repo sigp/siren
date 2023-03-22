@@ -74,12 +74,11 @@ jobs:
               run: |
                   export GPG_TTY=$(tty)
                   echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                  mkdir artifacts
-                  mv ~/.cargo/bin/lighthouse ./artifacts
+                  mkdir ./artifacts
+                  mv out/make/zip/*/*/* ./artifacts
                   cd artifacts
-                  tar -czf lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz lighthouse
-                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz
-                  mv *tar.gz* ..
+                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  mv *zip* ..
 
             - name: Configure GPG and create artifacts Windows
               if: startsWith(matrix.arch, 'x86_64-windows')
@@ -89,11 +88,10 @@ jobs:
               run: |
                   echo $env:GPG_SIGNING_KEY | gpg --batch --import
                   mkdir artifacts
-                  move $env:USERPROFILE/.cargo/bin/lighthouse.exe ./artifacts
+                  move out/make/zip/*/*/* ./artifacts
                   cd artifacts
-                  tar -czf lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz lighthouse.exe
-                  gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz
-                  move *tar.gz* ..
+                  gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  move *zip* ..
 
             # =======================================================================
             # Upload artifacts
@@ -103,14 +101,14 @@ jobs:
             - name:  Upload artifact
               uses:  actions/upload-artifact@v3
               with:
-                  name: lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz
-                  path: lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz
+                  name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
             - name: Upload signature
               uses: actions/upload-artifact@v3
               with:
-                  name: lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz.asc
-                  path: lighthouse-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.tar.gz.asc
+                  name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
     draft-release:
         name:   Draft Release
@@ -153,13 +151,6 @@ jobs:
                   body=$(cat <<- "ENDBODY"
                   <Rick and Morty character>
 
-                  ## Testing Checklist (DELETE ME)
-
-                  - [ ] Run on synced Prater Sigma Prime nodes.
-                  - [ ] Run on synced Canary (mainnet) Sigma Prime nodes.
-                  - [ ] Resync a Prater node.
-                  - [ ] Resync a mainnet node.
-
                   ## Release Checklist (DELETE ME)
 
                   - [ ] Merge `unstable` -> `stable`.
@@ -181,10 +172,6 @@ jobs:
                   |Staking Users| <TODO> | <TODO> |
                   |Non-Staking Users| <TODO>|---|
 
-                  *See [Update
-                  Priorities](https://lighthouse-book.sigmaprime.io/installation-priorities.html)
-                  more information about this table.*
-
                   ## All Changes
 
                   ${{ steps.changelog.outputs.CHANGELOG }}
@@ -197,21 +184,21 @@ jobs:
 
                   | System | Architecture | Binary | PGP Signature |
                   |:---:|:---:|:---:|:---|
-                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-apple-darwin.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-apple-darwin.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-apple-darwin.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-apple-darwin-portable.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-apple-darwin-portable.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-apple-darwin-portable.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-windows.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-windows.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-windows.tar.gz.asc) |
-                  | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [lighthouse-${{ env.VERSION }}-x86_64-windows-portable.tar.gz](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-windows-portable.tar.gz) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/lighthouse-${{ env.VERSION }}-x86_64-windows-portable.tar.gz.asc) |
+                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-apple-darwin.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-apple-darwin-portable.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin-portable.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin-portable.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu-portable.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu-portable.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-windows.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip.asc) |
+                  | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-windows-portable.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows-portable.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows-portable.zip.asc) |
                   | | | | |
                   | **System** | **Option** | - | **Resource** |
                   | <img src="https://simpleicons.org/icons/docker.svg" style="width: 32px;"/> | Docker | [${{ env.VERSION }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}/tags?page=1&ordering=last_updated&name=${{ env.VERSION }}) | [${{ env.IMAGE_NAME }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}) |
                   ENDBODY
                   )
                   assets=()
-                  for asset in ./lighthouse-*.tar.gz*; do
+                  for asset in ./siren-*.zip*; do
                       assets+=("-a" "$asset/$asset")
                   done
                   tag_name="${{ env.VERSION }}"
