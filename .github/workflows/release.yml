@@ -16,6 +16,7 @@ jobs:
               uses: actions/checkout@v3
             - name: Extract version
               # run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
+              # Used for running without tags
               run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
               id: extract_version
         outputs:
@@ -25,24 +26,26 @@ jobs:
         strategy:
             matrix:
                 arch: [
-                  # aarch64-unknown-linux-gnu,
+                       aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
-                       #                       x86_64-apple-darwin,
-                       #x86_64-windows
+                       # Requires apple signature secrets                      
+                       # x86_64-apple-darwin,
+                       x86_64-windows
                        ]
                 include:
-                  # -   arch: aarch64-unknown-linux-gnu
-                  #      platform: ubuntu-latest
-                  #      profile: maxperf
+                    -   arch: aarch64-unknown-linux-gnu
+                        platform: ubuntu-latest
+                        profile: maxperf
                     -   arch: x86_64-unknown-linux-gnu
                         platform: ubuntu-latest
                         profile: maxperf
-                          #-   arch: x86_64-apple-darwin
-                          #platform: macos-latest
-                          #profile: maxperf
-                          #-   arch: x86_64-windows
-                          #platform: windows-2019
-                          #profile: maxperf
+                    # Requires apple signature secrets
+                    #-   arch: x86_64-apple-darwin
+                       #platform: macos-latest
+                       #profile: maxperf
+                    -   arch: x86_64-windows
+                        platform: windows-2019
+                        profile: maxperf
 
         runs-on:    ${{ matrix.platform }}
         needs: extract-version
@@ -85,12 +88,8 @@ jobs:
                   echo "$GPG_SIGNING_KEY" | gpg --batch --import
                   mkdir ./artifacts
                   mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  cd artifacts
-                  ls ./
-                  pwd
                   echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   mv *zip* ..
-                  ls ../
 
             - name: Configure GPG and create artifacts Windows
               if: startsWith(matrix.arch, 'x86_64-windows')
@@ -101,7 +100,6 @@ jobs:
                   echo $env:GPG_SIGNING_KEY | gpg --batch --import
                   mkdir artifacts
                   move out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-
                   cd artifacts
                   gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   move *zip* ..
@@ -162,7 +160,7 @@ jobs:
               # The formatting here is borrowed from OpenEthereum: https://github.com/openethereum/openethereum/blob/main/.github/workflows/build.yml
               run: |
                   body=$(cat <<- "ENDBODY"
-                  <Rick and Morty character>
+                  <Release Name>
 
                   ## Release Checklist (DELETE ME)
 
