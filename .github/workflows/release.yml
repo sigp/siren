@@ -87,15 +87,10 @@ jobs:
                   export GPG_TTY=$(tty)
                   echo "$GPG_SIGNING_KEY" | gpg --batch --import
                   mkdir ./artifacts
-                  ls out/make
-                  pwd
-                  ls out/make/zip
-                  pwd
-                  ls out/make/zip/*/*/
-                  pwd
                   mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  cd artifacts
                   ls
+                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   mv *zip* ..
 
             - name: Configure GPG and create artifacts Windows
