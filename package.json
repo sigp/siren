@@ -110,8 +110,6 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.3",
-    "@electron-forge/maker-deb": "^6.0.3",
-    "@electron-forge/maker-rpm": "^6.0.3",
     "@electron-forge/maker-squirrel": "^6.0.3",
     "@electron-forge/maker-zip": "^6.0.3",
     "@faker-js/faker": "^7.5.0",
