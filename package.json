@@ -67,7 +67,7 @@
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
     "package": "electron-forge package",
-    "make": "electron-forge make --arch=x64,arm64"
+    "make": "electron-forge make"
   },
   "eslintConfig": {
     "extends": [
