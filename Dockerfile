@@ -8,6 +8,10 @@ COPY . /app/
 WORKDIR /app
 
 ENV NODE_ENV=development
+
+# cross-builds timeout on downloading deps for some reason
+RUN yarn config set network-timeout 300000
+
 # install (dev) deps
 RUN yarn
 
