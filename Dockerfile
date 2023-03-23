@@ -9,11 +9,9 @@ WORKDIR /app
 
 ENV NODE_ENV=development
 
-# cross-builds timeout on downloading deps for some reason
-RUN yarn config set network-timeout 300000
-
 # install (dev) deps
-RUN yarn
+# on GitHub runners, timeouts occur in emulated containers
+RUN yarn --network-timeout 300000
 
 ENV NODE_ENV=production
 # build (prod) app

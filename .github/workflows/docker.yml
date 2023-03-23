@@ -62,6 +62,7 @@ jobs:
             VERSION_SUFFIX: ${{ needs.extract-version.outputs.VERSION_SUFFIX }}
         steps:
             - uses: actions/checkout@v3
+            - uses: docker/setup-qemu-action@v2
             - name: Dockerhub login
               run: |
                   echo "${DOCKER_PASSWORD}" | docker login --username ${DOCKER_USERNAME} --password-stdin
@@ -74,8 +75,6 @@ jobs:
             # Install dependencies for emulation. Have to create a new builder to pick up emulation support.
             - name: Build Dockerfile and push
               run: |
-                  docker run --privileged --rm tonistiigi/binfmt --install ${SHORT_ARCH}
-                  docker buildx create --use --name cross-builder
                   docker buildx build \
                       --platform=linux/${SHORT_ARCH} \
                       --file ./Dockerfile . \
