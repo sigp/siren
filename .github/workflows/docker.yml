@@ -5,7 +5,6 @@ on:
         branches:
             - unstable
             - stable
-            - ci-publish-docker
         tags:
             - v*
 
@@ -34,11 +33,6 @@ jobs:
               run: |
                     echo "VERSION=latest" >> $GITHUB_ENV
                     echo "VERSION_SUFFIX=-unstable" >> $GITHUB_ENV
-            - name: Extract version (if publish-test)
-              if: github.event.ref == 'refs/heads/ci-publish-docker'
-              run: |
-                    echo "VERSION=latest" >> $GITHUB_ENV
-                    echo "VERSION_SUFFIX=-test" >> $GITHUB_ENV
             - name: Extract version (if tagged release)
               if: startsWith(github.event.ref, 'refs/tags')
               run: |
