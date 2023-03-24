@@ -3,6 +3,7 @@ import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../consta
 import { Endpoint } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
+import { BeaconValidatorMetricResults } from '../types/beacon'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
@@ -152,4 +153,9 @@ export const validatorNetworkError = atom<boolean>({
 export const beaconNetworkError = atom<boolean>({
   key: 'beaconNetworkError',
   default: false,
+})
+
+export const validatorMetrics = atom<BeaconValidatorMetricResults[]>({
+  key: 'validatorMetrics',
+  default: undefined,
 })
