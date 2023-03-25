@@ -1,5 +1,6 @@
 import DiagnosticCard, { DiagnosticCardProps } from './DiagnosticCard'
 import { Story } from '@storybook/react'
+import { StatusColor } from '../../types'
 
 export default {
   title: 'Diagnostic Card',
@@ -14,7 +15,7 @@ const Template: Story<DiagnosticCardProps> = (props) => (
 
 export const LargeCard = Template.bind({})
 LargeCard.args = {
-  status: 'bg-success',
+  status: StatusColor.SUCCESS,
   title: 'Health Check',
   metric: '16 MS',
   subTitle: 'Good Connection',
@@ -23,7 +24,7 @@ LargeCard.args = {
 
 export const StandardCard = Template.bind({})
 StandardCard.args = {
-  status: 'bg-warning',
+  status: StatusColor.WARNING,
   title: 'Disk',
   metric: '511 GB',
   subTitle: '22% Utilization',
@@ -31,7 +32,7 @@ StandardCard.args = {
 
 export const SmallCard = Template.bind({})
 SmallCard.args = {
-  status: 'bg-error',
+  status: StatusColor.ERROR,
   title: 'Health Check',
   metric: 'Uptime: 2H 44M',
   subTitle: 'Good, Nodes Syncing..',

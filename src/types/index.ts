@@ -2,7 +2,12 @@ import { RecoilState } from 'recoil'
 import { Protocol } from '../constants/enums'
 import { Method } from 'axios'
 
-export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error'
+export enum StatusColor {
+  DARK = 'bg-dark100',
+  SUCCESS = 'bg-success',
+  WARNING = 'bg-warning',
+  ERROR = 'bg-error',
+}
 
 export type ClientProvider = {
   provider: string
@@ -39,7 +44,7 @@ export type Endpoint = {
 export type Alert = {
   message: string
   subText: string
-  severity: StatusType
+  severity: StatusColor
 }
 
 export type CurrencyPrefix = {
