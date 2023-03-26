@@ -261,6 +261,14 @@
     "title": "Validator Management",
     "overview": "Overview",
     "day": "Day",
+    "effectiveness": {
+      "targetVote": "Target Vote",
+      "headVote": "Head Vote",
+      "overallTargetDescription": "Average accuracy of all validator finality votes indicating what the validators see as the first block in the current epoch",
+      "overallHeadHitDescription": "Average accuracy of all validator votes of the block the validator sees at the head of the chain",
+      "targetDescription": "Average accuracy of selected validator finality votes indicating what the validators see as the first block in the current epoch",
+      "headHitDescription": "Average accuracy of selected validator votes of the block the validator sees at the head of the chain"
+    },
     "summary": {
       "active": "active",
       "totalBalance": "Total Balance",

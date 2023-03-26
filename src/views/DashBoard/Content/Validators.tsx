@@ -13,10 +13,12 @@ import ValidatorTable, {
 import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
 import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
 import DisabledTooltip from '../../../components/DisabledTooltip/DisabledTooltip'
+import useValidatorMetrics from '../../../hooks/useValidatorMetrics'
 
 const Sync = () => {
   useValidatorInfoPolling()
   useValidatorCachePolling()
+  useValidatorMetrics()
   return null
 }
 const Validators = () => {
