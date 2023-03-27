@@ -190,15 +190,15 @@ const AccountEarning = () => {
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
                 </div>
+                <Typography
+                  type='text-subtitle3'
+                  color={textColor}
+                  darkMode={textColor}
+                  family='font-roboto'
+                >
+                  {estimatedApr ? estimatedApr.toFixed(2) : '---'}%
+                </Typography>
               </Tooltip>
-              <Typography
-                type='text-subtitle3'
-                color={textColor}
-                darkMode={textColor}
-                family='font-roboto'
-              >
-                {estimatedApr ? estimatedApr.toFixed(2) : '---'}%
-              </Typography>
             </div>
           </div>
         </div>

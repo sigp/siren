@@ -308,7 +308,7 @@
     "ethTotal": "Total ETH earnings of all validators",
     "fiatEstimate": "Estimated {{time}} earnings converted to selected fiat currency exchange rate.",
     "fiatTotal": "Total earnings converted to selected fiat currency exchange rate.",
-    "annualApr": "Combined total Annual Percentage Rate."
+    "annualApr": "Combined total Annual Percentage Rate estimate."
   },
   "networkErrorModal": {
     "title": "Network Error",
