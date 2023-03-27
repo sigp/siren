@@ -1,6 +1,5 @@
 import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 import { useMemo } from 'react'
-import reduceAddNum from '../utilities/reduceAddNum'
 import { formatUnits } from 'ethers/lib/utils'
 import { secondsInDay, secondsInEpoch } from '../constants/constants'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
@@ -27,15 +26,16 @@ const useEpochAprEstimate = (indices?: string[]) => {
 
   const totalInitialBalance = Number(
     formatUnits(
-      formattedCache?.map((validator) => validator[0]).reduce(reduceAddNum, 0) as number,
+      formattedCache.reduce((acc, validator) => acc + Number(validator[0]), 0) as number,
       'gwei',
     ),
   )
   const totalCurrentBalance = Number(
     formatUnits(
-      formattedCache
-        ?.map((validator) => validator[validator?.length - 1])
-        .reduce(reduceAddNum, 0) as number,
+      formattedCache.reduce(
+        (acc, validator) => acc + Number(validator[validator?.length - 1]),
+        0,
+      ) as number,
       'gwei',
     ),
   )
