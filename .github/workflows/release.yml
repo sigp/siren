@@ -87,9 +87,6 @@ jobs:
                   export GPG_TTY=$(tty)
                   echo "$GPG_SIGNING_KEY" | gpg --batch --import
                   mkdir ./artifacts
-                  dir
-                  cd out/make
-                  dir
                   mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   cd artifacts
                   echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
@@ -102,7 +99,12 @@ jobs:
                   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
               run: |
                   echo $env:GPG_SIGNING_KEY | gpg --batch --import
+                  dir
                   mkdir artifacts
+                  cd out/make
+                  dir
+                  cd zip
+                  dir
                   move out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   cd artifacts
                   gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
