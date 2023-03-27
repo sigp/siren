@@ -26,7 +26,7 @@ const ValidatorModal = () => {
       isVisible={!!validator}
       styles={{
         width: 'fit-content',
-        maxWidth: isTablet ? '448px' : '848px',
+        maxWidth: isTablet ? '448px' : '900px',
         height: isTablet ? '540px' : 'max-content',
       }}
       onClose={closeModal}
