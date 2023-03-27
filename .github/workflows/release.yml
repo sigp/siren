@@ -26,19 +26,19 @@ jobs:
         strategy:
             matrix:
                 arch: [
-                       aarch64-unknown-linux-gnu,
-                       x86_64-unknown-linux-gnu,
+                  #aarch64-unknown-linux-gnu,
+                  #     x86_64-unknown-linux-gnu,
                        # Requires apple signature secrets                      
                        # x86_64-apple-darwin,
                        x86_64-windows
                        ]
                 include:
-                    -   arch: aarch64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                        profile: maxperf
-                    -   arch: x86_64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                        profile: maxperf
+                  #  -   arch: aarch64-unknown-linux-gnu
+                  #      platform: ubuntu-latest
+                  #      profile: maxperf
+                  #  -   arch: x86_64-unknown-linux-gnu
+                  #      platform: ubuntu-latest
+                  #      profile: maxperf
                     # Requires apple signature secrets
                     #-   arch: x86_64-apple-darwin
                        #platform: macos-latest
@@ -87,9 +87,11 @@ jobs:
                   export GPG_TTY=$(tty)
                   echo "$GPG_SIGNING_KEY" | gpg --batch --import
                   mkdir ./artifacts
+                  dir
+                  cd out/make
+                  dir
                   mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   cd artifacts
-                  ls
                   echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   mv *zip* ..
 
