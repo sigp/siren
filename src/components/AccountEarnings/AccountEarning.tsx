@@ -10,12 +10,12 @@ import Spinner from '../Spinner/Spinner'
 import { useRecoilValue } from 'recoil'
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import EarningsLayout from './EarningsLayout'
-import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
 import { activeCurrency } from '../../recoil/atoms'
 import CurrencySelect from '../CurrencySelect/CurrencySelect'
 import useEarningsEstimate from '../../hooks/useEarningsEstimate'
 import Tooltip from '../ToolTip/Tooltip'
+import useEpochAprEstimate from '../../hooks/useEpochAprEstimate'
 
 export const AccountEarningFallback = () => {
   return (
@@ -28,10 +28,11 @@ export const AccountEarningFallback = () => {
 const AccountEarning = () => {
   const { t } = useTranslation()
   const currency = useRecoilValue(activeCurrency)
-  const { estimate, totalEarnings, annualizedEarningsPercent, estimateSelection, selectEstimate } =
-    useEarningsEstimate()
+  const { estimate, totalEarnings, estimateSelection, selectEstimate } = useEarningsEstimate()
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
   const { rates } = useRecoilValue(selectEthExchangeRates)
+
+  const { estimatedApr, textColor } = useEpochAprEstimate()
 
   const activeRate = rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
@@ -39,8 +40,6 @@ const AccountEarning = () => {
   const estimatedRateConversion = formattedRate * estimate
   const isEstimate = estimateSelection !== undefined
   const timeFrame = isEstimate ? EARNINGS_OPTIONS[estimateSelection]?.title : undefined
-
-  const annualizedTextColor = formatBalanceColor(annualizedEarningsPercent)
 
   const viewEarnings = async (value: number) => selectEstimate(value)
 
@@ -194,11 +193,11 @@ const AccountEarning = () => {
               </Tooltip>
               <Typography
                 type='text-subtitle3'
-                color={annualizedTextColor}
-                darkMode={annualizedTextColor}
+                color={textColor}
+                darkMode={textColor}
                 family='font-roboto'
               >
-                {annualizedEarningsPercent.toFixed(2)}%
+                {estimatedApr ? estimatedApr.toFixed(2) : '---'}%
               </Typography>
             </div>
           </div>

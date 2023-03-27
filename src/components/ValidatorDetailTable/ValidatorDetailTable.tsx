@@ -3,8 +3,7 @@ import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { useTranslation } from 'react-i18next'
-import calculateAprPercentage from '../../utilities/calculateAprPercentage'
-import { initialEthDeposit } from '../../constants/constants'
+import useEpochAprEstimate from '../../hooks/useEpochAprEstimate'
 
 export interface ValidatorDetailTableProps {
   validator: ValidatorInfo
@@ -12,11 +11,10 @@ export interface ValidatorDetailTableProps {
 
 export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator }) => {
   const { t } = useTranslation()
-  const { balance } = validator
+  const { balance, index } = validator
   const income = balance ? balance - 32 : 0
   const incomeColor = formatBalanceColor(income)
-  const aprPercentage = calculateAprPercentage(balance, initialEthDeposit)
-  const annualizedTextColor = formatBalanceColor(aprPercentage)
+  const { estimatedApr, textColor } = useEpochAprEstimate([String(index)])
   return (
     <>
       <div className='w-full lg:hidden'>
@@ -177,12 +175,8 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
             </Typography>
           </div>
           <div className='py-4 px-6'>
-            <Typography
-              darkMode={`dark:${annualizedTextColor}`}
-              color={annualizedTextColor}
-              type='text-caption1'
-            >
-              {`${aprPercentage.toFixed(2)} %`}
+            <Typography darkMode={`dark:${textColor}`} color={textColor} type='text-caption1'>
+              {`${estimatedApr ? estimatedApr.toFixed(2) : '---'} %`}
             </Typography>
           </div>
         </div>
