@@ -8,27 +8,14 @@ import {
   secondsInWeek,
 } from '../constants/constants'
 import calculateEpochEstimate from '../utilities/calculateEpochEstimate'
-import { validatorCacheBalanceResult } from '../recoil/atoms'
 import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
+import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 
 const useValidatorEarnings = (indices?: string[]) => {
   const validators = useRecoilValue(selectValidatorInfos)
-  const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
 
-  const filteredCacheData = useMemo(() => {
-    if (!validatorCacheData) return undefined
-
-    if (!indices) return validatorCacheData
-
-    return Object.keys(validatorCacheData)
-      .filter((key) => indices.includes(key))
-      .reduce((obj, key: string) => {
-        return Object.assign(obj, {
-          [key]: validatorCacheData[Number(key)],
-        })
-      }, {})
-  }, [validatorCacheData, indices])
+  const filteredCacheData = useFilteredValidatorCacheData(indices)
   const filteredValidators = useMemo(() => {
     return indices ? validators.filter(({ index }) => indices.includes(String(index))) : validators
   }, [validators, indices])
@@ -37,7 +24,6 @@ const useValidatorEarnings = (indices?: string[]) => {
     if (!filteredCacheData) return undefined
 
     return Object.values(filteredCacheData)
-      .map((cache) => cache.info)
       .flat()
       .reduce(function (r, a) {
         r[a.epoch] = r[a.epoch] || []
