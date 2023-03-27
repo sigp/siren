@@ -4,6 +4,7 @@ import { beaconEpochInterval, validatorCacheBalanceResult } from '../recoil/atom
 import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
 import usePollApi from './usePollApi'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
+import { ValidatorCacheResults } from '../types/validator'
 
 const useValidatorCachePolling = () => {
   const beaconUrl = useRecoilValue(selectBeaconUrl)
@@ -25,9 +26,11 @@ const useValidatorCachePolling = () => {
   })
 
   useEffect(() => {
-    const data = response?.data.data.validators
+    const data = response?.data.data.validators as ValidatorCacheResults
     if (data) {
-      setValidatorCache(data)
+      setValidatorCache(
+        Object.fromEntries(Object.entries(data).map(([key, { info }]) => [Number(key), info])),
+      )
     }
   }, [response])
 

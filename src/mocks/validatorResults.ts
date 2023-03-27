@@ -34,86 +34,76 @@ export const mockActiveValidators = [
 ]
 
 export const mockValidatorCacheResults = {
-  0: {
-    info: [
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-    ],
-  },
-  1: {
-    info: [
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-    ],
-  },
-  2: {
-    info: [
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-    ],
-  },
-  3: {
-    info: [
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-    ],
-  },
-  4: {
-    info: [
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-      {
-        epoch: 12345678,
-        total_balance: 3200000000,
-      },
-    ],
-  },
+  0: [
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+  ],
+  1: [
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+  ],
+  2: [
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+  ],
+  3: [
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+  ],
+  4: [
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+    {
+      epoch: 12345678,
+      total_balance: 3200000000,
+    },
+  ],
 }
 
 export const mockValidatorInfo = {
