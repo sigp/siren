@@ -99,11 +99,14 @@ jobs:
                   GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
               run: |
                   echo $env:GPG_SIGNING_KEY | gpg --batch --import
+                  gpg --list-secret-keys --with-keygrip
                   mkdir artifacts
-                  dir out/make/zip/win32/x64
-                  move out/make/zip/win32/x64/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  #move out/make/zip/win32/x64/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  move out/make/zip/win32/x64/*.zip ./artifacts/siren.zip
                   cd artifacts
-                  gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  dir 
+                  #gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  gpg --passphrase "$env:GPG_PASSPHRASE" --batch -ab siren.zip
                   move *zip* ..
 
             # =======================================================================
