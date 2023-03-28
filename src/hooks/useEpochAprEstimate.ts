@@ -4,7 +4,7 @@ import { formatUnits } from 'ethers/lib/utils'
 import { secondsInDay, secondsInEpoch } from '../constants/constants'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
 import formatBalanceColor from '../utilities/formatBalanceColor'
-import { TypographyColor } from '../components/Typography/Typography'
+import reduceAddNum from '../utilities/reduceAddNum'
 
 const useEpochAprEstimate = (indices?: string[]) => {
   const filteredValidatorCache = useFilteredValidatorCacheData(indices)
@@ -18,43 +18,39 @@ const useEpochAprEstimate = (indices?: string[]) => {
 
   const isValidEpochCount = formattedCache?.every((subArr) => subArr.length > 0)
 
-  if (!isValidEpochCount || !formattedCache)
-    return {
-      estimatedApr: undefined,
-      textColor: 'text-dark500' as TypographyColor,
-    }
-
-  const totalInitialBalance = Number(
-    formatUnits(
-      formattedCache.reduce((acc, validator) => acc + Number(validator[0]), 0) as number,
-      'gwei',
-    ),
-  )
-  const totalCurrentBalance = Number(
-    formatUnits(
-      formattedCache.reduce(
-        (acc, validator) => acc + Number(validator[validator?.length - 1]),
-        0,
-      ) as number,
-      'gwei',
-    ),
-  )
-
-  const rewards = totalCurrentBalance - totalInitialBalance
-  const multiplier = (secondsInDay * 365) / secondsInEpoch / formattedCache[0].length
-
-  const rewardsMultiplied = rewards * multiplier
-
-  const projectedTotalBalance = rewardsMultiplied + totalInitialBalance
-
-  const estimatedApr = calculateAprPercentage(projectedTotalBalance, totalInitialBalance)
-
-  const textColor = formatBalanceColor(estimatedApr)
-
-  return {
-    estimatedApr,
-    textColor,
+  const formatForWithdrawal = (arr: number[]) => {
+    const foundIndex = arr.findIndex((value) => value > 32 && value < 32.001)
+    return foundIndex === -1 ? arr : [arr[foundIndex], ...arr.slice(foundIndex + 1)]
   }
+
+  const mappedTotalApr = useMemo(() => {
+    return formattedCache?.map((cache) => {
+      const formattedValues = cache.map((value) => Number(formatUnits(value, 'gwei')))
+      const formattedCache = formatForWithdrawal(formattedValues)
+
+      const initialBalance = formattedCache[0]
+      const currentBalance = formattedCache[formattedCache.length - 1]
+      const rewards = currentBalance - initialBalance
+      const multiplier = (secondsInDay * 365) / secondsInEpoch / formattedCache.length
+
+      const rewardsMultiplied = rewards * multiplier
+      const projectedBalance = rewardsMultiplied + initialBalance
+
+      return calculateAprPercentage(projectedBalance, initialBalance)
+    })
+  }, [formattedCache])
+
+  return useMemo(() => {
+    const estimatedApr = mappedTotalApr
+      ? mappedTotalApr.reduce(reduceAddNum, 0) / mappedTotalApr.length
+      : undefined
+    const textColor = formatBalanceColor(estimatedApr)
+
+    return {
+      estimatedApr,
+      textColor,
+    }
+  }, [mappedTotalApr, isValidEpochCount])
 }
 
 export default useEpochAprEstimate
