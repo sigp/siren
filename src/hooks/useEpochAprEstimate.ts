@@ -45,7 +45,7 @@ const useEpochAprEstimate = (indices?: string[]) => {
 
   const rewardsMultiplied = rewards * multiplier
 
-  const projectedTotalBalance = rewardsMultiplied + totalCurrentBalance
+  const projectedTotalBalance = rewardsMultiplied + totalInitialBalance
 
   const estimatedApr = calculateAprPercentage(projectedTotalBalance, totalInitialBalance)
 
