@@ -101,10 +101,11 @@ jobs:
                   echo $env:GPG_SIGNING_KEY | gpg --batch --import
                   dir
                   mkdir artifacts
-                  cd out/make
-                  dir
-                  cd zip
-                  dir
+                  dir out/make/zip
+                  dir out/make/zip/win32
+                  dir out/*/*/*
+                  dir out/\*
+                  
                   move out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   cd artifacts
                   gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
