@@ -4,7 +4,6 @@ import { formatUnits } from 'ethers/lib/utils'
 import { secondsInDay, secondsInEpoch } from '../constants/constants'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
 import formatBalanceColor from '../utilities/formatBalanceColor'
-import reduceAddNum from '../utilities/reduceAddNum'
 
 const useEpochAprEstimate = (indices?: string[]) => {
   const filteredValidatorCache = useFilteredValidatorCacheData(indices)
@@ -16,7 +15,7 @@ const useEpochAprEstimate = (indices?: string[]) => {
     )
   }, [filteredValidatorCache])
 
-  const isValidEpochCount = formattedCache?.every((subArr) => subArr.length > 0)
+  const isValidEpochCount = formattedCache?.every((subArr) => subArr.length > 1)
 
   const formatForWithdrawal = (arr: number[]) => {
     const foundIndex = arr.findIndex((value) => value > 32 && value < 32.001)
@@ -26,12 +25,12 @@ const useEpochAprEstimate = (indices?: string[]) => {
   const mappedTotalApr = useMemo(() => {
     return formattedCache?.map((cache) => {
       const formattedValues = cache.map((value) => Number(formatUnits(value, 'gwei')))
-      const formattedCache = formatForWithdrawal(formattedValues)
+      const formattedWithdrawalCache = formatForWithdrawal(formattedValues)
 
-      const initialBalance = formattedCache[0]
-      const currentBalance = formattedCache[formattedCache.length - 1]
+      const initialBalance = formattedWithdrawalCache[0]
+      const currentBalance = formattedWithdrawalCache[formattedWithdrawalCache.length - 1]
       const rewards = currentBalance - initialBalance
-      const multiplier = (secondsInDay * 365) / secondsInEpoch / formattedCache.length
+      const multiplier = (secondsInDay * 365) / secondsInEpoch / formattedWithdrawalCache.length
 
       const rewardsMultiplied = rewards * multiplier
       const projectedBalance = rewardsMultiplied + initialBalance
@@ -41,9 +40,10 @@ const useEpochAprEstimate = (indices?: string[]) => {
   }, [formattedCache])
 
   return useMemo(() => {
-    const estimatedApr = mappedTotalApr
-      ? mappedTotalApr.reduce(reduceAddNum, 0) / mappedTotalApr.length
-      : undefined
+    const estimatedApr =
+      mappedTotalApr && isValidEpochCount
+        ? mappedTotalApr.reduce((acc, a) => acc + a, 0) / mappedTotalApr.length
+        : undefined
     const textColor = formatBalanceColor(estimatedApr)
 
     return {
