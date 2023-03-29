@@ -11,7 +11,7 @@ on:
 env:
     DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-    IMAGE_NAME: ${{ github.repository_owner}}/siren
+    IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/siren
 
 jobs:
     # Extract the VERSION which is either `latest` or `vX.Y.Z`, and the VERSION_SUFFIX
