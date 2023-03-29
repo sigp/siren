@@ -44,6 +44,15 @@ describe('useEpochAprEstimate hook', () => {
     })
   })
 
+  it('should return correct values when provided an array of indexes', () => {
+    mockedRecoilValue.mockReturnValue(mockValidatorCache)
+    const { result } = renderHook(() => useEpochAprEstimate(['1234567']))
+    expect(result.current).toStrictEqual({
+      estimatedApr: 1.3438636363304557,
+      textColor: 'text-success',
+    })
+  })
+
   it('should return correct when there is a withdrawal value', () => {
     mockedRecoilValue.mockReturnValue(mockedWithdrawalCash)
     const { result } = renderHook(() => useEpochAprEstimate())
