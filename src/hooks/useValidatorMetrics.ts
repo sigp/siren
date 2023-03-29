@@ -16,10 +16,13 @@ const useValidatorMetrics = () => {
   const validatorList = validators?.map(({ index }) => index)
   const [results, setResults] = useState<ValidatorMetricEpoch>()
 
-  const epochIds = useMemo(() => {
-    const { info = [] } = validatorCacheData?.[Object.keys(validatorCacheData)[0]] ?? {}
-    return info.map(({ epoch }) => epoch)
-  }, [validatorCacheData])
+  const epochIds = useMemo(
+    () =>
+      validatorCacheData
+        ? Object.values(validatorCacheData)[0]?.map(({ epoch }) => epoch) || []
+        : [],
+    [validatorCacheData],
+  )
 
   const fetchMetrics = useCallback(async () => {
     try {
