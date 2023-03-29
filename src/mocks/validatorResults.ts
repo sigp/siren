@@ -133,6 +133,11 @@ export const mockValidatorCache = {
   ],
 }
 
+export const mockShortValidatorCache = {
+  1234567: [{ epoch: '12345678', total_balance: 32 }],
+  1234568: [{ epoch: '12345678', total_balance: 32 }],
+}
+
 export const mockedWithdrawalCash = {
   1234567: [
     { epoch: '12345678', total_balance: 33 },
@@ -157,6 +162,33 @@ export const mockedWithdrawalCash = {
     { epoch: '12345679', total_balance: 32.00017 },
     { epoch: '12345679', total_balance: 32.00018 },
     { epoch: '12345679', total_balance: 32.00019 },
+  ],
+}
+
+export const mockedRecentWithdrawalCash = {
+  1234567: [
+    { epoch: '12345678', total_balance: 33 },
+    { epoch: '12345679', total_balance: 33.00002 },
+    { epoch: '12345679', total_balance: 33.000025 },
+    { epoch: '12345679', total_balance: 33.00003 },
+    { epoch: '12345679', total_balance: 33.00015 },
+    { epoch: '12345679', total_balance: 33.00016 },
+    { epoch: '12345679', total_balance: 33.00017 },
+    { epoch: '12345679', total_balance: 33.00018 },
+    { epoch: '12345679', total_balance: 33.00019 },
+    { epoch: '12345679', total_balance: 32.0001 },
+  ],
+  1234568: [
+    { epoch: '12345678', total_balance: 33 },
+    { epoch: '12345679', total_balance: 33.00002 },
+    { epoch: '12345679', total_balance: 33.000025 },
+    { epoch: '12345679', total_balance: 33.00003 },
+    { epoch: '12345679', total_balance: 33.00015 },
+    { epoch: '12345679', total_balance: 33.00016 },
+    { epoch: '12345679', total_balance: 33.00017 },
+    { epoch: '12345679', total_balance: 33.00018 },
+    { epoch: '12345679', total_balance: 33.00019 },
+    { epoch: '12345679', total_balance: 32.0001 },
   ],
 }
 

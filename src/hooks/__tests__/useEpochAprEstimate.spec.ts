@@ -6,6 +6,8 @@ import {
   mockValidatorCache,
   mockedWithdrawalCash,
   mockedWithdrawalCashLoss,
+  mockShortValidatorCache,
+  mockedRecentWithdrawalCash,
 } from '../../mocks/validatorResults'
 
 jest.mock('ethers/lib/utils', () => ({
@@ -15,7 +17,18 @@ jest.mock('ethers/lib/utils', () => ({
 const mockedFormatUnits = formatUnits as jest.MockedFn<typeof formatUnits>
 
 describe('useEpochAprEstimate hook', () => {
+  beforeEach(() => {
+    mockedFormatUnits.mockImplementation((value) => value.toString())
+  })
   it('should return default values', () => {
+    const { result } = renderHook(() => useEpochAprEstimate())
+    expect(result.current).toStrictEqual({
+      estimatedApr: undefined,
+      textColor: 'text-dark500',
+    })
+  })
+  it('should return default values when not enough epoch data', () => {
+    mockedRecoilValue.mockReturnValue(mockShortValidatorCache)
     const { result } = renderHook(() => useEpochAprEstimate())
     expect(result.current).toStrictEqual({
       estimatedApr: undefined,
@@ -24,7 +37,6 @@ describe('useEpochAprEstimate hook', () => {
   })
   it('should return correct values', () => {
     mockedRecoilValue.mockReturnValue(mockValidatorCache)
-    mockedFormatUnits.mockImplementation((value) => value.toString())
     const { result } = renderHook(() => useEpochAprEstimate())
     expect(result.current).toStrictEqual({
       estimatedApr: 1.3438636363304557,
@@ -34,7 +46,6 @@ describe('useEpochAprEstimate hook', () => {
 
   it('should return correct when there is a withdrawal value', () => {
     mockedRecoilValue.mockReturnValue(mockedWithdrawalCash)
-    mockedFormatUnits.mockImplementation((value) => value.toString())
     const { result } = renderHook(() => useEpochAprEstimate())
     expect(result.current).toStrictEqual({
       estimatedApr: 3.8495973450145105,
@@ -44,11 +55,19 @@ describe('useEpochAprEstimate hook', () => {
 
   it('should return correct when there is a withdrawal values at a loss', () => {
     mockedRecoilValue.mockReturnValue(mockedWithdrawalCashLoss)
-    mockedFormatUnits.mockImplementation((value) => value.toString())
     const { result } = renderHook(() => useEpochAprEstimate())
     expect(result.current).toStrictEqual({
       estimatedApr: -0.1710932155095768,
       textColor: 'text-error',
+    })
+  })
+
+  it('should return correct values when last epoch was a withdrawal', () => {
+    mockedRecoilValue.mockReturnValue(mockedRecentWithdrawalCash)
+    const { result } = renderHook(() => useEpochAprEstimate())
+    expect(result.current).toStrictEqual({
+      estimatedApr: 0,
+      textColor: 'text-dark500',
     })
   })
 })
