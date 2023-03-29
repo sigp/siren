@@ -38,9 +38,7 @@ const useValidatorMetrics = () => {
   }, [validatorList, beaconEndpoint, lastEpoch])
 
   useEffect(() => {
-    if (!epochIds || !epochIds.length || !validatorList || !validatorList.length) {
-      return
-    }
+    if (!epochIds || !epochIds.length || !validatorList || !validatorList.length) return
 
     setEpoch(epochIds[epochIds.length - 1])
   }, [epochIds, validatorList])
