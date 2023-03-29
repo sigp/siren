@@ -9,6 +9,7 @@ import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedom
 import { selectAtHeadSlot } from '../../recoil/selectors/selectAtHeadSlot'
 import useParticipationRate from '../../hooks/useParticipationRate'
 import addClassString from '../../utilities/addClassString'
+import { StatusColor } from '../../types'
 
 export const NetworkStatsFallback = () => (
   <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center'>
@@ -59,7 +60,7 @@ const NetworkStats = () => {
       />
       <NetworkPeerSpeedometer />
       <NetworkStatBlock
-        status={hasParticipation ? status : 'bg-dark100'}
+        status={hasParticipation ? status : StatusColor.DARK}
         toolTipId='participationRate'
         toolTipWidth={200}
         toolTipText={

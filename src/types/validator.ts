@@ -76,7 +76,7 @@ export type FormattedValidatorCache = {
 }
 
 export type ValidatorCacheResults = {
-  [key: number]: ValidatorCacheDataInfo
+  [key: string]: ValidatorCacheDataInfo
 }
 
 export type ValidatorCacheDataInfo = {

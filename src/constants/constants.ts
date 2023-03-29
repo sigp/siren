@@ -227,7 +227,7 @@ export const CURRENCIES = [
 export const REQUIRED_VALIDATOR_VERSION = {
   major: 3,
   minor: 5,
-  patch: 0,
+  patch: 1,
 }
 
 export const DEFAULT_MAX_NETWORK_ERROR = 3
