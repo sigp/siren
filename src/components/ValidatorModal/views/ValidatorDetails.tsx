@@ -87,7 +87,7 @@ const ValidatorDetails = () => {
                     </Typography>
                   </div>
                 </div>
-                <div className='group py-3 z-20 space-y-2 px-6 lg:px-3 relative'>
+                <div className='group py-3 z-20 space-y-2 px-6 lg:px-3 cursor-help relative'>
                   <Typography type='text-caption2' isBold isUpperCase>
                     {t('validatorManagement.summary.avgEffectiveness')}
                   </Typography>

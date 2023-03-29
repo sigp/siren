@@ -40,7 +40,7 @@ const OverallEffectiveness = () => {
   const status = getAvgEffectivenessStatus(combinedEffectiveness)
 
   return (
-    <div className='p-3 group space-y-2 relative'>
+    <div className='p-3 group space-y-2 relative cursor-help'>
       <Typography type='text-caption2' isBold isUpperCase>
         {t('validatorManagement.summary.avgEffectiveness')}
       </Typography>
