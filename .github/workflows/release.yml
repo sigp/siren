@@ -1,8 +1,9 @@
 name:   Release Suite
 
-on: [pull_request]
-              tags:
-            - v*
+on:
+  push:
+    tags:
+      - v*
 
 env:
     REPO_NAME: ${{ github.repository_owner }}/siren
@@ -28,7 +29,7 @@ jobs:
                 arch: [
                        aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
-                       # Requires apple signature secrets                      
+                       # Requires apple signature secrets
                        # x86_64-apple-darwin,
                        # x86_64-windows
                        ]
