@@ -7,6 +7,7 @@ import { useRecoilValue } from 'recoil'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
 import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { StatusColor } from '../../types'
 
 const NetworkHealth = () => {
   const { t } = useTranslation()
@@ -37,7 +38,7 @@ const NetworkHealth = () => {
             ? t('vcHealthCheck.networkName', { network: networkName })
             : t('networkUnavailable')
         }
-        status={natOpen ? 'bg-success' : 'bg-dark100'}
+        status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
       />
       <DiagnosticCard
         size='health'

@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next'
 import ValidatorMetric from './ValidatorMetric'
 import { useSetRecoilState } from 'recoil'
 import { isSideBarOpen } from '../../recoil/atoms'
+import BeaconNetwork from '../BeaconNetwork/BeaconNetwork'
 
 const TopBar = () => {
   const { t } = useTranslation()
@@ -53,20 +54,25 @@ const TopBar = () => {
           <SlasherLogo className='w-6 h-6 text-primary' />
         </div>
       </div>
-      <div className='h-full flex opacity-20'>
-        <Wallet className='hidden lg:flex' borderStyle='border-l' />
-        <Button
-          className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
-          type={ButtonFace.ICON}
-        >
-          <i className='bi bi-clock-history text-2xl text-dark300' />
-        </Button>
-        <Button
-          className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
-          type={ButtonFace.ICON}
-        >
-          <i className='bi bi-bell-fill text-2xl text-dark300' />
-        </Button>
+      <div className='h-full flex'>
+        <Suspense fallback={<div />}>
+          <BeaconNetwork />
+        </Suspense>
+        <div className='h-full flex opacity-20'>
+          <Wallet className='hidden lg:flex' borderStyle='border-l' />
+          <Button
+            className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
+            type={ButtonFace.ICON}
+          >
+            <i className='bi bi-clock-history text-2xl text-dark300' />
+          </Button>
+          <Button
+            className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
+            type={ButtonFace.ICON}
+          >
+            <i className='bi bi-bell-fill text-2xl text-dark300' />
+          </Button>
+        </div>
         {/* <div className='h-full w-8 bg-gradient-to-b from-primary to-secondary flex items-center justify-center cursor-pointer'> */}
         {/*   <i className='bi bi-three-dots-vertical text-white text-3xl' /> */}
         {/* </div> */}

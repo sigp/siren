@@ -1,9 +1,9 @@
-import Rodal from 'rodal'
 import React, { FC, ReactNode } from 'react'
 import { UiMode } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation } from 'react-i18next'
+import RodalModal from '../RodalModal/RodalModal'
 
 export interface DisclosureModalProps {
   isOpen: boolean
@@ -18,9 +18,9 @@ export interface DisclosureModalProps {
 const DisclosureModal: FC<DisclosureModalProps> = ({
   isOpen,
   backgroundImage,
-  mode,
   onClose,
   externalUrl,
+  mode,
   externalTarget,
   children,
 }) => {
@@ -28,17 +28,13 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
   const isTablet = useMediaQuery('(max-width: 1024px)')
 
   return (
-    <Rodal
-      visible={isOpen}
-      customStyles={{
-        backgroundColor: mode === UiMode.DARK ? '#1E1E1E' : 'white',
-        width: '100%',
-        maxWidth: isTablet ? '448px' : '949px',
-        height: 'max-content',
-        overflow: 'scroll',
-        zIndex: 999,
-      }}
+    <RodalModal
+      isVisible={isOpen}
       onClose={onClose}
+      uiMode={mode && { mode }}
+      styles={{
+        maxWidth: isTablet ? '448px' : '949px',
+      }}
     >
       <div className='w-full h-full flex'>
         <div
@@ -58,7 +54,7 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
           )}
         </div>
       </div>
-    </Rodal>
+    </RodalModal>
   )
 }
 

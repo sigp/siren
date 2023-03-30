@@ -1,15 +1,13 @@
 import { useState } from 'react'
 import ValidatorDetails from './views/ValidatorDetails'
-import Rodal from 'rodal'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Spinner from '../Spinner/Spinner'
 import { selectValidatorDetail } from '../../recoil/selectors/selectValidatorDetails'
 import { validatorIndex } from '../../recoil/atoms'
-import useUiMode from '../../hooks/useUiMode'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import RodalModal from '../RodalModal/RodalModal'
 
 const ValidatorModal = () => {
-  const { mode } = useUiMode()
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const validator = useRecoilValue(selectValidatorDetail)
   const [view] = useState('')
@@ -24,25 +22,23 @@ const ValidatorModal = () => {
     }
   }
   return (
-    <Rodal
-      visible={!!validator}
-      customStyles={{
-        backgroundColor: mode === 'DARK' ? '#1E1E1E' : 'white',
-        width: '100%',
-        maxWidth: isTablet ? '448px' : '848px',
+    <RodalModal
+      isVisible={!!validator}
+      styles={{
+        width: 'fit-content',
+        maxWidth: isTablet ? '448px' : '900px',
         height: isTablet ? '540px' : 'max-content',
-        overflow: 'scroll',
       }}
       onClose={closeModal}
     >
       {validator ? (
         renderContent()
       ) : (
-        <div className='w-full h-640 flex items-center justify-center'>
+        <div className='w-500 h-640 flex items-center justify-center'>
           <Spinner />
         </div>
       )}
-    </Rodal>
+    </RodalModal>
   )
 }
 

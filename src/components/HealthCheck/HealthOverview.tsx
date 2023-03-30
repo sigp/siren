@@ -5,6 +5,7 @@ import Status from '../Status/Status'
 import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
 import { Trans, useTranslation } from 'react-i18next'
 import HealthDisclosure from '../Disclosures/HealthDisclosure'
+import { StatusColor } from '../../types'
 
 const HealthOverview = () => {
   const { t } = useTranslation()
@@ -12,8 +13,8 @@ const HealthOverview = () => {
     useDeviceDiagnostics()
 
   const isSufficientSpace = totalDiskFree > 240
-  const isSufficientRam = ramStatus === 'bg-success'
-  const isSufficientCpu = cpuStatus === 'bg-success'
+  const isSufficientRam = ramStatus === StatusColor.SUCCESS
+  const isSufficientCpu = cpuStatus === StatusColor.SUCCESS
 
   return (
     <div className='relative overflow-hidden mt-4 w-full md:h-64 flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between p-4 border border-dark200'>
@@ -36,7 +37,7 @@ const HealthOverview = () => {
             }
           />
           <DiagnosticOverviewText
-            status={ramStatus === 'bg-success' ? 'text-success' : 'text-error'}
+            status={ramStatus === StatusColor.SUCCESS ? 'text-success' : 'text-error'}
             text={isSufficientRam ? t('vcHealthCheck.hasRam') : t('vcHealthCheck.checkLowRam')}
           />
         </div>
