@@ -1,36 +1,47 @@
 import { useEffect, useRef, useState } from 'react'
+import { PollingInterval, PollingIntervalOptions } from '../types'
 
 const usePollingInterval = (
   callback: () => void,
   delay: number,
-  options?: { isSkip: boolean; onClearInterval?: () => void },
-): { intervalId: NodeJS.Timer | undefined } => {
+  options?: PollingIntervalOptions,
+): PollingInterval => {
   const [intervalId, setId] = useState<NodeJS.Timer>()
   const savedCallback = useRef<() => void>()
+  const isSkip = options?.isSkip
+
+  const clearPoll = (id: NodeJS.Timer) => {
+    options?.onClearInterval?.()
+    clearInterval(id)
+    setId(undefined)
+  }
 
   useEffect(() => {
     savedCallback.current = callback
   }, [callback])
 
   useEffect(() => {
-    if (options?.isSkip) return
+    if (intervalId || isSkip) return
 
     function tick() {
       savedCallback.current?.()
     }
-    if (delay !== null) {
-      const id = setInterval(tick, delay)
-      setId(id)
+
+    const id = setInterval(tick, delay)
+    setId(id)
+  }, [delay, intervalId, isSkip])
+
+  useEffect(() => {
+    if (intervalId) {
       return () => {
-        options?.onClearInterval?.()
-        clearInterval(id)
-        setId(undefined)
+        clearPoll(intervalId)
       }
     }
-  }, [delay])
+  }, [intervalId])
 
   return {
     intervalId,
+    clearPoll,
   }
 }
 

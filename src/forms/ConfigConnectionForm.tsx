@@ -24,6 +24,8 @@ import { EndpointStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
 import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
+import isRequiredVersion from '../utilities/isRequiredVersion'
+import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -43,6 +45,7 @@ export interface RenderProps {
   formType: ConfigType
   isValidBeaconNode: boolean
   isValidValidatorClient: boolean
+  isVersionError: boolean
   setType: (type: ConfigType) => void
   isLoading: boolean
   onSubmit: () => void
@@ -65,6 +68,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const [isInitialApiCheck, setIsInitialApiCheck] = useState(true)
+  const [isVersionError, setVersionError] = useState(false)
 
   const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
   const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
@@ -188,6 +192,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
   const onSubmit = async () => {
     const values = getValues()
+    setVersionError(false)
 
     const errors = validationErrors(values)
 
@@ -205,7 +210,14 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
         fetchBeaconVersion(beaconNode),
       ])
 
-      setValidatorVersion(vcResult.data.data.version)
+      const vcVersion = vcResult.data.data.version
+
+      if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
+        setVersionError(true)
+        return
+      }
+
+      setValidatorVersion(vcVersion)
       setBeaconVersion(beaconResult.data.data.version)
 
       if (isRemember) {
@@ -248,6 +260,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           setType,
           isValidBeaconNode,
           isValidValidatorClient,
+          isVersionError,
           formType,
         })}
     </form>

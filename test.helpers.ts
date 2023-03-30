@@ -1,7 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import React from 'react'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 
 export * from '@testing-library/react'
 
@@ -50,3 +50,4 @@ export const mockResponse = {
 
 export const mockedRecoilValue = useRecoilValue as jest.MockedFn<typeof useRecoilValue>
 export const mockedRecoilState = useRecoilState as jest.MockedFn<typeof useRecoilState>
+export const mockedSetRecoilState = useSetRecoilState as jest.MockedFn<typeof useSetRecoilState>

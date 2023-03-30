@@ -3,13 +3,14 @@ import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import useValidatorEpochBalance from '../../hooks/useValidatorEpochBalance'
 import { useEffect, useMemo, useState } from 'react'
-import Rodal from 'rodal'
 import Spinner from '../Spinner/Spinner'
 import LoadingDots from '../LoadingDots/LoadingDots'
 import useUiMode from '../../hooks/useUiMode'
 import CheckBox from '../CheckBox/CheckBox'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { ValidatorIndicesStorage } from '../../types/storage'
+import RodalModal from '../RodalModal/RodalModal'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 export const ValidatorBalanceFallback = () => (
   <div className='flex-1 flex h-24 w-full justify-center items-center'>
@@ -20,6 +21,7 @@ export const ValidatorBalanceFallback = () => (
 const ValidatorBalances = () => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
+  const isTablet = useMediaQuery('(max-width: 1024px)')
   const [hiddenValidators, setHiddenValidators] = useState<string[]>([])
   const [isLegendModal, toggleModal] = useState(false)
   const { epochs, timestamps, isSufficientData } = useValidatorEpochBalance()
@@ -96,13 +98,15 @@ const ValidatorBalances = () => {
             {balanceData.datasets.length}
           </Typography>
         </div>
-        <Rodal
-          customStyles={{
+        <RodalModal
+          styles={{
             backgroundColor: mode === 'DARK' ? '#1E1E1E' : 'white',
+            width: isTablet ? '100%' : '400px',
+            height: '240px',
             overflow: 'hidden',
           }}
           onClose={onClose}
-          visible={isLegendModal}
+          isVisible={isLegendModal}
         >
           <div className='w-full h-full flex flex-col'>
             <div className='w-full p-4 border-b-style500'>
@@ -130,7 +134,7 @@ const ValidatorBalances = () => {
               ))}
             </ul>
           </div>
-        </Rodal>
+        </RodalModal>
         {isSufficientData ? (
           <StepChart
             onClick={viewBalanceLegend}

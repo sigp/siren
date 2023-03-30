@@ -1,17 +1,17 @@
-import { StatusType } from '../types'
+import { StatusColor } from '../types'
 
-const formatAtHeadSlotStatus = (status?: number): StatusType | 'bg-dark100' => {
-  if (status === undefined) return 'bg-dark100'
+const formatAtHeadSlotStatus = (status?: number): StatusColor => {
+  if (status === undefined) return StatusColor.DARK
 
   switch (true) {
     case status >= -1:
-      return 'bg-success'
+      return StatusColor.SUCCESS
     case status <= -2 && status > -5:
-      return 'bg-warning'
+      return StatusColor.WARNING
     case status <= -5:
-      return 'bg-error'
+      return StatusColor.ERROR
     default:
-      return 'bg-dark100'
+      return StatusColor.DARK
   }
 }
 
