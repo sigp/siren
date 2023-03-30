@@ -4,7 +4,6 @@ import '@testing-library/jest-dom'
 
 jest.mock('recoil', () => ({
   useRecoilValue: jest.fn(),
-  useSetRecoilState: jest.fn(),
   useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
   atom: jest.fn(),
   selector: jest.fn(),

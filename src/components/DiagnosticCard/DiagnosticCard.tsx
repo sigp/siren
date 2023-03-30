@@ -3,16 +3,15 @@ import Typography, { TypographyType } from '../Typography/Typography'
 import network from '../../assets/images/network.svg'
 import { ReactComponent as NotAvailable } from '../../assets/images/notAvalilable.svg'
 import darkNetwork from '../../assets/images/darkNetwork.svg'
-import Status from '../Status/Status'
+import Status, { StatusType } from '../Status/Status'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
 import generateId from '../../utilities/generateId'
 import Tooltip from '../ToolTip/Tooltip'
 import { ITooltip } from 'react-tooltip'
 import addClassString from '../../utilities/addClassString'
-import { StatusColor } from '../../types'
 
 export interface DiagnosticCardProps {
-  status?: StatusColor
+  status?: StatusType
   percent?: number
   title: string
   metric?: string

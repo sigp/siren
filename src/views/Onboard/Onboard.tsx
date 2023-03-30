@@ -8,18 +8,14 @@ import ValidatorSetup from './views/ValidatorSetup/ValidatorSetup'
 const Onboard = () => {
   const view = useRecoilValue(onBoardView)
 
-  const renderView = () => {
-    switch (view) {
-      case OnboardView.CONFIGURE:
-        return <ConfigureConnection />
-      case OnboardView.SETUP:
-        return <ValidatorSetup />
-      default:
-        return <SelectProvider />
-    }
+  switch (view) {
+    case OnboardView.CONFIGURE:
+      return <ConfigureConnection />
+    case OnboardView.SETUP:
+      return <ValidatorSetup />
+    default:
+      return <SelectProvider />
   }
-
-  return <div className='relative h-screen w-screen overflow-hidden flex'>{renderView()}</div>
 }
 
 export default Onboard

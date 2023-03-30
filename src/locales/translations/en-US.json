@@ -108,7 +108,6 @@
   "nodesCachingData": "Node caching data...",
   "thisCouldTakeTime": "This could take approximately 20 minutes.",
   "makeSelection": "make selection",
-  "lighthouseVersionError": "Lighthouse version {{major}}.{{minor}}.{{patch}} is required. Please update dependency and retry.",
   "hardwareInfo": {
     "usage": "Hardware Usage",
     "diagnostics": "Device Diagnostics"
@@ -132,18 +131,7 @@
     "queue": "Queue",
     "success": "Success",
     "active-slash": "active-slash",
-    "active_ongoing": "Active Ongoing",
-    "pending_initialized": "Init Pending",
-    "pending_queued": "Queue Pending",
-    "active_exiting": "Active Exiting",
-    "active_slashed": "Active Slashed",
-    "exited_slashed": "Exited Slashed",
-    "exited_unslashed": "Exited Unslashed",
-    "withdrawal_possible": "Withdrawal Possible",
-    "withdrawal_done": "Withdrawal Done",
-    "pending": "Pending",
-    "exited": "Exited",
-    "withdrawal": "Withdrawal"
+    "active_ongoing": "Active Ongoing"
   },
   "accountEarnings": {
     "annualized": "annualized",
@@ -261,14 +249,6 @@
     "title": "Validator Management",
     "overview": "Overview",
     "day": "Day",
-    "effectiveness": {
-      "targetVote": "Target Vote",
-      "headVote": "Head Vote",
-      "overallTargetDescription": "Average accuracy of all validator finality votes indicating what the validators see as the first block in the current epoch",
-      "overallHeadHitDescription": "Average accuracy of all validator votes of the block the validator sees at the head of the chain",
-      "targetDescription": "Average accuracy of selected validator finality votes indicating what the validators see as the first block in the current epoch",
-      "headHitDescription": "Average accuracy of selected validator votes of the block the validator sees at the head of the chain"
-    },
     "summary": {
       "active": "active",
       "totalBalance": "Total Balance",
@@ -315,15 +295,6 @@
     "ethEstimate": "Estimated {{time}} ETH earnings of all validators under current network and device conditions.",
     "ethTotal": "Total ETH earnings of all validators",
     "fiatEstimate": "Estimated {{time}} earnings converted to selected fiat currency exchange rate.",
-    "fiatTotal": "Total earnings converted to selected fiat currency exchange rate.",
-    "annualApr": "Combined total Annual Percentage Rate estimate."
-  },
-  "networkErrorModal": {
-    "title": "Network Error",
-    "beaconAndValidator": "Beacon Node and Validator Client",
-    "beaconNode": "Beacon Node",
-    "validatorClient": "Validator Client",
-    "affectedNetworks": "Siren failed to maintain connection to the designated <0>{{network}}</0>.",
-    "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
+    "fiatTotal": "Total earnings converted to selected fiat currency exchange rate."
   }
 }

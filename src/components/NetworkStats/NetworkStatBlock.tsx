@@ -1,15 +1,14 @@
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import Status from '../Status/Status'
+import Status, { StatusType } from '../Status/Status'
 import Tooltip from '../ToolTip/Tooltip'
 import addClassString from '../../utilities/addClassString'
-import { StatusColor } from '../../types'
 
 export interface NetworkStatBlockProps {
   title: string
   metric: string
   subTitle?: string
-  status?: StatusColor
+  status?: StatusType
   className?: string
   toolTipId?: string
   toolTipText?: string

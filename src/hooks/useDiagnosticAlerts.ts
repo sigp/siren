@@ -2,7 +2,7 @@ import useDeviceDiagnostics from './useDeviceDiagnostics'
 import { useRecoilValue } from 'recoil'
 import { validatorPeerCount } from '../recoil/atoms'
 import { useMemo } from 'react'
-import { Alert, StatusColor } from '../types'
+import { Alert } from '../types'
 import { useTranslation } from 'react-i18next'
 
 const useDiagnosticAlerts = () => {
@@ -16,7 +16,7 @@ const useDiagnosticAlerts = () => {
     return {
       message: t('alert.natClosedStatus', { type: t('alert.type.network') }),
       subText: t('poor'),
-      severity: StatusColor.ERROR,
+      severity: 'bg-error',
     }
   }, [natOpen])
 
@@ -28,13 +28,13 @@ const useDiagnosticAlerts = () => {
         return {
           message: t('alert.peerCountLow', { type: t('alert.type.nodeValidator') }),
           subText: t('poor'),
-          severity: StatusColor.ERROR,
+          severity: 'bg-error',
         }
       case peers > 20 && peers < 50:
         return {
           message: t('alert.peerCountMedium', { type: t('alert.type.nodeValidator') }),
           subText: t('fair'),
-          severity: StatusColor.WARNING,
+          severity: 'bg-warning',
         }
       default:
         return undefined

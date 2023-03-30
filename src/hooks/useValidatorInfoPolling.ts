@@ -1,37 +1,53 @@
-import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil'
+import usePollingInterval from './usePollingInterval'
 import { secondsInSlot } from '../constants/constants'
-import { useEffect } from 'react'
+import { fetchValidatorStatuses } from '../api/beacon'
+import { useEffect, useState } from 'react'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { selectValidators } from '../recoil/selectors/selectValidators'
 import { validatorInfoInterval, validatorStateInfo } from '../recoil/atoms'
 import { Validator } from '../types/validator'
-import usePollApi from './usePollApi'
 
 const useValidatorInfoPolling = () => {
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
-  const { contents: validators } = useRecoilValueLoadable(selectValidators)
+  const [isReady, setReady] = useState(false)
+  const { contents: validators, state } = useRecoilValueLoadable(selectValidators)
   const setStateInfo = useSetRecoilState(validatorStateInfo)
+  const [validatorInterval, setInterval] = useRecoilState(validatorInfoInterval)
+  const isSkip = Boolean(validatorInterval) && isReady
 
-  const validatorInfoUrl = baseBeaconUrl && `${baseBeaconUrl}/eth/v1/beacon/states/head/validators`
-  const validatorIdString =
-    validators?.length && validators.map((validator: Validator) => validator.pubKey).join(',')
+  useEffect(() => {
+    setReady(true)
+  }, [])
 
-  const { response } = usePollApi({
-    time: secondsInSlot * 1000,
-    isReady: validatorInfoUrl && validatorIdString,
-    intervalState: validatorInfoInterval,
-    url: validatorInfoUrl,
-    params: {
-      id: validatorIdString,
-    },
+  const fetchValidatorInfo = async () => {
+    if (!baseBeaconUrl || !validators) return
+
+    const beaconValidators = await fetchValidatorStatuses(
+      baseBeaconUrl,
+      validators.map((validator: Validator) => validator.pubKey).join(','),
+    )
+
+    setStateInfo(beaconValidators.data.data)
+  }
+  const onClearInterval = () => setInterval(undefined)
+
+  useEffect(() => {
+    if (state === 'hasValue' && isReady) {
+      void fetchValidatorInfo()
+    }
+  }, [state, isReady])
+
+  const { intervalId } = usePollingInterval(fetchValidatorInfo, secondsInSlot * 1000, {
+    isSkip,
+    onClearInterval,
   })
 
   useEffect(() => {
-    const data = response?.data.data
-    if (data) {
-      setStateInfo(data)
+    if (intervalId) {
+      setInterval(intervalId)
     }
-  }, [response])
+  }, [intervalId])
 }
 
 export default useValidatorInfoPolling

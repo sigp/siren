@@ -2,7 +2,7 @@ import { useRecoilValue } from 'recoil'
 import { useMemo } from 'react'
 import getPercentage from '../utilities/getPercentage'
 import formatGigBytes from '../utilities/formatGigBytes'
-import { StatusColor } from '../types'
+import { StatusType } from '../types'
 import { Diagnostics } from '../types/diagnostic'
 import { DiagnosticRate } from '../constants/enums'
 import secondsToShortHand from '../utilities/secondsToShortHand'
@@ -36,15 +36,15 @@ const useDeviceDiagnostics = (): Diagnostics => {
   const totalDiskSpace = formatGigBytes(disk_bytes_total)
   const totalDiskFree = formatGigBytes(disk_bytes_free)
 
-  const diskStatus = useMemo<StatusColor>(() => {
+  const diskStatus = useMemo<StatusType>(() => {
     const bigFree = isSyncing ? 300 : 100
     const midFree = isSyncing ? 200 : 50
 
     return totalDiskFree > bigFree
-      ? StatusColor.SUCCESS
+      ? 'bg-success'
       : totalDiskFree >= midFree && totalDiskFree < bigFree
-      ? StatusColor.WARNING
-      : StatusColor.ERROR
+      ? 'bg-warning'
+      : 'bg-error'
   }, [totalDiskFree, isSyncing])
 
   const memoryUtilization = Math.round(getPercentage(used_memory, total_memory))
@@ -53,39 +53,39 @@ const useDeviceDiagnostics = (): Diagnostics => {
 
   const totalMemoryFree = totalMemory - usedMemory
 
-  const ramStatus = useMemo<StatusColor>(
+  const ramStatus = useMemo<StatusType>(
     () =>
       totalMemoryFree >= 3
-        ? StatusColor.SUCCESS
+        ? 'bg-success'
         : totalMemoryFree > 1 && totalMemoryFree < 3
-        ? StatusColor.WARNING
-        : StatusColor.ERROR,
+        ? 'bg-warning'
+        : 'bg-error',
     [totalMemoryFree],
   )
 
   const cpuUtilization = sys_loadavg_5.toFixed(1)
 
-  const cpuStatus = useMemo<StatusColor>(
+  const cpuStatus = useMemo<StatusType>(
     () =>
       sys_loadavg_5 <= 80
-        ? StatusColor.SUCCESS
+        ? 'bg-success'
         : sys_loadavg_5 > 80 && sys_loadavg_5 < 90
-        ? StatusColor.WARNING
-        : StatusColor.ERROR,
+        ? 'bg-warning'
+        : 'bg-error',
     [sys_loadavg_5],
   )
 
   const overallHealth = [diskStatus, cpuStatus, ramStatus]
 
-  const overallHealthStatus = overallHealth.includes(StatusColor.ERROR)
-    ? StatusColor.ERROR
-    : overallHealth.includes(StatusColor.WARNING)
-    ? StatusColor.WARNING
-    : StatusColor.SUCCESS
+  const overallHealthStatus = overallHealth.includes('bg-error')
+    ? 'bg-error'
+    : overallHealth.includes('bg-warning')
+    ? 'bg-warning'
+    : 'bg-success'
   const healthCondition =
-    overallHealthStatus === StatusColor.ERROR
+    overallHealthStatus === 'bg-error'
       ? DiagnosticRate.POOR
-      : overallHealthStatus === StatusColor.WARNING
+      : overallHealthStatus === 'bg-warning'
       ? DiagnosticRate.FAIR
       : DiagnosticRate.GOOD
 
