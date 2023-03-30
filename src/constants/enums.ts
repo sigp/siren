@@ -58,3 +58,8 @@ export enum ApiType {
   VALIDATOR = 'VALIDATOR',
   BEACON = 'BEACON',
 }
+
+export enum Network {
+  Goerli = 'Goerli',
+  Mainnet = 'Mainnet',
+}

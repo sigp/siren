@@ -16,6 +16,13 @@ import AppDescription from '../../../components/AppDescription/AppDescription'
 import { useState } from 'react'
 import Button, { ButtonFace } from '../../../components/Button/Button'
 import addClassString from '../../../utilities/addClassString'
+import {
+  DiscordUrl,
+  LighthouseBookUrl,
+  SigPGithubUrl,
+  SigPIoUrl,
+  SigPTwitter,
+} from '../../../constants/constants'
 
 const Settings = () => {
   const { t } = useTranslation()
@@ -104,35 +111,35 @@ const Settings = () => {
             <AppDescription view='settings' />
             <div className='w-full flex pt-12 justify-between'>
               <SocialIcon
-                href='https://github.com/sigp'
+                href={SigPGithubUrl}
                 darkMode='dark:text-primary'
                 title='GitHub'
                 icon='bi-github'
                 color='text-primary'
               />
               <SocialIcon
-                href='https://github.com/sigp'
+                href={DiscordUrl}
                 darkMode='dark:text-primary'
                 title='Discord'
                 icon='bi-discord'
                 color='text-primary'
               />
               <SocialIcon
-                href='https://twitter.com/sigp_io'
+                href={SigPTwitter}
                 darkMode='dark:text-primary'
                 title='Twitter'
                 icon='bi-twitter'
                 color='text-primary'
               />
               <SocialIcon
-                href='https://sigmaprime.io/'
+                href={SigPIoUrl}
                 darkMode='dark:text-primary'
                 title={t('settings.links.website')}
                 icon='bi-globe2'
                 color='text-primary'
               />
               <SocialIcon
-                href='https://lighthouse-book.sigmaprime.io/'
+                href={LighthouseBookUrl}
                 darkMode='dark:text-primary'
                 title={t('settings.links.documentation')}
                 icon='bi-life-preserver'
