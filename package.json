@@ -1,7 +1,8 @@
 {
   "main": "src/main.ts",
   "description": "Electron Forge & Create React App Template",
-  "license": "MIT",
+  "license": "APACHE2",
+  "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
   "version": "0.2.1-beta.1",
@@ -22,6 +23,9 @@
     "axios": "^0.27.2",
     "bootstrap-icons": "^1.9.1",
     "chart.js": "^4.2.0",
+    "dotenv": "^16.0.3",
+    "concurrently": "5.2.0",
+    "electron-is-dev": "^2.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "ethers": "^5.7.1",
@@ -43,16 +47,19 @@
     "recoil": "^0.7.5",
     "rodal": "^2.0.0",
     "svg-identicon": "^1.0.1",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "^3.1.8",
     "tailwindcss-scoped-groups": "^2.0.0",
     "ts-jest": "^29.0.3",
     "typescript": "*",
+    "wait-on": "5.1.0",
     "web-vitals": "^2.1.0",
     "xmlbuilder": "^15.1.1",
     "yup": "^0.32.11"
   },
   "scripts": {
-    "dev": "electron .",
+    "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
+    "electron": "wait-on tcp:3000 && electron .",
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
@@ -66,7 +73,7 @@
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
     "package": "electron-forge package",
-    "make": "electron-forge make --arch=x64,arm64"
+    "make": "electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -109,8 +116,6 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.3",
-    "@electron-forge/maker-deb": "^6.0.3",
-    "@electron-forge/maker-rpm": "^6.0.3",
     "@electron-forge/maker-squirrel": "^6.0.3",
     "@electron-forge/maker-zip": "^6.0.3",
     "@faker-js/faker": "^7.5.0",
