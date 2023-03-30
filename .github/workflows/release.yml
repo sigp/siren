@@ -1,12 +1,12 @@
 name:   Release Suite
 
 on: [pull_request]
-      #        tags:
-      #      - v*
+              tags:
+            - v*
 
 env:
     REPO_NAME: ${{ github.repository_owner }}/siren
-    IMAGE_NAME: ${{ github.repository_owner }}/siren
+    IMAGE_NAME: sigmaprime/siren
 
 jobs:
     extract-version:
@@ -15,9 +15,9 @@ jobs:
             - name: Checkout sources
               uses: actions/checkout@v3
             - name: Extract version
-              # run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
+              run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
               # Used for running without tags
-              run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
+              # run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
               id: extract_version
         outputs:
             VERSION: ${{ steps.extract_version.outputs.VERSION }}
@@ -26,26 +26,26 @@ jobs:
         strategy:
             matrix:
                 arch: [
-                  #aarch64-unknown-linux-gnu,
-                  #     x86_64-unknown-linux-gnu,
+                       aarch64-unknown-linux-gnu,
+                       x86_64-unknown-linux-gnu,
                        # Requires apple signature secrets                      
                        # x86_64-apple-darwin,
-                       x86_64-windows
+                       # x86_64-windows
                        ]
                 include:
-                  #  -   arch: aarch64-unknown-linux-gnu
-                  #      platform: ubuntu-latest
-                  #      profile: maxperf
-                  #  -   arch: x86_64-unknown-linux-gnu
-                  #      platform: ubuntu-latest
-                  #      profile: maxperf
+                    -   arch: aarch64-unknown-linux-gnu
+                        platform: ubuntu-latest
+                        profile: maxperf
+                    -   arch: x86_64-unknown-linux-gnu
+                        platform: ubuntu-latest
+                        profile: maxperf
                     # Requires apple signature secrets
                     #-   arch: x86_64-apple-darwin
-                       #platform: macos-latest
-                       #profile: maxperf
-                    -   arch: x86_64-windows
-                        platform: windows-2019
-                        profile: maxperf
+                        # platform: macos-latest
+                        # profile: maxperf
+                    #-   arch: x86_64-windows
+                        # platform: windows-2019
+                        # profile: maxperf
 
         runs-on:    ${{ matrix.platform }}
         needs: extract-version
@@ -92,22 +92,17 @@ jobs:
                   echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   mv *zip* ..
 
-            - name: Configure GPG and create artifacts Windows
-              if: startsWith(matrix.arch, 'x86_64-windows')
-              env:
-                  GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-                  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-              run: |
-                  echo $env:GPG_SIGNING_KEY | gpg --batch --import
-                  gpg --list-secret-keys --with-keygrip
-                  mkdir artifacts
-                  #move out/make/zip/win32/x64/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  move out/make/zip/win32/x64/*.zip ./artifacts/siren.zip
-                  cd artifacts
-                  dir 
-                  #gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  gpg --passphrase "$env:GPG_PASSPHRASE" --batch -ab siren.zip
-                  move *zip* ..
+             #-name: Configure GPG and create artifacts Windows
+              #if: startsWith(matrix.arch, 'x86_64-windows')
+              #env:
+              #    GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+              #    GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+              #run: |
+              #    echo $env:GPG_SIGNING_KEY | gpg --batch --import
+              #    mkdir artifacts
+              #    move out/make/zip/win32/x64/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+              #    gpg --passphrase "$env:GPG_PASSPHRASE" --batch --pinentry-mode loopback -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+              #    move *zip* ..
 
             # =======================================================================
             # Upload artifacts
