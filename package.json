@@ -1,7 +1,8 @@
 {
   "main": "src/main.ts",
   "description": "Electron Forge & Create React App Template",
-  "license": "MIT",
+  "license": "APACHE2",
+  "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
   "version": "0.1.0-beta.1",
@@ -72,7 +73,7 @@
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
     "package": "electron-forge package",
-    "make": "electron-forge make --arch=x64,arm64"
+    "make": "electron-forge make"
   },
   "eslintConfig": {
     "extends": [
@@ -115,8 +116,6 @@
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.3",
-    "@electron-forge/maker-deb": "^6.0.3",
-    "@electron-forge/maker-rpm": "^6.0.3",
     "@electron-forge/maker-squirrel": "^6.0.3",
     "@electron-forge/maker-zip": "^6.0.3",
     "@faker-js/faker": "^7.5.0",
