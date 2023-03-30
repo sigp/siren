@@ -1,4 +1,4 @@
-import { StatusColor } from './index'
+import { StatusType } from './index'
 import { DiagnosticRate } from '../constants/enums'
 
 export type HealthDiagnosticResult = {
@@ -64,16 +64,16 @@ export type Diagnostics = {
   totalDiskSpace: number
   diskUtilization: number
   totalDiskFree: number
-  diskStatus: StatusColor
+  diskStatus: StatusType
   totalMemory: number
   memoryUtilization: number
   frequency?: string
-  ramStatus: StatusColor
-  cpuStatus: StatusColor
+  ramStatus: StatusType
+  cpuStatus: StatusType
   cpuUtilization: string
   networkName?: string
   natOpen: boolean
   uptime: string
   healthCondition: DiagnosticRate
-  overallHealthStatus: StatusColor
+  overallHealthStatus: StatusType
 }

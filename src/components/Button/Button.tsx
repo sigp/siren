@@ -19,7 +19,6 @@ export interface ButtonProps {
   fontType?: TypographyType
   children: ReactNode | ReactNode[]
   onClick?: () => void
-  dataTestId?: string
   padding?: string
   className?: string
   renderAs?: 'submit' | 'reset' | 'button'
@@ -36,7 +35,6 @@ const Button: FC<ButtonProps> = ({
   className,
   fontType = 'text-body',
   target = '_self',
-  dataTestId,
   font = 'font-openSauce',
   isDisabled,
   padding = 'px-4 py-2',
@@ -64,7 +62,6 @@ const Button: FC<ButtonProps> = ({
 
   const renderButton = () => (
     <button
-      data-testid={dataTestId}
       type={renderAs}
       onClick={onClick}
       disabled={isDisabled}

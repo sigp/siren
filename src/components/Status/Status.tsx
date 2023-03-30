@@ -1,8 +1,9 @@
 import { FC } from 'react'
-import { StatusColor } from '../../types'
+
+export type StatusType = 'bg-success' | 'bg-warning' | 'bg-error' | 'bg-dark100'
 
 export interface StatusProps {
-  status: StatusColor
+  status: StatusType
   size?: string
 }
 

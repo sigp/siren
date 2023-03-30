@@ -8,10 +8,8 @@ COPY . /app/
 WORKDIR /app
 
 ENV NODE_ENV=development
-
 # install (dev) deps
-# on GitHub runners, timeouts occur in emulated containers
-RUN yarn --network-timeout 300000
+RUN yarn
 
 ENV NODE_ENV=production
 # build (prod) app

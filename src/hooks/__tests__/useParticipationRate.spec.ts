@@ -4,7 +4,6 @@ import React from 'react'
 import { fetchValidatorInclusion } from '../../api/beacon'
 import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
-import { StatusColor } from '../../types'
 
 const mockParticipationResult = {
   current_epoch_active_gwei: 13022634000000000,
@@ -48,7 +47,7 @@ describe('useParticipationRate hook', () => {
     expect(result.current).toEqual({
       isInsufficientData: false,
       rate: undefined,
-      status: StatusColor.DARK,
+      status: 'bg-error',
     })
   })
   it('should return participation rate', () => {
@@ -59,7 +58,7 @@ describe('useParticipationRate hook', () => {
     expect(result.current).toEqual({
       isInsufficientData: false,
       rate: 82,
-      status: StatusColor.WARNING,
+      status: 'bg-warning',
     })
   })
   it('should return error status', () => {
@@ -75,7 +74,7 @@ describe('useParticipationRate hook', () => {
     expect(result.current).toEqual({
       isInsufficientData: false,
       rate: 8,
-      status: StatusColor.ERROR,
+      status: 'bg-error',
     })
   })
   it('should return success status', () => {
@@ -91,7 +90,7 @@ describe('useParticipationRate hook', () => {
     expect(result.current).toEqual({
       isInsufficientData: false,
       rate: 97,
-      status: StatusColor.SUCCESS,
+      status: 'bg-success',
     })
   })
   it('should set mock data', () => {
