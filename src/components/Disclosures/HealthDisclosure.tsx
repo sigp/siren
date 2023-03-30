@@ -4,7 +4,6 @@ import healthDisclosure from '../../assets/images/healthDisclosure.png'
 import Typography from '../Typography/Typography'
 import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import { useTranslation } from 'react-i18next'
-import { UiMode } from '../../constants/enums'
 
 const HealthDisclosure = () => {
   const { t } = useTranslation()
@@ -21,7 +20,6 @@ const HealthDisclosure = () => {
         externalUrl='https://lighthouse-book.sigmaprime.io/system-requirements.html'
         backgroundImage={healthDisclosure}
         onClose={closeModal}
-        mode={UiMode.LIGHT}
         isOpen={isOpen}
       >
         <Typography type='text-subtitle2' fontWeight='font-light' className='mb-8'>

@@ -2,14 +2,8 @@ import SideBar from '../../components/SideBar/SideBar'
 import FootBar from '../../components/FootBar/FootBar'
 import React, { useEffect, useState, Suspense } from 'react'
 import MainContent from './Content/MainContent'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  activeCurrency,
-  beaconNetworkError,
-  dashView,
-  uiMode,
-  validatorNetworkError,
-} from '../../recoil/atoms'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { activeCurrency, dashView, uiMode } from '../../recoil/atoms'
 import { ContentView, Storage, UiMode } from '../../constants/enums'
 import Logs from './Content/Logs'
 import Settings from './Content/Settings'
@@ -21,7 +15,6 @@ import useLocalStorage from '../../hooks/useLocalStorage'
 import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage'
 import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling'
 import Spinner from '../../components/Spinner/Spinner'
-import NetworkErrorModal from '../../components/NetworkErrorModal/NetworkErrorModal'
 
 const Sync = () => {
   useBeaconSyncPolling()
@@ -36,18 +29,8 @@ const DashboardFallback = () => (
 )
 
 const Dashboard = () => {
-  const mode = useRecoilValue(uiMode)
   const content = useRecoilValue(dashView)
   const [isReadySync, setSync] = useState(false)
-  const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
-  const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
-
-  useEffect(() => {
-    return () => {
-      isBeaconNetworkError(false)
-      isValidatorNetworkError(false)
-    }
-  }, [])
 
   useEffect(() => {
     setSync(true)
@@ -88,14 +71,9 @@ const Dashboard = () => {
     }
   }
   return (
-    <div
-      className={`${
-        mode === UiMode.DARK ? 'dark' : ''
-      } w-screen h-screen flex overflow-hidden relative`}
-    >
+    <>
       {isReadySync && <Sync />}
       <SideBar />
-      <NetworkErrorModal />
       <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar />
         <div className='flex-1 w-full overflow-scroll'>
@@ -103,7 +81,7 @@ const Dashboard = () => {
         </div>
         <FootBar />
       </div>
-    </div>
+    </>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useRecoilValue } from 'recoil'
-import { appView } from './recoil/atoms'
-import { AppView } from './constants/enums'
+import { appView, uiMode } from './recoil/atoms'
+import { AppView, UiMode } from './constants/enums'
 import Dashboard from './views/DashBoard/Dashboard'
 import Onboard from './views/Onboard/Onboard'
 import InitScreen from './views/InitScreen'
@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
 
 function App() {
+  const mode = useRecoilValue(uiMode)
   const view = useRecoilValue(appView)
 
   const renderView = () => {
@@ -24,10 +25,14 @@ function App() {
   }
 
   return (
-    <>
+    <div
+      className={`${
+        mode === UiMode.DARK ? 'dark' : ''
+      } relative h-screen w-screen overflow-hidden flex`}
+    >
       {renderView()}
       <ToastContainer />
-    </>
+    </div>
   )
 }
 

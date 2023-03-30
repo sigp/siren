@@ -1,7 +1,7 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { validatorIndex, validatorMetrics } from '../../../recoil/atoms'
+import { validatorIndex } from '../../../recoil/atoms'
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import Typography from '../../Typography/Typography'
 import { selectEthExchangeRates } from '../../../recoil/selectors/selectEthExchangeRates'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
@@ -12,49 +12,19 @@ import StatusIcon from '../../StatusIcon/StatusIcon'
 import ValidatorStatusProgress from '../../ValidatorStatusProgress/ValidatorStatusProgress'
 import ValidatorGraffitiInput from '../../ValidatorGraffitiInput/ValidatorGraffitiInput'
 import ValidatorCardAction from '../ValidatorCardAction'
+import { BeaconChaValidatorUrl } from '../../../constants/constants'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
 import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
 import useValidatorGraffiti from '../../../hooks/useValidatorGraffiti'
 import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
-import BeaconChaLink from '../../BeaconChaLink/BeaconChaLink'
-import getAvgEffectivenessStatus from '../../../utilities/getAvgEffectivenessStatus'
-import EffectivenessBreakdown from '../../EffectivenessBreakdown/EffectivenessBreakdown'
-import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const validator = useRecoilValue(selectValidatorDetail)
-  const metrics = useRecoilValue(validatorMetrics)
   const { index, balance, status } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
-
-  const avgTargetEffectiveness = useMemo(() => {
-    if (!metrics || !index) return
-
-    return (
-      metrics
-        .map((metric) => metric[index].attestation_target_hit_percentage)
-        .reduce((a, b) => a + b, 0) / metrics.length
-    )
-  }, [metrics, index])
-
-  const avgHitEffectiveness = useMemo(() => {
-    if (!metrics || !index) return
-
-    return (
-      metrics.map((metric) => metric[index].attestation_hit_percentage).reduce((a, b) => a + b, 0) /
-      metrics.length
-    )
-  }, [metrics, index])
-
-  const combinedEffectiveness =
-    avgHitEffectiveness &&
-    avgTargetEffectiveness &&
-    (avgHitEffectiveness + avgTargetEffectiveness) / 2
-
-  const combinedStatus = getAvgEffectivenessStatus(combinedEffectiveness)
 
   const { graffiti } = useValidatorGraffiti(validator)
 
@@ -73,8 +43,8 @@ const ValidatorDetails = () => {
         <div className='flex-1 flex py-4 justify-center items-center'>
           <div className='w-11/12 space-y-2'>
             <div className='w-full flex flex-col border-style100 lg:flex-row lg:shadow'>
-              <div className='flex lg:flex-col lg:border-r-style100 justify-between'>
-                <div className='space-y-2 p-3'>
+              <div className='p-3 flex lg:flex-col lg:border-r-style100 justify-between'>
+                <div className='space-y-2'>
                   <Typography isBold type='text-caption1'>
                     {t('validatorManagement.details.balance')}
                   </Typography>
@@ -87,28 +57,19 @@ const ValidatorDetails = () => {
                     </Typography>
                   </div>
                 </div>
-                <div className='group py-3 z-20 space-y-2 px-6 lg:px-3 cursor-help relative'>
+                <div className='space-y-2 px-6 lg:px-0 opacity-20'>
                   <Typography type='text-caption2' isBold isUpperCase>
                     {t('validatorManagement.summary.avgEffectiveness')}
                   </Typography>
                   <div className='flex space-x-8'>
-                    <Status status={combinedStatus} />
+                    <Status status='bg-dark100' />
                     <Typography isBold type='text-caption1'>
-                      {combinedEffectiveness
-                        ? `${toFixedIfNecessary(combinedEffectiveness, 2)} %`
-                        : '---'}
+                      -
                     </Typography>
                   </div>
-                  <EffectivenessBreakdown
-                    className='group-hover:block'
-                    target={avgTargetEffectiveness}
-                    head={avgHitEffectiveness}
-                    targetDescription={t('validatorManagement.effectiveness.targetDescription')}
-                    headDescription={t('validatorManagement.effectiveness.headHitDescription')}
-                  />
                 </div>
               </div>
-              <div className='space-y-4 border-t-style100 flex-1 lg:border-t-0 lg:border-r-style100 flex flex-col justify-between'>
+              <div className='space-y-4 border-t-style100 lg:border-t-0 lg:border-r-style100 flex flex-col justify-between'>
                 <ValidatorIncomeSummary
                   validators={[validator]}
                   className='pt-4 px-2 space-y-2 w-42'
@@ -131,7 +92,22 @@ const ValidatorDetails = () => {
                   </div>
                 </div>
               </div>
-              {index && <BeaconChaLink index={index} />}
+              <a target='_blank' rel='noreferrer' href={`${BeaconChaValidatorUrl}/${index}`}>
+                <div className='cursor-pointer dark:bg-dark700 bg-dark25 flex-1 space-y-3 p-3'>
+                  <Typography type='text-caption1' isBold className='uppercase'>
+                    Beacon <br /> Cha.in
+                  </Typography>
+                  <Typography color='text-dark400' fontWeight='font-light' type='text-caption2'>
+                    {t('validatorManagement.details.exploreBeaconChai')}
+                  </Typography>
+                  <div className='w-full flex items-center justify-between'>
+                    <Typography fontWeight='font-light' className='uppercase'>
+                      {t('validatorManagement.details.explore')}
+                    </Typography>
+                    <i className='bi-arrow-up-right text-primary' />
+                  </div>
+                </div>
+              </a>
             </div>
             <div className='w-full flex border-style100 shadow py-2 px-4'>
               <div className='space-y-2 mr-4'>
@@ -140,7 +116,7 @@ const ValidatorDetails = () => {
                 </Typography>
                 <div className='flex space-x-2'>
                   <Typography type='text-caption2' isUpperCase color='text-dark300'>
-                    {t(`validatorStatus.${status}`)}
+                    {status}
                   </Typography>
                   {status && <StatusIcon status={status} />}
                 </div>

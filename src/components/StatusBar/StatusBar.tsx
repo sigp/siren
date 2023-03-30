@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import { StatusColor } from '../../types'
+import { StatusType } from '../../types'
 
 export interface StatusBarProps {
   count: 1 | 2 | 3
-  status: StatusColor
+  status: StatusType
 }
 
 const StatusBar: FC<StatusBarProps> = ({ count, status }) => {

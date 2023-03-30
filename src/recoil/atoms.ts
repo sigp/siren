@@ -2,8 +2,7 @@ import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
 import { Endpoint } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
-import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
-import { BeaconValidatorMetricResults } from '../types/beacon'
+import { BeaconValidatorResult, ValidatorCacheResults } from '../types/validator'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
@@ -135,7 +134,7 @@ export const activeCurrency = atom<string>({
   default: undefined,
 })
 
-export const validatorCacheBalanceResult = atom<ValidatorCache | undefined>({
+export const validatorCacheBalanceResult = atom<ValidatorCacheResults | undefined>({
   key: 'validatorCacheBalanceResult',
   default: undefined,
 })
@@ -143,19 +142,4 @@ export const validatorCacheBalanceResult = atom<ValidatorCache | undefined>({
 export const isSideBarOpen = atom<boolean>({
   key: 'isSideBarOpen',
   default: false,
-})
-
-export const validatorNetworkError = atom<boolean>({
-  key: 'validatorNetworkError',
-  default: false,
-})
-
-export const beaconNetworkError = atom<boolean>({
-  key: 'beaconNetworkError',
-  default: false,
-})
-
-export const validatorMetrics = atom<BeaconValidatorMetricResults[]>({
-  key: 'validatorMetrics',
-  default: undefined,
 })

@@ -20,8 +20,6 @@ import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
 import { UsernameStorage } from '../types/storage'
 import AppDescription from '../components/AppDescription/AppDescription'
-import isRequiredVersion from '../utilities/isRequiredVersion'
-import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -58,17 +56,9 @@ const InitScreen = () => {
         fetchBeaconVersion(beaconNode),
       ])
 
-      const vcVersion = vcResult.data.data.version
-
       if (vcResult.status === 200 && beaconResult.status === 200) {
-        if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
-          setOnboardView(OnboardView.CONFIGURE)
-          moveToOnboard()
-          return
-        }
-
         setBeaconVersion(beaconResult.data.data.version)
-        setValidatorVersion(vcVersion)
+        setValidatorVersion(vcResult.data.data.version)
         setBeaconNode(beaconNode)
         setValidatorClient(validatorClient)
         setApiToken(token)

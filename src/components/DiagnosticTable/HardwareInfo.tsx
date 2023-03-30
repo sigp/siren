@@ -10,7 +10,6 @@ import { useState } from 'react'
 import { DiagnosticType } from '../../constants/enums'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import addSuffixString from '../../utilities/addSuffixString'
-import { StatusColor } from '../../types'
 
 const HardwareInfo = () => {
   const { t } = useTranslation()
@@ -94,7 +93,7 @@ const HardwareInfo = () => {
                   ? t('vcHealthCheck.networkName', { network: networkName })
                   : t('networkUnavailable')
               }
-              status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
+              status={natOpen ? 'bg-success' : 'bg-dark100'}
             />
             <DiagnosticCard
               size={size}

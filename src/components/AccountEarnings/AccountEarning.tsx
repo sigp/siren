@@ -10,12 +10,12 @@ import Spinner from '../Spinner/Spinner'
 import { useRecoilValue } from 'recoil'
 import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import EarningsLayout from './EarningsLayout'
+import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
 import { activeCurrency } from '../../recoil/atoms'
 import CurrencySelect from '../CurrencySelect/CurrencySelect'
 import useEarningsEstimate from '../../hooks/useEarningsEstimate'
 import Tooltip from '../ToolTip/Tooltip'
-import useEpochAprEstimate from '../../hooks/useEpochAprEstimate'
 
 export const AccountEarningFallback = () => {
   return (
@@ -28,11 +28,10 @@ export const AccountEarningFallback = () => {
 const AccountEarning = () => {
   const { t } = useTranslation()
   const currency = useRecoilValue(activeCurrency)
-  const { estimate, totalEarnings, estimateSelection, selectEstimate } = useEarningsEstimate()
+  const { estimate, totalEarnings, annualizedEarningsPercent, estimateSelection, selectEstimate } =
+    useEarningsEstimate()
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
   const { rates } = useRecoilValue(selectEthExchangeRates)
-
-  const { estimatedApr, textColor } = useEpochAprEstimate()
 
   const activeRate = rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
@@ -40,6 +39,8 @@ const AccountEarning = () => {
   const estimatedRateConversion = formattedRate * estimate
   const isEstimate = estimateSelection !== undefined
   const timeFrame = isEstimate ? EARNINGS_OPTIONS[estimateSelection]?.title : undefined
+
+  const annualizedTextColor = formatBalanceColor(annualizedEarningsPercent)
 
   const viewEarnings = async (value: number) => selectEstimate(value)
 
@@ -183,22 +184,20 @@ const AccountEarning = () => {
               </Tooltip>
             </div>
             <div>
-              <Tooltip id='overallApr' maxWidth={200} text={t('tooltip.annualApr')}>
-                <div className='flex space-x-2'>
-                  <Typography type='text-caption1' isCapitalize color='text-dark400'>
-                    {t('annualized')}
-                  </Typography>
-                  <i className='bi bi-info-circle text-caption1 text-dark400' />
-                </div>
-                <Typography
-                  type='text-subtitle3'
-                  color={textColor}
-                  darkMode={textColor}
-                  family='font-roboto'
-                >
-                  {estimatedApr ? estimatedApr.toFixed(2) : '---'}%
+              <div className='flex space-x-2'>
+                <Typography type='text-caption1' className='capitalize' color='text-dark400'>
+                  {t('annualized')}
                 </Typography>
-              </Tooltip>
+                <i className='bi bi-info-circle text-caption1 text-dark400' />
+              </div>
+              <Typography
+                type='text-subtitle3'
+                color={annualizedTextColor}
+                darkMode={annualizedTextColor}
+                family='font-roboto'
+              >
+                {annualizedEarningsPercent.toFixed(2)}%
+              </Typography>
             </div>
           </div>
         </div>

@@ -1,13 +1,12 @@
 import formatAtHeadSlotStatus from '../formatAtHeadSlotStatus'
-import { StatusColor } from '../../types'
 
 describe('formatAtHeadSlotStatus', () => {
   it('should return correct status', () => {
-    expect(formatAtHeadSlotStatus(0)).toBe(StatusColor.SUCCESS)
-    expect(formatAtHeadSlotStatus(-1)).toBe(StatusColor.SUCCESS)
-    expect(formatAtHeadSlotStatus(-3)).toBe(StatusColor.WARNING)
-    expect(formatAtHeadSlotStatus(-5)).toBe(StatusColor.ERROR)
-    expect(formatAtHeadSlotStatus()).toBe(StatusColor.DARK)
-    expect(formatAtHeadSlotStatus(NaN)).toBe(StatusColor.DARK)
+    expect(formatAtHeadSlotStatus(0)).toBe('bg-success')
+    expect(formatAtHeadSlotStatus(-1)).toBe('bg-success')
+    expect(formatAtHeadSlotStatus(-3)).toBe('bg-warning')
+    expect(formatAtHeadSlotStatus(-5)).toBe('bg-error')
+    expect(formatAtHeadSlotStatus()).toBe('bg-dark100')
+    expect(formatAtHeadSlotStatus(NaN)).toBe('bg-dark100')
   })
 })
