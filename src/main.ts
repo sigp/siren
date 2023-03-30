@@ -6,6 +6,8 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const url = require('url')
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const isDev = require('electron-is-dev')
 
 const createWindow = () => {
   // Create the browser window.
@@ -19,13 +21,13 @@ const createWindow = () => {
   mainWindow.maximize()
 
   // and load the index.html of the app.
-  const startUrl =
-    process.env.ELECTRON_START_URL ||
-    url.format({
-      pathname: path.join(__dirname, '../build/index.html'),
-      protocol: 'file',
-      slashes: true,
-    })
+  const startUrl = isDev
+    ? 'http://localhost:3000'
+    : url.format({
+        pathname: path.join(__dirname, '../build/index.html'),
+        protocol: 'file',
+        slashes: true,
+      })
   mainWindow.loadURL(startUrl)
 }
 

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import { fetchValidatorInclusion } from '../api/beacon'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { BeaconValidatorInclusionResults } from '../types/beacon'
-import { StatusType } from '../types'
+import { StatusColor } from '../types'
 
 const useParticipationRate = () => {
   const { head_slot } = useRecoilValue(beaconSyncInfo) || {}
@@ -42,21 +42,21 @@ const useParticipationRate = () => {
       : undefined
 
   const getStatus = (rate?: number) => {
-    if (!rate) return 'bg-error'
+    if (!rate) return StatusColor.DARK
     switch (true) {
       case rate >= 95:
-        return 'bg-success'
+        return StatusColor.SUCCESS
       case rate < 95 && rate > 75:
-        return 'bg-warning'
+        return StatusColor.WARNING
       default:
-        return 'bg-error'
+        return StatusColor.ERROR
     }
   }
 
   return {
     isInsufficientData,
     rate: ratePercentage,
-    status: getStatus(ratePercentage) as StatusType,
+    status: getStatus(ratePercentage),
   }
 }
 

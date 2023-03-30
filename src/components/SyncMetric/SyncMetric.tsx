@@ -44,7 +44,8 @@ const SyncMetric: FC<SyncMetricProps> = ({
           family='font-roboto'
           darkMode='dark:text-white'
           isBold
-          className='uppercase mb-1.5'
+          isUpperCase
+          className='mb-1.5'
         >
           {title}
         </Typography>
@@ -53,17 +54,11 @@ const SyncMetric: FC<SyncMetricProps> = ({
           family='font-roboto'
           color='text-dark400'
           fontWeight='font-light'
-          className='uppercase'
+          isUpperCase
         >
           {subTitle}
         </Typography>
-        <Typography
-          type='text-tiny'
-          family='font-roboto'
-          color='text-dark400'
-          isBold
-          className='uppercase'
-        >
+        <Typography type='text-tiny' family='font-roboto' color='text-dark400' isBold isUpperCase>
           {`${formatLocalCurrency(amount, { isStrict: true })} / ${formatLocalCurrency(total, {
             isStrict: true,
           })}`}

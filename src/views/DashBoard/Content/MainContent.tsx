@@ -12,7 +12,7 @@ import ValidatorBalances, {
   ValidatorBalanceFallback,
 } from '../../../components/ValidatorBalances/ValidatorBalances'
 import { useTranslation } from 'react-i18next'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import useValidatorInfoPolling from '../../../hooks/useValidatorInfoPolling'
 import { useRecoilState } from 'recoil'
@@ -27,10 +27,21 @@ import DashboardOptions from '../../../components/DashboardOptions/DashboardOpti
 import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
 import PillIcon from '../../../components/PillIcon/PillIcon'
 
+const Sync = () => {
+  useValidatorInfoPolling()
+  useValidatorHealthPolling()
+  useBeaconHealthPolling()
+  useValidatorPeerPolling()
+  useValidatorCachePolling()
+
+  return null
+}
+
 const MainContent = () => {
   const { t } = useTranslation()
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
   const [name, setUsername] = useRecoilState(userName)
+  const [isReady, setReady] = useState(false)
 
   useEffect(() => {
     if (username) {
@@ -38,62 +49,73 @@ const MainContent = () => {
     }
   }, [username])
 
-  useValidatorInfoPolling()
-  useValidatorHealthPolling()
-  useBeaconHealthPolling()
-  useValidatorPeerPolling()
-  useValidatorCachePolling()
+  useEffect(() => {
+    setReady(true)
+  }, [])
 
   return (
-    <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
-      <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
-        <div className='py-4 md:px-4 flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between'>
-          <Typography
-            type='text-subtitle1'
-            darkMode='dark:text-white'
-            className='xl:text-h3'
-            isCapitalize
-            fontWeight='font-light'
-          >
-            {t('helloUser', { user: name })}
-          </Typography>
-          <div className='flex w-full md:w-auto justify-between md:justify-start md:space-x-16'>
-            <div className='flex space-x-6'>
-              <div className='space-y-1'>
-                <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
-                  {t('lighthouseUiVersion')}
-                </Typography>
-                <PillIcon text='BETA' />
+    <>
+      {isReady && <Sync />}
+      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full flex items-center justify-center'>
+        <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
+          <div className='py-4 md:px-4 flex flex-col space-y-4 md:space-y-0 md:flex-row md:items-center md:justify-between'>
+            <Typography
+              type='text-subtitle1'
+              darkMode='dark:text-white'
+              className='xl:text-h3'
+              isCapitalize
+              fontWeight='font-light'
+            >
+              {t('helloUser', { user: name })}
+            </Typography>
+            <div className='flex w-full md:w-auto justify-between md:justify-start md:space-x-16'>
+              <div className='flex space-x-6'>
+                <div className='space-y-1'>
+                  <Typography
+                    type='text-tiny'
+                    family='font-roboto'
+                    darkMode='dark:text-white'
+                    isBold
+                  >
+                    {t('lighthouseUiVersion')}
+                  </Typography>
+                  <PillIcon bgColor='bg-tertiary' text='BETA' />
+                </div>
+                <div>
+                  <Typography
+                    type='text-tiny'
+                    family='font-roboto'
+                    darkMode='dark:text-white'
+                    isBold
+                  >
+                    {t('lighthouseVersion')}
+                  </Typography>
+                  <AppVersion />
+                </div>
               </div>
-              <div>
-                <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
-                  {t('lighthouseVersion')}
-                </Typography>
-                <AppVersion />
-              </div>
+              <DashboardOptions />
             </div>
-            <DashboardOptions />
           </div>
-        </div>
-        <Suspense fallback={<AccountEarningFallback />}>
-          <AccountEarning />
-        </Suspense>
-        <Suspense fallback={<ValidatorBalanceFallback />}>
-          <ValidatorBalances />
-        </Suspense>
-      </div>
-      <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
-        <Suspense fallback={<NetworkStatsFallback />}>
-          <NetworkStats />
-        </Suspense>
-        <ErrorBoundary fallback={<TableErrorFallback />}>
-          <Suspense fallback={<TableFallback />}>
-            <ValidatorTable className='mt-8 lg:mt-2' />
+          <Suspense fallback={<AccountEarningFallback />}>
+            <AccountEarning />
           </Suspense>
-        </ErrorBoundary>
-        <DiagnosticTable />
+          <Suspense fallback={<ValidatorBalanceFallback />}>
+            <ValidatorBalances />
+          </Suspense>
+        </div>
+        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
+          <Suspense fallback={<NetworkStatsFallback />}>
+            <NetworkStats />
+          </Suspense>
+          <ErrorBoundary fallback={<TableErrorFallback />}>
+            <Suspense fallback={<TableFallback />}>
+              <ValidatorTable className='mt-8 lg:mt-2' />
+            </Suspense>
+          </ErrorBoundary>
+          <DiagnosticTable />
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

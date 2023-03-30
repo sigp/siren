@@ -2,6 +2,7 @@
 import Button, { ButtonFace } from '../Button/Button'
 import HealthMetric, { HealthMetricFallback } from './HealthMetric'
 import { Suspense } from 'react'
+import { DiscordUrl, LighthouseBookUrl } from '../../constants/constants'
 
 const FootBar = () => {
   return (
@@ -23,12 +24,12 @@ const FootBar = () => {
           <HealthMetric />
         </Suspense>
         <div className='flex space-x-1'>
-          <a href='https://discord.gg/rbGCdFwH' target='_blank' rel='noreferrer'>
+          <a href={DiscordUrl} target='_blank' rel='noreferrer'>
             <Button type={ButtonFace.ICON}>
               <i className='bi bi-discord' />
             </Button>
           </a>
-          <a href='https://lighthouse-book.sigmaprime.io/' target='_blank' rel='noreferrer'>
+          <a href={LighthouseBookUrl} target='_blank' rel='noreferrer'>
             <Button type={ButtonFace.ICON}>
               <i className='bi bi-question-circle-fill' />
             </Button>

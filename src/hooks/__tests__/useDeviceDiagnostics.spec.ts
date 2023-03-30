@@ -5,13 +5,7 @@ import { mockBeaconHealthResult } from '../../mocks/beaconHealthResult'
 import { mockedRecoilValue } from '../../../test.helpers'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
 import clearAllMocks = jest.clearAllMocks
-
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
-  atom: jest.fn(),
-  selector: jest.fn(),
-}))
+import { StatusColor } from '../../types'
 
 jest.mock('../../utilities/formatGigBytes', () => jest.fn())
 
@@ -27,17 +21,17 @@ describe('useDeviceDiagnostics', () => {
     const { result } = renderHook(() => useDeviceDiagnostics())
 
     expect(result.current).toStrictEqual({
-      cpuStatus: 'bg-success',
+      cpuStatus: StatusColor.SUCCESS,
       cpuUtilization: '0.0',
-      diskStatus: 'bg-error',
+      diskStatus: StatusColor.ERROR,
       diskUtilization: 0,
       frequency: 'undefined',
       healthCondition: 'POOR',
       memoryUtilization: 0,
       natOpen: false,
       networkName: undefined,
-      overallHealthStatus: 'bg-error',
-      ramStatus: 'bg-error',
+      overallHealthStatus: StatusColor.ERROR,
+      ramStatus: StatusColor.ERROR,
       totalDiskFree: undefined,
       totalDiskSpace: undefined,
       totalMemory: undefined,
@@ -54,18 +48,18 @@ describe('useDeviceDiagnostics', () => {
       totalDiskSpace: 16.5,
       diskUtilization: 28,
       totalDiskFree: 16.5,
-      diskStatus: 'bg-error',
+      diskStatus: StatusColor.ERROR,
       totalMemory: 16.5,
       memoryUtilization: 99,
       frequency: '0',
-      ramStatus: 'bg-error',
-      cpuStatus: 'bg-success',
+      ramStatus: StatusColor.ERROR,
+      cpuStatus: StatusColor.SUCCESS,
       cpuUtilization: '13.0',
       networkName: 'en0',
       natOpen: true,
       uptime: '3D 22H',
       healthCondition: 'POOR',
-      overallHealthStatus: 'bg-error',
+      overallHealthStatus: StatusColor.ERROR,
     })
   })
   it('should return bg-warning for disk space if syncing', () => {
@@ -74,7 +68,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValue(200)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.diskStatus).toBe('bg-warning')
+    expect(result.current.diskStatus).toBe(StatusColor.WARNING)
   })
   it('should return bg-success for disk space if syncing', () => {
     mockedRecoilValue.mockReturnValueOnce(undefined)
@@ -82,7 +76,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValue(200)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.diskStatus).toBe('bg-success')
+    expect(result.current.diskStatus).toBe(StatusColor.SUCCESS)
   })
   it('should return bg-success for ram status', () => {
     mockedRecoilValue.mockReturnValueOnce(undefined)
@@ -93,7 +87,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValueOnce(4)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.ramStatus).toBe('bg-success')
+    expect(result.current.ramStatus).toBe(StatusColor.SUCCESS)
   })
   it('should return bg-warning for ram status', () => {
     mockedRecoilValue.mockReturnValueOnce(undefined)
@@ -104,7 +98,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValueOnce(4)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.ramStatus).toBe('bg-warning')
+    expect(result.current.ramStatus).toBe(StatusColor.WARNING)
   })
   it('should return bg-warning for cpu status', () => {
     mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconHealthResult, sys_loadavg_5: 85 })
@@ -112,7 +106,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValue(4)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.cpuStatus).toBe('bg-warning')
+    expect(result.current.cpuStatus).toBe(StatusColor.WARNING)
   })
   it('should return bg-error for cpu status', () => {
     mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconHealthResult, sys_loadavg_5: 95 })
@@ -120,7 +114,7 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValue(4)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.cpuStatus).toBe('bg-error')
+    expect(result.current.cpuStatus).toBe(StatusColor.ERROR)
   })
   it('should return correct overall status', () => {
     mockedRecoilValue.mockReturnValueOnce({ ...mockBeaconHealthResult, sys_loadavg_5: 85 })
@@ -131,6 +125,6 @@ describe('useDeviceDiagnostics', () => {
     mockedFormatGigBytes.mockReturnValueOnce(4)
     const { result } = renderHook(() => useDeviceDiagnostics())
 
-    expect(result.current.overallHealthStatus).toStrictEqual('bg-warning')
+    expect(result.current.overallHealthStatus).toStrictEqual(StatusColor.WARNING)
   })
 })

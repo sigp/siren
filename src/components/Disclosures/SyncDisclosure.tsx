@@ -4,6 +4,7 @@ import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import syncDisclosure from '../../assets/images/syncDisclosure.png'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import { UiMode } from '../../constants/enums'
 
 const SyncDisclosure = () => {
   const { t } = useTranslation()
@@ -19,6 +20,7 @@ const SyncDisclosure = () => {
         externalTarget='_blank'
         externalUrl='https://lighthouse-book.sigmaprime.io/run_a_node.html'
         backgroundImage={syncDisclosure}
+        mode={UiMode.LIGHT}
         onClose={closeModal}
         isOpen={isOpen}
       >
