@@ -217,3 +217,11 @@ export const CURRENCIES = [
   'HKD',
   'NZD',
 ]
+
+export const REQUIRED_VALIDATOR_VERSION = {
+  major: 4,
+  minor: 0,
+  patch: 1,
+}
+
+export const DEFAULT_MAX_NETWORK_ERROR = 3
