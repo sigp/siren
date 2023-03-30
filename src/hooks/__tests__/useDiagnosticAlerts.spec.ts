@@ -3,6 +3,7 @@ import useDiagnosticAlerts from '../useDiagnosticAlerts'
 import { Diagnostics } from '../../types/diagnostic'
 import useDeviceDiagnostics from '../useDeviceDiagnostics'
 import { mockedRecoilValue } from '../../../test.helpers'
+import { StatusColor } from '../../types'
 
 jest.mock('../useDeviceDiagnostics', () => jest.fn())
 
@@ -35,7 +36,7 @@ describe('useDiagnosticAlerts', () => {
     expect(result.current.peerCountAlert).toStrictEqual({
       message: 'alert.peerCountLow',
       subText: 'poor',
-      severity: 'bg-error',
+      severity: StatusColor.ERROR,
     })
   })
   it('should return peer count medium alert', () => {
@@ -45,7 +46,7 @@ describe('useDiagnosticAlerts', () => {
     expect(result.current.peerCountAlert).toStrictEqual({
       message: 'alert.peerCountMedium',
       subText: 'fair',
-      severity: 'bg-warning',
+      severity: StatusColor.WARNING,
     })
   })
   it('should return nat closed alert', () => {
@@ -54,7 +55,7 @@ describe('useDiagnosticAlerts', () => {
 
     expect(result.current.natAlert).toStrictEqual({
       message: 'alert.natClosedStatus',
-      severity: 'bg-error',
+      severity: StatusColor.ERROR,
       subText: 'poor',
     })
   })

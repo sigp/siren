@@ -2,6 +2,7 @@ import Typography from '../Typography/Typography'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import { useTranslation } from 'react-i18next'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { StatusColor } from '../../types'
 
 const LogsInfo = () => {
   const { t } = useTranslation()
@@ -23,7 +24,7 @@ const LogsInfo = () => {
         toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.criticalLogs')}
         maxHeight='flex-1'
-        status='bg-dark100'
+        status={StatusColor.DARK}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('critical')}
@@ -35,7 +36,7 @@ const LogsInfo = () => {
         toolTipText={t('logInfo.comingSoon')}
         title={t('errors')}
         maxHeight='flex-1'
-        status='bg-dark100'
+        status={StatusColor.DARK}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
@@ -47,7 +48,7 @@ const LogsInfo = () => {
         toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.warnings')}
         maxHeight='flex-1'
-        status='bg-dark100'
+        status={StatusColor.DARK}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}

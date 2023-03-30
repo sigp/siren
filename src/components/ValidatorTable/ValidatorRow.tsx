@@ -6,14 +6,14 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../utilities/formatEthAddress'
 import { TableView } from './ValidatorTable'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { dashView, validatorIndex } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import StatusIcon from '../StatusIcon/StatusIcon'
-import { BeaconChaValidatorUrl } from '../../constants/constants'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
+import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -26,6 +26,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const { name, pubKey, index, balance, rewards, status } = validator
   const rewardColor = formatBalanceColor(rewards)
+  const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
 
   const viewValidator = () => {
     setValidatorIndex(index)
@@ -141,7 +142,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       )}
       <th className='border-r-style500 px-2'>
         <div className='w-full flex justify-center'>
-          <a target='_blank' rel='noreferrer' href={`${BeaconChaValidatorUrl}/${index}`}>
+          <a target='_blank' rel='noreferrer' href={`${baseUrl}/${index}`}>
             <ValidatorActionIcon icon='bi-box-arrow-in-up-right' />
           </a>
         </div>
