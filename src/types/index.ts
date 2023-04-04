@@ -67,3 +67,8 @@ export type SemanticVersion = {
   minor: number
   patch: number
 }
+
+export type SessionAuthStorage = {
+  password: string
+  delay: number
+}

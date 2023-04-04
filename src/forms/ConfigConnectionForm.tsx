@@ -232,7 +232,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       setBeaconNode(beaconNode)
       setValidatorClient(validatorClient)
       setDashView(ContentView.MAIN)
-      setView(OnboardView.SETUP)
+      setView(OnboardView.SESSION)
     } catch (e) {
       if (!isValidBeaconNode || !isValidValidatorClient) {
         if (!isValidBeaconNode) {

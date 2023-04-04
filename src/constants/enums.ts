@@ -19,6 +19,7 @@ export enum AppView {
 export enum OnboardView {
   PROVIDER = 'PROVIDER',
   CONFIGURE = 'CONFIGURE',
+  SESSION = 'SESSION',
   SETUP = 'SETUP',
 }
 
