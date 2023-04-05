@@ -231,6 +231,11 @@
     "vcPort": "VC Port"
   },
   "error": {
+    "sessionAuth": {
+      "length": "Password must be at least 12 characters",
+      "passwordMatch": "Confirmation must match password",
+      "confirmationRequired": "Password confirmation is required"
+    },
     "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin in {{type}} config",
     "unknownError": "Unknown {{type}} NODE error.",
     "validatorInfo": "Error Loading Validator Info...",

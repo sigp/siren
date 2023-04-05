@@ -159,3 +159,13 @@ export const validatorMetrics = atom<BeaconValidatorMetricResults[]>({
   key: 'validatorMetrics',
   default: undefined,
 })
+
+export const isAppLockdown = atom({
+  key: 'isAppLockdown',
+  default: false,
+})
+
+export const isSessionAuthModal = atom({
+  key: 'isAuthConfig',
+  default: true,
+})
