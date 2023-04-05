@@ -23,6 +23,7 @@ import {
   SigPIoUrl,
   SigPTwitter,
 } from '../../../constants/constants'
+import { SessionAuthStorage } from '../../../types'
 
 const Settings = () => {
   const { t } = useTranslation()
@@ -31,12 +32,19 @@ const Settings = () => {
   const [username, setUsername] = useRecoilState(userName)
   const setView = useSetRecoilState(onBoardView)
   const setAppView = useSetRecoilState(appView)
+  const [, setSessionAuth] = useLocalStorage<SessionAuthStorage | undefined>(
+    'session-auth',
+    undefined,
+  )
+  const [, storeApiToken] = useLocalStorage<string>('api-token', '')
   const [, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
   const svgClasses = addClassString('hidden md:block absolute top-14 right-10', [
     mode === UiMode.DARK ? 'opacity-20' : 'opacity-40',
   ])
 
   const viewConfig = () => {
+    storeApiToken('')
+    setSessionAuth(undefined)
     setView(OnboardView.CONFIGURE)
     setAppView(AppView.ONBOARD)
   }
