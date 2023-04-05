@@ -167,5 +167,5 @@ export const isAppLockdown = atom({
 
 export const isSessionAuthModal = atom({
   key: 'isAuthConfig',
-  default: true,
+  default: false,
 })

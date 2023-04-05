@@ -69,7 +69,7 @@ export type SemanticVersion = {
 }
 
 export type SessionAuthStorage = {
-  password: string
+  password?: string
   delay: number
 }
 

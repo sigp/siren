@@ -1,7 +1,5 @@
 import Typography from '../../Typography/Typography'
 import Button, { ButtonFace } from '../../Button/Button'
-// import { useSetRecoilState } from 'recoil'
-// import { isAppLockdown  } from '../../../recoil/atoms'
 import Input from '../../Input/Input'
 import { useState, ChangeEvent } from 'react'
 import useUiMode from '../../../hooks/useUiMode'
@@ -10,17 +8,21 @@ import useLocalStorage from '../../../hooks/useLocalStorage'
 import { SessionAuthStorage } from '../../../types'
 import { AppView, OnboardView } from '../../../constants/enums'
 import { useSetRecoilState } from 'recoil'
-import { appView, isSessionAuthModal, onBoardView } from '../../../recoil/atoms'
+import { appView, isSessionAuthModal, onBoardView, isAppLockdown } from '../../../recoil/atoms'
+import CryptoJS from 'crypto-js'
+import { MAX_SESSION_UNLOCK_ATTEMPTS } from '../../../constants/constants'
+import { ENCRYPT_KEY } from '../../../constants/window'
 
 const UnlockAppView = () => {
   const [sessionAuth] = useLocalStorage<SessionAuthStorage | undefined>('session-auth', undefined)
   const [, storeApiToken] = useLocalStorage<string>('api-token', '')
   const [password, setPassword] = useState('')
+  const [errorCount, setCount] = useState(0)
   const [isError, setIsError] = useState(false)
   const setView = useSetRecoilState(onBoardView)
   const setAppView = useSetRecoilState(appView)
   const setAuthModal = useSetRecoilState(isSessionAuthModal)
-  // const setAppLockdown = useSetRecoilState(isAppLockdown)
+  const setAppLockdown = useSetRecoilState(isAppLockdown)
   const { mode } = useUiMode()
 
   const classes = addClassString('', [isError && 'animate-shake'])
@@ -34,15 +36,32 @@ const UnlockAppView = () => {
     setAuthModal(false)
   }
 
-  const unlockApp = () => {
-    setIsError(true)
+  const isValidPassword = (password: string) => {
+    if (!sessionAuth?.password) return false
+    return (
+      password ===
+      CryptoJS.AES.decrypt(sessionAuth.password, ENCRYPT_KEY).toString(CryptoJS.enc.Utf8)
+    )
+  }
 
-    // setAppLockdown(false)
-    // setAuthModal(false)
+  const playErrorAnim = () => {
+    setIsError(true)
 
     setTimeout(() => {
       setIsError(false)
     }, 1000)
+  }
+
+  const unlockApp = () => {
+    if (!isValidPassword(password)) {
+      playErrorAnim()
+      setCount((prevState) => prevState + 1)
+      return
+    }
+
+    setAppLockdown(false)
+    setAuthModal(false)
+    setCount(0)
   }
 
   const renderNoPasswordRedirect = () => (
@@ -89,7 +108,9 @@ const UnlockAppView = () => {
 
   return (
     <div className='w-full space-y-4'>
-      {sessionAuth?.password ? renderPasswordInput() : renderNoPasswordRedirect()}
+      {sessionAuth?.password && errorCount < MAX_SESSION_UNLOCK_ATTEMPTS
+        ? renderPasswordInput()
+        : renderNoPasswordRedirect()}
     </div>
   )
 }
