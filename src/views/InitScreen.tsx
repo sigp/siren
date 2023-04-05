@@ -8,6 +8,7 @@ import {
   appView,
   beaconNodeEndpoint,
   beaconVersionData,
+  isAppLockdown,
   onBoardView,
   userName,
   validatorClientEndpoint,
@@ -31,6 +32,7 @@ const InitScreen = () => {
   const setOnboardView = useSetRecoilState(onBoardView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
+  const setAppLockdown = useSetRecoilState(isAppLockdown)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
@@ -72,6 +74,7 @@ const InitScreen = () => {
         setBeaconNode(beaconNode)
         setValidatorClient(validatorClient)
         setApiToken(token)
+        setAppLockdown(true)
 
         await checkSyncStatus(beaconNode)
       }
