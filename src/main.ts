@@ -9,6 +9,9 @@ const url = require('url')
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const isDev = require('electron-is-dev')
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config()
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -16,6 +19,7 @@ const createWindow = () => {
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      preload: path.join(__dirname, '../preload.js'),
     },
   })
   mainWindow.maximize()

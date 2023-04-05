@@ -246,3 +246,4 @@ export const TIMEOUT_OPTIONS = [
 ]
 
 export const DEFAULT_TIMEOUT_LENGTH = 10
+export const MAX_SESSION_UNLOCK_ATTEMPTS = 3

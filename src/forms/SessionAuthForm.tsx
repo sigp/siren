@@ -10,6 +10,8 @@ import useLocalStorage from '../hooks/useLocalStorage'
 import { SessionAuthStorage } from '../types'
 import { DEFAULT_TIMEOUT_LENGTH } from '../constants/constants'
 import { OptionType } from '../components/SelectDropDown/SelectDropDown'
+import CryptoJS from 'crypto-js'
+import { ENCRYPT_KEY } from '../constants/window'
 
 export interface SessionAuthForm {
   password: string
@@ -65,7 +67,13 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
       return
     }
 
-    storeSessionAuth({ password, delay: sessionTime === 'required' ? 0 : (sessionTime as number) })
+    const encryptedPassword = password
+      ? CryptoJS.AES.encrypt(password, ENCRYPT_KEY).toString()
+      : undefined
+    storeSessionAuth({
+      password: encryptedPassword,
+      delay: sessionTime === 'required' ? 0 : (sessionTime as number),
+    })
     viewSetup()
   }
 

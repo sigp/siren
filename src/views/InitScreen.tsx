@@ -23,6 +23,8 @@ import { UsernameStorage } from '../types/storage'
 import AppDescription from '../components/AppDescription/AppDescription'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
+import CryptoJS from 'crypto-js'
+import { ENCRYPT_KEY } from '../constants/window'
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -39,7 +41,7 @@ const InitScreen = () => {
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
   const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
-  const [token] = useLocalStorage<string | undefined>('api-token', undefined)
+  const [encryptedToken] = useLocalStorage<string | undefined>('api-token', undefined)
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
 
   const moveToView = (view: AppView) => {
@@ -103,14 +105,17 @@ const InitScreen = () => {
   useEffect(() => {
     if (isReady) return
 
-    if (!validatorClient || !beaconNode || !token || !username) {
+    if (!validatorClient || !beaconNode || !encryptedToken || !username) {
       moveToView(AppView.ONBOARD)
       return
     }
     setUserName(username)
-    void setNodeInfo(validatorClient, beaconNode, token)
+    const decryptedToken = CryptoJS.AES.decrypt(encryptedToken, ENCRYPT_KEY).toString(
+      CryptoJS.enc.Utf8,
+    )
+    void setNodeInfo(validatorClient, beaconNode, decryptedToken)
     setReady(true)
-  }, [validatorClient, beaconNode, token, isReady])
+  }, [validatorClient, beaconNode, encryptedToken, isReady])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>

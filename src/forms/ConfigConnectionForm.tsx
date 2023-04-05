@@ -26,6 +26,8 @@ import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
+import CryptoJS from 'crypto-js'
+import { ENCRYPT_KEY } from '../constants/window'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -223,7 +225,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       if (isRemember) {
         storeBeaconNode(beaconNode)
         storeValidatorClient(validatorClient)
-        storeApiToken(apiToken)
+        storeApiToken(CryptoJS.AES.encrypt(apiToken, ENCRYPT_KEY).toString())
         storeUserName(userName)
       }
 

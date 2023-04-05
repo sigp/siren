@@ -72,3 +72,11 @@ export type SessionAuthStorage = {
   password: string
   delay: number
 }
+
+declare global {
+  interface Window {
+    env: {
+      ENCRYPT_KEY: string
+    }
+  }
+}
