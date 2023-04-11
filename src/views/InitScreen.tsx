@@ -77,8 +77,7 @@ const InitScreen = () => {
         await checkSyncStatus(beaconNode)
       }
     } catch (e) {
-      console.log('wrong...')
-      // moveToOnboard()
+      moveToOnboard()
     }
   }
   const checkSyncStatus = async (beaconNode: Endpoint) => {
