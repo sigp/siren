@@ -12,7 +12,10 @@ export interface ValidatorCardActionProps {
 
 const ValidatorCardAction: FC<ValidatorCardActionProps> = ({ icon, title, onClick, className }) => {
   return (
-    <div onClick={onClick} className={addClassString('border p-4 space-y-2', [className])}>
+    <div
+      onClick={onClick}
+      className={addClassString('border p-4 space-y-2 cursor-pointer', [className])}
+    >
       <ValidatorActionIcon icon={icon} color='text-primary' />
       <div>
         <Typography>—</Typography>
