@@ -231,19 +231,4 @@ export const REQUIRED_VALIDATOR_VERSION = {
 }
 
 export const DEFAULT_MAX_NETWORK_ERROR = 3
-
-export const TEN_MINUTES = 10
-export const THIRTY_MINUTES = 30
-export const SIXTY_MINUTES = 60
-export const ONE_HUNDRED_TWENTY_MINUTES = 120
-
-export const TIMEOUT_OPTIONS = [
-  { title: 'Always Require', value: 'required' },
-  { title: '10 minutes', value: TEN_MINUTES },
-  { title: '30 minutes', value: THIRTY_MINUTES },
-  { title: '1 hour', value: SIXTY_MINUTES },
-  { title: '2 hour', value: ONE_HUNDRED_TWENTY_MINUTES },
-]
-
-export const DEFAULT_TIMEOUT_LENGTH = 10
 export const MAX_SESSION_UNLOCK_ATTEMPTS = 3

@@ -7,7 +7,6 @@ import {
   activeCurrency,
   beaconNetworkError,
   dashView,
-  isAppLockdown,
   uiMode,
   validatorNetworkError,
 } from '../../recoil/atoms'
@@ -23,8 +22,6 @@ import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage'
 import useValidatorSyncPolling from '../../hooks/useValidatorSyncPolling'
 import Spinner from '../../components/Spinner/Spinner'
 import NetworkErrorModal from '../../components/NetworkErrorModal/NetworkErrorModal'
-import SessionController from '../../components/SessionController/SessionController'
-import SessionAuthModal from '../../components/SessionAuthModal/SessionAuthModal'
 
 const Sync = () => {
   useBeaconSyncPolling()
@@ -41,7 +38,6 @@ const DashboardFallback = () => (
 const Dashboard = () => {
   const mode = useRecoilValue(uiMode)
   const content = useRecoilValue(dashView)
-  const [isLockDown, setLockDown] = useRecoilState(isAppLockdown)
   const [isReadySync, setSync] = useState(false)
   const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
@@ -50,7 +46,6 @@ const Dashboard = () => {
     return () => {
       isBeaconNetworkError(false)
       isValidatorNetworkError(false)
-      setLockDown(false)
     }
   }, [])
 
@@ -99,10 +94,8 @@ const Dashboard = () => {
       } w-screen h-screen flex overflow-hidden relative`}
     >
       {isReadySync && <Sync />}
-      {!isLockDown && <SessionController />}
       <SideBar />
       <NetworkErrorModal />
-      <SessionAuthModal />
       <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar />
         <div className='flex-1 w-full overflow-scroll'>

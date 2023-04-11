@@ -5,8 +5,8 @@ import SideItem from './SideItem'
 import SideBarText from './SideBarText'
 import { PRIMARY_VIEWS, SECONDARY_VIEWS } from '../../constants/constants'
 import { createElement, useCallback } from 'react'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { dashView, isAppLockdown, isSessionAuthModal, isSideBarOpen } from '../../recoil/atoms'
+import { useRecoilState } from 'recoil'
+import { dashView, isSideBarOpen } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
 import useUiMode from '../../hooks/useUiMode'
@@ -14,18 +14,13 @@ import UiModeIcon from '../UiModeIcon/UiModeIcon'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import addClassString from '../../utilities/addClassString'
 import useClickOutside from '../../hooks/useClickOutside'
-import LockStatus from '../LockStatus/LockStatus'
 
 const SideBar = () => {
   const { t } = useTranslation()
   const [view, setView] = useRecoilState(dashView)
   const [showSideBar, toggleSideBar] = useRecoilState(isSideBarOpen)
-  const setIsAuthModal = useSetRecoilState(isSessionAuthModal)
-  const isLocked = useRecoilValue(isAppLockdown)
   const { mode, toggleUiMode } = useUiMode()
   const isMobile = useMediaQuery('(max-width: 425px)')
-
-  const openAuthModal = () => setIsAuthModal(true)
 
   const sideBarClasses = addClassString(
     'z-40 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform',
@@ -86,9 +81,6 @@ const SideBar = () => {
               </SideItem>
             ))}
             <div className='w-full h-6 flex items-center justify-center'>
-              <LockStatus onClick={openAuthModal} status={isLocked} />
-            </div>
-            <div className='w-full h-6 flex items-center justify-center'>
               <UiModeIcon onClick={toggleUiMode} mode={mode} />
             </div>
           </ul>
@@ -122,11 +114,6 @@ const SideBar = () => {
                 text={t(title)}
               />
             ))}
-            <SideBarText
-              onClick={openAuthModal}
-              className='w-auto mr-4'
-              text={`Actions - ${isLocked ? 'Locked' : 'Unlocked'}`}
-            />
             <div onClick={toggleUi} className='w-full flex items-center'>
               <SideBarText className='w-auto mr-4' text={t('sidebar.theme')} />
               <UiModeIcon className='md:hidden' mode={mode} />
