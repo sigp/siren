@@ -28,8 +28,8 @@ const SessionConfig = () => {
             <Typography>
               Protect your account with an optional session password. This extra layer of security
               ensures that only you have access to your account, even if someone gains access to
-              your device. If no password is set, Siren will automatically lock sensitive validator
-              actions and redirect back to the configuration settings.
+              your device. If no password is set, Siren will automatically default back to the
+              api-token you set in your configuration settings.
             </Typography>
             <div className='w-full flex'>
               <div className='space-y-8 w-full'>

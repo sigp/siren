@@ -46,7 +46,11 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
   const password = watch('password')
 
   const onSubmit = () => {
-    if (!isValid) {
+    if (!password) {
+      viewSetup()
+      return
+    }
+    if (!isValid && password) {
       toast.error('Invalid SessionController Auth Password', {
         position: 'top-right',
         autoClose: 5000,
