@@ -6,8 +6,7 @@ import Typography from '../../../components/Typography/Typography'
 import Input from '../../../components/Input/Input'
 import SessionAuthForm from '../../../forms/SessionAuthForm'
 import { Controller } from 'react-hook-form'
-import SelectDropDown from '../../../components/SelectDropDown/SelectDropDown'
-import { TIMEOUT_OPTIONS } from '../../../constants/constants'
+import { ButtonFace } from '../../../components/Button/Button'
 
 const SessionConfig = () => {
   const setView = useSetRecoilState(onBoardView)
@@ -15,10 +14,11 @@ const SessionConfig = () => {
 
   return (
     <SessionAuthForm>
-      {({ control, onSubmit, sessionTime, setTime }) => (
+      {({ control, onSubmit }) => (
         <ValidatorSetupLayout
           onStepBack={viewConfig}
           onNext={onSubmit}
+          ctaType={ButtonFace.SECONDARY}
           title='Session Authentication'
           currentStep='Session Auth'
           previousStep='Configure'
@@ -32,7 +32,7 @@ const SessionConfig = () => {
               actions and redirect back to the configuration settings.
             </Typography>
             <div className='w-full flex'>
-              <div className='space-y-8 w-1/2'>
+              <div className='space-y-8 w-full'>
                 <Controller
                   name='password'
                   control={control}
@@ -61,31 +61,6 @@ const SessionConfig = () => {
                     />
                   )}
                 />
-              </div>
-              <div className='flex flex-col flex-1 border-l-style500 ml-8'>
-                <div className='px-4 space-y-2'>
-                  <Typography
-                    isBold
-                    family='font-archivo'
-                    color='text-dark500'
-                    type='text-caption1'
-                  >
-                    Session Timeout
-                  </Typography>
-                  <Typography type='text-caption1'>
-                    Configure your session timeout period. Siren will prompt you to enter your
-                    password if the session exceeds the timeout period.
-                  </Typography>
-                </div>
-                <div className='flex flex-1 items-center justify-center mt-6'>
-                  <SelectDropDown
-                    className='w-42'
-                    value={sessionTime}
-                    onSelect={setTime}
-                    label=''
-                    options={TIMEOUT_OPTIONS}
-                  />
-                </div>
               </div>
             </div>
           </div>

@@ -1,17 +1,13 @@
-import { FC, ReactElement, useState } from 'react'
+import { FC, ReactElement } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { sessionAuthValidation } from '../validation/sessionAuthValidation'
 import { OnboardView } from '../constants/enums'
-import { useSetRecoilState } from 'recoil'
-import { onBoardView } from '../recoil/atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { apiToken, onBoardView } from '../recoil/atoms'
 import { toast } from 'react-toastify'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { SessionAuthStorage } from '../types'
-import { DEFAULT_TIMEOUT_LENGTH } from '../constants/constants'
-import { OptionType } from '../components/SelectDropDown/SelectDropDown'
 import CryptoJS from 'crypto-js'
-import { ENCRYPT_KEY } from '../constants/window'
 
 export interface SessionAuthForm {
   password: string
@@ -20,10 +16,8 @@ export interface SessionAuthForm {
 
 export interface RenderProps {
   control: Control<SessionAuthForm>
-  sessionTime: OptionType
   isLoading: boolean
   onSubmit: () => void
-  setTime: (time: OptionType) => void
 }
 
 export interface SessionAuthFormProps {
@@ -33,11 +27,8 @@ export interface SessionAuthFormProps {
 const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
   const setView = useSetRecoilState(onBoardView)
   const viewSetup = () => setView(OnboardView.SETUP)
-  const [sessionTime, setTime] = useState<OptionType>(DEFAULT_TIMEOUT_LENGTH)
-  const [, storeSessionAuth] = useLocalStorage<SessionAuthStorage | undefined>(
-    'session-auth',
-    undefined,
-  )
+  const token = useRecoilValue(apiToken)
+  const [, storeApiToken] = useLocalStorage<string>('api-token', '')
 
   const {
     control,
@@ -55,7 +46,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
   const password = watch('password')
 
   const onSubmit = () => {
-    if (password && !isValid) {
+    if (!isValid) {
       toast.error('Invalid SessionController Auth Password', {
         position: 'top-right',
         autoClose: 5000,
@@ -67,13 +58,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
       return
     }
 
-    const encryptedPassword = password
-      ? CryptoJS.AES.encrypt(password, ENCRYPT_KEY).toString()
-      : undefined
-    storeSessionAuth({
-      password: encryptedPassword,
-      delay: sessionTime === 'required' ? 0 : (sessionTime as number),
-    })
+    storeApiToken(CryptoJS.AES.encrypt(token, password).toString())
     viewSetup()
   }
 
@@ -83,9 +68,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
         children({
           control,
           isLoading: false,
-          sessionTime,
           onSubmit,
-          setTime,
         })}
     </form>
   )

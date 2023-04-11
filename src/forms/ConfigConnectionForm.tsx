@@ -26,8 +26,6 @@ import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
-import CryptoJS from 'crypto-js'
-import { ENCRYPT_KEY } from '../constants/window'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -73,15 +71,13 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isVersionError, setVersionError] = useState(false)
 
   const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
-  const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
   const [storedVc, storeValidatorClient] = useLocalStorage<EndpointStorage>(
     'validatorClient',
     undefined,
   )
   const [storedName, storeUserName] = useLocalStorage<string>('username', '')
 
-  const hasCache =
-    Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedToken) && Boolean(storedName)
+  const hasCache = Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedName)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -98,7 +94,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     defaultValues: {
       beaconNode: storedBnNode || endPointDefault,
       validatorClient: storedVc || vcDefaultEndpoint,
-      apiToken: storedToken,
+      apiToken: '',
       deviceName: '',
       userName: storedName,
       isRemember: hasCache,
@@ -225,7 +221,6 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       if (isRemember) {
         storeBeaconNode(beaconNode)
         storeValidatorClient(validatorClient)
-        storeApiToken(CryptoJS.AES.encrypt(apiToken, ENCRYPT_KEY).toString())
         storeUserName(userName)
       }
 

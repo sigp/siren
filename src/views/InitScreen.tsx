@@ -1,40 +1,38 @@
 import Typography from '../components/Typography/Typography'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { Endpoint } from '../types'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import {
-  apiToken,
   appView,
+  userName,
+  onBoardView,
   beaconNodeEndpoint,
   beaconVersionData,
-  isAppLockdown,
-  onBoardView,
-  userName,
-  validatorClientEndpoint,
+  apiToken,
   validatorVersionData,
+  validatorClientEndpoint,
 } from '../recoil/atoms'
-import { AppView, OnboardView } from '../constants/enums'
+import { AppView, OnboardView, UiMode } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
 import { UsernameStorage } from '../types/storage'
 import AppDescription from '../components/AppDescription/AppDescription'
+import SessionAuthModal from '../components/SessionAuthModal/SessionAuthModal'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
-import CryptoJS from 'crypto-js'
-import { ENCRYPT_KEY } from '../constants/window'
 
 const InitScreen = () => {
   const { t } = useTranslation()
   const [isReady, setReady] = useState(false)
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
+  const [isAuthModal, toggleAuthModal] = useState(false)
   const setOnboardView = useSetRecoilState(onBoardView)
   const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
   const setApiToken = useSetRecoilState(apiToken)
-  const setAppLockdown = useSetRecoilState(isAppLockdown)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
@@ -49,7 +47,6 @@ const InitScreen = () => {
       setView(view)
     }, 1000)
   }
-
   const moveToOnboard = () => moveToView(AppView.ONBOARD)
 
   const incrementStep = () => setStep((prev) => prev + 1)
@@ -76,12 +73,12 @@ const InitScreen = () => {
         setBeaconNode(beaconNode)
         setValidatorClient(validatorClient)
         setApiToken(token)
-        setAppLockdown(true)
 
         await checkSyncStatus(beaconNode)
       }
     } catch (e) {
-      moveToOnboard()
+      console.log('wrong...')
+      // moveToOnboard()
     }
   }
   const checkSyncStatus = async (beaconNode: Endpoint) => {
@@ -101,6 +98,16 @@ const InitScreen = () => {
       moveToOnboard()
     }
   }
+  const finishInit = useCallback(
+    (token?: string) => {
+      if (validatorClient && beaconNode && token) {
+        toggleAuthModal(false)
+        void setNodeInfo(validatorClient, beaconNode, token)
+        setReady(true)
+      }
+    },
+    [validatorClient, beaconNode, encryptedToken],
+  )
 
   useEffect(() => {
     if (isReady) return
@@ -110,15 +117,12 @@ const InitScreen = () => {
       return
     }
     setUserName(username)
-    const decryptedToken = CryptoJS.AES.decrypt(encryptedToken, ENCRYPT_KEY).toString(
-      CryptoJS.enc.Utf8,
-    )
-    void setNodeInfo(validatorClient, beaconNode, decryptedToken)
-    setReady(true)
-  }, [validatorClient, beaconNode, encryptedToken, isReady])
+    toggleAuthModal(true)
+  }, [validatorClient, beaconNode, encryptedToken])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
+      <SessionAuthModal mode={UiMode.LIGHT} onSuccess={finishInit} isOpen={isAuthModal} />
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />
