@@ -10,6 +10,7 @@ import CryptoJS from 'crypto-js'
 import Button, { ButtonFace } from '../Button/Button'
 import Input from '../Input/Input'
 import { MAX_SESSION_UNLOCK_ATTEMPTS } from '../../constants/constants'
+import { useTranslation } from 'react-i18next'
 
 export interface SessionAuthModalProps {
   onSuccess: (token?: string) => void
@@ -28,6 +29,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   onClose,
   mode,
 }) => {
+  const { t } = useTranslation()
   const [localStorageApiToken, storeApiToken] = useLocalStorage<string>('api-token', '')
   const memoryApiToken = useRecoilValue(apiToken)
   const [password, setPassword] = useState('')
@@ -101,25 +103,18 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
 
   const renderNoPasswordRedirect = () => (
     <>
-      <Typography type='text-caption1'>
-        Authentication failed. Please return to the configuration settings to re-enter your
-        validator credentials.
-      </Typography>
+      <Typography type='text-caption1'>{t('sessionAuthModal.failedResponse')}</Typography>
       <div className='w-full flex justify-center p-4'>
         <Button className={classes} onClick={viewConfig} type={ButtonFace.SECONDARY}>
           <i className='bi bi-box-arrow-right text-white mr-2' />
-          Configuration Settings
+          {t('sessionAuthModal.configSettings')}
         </Button>
       </div>
     </>
   )
   const renderPasswordInput = () => (
     <>
-      <Typography type='text-caption1'>
-        To ensure the safety of your account, password authentication is required to complete this
-        action. Please confirm your password to proceed. Please be aware that you have a maximum of
-        three attempts.
-      </Typography>
+      <Typography type='text-caption1'>{t('sessionAuthModal.passwordPrompt')}</Typography>
       <Input uiMode={mode} type='password' label='Password' value={password} onChange={setInput} />
       <div className='w-full flex justify-center p-4'>
         <Button
@@ -128,7 +123,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
           onClick={authenticateAction}
           type={ButtonFace.SECONDARY}
         >
-          Confirm Password
+          {t('confirmPassword')}
         </Button>
       </div>
     </>
@@ -145,7 +140,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
               color='text-transparent'
               className='primary-gradient-text'
             >
-              Session Authentication
+              {t('sessionAuthModal.title')}
             </Typography>
           </div>
           <div className='w-full space-y-4'>

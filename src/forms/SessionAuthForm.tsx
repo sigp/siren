@@ -8,6 +8,7 @@ import { apiToken, onBoardView } from '../recoil/atoms'
 import { toast } from 'react-toastify'
 import useLocalStorage from '../hooks/useLocalStorage'
 import CryptoJS from 'crypto-js'
+import { useTranslation } from 'react-i18next'
 
 export interface SessionAuthForm {
   password: string
@@ -25,6 +26,7 @@ export interface SessionAuthFormProps {
 }
 
 const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
+  const { t } = useTranslation()
   const setView = useSetRecoilState(onBoardView)
   const viewSetup = () => setView(OnboardView.SETUP)
   const token = useRecoilValue(apiToken)
@@ -51,7 +53,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
       return
     }
     if (!isValid && password) {
-      toast.error('Invalid SessionController Auth Password', {
+      toast.error(t('error.sessionAuth.invalidPassword') as string, {
         position: 'top-right',
         autoClose: 5000,
         theme: 'colored',

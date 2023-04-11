@@ -7,8 +7,10 @@ import Input from '../../../components/Input/Input'
 import SessionAuthForm from '../../../forms/SessionAuthForm'
 import { Controller } from 'react-hook-form'
 import { ButtonFace } from '../../../components/Button/Button'
+import { useTranslation } from 'react-i18next'
 
 const SessionConfig = () => {
+  const { t } = useTranslation()
   const setView = useSetRecoilState(onBoardView)
   const viewConfig = () => setView(OnboardView.CONFIGURE)
 
@@ -19,18 +21,13 @@ const SessionConfig = () => {
           onStepBack={viewConfig}
           onNext={onSubmit}
           ctaType={ButtonFace.SECONDARY}
-          title='Session Authentication'
-          currentStep='Session Auth'
-          previousStep='Configure'
-          ctaText='Continue'
+          title={t('sessionConfiguration.title')}
+          currentStep={t('sessionConfiguration.currentStep')}
+          previousStep={t('sessionConfiguration.prevStep')}
+          ctaText={t('continue')}
         >
           <div className='space-y-8 mb-12'>
-            <Typography>
-              Protect your account with an optional session password. This extra layer of security
-              ensures that only you have access to your account, even if someone gains access to
-              your device. If no password is set, Siren will automatically default back to the
-              api-token you set in your configuration settings.
-            </Typography>
+            <Typography>{t('sessionConfiguration.description')}</Typography>
             <div className='w-full flex'>
               <div className='space-y-8 w-full'>
                 <Controller
@@ -39,7 +36,7 @@ const SessionConfig = () => {
                   render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
                     <Input
                       type='password'
-                      label='Password'
+                      label={t('password')}
                       error={error?.message}
                       uiMode={UiMode.LIGHT}
                       {...props}
@@ -54,7 +51,7 @@ const SessionConfig = () => {
                       type='password'
                       isDisablePaste
                       isDisableToggle
-                      label='Confirm Password'
+                      label={t('confirmPassword')}
                       error={error?.message}
                       uiMode={UiMode.LIGHT}
                       {...props}

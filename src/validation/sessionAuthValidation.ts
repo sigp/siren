@@ -5,12 +5,12 @@ export const sessionAuthValidation = yup.object().shape({
   password: yup
     .string()
     .min(12, i18n.t('error.sessionAuth.length'))
-    .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-    .matches(/[0-9]/, 'Password must contain at least one number')
-    .matches(/[$&+,:;=?@#|'<>.^*()%!-]/, 'Password must contain at least one special character'),
+    .matches(/[a-z]/, i18n.t('error.sessionAuth.lowercaseRequired'))
+    .matches(/[A-Z]/, i18n.t('error.sessionAuth.uppercaseRequired'))
+    .matches(/[0-9]/, i18n.t('error.sessionAuth.numberRequired'))
+    .matches(/[$&+,:;=?@#|'<>.^*()%!-]/, i18n.t('error.sessionAuth.specialCharRequired')),
   password_confirmation: yup
     .string()
-    .oneOf([yup.ref('password'), null], 'error.sessionAuth.passwordMatch')
-    .required('error.sessionAuth.confirmationRequired'),
+    .oneOf([yup.ref('password'), null], i18n.t('error.sessionAuth.passwordMatch'))
+    .required(i18n.t('error.sessionAuth.confirmationRequired')),
 })
