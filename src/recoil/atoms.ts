@@ -159,3 +159,8 @@ export const validatorMetrics = atom<BeaconValidatorMetricResults[]>({
   key: 'validatorMetrics',
   default: undefined,
 })
+
+export const sessionAuthErrorCount = atom<number>({
+  key: 'sessionAuthErrorCount',
+  default: 0,
+})
