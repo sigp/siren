@@ -7,6 +7,7 @@ import {
   activeCurrency,
   beaconNetworkError,
   dashView,
+  sessionAuthErrorCount,
   uiMode,
   validatorNetworkError,
 } from '../../recoil/atoms'
@@ -41,11 +42,13 @@ const Dashboard = () => {
   const [isReadySync, setSync] = useState(false)
   const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
+  const setSessionAuthErrorCount = useSetRecoilState(sessionAuthErrorCount)
 
   useEffect(() => {
     return () => {
       isBeaconNetworkError(false)
       isValidatorNetworkError(false)
+      setSessionAuthErrorCount(0)
     }
   }, [])
 

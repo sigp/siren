@@ -54,7 +54,7 @@ const Button: FC<ButtonProps> = ({
       case ButtonFace.TERTIARY:
         return 'border border-primary text-primary'
       case ButtonFace.SECONDARY:
-        return 'bg-primary text-white'
+        return 'bg-primary text-white disabled:cursor-default disabled:opacity-30'
       case ButtonFace.WHITE:
         return 'bg-transparent disabled:border-dark300 disabled:text-dark300 disabled:cursor-default border border-white text-white'
       default:

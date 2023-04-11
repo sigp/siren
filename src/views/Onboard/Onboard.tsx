@@ -4,6 +4,7 @@ import { OnboardView } from '../../constants/enums'
 import SelectProvider from './views/SelectProvider'
 import ConfigureConnection from './views/ConfigureConnection'
 import ValidatorSetup from './views/ValidatorSetup/ValidatorSetup'
+import SessionConfig from './views/SessionConfig'
 
 const Onboard = () => {
   const view = useRecoilValue(onBoardView)
@@ -14,6 +15,8 @@ const Onboard = () => {
         return <ConfigureConnection />
       case OnboardView.SETUP:
         return <ValidatorSetup />
+      case OnboardView.SESSION:
+        return <SessionConfig />
       default:
         return <SelectProvider />
     }

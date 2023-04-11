@@ -24,9 +24,12 @@
       "saturday": "Sat"
     }
   },
+  "password": "Password",
+  "confirmPassword": "Confirm Password",
   "helloUser": "Hello {{user}},",
   "lighthouseVersion": "Lighthouse Version",
   "lighthouseUiVersion": "Lighthouse UI Version",
+  "sessionAuth": "Session Auth",
   "configure": "Configure",
   "continue": "Continue",
   "comingSoon": "Coming Soon",
@@ -231,6 +234,16 @@
     "vcPort": "VC Port"
   },
   "error": {
+    "sessionAuth": {
+      "invalidPassword": "Invalid Session Password",
+      "length": "Password must be at least 12 characters",
+      "passwordMatch": "Confirmation must match password",
+      "confirmationRequired": "Password confirmation is required",
+      "lowercaseRequired": "Password must contain at least one lowercase letter",
+      "uppercaseRequired": "Password must contain at least one uppercase letter",
+      "numberRequired": "Password must contain at least one number",
+      "specialCharRequired": "Password must contain at least one special character"
+    },
     "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin in {{type}} config",
     "unknownError": "Unknown {{type}} NODE error.",
     "validatorInfo": "Error Loading Validator Info...",
@@ -325,5 +338,17 @@
     "validatorClient": "Validator Client",
     "affectedNetworks": "Siren failed to maintain connection to the designated <0>{{network}}</0>.",
     "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
+  },
+  "sessionConfiguration": {
+    "prevStep": "Configuration",
+    "currentStep": "Session Auth",
+    "title": "Session Authentication",
+    "description": "Protect your account with an optional session password. This extra layer of security ensures that only you have access to your account, even if someone gains access to your device. If no password is set, Siren will automatically default back to the api-token you set in your configuration settings."
+  },
+  "sessionAuthModal": {
+    "title": "Session Authentication",
+    "passwordPrompt": "To ensure the safety of your account, password authentication is required to complete this action. Please confirm your password to proceed. Please be aware that you have a maximum of three attempts.",
+    "failedResponse": "Authentication failed. Please return to the configuration settings to re-enter your validator credentials.",
+    "configSettings": "Configuration Settings"
   }
 }
