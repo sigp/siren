@@ -57,4 +57,11 @@ lcli \
 	--testnet-dir $TESTNET_DIR \
 	$GENESIS_VALIDATOR_COUNT
 
+lcli \
+	replace-state-pubkeys \
+	--spec $SPEC_PRESET \
+	--testnet-dir $TESTNET_DIR \
+	$TESTNET_DIR/genesis.ssz \
+	"$VALIDATOR_MNEMONIC"
+
 echo Created genesis state in $TESTNET_DIR
