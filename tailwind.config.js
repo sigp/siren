@@ -36,6 +36,8 @@ module.exports = {
         success: '#2ED47A',
         warning: '#FFB800',
         error: '#FF4D00',
+        lightError: '#FFDDE8',
+        lightError200: '#FFB7B3',
       },
       backgroundImage: {
         lighthouse: 'url(\'./assets/images/lightHouseBg.png\')',

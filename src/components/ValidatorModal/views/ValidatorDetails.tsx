@@ -1,7 +1,7 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { validatorIndex, validatorMetrics } from '../../../recoil/atoms'
+import { useRecoilValue } from 'recoil'
+import { validatorMetrics } from '../../../recoil/atoms'
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import Typography from '../../Typography/Typography'
 import { selectEthExchangeRates } from '../../../recoil/selectors/selectEthExchangeRates'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
@@ -11,24 +11,25 @@ import ValidatorIncomeSummary from '../../ValidatorIncomeSummary/ValidatorIncome
 import StatusIcon from '../../StatusIcon/StatusIcon'
 import ValidatorStatusProgress from '../../ValidatorStatusProgress/ValidatorStatusProgress'
 import ValidatorGraffitiInput from '../../ValidatorGraffitiInput/ValidatorGraffitiInput'
-import ValidatorCardAction from '../ValidatorCardAction'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
-import DisabledTooltip from '../../DisabledTooltip/DisabledTooltip'
 import useValidatorGraffiti from '../../../hooks/useValidatorGraffiti'
 import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
 import BeaconChaLink from '../../BeaconChaLink/BeaconChaLink'
 import getAvgEffectivenessStatus from '../../../utilities/getAvgEffectivenessStatus'
 import EffectivenessBreakdown from '../../EffectivenessBreakdown/EffectivenessBreakdown'
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
+import isBlsAddress from '../../../utilities/isBlsAddress'
+import ValidatorActions from '../ValidatorActions'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
-  const setValidatorIndex = useSetRecoilState(validatorIndex)
   const validator = useRecoilValue(selectValidatorDetail)
   const metrics = useRecoilValue(validatorMetrics)
-  const { index, balance, status } = validator || {}
+  const { index, balance, status, withdrawalAddress } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
+
+  const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
 
   const avgTargetEffectiveness = useMemo(() => {
     if (!metrics || !index) return
@@ -56,18 +57,14 @@ const ValidatorDetails = () => {
 
   const combinedStatus = getAvgEffectivenessStatus(combinedEffectiveness)
 
+  console.log(validator)
+
   const { graffiti } = useValidatorGraffiti(validator)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0)
 
-  useEffect(() => {
-    return () => {
-      setValidatorIndex(undefined)
-    }
-  }, [])
-
   return validator ? (
-    <div className='w-full'>
+    <div className='w-full relative'>
       <div className='w-full flex flex-col lg:flex-row'>
         <ValidatorInfoCard validator={validator} />
         <div className='flex-1 flex py-4 justify-center items-center'>
@@ -152,47 +149,7 @@ const ValidatorDetails = () => {
       </div>
       <ValidatorGraffitiInput value={graffiti} />
       <ValidatorDetailTable validator={validator} />
-      <div className='w-full border-t-style100 space-y-4 p-4'>
-        <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
-        <div className='w-full flex flex-wrap lg:space-x-3'>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-down-circle'
-              title={t('validatorManagement.actions.depositFunds')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-key-fill'
-              title={t('validatorManagement.actions.backupKeys')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-power'
-              title={t('validatorManagement.actions.stopValidator')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.exportValidator')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.exitValidator')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.withdrawValidator')}
-            />
-          </DisabledTooltip>
-        </div>
-      </div>
+      <ValidatorActions isConversionRequired={isBls} />
       <div className='p-3 border-t-style100'>
         <ValidatorDisclosure />
       </div>

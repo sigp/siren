@@ -64,3 +64,8 @@ export enum Network {
   Goerli = 'Goerli',
   Mainnet = 'Mainnet',
 }
+
+export enum ValidatorModalView {
+  DETAILS = 'DETAILS',
+  BLS = 'BLS',
+}
