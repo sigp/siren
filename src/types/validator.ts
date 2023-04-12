@@ -25,6 +25,7 @@ export type ValidatorInfo = {
   pubKey: string
   rewards: number
   slashed: boolean
+  withdrawalAddress: string
   status: ValidatorStatus
   processed: number
   missed: number
