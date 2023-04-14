@@ -37,16 +37,18 @@ lcli \
 	--seconds-per-eth1-block $SECONDS_PER_ETH1_BLOCK \
 	--proposer-score-boost "$PROPOSER_SCORE_BOOST" \
 	--validator-count $GENESIS_VALIDATOR_COUNT \
-	--interop-genesis-state \
+	--derived-genesis-state \
+	--mnemonics-phrase "$MNEMONICS_PHRASE" \
 	--force
 
 echo Specification and genesis.ssz generated at $TESTNET_DIR.
 echo "Generating $VALIDATOR_COUNT validators concurrently... (this may take a while)"
 
 lcli \
-	insecure-validators \
+	mnemonics-validators \
 	--count $VALIDATOR_COUNT \
 	--base-dir $DATADIR \
+	--mnemonics-phrase "$MNEMONICS_PHRASE" \
 	--node-count $BN_COUNT
 
 echo Validators generated with keystore passwords at $DATADIR.
