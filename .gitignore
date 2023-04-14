@@ -28,5 +28,6 @@ build-storybook.log
 
 # local-testnet
 /local-testnet/testnet-data
+/local-testnet/bls_to_execution_changes
 /out
 .env

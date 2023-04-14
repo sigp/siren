@@ -23,7 +23,7 @@ function print_help() {
   echo "$0 0 0,1,2 0x49011adbCC3bC9c0307BB07F37Dda1a1a9c69d2E"
 }
 
-vars=("GENESIS_FORK_VERSION" "VALIDATOR_MNEMONIC")
+vars=("GENESIS_FORK_VERSION" "MNEMONICS_PHRASE")
 for varname in "${vars[@]}"; do
   if [ -z "${!varname}" ]; then
     echo "Error: Variable $varname is not set. Please set it in vars.env" >&2
@@ -68,7 +68,7 @@ docker run -it --rm -v $(pwd)/bls_to_execution_changes:/app/bls_to_execution_cha
   --devnet_chain_setting "$devnet_chain_setting" \
   --validator_start_index "$VALIDATOR_START_INDEX" --validator_indices "$VALIDATOR_INDICES" \
   --bls_withdrawal_credentials_list "$validator_withdrawal_credentials_list" \
-  --mnemonic "$VALIDATOR_MNEMONIC" \
+  --mnemonic "$MNEMONICS_PHRASE" \
   --execution_address "$EXECUTION_ADDRESS"
 
 echo "BLS to execution change generated in bls_to_execution_changes directory."

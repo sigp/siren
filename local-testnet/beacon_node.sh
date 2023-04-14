@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 
 #
 # Starts a beacon node based upon a genesis state created by `./setup.sh`.
@@ -30,6 +30,8 @@ while getopts "d:sh" flag; do
        echo "  DATADIR       Value for --datadir parameter"
        echo "  NETWORK-PORT  Value for --enr-udp-port, --enr-tcp-port and --port"
        echo "  HTTP-PORT     Value for --http-port"
+       echo "  EXECUTION-ENDPOINT     Value for --execution-endpoint"
+       echo "  EXECUTION-JWT     Value for --execution-jwt"
        exit
        ;;
   esac
@@ -39,14 +41,19 @@ done
 data_dir=${@:$OPTIND+0:1}
 network_port=${@:$OPTIND+1:1}
 http_port=${@:$OPTIND+2:1}
+execution_endpoint=${@:$OPTIND+3:1}
+execution_jwt=${@:$OPTIND+4:1}
 
-exec lighthouse \
+lighthouse_binary=lighthouse
+
+exec $lighthouse_binary \
 	--debug-level $DEBUG_LEVEL \
 	bn \
 	$SUBSCRIBE_ALL_SUBNETS \
 	--datadir $data_dir \
 	--testnet-dir $TESTNET_DIR \
 	--enable-private-discovery \
+  --disable-peer-scoring \
 	--staking \
 	--enr-address 127.0.0.1 \
 	--enr-udp-port $network_port \
@@ -57,4 +64,6 @@ exec lighthouse \
 	--http-port $http_port \
 	--disable-packet-filter \
 	--target-peers $((BN_COUNT - 1)) \
-	--gui
+	--gui \
+  --execution-endpoint $execution_endpoint \
+  --execution-jwt $execution_jwt
