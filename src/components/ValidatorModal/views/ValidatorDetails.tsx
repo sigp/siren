@@ -57,8 +57,6 @@ const ValidatorDetails = () => {
 
   const combinedStatus = getAvgEffectivenessStatus(combinedEffectiveness)
 
-  console.log(validator)
-
   const { graffiti } = useValidatorGraffiti(validator)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0)

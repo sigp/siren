@@ -67,5 +67,4 @@ export enum Network {
 
 export enum ValidatorModalView {
   DETAILS = 'DETAILS',
-  BLS = 'BLS',
 }

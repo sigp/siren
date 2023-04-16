@@ -7,7 +7,6 @@ import { validatorIndex } from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import RodalModal from '../RodalModal/RodalModal'
 import { ValidatorModalView } from '../../constants/enums'
-import ValidatorBls from './views/ValidatorBls'
 
 export interface ValidatorModalContextProps {
   setView: Dispatch<SetStateAction<ValidatorModalView>>
@@ -34,8 +33,6 @@ const ValidatorModal = () => {
 
   const renderContent = () => {
     switch (view) {
-      case ValidatorModalView.BLS:
-        return <ValidatorBls />
       default:
         return <ValidatorDetails />
     }
