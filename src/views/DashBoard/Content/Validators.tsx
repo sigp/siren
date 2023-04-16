@@ -14,6 +14,7 @@ import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
 import useValidatorCachePolling from '../../../hooks/useValidatorCachePolling'
 import DisabledTooltip from '../../../components/DisabledTooltip/DisabledTooltip'
 import useValidatorMetrics from '../../../hooks/useValidatorMetrics'
+import BlsExecutionModal from '../../../components/BlsExecutionModal/BlsExecutionModal'
 
 const Sync = () => {
   useValidatorInfoPolling()
@@ -33,6 +34,7 @@ const Validators = () => {
   return (
     <>
       {isReady && <Sync />}
+      <BlsExecutionModal />
       <div className='w-full grid grid-cols-1 lg:block lg:h-full p-4 mb-28 lg:mb-0'>
         <div className='w-full space-y-6 mb-6'>
           <div className='w-full flex flex-col items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>

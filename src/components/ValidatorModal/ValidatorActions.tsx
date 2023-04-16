@@ -3,8 +3,9 @@ import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import ValidatorCardAction from './ValidatorCardAction'
 import { useTranslation } from 'react-i18next'
 import { FC, useContext } from 'react'
-import { ValidatorModalView } from '../../constants/enums'
 import { ValidatorModalContext } from './ValidatorModal'
+import { useSetRecoilState } from 'recoil'
+import { isBlsExecutionModal } from '../../recoil/atoms'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
@@ -12,9 +13,14 @@ export interface ValidatorActionsProps {
 
 const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) => {
   const { t } = useTranslation()
-
-  const { setView } = useContext(ValidatorModalContext)
-  const viewBlsView = () => setView(ValidatorModalView.BLS)
+  const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
+  const { closeModal } = useContext(ValidatorModalContext)
+  const viewBlsModal = () => {
+    closeModal()
+    setTimeout(() => {
+      toggleBlsModal(true)
+    }, 200)
+  }
 
   return (
     <div className='w-full border-t-style100 space-y-4 p-4'>
@@ -40,7 +46,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) =
                 </a>
               </span>
             </Typography>
-            <div className='w-fit' onClick={viewBlsView}>
+            <div className='w-fit' onClick={viewBlsModal}>
               <Typography
                 className='mt-4 underline cursor-pointer'
                 type='text-caption1'

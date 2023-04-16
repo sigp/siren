@@ -232,3 +232,19 @@ export const REQUIRED_VALIDATOR_VERSION = {
 
 export const DEFAULT_MAX_NETWORK_ERROR = 3
 export const MAX_SESSION_UNLOCK_ATTEMPTS = 3
+
+export const MOCK_BLS_JSON = `[
+  {
+    "message": {
+      "validator_index": "0",
+      "from_bls_pubkey": "your-pub-key",
+      "to_execution_address": "your-execution-address"
+    },
+    "signature": "your-signature",
+    "metadata": {
+      "network_name": "network",
+      "genesis_validators_root": "genesis-validators-root",
+      "deposit_cli_version": "x.x.x"
+    }
+  }
+]`
