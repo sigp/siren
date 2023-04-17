@@ -79,7 +79,13 @@ jobs:
 
             - name: Create unsigned artifacts
               run: |
-                  move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                   if [ "$(uname)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+                     mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                   elif [ "%OS%" == "Windows_NT" ]; then
+                     move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                   else
+                     echo "Unsupported platform"
+                   fi
 
             # =======================================================================
             # Upload artifacts
