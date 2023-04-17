@@ -35,7 +35,7 @@ jobs:
                     echo "VERSION=latest" >> $GITHUB_ENV
                     echo "VERSION_SUFFIX=-unstable" >> $GITHUB_ENV
             - name: Extract version (if dockerbranch)
-              if: github.event.ref == 'refs/heads/faster-docker-builds'
+              if: github.ref_name == 'faster-docker-builds'
               run: |
                     echo "VERSION=latest" >> $GITHUB_ENV
                     echo "VERSION_SUFFIX=-test" >> $GITHUB_ENV
