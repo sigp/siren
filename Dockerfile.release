@@ -1,0 +1,6 @@
+FROM nginx:alpine 
+
+LABEL version="$VERSION" \
+      org.opencontainers.image.authors="Sigma Prime"
+
+COPY html/ /usr/share/nginx/html/

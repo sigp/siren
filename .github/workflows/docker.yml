@@ -103,14 +103,12 @@ jobs:
               with:
                   name: html
                   path: html/
-            - name: debug
-              #run: ls /home/runner/work/siren/siren/build
-              run: ls html
             - name: Build Dockerfile and push
               run: |
                   docker buildx build \
                       --platform=linux/${SHORT_ARCH} \
                       --file ./Dockerfile.release . \
+                      --build-arg VERSION="${VERSION}-${SHORT_ARCH}${VERSION_SUFFIX}" \
                       --tag ${IMAGE_NAME}:${VERSION}-${SHORT_ARCH}${VERSION_SUFFIX} \
                       --provenance=false \
                       --push
