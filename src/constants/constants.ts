@@ -197,6 +197,7 @@ export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'
 export const SigPGithubUrl = 'https://github.com/sigp'
 export const SigPTwitter = 'https://twitter.com/sigp_io'
 export const SigPIoUrl = 'https://sigmaprime.io/'
+export const WithdrawalInfoLink = 'https://launchpad.ethereum.org/en/withdrawals'
 
 export const DEFAULT_VALIDATOR_COUNT = {
   active_exiting: 0,
