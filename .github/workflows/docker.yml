@@ -24,31 +24,36 @@ jobs:
     extract-version:
         runs-on: ubuntu-22.04
         steps:
-            - name: Extract version (if stable)
-              if: github.event.ref == 'refs/heads/stable'
-              run: |
-                    echo "VERSION=latest" >> $GITHUB_ENV
-                    echo "VERSION_SUFFIX=" >> $GITHUB_ENV
-            - name: Extract version (if unstable)
-              if: github.event.ref == 'refs/heads/unstable'
-              run: |
-                    echo "VERSION=latest" >> $GITHUB_ENV
-                    echo "VERSION_SUFFIX=-unstable" >> $GITHUB_ENV
-            - name: Extract version (if dockerbranch)
-              if: github.ref_name == 'faster-docker-builds'
-              run: |
-                    echo "VERSION=latest" >> $GITHUB_ENV
-                    echo "VERSION_SUFFIX=-test" >> $GITHUB_ENV
-            - name: Extract version (if tagged release)
-              if: startsWith(github.event.ref, 'refs/tags')
-              run: |
-                    echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
-                    echo "VERSION_SUFFIX=" >> $GITHUB_ENV
+#            - name: Extract version (if stable)
+#              if: github.event.ref == 'refs/heads/stable'
+#              run: |
+#                    echo "VERSION=latest" >> $GITHUB_ENV
+#                    echo "VERSION_SUFFIX=" >> $GITHUB_ENV
+#            - name: Extract version (if unstable)
+#              if: github.event.ref == 'refs/heads/unstable'
+#              run: |
+#                    echo "VERSION=latest" >> $GITHUB_ENV
+#                    echo "VERSION_SUFFIX=-unstable" >> $GITHUB_ENV
+#            - name: Extract version (if dockerbranch)
+#              if: github.ref_name == 'faster-docker-builds'
+#              run: |
+#                    echo "VERSION=latest" >> $GITHUB_ENV
+#                    echo "VERSION_SUFFIX=-test" >> $GITHUB_ENV
+#            - name: Extract version (if tagged release)
+#              if: startsWith(github.event.ref, 'refs/tags')
+#              run: |
+#                    echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_ENV
+#                    echo "VERSION_SUFFIX=" >> $GITHUB_ENV
+            - name: dummy
+              run: sleep 1
+#        outputs:
+#            VERSION: ${{ env.VERSION }}
+#            VERSION_SUFFIX: ${{ env.VERSION_SUFFIX }}
         outputs:
-            VERSION: ${{ env.VERSION }}
-            VERSION_SUFFIX: ${{ env.VERSION_SUFFIX }}
-    build:
-        name: build
+            VERSION: "latest"
+            VERSION_SUFFIX: "-test"
+    build-html:
+        name: build html
         runs-on: ubuntu-22.04
         needs: [extract-version]
         steps:
@@ -58,6 +63,7 @@ jobs:
               uses: actions/setup-node@v3
               with:
                 node-version: 18
+                cache: 'yarn'
             - name: Install dependencies
               env:
                 NODE_ENV: development
@@ -80,12 +86,14 @@ jobs:
             matrix:
                 binary: [aarch64, x86_64]
 
-        needs: [build]
+        needs: [build-html]
         env:
             # We need to enable experimental docker features in order to use `docker buildx`
             DOCKER_CLI_EXPERIMENTAL: enabled
-            VERSION: ${{ needs.extract-version.outputs.VERSION }}
-            VERSION_SUFFIX: ${{ needs.extract-version.outputs.VERSION_SUFFIX }}
+#            VERSION: ${{ needs.extract-version.outputs.VERSION }}
+#            VERSION_SUFFIX: ${{ needs.extract-version.outputs.VERSION_SUFFIX }}
+            VERSION: latest
+            VERSION_SUFFIX: "-test"
         steps:
             - uses: actions/checkout@v3
             - uses: docker/setup-qemu-action@v2
