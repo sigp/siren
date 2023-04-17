@@ -6,6 +6,7 @@ import { FC, useContext } from 'react'
 import { ValidatorModalContext } from './ValidatorModal'
 import { useSetRecoilState } from 'recoil'
 import { isBlsExecutionModal } from '../../recoil/atoms'
+import { WithdrawalInfoLink } from '../../constants/constants'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
@@ -32,17 +33,11 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) =
           </div>
           <div>
             <Typography className='mr-12' type='text-caption1' darkMode='text-dark900'>
-              This validator is using old BLS withdrawal credentials. It will not receive regular
-              partial withdrawals and cannot be exited. Please convert the withdrawal address to an
-              execution address.
+              {t('blsExecution.warning.text')}
               <span className='text-blue-500'>
-                <a
-                  href='https://launchpad.ethereum.org/en/btec/#generate-json'
-                  target='_blank'
-                  rel='noreferrer'
-                >
+                <a href={WithdrawalInfoLink} target='_blank' rel='noreferrer'>
                   {' '}
-                  Learn more about BLS to Execution here.
+                  {t('blsExecution.warning.learnMore')}
                 </a>
               </span>
             </Typography>
@@ -53,7 +48,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) =
                 color='text-error'
                 darkMode='text-error'
               >
-                Convert withdrawal address.
+                {t('blsExecution.warning.cta')}
               </Typography>
             </div>
           </div>

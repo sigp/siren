@@ -6,11 +6,13 @@ import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
 import ValidatorDisclosure from '../Disclosures/ValidatorDisclosure'
 import { useState } from 'react'
-import { MOCK_BLS_JSON } from '../../constants/constants'
+import { MOCK_BLS_JSON, WithdrawalInfoLink } from '../../constants/constants'
 import GradientHeader from '../GradientHeader/GradientHeader'
 import { ButtonFace } from '../Button/Button'
+import { useTranslation, Trans } from 'react-i18next'
 
 const BlsExecutionModal = () => {
+  const { t } = useTranslation()
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [blsJson, setJson] = useState(MOCK_BLS_JSON)
@@ -33,17 +35,26 @@ const BlsExecutionModal = () => {
       onClose={closeModal}
     >
       <div>
-        <GradientHeader title='BLS to Execution Change ' />
+        <GradientHeader title={t('blsExecution.modal.title')} />
         <div className='p-6 space-y-4'>
           <Typography type='text-caption1'>
-            Validator <br /> Management --
+            <Trans i18nKey='blsExecution.modal.subTitle'>
+              <br />
+            </Trans>
+            {' ---'}
           </Typography>
           <Typography className='w-3/4' type='text-caption1'>
-            Please enter your BLS Change JSON. Submitting this request will allow the beacon node to
-            voluntarily deposit partial rewards and execute validator exits to a designated
-            withdrawal address. This action is sensitive, please exercise caution and ensure that
-            you have access to your withdrawal address before proceeding. For additional details,
-            please follow the link provided.
+            {t('blsExecution.modal.description')}
+          </Typography>
+          <Typography className='w-3/4' type='text-caption1'>
+            <Trans i18nKey='blsExecution.modal.followLink'>
+              <a
+                className='text-blue-500 underline'
+                target='_blank'
+                rel='noreferrer'
+                href={WithdrawalInfoLink}
+              />
+            </Trans>
           </Typography>
           <CodeInput value={blsJson} onChange={setJsonValue} />
         </div>
@@ -53,7 +64,7 @@ const BlsExecutionModal = () => {
               isSensitive
               onAccept={showWarning}
               ctaType={ButtonFace.SECONDARY}
-              ctaText='Execute Change'
+              ctaText={t('blsExecution.modal.cta')}
             />
           </div>
         )}

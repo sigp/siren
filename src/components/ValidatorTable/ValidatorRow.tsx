@@ -40,11 +40,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const renderAvatar = () => {
     if (isConversionRequired) {
       return (
-        <Tooltip
-          id={`blsTransfer-${pubKey}`}
-          maxWidth={300}
-          text='Validator requires BLS to Execution address conversion'
-        >
+        <Tooltip id={`blsTransfer-${pubKey}`} maxWidth={300} text={t('blsExecution.tooltip')}>
           <div className='relative'>
             <IdenticonIcon size={32} type='CIRCULAR' hash={pubKey} />
             {isConversionRequired && (
