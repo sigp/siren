@@ -107,8 +107,7 @@ jobs:
                 export GPG_TTY=$(tty)
                 echo "$GPG_SIGNING_KEY" | gpg --batch --import
                 for file in $(ls siren-*.zip); do 
-                  ## remove `--default-key`
-                  echo "$GPG_PASSPHRASE" | gpg --default-key F52D78323CB9A127 --passphrase-fd 0 --pinentry-mode loopback --batch -ab $file ; 
+                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab ${file%?} ; 
                 done
 
             - name: Upload signature (aarch64-unknown-linux-gnu)
