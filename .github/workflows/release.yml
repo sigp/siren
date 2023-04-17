@@ -23,7 +23,8 @@ jobs:
               # run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
               id: extract_version
         outputs:
-            VERSION: ${{ steps.extract_version.outputs.VERSION }}
+#            VERSION: ${{ steps.extract_version.outputs.VERSION }}
+            VERSION: "test"
     build:
         name: Build Release
         strategy:
@@ -59,15 +60,6 @@ jobs:
               run: yarn config set network-timeout 300000
 
             # ==============================
-            # Linux dependencies
-            # ==============================
-            - name: Install dependencies
-              if: contains(matrix.arch, 'linux')
-              run: |
-                sudo apt-get update
-                sudo apt-get install fakeroot dpkg
-
-            # ==============================
             # Windows & Mac dependencies
             # ==============================
 
@@ -77,15 +69,15 @@ jobs:
             - name: Build Siren
               run: make release
 
-            - name: Create unsigned artifacts
+            - name: Create unsigned artifacts (*nix)
+              if: startsWith(matrix.arch, 'x86_64-windows') != true
               run: |
-                   if [ "$(uname)" == "Darwin" ] || [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-                     mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                   elif [ "%OS%" == "Windows_NT" ]; then
-                     move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                   else
-                     echo "Unsupported platform"
-                   fi
+                 mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+
+            - name: Create unsigned artifacts (windows)           
+              if: startsWith(matrix.arch, 'x86_64-windows')
+              run: |
+                 move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
             # =======================================================================
             # Upload artifacts
@@ -96,7 +88,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+                  path: ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
 
     sign:
