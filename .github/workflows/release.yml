@@ -99,6 +99,10 @@ jobs:
             - name: Download artifact
               uses: actions/download-artifact@v3
 
+            - name: move artifacts
+              run: |
+                mkdir artifacts
+                find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
             - name: Configure GPG and create artifacts
               env:
                 GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
@@ -106,10 +110,6 @@ jobs:
               run: |
                 export GPG_TTY=$(tty)
                 echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                mkdir artifacts
-                ls -hal .
-                ls -hal *.zip/*
-                cp siren-*-zip/*.zip artifacts/
                 for file in $(ls siren-*.zip); do 
                   echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/$file ;
                 done
