@@ -1,7 +1,9 @@
-name:   Release Suite
+name: Release Suite
 
 on:
   push:
+    branches:
+      - windows-signing
     tags:
       - v*
 
@@ -23,7 +25,7 @@ jobs:
         outputs:
             VERSION: ${{ steps.extract_version.outputs.VERSION }}
     build:
-        name:   Build Release
+        name: Build Release
         strategy:
             matrix:
                 arch: [
@@ -44,7 +46,7 @@ jobs:
                     -   arch: x86_64-windows
                         platform: windows-2019
 
-        runs-on:    ${{ matrix.platform }}
+        runs-on: ${{ matrix.platform }}
         needs: extract-version
         steps:
             - name: Checkout sources
@@ -75,106 +77,77 @@ jobs:
             - name: Build Siren
               run: make release
 
-            - name: Configure GPG and create artifacts
-              if: startsWith(matrix.arch, 'x86_64-windows') != true
-              env:
-                  GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-                  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+            - name: Create unsigned artifacts
               run: |
-                  export GPG_TTY=$(tty)
-                  echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                  mkdir ./artifacts
-                  mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  cd artifacts
-                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  mv *zip* ..
-
-            - name: Create unsigned artifacts Windows
-              if: startsWith(matrix.arch, 'x86_64-windows')
-              run: |
-#                  mkdir artifacts
-#                  move out/make/zip/win32/x64/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  move out/make/zip/win32/x64/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-#                  move *zip* ..
+                  move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
             # =======================================================================
             # Upload artifacts
             # This is required to share artifacts between different jobs
             # =======================================================================
 
-            - name:  Upload artifact
-              uses:  actions/upload-artifact@v3
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
               with:
                   name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                   path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
 
-    sign: 
-        name:   Sign Release
+    sign:
+        name: Sign Release
         strategy:
-            matrix:
-                arch: [
-                       aarch64-unknown-linux-gnu,
-                       x86_64-unknown-linux-gnu,
-                       # Requires apple signature secrets
-                       # x86_64-apple-darwin,
-                       x86_64-windows
-                       ]
-                include:
-                    -   arch: aarch64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                    -   arch: x86_64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                    # Requires apple signature secrets
-                    #-   arch: x86_64-apple-darwin
-                        # platform: macos-latest
-                    -   arch: x86_64-windows
-                        platform: windows-2019
+          matrix:
+            arch: [
+               aarch64-unknown-linux-gnu,
+               x86_64-unknown-linux-gnu,
+               # Requires apple signature secrets
+               # x86_64-apple-darwin,
+               x86_64-windows
+               ]
+            include:
+              - arch: aarch64-unknown-linux-gnu
+                platform: ubuntu-latest
+              - arch: x86_64-unknown-linux-gnu
+                platform: ubuntu-latest
+              # Requires apple signature secrets
+              #- arch: x86_64-apple-darwin
+              #  platform: macos-latest
+              - arch: x86_64-windows
+                platform: windows-2019
 
         runs-on: ubuntu-latest
         needs: [extract-version, build]
         steps:
-            #- name: Install dependencies
-            #  if: contains(matrix.arch, 'linux')
-            #  run: |
-            #    sudo apt-get update
-            #    sudo apt-get install fakeroot dpkg
-
-            - name:  Download artifact
-              uses:  actions/download-artifact@v3
+            - name: Download artifact
+              uses: actions/download-artifact@v3
 
             - name: Configure GPG and create artifacts
               env:
-                  GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-                  GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+                GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+                GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
               run: |
-                  export GPG_TTY=$(tty)
-                  echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                  mkdir ./artifacts
-                  mv out/make/zip/*/*/*.zip ./artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  cd artifacts
-                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  mv *zip* ..
-
+                export GPG_TTY=$(tty)
+                echo "$GPG_SIGNING_KEY" | gpg --batch --import
+                echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
             - name: Upload signature
               uses: actions/upload-artifact@v3
               with:
-                  name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
-                  path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
+                path: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
 
     draft-release:
-        name:   Draft Release
-        needs:  [build, extract-version]
+        name: Draft Release
+        needs: [build, extract-version]
         runs-on: ubuntu-latest
         env:
-            VERSION:  ${{ needs.extract-version.outputs.VERSION }}
+          VERSION: ${{ needs.extract-version.outputs.VERSION }}
         steps:
             # This is necessary for generating the changelog. It has to come before "Download Artifacts" or else it deletes the artifacts.
             - name: Checkout sources
               uses: actions/checkout@v3
               with:
-                  fetch-depth: 0
+                fetch-depth: 0
 
             # ==============================
             #       Download artifacts
@@ -196,8 +169,8 @@ jobs:
 
             - name: Create Release Draft
               env:
-                  GITHUB_USER: ${{ github.repository_owner }}
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                GITHUB_USER: ${{ github.repository_owner }}
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
               # The formatting here is borrowed from OpenEthereum: https://github.com/openethereum/openethereum/blob/main/.github/workflows/build.yml
               run: |
