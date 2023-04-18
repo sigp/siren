@@ -1,6 +1,6 @@
 import RodalModal from '../RodalModal/RodalModal'
-import { useRecoilState } from 'recoil'
-import { isBlsExecutionModal } from '../../recoil/atoms'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { beaconNodeEndpoint, isBlsExecutionModal, isProcessBls } from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
@@ -10,18 +10,59 @@ import { MOCK_BLS_JSON, WithdrawalInfoLink } from '../../constants/constants'
 import GradientHeader from '../GradientHeader/GradientHeader'
 import { ButtonFace } from '../Button/Button'
 import { useTranslation, Trans } from 'react-i18next'
+import { broadcastBlsChange } from '../../api/beacon'
+import { toast } from 'react-toastify'
+import axios, { AxiosError } from 'axios'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { Storage } from '../../constants/enums'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
+  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [blsJson, setJson] = useState(MOCK_BLS_JSON)
+  const setIsProcess = useSetRecoilState(isProcessBls)
+  const [, storeIsBlsProcessing] = useLocalStorage<boolean>(Storage.BLS_PROCESSING, false)
 
   const closeModal = () => toggleModal(false)
   const setJsonValue = (value: string) => setJson(value)
 
-  const showWarning = () => {
-    console.log('make execution... ')
+  const handleError = (code?: number) => {
+    let message = t('error.unknownError', { type: 'BEACON' })
+
+    if (code === 400) {
+      message = t('error.executionFailure')
+    }
+
+    toast.error(message, {
+      position: 'top-right',
+      autoClose: 5000,
+      theme: 'colored',
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+    })
+  }
+
+  const submitChange = async () => {
+    try {
+      const { status } = await broadcastBlsChange(beaconEndpoint, blsJson)
+
+      if (status != 200) {
+        handleError(status)
+        return
+      }
+
+      setIsProcess(true)
+      storeIsBlsProcessing(true)
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const axiosError = e as AxiosError
+
+        handleError(axiosError.response?.status)
+      }
+    }
   }
 
   return (
@@ -61,8 +102,7 @@ const BlsExecutionModal = () => {
         {isModal && (
           <div className='p-3 border-t-style100'>
             <ValidatorDisclosure
-              isSensitive
-              onAccept={showWarning}
+              onAccept={submitChange}
               ctaType={ButtonFace.SECONDARY}
               ctaText={t('blsExecution.modal.cta')}
             />
