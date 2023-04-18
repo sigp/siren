@@ -34,7 +34,7 @@ jobs:
                        x86_64-unknown-linux-gnu,
                        # Requires apple signature secrets
                        # x86_64-apple-darwin,
-                       #x86_64-windows
+                       x86_64-windows
                        ]
                 include:
                     -   arch: aarch64-unknown-linux-gnu
@@ -44,8 +44,8 @@ jobs:
                     # Requires apple signature secrets
                     #-   arch: x86_64-apple-darwin
                         # platform: macos-latest
-                    #-   arch: x86_64-windows
-                    #    platform: windows-2019
+                    -   arch: x86_64-windows
+                        platform: windows-2019
 
         runs-on: ${{ matrix.platform }}
         needs: extract-version
@@ -126,11 +126,11 @@ jobs:
               with:
                 name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
                 path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-            #- name: Upload signature (x86_64-windows)
-            #  uses: actions/upload-artifact@v3
-            #  with:
-            #    name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
-            #    path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+            - name: Upload signature (x86_64-windows)
+              uses: actions/upload-artifact@v3
+              with:
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
 
     draft-release:
         name: Draft Release
