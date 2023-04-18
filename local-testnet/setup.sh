@@ -37,7 +37,7 @@ lcli \
 	--proposer-score-boost "$PROPOSER_SCORE_BOOST" \
 	--validator-count $GENESIS_VALIDATOR_COUNT \
 	--derived-genesis-state \
-	--mnemonic-phrase "$MNEMONICS_PHRASE" \
+	--mnemonic-phrase "$MNEMONIC_PHRASE" \
 	--force
 
 echo Specification and genesis.ssz generated at $TESTNET_DIR.
@@ -47,7 +47,7 @@ lcli \
 	mnemonic-validators \
 	--count $VALIDATOR_COUNT \
 	--base-dir $DATADIR \
-	--mnemonic-phrase "$MNEMONICS_PHRASE" \
+	--mnemonic-phrase "$MNEMONIC_PHRASE" \
 	--node-count $BN_COUNT
 
 echo Validators generated with keystore passwords at $DATADIR.
