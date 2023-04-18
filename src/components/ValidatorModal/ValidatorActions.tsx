@@ -4,9 +4,10 @@ import ValidatorCardAction from './ValidatorCardAction'
 import { useTranslation } from 'react-i18next'
 import { FC, useContext } from 'react'
 import { ValidatorModalContext } from './ValidatorModal'
-import { useSetRecoilState } from 'recoil'
-import { isBlsExecutionModal } from '../../recoil/atoms'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { isBlsExecutionModal, isProcessBls } from '../../recoil/atoms'
 import { WithdrawalInfoLink } from '../../constants/constants'
+import addClassString from '../../utilities/addClassString'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
@@ -14,6 +15,19 @@ export interface ValidatorActionsProps {
 
 const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) => {
   const { t } = useTranslation()
+  const isProcessing = useRecoilValue(isProcessBls)
+  const warningClasses = addClassString('w-full flex items-center px-6 py-8 rounded', [
+    isProcessing && 'bg-dark500',
+    !isProcessing && 'bg-lightError',
+  ])
+  const warningIconBackgroundClasses = addClassString(
+    'rounded-full mr-14 flex-shrink-0 flex items-center justify-center h-12 w-12',
+    [isProcessing && 'bg-dark400', !isProcessing && 'bg-lightError200'],
+  )
+  const warningIconClasses = addClassString('text-2xl', [
+    isProcessing && 'bi-hourglass-split text-dark600',
+    !isProcessing && 'bi-exclamation-triangle-fill text-error',
+  ])
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
   const { closeModal } = useContext(ValidatorModalContext)
   const viewBlsModal = () => {
@@ -27,31 +41,37 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) =
     <div className='w-full border-t-style100 space-y-4 p-4'>
       <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
       {isConversionRequired ? (
-        <div className='w-full flex items-center px-6 py-8 rounded bg-lightError text-white'>
-          <div className='rounded-full mr-14 bg-lightError200 flex-shrink-0 flex items-center justify-center h-12 w-12'>
-            <i className='text-2xl bi-exclamation-triangle-fill text-error' />
+        <div className={warningClasses}>
+          <div className={warningIconBackgroundClasses}>
+            <i className={warningIconClasses} />
           </div>
-          <div>
+          {isProcessing ? (
             <Typography className='mr-12' type='text-caption1' darkMode='text-dark900'>
-              {t('blsExecution.warning.text')}
-              <span className='text-blue-500'>
-                <a href={WithdrawalInfoLink} target='_blank' rel='noreferrer'>
-                  {' '}
-                  {t('blsExecution.warning.learnMore')}
-                </a>
-              </span>
+              {t('blsExecution.warning.processingText')}
             </Typography>
-            <div className='w-fit' onClick={viewBlsModal}>
-              <Typography
-                className='mt-4 underline cursor-pointer'
-                type='text-caption1'
-                color='text-error'
-                darkMode='text-error'
-              >
-                {t('blsExecution.warning.cta')}
+          ) : (
+            <div>
+              <Typography className='mr-12' type='text-caption1' darkMode='text-dark900'>
+                {t('blsExecution.warning.text')}
+                <span className='text-blue-500'>
+                  <a href={WithdrawalInfoLink} target='_blank' rel='noreferrer'>
+                    {' '}
+                    {t('blsExecution.warning.learnMore')}
+                  </a>
+                </span>
               </Typography>
+              <div className='w-fit' onClick={viewBlsModal}>
+                <Typography
+                  className='mt-4 underline cursor-pointer'
+                  type='text-caption1'
+                  color='text-error'
+                  darkMode='text-error'
+                >
+                  {t('blsExecution.warning.cta')}
+                </Typography>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ) : (
         <div className='w-full flex flex-wrap lg:space-x-3'>

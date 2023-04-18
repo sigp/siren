@@ -53,6 +53,7 @@ export enum SetupSteps {
 export enum Storage {
   UI = 'UI',
   CURRENCY = 'CURRENCY',
+  BLS_PROCESSING = 'BLS_PROCESSING',
 }
 
 export enum ApiType {

@@ -1,12 +1,13 @@
-import { createContext, Dispatch, SetStateAction, useState } from 'react'
+import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import ValidatorDetails from './views/ValidatorDetails'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import Spinner from '../Spinner/Spinner'
 import { selectValidatorDetail } from '../../recoil/selectors/selectValidatorDetails'
-import { validatorIndex } from '../../recoil/atoms'
+import { isProcessBls, validatorIndex } from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import RodalModal from '../RodalModal/RodalModal'
-import { ValidatorModalView } from '../../constants/enums'
+import { Storage, ValidatorModalView } from '../../constants/enums'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 export interface ValidatorModalContextProps {
   setView: Dispatch<SetStateAction<ValidatorModalView>>
@@ -23,6 +24,14 @@ const ValidatorModal = () => {
   const validator = useRecoilValue(selectValidatorDetail)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.DETAILS)
   const isTablet = useMediaQuery('(max-width: 1024px)')
+  const setIsProcess = useSetRecoilState(isProcessBls)
+  const [isProcessing] = useLocalStorage<boolean>(Storage.BLS_PROCESSING, false)
+
+  useEffect(() => {
+    if (isProcessing) {
+      setIsProcess(true)
+    }
+  }, [isProcessing])
 
   const closeModal = () => {
     setValidatorIndex(undefined)
