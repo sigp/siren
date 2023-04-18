@@ -2,8 +2,6 @@ name: Release Suite
 
 on:
   push:
-    branches:
-      - windows-signing
     tags:
       - v*
 
@@ -23,8 +21,7 @@ jobs:
               # run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
               id: extract_version
         outputs:
-#            VERSION: ${{ steps.extract_version.outputs.VERSION }}
-            VERSION: "test"
+            VERSION: ${{ steps.extract_version.outputs.VERSION }}
     build:
         name: Build Release
         strategy:
@@ -110,7 +107,7 @@ jobs:
               with:
                 name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            - name: move artifacts
+            - name: Move artifacts
               run: |
                 mkdir artifacts
                 #find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
