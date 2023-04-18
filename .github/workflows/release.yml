@@ -69,12 +69,12 @@ jobs:
             - name: Build Siren
               run: make release
 
-            - name: Create unsigned artifacts (*nix)
+            - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true
               run: |
                  mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            - name: Create unsigned artifacts (windows)           
+            - name: Move unsigned packages (windows)           
               if: startsWith(matrix.arch, 'x86_64-windows')
               run: |
                  move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
@@ -95,14 +95,26 @@ jobs:
         name: Sign Release
         runs-on: ubuntu-latest
         needs: [extract-version, build]
+        strategy:
+            matrix:
+                arch: [
+                       aarch64-unknown-linux-gnu,
+                       x86_64-unknown-linux-gnu,
+                       # Requires apple signature secrets
+                       # x86_64-apple-darwin,
+                       x86_64-windows
+                       ]
         steps:
             - name: Download artifact
               uses: actions/download-artifact@v3
+              with:
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
             - name: move artifacts
               run: |
                 mkdir artifacts
-                find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
+                #find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
+                mv siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip artifacts/
                 ls -hal artifacts
             - name: Configure GPG and create artifacts
               env:
@@ -111,26 +123,33 @@ jobs:
               run: |
                 export GPG_TTY=$(tty)
                 echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                for file in $(ls artifacts); do 
-                  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/$file ;
-                done
+                #for file in $(ls artifacts); do 
+                #  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/$file ;
+                #done
+                echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
                 ls -hal artifacts
 
-            - name: Upload signature (aarch64-unknown-linux-gnu)
+            - name: Upload signature (${{ matrix.arch }})
               uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-            - name: Upload signature (x86_64-unknown-linux-gnu)
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-            - name: Upload signature (x86_64-windows)
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
-                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+              with: 
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
+                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
+
+#            - name: Upload signature (aarch64-unknown-linux-gnu)
+#              uses: actions/upload-artifact@v3
+#              with:
+#                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+#                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+#            - name: Upload signature (x86_64-unknown-linux-gnu)
+#              uses: actions/upload-artifact@v3
+#              with:
+#                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+#                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+#            - name: Upload signature (x86_64-windows)
+#              uses: actions/upload-artifact@v3
+#              with:
+#                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+#                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
 
     draft-release:
         name: Draft Release
