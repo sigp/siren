@@ -13,6 +13,16 @@ make
 make install-lcli
 ```
 
+### MacOS Users
+
+Install GNU `sed` and GNU `grep`, and add them both to `PATH`, e.g.
+
+```
+brew install gnu-sed grep
+echo "export PATH=\$PATH:$(brew --prefix)/opt/grep/libexec/gnubin" >> ~/.bash_profile
+echo "export PATH=\$PATH:$(brew --prefix)/opt/gnu-sed/libexec/gnubin" >> ~/.bash_profile
+```
+
 ## Starting the testnet
 
 Modify `vars.env` as desired.
