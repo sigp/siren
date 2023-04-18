@@ -5,7 +5,7 @@ This setup can be useful for testing and development.
 
 ## Requirements
 
-The scripts require `lcli`, `lighthouse`, `geth` to be installed on `PATH`. From the
+The scripts require `lcli`, `lighthouse`, `geth`, `bootnode` to be installed on `PATH`. From the
 root of this repository, run:
 
 ```bash
@@ -56,7 +56,7 @@ create the testnet directory, genesis state and validator keys with:
 
 Note: The generated genesis validators are embedded into the genesis state as genesis validators and hence do not require manual deposits to activate.
 
-Generate bootnode enr and start a EL and CL bootnode so that multiple nodes can find each other
+Generate bootnode enr and start an EL and CL bootnode so that multiple nodes can find each other
 ```bash
 ./bootnode.sh
 ./el_bootnode.sh

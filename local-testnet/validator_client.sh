@@ -29,9 +29,6 @@ exec lighthouse \
 	--datadir ${@:$OPTIND:1} \
 	--testnet-dir $TESTNET_DIR \
 	--init-slashing-protection \
-	--http \
-	--http-allow-origin "*" \
-	--http-port ${@:$OPTIND+2:1} \
 	--beacon-nodes ${@:$OPTIND+1:1} \
 	--suggested-fee-recipient 0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990 \
 	$VC_ARGS

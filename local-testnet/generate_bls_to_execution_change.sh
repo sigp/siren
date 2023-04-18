@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/usr/bin/env bash
 # 
 # This script generates a BLS to execution change for given validator indices on the local testnet.
 #

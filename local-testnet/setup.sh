@@ -12,7 +12,6 @@ set -o nounset -o errexit -o pipefail
 
 source ./vars.env
 
-genesis_file=${@:$OPTIND+0:1}
 
 NOW=`date +%s`
 GENESIS_TIME=`expr $NOW + $GENESIS_DELAY`
@@ -38,22 +37,17 @@ lcli \
 	--proposer-score-boost "$PROPOSER_SCORE_BOOST" \
 	--validator-count $GENESIS_VALIDATOR_COUNT \
 	--derived-genesis-state \
-	--mnemonics-phrase "$MNEMONICS_PHRASE" \
+	--mnemonic-phrase "$MNEMONICS_PHRASE" \
 	--force
 
 echo Specification and genesis.ssz generated at $TESTNET_DIR.
 echo "Generating $VALIDATOR_COUNT validators concurrently... (this may take a while)"
 
 lcli \
-	mnemonics-validators \
+	mnemonic-validators \
 	--count $VALIDATOR_COUNT \
 	--base-dir $DATADIR \
-	--mnemonics-phrase "$MNEMONICS_PHRASE" \
+	--mnemonic-phrase "$MNEMONICS_PHRASE" \
 	--node-count $BN_COUNT
 
 echo Validators generated with keystore passwords at $DATADIR.
-
-GENESIS_TIME=$(lcli pretty-ssz state_merge $TESTNET_DIR/genesis.ssz  | jq | grep -Po 'genesis_time": "\K.*\d')
-CAPELLA_TIME=$((GENESIS_TIME + (CAPELLA_FORK_EPOCH * 32 * SECONDS_PER_SLOT)))
-
-sed -i 's/"shanghaiTime".*$/"shanghaiTime": '"$CAPELLA_TIME"',/g' $genesis_file
