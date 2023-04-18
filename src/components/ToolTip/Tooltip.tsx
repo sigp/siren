@@ -34,7 +34,7 @@ const Tooltip: FC<TooltipProps> = ({
     <div id={id} className={classes} data-tooltip-content={text}>
       {children}
       <TooltipComponent
-        className='shadow-xl'
+        className='shadow-xl z-50'
         place={place}
         style={{
           maxWidth,

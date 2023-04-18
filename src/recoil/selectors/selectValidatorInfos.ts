@@ -27,6 +27,7 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
         rewards: Number(formatUnits(balance, 'gwei')) - initialEthDeposit,
         index: Number(index),
         slashed: validator.slashed,
+        withdrawalAddress: validator.withdrawal_credentials,
         status: status,
         processed: 0,
         missed: 0,

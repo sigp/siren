@@ -29,3 +29,9 @@ export const fetchValidatorMetrics = async (
   await axios.post(`${protocol}://${address}:${port}/lighthouse/ui/validator_metrics`, {
     indices,
   })
+
+export const broadcastBlsChange = async ({ protocol, address, port }: Endpoint, data: any) =>
+  await axios.post(
+    `${protocol}://${address}:${port}/eth/v1/beacon/pool/bls_to_execution_changes`,
+    data,
+  )

@@ -64,6 +64,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
 
   const handleError = () => {
     playErrorAnim()
+    setPassword('')
     setCount((prevState) => prevState + 1)
   }
 
@@ -86,6 +87,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
         return
       }
       setCount(0)
+      setPassword('')
       onSuccess(token)
     } catch (e) {
       handleError()
@@ -129,9 +131,14 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
     </>
   )
 
+  const closeAuthModal = () => {
+    onClose?.()
+    setPassword('')
+  }
+
   return (
     <>
-      <RodalModal onClose={onClose} isVisible={isOpen}>
+      <RodalModal onClose={closeAuthModal} isVisible={isOpen}>
         <div className='p-4'>
           <div className='border-b-style500 pb-4 mb-4'>
             <Typography

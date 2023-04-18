@@ -227,6 +227,7 @@ export const mockValidatorInfo = {
   rewards: 1000000,
   slashed: false,
   status: 'active_ongoing' as ValidatorStatus,
+  withdrawalAddress: 'mock-address',
   processed: 1,
   missed: 0,
   attested: 0,

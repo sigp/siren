@@ -164,3 +164,13 @@ export const sessionAuthErrorCount = atom<number>({
   key: 'sessionAuthErrorCount',
   default: 0,
 })
+
+export const isBlsExecutionModal = atom<boolean>({
+  key: 'isBlsExecutionModal',
+  default: false,
+})
+
+export const isProcessBls = atom<boolean>({
+  key: 'isProcessBls',
+  default: false,
+})
