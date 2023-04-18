@@ -172,5 +172,5 @@ export const isBlsExecutionModal = atom<boolean>({
 
 export const isProcessBls = atom<boolean>({
   key: 'isProcessBls',
-  default: true,
+  default: false,
 })
