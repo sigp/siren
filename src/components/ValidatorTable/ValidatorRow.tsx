@@ -7,7 +7,7 @@ import formatEthAddress from '../../utilities/formatEthAddress'
 import { TableView } from './ValidatorTable'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { dashView, isProcessBls, validatorIndex } from '../../recoil/atoms'
+import { dashView, processingBlsValidators, validatorIndex } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import StatusIcon from '../StatusIcon/StatusIcon'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
@@ -25,13 +25,15 @@ export interface ValidatorRowProps {
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { t } = useTranslation()
   const setDashView = useSetRecoilState(dashView)
-  const isProcessing = useRecoilValue(isProcessBls)
+  const processingValidators = useRecoilValue(processingBlsValidators)
   const setValidatorIndex = useSetRecoilState(validatorIndex)
   const { name, pubKey, index, balance, rewards, status, withdrawalAddress } = validator
   const rewardColor = formatBalanceColor(rewards)
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
 
   const isConversionRequired = isBlsAddress(withdrawalAddress)
+  const isValidatorProcessing =
+    processingValidators && processingValidators.includes(validator.index.toString())
 
   const viewValidator = () => {
     setValidatorIndex(index)
@@ -44,7 +46,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         <Tooltip id={`blsTransfer-${pubKey}`} maxWidth={300} text={t('blsExecution.tooltip')}>
           <div className='relative'>
             <IdenticonIcon size={32} type='CIRCULAR' hash={pubKey} />
-            {isConversionRequired && !isProcessing && (
+            {isConversionRequired && !isValidatorProcessing && (
               <i className='bi-exclamation text-3xl text-error absolute z-10 -top-2.5 -right-3.5' />
             )}
           </div>

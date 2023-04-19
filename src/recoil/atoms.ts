@@ -170,7 +170,7 @@ export const isBlsExecutionModal = atom<boolean>({
   default: false,
 })
 
-export const isProcessBls = atom<boolean>({
-  key: 'isProcessBls',
-  default: false,
+export const processingBlsValidators = atom<(string | number)[]>({
+  key: 'processingBlsValidators',
+  default: undefined,
 })
