@@ -1,6 +1,10 @@
 import RodalModal from '../RodalModal/RodalModal'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { beaconNodeEndpoint, isBlsExecutionModal, isProcessBls } from '../../recoil/atoms'
+import {
+  beaconNodeEndpoint,
+  isBlsExecutionModal,
+  processingBlsValidators,
+} from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
@@ -15,6 +19,8 @@ import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { Storage } from '../../constants/enums'
+import isValidJSONArray from '../../utilities/isValidJson'
+import getValuesFromObjArray from '../../utilities/getValuesFromObjArray'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
@@ -22,8 +28,8 @@ const BlsExecutionModal = () => {
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [blsJson, setJson] = useState(MOCK_BLS_JSON)
-  const setIsProcess = useSetRecoilState(isProcessBls)
-  const [, storeIsBlsProcessing] = useLocalStorage<boolean>(Storage.BLS_PROCESSING, false)
+  const setIsProcess = useSetRecoilState(processingBlsValidators)
+  const [, storeIsBlsProcessing] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
 
   const closeModal = () => toggleModal(false)
   const setJsonValue = (value: string) => setJson(value)
@@ -33,6 +39,10 @@ const BlsExecutionModal = () => {
 
     if (code === 400) {
       message = t('error.executionFailure')
+    }
+
+    if (code === 422) {
+      message = t('error.invalidJson')
     }
 
     toast.error(message, {
@@ -46,6 +56,13 @@ const BlsExecutionModal = () => {
   }
 
   const submitChange = async () => {
+    if (!isValidJSONArray(blsJson)) {
+      handleError(422)
+      return
+    }
+
+    const targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
+
     try {
       const { status } = await broadcastBlsChange(beaconEndpoint, blsJson)
 
@@ -54,8 +71,9 @@ const BlsExecutionModal = () => {
         return
       }
 
-      setIsProcess(true)
-      storeIsBlsProcessing(true)
+      setIsProcess(targetIndices)
+      storeIsBlsProcessing(JSON.stringify(targetIndices))
+      closeModal()
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const axiosError = e as AxiosError
