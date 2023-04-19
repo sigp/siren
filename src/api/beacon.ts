@@ -34,4 +34,9 @@ export const broadcastBlsChange = async ({ protocol, address, port }: Endpoint, 
   await axios.post(
     `${protocol}://${address}:${port}/eth/v1/beacon/pool/bls_to_execution_changes`,
     data,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    },
   )

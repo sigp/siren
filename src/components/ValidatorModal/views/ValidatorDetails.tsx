@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { validatorMetrics } from '../../../recoil/atoms'
+import { processingBlsValidators, validatorMetrics } from '../../../recoil/atoms'
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails'
 import { useMemo } from 'react'
 import Typography from '../../Typography/Typography'
@@ -26,8 +26,13 @@ const ValidatorDetails = () => {
   const { t } = useTranslation()
   const validator = useRecoilValue(selectValidatorDetail)
   const metrics = useRecoilValue(validatorMetrics)
+  const processingValidators = useRecoilValue(processingBlsValidators)
   const { index, balance, status, withdrawalAddress } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
+
+  const isProcessing = Boolean(
+    processingValidators && index && processingValidators.includes(index.toString()),
+  )
 
   const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
 
@@ -147,7 +152,7 @@ const ValidatorDetails = () => {
       </div>
       <ValidatorGraffitiInput value={graffiti} />
       <ValidatorDetailTable validator={validator} />
-      <ValidatorActions isConversionRequired={isBls} />
+      <ValidatorActions isProcessing={isProcessing} isConversionRequired={isBls} />
       <div className='p-3 border-t-style100'>
         <ValidatorDisclosure />
       </div>
