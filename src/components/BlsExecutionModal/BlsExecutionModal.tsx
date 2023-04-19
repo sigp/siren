@@ -1,5 +1,5 @@
 import RodalModal from '../RodalModal/RodalModal'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { useRecoilState, useRecoilValue } from 'recoil'
 import {
   beaconNodeEndpoint,
   isBlsExecutionModal,
@@ -28,7 +28,7 @@ const BlsExecutionModal = () => {
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [blsJson, setJson] = useState(MOCK_BLS_JSON)
-  const setIsProcess = useSetRecoilState(processingBlsValidators)
+  const [processingValidators, setIsProcess] = useRecoilState(processingBlsValidators)
   const [, storeIsBlsProcessing] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
 
   const closeModal = () => toggleModal(false)
@@ -61,7 +61,7 @@ const BlsExecutionModal = () => {
       return
     }
 
-    const targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
+    let targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
 
     try {
       const { status } = await broadcastBlsChange(beaconEndpoint, blsJson)
@@ -69,6 +69,10 @@ const BlsExecutionModal = () => {
       if (status != 200) {
         handleError(status)
         return
+      }
+
+      if (processingValidators) {
+        targetIndices = [...targetIndices, ...processingValidators]
       }
 
       setIsProcess(targetIndices)
