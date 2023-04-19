@@ -1,4 +1,11 @@
-import { FC, HTMLInputTypeAttribute, InputHTMLAttributes, useState } from 'react'
+import {
+  FC,
+  HTMLInputTypeAttribute,
+  InputHTMLAttributes,
+  useState,
+  ClipboardEvent,
+  ChangeEvent,
+} from 'react'
 import Typography from '../Typography/Typography'
 import { UiMode } from '../../constants/enums'
 import Tooltip from '../ToolTip/Tooltip'
@@ -12,6 +19,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   toolTipMaxWidth?: number
   className?: string
   uiMode?: UiMode
+  isDisableToggle?: boolean
+  isDisablePaste?: boolean
   inputStyle?: 'primary' | 'secondary'
   icon?: string
 }
@@ -27,11 +36,25 @@ const Input: FC<InputProps> = ({
   toolTipId,
   toolTipMode,
   toolTipMaxWidth = 250,
+  isDisableToggle,
+  isDisablePaste,
   icon,
+  onChange,
   ...props
 }) => {
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
+  const sanitizeInput = (e: ChangeEvent<HTMLInputElement>) => {
+    return {
+      ...e,
+      target: {
+        ...e.target,
+        value: e.target.value
+          .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+          .replace(/onerror\s*=\s*["'][^"']*["']/gi, ''),
+      },
+    }
+  }
 
   const generateInputStyle = () => {
     switch (inputStyle) {
@@ -40,9 +63,15 @@ const Input: FC<InputProps> = ({
       default:
         return `${
           uiMode === UiMode.LIGHT
-            ? 'text-dark500 bg-dark10 border-dark500'
-            : 'bg-transparent border-white placeholder:text-dark500'
-        } font-light text-white border-b text-body md:text-subtitle1`
+            ? 'text-dark500 bg-dark10 border-dark500 px-2'
+            : 'bg-transparent text-white border-white placeholder:text-dark500'
+        } font-light border-b text-body md:text-subtitle1`
+    }
+  }
+
+  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {
+    if (isDisablePaste) {
+      e.preventDefault()
     }
   }
 
@@ -75,12 +104,14 @@ const Input: FC<InputProps> = ({
       <div className='relative w-full'>
         <input
           {...props}
+          onChange={(value) => onChange?.(sanitizeInput(value))}
+          onPaste={handlePaste}
           type={inputType}
           className={`${isPasswordType || icon ? 'pr-5' : ''} ${
             className ? className : ''
           } pb-2 w-full font-openSauce outline-none ${generateInputStyle()}`}
         />
-        {isPasswordType ? (
+        {isPasswordType && !isDisableToggle ? (
           <i
             onClick={togglePassword}
             className={`cursor-pointer text-caption1 md:text-body ${

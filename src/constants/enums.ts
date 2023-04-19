@@ -19,6 +19,7 @@ export enum AppView {
 export enum OnboardView {
   PROVIDER = 'PROVIDER',
   CONFIGURE = 'CONFIGURE',
+  SESSION = 'SESSION',
   SETUP = 'SETUP',
 }
 
@@ -52,6 +53,7 @@ export enum SetupSteps {
 export enum Storage {
   UI = 'UI',
   CURRENCY = 'CURRENCY',
+  BLS_PROCESSING = 'BLS_PROCESSING',
 }
 
 export enum ApiType {
@@ -62,4 +64,8 @@ export enum ApiType {
 export enum Network {
   Goerli = 'Goerli',
   Mainnet = 'Mainnet',
+}
+
+export enum ValidatorModalView {
+  DETAILS = 'DETAILS',
 }

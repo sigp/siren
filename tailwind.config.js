@@ -36,6 +36,8 @@ module.exports = {
         success: '#2ED47A',
         warning: '#FFB800',
         error: '#FF4D00',
+        lightError: '#FFDDE8',
+        lightError200: '#FFB7B3',
       },
       backgroundImage: {
         lighthouse: 'url(\'./assets/images/lightHouseBg.png\')',
@@ -101,6 +103,11 @@ module.exports = {
         45: '45%',
       },
       keyframes: {
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-10px)' },
+          '20%, 40%, 60%, 80%': { transform: 'translateX(10px)' },
+        },
         blink: {
           '0%': { opacity: '100%' },
           '50%': { opacity: '100%' },
@@ -118,6 +125,7 @@ module.exports = {
         },
       },
       animation: {
+        shake: 'shake 1s ease-in-out',
         'spin-slow': 'spin 240s linear infinite',
         blink: 'blink 1s linear infinite',
         fadeSlideIn: 'fadeSlideIn 150ms ease-in',

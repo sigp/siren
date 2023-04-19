@@ -7,13 +7,15 @@ import formatEthAddress from '../../utilities/formatEthAddress'
 import { TableView } from './ValidatorTable'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { dashView, validatorIndex } from '../../recoil/atoms'
+import { dashView, isProcessBls, validatorIndex } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
 import StatusIcon from '../StatusIcon/StatusIcon'
 import formatBalanceColor from '../../utilities/formatBalanceColor'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
+import isBlsAddress from '../../utilities/isBlsAddress'
+import Tooltip from '../ToolTip/Tooltip'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -23,22 +25,40 @@ export interface ValidatorRowProps {
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { t } = useTranslation()
   const setDashView = useSetRecoilState(dashView)
+  const isProcessing = useRecoilValue(isProcessBls)
   const setValidatorIndex = useSetRecoilState(validatorIndex)
-  const { name, pubKey, index, balance, rewards, status } = validator
+  const { name, pubKey, index, balance, rewards, status, withdrawalAddress } = validator
   const rewardColor = formatBalanceColor(rewards)
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
+
+  const isConversionRequired = isBlsAddress(withdrawalAddress)
 
   const viewValidator = () => {
     setValidatorIndex(index)
     setDashView(ContentView.VALIDATORS)
   }
 
+  const renderAvatar = () => {
+    if (isConversionRequired) {
+      return (
+        <Tooltip id={`blsTransfer-${pubKey}`} maxWidth={300} text={t('blsExecution.tooltip')}>
+          <div className='relative'>
+            <IdenticonIcon size={32} type='CIRCULAR' hash={pubKey} />
+            {isConversionRequired && !isProcessing && (
+              <i className='bi-exclamation text-3xl text-error absolute z-10 -top-2.5 -right-3.5' />
+            )}
+          </div>
+        </Tooltip>
+      )
+    }
+
+    return <IdenticonIcon size={32} type='CIRCULAR' hash={pubKey} />
+  }
+
   return (
     <tr className='w-full border-t-style500 h-12'>
       <th className='px-2'>
-        <div className='w-full flex justify-center'>
-          <IdenticonIcon size={32} type='CIRCULAR' hash={pubKey} />
-        </div>
+        <div className='w-full flex justify-center'>{renderAvatar()}</div>
       </th>
       <th className='w-28'>
         <Typography className='text-left' color='text-dark500' type='text-caption2'>

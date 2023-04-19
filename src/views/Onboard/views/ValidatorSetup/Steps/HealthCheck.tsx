@@ -17,9 +17,13 @@ const HealthCheck = () => {
   const { t } = useTranslation()
   const setView = useSetRecoilState(onBoardView)
   const setStep = useSetRecoilState(setupStep)
+  const [, storeApiToken] = useLocalStorage<string>('api-token', '')
   const [, setHealthChecked] = useLocalStorage<HealthCheckStorage>('health-check', undefined)
 
-  const viewConfig = () => setView(OnboardView.CONFIGURE)
+  const viewSessionAuth = () => {
+    storeApiToken('')
+    setView(OnboardView.SESSION)
+  }
   const viewSync = () => {
     setHealthChecked(true)
     setStep(SetupSteps.SYNC)
@@ -29,9 +33,9 @@ const HealthCheck = () => {
 
   return (
     <ValidatorSetupLayout
-      onStepBack={viewConfig}
+      onStepBack={viewSessionAuth}
       onNext={viewSync}
-      previousStep={t('configure')}
+      previousStep={t('sessionAuth')}
       currentStep={t('healthCheck')}
       title={t('vcHealthCheck.title')}
       ctaText={t('continue')}

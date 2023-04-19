@@ -3,6 +3,7 @@ import useClickOutside from '../../hooks/useClickOutside'
 import Typography, { TypographyColor } from '../Typography/Typography'
 import DropDown from '../DropDown/DropDown'
 import { useTranslation } from 'react-i18next'
+import addClassString from '../../utilities/addClassString'
 
 export type OptionType = string | number
 
@@ -13,6 +14,7 @@ export type SelectOption = {
 
 export interface SelectDropDownProps {
   options: SelectOption[]
+  className?: string
   label?: string
   placeholder?: string
   value?: OptionType
@@ -26,6 +28,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   onSelect,
   value,
   color,
+  className,
   label,
   isFilter,
   placeholder,
@@ -33,6 +36,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [isOpen, toggle] = useState(false)
+  const classes = addClassString('w-36', [className])
 
   const toggleDropdown = () => toggle((prevState) => !prevState)
   const makeSelection = (selection: OptionType) => {
@@ -60,7 +64,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   }, [query, options])
 
   return (
-    <div className='w-36'>
+    <div className={classes}>
       {label && (
         <Typography type='text-caption1' color={color} className='xl:text-body'>
           {label}

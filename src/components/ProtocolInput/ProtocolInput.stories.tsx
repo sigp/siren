@@ -1,15 +1,40 @@
 import ProtocolInput, { ProtocolInputProps } from './ProtocolInput'
 import { Story } from '@storybook/react'
-import ConfigConnectionForm from '../../forms/ConfigConnectionForm'
+import { Control, useForm, UseFormGetValues } from 'react-hook-form'
+import React, { FC } from 'react'
+import { UseFormSetValue } from 'react-hook-form/dist/types/form'
+
+export interface RenderProps {
+  control: Control<any>
+  setValue: UseFormSetValue<any>
+  getValues: UseFormGetValues<any>
+}
 
 export default {
   key: 'Protocol Input',
   component: ProtocolInput,
 }
 
+const MockConnectionForm: FC<{ children: (props: RenderProps) => React.ReactElement }> = ({
+  children,
+}) => {
+  const { control, setValue, getValues } = useForm()
+
+  return (
+    <form>
+      {children &&
+        children({
+          control,
+          setValue,
+          getValues,
+        })}
+    </form>
+  )
+}
+
 const Template: Story<ProtocolInputProps> = ({ type, id, isValid }) => (
-  <ConfigConnectionForm>
-    {({ control, setValue, getValues }) => (
+  <MockConnectionForm>
+    {({ control, getValues, setValue }) => (
       <div className='h-screen w-screen bg-black flex flex-col items-center justify-center'>
         <div className='w-full max-w-xl'>
           <ProtocolInput
@@ -23,7 +48,7 @@ const Template: Story<ProtocolInputProps> = ({ type, id, isValid }) => (
         </div>
       </div>
     )}
-  </ConfigConnectionForm>
+  </MockConnectionForm>
 )
 
 export const Basic = Template.bind({})

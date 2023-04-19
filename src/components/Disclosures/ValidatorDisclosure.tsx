@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
-import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
+import React, { FC, useState } from 'react'
+import ViewDisclosures, { ViewDisclosuresProps } from '../ViewDisclosures/ViewDisclosures'
 import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import useUiMode from '../../hooks/useUiMode'
 
-const ValidatorDisclosure = () => {
+type ValidatorDisclosureProps = Omit<ViewDisclosuresProps, 'onClick'>
+
+const ValidatorDisclosure: FC<ValidatorDisclosureProps> = (props) => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
   const [isOpen, toggleModal] = useState(false)
@@ -16,7 +18,7 @@ const ValidatorDisclosure = () => {
 
   return (
     <>
-      <ViewDisclosures onClick={openModal} />
+      <ViewDisclosures {...props} onClick={openModal} />
       <DisclosureModal
         mode={mode}
         backgroundImage={validatorDisclosure}

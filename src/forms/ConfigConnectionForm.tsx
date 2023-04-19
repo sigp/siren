@@ -71,15 +71,13 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const [isVersionError, setVersionError] = useState(false)
 
   const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
-  const [storedToken, storeApiToken] = useLocalStorage<string>('api-token', '')
   const [storedVc, storeValidatorClient] = useLocalStorage<EndpointStorage>(
     'validatorClient',
     undefined,
   )
   const [storedName, storeUserName] = useLocalStorage<string>('username', '')
 
-  const hasCache =
-    Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedToken) && Boolean(storedName)
+  const hasCache = Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedName)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -96,7 +94,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     defaultValues: {
       beaconNode: storedBnNode || endPointDefault,
       validatorClient: storedVc || vcDefaultEndpoint,
-      apiToken: storedToken,
+      apiToken: '',
       deviceName: '',
       userName: storedName,
       isRemember: hasCache,
@@ -223,7 +221,6 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       if (isRemember) {
         storeBeaconNode(beaconNode)
         storeValidatorClient(validatorClient)
-        storeApiToken(apiToken)
         storeUserName(userName)
       }
 
@@ -232,7 +229,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       setBeaconNode(beaconNode)
       setValidatorClient(validatorClient)
       setDashView(ContentView.MAIN)
-      setView(OnboardView.SETUP)
+      setView(OnboardView.SESSION)
     } catch (e) {
       if (!isValidBeaconNode || !isValidValidatorClient) {
         if (!isValidBeaconNode) {

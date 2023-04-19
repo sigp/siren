@@ -3,13 +3,6 @@ import CurrencySelect from './CurrencySelect'
 import { mockedRecoilState, mockedRecoilValue } from '../../../test.helpers'
 import { mockCurrencies } from '../../mocks/currencyResults'
 
-jest.mock('recoil', () => ({
-  useRecoilValue: jest.fn(),
-  useRecoilState: jest.fn(() => ['mock-value', jest.fn()]),
-  atom: jest.fn(),
-  selector: jest.fn(),
-}))
-
 const mockSetState = jest.fn()
 
 describe('Currency select component', () => {
