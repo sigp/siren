@@ -131,7 +131,7 @@ const ValidatorDetails = () => {
                   </div>
                 </div>
               </div>
-              {index && <BeaconChaLink index={index} />}
+              {index !== undefined && <BeaconChaLink index={index} />}
             </div>
             <div className='w-full flex border-style100 shadow py-2 px-4'>
               <div className='space-y-2 mr-4'>
