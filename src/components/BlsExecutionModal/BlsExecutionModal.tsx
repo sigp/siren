@@ -78,6 +78,7 @@ const BlsExecutionModal = () => {
       setIsProcess(targetIndices)
       storeIsBlsProcessing(JSON.stringify(targetIndices))
       closeModal()
+      setJson(MOCK_BLS_JSON)
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const axiosError = e as AxiosError
