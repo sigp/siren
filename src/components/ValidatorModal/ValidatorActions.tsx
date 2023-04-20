@@ -4,18 +4,18 @@ import ValidatorCardAction from './ValidatorCardAction'
 import { useTranslation } from 'react-i18next'
 import { FC, useContext } from 'react'
 import { ValidatorModalContext } from './ValidatorModal'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { isBlsExecutionModal, isProcessBls } from '../../recoil/atoms'
+import { useSetRecoilState } from 'recoil'
+import { isBlsExecutionModal } from '../../recoil/atoms'
 import { WithdrawalInfoLink } from '../../constants/constants'
 import addClassString from '../../utilities/addClassString'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
+  isProcessing?: boolean
 }
 
-const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired }) => {
+const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isProcessing }) => {
   const { t } = useTranslation()
-  const isProcessing = useRecoilValue(isProcessBls)
   const warningClasses = addClassString('w-full flex items-center px-6 py-8 rounded', [
     isProcessing && 'bg-dark500',
     !isProcessing && 'bg-lightError',

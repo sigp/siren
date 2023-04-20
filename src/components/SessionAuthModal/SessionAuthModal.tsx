@@ -3,7 +3,7 @@ import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
 import { apiToken, appView, onBoardView, sessionAuthErrorCount } from '../../recoil/atoms'
 import Typography from '../Typography/Typography'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import { ChangeEvent, FC, ReactElement, useEffect, useState } from 'react'
+import { ChangeEvent, FC, ReactElement, useEffect, useState, KeyboardEvent } from 'react'
 import addClassString from '../../utilities/addClassString'
 import { AppView, OnboardView, UiMode } from '../../constants/enums'
 import CryptoJS from 'crypto-js'
@@ -94,6 +94,12 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
     }
   }
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.keyCode === 13 && password) {
+      authenticateAction()
+    }
+  }
+
   const authenticateAction = () => {
     if (localStorageApiToken) {
       confirmPassword()
@@ -117,7 +123,14 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   const renderPasswordInput = () => (
     <>
       <Typography type='text-caption1'>{t('sessionAuthModal.passwordPrompt')}</Typography>
-      <Input uiMode={mode} type='password' label='Password' value={password} onChange={setInput} />
+      <Input
+        onKeyDown={handleKeyDown}
+        uiMode={mode}
+        type='password'
+        label='Password'
+        value={password}
+        onChange={setInput}
+      />
       <div className='w-full flex justify-center p-4'>
         <Button
           isDisabled={!password}

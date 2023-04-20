@@ -7,6 +7,7 @@ import {
   activeCurrency,
   beaconNetworkError,
   dashView,
+  processingBlsValidators,
   sessionAuthErrorCount,
   uiMode,
   validatorNetworkError,
@@ -43,6 +44,7 @@ const Dashboard = () => {
   const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
   const setSessionAuthErrorCount = useSetRecoilState(sessionAuthErrorCount)
+  const setIsProcess = useSetRecoilState(processingBlsValidators)
 
   useEffect(() => {
     return () => {
@@ -59,11 +61,18 @@ const Dashboard = () => {
   const [uiTheme, setUiTheme] = useRecoilState(uiMode)
   const [currency, setActiveCurrency] = useRecoilState(activeCurrency)
 
+  const [processingValidators] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
   const [uiThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
   const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(
     Storage.CURRENCY,
     undefined,
   )
+
+  useEffect(() => {
+    if (processingValidators) {
+      setIsProcess(JSON.parse(processingValidators))
+    }
+  }, [processingValidators])
 
   useEffect(() => {
     if (uiTheme) return
