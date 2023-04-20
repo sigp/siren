@@ -73,7 +73,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({ view = 'partial', isFilter, c
         ))
       ) : (
         <table className='relative table-auto w-full'>
-          <thead className='sticky top-0 left-0 bg-white dark:bg-darkPrimary'>
+          <thead className='sticky z-30 top-0 left-0 bg-white dark:bg-darkPrimary'>
             <tr className='w-full h-12'>
               <th>
                 <div className='w-full flex justify-center'>
