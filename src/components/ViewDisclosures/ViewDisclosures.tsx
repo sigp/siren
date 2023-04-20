@@ -3,12 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { FC, useState } from 'react'
 import Button, { ButtonFace } from '../Button/Button'
 import SessionAuthModal from '../SessionAuthModal/SessionAuthModal'
+import useUiMode from '../../hooks/useUiMode'
 
 export interface ViewDisclosuresProps {
   onClick?: () => void
   onAccept?: () => void
   ctaText?: string
   isSensitive?: boolean
+  isDisabled?: boolean
   ctaType?: ButtonFace
 }
 
@@ -17,9 +19,11 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
   onAccept,
   ctaText,
   ctaType,
+  isDisabled,
   isSensitive,
 }) => {
   const { t } = useTranslation()
+  const { mode } = useUiMode()
   const [isSessionModal, toggleAuthModal] = useState(false)
 
   const closeAuthModal = () => toggleAuthModal(false)
@@ -36,11 +40,12 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
     if (isSensitive) {
       return (
         <SessionAuthModal
+          mode={mode}
           onSuccess={onSuccessAuth}
           isOpen={isSessionModal}
           onClose={closeAuthModal}
         >
-          <Button type={ctaType} onClick={openAuthModal}>
+          <Button isDisabled={isDisabled} type={ctaType} onClick={openAuthModal}>
             {ctaText}
           </Button>
         </SessionAuthModal>
@@ -48,7 +53,7 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
     }
 
     return (
-      <Button type={ctaType} onClick={onAccept}>
+      <Button isDisabled={isDisabled} type={ctaType} onClick={onAccept}>
         {ctaText}
       </Button>
     )
