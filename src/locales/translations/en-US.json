@@ -368,5 +368,8 @@
       "description": "Please enter your BLS Change JSON. Submitting this request will allow the beacon node to voluntarily deposit partial rewards and execute validator exits to a designated withdrawal address. This action is sensitive, please exercise caution and ensure that you have access to your withdrawal address before proceeding.",
       "followLink": "For additional information, please follow the <0>link</0>."
     }
+  },
+  "validatorExit": {
+    "exitCta": "Exit Validator"
   }
 }
