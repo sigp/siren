@@ -34,7 +34,7 @@ const NetworkStats = () => {
   const participationClasses = addClassString('border-none', [!hasParticipation && 'opacity-20'])
 
   return (
-    <div className='w-full z-10 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
+    <div className='w-full z-50 h-18 lg:h-16 xl:h-14 dark:border dark:border-dark500 shadow flex flex-col md:flex-row'>
       <NetworkStatBlock
         toolTipId='vcTime'
         toolTipText={t('networkStats.toolTips.vcTime')}
