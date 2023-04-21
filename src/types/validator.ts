@@ -103,3 +103,11 @@ export type activeValidatorDetail = {
 export type ValidatorGraffitiResults = {
   [key: string]: string
 }
+
+export type SignedExitData = {
+  message: {
+    epoch: string
+    validator_index: string
+  }
+  signature: string
+}
