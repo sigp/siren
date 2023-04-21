@@ -16,7 +16,13 @@ export const selectActiveValidators = selector<activeValidatorDetail[]>({
               validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
             return { status, pubKey, index, name }
           })
-          .filter(({ status }) => status.includes('active') && !status.includes('slashed'))
+          .filter(
+            ({ status }) =>
+              status.includes('active') &&
+              !status.includes('slashed') &&
+              !status.includes('exiting') &&
+              !status.includes('exited'),
+          )
           .slice(0, 10)
       : []
   },

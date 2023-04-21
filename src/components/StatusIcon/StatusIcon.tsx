@@ -13,6 +13,8 @@ const StatusIcon: FC<StatusIconProps> = ({ status }) => {
   switch (status) {
     case 'active_ongoing':
       return <CheckIcon className='h-4 w-4 text-success' />
+    case 'exited_unslashed':
+      return <i className='bi bi-box-arrow-right text-error' />
     case 'active_slashed':
       return (
         <div className='flex items-center space-x-2'>
