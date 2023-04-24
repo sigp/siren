@@ -254,6 +254,8 @@
     "invalidApiToken": "Invalid Api Token",
     "beaconDataRequired": "Beacon Node requires protocol, address and port",
     "validatorDataRequired": "Validator Node requires protocol, address and port",
+    "unableToSignExit": "Unable to sign voluntary exit message",
+    "invalidExit": "Invalid voluntary exit",
     "userName": {
       "maxLength": "Username cannot exceed 14 characters",
       "required": "User name is required"
@@ -369,7 +371,20 @@
       "followLink": "For additional information, please follow the <0>link</0>."
     }
   },
+  "basicValidatorMetrics": {
+    "ethRate": "ETH Rate",
+    "validator": "Validator",
+    "balance": "Balance"
+  },
+  "validatorInfoHeader": {
+    "viewOnBeaconChain": "View on BeaconChai.in",
+    "validatorBalance": "Validator <0></0> Balance"
+  },
   "validatorExit": {
-    "exitCta": "Exit Validator"
+    "exit": "Exit Validator",
+    "management": "Validator <0></0> Management",
+    "warning": "This action is irreversible and will cause your validator to get locked in to exited state pending withdrawal without the ability to start validator again. This action may take time, kindly wait until the validator status reflects the changes.",
+    "learnMore": "Learn more about validator states in various phases here.",
+    "iAccept": "I understand and Accept"
   }
 }

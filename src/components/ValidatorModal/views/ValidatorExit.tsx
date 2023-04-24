@@ -8,7 +8,7 @@ import BasicValidatorMetrics from '../../BasicValidatorMetrics/BasicValidatorMet
 import InfoBox, { InfoBoxType } from '../../InfoBox/InfoBox'
 import Button, { ButtonFace } from '../../Button/Button'
 import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { signVoluntaryExit } from '../../../api/lighthouse'
 import { useRecoilValue } from 'recoil'
@@ -22,11 +22,11 @@ export interface ValidatorExitProps {
 }
 
 const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
+  const { t } = useTranslation()
   const { pubKey } = validator
   const beacon = useRecoilValue(beaconNodeEndpoint)
   const endpoint = useRecoilValue(validatorClientEndpoint)
   const token = useRecoilValue(apiToken)
-  const { t } = useTranslation()
   const [isAccept, setIsAccept] = useState(false)
   const { moveToView, closeModal } = useContext(ValidatorModalContext)
   const viewDetails = () => moveToView(ValidatorModalView.DETAILS)
@@ -40,7 +40,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         return data
       }
     } catch (e) {
-      toast.error('Unable to sign voluntary exit message', {
+      toast.error(t('error.unableToSignExit') as string, {
         position: 'top-right',
         autoClose: 5000,
         theme: 'colored',
@@ -58,7 +58,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         closeModal()
       }
     } catch (e) {
-      toast.error('Invalid voluntary exit', {
+      toast.error(t('error.invalidExit') as string, {
         position: 'top-right',
         autoClose: 5000,
         theme: 'colored',
@@ -86,7 +86,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         <div className='space-x-4 flex items-center'>
           <i onClick={viewDetails} className='bi-chevron-left dark:text-dark300 cursor-pointer' />
           <Typography type='text-subtitle1' fontWeight='font-light'>
-            Exit Validator
+            {t('validatorExit.exit')}
           </Typography>
         </div>
         <BasicValidatorMetrics validator={validator} />
@@ -94,24 +94,25 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
       <ValidatorInfoHeader validator={validator} />
       <div className='p-6 space-y-6'>
         <Typography type='text-caption1' isBold isUpperCase>
-          Validator <br /> Management ---
+          <Trans i18nKey='validatorExit.management'>
+            <br />
+          </Trans>{' '}
+          ---
         </Typography>
         <InfoBox type={InfoBoxType.WARNING}>
           <div>
             <Typography type='text-caption1' className='mb-3' darkMode='text-dark900'>
-              This action is irreversible and will cause your validator to get locked in to exited
-              state pending withdrawal without the ability to start validator again. This action may
-              take time, kindly wait until the validator status reflects the changes.
+              {t('validatorExit.warning')}
             </Typography>
             <a href=''>
               <Typography type='text-caption1' className='underline' darkMode='text-error'>
-                Learn more about validator states in various phases here.
+                {t('validatorExit.learnMore')}
               </Typography>
             </a>
           </div>
         </InfoBox>
         <Button onClick={toggleAccept} className={acceptBtnClasses} type={ButtonFace.TERTIARY}>
-          I understand and Accept
+          {t('validatorExit.iAccept')}
           <i className='bi bi-check-circle ml-4' />
         </Button>
       </div>
@@ -121,7 +122,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
           isDisabled={!isAccept}
           onAccept={confirmExit}
           ctaType={ButtonFace.SECONDARY}
-          ctaText={t('validatorExit.exitCta')}
+          ctaText={t('validatorExit.exit')}
         />
       </div>
     </div>

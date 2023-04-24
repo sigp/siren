@@ -5,12 +5,14 @@ import Typography from '../Typography/Typography'
 import Waves from '../../assets/images/waves.png'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
+import { useTranslation, Trans } from 'react-i18next'
 
 export interface ValidatorInfoHeaderProps {
   validator: ValidatorInfo
 }
 
 const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator }) => {
+  const { t } = useTranslation()
   const { pubKey, name, index, balance } = validator
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
 
@@ -37,7 +39,7 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator }) => {
                 color='text-primary'
                 darkMode='dark:text-primary'
               >
-                View on BeaconChai.in
+                {t('validatorInfoHeader.viewOnBeaconChain')}
               </Typography>
             </a>
           </div>
@@ -51,7 +53,9 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator }) => {
             <div>
               <Typography>-</Typography>
               <Typography isUpperCase isBold type='text-tiny'>
-                Validator <br /> Balance
+                <Trans i18nKey='validatorInfoHeader.validatorBalance'>
+                  <br />
+                </Trans>
               </Typography>
               <Typography>{balance.toFixed(2)} ETH</Typography>
             </div>
