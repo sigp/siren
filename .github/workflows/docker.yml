@@ -41,6 +41,33 @@ jobs:
         outputs:
             VERSION: ${{ env.VERSION }}
             VERSION_SUFFIX: ${{ env.VERSION_SUFFIX }}
+    build-html:
+        name: build html
+        runs-on: ubuntu-22.04
+        needs: [extract-version]
+        steps:
+            - name: Checkout sources
+              uses: actions/checkout@v3
+            - name: Use node 18
+              uses: actions/setup-node@v3
+              with:
+                node-version: 18
+                cache: 'yarn'
+            - name: Install dependencies
+              env:
+                NODE_ENV: development
+              run: |
+                yarn
+            - name: Build Siren
+              env:
+                NODE_ENV: production
+              run: yarn build
+            - name: Upload artifact
+              uses: actions/upload-artifact@v3
+              with:
+                name: html
+                path: build/
+
     build-docker-single-arch:
         name: build-docker-${{ matrix.binary }}
         runs-on: ubuntu-22.04
@@ -48,7 +75,7 @@ jobs:
             matrix:
                 binary: [aarch64, x86_64]
 
-        needs: [extract-version]
+        needs: [extract-version, build-html]
         env:
             # We need to enable experimental docker features in order to use `docker buildx`
             DOCKER_CLI_EXPERIMENTAL: enabled
@@ -66,15 +93,20 @@ jobs:
             - name: Map x86_64 to amd64 short arch
               if: startsWith(matrix.binary, 'x86_64')
               run: echo "SHORT_ARCH=amd64" >> $GITHUB_ENV;
-            # Install dependencies for emulation. Have to create a new builder to pick up emulation support.
+            - name: Download artifacts
+              uses: actions/download-artifact@v3
+              with:
+                  name: html
+                  path: html/
             - name: Build Dockerfile and push
               run: |
                   docker buildx build \
                       --platform=linux/${SHORT_ARCH} \
-                      --file ./Dockerfile . \
+                      --file ./Dockerfile.release . \
                       --tag ${IMAGE_NAME}:${VERSION}-${SHORT_ARCH}${VERSION_SUFFIX} \
                       --provenance=false \
                       --push
+
     build-docker-multiarch:
         name: build-docker-multiarch
         runs-on: ubuntu-22.04
