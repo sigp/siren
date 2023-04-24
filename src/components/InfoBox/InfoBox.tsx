@@ -5,6 +5,7 @@ import Typography from '../Typography/Typography'
 export enum InfoBoxType {
   WARNING = 'WARNING',
   INFO = 'INFO',
+  ERROR = 'ERROR',
 }
 
 export interface InfoBoxProps {
@@ -16,18 +17,21 @@ export interface InfoBoxProps {
 const InfoBox: FC<InfoBoxProps> = ({ type, children, text }) => {
   const isWarning = type === InfoBoxType.WARNING
   const isInfo = type === InfoBoxType.INFO
+  const isError = type === InfoBoxType.ERROR
 
   const warningClasses = addClassString('w-full flex items-center p-6 rounded', [
     isInfo && 'bg-dark500',
-    isWarning && 'bg-lightError',
+    isError && 'bg-lightError',
+    isWarning && 'bg-warning200',
   ])
   const warningIconBackgroundClasses = addClassString(
     'rounded-full mr-14 flex-shrink-0 flex items-center justify-center h-12 w-12',
-    [isInfo && 'bg-dark400', isWarning && 'bg-lightError200'],
+    [isInfo && 'bg-dark400', isError && 'bg-lightError200', isWarning && 'bg-warning'],
   )
   const warningIconClasses = addClassString('text-2xl', [
     isInfo && 'bi-hourglass-split text-dark600',
-    isWarning && 'bi-exclamation-triangle-fill text-error',
+    isError && 'bi-exclamation-triangle-fill text-error',
+    isWarning && 'bi-exclamation text-4xl text-warning900',
   ])
 
   return (

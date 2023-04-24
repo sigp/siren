@@ -99,7 +99,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
           </Trans>{' '}
           ---
         </Typography>
-        <InfoBox type={InfoBoxType.WARNING}>
+        <InfoBox type={InfoBoxType.ERROR}>
           <div>
             <Typography type='text-caption1' className='mb-3' darkMode='text-dark900'>
               {t('validatorExit.warning')}

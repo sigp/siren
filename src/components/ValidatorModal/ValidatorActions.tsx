@@ -13,9 +13,14 @@ import InfoBox, { InfoBoxType } from '../InfoBox/InfoBox'
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
   isProcessing?: boolean
+  isExitAction?: boolean
 }
 
-const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isProcessing }) => {
+const ValidatorActions: FC<ValidatorActionsProps> = ({
+  isConversionRequired,
+  isProcessing,
+  isExitAction = true,
+}) => {
   const { t } = useTranslation()
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
   const { closeModal, moveToView } = useContext(ValidatorModalContext)
@@ -86,13 +91,9 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isP
               title={t('validatorManagement.actions.exportValidator')}
             />
           </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.exitValidator')}
-            />
-          </DisabledTooltip>
           <ValidatorCardAction
+            isDisabled={!isExitAction}
+            className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'
             onClick={viewExitAction}
             icon='bi-arrow-right-square'
             title={t('validatorManagement.actions.withdrawValidator')}
