@@ -2,9 +2,9 @@ import { Endpoint } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from '../utilities/debounce'
 import axios from 'axios'
-import { toast, ToastOptions } from 'react-toastify'
 import { ApiType } from '../constants/enums'
 import { useTranslation } from 'react-i18next'
+import displayToast from '../utilities/displayToast'
 
 const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, data?: Endpoint) => {
   const { t } = useTranslation()
@@ -25,19 +25,10 @@ const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, da
 
         if (!isToastAlert) return
 
-        const options = {
-          position: 'top-right',
-          autoClose: 5000,
-          theme: 'colored',
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-        } as ToastOptions
-
         if (code === 'ERR_NETWORK') {
-          toast.error(t('error.networkError', { type }) as string, options)
+          displayToast(t('error.networkError', { type }), 'error')
         } else {
-          toast.error(t('error.unknownError', { type }) as string, options)
+          displayToast(t('error.unknownError', { type }), 'error')
         }
       }
     }),

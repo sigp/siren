@@ -18,7 +18,6 @@ import {
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
-import { toast } from 'react-toastify'
 import { fetchVersion } from '../api/lighthouse'
 import { EndpointStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
@@ -26,6 +25,7 @@ import { Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
+import displayToast from '../utilities/displayToast'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -147,15 +147,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     if (e instanceof AxiosError && e.response?.status === 403) {
       message = t('error.invalidApiToken')
     }
-
-    toast.error(message, {
-      position: 'top-right',
-      autoClose: 5000,
-      theme: 'colored',
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-    })
+    displayToast(message, 'error')
   }
 
   const validationErrors = (values: ConnectionForm) => {
