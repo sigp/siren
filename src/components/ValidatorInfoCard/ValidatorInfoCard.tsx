@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import addClassString from '../../utilities/addClassString'
 
 export interface ValidatorInfoCardProps {
   validator: ValidatorInfo
@@ -14,14 +15,13 @@ export interface ValidatorInfoCardProps {
 const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, onClick }) => {
   const { t } = useTranslation()
   const { index, balance, pubKey, name } = validator
+  const classes = addClassString(
+    'w-full lg:w-80 h-60 border-r-style100 px-8 lg:px-6 py-4 relative',
+    [className],
+  )
 
   return (
-    <div
-      onClick={onClick}
-      className={`${
-        className || ''
-      } w-full lg:w-80 h-60 border-r-style100 px-8 lg:px-6 py-4 relative`}
-    >
+    <div onClick={onClick} className={classes}>
       <img
         alt='waves'
         src={Waves}

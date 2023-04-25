@@ -7,29 +7,24 @@ import { ValidatorModalContext } from './ValidatorModal'
 import { useSetRecoilState } from 'recoil'
 import { isBlsExecutionModal } from '../../recoil/atoms'
 import { WithdrawalInfoLink } from '../../constants/constants'
-import addClassString from '../../utilities/addClassString'
+import { ValidatorModalView } from '../../constants/enums'
+import InfoBox, { InfoBoxType } from '../InfoBox/InfoBox'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
   isProcessing?: boolean
+  isExitAction?: boolean
 }
 
-const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isProcessing }) => {
+const ValidatorActions: FC<ValidatorActionsProps> = ({
+  isConversionRequired,
+  isProcessing,
+  isExitAction = true,
+}) => {
   const { t } = useTranslation()
-  const warningClasses = addClassString('w-full flex items-center px-6 py-8 rounded', [
-    isProcessing && 'bg-dark500',
-    !isProcessing && 'bg-lightError',
-  ])
-  const warningIconBackgroundClasses = addClassString(
-    'rounded-full mr-14 flex-shrink-0 flex items-center justify-center h-12 w-12',
-    [isProcessing && 'bg-dark400', !isProcessing && 'bg-lightError200'],
-  )
-  const warningIconClasses = addClassString('text-2xl', [
-    isProcessing && 'bi-hourglass-split text-dark600',
-    !isProcessing && 'bi-exclamation-triangle-fill text-error',
-  ])
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
-  const { closeModal } = useContext(ValidatorModalContext)
+  const { closeModal, moveToView } = useContext(ValidatorModalContext)
+  const viewExitAction = () => moveToView(ValidatorModalView.EXIT)
   const viewBlsModal = () => {
     closeModal()
     setTimeout(() => {
@@ -41,12 +36,9 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isP
     <div className='w-full border-t-style100 space-y-4 p-4'>
       <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
       {isConversionRequired ? (
-        <div className={warningClasses}>
-          <div className={warningIconBackgroundClasses}>
-            <i className={warningIconClasses} />
-          </div>
+        <InfoBox type={isProcessing ? InfoBoxType.INFO : InfoBoxType.WARNING}>
           {isProcessing ? (
-            <Typography className='mr-12' type='text-caption1' darkMode='text-dark900'>
+            <Typography type='text-caption1' darkMode='text-dark900'>
               {t('blsExecution.warning.processingText')}
             </Typography>
           ) : (
@@ -72,7 +64,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isP
               </div>
             </div>
           )}
-        </div>
+        </InfoBox>
       ) : (
         <div className='w-full flex flex-wrap lg:space-x-3'>
           <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
@@ -99,18 +91,13 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({ isConversionRequired, isP
               title={t('validatorManagement.actions.exportValidator')}
             />
           </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.exitValidator')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.withdrawValidator')}
-            />
-          </DisabledTooltip>
+          <ValidatorCardAction
+            isDisabled={!isExitAction}
+            className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'
+            onClick={viewExitAction}
+            icon='bi-arrow-right-square'
+            title={t('validatorManagement.actions.withdrawValidator')}
+          />
         </div>
       )}
     </div>

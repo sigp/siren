@@ -68,4 +68,5 @@ export enum Network {
 
 export enum ValidatorModalView {
   DETAILS = 'DETAILS',
+  EXIT = 'EXIT',
 }

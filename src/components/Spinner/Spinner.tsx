@@ -2,11 +2,12 @@ import { FC } from 'react'
 
 export interface SpinnerProps {
   size?: string
+  className?: string
 }
 
-const Spinner: FC<SpinnerProps> = ({ size = 'w-8 h-8' }) => {
+const Spinner: FC<SpinnerProps> = ({ size = 'w-8 h-8', className }) => {
   return (
-    <div role='status'>
+    <div className={className} role='status'>
       <svg
         aria-hidden='true'
         className={`mr-2 ${size} text-gray-200 animate-spin dark:text-gray-600 fill-primary200`}

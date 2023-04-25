@@ -5,10 +5,10 @@ import { sessionAuthValidation } from '../validation/sessionAuthValidation'
 import { OnboardView } from '../constants/enums'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { apiToken, onBoardView } from '../recoil/atoms'
-import { toast } from 'react-toastify'
 import useLocalStorage from '../hooks/useLocalStorage'
 import CryptoJS from 'crypto-js'
 import { useTranslation } from 'react-i18next'
+import displayToast from '../utilities/displayToast'
 
 export interface SessionAuthForm {
   password: string
@@ -53,14 +53,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
       return
     }
     if (!isValid && password) {
-      toast.error(t('error.sessionAuth.invalidPassword') as string, {
-        position: 'top-right',
-        autoClose: 5000,
-        theme: 'colored',
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      displayToast(t('error.sessionAuth.invalidPassword'), 'error')
       return
     }
 

@@ -34,6 +34,8 @@ module.exports = {
         secondary: '#A841D5',
         tertiary: '#D541B8',
         success: '#2ED47A',
+        warning200: '#FFFF6E',
+        warning900: '#A85407',
         warning: '#FFB800',
         error: '#FF4D00',
         lightError: '#FFDDE8',

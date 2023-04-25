@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from 'react'
 import { TypographyFamily, TypographyType } from '../Typography/Typography'
 import Spinner from '../Spinner/Spinner'
+import addClassString from '../../utilities/addClassString'
 
 export enum ButtonFace {
   PRIMARY = 'PRIMARY',
@@ -43,6 +44,12 @@ const Button: FC<ButtonProps> = ({
   renderAs = 'button',
   isLoading,
 }) => {
+  const buttonContentClasses = addClassString('flex space-x-2', [isLoading && 'opacity-0'])
+  const spinnerContentClasses = addClassString('', [
+    !isLoading && 'hidden',
+    isLoading && 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2',
+  ])
+
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.LIGHT_ACTIVE:
@@ -68,9 +75,12 @@ const Button: FC<ButtonProps> = ({
       type={renderAs}
       onClick={onClick}
       disabled={isDisabled}
-      className={`${formatFaceStyle()} ${font} ${fontType} ${className} box-border ${padding} w-fit cursor-pointer flex space-x-2`}
+      className={`${formatFaceStyle()} ${font} ${fontType} ${className} ${
+        isLoading && 'pointer-events-none'
+      } relative box-border ${padding} w-fit cursor-pointer flex space-x-2`}
     >
-      {isLoading ? <Spinner size='h-6 w-6' /> : children}
+      <div className={buttonContentClasses}>{children}</div>
+      {isLoading && <Spinner className={spinnerContentClasses} size='h-6 w-6' />}
     </button>
   )
   return href ? (

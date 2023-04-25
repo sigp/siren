@@ -15,12 +15,12 @@ import GradientHeader from '../GradientHeader/GradientHeader'
 import { ButtonFace } from '../Button/Button'
 import { useTranslation, Trans } from 'react-i18next'
 import { broadcastBlsChange } from '../../api/beacon'
-import { toast } from 'react-toastify'
 import axios, { AxiosError } from 'axios'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { Storage } from '../../constants/enums'
 import isValidJSONArray from '../../utilities/isValidJson'
 import getValuesFromObjArray from '../../utilities/getValuesFromObjArray'
+import displayToast from '../../utilities/displayToast'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
@@ -45,14 +45,7 @@ const BlsExecutionModal = () => {
       message = t('error.invalidJson')
     }
 
-    toast.error(message, {
-      position: 'top-right',
-      autoClose: 5000,
-      theme: 'colored',
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-    })
+    displayToast(message, 'error')
   }
 
   const submitChange = async () => {

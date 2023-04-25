@@ -40,3 +40,10 @@ export const broadcastBlsChange = async ({ protocol, address, port }: Endpoint, 
       },
     },
   )
+
+export const submitSignedExit = async ({ protocol, address, port }: Endpoint, data: any) =>
+  await axios.post(`${protocol}://${address}:${port}/eth/v1/beacon/pool/voluntary_exits`, data, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })

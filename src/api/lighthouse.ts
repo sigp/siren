@@ -20,3 +20,16 @@ export const fetchValidatorGraffiti = async (baseValidatorUrl: string, token: st
   await axios.get(`${baseValidatorUrl}/ui/graffiti`, {
     headers: { Authorization: `Bearer ${token}` },
   })
+
+export const signVoluntaryExit = async (
+  { protocol, address, port }: Endpoint,
+  token: string,
+  pubkey: string,
+) =>
+  await axios.post(
+    `${protocol}://${address}:${port}/eth/v1/validator/${pubkey}/voluntary_exit`,
+    null,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  )

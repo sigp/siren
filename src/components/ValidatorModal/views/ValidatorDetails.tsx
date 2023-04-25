@@ -35,6 +35,7 @@ const ValidatorDetails = () => {
   )
 
   const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
+  const isExited = validator?.status.includes('exit')
 
   const avgTargetEffectiveness = useMemo(() => {
     if (!metrics || !index) return
@@ -152,7 +153,11 @@ const ValidatorDetails = () => {
       </div>
       <ValidatorGraffitiInput value={graffiti} />
       <ValidatorDetailTable validator={validator} />
-      <ValidatorActions isProcessing={isProcessing} isConversionRequired={isBls} />
+      <ValidatorActions
+        isExitAction={!isExited}
+        isProcessing={isProcessing}
+        isConversionRequired={isBls}
+      />
       <div className='p-3 border-t-style100'>
         <ValidatorDisclosure />
       </div>
