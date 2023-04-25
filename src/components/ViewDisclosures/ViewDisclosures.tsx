@@ -12,6 +12,7 @@ export interface ViewDisclosuresProps {
   isSensitive?: boolean
   isDisabled?: boolean
   ctaType?: ButtonFace
+  isLoading?: boolean
 }
 
 const ViewDisclosures: FC<ViewDisclosuresProps> = ({
@@ -21,6 +22,7 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
   ctaType,
   isDisabled,
   isSensitive,
+  isLoading,
 }) => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
@@ -45,7 +47,12 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
           isOpen={isSessionModal}
           onClose={closeAuthModal}
         >
-          <Button isDisabled={isDisabled} type={ctaType} onClick={openAuthModal}>
+          <Button
+            isLoading={isLoading}
+            isDisabled={isDisabled}
+            type={ctaType}
+            onClick={openAuthModal}
+          >
             {ctaText}
           </Button>
         </SessionAuthModal>
@@ -53,7 +60,7 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
     }
 
     return (
-      <Button isDisabled={isDisabled} type={ctaType} onClick={onAccept}>
+      <Button isLoading={isLoading} isDisabled={isDisabled} type={ctaType} onClick={onAccept}>
         {ctaText}
       </Button>
     )
