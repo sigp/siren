@@ -67,6 +67,11 @@
       "title": "Validator Returns Disclosure",
       "text1": "The returns of a validator are based on the local performance of the node, the network as a whole and also the current active validators on the network.",
       "text2": "Therefore predictions of future return in this application should be taken as a rough guide as these factors cannot be predicted in advance."
+    },
+    "exitValidator": {
+      "title": "Validator Exit Disclosure",
+      "text1": "A validator cannot rejoin the network once it voluntarily exits.",
+      "text2": "We advise you to proceed with caution when completing the voluntary exit action, as it is a serious matter that may not be undone."
     }
   },
   "uptime": "Uptime",
