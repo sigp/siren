@@ -7,15 +7,15 @@ import { ValidatorModalView } from '../../../constants/enums'
 import BasicValidatorMetrics from '../../BasicValidatorMetrics/BasicValidatorMetrics'
 import InfoBox, { InfoBoxType } from '../../InfoBox/InfoBox'
 import Button, { ButtonFace } from '../../Button/Button'
-import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
 import { useTranslation, Trans } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { signVoluntaryExit } from '../../../api/lighthouse'
 import { useRecoilValue } from 'recoil'
 import { apiToken, beaconNodeEndpoint, validatorClientEndpoint } from '../../../recoil/atoms'
 import { Endpoint } from '../../../types'
-import { toast } from 'react-toastify'
 import { submitSignedExit } from '../../../api/beacon'
+import ExitDisclosure from '../../Disclosures/ExitDisclosure'
+import displayToast from '../../../utilities/displayToast'
 
 export interface ValidatorExitProps {
   validator: ValidatorInfo
@@ -25,6 +25,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const { t } = useTranslation()
   const { pubKey } = validator
   const beacon = useRecoilValue(beaconNodeEndpoint)
+  const [isLoading, setLoading] = useState(false)
   const endpoint = useRecoilValue(validatorClientEndpoint)
   const token = useRecoilValue(apiToken)
   const [isAccept, setIsAccept] = useState(false)
@@ -40,14 +41,8 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         return data
       }
     } catch (e) {
-      toast.error(t('error.unableToSignExit') as string, {
-        position: 'top-right',
-        autoClose: 5000,
-        theme: 'colored',
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      setLoading(false)
+      displayToast(t('error.unableToSignExit'), 'error')
     }
   }
   const submitSignedMessage = async (data: SignedExitData) => {
@@ -55,22 +50,20 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
       const { status } = await submitSignedExit(beacon, data)
 
       if (status === 200) {
+        setLoading(false)
+        displayToast(t('success.validatorExit'), 'success')
         closeModal()
       }
     } catch (e) {
-      toast.error(t('error.invalidExit') as string, {
-        position: 'top-right',
-        autoClose: 5000,
-        theme: 'colored',
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-      })
+      setLoading(false)
+      displayToast(t('error.invalidExit'), 'error')
     }
   }
 
   const confirmExit = async () => {
-    if (!beaconNodeEndpoint) return
+    if (!beacon) return
+
+    setLoading(true)
 
     const message = await getSignedExit(endpoint)
 
@@ -117,8 +110,9 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         </Button>
       </div>
       <div className='p-3 border-t-style100'>
-        <ValidatorDisclosure
+        <ExitDisclosure
           isSensitive
+          isLoading={isLoading}
           isDisabled={!isAccept}
           onAccept={confirmExit}
           ctaType={ButtonFace.SECONDARY}
