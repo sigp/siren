@@ -239,7 +239,8 @@
     "vcPort": "VC Port"
   },
   "success": {
-    "validatorExit": "Validator exit submitted successfully. Kindly wait while exit is being processed."
+    "validatorExit": "Validator exit submitted successfully. Kindly wait while exit is being processed.",
+    "blsExecution": "BLS Change Execution submitted. Kindly wait while the execution is being processed."
   },
   "error": {
     "sessionAuth": {

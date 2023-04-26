@@ -24,6 +24,7 @@ import displayToast from '../../utilities/displayToast'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
+  const [isLoading, setLoading] = useState(false)
   const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
@@ -49,7 +50,9 @@ const BlsExecutionModal = () => {
   }
 
   const submitChange = async () => {
+    setLoading(true)
     if (!isValidJSONArray(blsJson)) {
+      setLoading(false)
       handleError(422)
       return
     }
@@ -58,6 +61,8 @@ const BlsExecutionModal = () => {
 
     try {
       const { status } = await broadcastBlsChange(beaconEndpoint, blsJson)
+
+      setLoading(false)
 
       if (status != 200) {
         handleError(status)
@@ -72,7 +77,9 @@ const BlsExecutionModal = () => {
       storeIsBlsProcessing(JSON.stringify(targetIndices))
       closeModal()
       setJson(MOCK_BLS_JSON)
+      displayToast(t('success.blsExecution'), 'success')
     } catch (e) {
+      setLoading(false)
       if (axios.isAxiosError(e)) {
         const axiosError = e as AxiosError
 
@@ -118,6 +125,7 @@ const BlsExecutionModal = () => {
         {isModal && (
           <div className='p-3 border-t-style100'>
             <ValidatorDisclosure
+              isLoading={isLoading}
               onAccept={submitChange}
               ctaType={ButtonFace.SECONDARY}
               ctaText={t('blsExecution.modal.cta')}
