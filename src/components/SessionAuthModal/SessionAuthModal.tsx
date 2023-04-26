@@ -124,6 +124,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
     <>
       <Typography type='text-caption1'>{t('sessionAuthModal.passwordPrompt')}</Typography>
       <Input
+        isAutoFocus={isOpen}
         onKeyDown={handleKeyDown}
         uiMode={mode}
         type='password'
