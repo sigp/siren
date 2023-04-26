@@ -1,5 +1,5 @@
 import { ApiPollConfig } from '../types'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRecoilState } from 'recoil'
 import usePollingInterval from './usePollingInterval'
 import axios, { AxiosResponse } from 'axios'
@@ -24,7 +24,7 @@ const usePollApi = ({
   const onClearInterval = () => setIntervalId(undefined)
   const isSkip = !isReady || !!interval
 
-  const fetchApi = async () => {
+  const fetchApi = useCallback(async () => {
     if (!url) return
 
     setError(undefined)
@@ -50,7 +50,7 @@ const usePollApi = ({
         setErrorCount((prev) => prev + 1)
       }
     }
-  }
+  }, [url, method, apiToken, params, data])
 
   const { intervalId, clearPoll } = usePollingInterval(fetchApi, time, {
     isSkip,
