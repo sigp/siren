@@ -5,6 +5,8 @@ import {
   useState,
   ClipboardEvent,
   ChangeEvent,
+  useRef,
+  useEffect,
 } from 'react'
 import Typography from '../Typography/Typography'
 import { UiMode } from '../../constants/enums'
@@ -23,6 +25,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   isDisablePaste?: boolean
   inputStyle?: 'primary' | 'secondary'
   icon?: string
+  isAutoFocus?: boolean
 }
 
 const Input: FC<InputProps> = ({
@@ -40,8 +43,10 @@ const Input: FC<InputProps> = ({
   isDisablePaste,
   icon,
   onChange,
+  isAutoFocus,
   ...props
 }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null)
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
   const sanitizeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +81,20 @@ const Input: FC<InputProps> = ({
   }
 
   const togglePassword = () => setType((prev) => (prev === 'password' ? 'text' : 'password'))
+
+  useEffect(() => {
+    if (isAutoFocus && inputRef.current) {
+      const timeoutId = setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus()
+        }
+      }, 200)
+      return () => {
+        clearTimeout(timeoutId)
+      }
+    }
+  }, [isAutoFocus, inputRef])
+
   return (
     <div className='space-y-4 w-full'>
       {label && (
@@ -104,6 +123,7 @@ const Input: FC<InputProps> = ({
       <div className='relative w-full'>
         <input
           {...props}
+          ref={inputRef}
           onChange={(value) => onChange?.(sanitizeInput(value))}
           onPaste={handlePaste}
           type={inputType}
