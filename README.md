@@ -101,6 +101,8 @@ $ make
 $ make install-lcli
 ```
 
+note: you need a version of lcli that includes [these](https://github.com/sigp/lighthouse/pull/3807) changes
+
 `ganache` is also required to be installed. This can be installed via `npm` or via the OS. If using `npm` it can be installed as:
 ```
 $ npm install ganache --global
@@ -110,7 +112,7 @@ $ npm install ganache --global
 
 To start a local testnet, move into the `local-testnet` directory. Then run:
 ```bash
-./start_local_testnet.sh
+./start_local_testnet.sh genesis.json
 ```
 
 This will spin up both a validator client and a beacon node. These will run in
