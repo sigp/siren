@@ -3,10 +3,40 @@ import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import { useTranslation } from 'react-i18next'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { StatusColor } from '../../types'
+import { useContext } from 'react'
+import { SSEContext } from '../SSELogProvider/SSELogProvider'
 
 const LogsInfo = () => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery('(max-width: 425px)')
+  const { beaconLogs, vcLogs } = useContext(SSEContext)
+
+  const totalLogs = beaconLogs.totalLogsPerHour + vcLogs.totalLogsPerHour
+
+  const criticalPercentage =
+    ((beaconLogs.criticalPerHour + vcLogs.criticalPerHour) / totalLogs) * 100
+  const warnPercentage = ((beaconLogs.warningsPerHour + vcLogs.warningsPerHour) / totalLogs) * 100
+  const errorPercentage = ((beaconLogs.errorsPerHour + vcLogs.errorsPerHour) / totalLogs) * 100
+
+  const critStatus = totalLogs
+    ? criticalPercentage > 0
+      ? StatusColor.ERROR
+      : StatusColor.SUCCESS
+    : StatusColor.DARK
+  const errorStatus = totalLogs
+    ? errorPercentage <= 0
+      ? StatusColor.SUCCESS
+      : errorPercentage <= 2
+      ? StatusColor.WARNING
+      : StatusColor.ERROR
+    : StatusColor.DARK
+  const warnStatus = totalLogs
+    ? warnPercentage < 5
+      ? StatusColor.SUCCESS
+      : warnPercentage <= 50
+      ? StatusColor.WARNING
+      : StatusColor.ERROR
+    : StatusColor.DARK
 
   const size = isMobile ? 'health' : 'md'
   return (
@@ -20,39 +50,33 @@ const LogsInfo = () => {
         </Typography>
       </div>
       <DiagnosticCard
-        isDisabled
-        toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.criticalLogs')}
         maxHeight='flex-1'
-        status={StatusColor.DARK}
+        status={critStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('critical')}
-        metric='---'
+        metric={`${totalLogs ? criticalPercentage.toFixed(2) : '-'} / HR`}
       />
       <DiagnosticCard
-        isDisabled
         isBackground={false}
-        toolTipText={t('logInfo.comingSoon')}
         title={t('errors')}
         maxHeight='flex-1'
-        status={StatusColor.DARK}
+        status={errorStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric='---'
+        metric={`${totalLogs ? errorPercentage.toFixed(2) : '-'} / HR`}
       />
       <DiagnosticCard
-        isDisabled
         isBackground={false}
-        toolTipText={t('logInfo.comingSoon')}
         title={t('logInfo.warnings')}
         maxHeight='flex-1'
-        status={StatusColor.DARK}
+        status={warnStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric='---'
+        metric={`${totalLogs ? warnPercentage.toFixed(2) : '-'} / HR`}
       />
     </div>
   )

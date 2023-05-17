@@ -125,7 +125,7 @@
     "logs": "Logs",
     "warnings": "Warnings",
     "validatorLogs": "Validator Logs",
-    "criticalLogs": "Critical Logs Per Minute",
+    "criticalLogs": "Critical",
     "comingSoon": "Logs Coming Soon"
   },
   "alertInfo": {
