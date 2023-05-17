@@ -231,6 +231,8 @@ export const REQUIRED_VALIDATOR_VERSION = {
   patch: 1,
 }
 
+export const MAX_PERSISTED_LOGS = 1000
+
 export const DEFAULT_MAX_NETWORK_ERROR = 3
 export const MAX_SESSION_UNLOCK_ATTEMPTS = 3
 
