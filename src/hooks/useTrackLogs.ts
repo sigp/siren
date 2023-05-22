@@ -24,6 +24,7 @@ export const defaultLogData = {
 
 const useTrackLogs = (url?: string): trackedLogData => {
   const dataRef = useRef<SSELog[]>([])
+  const infoPerHour = useRef<number[]>([])
   const criticalPerHour = useRef<number[]>([])
   const warningsPerHour = useRef<number[]>([])
   const errorsPerHour = useRef<number[]>([])
@@ -42,6 +43,10 @@ const useTrackLogs = (url?: string): trackedLogData => {
 
     if (level === LogLevels.ERRO) {
       errorsPerHour.current.push(timeNow)
+    }
+
+    if (level === LogLevels.INFO) {
+      infoPerHour.current.push(timeNow)
     }
   }
 
@@ -72,7 +77,7 @@ const useTrackLogs = (url?: string): trackedLogData => {
     while (ref.current.length > 0) {
       const elementTime = ref.current.shift()
 
-      if (elementTime && moment().diff(moment.unix(elementTime), 'minutes') <= 1) {
+      if (elementTime && moment().diff(moment.unix(elementTime), 'hours') <= 1) {
         ref.current.unshift(elementTime)
         break
       }
@@ -83,15 +88,17 @@ const useTrackLogs = (url?: string): trackedLogData => {
     pruneLogRef(criticalPerHour)
     pruneLogRef(warningsPerHour)
     pruneLogRef(errorsPerHour)
+    pruneLogRef(infoPerHour)
   }
 
   useSSE({ url, callback: trackLogs })
 
   const criticalCount = criticalPerHour.current.length
+  const infoCount = infoPerHour.current.length
   const warningCount = warningsPerHour.current.length
   const errorCount = errorsPerHour.current.length
 
-  const totalLogsPerHour = criticalCount + warningCount + errorCount
+  const totalLogsPerHour = criticalCount + warningCount + errorCount + infoCount
 
   return {
     data: dataRef.current,

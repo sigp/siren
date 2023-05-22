@@ -68,6 +68,11 @@ export type SemanticVersion = {
   patch: number
 }
 
+export enum LogType {
+  VALIDATOR = 'VALIDATOR',
+  BEACON = 'BEACON',
+}
+
 export enum LogLevels {
   OFF = 'OFF',
   CRIT = 'CRIT',
@@ -87,7 +92,8 @@ export type SSELog = {
 }
 
 export type LogCounts = {
-  critical: number
-  error: number
-  warning: number
+  totalLogsPerHour: number
+  criticalPerHour: number
+  warningsPerHour: number
+  errorsPerHour: number
 }
