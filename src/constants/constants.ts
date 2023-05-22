@@ -7,7 +7,7 @@ import { ReactComponent as GrafanaLogo } from '../assets/images/grafana.svg'
 import { ReactComponent as SettingsLogo } from '../assets/images/settings.svg'
 import { ContentView } from './enums'
 import { EarningOption, ValidatorStatus } from '../types/validator'
-import { ClientProvider } from '../types'
+import { ClientProvider, LogType } from '../types'
 
 export type ViewType = {
   title: string
@@ -31,7 +31,6 @@ export const VIEW = {
     title: 'sidebar.logs',
     logoComponent: LogsLogo,
     key: ContentView.LOGS,
-    isDisabled: true,
   },
   GRAFANA: {
     title: 'sidebar.grafana',
@@ -251,3 +250,8 @@ export const MOCK_BLS_JSON = `[
     }
   }
 ]`
+
+export const LogTypeOptions = [
+  { title: 'Validator', value: LogType.VALIDATOR },
+  { title: 'Beacon', value: LogType.BEACON },
+]
