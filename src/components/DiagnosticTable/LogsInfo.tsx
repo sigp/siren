@@ -4,10 +4,14 @@ import { useContext, useMemo } from 'react'
 import { SSEContext } from '../SSELogProvider/SSELogProvider'
 import LogStats from '../LogStats/LogStats'
 import { LogCounts } from '../../types'
+import useMediaQuery from '../../hooks/useMediaQuery'
 
 const LogsInfo = () => {
   const { t } = useTranslation()
   const { beaconLogs, vcLogs } = useContext(SSEContext)
+  const isMobile = useMediaQuery('(max-width: 425px)')
+
+  const size = isMobile ? 'health' : 'md'
 
   const combinedLogCounts = useMemo<LogCounts>(() => {
     return {
@@ -28,7 +32,7 @@ const LogsInfo = () => {
           {t('viewAll')}
         </Typography>
       </div>
-      <LogStats logCounts={combinedLogCounts} />
+      <LogStats size={size} logCounts={combinedLogCounts} />
     </div>
   )
 }

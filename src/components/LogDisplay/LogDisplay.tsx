@@ -147,8 +147,13 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
               )}
             </div>
           </div>
-          <div className='flex flex-col border-t-style500 border-l-style500 mt-4 ml-4'>
-            <LogStats logCounts={logCounts} />
+          <div className='flex order-first md:order-2 w-full md:w-fit flex-col border-t-style500 border-l-style500 mt-4 md:ml-4'>
+            <LogStats
+              size='lg'
+              maxHeight='h-32 md:flex-1'
+              maxWidth='w-full'
+              logCounts={logCounts}
+            />
           </div>
         </>
       )}
