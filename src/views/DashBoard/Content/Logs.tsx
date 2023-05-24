@@ -5,10 +5,19 @@ import { SSEContext } from '../../../components/SSELogProvider/SSELogProvider'
 import { LogType } from '../../../types'
 import SelectDropDown, { OptionType } from '../../../components/SelectDropDown/SelectDropDown'
 import { LogTypeOptions } from '../../../constants/constants'
+import Toggle from '../../../components/Toggle/Toggle'
+import Button, { ButtonFace } from '../../../components/Button/Button'
 
 const Logs = () => {
   const [logType, selectType] = useState(LogType.VALIDATOR)
-  const { beaconLogs, vcLogs } = useContext(SSEContext)
+  const {
+    beaconLogs,
+    vcLogs,
+    intervalId,
+    clearRefreshInterval,
+    startRefreshInterval,
+    triggerRefresh,
+  } = useContext(SSEContext)
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -32,15 +41,62 @@ const Logs = () => {
     }, 500)
   }
 
+  const toggleTriggerInterval = (value: boolean) => {
+    if (!value) {
+      clearRefreshInterval()
+      return
+    }
+
+    startRefreshInterval()
+  }
+
+  const manualRefresh = () => {
+    setLoading(true)
+    triggerRefresh()
+    setTimeout(() => {
+      setLoading(false)
+    }, 500)
+  }
+
   return (
     <div className='w-full h-full p-6 flex flex-col'>
-      <div className='flex w-full justify-between'>
+      <div className='flex flex-col w-full space-y-4 lg:space-y-0 lg:flex-row lg:space-x-20'>
         <Typography fontWeight='font-light' type='text-subtitle1'>
           Lighthouse Logs
         </Typography>
-        <div>
-          <Typography type='text-caption1'>Service</Typography>
-          <SelectDropDown value={logType} onSelect={toggleLogType} options={LogTypeOptions} />
+        <div className='flex space-x-20'>
+          <div>
+            <Typography
+              type='text-caption2'
+              color='text-dark500'
+              darkMode='dark:text-dark500'
+              isUpperCase
+            >
+              Service
+            </Typography>
+            <SelectDropDown value={logType} onSelect={toggleLogType} options={LogTypeOptions} />
+          </div>
+          <div className='flex space-x-2'>
+            <div className='flex items-center space-x-3'>
+              <Typography
+                type='text-caption2'
+                color='text-dark500'
+                darkMode='dark:text-dark500'
+                family='font-archivo'
+                isUpperCase
+              >
+                Auto-Refresh
+              </Typography>
+              <Toggle
+                id='triggerIntervalToggle'
+                value={Boolean(intervalId)}
+                onChange={toggleTriggerInterval}
+              />
+            </div>
+            <Button type={ButtonFace.ICON} isDisabled={Boolean(intervalId)} onClick={manualRefresh}>
+              <i className='bi-arrow-clockwise text-3xl' />
+            </Button>
+          </div>
         </div>
       </div>
       <LogDisplay isLoading={isLoading} type={logType} logs={activeLogs} />
