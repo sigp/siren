@@ -1,16 +1,17 @@
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 import { useTranslation } from 'react-i18next'
 import { LogCounts, StatusColor } from '../../types'
 import { FC } from 'react'
-import useMediaQuery from '../../hooks/useMediaQuery'
 
 export interface LogStatsProps {
   logCounts: LogCounts
+  size?: CardSize
+  maxHeight?: string
+  maxWidth?: string
 }
 
-const LogStats: FC<LogStatsProps> = ({ logCounts }) => {
+const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', maxWidth }) => {
   const { t } = useTranslation()
-  const isMobile = useMediaQuery('(max-width: 425px)')
   const { totalLogsPerHour, criticalPerHour, warningsPerHour, errorsPerHour } = logCounts
 
   const criticalPercentage = (criticalPerHour / totalLogsPerHour) * 100
@@ -37,13 +38,12 @@ const LogStats: FC<LogStatsProps> = ({ logCounts }) => {
       : StatusColor.ERROR
     : StatusColor.DARK
 
-  const size = isMobile ? 'health' : 'md'
-
   return (
     <>
       <DiagnosticCard
         title={t('logInfo.criticalLogs')}
-        maxHeight='flex-1'
+        maxHeight={maxHeight}
+        maxWidth={maxWidth}
         status={critStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
@@ -53,7 +53,8 @@ const LogStats: FC<LogStatsProps> = ({ logCounts }) => {
       <DiagnosticCard
         isBackground={false}
         title={t('errors')}
-        maxHeight='flex-1'
+        maxHeight={maxHeight}
+        maxWidth={maxWidth}
         status={errorStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
@@ -63,7 +64,8 @@ const LogStats: FC<LogStatsProps> = ({ logCounts }) => {
       <DiagnosticCard
         isBackground={false}
         title={t('logInfo.warnings')}
-        maxHeight='flex-1'
+        maxHeight={maxHeight}
+        maxWidth={maxWidth}
         status={warnStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
