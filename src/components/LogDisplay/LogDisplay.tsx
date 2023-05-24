@@ -24,13 +24,19 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
   }, [isLoading])
 
   useEffect(() => {
-    if (scrollableRef.current && !isLoading) {
-      scrollableRef.current.scrollTo({
-        top: scrollableRef.current.scrollHeight,
-        behavior: 'smooth',
-      })
+    if (!isLoading) {
+      scrollToBottom()
     }
   }, [scrollableRef, isLoading])
+
+  const scrollToBottom = () => {
+    if (!scrollableRef.current) return
+
+    scrollableRef.current.scrollTo({
+      top: scrollableRef.current.scrollHeight,
+      behavior: 'smooth',
+    })
+  }
 
   const logCounts = useMemo(() => {
     const { totalLogsPerHour, errorsPerHour, criticalPerHour, warningsPerHour } = logs
@@ -55,26 +61,23 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
 
   const onSearchText = debounce(500, (e: any) => {
     setText(e.target.value)
-    setTimeout(() => {
-      if (scrollableRef.current) {
-        scrollableRef.current.scrollTo({
-          top: scrollableRef.current.scrollHeight,
-          behavior: 'smooth',
-        })
-      }
-    }, 500)
+    setTimeout(() => scrollToBottom(), 500)
   })
 
   return (
-    <div className='flex flex-1 overflow-hidden'>
+    <div className='flex flex-1 flex-col md:flex-row md:overflow-hidden'>
       {isLoading ? (
         <div className='w-full h-full flex items-center justify-center'>
           <Spinner />
         </div>
       ) : (
         <>
-          <div className='flex-1 flex flex-col mt-4 p-4 border border-style500'>
-            <div className='flex flex-col max-h-full flex-1'>
+          <div className='flex-1 flex flex-col max-h-396 md:max-h-none mb-28 md:mb-0 mt-4 p-4 border border-style500'>
+            <div className='flex group relative flex-col max-h-full flex-1'>
+              <i
+                onClick={scrollToBottom}
+                className='absolute bottom-0 right-0 text-primary text-4xl opacity-0 cursor-pointer group-hover:opacity-100 bi-arrow-down-circle-fill'
+              />
               <div className='w-full flex justify-between pb-6 border-b-style500'>
                 <div className='w-fit space-y-2'>
                   <Typography className='w-fit' type='text-caption1' isUpperCase>
@@ -95,12 +98,14 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
               {filteredLogs.length ? (
                 <div
                   ref={scrollableRef}
-                  className='space-y-6 overflow-scroll scrollbar-hide flex-1'
+                  className='space-y-1 overflow-scroll scrollbar-hide flex-1'
                 >
                   {filteredLogs.map(({ level, time, service, error, msg }, index) => {
                     const levelColor =
                       level === LogLevels.CRIT || level === LogLevels.ERRO
                         ? 'text-error'
+                        : level === LogLevels.WARN
+                        ? 'text-warning'
                         : undefined
                     return (
                       <div className='space-y-2 w-full' key={index}>
@@ -112,13 +117,19 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
                               darkMode={levelColor}
                               family='font-roboto'
                             >
-                              -- DEBUG-LEVEL {`< ${level} >`}
+                              -- {level}:
                             </Typography>
-                            <Typography type='text-caption1' family='font-roboto'>
+                            <Typography
+                              color={levelColor}
+                              darkMode={levelColor}
+                              type='text-caption1'
+                              family='font-roboto'
+                            >
                               {time}
                             </Typography>
                             <Typography className='pl-8' type='text-caption1' family='font-roboto'>
-                              Message: {msg}
+                              {msg}
+                              {error ? ` --- ${error}` : ''}
                             </Typography>
                           </div>
                           <div className='flex justify-between space-x-2'>
@@ -127,13 +138,6 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
                             </Typography>
                           </div>
                         </div>
-                        {error && (
-                          <div className='flex space-x-8 pl-12'>
-                            <Typography type='text-caption1' family='font-roboto'>
-                              ERROR: {error || 'N/A'}
-                            </Typography>
-                          </div>
-                        )}
                       </div>
                     )
                   })}
