@@ -2,6 +2,7 @@ import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 import { useTranslation } from 'react-i18next'
 import { LogCounts, StatusColor } from '../../types'
 import { FC } from 'react'
+import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
 
 export interface LogStatsProps {
   logCounts: LogCounts
@@ -22,21 +23,21 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
     ? criticalPercentage > 0
       ? StatusColor.ERROR
       : StatusColor.SUCCESS
-    : StatusColor.DARK
+    : StatusColor.SUCCESS
   const errorStatus = totalLogsPerHour
     ? errorPercentage <= 0
       ? StatusColor.SUCCESS
       : errorPercentage <= 2
       ? StatusColor.WARNING
       : StatusColor.ERROR
-    : StatusColor.DARK
+    : StatusColor.SUCCESS
   const warnStatus = totalLogsPerHour
     ? warnPercentage < 5
       ? StatusColor.SUCCESS
       : warnPercentage <= 50
       ? StatusColor.WARNING
       : StatusColor.ERROR
-    : StatusColor.DARK
+    : StatusColor.SUCCESS
 
   return (
     <>
@@ -48,7 +49,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('critical')}
-        metric={`${totalLogsPerHour ? criticalPerHour : '-'} / HR`}
+        metric={`${totalLogsPerHour ? toFixedIfNecessary(criticalPerHour, 2) : '0'} / HR`}
       />
       <DiagnosticCard
         isBackground={false}
@@ -59,7 +60,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${totalLogsPerHour ? errorPercentage.toFixed(2) : '-'} / HR`}
+        metric={`${totalLogsPerHour ? toFixedIfNecessary(errorPercentage, 2) : '0'} / HR`}
       />
       <DiagnosticCard
         isBackground={false}
@@ -70,7 +71,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${totalLogsPerHour ? warnPercentage.toFixed(2) : '-'} / HR`}
+        metric={`${totalLogsPerHour ? toFixedIfNecessary(warnPercentage, 2) : '0'} / HR`}
       />
     </>
   )
