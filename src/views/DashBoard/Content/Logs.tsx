@@ -7,8 +7,10 @@ import SelectDropDown, { OptionType } from '../../../components/SelectDropDown/S
 import { LogTypeOptions } from '../../../constants/constants'
 import Toggle from '../../../components/Toggle/Toggle'
 import Button, { ButtonFace } from '../../../components/Button/Button'
+import { useTranslation } from 'react-i18next'
 
 const Logs = () => {
+  const { t } = useTranslation()
   const [logType, selectType] = useState(LogType.VALIDATOR)
   const {
     beaconLogs,
@@ -59,12 +61,12 @@ const Logs = () => {
   }
 
   return (
-    <div className='w-full h-full p-6 flex flex-col'>
+    <div className='w-full h-full pt-8 p-2 md:p-6 flex flex-col'>
       <div className='flex flex-col w-full space-y-4 lg:space-y-0 lg:flex-row lg:space-x-20'>
         <Typography fontWeight='font-light' type='text-subtitle1'>
-          Lighthouse Logs
+          {t('logs.title')}
         </Typography>
-        <div className='flex space-x-20'>
+        <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-20'>
           <div>
             <Typography
               type='text-caption2'
@@ -72,7 +74,7 @@ const Logs = () => {
               darkMode='dark:text-dark500'
               isUpperCase
             >
-              Service
+              {t('logs.service')}
             </Typography>
             <SelectDropDown value={logType} onSelect={toggleLogType} options={LogTypeOptions} />
           </div>
@@ -85,7 +87,7 @@ const Logs = () => {
                 family='font-archivo'
                 isUpperCase
               >
-                Auto-Refresh
+                {t('logs.autoRefresh')}
               </Typography>
               <Toggle
                 id='triggerIntervalToggle'

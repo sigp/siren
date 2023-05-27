@@ -395,5 +395,12 @@
     "warning": "This action is irreversible and will cause your validator to get locked in to exited state pending withdrawal without the ability to start validator again. This action may take time, kindly wait until the validator status reflects the changes.",
     "learnMore": "Learn more about validator states in various phases here.",
     "iAccept": "I understand and Accept"
+  },
+  "logs": {
+    "title": "Lighthouse Logs",
+    "service": "Service",
+    "autoRefresh": "Auto-Refresh",
+    "searchLogs": "Search Logs",
+    "noLogsFound": "No Logs Found"
   }
 }

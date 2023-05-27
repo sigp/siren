@@ -89,6 +89,7 @@ export type SSELog = {
   msg: string
   service: string
   time: string
+  [key: string]: any
 }
 
 export type LogCounts = {
