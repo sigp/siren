@@ -17,7 +17,7 @@ const LogsInfo = () => {
     return {
       totalLogsPerHour: beaconLogs.totalLogsPerHour + vcLogs.totalLogsPerHour,
       criticalPerHour: beaconLogs.criticalPerHour + vcLogs.criticalPerHour,
-      warningsPerHour: beaconLogs.warningsPerHour + beaconLogs.warningsPerHour,
+      warningsPerHour: beaconLogs.warningsPerHour + vcLogs.warningsPerHour,
       errorsPerHour: beaconLogs.errorsPerHour + vcLogs.errorsPerHour,
     }
   }, [beaconLogs, vcLogs])
