@@ -76,18 +76,10 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       ) : (
         size !== 'sm' &&
         isBackground && (
-          <>
-            <img
-              className='w-full absolute dark:hidden left-0 top-1/2 transform -translate-y-1/2'
-              src={network}
-              alt='network'
-            />
-            <img
-              className='w-full absolute hidden dark:block left-0 top-1/2 transform -translate-y-1/2'
-              src={darkNetwork}
-              alt='network'
-            />
-          </>
+          <div className='w-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
+            <img className='w-full dark:hidden' src={network} alt='network' />
+            <img className='w-full hidden dark:block' src={darkNetwork} alt='network' />
+          </div>
         )
       )}
       <div className='w-full z-10 space-x-8 flex justify-between'>
@@ -125,9 +117,15 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   )
 
   return (
-    <div className={`w-full h-full overflow-hidden ${getContainerSize()} ${border} relative`}>
+    <div className={`w-full h-full ${getContainerSize()} ${border} relative`}>
       {toolTipText ? (
-        <Tooltip className='h-full' id={toolTipId} place={toolTipPosition} text={toolTipText}>
+        <Tooltip
+          className='h-full'
+          maxWidth={250}
+          id={toolTipId}
+          place={toolTipPosition}
+          text={toolTipText}
+        >
           {renderContent()}
         </Tooltip>
       ) : (
