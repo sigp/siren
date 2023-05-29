@@ -32,7 +32,13 @@ const LogsInfo = () => {
           {t('viewAll')}
         </Typography>
       </div>
-      <LogStats size={size} logCounts={combinedLogCounts} />
+      <LogStats
+        critToolTip={t('logs.tooltips.combinedCritical')}
+        errorToolTip={t('logs.tooltips.combinedError')}
+        warnToolTip={t('logs.tooltips.combinedWarning')}
+        size={size}
+        logCounts={combinedLogCounts}
+      />
     </div>
   )
 }

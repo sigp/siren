@@ -401,6 +401,17 @@
     "service": "Service",
     "autoRefresh": "Auto-Refresh",
     "searchLogs": "Search Logs",
-    "noLogsFound": "No Logs Found"
+    "noLogsFound": "No Logs Found",
+    "tooltips": {
+      "combinedCritical": "Combined hourly rate of critical level beacon and validator logs",
+      "validatorCritical": "Hourly rate  of critical level validator logs",
+      "beaconCritical": "Hourly rate of critical level beacon logs",
+      "combinedError": "Combined hourly percentage of error level beacon and validator logs",
+      "validatorError": "Hourly percentage of error level validator logs",
+      "beaconError": "Hourly percentage of error level beacon logs",
+      "combinedWarning": "Combined hourly percentage of warning level beacon and validator logs",
+      "validatorWarning": "Hourly percentage of warning level validator logs",
+      "beaconWarning": "Hourly percentage of warning level beacon logs"
+    }
   }
 }

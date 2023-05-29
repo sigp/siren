@@ -5,13 +5,24 @@ import { FC } from 'react'
 import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
 
 export interface LogStatsProps {
+  critToolTip?: string
+  warnToolTip?: string
+  errorToolTip?: string
   logCounts: LogCounts
   size?: CardSize
   maxHeight?: string
   maxWidth?: string
 }
 
-const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', maxWidth }) => {
+const LogStats: FC<LogStatsProps> = ({
+  logCounts,
+  size,
+  maxHeight = 'flex-1',
+  maxWidth,
+  critToolTip,
+  warnToolTip,
+  errorToolTip,
+}) => {
   const { t } = useTranslation()
   const { totalLogsPerHour, criticalPerHour, warningsPerHour, errorsPerHour } = logCounts
 
@@ -43,6 +54,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
     <>
       <DiagnosticCard
         title={t('logInfo.criticalLogs')}
+        toolTipText={critToolTip}
         maxHeight={maxHeight}
         maxWidth={maxWidth}
         status={critStatus}
@@ -54,6 +66,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
       <DiagnosticCard
         isBackground={false}
         title={t('errors')}
+        toolTipText={errorToolTip}
         maxHeight={maxHeight}
         maxWidth={maxWidth}
         status={errorStatus}
@@ -65,6 +78,7 @@ const LogStats: FC<LogStatsProps> = ({ logCounts, size, maxHeight = 'flex-1', ma
       <DiagnosticCard
         isBackground={false}
         title={t('logInfo.warnings')}
+        toolTipText={warnToolTip}
         maxHeight={maxHeight}
         maxWidth={maxWidth}
         status={warnStatus}

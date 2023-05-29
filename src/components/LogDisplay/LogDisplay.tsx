@@ -111,6 +111,15 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
           </div>
           <div className='flex order-first md:order-2 lg:min-w-250 w-full md:w-fit flex-col border-t-style500 border-l-style500 mt-4 md:ml-4'>
             <LogStats
+              critToolTip={t(
+                `logs.tooltips.${type === LogType.BEACON ? 'beaconCritical' : 'validatorCritical'}`,
+              )}
+              errorToolTip={t(
+                `logs.tooltips.${type === LogType.BEACON ? 'beaconError' : 'validatorError'}`,
+              )}
+              warnToolTip={t(
+                `logs.tooltips.${type === LogType.BEACON ? 'beaconWarning' : 'validatorWarning'}`,
+              )}
               size='lg'
               maxHeight='h-32 md:flex-1'
               maxWidth='w-full'
