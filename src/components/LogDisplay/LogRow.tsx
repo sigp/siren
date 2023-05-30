@@ -19,7 +19,7 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
       : undefined
 
   const remainingData = Object.keys(log)
-    .filter((key) => !['error', 'level', 'msg', 'service', 'time'].includes(key))
+    .filter((key) => !['level', 'msg', 'time'].includes(key))
     .map((key) => `${key}: ${log[key]} `)
     .join(', ')
 
