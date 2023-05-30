@@ -1,7 +1,7 @@
 import { StatusColor } from '../types'
 
 const getAvgEffectivenessStatus = (average?: number | undefined): StatusColor => {
-  if (average === undefined) {
+  if (average === undefined || isNaN(average)) {
     return StatusColor.DARK
   }
 
