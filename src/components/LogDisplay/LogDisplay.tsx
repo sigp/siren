@@ -64,14 +64,14 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
   })
 
   return (
-    <div className='flex flex-1 flex-col md:flex-row md:overflow-hidden'>
+    <div className='flex flex-1 flex-col lg:flex-row lg:overflow-hidden'>
       {isLoading ? (
         <div className='w-full h-full flex items-center justify-center'>
           <Spinner />
         </div>
       ) : (
         <>
-          <div className='flex-1 flex group relative flex-col max-h-396 md:max-h-none mb-28 md:mb-0 mt-4 p-4 pb-0 border border-style500'>
+          <div className='flex-1 flex group relative flex-col max-w-full md:max-w-1068 2xl:max-w-none max-h-396 lg:max-h-none mb-28 md:mb-0 mt-4 p-4 pb-0 border border-style500'>
             <i
               onClick={scrollToBottom}
               className='absolute bottom-5 right-5 text-primary text-4xl opacity-0 cursor-pointer group-hover:opacity-100 bi-arrow-down-circle-fill'
@@ -109,7 +109,7 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
               </div>
             )}
           </div>
-          <div className='flex order-first md:order-2 lg:min-w-250 w-full md:w-fit flex-col border-t-style500 border-l-style500 mt-4 md:ml-4'>
+          <div className='flex order-first lg:order-2 lg:max-w-xs w-full flex-col border-t-style500 border-l-style500 mt-4 lg:ml-4'>
             <LogStats
               critToolTip={t(
                 `logs.tooltips.${type === LogType.BEACON ? 'beaconCritical' : 'validatorCritical'}`,

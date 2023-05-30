@@ -46,11 +46,7 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
           <Typography type='text-caption1' family='font-roboto'>
             {msg}
           </Typography>
-          <Typography
-            type='text-caption1'
-            className='break-words max-w-238 md:max-w-316'
-            family='font-roboto'
-          >
+          <Typography type='text-caption1' className='break-all' family='font-roboto'>
             {`${isExpanded ? remainingData : formattedData}${
               isLargeData && !isExpanded ? '...' : ''
             }`}
@@ -72,7 +68,7 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
             {level}
           </Typography>
         </div>
-        <div className='hidden lg:table-cell px-4 py-2 min-w-150 max-w-150 xl:min-w-250 xl:max-w-250'>
+        <div className='hidden lg:table-cell px-4 py-2 min-w-150 max-w-150 xl:min-w-250 xl:max-w-250 2xl:max-w-none 2xl:min-w-320'>
           <Typography type='text-caption1' family='font-roboto'>
             {msg}
           </Typography>
@@ -80,8 +76,8 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
         <div className='hidden xl:table-cell px-4 py-2' />
         <div className='hidden xl:table-cell px-4 py-2' />
         <div className='hidden xl:table-cell px-4 py-2' />
-        <div className='hidden lg:table-cell px-4 py-2 max-w-250 xl:max-w-xl'>
-          <Typography type='text-caption1' className='break-words' family='font-roboto'>
+        <div className='hidden lg:table-cell px-4 py-2'>
+          <Typography type='text-caption1' className='break-all' family='font-roboto'>
             {`${isExpanded ? remainingData : formattedData}${
               isLargeData && !isExpanded ? '...' : ''
             }`}

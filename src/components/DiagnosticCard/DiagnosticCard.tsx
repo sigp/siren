@@ -76,7 +76,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       ) : (
         size !== 'sm' &&
         isBackground && (
-          <div className='w-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
+          <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
             <img className='w-full dark:hidden' src={network} alt='network' />
             <img className='w-full hidden dark:block' src={darkNetwork} alt='network' />
           </div>
