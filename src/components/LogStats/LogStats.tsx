@@ -73,7 +73,7 @@ const LogStats: FC<LogStatsProps> = ({
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${totalLogsPerHour ? toFixedIfNecessary(errorPercentage, 2) : '0'} / HR`}
+        metric={`${totalLogsPerHour ? toFixedIfNecessary(errorsPerHour, 2) : '0'} / HR`}
       />
       <DiagnosticCard
         isBackground={false}
@@ -85,7 +85,7 @@ const LogStats: FC<LogStatsProps> = ({
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${totalLogsPerHour ? toFixedIfNecessary(warnPercentage, 2) : '0'} / HR`}
+        metric={`${totalLogsPerHour ? toFixedIfNecessary(warningsPerHour, 2) : '0'} / HR`}
       />
     </>
   )
