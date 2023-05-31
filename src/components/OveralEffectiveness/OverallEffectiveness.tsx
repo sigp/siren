@@ -1,36 +1,14 @@
 import Typography from '../Typography/Typography'
 import Status from '../Status/Status'
 import { useTranslation } from 'react-i18next'
-import { useMemo } from 'react'
-import { useRecoilValue } from 'recoil'
-import { validatorMetrics } from '../../recoil/atoms'
 import getAvgEffectivenessStatus from '../../utilities/getAvgEffectivenessStatus'
 import EffectivenessBreakdown from '../EffectivenessBreakdown/EffectivenessBreakdown'
 import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
+import useValidatorEffectiveness from '../../hooks/useValidatorEffectiveness'
 
 const OverallEffectiveness = () => {
   const { t } = useTranslation()
-  const metrics = useRecoilValue(validatorMetrics)
-
-  const avgTargetEffectiveness = useMemo(() => {
-    if (!metrics) return
-
-    const values = metrics
-      .map((metric) =>
-        Object.values(metric).map((values) => values.attestation_target_hit_percentage),
-      )
-      .flat()
-    return values.reduce((a, b) => a + b, 0) / values.length
-  }, [metrics])
-
-  const avgHitEffectiveness = useMemo(() => {
-    if (!metrics) return
-
-    const values = metrics?.flatMap((metric) =>
-      Object.values(metric).map((values) => values.attestation_hit_percentage),
-    )
-    return values?.reduce((a, b) => a + b, 0) / values.length
-  }, [metrics])
+  const { avgTargetEffectiveness, avgHitEffectiveness } = useValidatorEffectiveness()
 
   const combinedEffectiveness =
     avgTargetEffectiveness &&

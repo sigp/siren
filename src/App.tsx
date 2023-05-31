@@ -8,6 +8,7 @@ import InitScreen from './views/InitScreen'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
+import SSELogProvider from './components/SSELogProvider/SSELogProvider'
 
 function App() {
   const view = useRecoilValue(appView)
@@ -15,7 +16,11 @@ function App() {
   const renderView = () => {
     switch (view) {
       case AppView.DASHBOARD:
-        return <Dashboard />
+        return (
+          <SSELogProvider>
+            <Dashboard />
+          </SSELogProvider>
+        )
       case AppView.ONBOARD:
         return <Onboard />
       default:

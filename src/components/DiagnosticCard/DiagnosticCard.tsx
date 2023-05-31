@@ -11,6 +11,8 @@ import { ITooltip } from 'react-tooltip'
 import addClassString from '../../utilities/addClassString'
 import { StatusColor } from '../../types'
 
+export type CardSize = 'lg' | 'md' | 'sm' | 'health'
+
 export interface DiagnosticCardProps {
   status?: StatusColor
   percent?: number
@@ -21,8 +23,9 @@ export interface DiagnosticCardProps {
   border?: string
   subTitleHighlightColor?: string
   maxHeight?: string
+  maxWidth?: string
   isBackground?: boolean
-  size?: 'lg' | 'md' | 'sm' | 'health'
+  size?: CardSize
   toolTipText?: string
   toolTipPosition?: ITooltip['place']
   isDisabled?: boolean
@@ -34,6 +37,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   subTitle,
   status,
   maxHeight,
+  maxWidth,
   metricTextSize,
   isBackground = true,
   border = 'border border-dark200',
@@ -49,15 +53,17 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   const getContainerSize = () => {
     switch (size) {
       case 'lg':
-        return `max-w-xs ${maxHeight || 'max-h-60'} py-3 px-4 dark:border-dark500`
+        return `${maxWidth || 'max-w-xs'} ${maxHeight || 'max-h-60'} py-3 px-4 dark:border-dark500`
       case 'sm':
-        return `max-w-tiny ${maxHeight || 'max-h-11'} p-1 dark:border-none px-1.5`
+        return `${maxWidth || 'max-w-tiny'} ${maxHeight || 'max-h-11'} p-1 dark:border-none px-1.5`
       case 'health':
-        return 'h-24 md:h-full max-w-full md:max-w-xs py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500'
+        return `h-24 md:h-full ${
+          maxWidth || 'max-w-full md:max-w-xs'
+        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
       default:
-        return `max-w-xs ${
+        return `${maxWidth || 'max-w-xs @1600:max-w-full'} ${
           maxHeight || 'max-h-30'
-        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500 @1600:max-w-full`
+        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
     }
   }
   const contentClass = addClassString('flex flex-col justify-between h-full', [
@@ -70,18 +76,10 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       ) : (
         size !== 'sm' &&
         isBackground && (
-          <>
-            <img
-              className='w-full absolute dark:hidden left-0 top-1/2 transform -translate-y-1/2'
-              src={network}
-              alt='network'
-            />
-            <img
-              className='w-full absolute hidden dark:block left-0 top-1/2 transform -translate-y-1/2'
-              src={darkNetwork}
-              alt='network'
-            />
-          </>
+          <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
+            <img className='w-full dark:hidden' src={network} alt='network' />
+            <img className='w-full hidden dark:block' src={darkNetwork} alt='network' />
+          </div>
         )
       )}
       <div className='w-full z-10 space-x-8 flex justify-between'>
@@ -121,7 +119,13 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   return (
     <div className={`w-full h-full ${getContainerSize()} ${border} relative`}>
       {toolTipText ? (
-        <Tooltip className='h-full' id={toolTipId} place={toolTipPosition} text={toolTipText}>
+        <Tooltip
+          className='h-full'
+          maxWidth={250}
+          id={toolTipId}
+          place={toolTipPosition}
+          text={toolTipText}
+        >
           {renderContent()}
         </Tooltip>
       ) : (

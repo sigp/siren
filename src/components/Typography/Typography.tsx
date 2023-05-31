@@ -13,7 +13,7 @@ const ELEMENT = {
 
 const tagsSupported = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'label', 'span'] as const
 
-type TagsSupported = typeof tagsSupported[number]
+type TagsSupported = (typeof tagsSupported)[number]
 
 export type TypographyFamily = 'font-openSauce' | 'font-roboto' | 'font-archivo'
 
@@ -30,6 +30,7 @@ export type TypographyColor =
   | 'text-transparent'
   | 'text-success'
   | 'text-error'
+  | 'text-warning'
 
 export type TypographyType =
   | 'text-caption2'

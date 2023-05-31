@@ -1,7 +1,6 @@
 import { useRecoilValue } from 'recoil'
-import { processingBlsValidators, validatorMetrics } from '../../../recoil/atoms'
+import { processingBlsValidators } from '../../../recoil/atoms'
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails'
-import { useMemo } from 'react'
 import Typography from '../../Typography/Typography'
 import { selectEthExchangeRates } from '../../../recoil/selectors/selectEthExchangeRates'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
@@ -21,14 +20,15 @@ import EffectivenessBreakdown from '../../EffectivenessBreakdown/EffectivenessBr
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
 import isBlsAddress from '../../../utilities/isBlsAddress'
 import ValidatorActions from '../ValidatorActions'
+import useValidatorEffectiveness from '../../../hooks/useValidatorEffectiveness'
 
 const ValidatorDetails = () => {
   const { t } = useTranslation()
   const validator = useRecoilValue(selectValidatorDetail)
-  const metrics = useRecoilValue(validatorMetrics)
   const processingValidators = useRecoilValue(processingBlsValidators)
   const { index, balance, status, withdrawalAddress } = validator || {}
   const { rates } = useRecoilValue(selectEthExchangeRates)
+  const { avgTargetEffectiveness, avgHitEffectiveness } = useValidatorEffectiveness([String(index)])
 
   const isProcessing = Boolean(
     processingValidators && index && processingValidators.includes(index.toString()),
@@ -36,25 +36,6 @@ const ValidatorDetails = () => {
 
   const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
   const isExited = validator?.status.includes('exit')
-
-  const avgTargetEffectiveness = useMemo(() => {
-    if (!metrics || !index) return
-
-    return (
-      metrics
-        .map((metric) => metric[index].attestation_target_hit_percentage)
-        .reduce((a, b) => a + b, 0) / metrics.length
-    )
-  }, [metrics, index])
-
-  const avgHitEffectiveness = useMemo(() => {
-    if (!metrics || !index) return
-
-    return (
-      metrics.map((metric) => metric[index].attestation_hit_percentage).reduce((a, b) => a + b, 0) /
-      metrics.length
-    )
-  }, [metrics, index])
 
   const combinedEffectiveness =
     avgHitEffectiveness &&
