@@ -33,6 +33,8 @@ const Logs = () => {
   }, [logType, beaconLogs, vcLogs])
 
   const toggleLogType = (selection: OptionType) => {
+    if (selection === logType) return
+
     setLoading(true)
 
     setTimeout(() => {
