@@ -226,8 +226,8 @@ export const CURRENCIES = [
 
 export const REQUIRED_VALIDATOR_VERSION = {
   major: 4,
-  minor: 0,
-  patch: 1,
+  minor: 2,
+  patch: 0,
 }
 
 export const MAX_PERSISTED_LOGS = 1000
