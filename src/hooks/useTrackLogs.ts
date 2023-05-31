@@ -22,7 +22,7 @@ export const defaultLogData = {
   cleanLogs: () => {},
 }
 
-const useTrackLogs = (url?: string): trackedLogData => {
+const useTrackLogs = (url?: string, onError?: () => void): trackedLogData => {
   const dataRef = useRef<SSELog[]>([])
   const infoPerHour = useRef<number[]>([])
   const criticalPerHour = useRef<number[]>([])
@@ -91,7 +91,7 @@ const useTrackLogs = (url?: string): trackedLogData => {
     pruneLogRef(infoPerHour)
   }
 
-  useSSE({ url, callback: trackLogs })
+  useSSE({ url, callback: trackLogs, onError })
 
   const criticalCount = criticalPerHour.current.length
   const infoCount = infoPerHour.current.length
