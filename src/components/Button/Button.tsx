@@ -57,7 +57,7 @@ const Button: FC<ButtonProps> = ({
       case ButtonFace.LIGHT:
         return 'bg-primary100 text-primary'
       case ButtonFace.ICON:
-        return 'h-full w-11 dark:bg-dark900 text-dark300 dark:text-white'
+        return 'h-full w-11 disabled:opacity-30 dark:bg-dark900 text-dark300 dark:text-white'
       case ButtonFace.TERTIARY:
         return 'border border-primary text-primary'
       case ButtonFace.SECONDARY:
@@ -77,7 +77,7 @@ const Button: FC<ButtonProps> = ({
       disabled={isDisabled}
       className={`${formatFaceStyle()} ${font} ${fontType} ${className} ${
         isLoading && 'pointer-events-none'
-      } relative box-border ${padding} w-fit cursor-pointer flex space-x-2`}
+      } relative box-border ${padding} w-fit cursor-pointer disabled:cursor-default flex space-x-2`}
     >
       <div className={buttonContentClasses}>{children}</div>
       {isLoading && <Spinner className={spinnerContentClasses} size='h-6 w-6' />}

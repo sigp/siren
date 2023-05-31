@@ -67,3 +67,34 @@ export type SemanticVersion = {
   minor: number
   patch: number
 }
+
+export enum LogType {
+  VALIDATOR = 'VALIDATOR',
+  BEACON = 'BEACON',
+}
+
+export enum LogLevels {
+  OFF = 'OFF',
+  CRIT = 'CRIT',
+  ERRO = 'ERRO',
+  WARN = 'WARN',
+  INFO = 'INFO',
+  DEBG = 'DEBG',
+  TRCE = 'TRCE',
+}
+
+export type SSELog = {
+  error: string
+  level: LogLevels
+  msg: string
+  service: string
+  time: string
+  [key: string]: any
+}
+
+export type LogCounts = {
+  totalLogsPerHour: number
+  criticalPerHour: number
+  warningsPerHour: number
+  errorsPerHour: number
+}
