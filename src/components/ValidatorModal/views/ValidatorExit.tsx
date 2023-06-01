@@ -11,11 +11,12 @@ import { useTranslation, Trans } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { signVoluntaryExit } from '../../../api/lighthouse'
 import { useRecoilValue } from 'recoil'
-import { apiToken, beaconNodeEndpoint, validatorClientEndpoint } from '../../../recoil/atoms'
-import { Endpoint } from '../../../types'
+import { apiToken } from '../../../recoil/atoms'
 import { submitSignedExit } from '../../../api/beacon'
 import ExitDisclosure from '../../Disclosures/ExitDisclosure'
 import displayToast from '../../../utilities/displayToast'
+import { selectBeaconUrl } from '../../../recoil/selectors/selectBeaconUrl'
+import { selectValidatorUrl } from '../../../recoil/selectors/selectValidatorUrl'
 
 export interface ValidatorExitProps {
   validator: ValidatorInfo
@@ -24,16 +25,16 @@ export interface ValidatorExitProps {
 const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const { t } = useTranslation()
   const { pubKey } = validator
-  const beacon = useRecoilValue(beaconNodeEndpoint)
+  const beacon = useRecoilValue(selectBeaconUrl)
   const [isLoading, setLoading] = useState(false)
-  const endpoint = useRecoilValue(validatorClientEndpoint)
+  const vcEndpoint = useRecoilValue(selectValidatorUrl)
   const token = useRecoilValue(apiToken)
   const [isAccept, setIsAccept] = useState(false)
   const { moveToView, closeModal } = useContext(ValidatorModalContext)
   const viewDetails = () => moveToView(ValidatorModalView.DETAILS)
   const acceptBtnClasses = addClassString('', [isAccept && 'border-success text-success'])
 
-  const getSignedExit = async (beacon: Endpoint): Promise<SignedExitData | undefined> => {
+  const getSignedExit = async (beacon: string): Promise<SignedExitData | undefined> => {
     try {
       const { data } = await signVoluntaryExit(beacon, token, pubKey)
 
@@ -61,11 +62,9 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   }
 
   const confirmExit = async () => {
-    if (!beacon) return
-
     setLoading(true)
 
-    const message = await getSignedExit(endpoint)
+    const message = await getSignedExit(vcEndpoint)
 
     if (message) {
       void (await submitSignedMessage(message))

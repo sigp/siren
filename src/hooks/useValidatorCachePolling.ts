@@ -12,7 +12,7 @@ const useValidatorCachePolling = () => {
   const setValidatorCache = useSetRecoilState(validatorCacheBalanceResult)
 
   const indices = activeValidators?.map((validator) => Number(validator.index))
-  const cacheUrl = beaconUrl && `${beaconUrl}/lighthouse/ui/validator_info`
+  const cacheUrl = `${beaconUrl}/lighthouse/ui/validator_info`
 
   const { response } = usePollApi({
     time: 60000,

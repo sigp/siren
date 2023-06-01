@@ -12,7 +12,7 @@ const useValidatorInfoPolling = () => {
   const { contents: validators } = useRecoilValueLoadable(selectValidators)
   const setStateInfo = useSetRecoilState(validatorStateInfo)
 
-  const validatorInfoUrl = baseBeaconUrl && `${baseBeaconUrl}/eth/v1/beacon/states/head/validators`
+  const validatorInfoUrl = `${baseBeaconUrl}/eth/v1/beacon/states/head/validators`
   const validatorIdString =
     validators?.length && validators.map((validator: Validator) => validator.pubKey).join(',')
 

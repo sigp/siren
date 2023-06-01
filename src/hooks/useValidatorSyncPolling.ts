@@ -1,21 +1,14 @@
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  beaconNetworkError,
-  beaconNodeEndpoint,
-  validatorSyncInfo,
-  validatorSyncInterval,
-} from '../recoil/atoms'
+import { beaconNetworkError, validatorSyncInfo, validatorSyncInterval } from '../recoil/atoms'
 import usePollApi from './usePollApi'
 import { secondsInSlot } from '../constants/constants'
+import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 
 const useValidatorSyncPolling = (time = secondsInSlot * 1000) => {
-  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
+  const beaconEndpoint = useRecoilValue(selectBeaconUrl)
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)
-  const { protocol, address, port } = beaconEndpoint
-  const url = beaconEndpoint
-    ? `${protocol}://${address}:${port}/lighthouse/eth1/syncing`
-    : undefined
+  const url = `${beaconEndpoint}/lighthouse/eth1/syncing`
   const setResult = useSetRecoilState(validatorSyncInfo)
 
   const setNetworkError = () => setBeaconNetworkError(true)

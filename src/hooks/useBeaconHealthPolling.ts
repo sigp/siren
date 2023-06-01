@@ -1,17 +1,12 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  beaconHealthResult,
-  beaconHealthSyncInterval,
-  beaconNetworkError,
-  beaconNodeEndpoint,
-} from '../recoil/atoms'
-import formatHealthEndpoint from '../utilities/formatHealthEndpoint'
+import { beaconHealthResult, beaconHealthSyncInterval, beaconNetworkError } from '../recoil/atoms'
 import usePollApi from './usePollApi'
 import { useEffect } from 'react'
+import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 
 const useBeaconHealthPolling = (time = 6000) => {
-  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
-  const url = formatHealthEndpoint(beaconEndpoint)
+  const beaconEndpoint = useRecoilValue(selectBeaconUrl)
+  const url = `${beaconEndpoint}/lighthouse/ui/health`
   const setHealth = useSetRecoilState(beaconHealthResult)
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)
 

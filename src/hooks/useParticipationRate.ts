@@ -29,7 +29,7 @@ const useParticipationRate = () => {
   }
 
   useEffect(() => {
-    if (closestEpochSlot !== undefined && url) {
+    if (closestEpochSlot !== undefined) {
       void fetchInclusion(url, closestEpochSlot)
     }
   }, [closestEpochSlot, url])
