@@ -5,6 +5,7 @@ import axios from 'axios'
 import { ApiType } from '../constants/enums'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../utilities/displayToast'
+import formatEndpoint from '../utilities/formatEndpoint'
 
 const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, data?: Endpoint) => {
   const { t } = useTranslation()
@@ -14,9 +15,10 @@ const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, da
     debounce(1000, async () => {
       if (!data) return
 
-      const { port, protocol, address } = data
+      const formattedAddress = formatEndpoint(data)
+
       try {
-        const { status } = await axios.get(`${protocol}://${address}:${port}/${path}`)
+        const { status } = await axios.get(`${formattedAddress}/${path}`)
         if (status === 200) {
           setValidApi(true)
         }
