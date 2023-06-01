@@ -1,14 +1,11 @@
 import { selector } from 'recoil'
 import { beaconNodeEndpoint } from '../atoms'
+import formatEndpoint from '../../utilities/formatEndpoint'
 
-export const selectBeaconUrl = selector({
+export const selectBeaconUrl = selector<string>({
   key: 'beaconUrl',
   get: ({ get }) => {
     const beaconNode = get(beaconNodeEndpoint)
-    if (!beaconNode) return undefined
-
-    const { protocol, address, port } = beaconNode
-
-    return `${protocol}://${address}:${port}`
+    return formatEndpoint(beaconNode) as string
   },
 })
