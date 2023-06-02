@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useRef } from 'react'
 import axios, { Method } from 'axios'
 import { useQuery } from 'react-query'
 
@@ -25,7 +25,7 @@ const usePollApi = ({
   payload?: { [key: string]: any }
   method?: Method
 }) => {
-  const [retries, setRetries] = useState(0)
+  const retries = useRef(0)
 
   const fetchApi = useCallback(async () => {
     if (!url) return
@@ -42,19 +42,16 @@ const usePollApi = ({
   }, [url, method, apiToken, params, payload])
 
   const { data } = useQuery(key, fetchApi, {
-    enabled: isReady,
-    refetchInterval: retries < maxErrors ? time : false,
+    enabled: isReady && retries.current < maxErrors,
+    refetchInterval: time,
     retry: 3,
     onError: () => {
-      setRetries((retries) => retries + 1)
+      retries.current += 1
+      if (retries.current >= maxErrors) {
+        onMaxError?.()
+      }
     },
   })
-
-  useEffect(() => {
-    if (retries >= maxErrors) {
-      onMaxError?.()
-    }
-  }, [retries, maxErrors])
 
   return {
     data,
