@@ -1,85 +1,63 @@
-import { ApiPollConfig } from '../types'
 import { useCallback, useEffect, useState } from 'react'
-import { useRecoilState } from 'recoil'
-import usePollingInterval from './usePollingInterval'
-import axios, { AxiosResponse } from 'axios'
-import { DEFAULT_MAX_NETWORK_ERROR } from '../constants/constants'
+import axios, { Method } from 'axios'
+import { useQuery } from 'react-query'
 
 const usePollApi = ({
-  time,
-  isReady,
-  intervalState,
+  key,
   url,
+  time,
+  method,
   apiToken,
-  maxErrors = DEFAULT_MAX_NETWORK_ERROR,
-  onMaxError,
   params,
-  method = 'get',
-  data,
-}: ApiPollConfig) => {
-  const [response, setResponse] = useState<AxiosResponse | undefined>()
-  const [errorMessage, setError] = useState<string | undefined>(undefined)
-  const [errorCount, setErrorCount] = useState<number>(0)
-  const [interval, setIntervalId] = useRecoilState(intervalState)
-  const onClearInterval = () => setIntervalId(undefined)
-  const isSkip = !isReady || !!interval
+  payload,
+  onMaxError,
+  maxErrors = 3,
+  isReady = true,
+}: {
+  key: string
+  time: number
+  isReady?: boolean
+  url?: string
+  apiToken?: string
+  maxErrors?: number
+  onMaxError?: () => void
+  params?: { [key: string]: any }
+  payload?: { [key: string]: any }
+  method?: Method
+}) => {
+  const [retries, setRetries] = useState(0)
 
   const fetchApi = useCallback(async () => {
     if (!url) return
 
-    setError(undefined)
+    const { data } = await axios({
+      method,
+      url,
+      headers: apiToken ? { Authorization: `Bearer ${apiToken}` } : undefined,
+      params,
+      data: payload,
+    })
 
-    try {
-      const result = await axios({
-        method,
-        url,
-        headers: apiToken ? { Authorization: `Bearer ${apiToken}` } : undefined,
-        params,
-        data,
-      })
+    return data
+  }, [url, method, apiToken, params, payload])
 
-      if (result) {
-        setError(undefined)
-        setErrorCount(0)
-        setResponse(result)
-      }
-    } catch (e) {
-      if (e instanceof Error) {
-        console?.error(e.message)
-        setError(e.message)
-        setErrorCount((prev) => prev + 1)
-      }
-    }
-  }, [url, method, apiToken, params, data])
-
-  const { intervalId, clearPoll } = usePollingInterval(fetchApi, time, {
-    isSkip,
-    onClearInterval,
+  const { data } = useQuery(key, fetchApi, {
+    enabled: isReady,
+    refetchInterval: retries < maxErrors ? time : false,
+    retry: 3,
+    onError: () => {
+      setRetries((retries) => retries + 1)
+    },
   })
 
   useEffect(() => {
-    if (intervalId) {
-      setIntervalId(intervalId)
-    }
-  }, [intervalId])
-
-  useEffect(() => {
-    if (isReady) {
-      void fetchApi()
-    }
-  }, [isReady])
-
-  useEffect(() => {
-    if (maxErrors && errorCount >= maxErrors && intervalId) {
+    if (retries >= maxErrors) {
       onMaxError?.()
-      clearPoll(intervalId)
     }
-  }, [errorCount, maxErrors, onMaxError, intervalId])
+  }, [retries, maxErrors])
 
   return {
-    response,
-    error: errorMessage,
-    errorCount,
+    data,
   }
 }
 
