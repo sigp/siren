@@ -1,15 +1,12 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  apiToken,
-  validatorHealthResult,
-  validatorHealthSyncInterval,
-  validatorNetworkError,
-} from '../recoil/atoms'
+import { apiToken, validatorHealthResult, validatorNetworkError } from '../recoil/atoms'
 import usePollApi from './usePollApi'
 import { useEffect } from 'react'
 import { selectValidatorUrl } from '../recoil/selectors/selectValidatorUrl'
+import { PollingOptions } from '../types'
 
-const useValidatorHealthPolling = (time = 6000) => {
+const useValidatorHealthPolling = (options?: PollingOptions) => {
+  const { time = 6000, isReady = true } = options || {}
   const validatorEndpoint = useRecoilValue(selectValidatorUrl)
   const url = `${validatorEndpoint}/ui/health`
   const token = useRecoilValue(apiToken)
@@ -18,18 +15,18 @@ const useValidatorHealthPolling = (time = 6000) => {
 
   const setNetworkError = () => setValidatorNetworkError(true)
 
-  const { response } = usePollApi({
+  const { data } = usePollApi({
+    key: 'validatorHealth',
     time,
-    isReady: !!url && !!token,
+    isReady: !!token && isReady,
     apiToken: token,
-    intervalState: validatorHealthSyncInterval,
     url,
     onMaxError: setNetworkError,
   })
 
   useEffect(() => {
-    setHealth(response?.data.data)
-  }, [response])
+    setHealth(data?.data)
+  }, [data])
 }
 
 export default useValidatorHealthPolling
