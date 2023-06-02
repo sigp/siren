@@ -9,6 +9,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
 import SSELogProvider from './components/SSELogProvider/SSELogProvider'
+import SyncPollingWrapper from './wrappers/SyncPollingWrapper'
 
 function App() {
   const view = useRecoilValue(appView)
@@ -17,9 +18,11 @@ function App() {
     switch (view) {
       case AppView.DASHBOARD:
         return (
-          <SSELogProvider>
-            <Dashboard />
-          </SSELogProvider>
+          <SyncPollingWrapper>
+            <SSELogProvider>
+              <Dashboard />
+            </SSELogProvider>
+          </SyncPollingWrapper>
         )
       case AppView.ONBOARD:
         return <Onboard />
