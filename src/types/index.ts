@@ -98,3 +98,8 @@ export type LogCounts = {
   warningsPerHour: number
   errorsPerHour: number
 }
+
+export interface PollingOptions {
+  time?: number
+  isReady?: boolean
+}

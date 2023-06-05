@@ -2,15 +2,16 @@ import usePrevious from './usePrevious'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { fetchValidatorMetrics } from '../api/beacon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { beaconNodeEndpoint, validatorCacheBalanceResult, validatorMetrics } from '../recoil/atoms'
+import { validatorCacheBalanceResult, validatorMetrics } from '../recoil/atoms'
 import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 import { ValidatorMetricEpoch } from '../types/beacon'
+import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 
 const useValidatorMetrics = () => {
   const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
   const validators = useRecoilValue(selectValidatorInfos)
   const setMetrics = useSetRecoilState(validatorMetrics)
-  const beaconEndpoint = useRecoilValue(beaconNodeEndpoint)
+  const beaconEndpoint = useRecoilValue(selectBeaconUrl)
   const [lastEpoch, setEpoch] = useState<number>()
   const previousEpoch = usePrevious(lastEpoch)
   const validatorList = validators?.map(({ index }) => index)

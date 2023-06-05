@@ -1,14 +1,13 @@
 import axios from 'axios'
-import { Endpoint } from '../types'
 
-export const fetchSyncStatus = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/eth/v1/node/syncing`)
+export const fetchSyncStatus = async (baseUrl: string) =>
+  await axios.get(`${baseUrl}/eth/v1/node/syncing`)
 
-export const fetchBeaconVersion = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/eth/v1/node/version`)
+export const fetchBeaconVersion = async (baseUrl: string) =>
+  await axios.get(`${baseUrl}/eth/v1/node/version`)
 
-export const fetchGenesisBlock = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/eth/v1/beacon/genesis`)
+export const fetchGenesisBlock = async (baseUrl: string) =>
+  await axios.get(`${baseUrl}/eth/v1/beacon/genesis`)
 
 export const fetchValidatorInclusion = async (
   baseBeaconUrl: string,
@@ -19,30 +18,23 @@ export const fetchValidatorInclusion = async (
     `${baseBeaconUrl}/lighthouse/validator_inclusion/${epoch}/${validatorId || 'global'}`,
   )
 
-export const fetchBnSpec = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/eth/v1/config/spec`)
+export const fetchBnSpec = async (baseUrl: string) =>
+  await axios.get(`${baseUrl}/eth/v1/config/spec`)
 
-export const fetchValidatorMetrics = async (
-  { protocol, address, port }: Endpoint,
-  indices: number[],
-) =>
-  await axios.post(`${protocol}://${address}:${port}/lighthouse/ui/validator_metrics`, {
+export const fetchValidatorMetrics = async (baseUrl: string, indices: number[]) =>
+  await axios.post(`${baseUrl}/lighthouse/ui/validator_metrics`, {
     indices,
   })
 
-export const broadcastBlsChange = async ({ protocol, address, port }: Endpoint, data: any) =>
-  await axios.post(
-    `${protocol}://${address}:${port}/eth/v1/beacon/pool/bls_to_execution_changes`,
-    data,
-    {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+export const broadcastBlsChange = async (baseUrl: string, data: any) =>
+  await axios.post(`${baseUrl}/eth/v1/beacon/pool/bls_to_execution_changes`, data, {
+    headers: {
+      'Content-Type': 'application/json',
     },
-  )
+  })
 
-export const submitSignedExit = async ({ protocol, address, port }: Endpoint, data: any) =>
-  await axios.post(`${protocol}://${address}:${port}/eth/v1/beacon/pool/voluntary_exits`, data, {
+export const submitSignedExit = async (baseUrl: string, data: any) =>
+  await axios.post(`${baseUrl}/eth/v1/beacon/pool/voluntary_exits`, data, {
     headers: {
       'Content-Type': 'application/json',
     },

@@ -1,35 +1,26 @@
 import axios from 'axios'
-import { Endpoint } from '../types'
 
-export const fetchVersion = async ({ protocol, address, port }: Endpoint, apiToken: string) =>
-  await axios.get(`${protocol}://${address}:${port}/lighthouse/version`, {
+export const fetchVersion = async (baseUrl: string, apiToken: string) =>
+  await axios.get(`${baseUrl}/lighthouse/version`, {
     headers: {
       authorization: `Bearer ${apiToken}`,
     },
   })
 
-export const fetchValidators = async (baseValidatorUrl: string, token: string) =>
-  await axios.get(`${baseValidatorUrl}/validators`, {
+export const fetchValidators = async (baseUrl: string, token: string) =>
+  await axios.get(`${baseUrl}/validators`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 
-export const fetchValidatorCount = async ({ protocol, address, port }: Endpoint) =>
-  await axios.get(`${protocol}://${address}:${port}/lighthouse/ui/validator_count`)
+export const fetchValidatorCount = async (baseUrl: string) =>
+  await axios.get(`${baseUrl}/lighthouse/ui/validator_count`)
 
 export const fetchValidatorGraffiti = async (baseValidatorUrl: string, token: string) =>
   await axios.get(`${baseValidatorUrl}/ui/graffiti`, {
     headers: { Authorization: `Bearer ${token}` },
   })
 
-export const signVoluntaryExit = async (
-  { protocol, address, port }: Endpoint,
-  token: string,
-  pubkey: string,
-) =>
-  await axios.post(
-    `${protocol}://${address}:${port}/eth/v1/validator/${pubkey}/voluntary_exit`,
-    null,
-    {
-      headers: { Authorization: `Bearer ${token}` },
-    },
-  )
+export const signVoluntaryExit = async (baseUrl: string, token: string, pubkey: string) =>
+  await axios.post(`${baseUrl}/eth/v1/validator/${pubkey}/voluntary_exit`, null, {
+    headers: { Authorization: `Bearer ${token}` },
+  })

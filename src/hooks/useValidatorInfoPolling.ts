@@ -3,23 +3,26 @@ import { secondsInSlot } from '../constants/constants'
 import { useEffect } from 'react'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { selectValidators } from '../recoil/selectors/selectValidators'
-import { validatorInfoInterval, validatorStateInfo } from '../recoil/atoms'
+import { validatorStateInfo } from '../recoil/atoms'
 import { Validator } from '../types/validator'
 import usePollApi from './usePollApi'
+import { PollingOptions } from '../types'
 
-const useValidatorInfoPolling = () => {
+const useValidatorInfoPolling = (options?: PollingOptions) => {
+  const { time = secondsInSlot * 1000, isReady = true } = options || {}
   const baseBeaconUrl = useRecoilValue(selectBeaconUrl)
   const { contents: validators } = useRecoilValueLoadable(selectValidators)
   const setStateInfo = useSetRecoilState(validatorStateInfo)
 
-  const validatorInfoUrl = baseBeaconUrl && `${baseBeaconUrl}/eth/v1/beacon/states/head/validators`
-  const validatorIdString =
-    validators?.length && validators.map((validator: Validator) => validator.pubKey).join(',')
+  const validatorInfoUrl = `${baseBeaconUrl}/eth/v1/beacon/states/head/validators`
+  const validatorIdString = validators?.length
+    ? validators.map((validator: Validator) => validator.pubKey).join(',')
+    : undefined
 
-  const { response } = usePollApi({
-    time: secondsInSlot * 1000,
-    isReady: validatorInfoUrl && validatorIdString,
-    intervalState: validatorInfoInterval,
+  const { data } = usePollApi({
+    key: 'validatorInfo',
+    time,
+    isReady: !!validatorIdString && isReady,
     url: validatorInfoUrl,
     params: {
       id: validatorIdString,
@@ -27,11 +30,11 @@ const useValidatorInfoPolling = () => {
   })
 
   useEffect(() => {
-    const data = response?.data.data
-    if (data) {
-      setStateInfo(data)
+    const result = data?.data
+    if (result) {
+      setStateInfo(result)
     }
-  }, [response])
+  }, [data])
 }
 
 export default useValidatorInfoPolling

@@ -1,43 +1,39 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  beaconNetworkError,
-  beaconNodeEndpoint,
-  beaconSyncInfo,
-  beaconSyncInterval,
-} from '../recoil/atoms'
+import { beaconNetworkError, beaconSyncInfo } from '../recoil/atoms'
 import { useEffect } from 'react'
 import { secondsInSlot } from '../constants/constants'
 import usePollApi from './usePollApi'
+import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
+import { PollingOptions } from '../types'
 
-const useBeaconSyncPolling = (time = secondsInSlot * 1000) => {
-  const beaconNode = useRecoilValue(beaconNodeEndpoint)
-  const { protocol, address, port } = beaconNode || {}
-  const url = beaconNode ? `${protocol}://${address}:${port}/eth/v1/node/syncing` : undefined
+const useBeaconSyncPolling = (options?: PollingOptions) => {
+  const { time = secondsInSlot * 1000, isReady = true } = options || {}
+  const beaconNode = useRecoilValue(selectBeaconUrl)
+  const url = `${beaconNode}/eth/v1/node/syncing`
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo)
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)
 
   const setNetworkError = () => setBeaconNetworkError(true)
 
-  const { response } = usePollApi({
+  const { data } = usePollApi({
+    key: 'beaconSync',
     time,
-    isReady: !!url,
-    intervalState: beaconSyncInterval,
+    isReady: !!url && isReady,
     url,
     maxErrors: 2,
     onMaxError: setNetworkError,
   })
 
   useEffect(() => {
-    if (!response) return
-
-    const data = response.data.data
+    if (!data) return
+    const info = data.data
 
     setBeaconSyncInfo({
-      ...data,
-      head_slot: Number(data.head_slot),
-      sync_distance: Number(data.sync_distance),
+      ...info,
+      head_slot: Number(info.head_slot),
+      sync_distance: Number(info.sync_distance),
     })
-  }, [response])
+  }, [data])
 }
 
 export default useBeaconSyncPolling

@@ -44,14 +44,8 @@ const SSELogProvider: FC<SSELogWrapperProps> = ({ children, trigger = 10000 }) =
     setValidatorNetworkError(true)
   }
 
-  const beaconLogs = useTrackLogs(
-    beaconUrl ? `${beaconUrl}/lighthouse/logs` : undefined,
-    handleBeaconLogError,
-  )
-  const validatorLogs = useTrackLogs(
-    beaconUrl ? `${validatorUrl}/logs` : undefined,
-    handleValidatorLogError,
-  )
+  const beaconLogs = useTrackLogs(`${beaconUrl}/lighthouse/logs`, handleBeaconLogError)
+  const validatorLogs = useTrackLogs(`${validatorUrl}/logs`, handleValidatorLogError)
 
   const clearRefreshInterval = useCallback(() => {
     if (intervalId) {
