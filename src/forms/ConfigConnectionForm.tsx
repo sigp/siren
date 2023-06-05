@@ -26,6 +26,7 @@ import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
 import displayToast from '../utilities/displayToast'
+import formatEndpoint from '../utilities/formatEndpoint'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -186,18 +187,20 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
     const errors = validationErrors(values)
 
+    const { isRemember, apiToken, userName, beaconNode, validatorClient } = values
+    const formattedBnEndpoint = formatEndpoint(beaconNode) as string
+    const formattedVcEndpoint = formatEndpoint(validatorClient) as string
+
     if (errors.length) {
       errors.forEach((error) => handleError(error))
       await trigger()
       return
     }
 
-    const { isRemember, apiToken, userName, beaconNode, validatorClient } = values
-
     try {
       const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(validatorClient, apiToken),
-        fetchBeaconVersion(beaconNode),
+        fetchVersion(formattedVcEndpoint, apiToken),
+        fetchBeaconVersion(formattedBnEndpoint),
       ])
 
       const vcVersion = vcResult.data.data.version

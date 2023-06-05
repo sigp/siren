@@ -10,9 +10,6 @@ export const selectValidators = selector<Validator[]>({
   get: async ({ get }) => {
     const baseValidatorUrl = get(selectValidatorUrl)
     const token = get(apiToken)
-
-    if (!baseValidatorUrl) return
-
     const { data } = await fetchValidators(baseValidatorUrl, token)
 
     return data.data.map((validator: LighthouseValidatorResult) => ({

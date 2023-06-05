@@ -1,13 +1,12 @@
 import { selector } from 'recoil'
-import { beaconNodeEndpoint } from '../atoms'
 import { fetchBnSpec } from '../../api/beacon'
 import { BeaconNodeSpecResults } from '../../types/beacon'
+import { selectBeaconUrl } from './selectBeaconUrl'
 
 export const selectBnSpec = selector<BeaconNodeSpecResults>({
   key: 'selectBnSpec',
   get: async ({ get }) => {
-    const beaconEndpoint = get(beaconNodeEndpoint)
-
+    const beaconEndpoint = get(selectBeaconUrl)
     try {
       const { data } = await fetchBnSpec(beaconEndpoint)
 

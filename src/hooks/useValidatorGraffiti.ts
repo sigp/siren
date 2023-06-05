@@ -23,7 +23,7 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
   }
 
   useEffect(() => {
-    if (validatorUrl && token) {
+    if (token) {
       void fetchGraffiti(validatorUrl, token)
     }
   }, [token, validatorUrl])

@@ -1,38 +1,40 @@
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { beaconEpochInterval, validatorCacheBalanceResult } from '../recoil/atoms'
+import { validatorCacheBalanceResult } from '../recoil/atoms'
 import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
 import usePollApi from './usePollApi'
 import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { ValidatorCacheResults } from '../types/validator'
+import { PollingOptions } from '../types'
 
-const useValidatorCachePolling = () => {
+const useValidatorCachePolling = (options?: PollingOptions) => {
+  const { time = 60000, isReady = true } = options || {}
   const beaconUrl = useRecoilValue(selectBeaconUrl)
   const activeValidators = useRecoilValue(selectActiveValidators)
   const setValidatorCache = useSetRecoilState(validatorCacheBalanceResult)
 
   const indices = activeValidators?.map((validator) => Number(validator.index))
-  const cacheUrl = beaconUrl && `${beaconUrl}/lighthouse/ui/validator_info`
+  const cacheUrl = `${beaconUrl}/lighthouse/ui/validator_info`
 
-  const { response } = usePollApi({
-    time: 60000,
+  const { data } = usePollApi({
+    key: 'validatorCache',
+    time,
     url: cacheUrl,
     method: 'post',
-    intervalState: beaconEpochInterval,
-    isReady: !!cacheUrl && indices?.length > 0,
-    data: {
+    isReady: isReady && indices?.length > 0,
+    payload: {
       indices,
     },
   })
 
   useEffect(() => {
-    const data = response?.data.data.validators as ValidatorCacheResults
-    if (data) {
+    const result = data?.data.validators as ValidatorCacheResults
+    if (result) {
       setValidatorCache(
-        Object.fromEntries(Object.entries(data).map(([key, { info }]) => [Number(key), info])),
+        Object.fromEntries(Object.entries(result).map(([key, { info }]) => [Number(key), info])),
       )
     }
-  }, [response])
+  }, [data])
 
   useEffect(() => {
     return () => {

@@ -23,6 +23,7 @@ import AppDescription from '../components/AppDescription/AppDescription'
 import SessionAuthModal from '../components/SessionAuthModal/SessionAuthModal'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
+import formatEndpoint from '../utilities/formatEndpoint'
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -51,12 +52,14 @@ const InitScreen = () => {
 
   const incrementStep = () => setStep((prev) => prev + 1)
   const setNodeInfo = async (validatorClient: Endpoint, beaconNode: Endpoint, token: string) => {
+    const formattedVcEndpoint = formatEndpoint(validatorClient) as string
+    const formattedBnEndpoint = formatEndpoint(beaconNode) as string
     try {
       incrementStep()
 
       const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(validatorClient, token),
-        fetchBeaconVersion(beaconNode),
+        fetchVersion(formattedVcEndpoint, token),
+        fetchBeaconVersion(formattedBnEndpoint),
       ])
 
       const vcVersion = vcResult.data.data.version
@@ -74,13 +77,13 @@ const InitScreen = () => {
         setValidatorClient(validatorClient)
         setApiToken(token)
 
-        await checkSyncStatus(beaconNode)
+        await checkSyncStatus(formattedBnEndpoint)
       }
     } catch (e) {
       moveToOnboard()
     }
   }
-  const checkSyncStatus = async (beaconNode: Endpoint) => {
+  const checkSyncStatus = async (beaconNode: string) => {
     try {
       incrementStep()
 
