@@ -12,6 +12,7 @@ export type ValidatorStatus =
   | 'pending'
   | 'exited'
   | 'withdrawal'
+  | 'deposit'
 
 export type Validator = {
   pubKey: string

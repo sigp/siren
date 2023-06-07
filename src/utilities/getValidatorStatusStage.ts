@@ -3,6 +3,7 @@ import { ValidatorStatus } from '../types/validator'
 const getValidatorStatusStage = (status: ValidatorStatus): number => {
   switch (true) {
     case status.includes('exit'):
+    case status.includes('withdrawal'):
       return 4
     case status.includes('active'):
       return 3
