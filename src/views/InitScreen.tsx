@@ -1,6 +1,6 @@
 import Typography from '../components/Typography/Typography'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { Endpoint } from '../types'
+import { Endpoint, ValAliases } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import {
@@ -12,6 +12,7 @@ import {
   apiToken,
   validatorVersionData,
   validatorClientEndpoint,
+  validatorAliases,
 } from '../recoil/atoms'
 import { AppView, OnboardView, UiMode } from '../constants/enums'
 import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
@@ -38,10 +39,12 @@ const InitScreen = () => {
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
   const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  const setAlias = useSetRecoilState(validatorAliases)
   const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
   const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
   const [encryptedToken] = useLocalStorage<string | undefined>('api-token', undefined)
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
+  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
 
   const moveToView = (view: AppView) => {
     setTimeout(() => {
@@ -114,13 +117,15 @@ const InitScreen = () => {
   useEffect(() => {
     if (isReady) return
 
+    setAlias(aliases)
+
     if (!validatorClient || !beaconNode || !encryptedToken || !username) {
       moveToView(AppView.ONBOARD)
       return
     }
     setUserName(username)
     toggleAuthModal(true)
-  }, [validatorClient, beaconNode, encryptedToken])
+  }, [validatorClient, beaconNode, encryptedToken, aliases])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
