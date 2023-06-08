@@ -15,7 +15,6 @@ export type ValidatorStatus =
 
 export type Validator = {
   pubKey: string
-  name: string
 }
 
 export type ValidatorInfo = {
@@ -97,7 +96,7 @@ export type activeValidatorDetail = {
   status: ValidatorStatus
   pubKey?: string
   index: string
-  name?: string
+  name: string
 }
 
 export type ValidatorGraffitiResults = {

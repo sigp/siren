@@ -184,6 +184,16 @@ const ValidatorTable: FC<ValidatorTableProps> = ({ view = 'partial', isFilter, c
                       {t('keys')}
                     </Typography>
                   </th>
+                  <th className='pl-2'>
+                    <Typography
+                      color='text-dark500'
+                      type='text-tiny'
+                      isUpperCase
+                      className='text-center'
+                    >
+                      edit
+                    </Typography>
+                  </th>
                 </>
               )}
               <th className={`border-r-style500 ${view === 'full' ? 'border-l-style500' : ''}`}>

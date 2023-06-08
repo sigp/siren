@@ -16,6 +16,7 @@ import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 import isBlsAddress from '../../utilities/isBlsAddress'
 import Tooltip from '../ToolTip/Tooltip'
+import EditValidator from '../EditValidator/EditValidator'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
@@ -159,6 +160,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
                 />
               </div>
             </DisabledTooltip>
+          </th>
+          <th className='px-2'>
+            <div className='w-full flex justify-center'>
+              <EditValidator validator={validator} />
+            </div>
           </th>
         </>
       )}

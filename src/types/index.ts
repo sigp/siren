@@ -103,3 +103,7 @@ export interface PollingOptions {
   time?: number
   isReady?: boolean
 }
+
+export interface ValAliases {
+  [key: string]: string
+}
