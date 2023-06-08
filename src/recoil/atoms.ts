@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
-import { Endpoint } from '../types'
+import { Endpoint, ValAliases } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
 import { BeaconValidatorMetricResults } from '../types/beacon'
@@ -172,5 +172,10 @@ export const isBlsExecutionModal = atom<boolean>({
 
 export const processingBlsValidators = atom<(string | number)[]>({
   key: 'processingBlsValidators',
+  default: undefined,
+})
+
+export const validatorAliases = atom<ValAliases>({
+  key: 'validatorAliases',
   default: undefined,
 })
