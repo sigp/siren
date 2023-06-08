@@ -31,7 +31,7 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator }) => {
         </div>
         <div className='flex-1 flex justify-between'>
           <div>
-            <Typography>{name}</Typography>
+            <Typography className='text-left'>{name}</Typography>
             <a target='_blank' rel='noreferrer' href={`${baseUrl}/${index}`}>
               <Typography
                 type='text-caption1'
