@@ -1,15 +1,15 @@
 import { selector } from 'recoil'
 import { BeaconValidatorResult, ValidatorInfo } from '../../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
-import { selectValidators } from './selectValidators'
 import { initialEthDeposit } from '../../constants/constants'
-import { validatorStateInfo } from '../atoms'
+import { validatorAliases, validatorStateInfo } from '../atoms'
+import formatDefaultValName from '../../utilities/formatDefaultValName'
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',
   get: ({ get }) => {
-    const validators = get(selectValidators)
     const validatorStates = get(validatorStateInfo)
+    const aliases = get(validatorAliases)
 
     if (!validatorStates) return []
 
@@ -18,10 +18,8 @@ export const selectValidatorInfos = selector<ValidatorInfo[]>({
     )
 
     return validatorInfo.map(({ validator, index, status, balance }: BeaconValidatorResult) => {
-      const baseInfo = validators.find((v) => v.pubKey === validator.pubkey)
-
       return {
-        name: baseInfo?.name || '',
+        name: aliases?.[index] || formatDefaultValName(index),
         pubKey: validator.pubkey,
         balance: Number(formatUnits(balance, 'gwei')),
         rewards: Number(formatUnits(balance, 'gwei')) - initialEthDeposit,
