@@ -1,21 +1,14 @@
 import { selector } from 'recoil'
-import { validatorStateInfo } from '../atoms'
-import { selectValidators } from './selectValidators'
 import { activeValidatorDetail } from '../../types/validator'
+import { selectValidatorInfos } from './selectValidatorInfos'
 
 export const selectActiveValidators = selector<activeValidatorDetail[]>({
   key: 'selectActiveValidators',
   get: ({ get }) => {
-    const validators = get(selectValidators)
-    const validatorInfo = get(validatorStateInfo)
+    const validatorInfo = get(selectValidatorInfos)
 
     return validatorInfo
       ? validatorInfo
-          .map(({ status, validator, index }) => {
-            const { name, pubKey } =
-              validators.find(({ pubKey }) => pubKey === validator.pubkey) || {}
-            return { status, pubKey, index, name }
-          })
           .filter(
             ({ status }) =>
               status.includes('active') &&
@@ -23,6 +16,12 @@ export const selectActiveValidators = selector<activeValidatorDetail[]>({
               !status.includes('exiting') &&
               !status.includes('exited'),
           )
+          .map(({ status, pubKey, index, name }) => ({
+            status,
+            pubKey,
+            index: String(index),
+            name,
+          }))
           .slice(0, 10)
       : []
   },
