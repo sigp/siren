@@ -12,12 +12,14 @@ import Button, { ButtonFace } from '../Button/Button'
 import formatDefaultValName from '../../utilities/formatDefaultValName'
 import EditValidatorForm from '../../forms/EditValidatorForm'
 import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 
 export interface EditValidatorProps {
   validator: ValidatorInfo
 }
 
 const EditValidator: FC<EditValidatorProps> = ({ validator }) => {
+  const { t } = useTranslation()
   const { index } = validator
   const [isOpen, setOpen] = useState(false)
   const isTablet = useMediaQuery('(max-width: 1024px)')
@@ -45,7 +47,7 @@ const EditValidator: FC<EditValidatorProps> = ({ validator }) => {
         <div className='py-4 px-6 space-x-12 flex justify-between'>
           <div className='flex items-center'>
             <Typography type='text-subtitle1' fontWeight='font-light'>
-              Edit Validator
+              {t('validatorEdit.title')}
             </Typography>
           </div>
           <BasicValidatorMetrics validator={validator} />
@@ -63,14 +65,14 @@ const EditValidator: FC<EditValidatorProps> = ({ validator }) => {
                     placeholder={formatDefaultValName(String(index))}
                     uiMode={mode}
                     error={error?.message}
-                    label='Validator Name'
+                    label={t('validatorEdit.label')}
                     {...props}
                   />
                 )}
               />
               <div className='flex justify-end'>
                 <Button isDisabled={!isValid} onClick={onSubmit} type={ButtonFace.SECONDARY}>
-                  Update Validator
+                  {t('validatorEdit.cta')}
                 </Button>
               </div>
             </div>

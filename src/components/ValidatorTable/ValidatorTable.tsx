@@ -191,7 +191,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({ view = 'partial', isFilter, c
                       isUpperCase
                       className='text-center'
                     >
-                      edit
+                      {t('edit')}
                     </Typography>
                   </th>
                 </>

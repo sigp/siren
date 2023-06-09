@@ -99,6 +99,7 @@
   "in": "In",
   "effectiveness": "Effectiveness",
   "status": "status",
+  "edit": "Edit",
   "account": "Account",
   "hourly": "hourly",
   "daily": "daily",
@@ -413,5 +414,13 @@
       "validatorWarning": "Hourly rate of warning level validator logs",
       "beaconWarning": "Hourly rate of warning level beacon logs"
     }
+  },
+  "validatorEdit": {
+    "title": "Edit Validator",
+    "label": "Validator Name",
+    "cta": "Update Validator",
+    "successUpdate": "Validator name updated successfully!",
+    "nameRequired": "Name is required",
+    "nameLimit": "Name cannot exceed 19 characters"
   }
 }

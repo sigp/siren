@@ -8,6 +8,7 @@ import { validatorAliases } from '../recoil/atoms'
 import displayToast from '../utilities/displayToast'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { ValAliases } from '../types'
+import { useTranslation } from 'react-i18next'
 
 export interface EditValidatorFormProps {
   validator: ValidatorInfo
@@ -26,6 +27,7 @@ export interface RenderProps {
 }
 
 const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) => {
+  const { t } = useTranslation()
   const { index } = validator
   const setAlias = useSetRecoilState(validatorAliases)
   const [aliases, storeValAliases] = useLocalStorage<ValAliases>('val-aliases', {})
@@ -48,7 +50,7 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
     setAlias((prev) => ({ ...prev, [index]: nameString }))
     storeValAliases({ ...aliases, [index]: nameString })
 
-    displayToast('Validator name updated successfully', 'success')
+    displayToast(t('validatorEdit.successUpdate'), 'success')
 
     reset()
   }
