@@ -35,7 +35,7 @@ const ValidatorDetails = () => {
   )
 
   const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
-  const isExited = validator?.status.includes('exit')
+  const isExited = validator?.status.includes('exit') || validator?.status.includes('withdrawal')
 
   const combinedEffectiveness =
     avgHitEffectiveness &&
