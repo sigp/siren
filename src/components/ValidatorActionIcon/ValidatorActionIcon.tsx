@@ -6,6 +6,7 @@ export interface ValidatorActionIconProps {
   backgroundColor?: string
   color?: string
   size?: string
+  onClick?: () => void
 }
 
 const ValidatorActionIcon: FC<ValidatorActionIconProps> = ({
@@ -14,9 +15,11 @@ const ValidatorActionIcon: FC<ValidatorActionIconProps> = ({
   backgroundColor = 'bg-dark25 dark:bg-dark750',
   border = 'border border-primary100 dark:border-primary',
   color = 'text-primary',
+  onClick,
 }) => {
   return (
     <div
+      onClick={onClick}
       className={`${border} ${backgroundColor} w-8 h-8  cursor-pointer rounded-full flex items-center justify-center`}
     >
       <i className={`${icon} ${color} ${size}`} />
