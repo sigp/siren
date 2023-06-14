@@ -50,11 +50,6 @@ export const validatorSyncInfo = atom<ValidatorSyncResult>({
   default: undefined,
 })
 
-export const validatorSyncInterval = atom<NodeJS.Timer | undefined>({
-  key: 'validatorSyncInterval',
-  default: undefined,
-})
-
 export const beaconSyncInfo = atom<BeaconSyncResult>({
   key: 'beaconSyncInfos',
   default: undefined,
@@ -62,21 +57,6 @@ export const beaconSyncInfo = atom<BeaconSyncResult>({
 
 export const validatorStateInfo = atom<BeaconValidatorResult[]>({
   key: 'validatorStateInfo',
-  default: undefined,
-})
-
-export const validatorInfoInterval = atom<NodeJS.Timer | undefined>({
-  key: 'validatorInfoInterval',
-  default: undefined,
-})
-
-export const beaconEpochInterval = atom<NodeJS.Timer | undefined>({
-  key: 'beaconEpochInterval',
-  default: undefined,
-})
-
-export const beaconSyncInterval = atom<NodeJS.Timer | undefined>({
-  key: 'beaconSyncInterval',
   default: undefined,
 })
 
@@ -100,18 +80,8 @@ export const validatorHealthResult = atom<HealthDiagnosticResult | undefined>({
   default: undefined,
 })
 
-export const validatorHealthSyncInterval = atom<NodeJS.Timer | undefined>({
-  key: 'validatorHealthSyncInterval',
-  default: undefined,
-})
-
 export const beaconHealthResult = atom<HealthDiagnosticResult | undefined>({
   key: 'beaconHealthResult',
-  default: undefined,
-})
-
-export const beaconHealthSyncInterval = atom<NodeJS.Timer | undefined>({
-  key: 'beaconHealthSyncInterval',
   default: undefined,
 })
 
