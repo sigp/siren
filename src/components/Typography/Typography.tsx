@@ -31,6 +31,7 @@ export type TypographyColor =
   | 'text-success'
   | 'text-error'
   | 'text-warning'
+  | 'text-primaryBright'
 
 export type TypographyType =
   | 'text-caption2'

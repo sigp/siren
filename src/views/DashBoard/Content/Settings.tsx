@@ -6,8 +6,8 @@ import Toggle from '../../../components/Toggle/Toggle'
 import UiModeIcon from '../../../components/UiModeIcon/UiModeIcon'
 import SocialIcon from '../../../components/SocialIcon/SocialIcon'
 import Input from '../../../components/Input/Input'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { appView, onBoardView, userName } from '../../../recoil/atoms'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import { activeDevice, appView, deviceSettings, onBoardView, userName } from '../../../recoil/atoms'
 import useLocalStorage from '../../../hooks/useLocalStorage'
 import { UsernameStorage } from '../../../types/storage'
 import { ReactComponent as LighthouseSvg } from '../../../assets/images/lighthouse-black.svg'
@@ -23,10 +23,13 @@ import {
   SigPIoUrl,
   SigPTwitter,
 } from '../../../constants/constants'
+import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
 
 const Settings = () => {
   const { t } = useTranslation()
   const { mode, toggleUiMode } = useUiMode()
+  const devices = useRecoilValue(deviceSettings)
+  const currentDevice = useRecoilValue(activeDevice)
   const [userNameError, setError] = useState<string | undefined>()
   const [username, setUsername] = useRecoilState(userName)
   const setView = useSetRecoilState(onBoardView)
@@ -59,7 +62,7 @@ const Settings = () => {
   }
 
   return (
-    <div className='relative w-full max-w-1440 px-5 py-8'>
+    <div className='relative z-50 w-full max-w-1440 px-5 py-8'>
       <LighthouseSvg className={svgClasses} />
       <div className='relative z-10 w-full pb-20 lg:pb-0'>
         <div className='w-full flex items-center justify-between pr-12'>
@@ -170,13 +173,7 @@ const Settings = () => {
               />
             </div>
             <div className='flex-1'>
-              <Input
-                uiMode={mode}
-                label={t('configScreen.deviceName')}
-                className='capitalize max-w-xl pl-4 pt-2'
-                placeholder='Local Host'
-                value={undefined}
-              />
+              <DeviceSelect uiMode={mode} devices={devices} value={currentDevice.deviceName} />
             </div>
           </div>
         </div>

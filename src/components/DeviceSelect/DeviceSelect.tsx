@@ -1,0 +1,162 @@
+import { useSetRecoilState } from 'recoil'
+import { appView } from '../../recoil/atoms'
+import { FC, MouseEvent, useMemo, useState } from 'react'
+import RodalModal from '../RodalModal/RodalModal'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { DeviceKeyStorage, DeviceListStorage } from '../../types/storage'
+import { AppView, UiMode } from '../../constants/enums'
+import { DeviceList } from '../../types'
+import Typography from '../Typography/Typography'
+import DropDown from '../DropDown/DropDown'
+import useClickOutside from '../../hooks/useClickOutside'
+import addClassString from '../../utilities/addClassString'
+import Button, { ButtonFace } from '../Button/Button'
+
+export interface DeviceSelectProps {
+  devices?: DeviceList
+  value?: string
+  uiMode?: UiMode
+  type?: 'default' | 'black'
+}
+
+const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) => {
+  const isBlack = type === 'black'
+  const setAppView = useSetRecoilState(appView)
+  const [isOpen, toggle] = useState(false)
+  const [targetKey, setTargetKey] = useState('')
+  const [deletedDevices, setDeletedDevices] = useState<string[]>([])
+  const [, setDeviceKey] = useLocalStorage<DeviceKeyStorage>('deviceKey', undefined)
+  const [, storeDeviceList] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
+
+  const { ref } = useClickOutside<HTMLDivElement>(() => {
+    toggle(false)
+  })
+
+  const deviceOptions = useMemo(() => {
+    return Object.keys(devices ?? {})
+      .filter((deviceKey) => deviceKey !== value && !deletedDevices.includes(deviceKey))
+      .map((deviceKey) => {
+        const device = devices?.[deviceKey]
+        return { deviceKey, isLocked: device?.apiToken }
+      })
+  }, [devices, deletedDevices])
+
+  const select = (selection: string) => {
+    const newDevice = devices?.[selection]
+
+    if (newDevice) {
+      setDeviceKey(selection)
+      setAppView(AppView.INIT)
+    }
+  }
+  const toggleDropdown = () => toggle((prevState) => !prevState)
+
+  const confirmDelete = (deviceKey: string) => setTargetKey(deviceKey)
+  const closeConfirm = () => setTargetKey('')
+
+  const deleteDevice = () => {
+    setDeletedDevices((prev) => [...prev, targetKey])
+    storeDeviceList(
+      Object.keys(devices ?? {}).reduce((result: DeviceList, currentKey) => {
+        const settings = devices?.[currentKey]
+        if (currentKey !== targetKey && settings) {
+          result[currentKey] = settings
+        }
+        return result
+      }, {}),
+    )
+    setTargetKey('')
+  }
+
+  const buttonClasses = addClassString('relative border border-style500 w-full p-3', [
+    isBlack ? 'bg-black' : 'dark:bg-dark800 bg-white',
+  ])
+
+  const itemClasses = addClassString('block group cursor-pointer flex justify-between py-2 px-4', [
+    !isBlack && 'hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white',
+    isBlack && 'bg-dark750 hover:bg-dark600 text-white',
+  ])
+  const typographyClasses = addClassString('dark:text-dark300', [
+    isBlack && 'dark:text-dark300 text-dark300',
+  ])
+
+  const chevronClasses = addClassString('bi-chevron-down', [
+    !isBlack && 'text-dark900 dark:text-dark300',
+    isBlack && 'text-white',
+  ])
+
+  return (
+    <>
+      <div className='space-y-4 z-50'>
+        <Typography
+          type='text-caption2'
+          family='font-archivo'
+          isBold
+          color='text-dark500'
+          className='md:text-caption1'
+          darkMode='dark:text-dark300'
+        >
+          Select Device
+        </Typography>
+        <div ref={ref} className={buttonClasses}>
+          <button
+            onClick={toggleDropdown}
+            id='dropdownDefault'
+            disabled={!deviceOptions?.length}
+            data-dropdown-toggle='dropdown'
+            className='w-full space-x-2 focus:outline-none text-center flex items-center justify-between'
+            type='button'
+          >
+            <Typography color={isBlack ? 'text-white' : undefined} className='capitalize'>
+              {value}
+            </Typography>
+            <i className={chevronClasses} />
+          </button>
+          <DropDown className='mt-2' isOpen={isOpen}>
+            {deviceOptions.map(({ deviceKey, isLocked }, index) => (
+              <li
+                onClick={() => select(deviceKey)}
+                className={itemClasses}
+                key={index}
+                data-testid='option'
+              >
+                <Typography
+                  isCapitalize
+                  color={isBlack ? 'text-dark300' : undefined}
+                  darkMode={typographyClasses}
+                >
+                  {deviceKey}
+                </Typography>
+                <i
+                  onClick={(e: MouseEvent<HTMLElement>) => {
+                    e.stopPropagation()
+                    confirmDelete(deviceKey)
+                  }}
+                  className='bi bi-trash-fill hidden group-hover:block'
+                />
+                {isLocked && <i className='bi bi-lock group-hover:hidden' />}
+              </li>
+            ))}
+          </DropDown>
+        </div>
+      </div>
+      <RodalModal
+        styles={{ maxWidth: '420px' }}
+        uiMode={uiMode ? { mode: uiMode } : undefined}
+        isVisible={Boolean(targetKey)}
+        onClose={closeConfirm}
+      >
+        <div className='p-6 space-y-8 flex flex-col items-center'>
+          <Typography color={uiMode === UiMode.DARK ? 'text-dark300' : 'text-dark900'}>
+            Are you sure you want to remove {targetKey.toUpperCase()} device?
+          </Typography>
+          <Button type={ButtonFace.SECONDARY} onClick={deleteDevice}>
+            Remove Device
+          </Button>
+        </div>
+      </RodalModal>
+    </>
+  )
+}
+
+export default DeviceSelect
