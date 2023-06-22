@@ -1,8 +1,7 @@
 import RodalModal from '../RodalModal/RodalModal'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { apiToken, appView, onBoardView, sessionAuthErrorCount } from '../../recoil/atoms'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import { appView, onBoardView, sessionAuthErrorCount } from '../../recoil/atoms'
 import Typography from '../Typography/Typography'
-import useLocalStorage from '../../hooks/useLocalStorage'
 import { ChangeEvent, FC, ReactElement, useEffect, useState, KeyboardEvent } from 'react'
 import addClassString from '../../utilities/addClassString'
 import { AppView, OnboardView, UiMode } from '../../constants/enums'
@@ -16,6 +15,8 @@ export interface SessionAuthModalProps {
   onSuccess: (token?: string) => void
   onFail?: () => void
   isOpen: boolean
+  encryptedToken?: string
+  defaultToken?: string
   onClose?: () => void
   children?: ReactElement | ReactElement[]
   mode?: UiMode
@@ -25,13 +26,13 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   onSuccess,
   children,
   isOpen,
+  encryptedToken,
+  defaultToken,
   onFail,
   onClose,
   mode,
 }) => {
   const { t } = useTranslation()
-  const [localStorageApiToken, storeApiToken] = useLocalStorage<string>('api-token', '')
-  const memoryApiToken = useRecoilValue(apiToken)
   const [password, setPassword] = useState('')
   const [errorCount, setCount] = useRecoilState(sessionAuthErrorCount)
   const [isError, setIsError] = useState(false)
@@ -49,9 +50,9 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   const setInput = (event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)
 
   const viewConfig = () => {
-    storeApiToken('')
     setView(OnboardView.CONFIGURE)
     setAppView(AppView.ONBOARD)
+    setCount(0)
   }
 
   const playErrorAnim = () => {
@@ -69,26 +70,26 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   }
 
   const confirmApiToken = () => {
-    if (password !== memoryApiToken) {
+    if (!defaultToken || password !== defaultToken) {
       handleError()
       return
     }
 
     setCount(0)
-    onSuccess(memoryApiToken)
+    onSuccess(defaultToken)
   }
 
-  const confirmPassword = () => {
+  const confirmPassword = (token: string) => {
     const pattern = /^api-token-0x\w*$/
     try {
-      const token = CryptoJS.AES.decrypt(localStorageApiToken, password).toString(CryptoJS.enc.Utf8)
-      if (!token.length || !pattern.test(token)) {
+      const decryptedToken = CryptoJS.AES.decrypt(token, password).toString(CryptoJS.enc.Utf8)
+      if (!decryptedToken.length || !pattern.test(decryptedToken)) {
         handleError()
         return
       }
       setCount(0)
       setPassword('')
-      onSuccess(token)
+      onSuccess(decryptedToken)
     } catch (e) {
       handleError()
     }
@@ -101,8 +102,8 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   }
 
   const authenticateAction = () => {
-    if (localStorageApiToken) {
-      confirmPassword()
+    if (encryptedToken) {
+      confirmPassword(encryptedToken)
       return
     }
 
@@ -152,7 +153,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
 
   return (
     <>
-      <RodalModal onClose={closeAuthModal} isVisible={isOpen}>
+      <RodalModal uiMode={mode && { mode }} onClose={closeAuthModal} isVisible={isOpen}>
         <div className='p-4'>
           <div className='border-b-style500 pb-4 mb-4'>
             <Typography
