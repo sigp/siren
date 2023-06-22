@@ -1,9 +1,7 @@
 import useTrackLogs, { defaultLogData, trackedLogData } from '../../hooks/useTrackLogs'
 import { FC, ReactElement, createContext, useState, useEffect, useCallback } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { selectBeaconUrl } from '../../recoil/selectors/selectBeaconUrl'
-import { selectValidatorUrl } from '../../recoil/selectors/selectValidatorUrl'
-import { beaconNetworkError, validatorNetworkError } from '../../recoil/atoms'
+import { beaconNetworkError, validatorNetworkError, activeDevice } from '../../recoil/atoms'
 
 export interface SSELogWrapperProps {
   trigger?: number
@@ -31,8 +29,7 @@ const SSELogProvider: FC<SSELogWrapperProps> = ({ children, trigger = 10000 }) =
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const setValidatorNetworkError = useSetRecoilState(validatorNetworkError)
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>(undefined)
-  const beaconUrl = useRecoilValue(selectBeaconUrl)
-  const validatorUrl = useRecoilValue(selectValidatorUrl)
+  const { beaconUrl, validatorUrl } = useRecoilValue(activeDevice)
 
   const handleBeaconLogError = () => {
     clearRefreshInterval()

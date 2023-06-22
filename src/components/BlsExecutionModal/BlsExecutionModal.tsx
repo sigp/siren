@@ -1,6 +1,6 @@
 import RodalModal from '../RodalModal/RodalModal'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { isBlsExecutionModal, processingBlsValidators } from '../../recoil/atoms'
+import { isBlsExecutionModal, processingBlsValidators, activeDevice } from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
@@ -17,12 +17,11 @@ import { Storage } from '../../constants/enums'
 import isValidJSONArray from '../../utilities/isValidJson'
 import getValuesFromObjArray from '../../utilities/getValuesFromObjArray'
 import displayToast from '../../utilities/displayToast'
-import { selectBeaconUrl } from '../../recoil/selectors/selectBeaconUrl'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
   const [isLoading, setLoading] = useState(false)
-  const beaconEndpoint = useRecoilValue(selectBeaconUrl)
+  const { beaconUrl } = useRecoilValue(activeDevice)
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [blsJson, setJson] = useState(MOCK_BLS_JSON)
@@ -57,7 +56,7 @@ const BlsExecutionModal = () => {
     let targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
 
     try {
-      const { status } = await broadcastBlsChange(beaconEndpoint, blsJson)
+      const { status } = await broadcastBlsChange(beaconUrl, blsJson)
 
       setLoading(false)
 

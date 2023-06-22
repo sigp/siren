@@ -3,15 +3,15 @@ import { fetchValidatorCount } from '../api/lighthouse'
 import { useRecoilValue } from 'recoil'
 import { ValidatorCountResult } from '../types/validator'
 import { DEFAULT_VALIDATOR_COUNT } from '../constants/constants'
-import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
+import { activeDevice } from '../recoil/atoms'
 
 const useValidatorCount = (): ValidatorCountResult => {
   const [data, setData] = useState(DEFAULT_VALIDATOR_COUNT)
-  const beaconNode = useRecoilValue(selectBeaconUrl)
+  const { beaconUrl } = useRecoilValue(activeDevice)
 
   const fetchCount = async () => {
     try {
-      const { data } = await fetchValidatorCount(beaconNode)
+      const { data } = await fetchValidatorCount(beaconUrl)
 
       setData(data?.data)
     } catch (e) {
@@ -21,7 +21,7 @@ const useValidatorCount = (): ValidatorCountResult => {
 
   useEffect(() => {
     void fetchCount()
-  }, [beaconNode])
+  }, [beaconUrl])
 
   return data
 }

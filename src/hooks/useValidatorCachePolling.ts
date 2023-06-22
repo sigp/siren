@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { validatorCacheBalanceResult } from '../recoil/atoms'
+import { validatorCacheBalanceResult, activeDevice } from '../recoil/atoms'
 import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
 import usePollApi from './usePollApi'
-import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { ValidatorCacheResults } from '../types/validator'
 import { PollingOptions } from '../types'
 
 const useValidatorCachePolling = (options?: PollingOptions) => {
   const { time = 60000, isReady = true } = options || {}
-  const beaconUrl = useRecoilValue(selectBeaconUrl)
+  const { beaconUrl } = useRecoilValue(activeDevice)
   const activeValidators = useRecoilValue(selectActiveValidators)
   const setValidatorCache = useSetRecoilState(validatorCacheBalanceResult)
 

@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const fetchVersion = async (baseUrl: string, apiToken: string) =>
-  await axios.get(`${baseUrl}/lighthouse/version`, {
+  await axios.get(`${baseUrl}/version`, {
     headers: {
       authorization: `Bearer ${apiToken}`,
     },

@@ -11,12 +11,10 @@ import { useTranslation, Trans } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { signVoluntaryExit } from '../../../api/lighthouse'
 import { useRecoilValue } from 'recoil'
-import { apiToken } from '../../../recoil/atoms'
 import { submitSignedExit } from '../../../api/beacon'
 import ExitDisclosure from '../../Disclosures/ExitDisclosure'
 import displayToast from '../../../utilities/displayToast'
-import { selectBeaconUrl } from '../../../recoil/selectors/selectBeaconUrl'
-import { selectValidatorUrl } from '../../../recoil/selectors/selectValidatorUrl'
+import { activeDevice } from '../../../recoil/atoms'
 
 export interface ValidatorExitProps {
   validator: ValidatorInfo
@@ -25,18 +23,16 @@ export interface ValidatorExitProps {
 const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const { t } = useTranslation()
   const { pubKey } = validator
-  const beacon = useRecoilValue(selectBeaconUrl)
   const [isLoading, setLoading] = useState(false)
-  const vcEndpoint = useRecoilValue(selectValidatorUrl)
-  const token = useRecoilValue(apiToken)
+  const { validatorUrl, apiToken, beaconUrl } = useRecoilValue(activeDevice)
   const [isAccept, setIsAccept] = useState(false)
   const { moveToView, closeModal } = useContext(ValidatorModalContext)
   const viewDetails = () => moveToView(ValidatorModalView.DETAILS)
   const acceptBtnClasses = addClassString('', [isAccept && 'border-success text-success'])
 
-  const getSignedExit = async (beacon: string): Promise<SignedExitData | undefined> => {
+  const getSignedExit = async (url: string): Promise<SignedExitData | undefined> => {
     try {
-      const { data } = await signVoluntaryExit(beacon, token, pubKey)
+      const { data } = await signVoluntaryExit(url, apiToken, pubKey)
 
       if (data) {
         return data
@@ -48,7 +44,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   }
   const submitSignedMessage = async (data: SignedExitData) => {
     try {
-      const { status } = await submitSignedExit(beacon, data)
+      const { status } = await submitSignedExit(beaconUrl, data)
 
       if (status === 200) {
         setLoading(false)
@@ -64,7 +60,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const confirmExit = async () => {
     setLoading(true)
 
-    const message = await getSignedExit(vcEndpoint)
+    const message = await getSignedExit(validatorUrl)
 
     if (message) {
       void (await submitSignedMessage(message))
