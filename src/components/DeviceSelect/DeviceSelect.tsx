@@ -11,7 +11,7 @@ import DropDown from '../DropDown/DropDown'
 import useClickOutside from '../../hooks/useClickOutside'
 import addClassString from '../../utilities/addClassString'
 import Button, { ButtonFace } from '../Button/Button'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 export interface DeviceSelectProps {
   devices?: DeviceList
@@ -145,7 +145,10 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
       >
         <div className='p-6 space-y-8 flex flex-col items-center'>
           <Typography color={uiMode === UiMode.DARK ? 'text-dark300' : 'text-dark900'}>
-            {t('deviceSelect.confirmText')}
+            <Trans i18nKey='deviceSelect.confirmText'>
+              <span className='uppercase font-bold' />
+              {{ target: targetKey }}
+            </Trans>
           </Typography>
           <Button type={ButtonFace.SECONDARY} onClick={deleteDevice}>
             {t('deviceSelect.confirmCta')}
