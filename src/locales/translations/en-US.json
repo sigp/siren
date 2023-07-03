@@ -426,6 +426,8 @@
   "deviceSelect": {
     "label": "Select Device",
     "confirmText": "Are you sure you want to remove <0>{{target}}</0> device?",
-    "confirmCta": "Remove Device"
+    "confirmCta": "Remove Device",
+    "addDevice": "Add Device",
+    "selectDevice": "Select stored device"
   }
 }

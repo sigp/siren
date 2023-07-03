@@ -135,11 +135,14 @@ const ConfigureConnection = () => {
                       <div onClick={toggleDeviceInput}>
                         <Typography
                           color='text-primaryBright'
-                          className='cursor-pointer'
+                          className='cursor-pointer flex items-center'
                           isBold
                           type='text-caption2'
                         >
-                          {isAddDevice ? 'Add Device' : 'Select stored device'}
+                          {isAddDevice && (
+                            <span className='text-caption1 bi bi-plus-circle text-primaryBright mr-2' />
+                          )}{' '}
+                          {t(`deviceSelect.${isAddDevice ? 'addDevice' : 'selectDevice'}`)}
                         </Typography>
                       </div>
                     )}
