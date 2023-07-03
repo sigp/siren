@@ -20,7 +20,7 @@ import { AxiosError } from 'axios'
 import { fetchVersion } from '../api/lighthouse'
 import { DeviceKeyStorage, DeviceListStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
-import { DeviceList, Endpoint } from '../types'
+import { DeviceList, DeviceSettings, Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
@@ -165,6 +165,17 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     displayToast(message, 'error')
   }
 
+  const handleValidationErrors = (values: ConnectionForm) => {
+    const errors = validationErrors(values)
+
+    if (errors.length) {
+      errors.forEach((error) => handleError(error))
+      return true
+    }
+
+    return false
+  }
+
   const toggleDeviceInput = () => {
     if (Object.keys(devices || {}).length) {
       toggleInput((prev) => !prev)
@@ -200,56 +211,68 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
     return errors
   }
-
-  const onSubmit = async () => {
-    const values = getValues()
-    setVersionError(false)
-
-    const errors = validationErrors(values)
-
-    if (errors.length) {
-      errors.forEach((error) => handleError(error))
-      await trigger()
-      return
-    }
-
-    const { isRemember, apiToken, userName, beaconNode, validatorClient, deviceName } = values
+  const formatDevice = (values: ConnectionForm): DeviceSettings => {
+    const { beaconNode, validatorClient, deviceName } = values
     const formattedBnEndpoint = formatEndpoint(beaconNode) as string
     const formattedVcEndpoint = `${formatEndpoint(validatorClient)}/lighthouse`
     const settingName = deviceName || 'localhost'
-    const device = {
+
+    return {
       validatorUrl: formattedVcEndpoint,
       beaconUrl: formattedBnEndpoint,
       deviceName: settingName,
     }
+  }
+  const saveToLocalStorage = (userName: string, device: DeviceSettings) => {
+    const { deviceName } = device
+    storeUserName(userName)
+    storeDeviceKey(deviceName)
+    storeDeviceList({ ...devices, [deviceName]: device })
+  }
+  const fetchAndValidateVersion = async (
+    device: DeviceSettings,
+    apiToken: string,
+  ): Promise<boolean> => {
+    const { validatorUrl, beaconUrl } = device
+    const [vcResult, beaconResult] = await Promise.all([
+      fetchVersion(validatorUrl, apiToken),
+      fetchBeaconVersion(beaconUrl),
+    ])
+    const vcVersion = vcResult.data.data.version
+
+    setValidatorVersion(vcVersion)
+    setBeaconVersion(beaconResult.data.data.version)
+
+    return isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)
+  }
+
+  const onSubmit = async () => {
+    const values = getValues()
+    const { isRemember, apiToken, userName } = values
+    setVersionError(false)
+
+    if (handleValidationErrors(values)) {
+      await trigger()
+      return
+    }
+
+    const device = formatDevice(values)
+
+    const updatedDeviceList = { ...devices, [device.deviceName]: device }
 
     try {
-      const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(formattedVcEndpoint, apiToken),
-        fetchBeaconVersion(formattedBnEndpoint),
-      ])
+      const isValidVersion = await fetchAndValidateVersion(device, apiToken)
 
-      const vcVersion = vcResult.data.data.version
-
-      if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
+      if (!isValidVersion) {
         setVersionError(true)
         return
       }
 
-      setValidatorVersion(vcVersion)
-      setBeaconVersion(beaconResult.data.data.version)
-
       if (isRemember) {
-        storeUserName(userName)
-
-        storeDeviceKey(settingName)
-        storeDeviceList({ ...devices, [settingName]: device })
+        saveToLocalStorage(userName, device)
       }
 
-      setDevices((prev: DeviceList) => ({
-        ...prev,
-        [settingName]: device,
-      }))
+      setDevices(updatedDeviceList)
 
       setActiveDevice({
         ...device,

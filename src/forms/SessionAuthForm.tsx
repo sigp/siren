@@ -70,7 +70,10 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
 
   const onSubmit = () => {
     if (!password || !isValid) {
-      if (!password) viewSetup()
+      if (!password) {
+        viewSetup()
+        return
+      }
       if (!isValid) displayToast(t('error.sessionAuth.invalidPassword'), 'error')
       return
     }
@@ -79,7 +82,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
       updateDevice()
       viewSetup()
     } catch (e) {
-      console.error('failed to update', e)
+      console.error(e)
     }
   }
 

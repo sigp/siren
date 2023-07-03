@@ -51,35 +51,43 @@ const InitScreen = () => {
   const moveToOnboard = () => moveToView(AppView.ONBOARD)
 
   const incrementStep = () => setStep((prev) => prev + 1)
-  const setNodeInfo = async (device: DeviceSettings, token: string) => {
+
+  const fetchAndValidateVersion = async (
+    device: DeviceSettings,
+    apiToken: string,
+  ): Promise<boolean> => {
     const { validatorUrl, beaconUrl } = device
+    const [vcResult, beaconResult] = await Promise.all([
+      fetchVersion(validatorUrl, apiToken),
+      fetchBeaconVersion(beaconUrl),
+    ])
+
+    const vcVersion = vcResult.data.data.version
+
+    setBeaconVersion(beaconResult.data.data.version)
+    setValidatorVersion(vcVersion)
+
+    return isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)
+  }
+
+  const setNodeInfo = async (device: DeviceSettings, token: string) => {
     try {
       incrementStep()
 
-      const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(validatorUrl, token),
-        fetchBeaconVersion(beaconUrl),
-      ])
+      const isValidVersion = await fetchAndValidateVersion(device, token)
 
-      const vcVersion = vcResult.data.data.version
-
-      if (vcResult.status === 200 && beaconResult.status === 200) {
-        if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
-          setOnboardView(OnboardView.CONFIGURE)
-          moveToOnboard()
-          return
-        }
-
-        setBeaconVersion(beaconResult.data.data.version)
-        setValidatorVersion(vcVersion)
-
-        setActiveDevice({
-          ...device,
-          apiToken: token,
-        })
-
-        await checkSyncStatus(beaconUrl)
+      if (!isValidVersion) {
+        setOnboardView(OnboardView.CONFIGURE)
+        moveToOnboard()
+        return
       }
+
+      setActiveDevice({
+        ...device,
+        apiToken: token,
+      })
+
+      await checkSyncStatus(device.beaconUrl)
     } catch (e) {
       moveToOnboard()
     }
