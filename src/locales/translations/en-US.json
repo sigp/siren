@@ -422,5 +422,10 @@
     "successUpdate": "Validator name updated successfully!",
     "nameRequired": "Name is required",
     "nameLimit": "Name cannot exceed 19 characters"
+  },
+  "deviceSelect": {
+    "label": "Select Device",
+    "confirmText": "Are you sure you want to remove {{target}} device?",
+    "confirmCta": "Remove Device"
   }
 }

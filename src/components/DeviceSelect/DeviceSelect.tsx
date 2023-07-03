@@ -11,6 +11,7 @@ import DropDown from '../DropDown/DropDown'
 import useClickOutside from '../../hooks/useClickOutside'
 import addClassString from '../../utilities/addClassString'
 import Button, { ButtonFace } from '../Button/Button'
+import { useTranslation } from 'react-i18next'
 
 export interface DeviceSelectProps {
   devices?: DeviceList
@@ -20,6 +21,7 @@ export interface DeviceSelectProps {
 }
 
 const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) => {
+  const { t } = useTranslation()
   const isBlack = type === 'black'
   const setAppView = useSetRecoilState(appView)
   const [isOpen, toggle] = useState(false)
@@ -35,16 +37,11 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
   const deviceOptions = useMemo(() => {
     return Object.keys(devices ?? {})
       .filter((deviceKey) => deviceKey !== value && !deletedDevices.includes(deviceKey))
-      .map((deviceKey) => {
-        const device = devices?.[deviceKey]
-        return { deviceKey, isLocked: device?.apiToken }
-      })
+      .map((deviceKey) => ({ deviceKey, isLocked: devices?.[deviceKey]?.apiToken }))
   }, [devices, deletedDevices])
 
   const select = (selection: string) => {
-    const newDevice = devices?.[selection]
-
-    if (newDevice) {
+    if (devices?.[selection]) {
       setDeviceKey(selection)
       setAppView(AppView.INIT)
     }
@@ -96,7 +93,7 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
           className='md:text-caption1'
           darkMode='dark:text-dark300'
         >
-          Select Device
+          {t('deviceSelect.label')}
         </Typography>
         <div ref={ref} className={buttonClasses}>
           <button
@@ -148,10 +145,10 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
       >
         <div className='p-6 space-y-8 flex flex-col items-center'>
           <Typography color={uiMode === UiMode.DARK ? 'text-dark300' : 'text-dark900'}>
-            Are you sure you want to remove {targetKey.toUpperCase()} device?
+            {t('deviceSelect.confirmText')}
           </Typography>
           <Button type={ButtonFace.SECONDARY} onClick={deleteDevice}>
-            Remove Device
+            {t('deviceSelect.confirmCta')}
           </Button>
         </div>
       </RodalModal>
