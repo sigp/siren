@@ -48,7 +48,10 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
   }
   const toggleDropdown = () => toggle((prevState) => !prevState)
 
-  const confirmDelete = (deviceKey: string) => setTargetKey(deviceKey)
+  const confirmDelete = (e: MouseEvent<HTMLElement>, deviceKey: string) => {
+    e.stopPropagation()
+    setTargetKey(deviceKey)
+  }
   const closeConfirm = () => setTargetKey('')
 
   const deleteDevice = () => {
@@ -125,10 +128,7 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
                   {deviceKey}
                 </Typography>
                 <i
-                  onClick={(e: MouseEvent<HTMLElement>) => {
-                    e.stopPropagation()
-                    confirmDelete(deviceKey)
-                  }}
+                  onClick={(e) => confirmDelete(e, deviceKey)}
                   className='bi bi-trash-fill hidden group-hover:block'
                 />
                 {isLocked && <i className='bi bi-lock group-hover:hidden' />}
