@@ -1,6 +1,4 @@
-import { RecoilState } from 'recoil'
 import { Protocol } from '../constants/enums'
-import { Method } from 'axios'
 
 export enum StatusColor {
   DARK = 'bg-dark100',
@@ -22,19 +20,6 @@ export type NodeVersion = {
   id: string
 }
 
-export type ApiPollConfig = {
-  time: number
-  isReady: boolean
-  intervalState: RecoilState<NodeJS.Timer | undefined>
-  url?: string
-  apiToken?: string
-  maxErrors?: number
-  onMaxError?: () => void
-  params?: { [key: string]: any }
-  data?: { [key: string]: any }
-  method?: Method
-}
-
 export type Endpoint = {
   protocol: Protocol
   address: string
@@ -52,16 +37,6 @@ export type CurrencyPrefix = {
   formattedPrefix?: string
 }
 
-export type PollingIntervalOptions = {
-  isSkip: boolean
-  onClearInterval?: () => void
-}
-
-export type PollingInterval = {
-  intervalId: NodeJS.Timer | undefined
-  clearPoll: (id: NodeJS.Timer) => void
-}
-
 export type SemanticVersion = {
   major: number
   minor: number
@@ -74,13 +49,10 @@ export enum LogType {
 }
 
 export enum LogLevels {
-  OFF = 'OFF',
   CRIT = 'CRIT',
   ERRO = 'ERRO',
   WARN = 'WARN',
   INFO = 'INFO',
-  DEBG = 'DEBG',
-  TRCE = 'TRCE',
 }
 
 export type SSELog = {
@@ -102,6 +74,24 @@ export type LogCounts = {
 export interface PollingOptions {
   time?: number
   isReady?: boolean
+}
+
+export interface DeviceList {
+  [key: string]: DeviceSettings
+}
+
+export interface DeviceSettings {
+  validatorUrl: string
+  beaconUrl: string
+  apiToken?: string
+  deviceName: string
+}
+
+export interface ActiveDevice {
+  validatorUrl: string
+  beaconUrl: string
+  apiToken: string
+  deviceName: string
 }
 
 export interface ValAliases {

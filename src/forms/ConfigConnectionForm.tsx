@@ -6,27 +6,27 @@ import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
 import { useSetRecoilState } from 'recoil'
 import {
-  apiToken,
-  beaconNodeEndpoint,
+  activeDevice,
   beaconVersionData,
   dashView,
+  deviceSettings,
   onBoardView,
   userName,
-  validatorClientEndpoint,
   validatorVersionData,
 } from '../recoil/atoms'
 import { configValidation } from '../validation/configValidation'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { AxiosError } from 'axios'
 import { fetchVersion } from '../api/lighthouse'
-import { EndpointStorage } from '../types/storage'
+import { DeviceKeyStorage, DeviceListStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
-import { Endpoint } from '../types'
+import { DeviceList, DeviceSettings, Endpoint } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
 import displayToast from '../utilities/displayToast'
 import formatEndpoint from '../utilities/formatEndpoint'
+import parseEndpointString from '../utilities/parseEndpointString'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 
@@ -50,6 +50,11 @@ export interface RenderProps {
   setType: (type: ConfigType) => void
   isLoading: boolean
   onSubmit: () => void
+  devices?: DeviceList
+  hasMultiDevice: boolean
+  isAddDevice: boolean
+  toggleDeviceInput: () => void
+  storedDeviceName?: string
 }
 
 export interface ConfigConnectionFormProps {
@@ -60,25 +65,28 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const { t } = useTranslation()
   const [isLoading] = useState<boolean>(false)
   const [formType, setType] = useState<ConfigType>(ConfigType.BASIC)
+  const setDevices = useSetRecoilState(deviceSettings)
   const setView = useSetRecoilState(onBoardView)
   const setDashView = useSetRecoilState(dashView)
-  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
-  const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  const setActiveDevice = useSetRecoilState(activeDevice)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
-  const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const [isInitialApiCheck, setIsInitialApiCheck] = useState(true)
   const [isVersionError, setVersionError] = useState(false)
+  const [isAddDevice, toggleInput] = useState(false)
+  const [devices, storeDeviceList] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
+  const [deviceKey, storeDeviceKey] = useLocalStorage<DeviceKeyStorage>('deviceKey', undefined)
 
-  const [storedBnNode, storeBeaconNode] = useLocalStorage<EndpointStorage>('beaconNode', undefined)
-  const [storedVc, storeValidatorClient] = useLocalStorage<EndpointStorage>(
-    'validatorClient',
-    undefined,
-  )
+  const hasMultiDevice = Object.keys(devices || {}).length > 1
+
+  const storedDevice = devices?.[deviceKey || '']
+  const storedBnNode = parseEndpointString(storedDevice?.beaconUrl)
+  const storedVc = parseEndpointString(storedDevice?.validatorUrl)
+
   const [storedName, storeUserName] = useLocalStorage<string>('username', '')
 
-  const hasCache = Boolean(storedBnNode) && Boolean(storedVc) && Boolean(storedName)
+  const hasCache = Boolean(storedDevice) && Boolean(storedName)
 
   const endPointDefault = {
     protocol: Protocol.HTTP,
@@ -96,7 +104,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
       beaconNode: storedBnNode || endPointDefault,
       validatorClient: storedVc || vcDefaultEndpoint,
       apiToken: '',
-      deviceName: '',
+      deviceName: storedDevice?.deviceName || '',
       userName: storedName,
       isRemember: hasCache,
     },
@@ -110,6 +118,12 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   useEffect(() => {
     setIsInitialApiCheck(false)
   }, [beaconNode, validatorClient])
+
+  useEffect(() => {
+    if (devices) {
+      setDevices(devices)
+    }
+  }, [devices])
 
   const isValidBeaconNode = useApiValidation(
     'eth/v1/node/version',
@@ -151,6 +165,23 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     displayToast(message, 'error')
   }
 
+  const handleValidationErrors = (values: ConnectionForm) => {
+    const errors = validationErrors(values)
+
+    if (errors.length) {
+      errors.forEach((error) => handleError(error))
+      return true
+    }
+
+    return false
+  }
+
+  const toggleDeviceInput = () => {
+    if (Object.keys(devices || {}).length) {
+      toggleInput((prev) => !prev)
+    }
+  }
+
   const validationErrors = (values: ConnectionForm) => {
     const { apiToken, userName, beaconNode, validatorClient } = values
     const errors = []
@@ -180,49 +211,75 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
     return errors
   }
+  const formatDevice = (values: ConnectionForm): DeviceSettings => {
+    const { beaconNode, validatorClient, deviceName } = values
+    const formattedBnEndpoint = formatEndpoint(beaconNode) as string
+    const formattedVcEndpoint = `${formatEndpoint(validatorClient)}/lighthouse`
+    const settingName = deviceName || 'localhost'
+
+    return {
+      validatorUrl: formattedVcEndpoint,
+      beaconUrl: formattedBnEndpoint,
+      deviceName: settingName,
+    }
+  }
+  const saveToLocalStorage = (userName: string, device: DeviceSettings) => {
+    const { deviceName } = device
+    storeUserName(userName)
+    storeDeviceKey(deviceName)
+    storeDeviceList({ ...devices, [deviceName]: device })
+  }
+  const fetchAndValidateVersion = async (
+    device: DeviceSettings,
+    apiToken: string,
+  ): Promise<boolean> => {
+    const { validatorUrl, beaconUrl } = device
+    const [vcResult, beaconResult] = await Promise.all([
+      fetchVersion(validatorUrl, apiToken),
+      fetchBeaconVersion(beaconUrl),
+    ])
+    const vcVersion = vcResult.data.data.version
+
+    setValidatorVersion(vcVersion)
+    setBeaconVersion(beaconResult.data.data.version)
+
+    return isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)
+  }
 
   const onSubmit = async () => {
     const values = getValues()
+    const { isRemember, apiToken, userName } = values
     setVersionError(false)
 
-    const errors = validationErrors(values)
-
-    const { isRemember, apiToken, userName, beaconNode, validatorClient } = values
-    const formattedBnEndpoint = formatEndpoint(beaconNode) as string
-    const formattedVcEndpoint = formatEndpoint(validatorClient) as string
-
-    if (errors.length) {
-      errors.forEach((error) => handleError(error))
+    if (handleValidationErrors(values)) {
       await trigger()
       return
     }
 
+    const device = formatDevice(values)
+
+    const updatedDeviceList = { ...devices, [device.deviceName]: device }
+
     try {
-      const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(formattedVcEndpoint, apiToken),
-        fetchBeaconVersion(formattedBnEndpoint),
-      ])
+      const isValidVersion = await fetchAndValidateVersion(device, apiToken)
 
-      const vcVersion = vcResult.data.data.version
-
-      if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
+      if (!isValidVersion) {
         setVersionError(true)
         return
       }
 
-      setValidatorVersion(vcVersion)
-      setBeaconVersion(beaconResult.data.data.version)
-
       if (isRemember) {
-        storeBeaconNode(beaconNode)
-        storeValidatorClient(validatorClient)
-        storeUserName(userName)
+        saveToLocalStorage(userName, device)
       }
 
+      setDevices(updatedDeviceList)
+
+      setActiveDevice({
+        ...device,
+        apiToken,
+      })
+
       setUserName(userName)
-      setApiToken(apiToken)
-      setBeaconNode(beaconNode)
-      setValidatorClient(validatorClient)
       setDashView(ContentView.MAIN)
       setView(OnboardView.SESSION)
     } catch (e) {
@@ -254,6 +311,11 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
           isValidValidatorClient,
           isVersionError,
           formType,
+          devices,
+          isAddDevice,
+          toggleDeviceInput,
+          hasMultiDevice,
+          storedDeviceName: storedDevice?.deviceName,
         })}
     </form>
   )

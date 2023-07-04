@@ -1,17 +1,15 @@
 import Typography from '../components/Typography/Typography'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { Endpoint, ValAliases } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import {
   appView,
   userName,
   onBoardView,
-  beaconNodeEndpoint,
   beaconVersionData,
-  apiToken,
   validatorVersionData,
-  validatorClientEndpoint,
+  activeDevice,
+  deviceSettings,
   validatorAliases,
 } from '../recoil/atoms'
 import { AppView, OnboardView, UiMode } from '../constants/enums'
@@ -19,12 +17,12 @@ import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
 import { fetchVersion } from '../api/lighthouse'
 import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon'
 import { useTranslation } from 'react-i18next'
-import { UsernameStorage } from '../types/storage'
+import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../types/storage'
 import AppDescription from '../components/AppDescription/AppDescription'
 import SessionAuthModal from '../components/SessionAuthModal/SessionAuthModal'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
-import formatEndpoint from '../utilities/formatEndpoint'
+import { DeviceSettings, ValAliases } from '../types'
 
 const InitScreen = () => {
   const { t } = useTranslation()
@@ -33,19 +31,18 @@ const InitScreen = () => {
   const setView = useSetRecoilState(appView)
   const [isAuthModal, toggleAuthModal] = useState(false)
   const setOnboardView = useSetRecoilState(onBoardView)
-  const setBeaconNode = useSetRecoilState(beaconNodeEndpoint)
-  const setApiToken = useSetRecoilState(apiToken)
   const setUserName = useSetRecoilState(userName)
   const setBeaconVersion = useSetRecoilState(beaconVersionData)
   const setValidatorVersion = useSetRecoilState(validatorVersionData)
-  const setValidatorClient = useSetRecoilState(validatorClientEndpoint)
+  const setActiveDevice = useSetRecoilState(activeDevice)
+  const setDevices = useSetRecoilState(deviceSettings)
+  const [deviceKey] = useLocalStorage<DeviceKeyStorage>('deviceKey', undefined)
+  const [devices] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
   const setAlias = useSetRecoilState(validatorAliases)
-  const [validatorClient] = useLocalStorage<Endpoint | undefined>('validatorClient', undefined)
-  const [beaconNode] = useLocalStorage<Endpoint | undefined>('beaconNode', undefined)
-  const [encryptedToken] = useLocalStorage<string | undefined>('api-token', undefined)
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
 
+  const storedDevice = devices?.[deviceKey || '']
   const moveToView = (view: AppView) => {
     setTimeout(() => {
       setView(view)
@@ -54,34 +51,43 @@ const InitScreen = () => {
   const moveToOnboard = () => moveToView(AppView.ONBOARD)
 
   const incrementStep = () => setStep((prev) => prev + 1)
-  const setNodeInfo = async (validatorClient: Endpoint, beaconNode: Endpoint, token: string) => {
-    const formattedVcEndpoint = formatEndpoint(validatorClient) as string
-    const formattedBnEndpoint = formatEndpoint(beaconNode) as string
+
+  const fetchAndValidateVersion = async (
+    device: DeviceSettings,
+    apiToken: string,
+  ): Promise<boolean> => {
+    const { validatorUrl, beaconUrl } = device
+    const [vcResult, beaconResult] = await Promise.all([
+      fetchVersion(validatorUrl, apiToken),
+      fetchBeaconVersion(beaconUrl),
+    ])
+
+    const vcVersion = vcResult.data.data.version
+
+    setBeaconVersion(beaconResult.data.data.version)
+    setValidatorVersion(vcVersion)
+
+    return isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)
+  }
+
+  const setNodeInfo = async (device: DeviceSettings, token: string) => {
     try {
       incrementStep()
 
-      const [vcResult, beaconResult] = await Promise.all([
-        fetchVersion(formattedVcEndpoint, token),
-        fetchBeaconVersion(formattedBnEndpoint),
-      ])
+      const isValidVersion = await fetchAndValidateVersion(device, token)
 
-      const vcVersion = vcResult.data.data.version
-
-      if (vcResult.status === 200 && beaconResult.status === 200) {
-        if (!isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)) {
-          setOnboardView(OnboardView.CONFIGURE)
-          moveToOnboard()
-          return
-        }
-
-        setBeaconVersion(beaconResult.data.data.version)
-        setValidatorVersion(vcVersion)
-        setBeaconNode(beaconNode)
-        setValidatorClient(validatorClient)
-        setApiToken(token)
-
-        await checkSyncStatus(formattedBnEndpoint)
+      if (!isValidVersion) {
+        setOnboardView(OnboardView.CONFIGURE)
+        moveToOnboard()
+        return
       }
+
+      setActiveDevice({
+        ...device,
+        apiToken: token,
+      })
+
+      await checkSyncStatus(device.beaconUrl)
     } catch (e) {
       moveToOnboard()
     }
@@ -105,31 +111,43 @@ const InitScreen = () => {
   }
   const finishInit = useCallback(
     (token?: string) => {
-      if (validatorClient && beaconNode && token) {
+      if (storedDevice && token) {
         toggleAuthModal(false)
-        void setNodeInfo(validatorClient, beaconNode, token)
+        void setNodeInfo(storedDevice, token)
         setReady(true)
       }
     },
-    [validatorClient, beaconNode, encryptedToken],
+    [storedDevice],
   )
+
+  const closeModal = () => {
+    toggleAuthModal(false)
+    moveToView(AppView.ONBOARD)
+  }
 
   useEffect(() => {
     if (isReady) return
 
     setAlias(aliases)
 
-    if (!validatorClient || !beaconNode || !encryptedToken || !username) {
+    if (!storedDevice?.apiToken || !username || !devices) {
       moveToView(AppView.ONBOARD)
       return
     }
     setUserName(username)
+    setDevices(devices)
     toggleAuthModal(true)
-  }, [validatorClient, beaconNode, encryptedToken, aliases])
+  }, [aliases, storedDevice, devices, username, isReady])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
-      <SessionAuthModal mode={UiMode.LIGHT} onSuccess={finishInit} isOpen={isAuthModal} />
+      <SessionAuthModal
+        mode={UiMode.LIGHT}
+        onClose={closeModal}
+        onSuccess={finishInit}
+        encryptedToken={storedDevice?.apiToken}
+        isOpen={isAuthModal}
+      />
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />

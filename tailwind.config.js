@@ -111,6 +111,10 @@ module.exports = {
         40: '40%',
         45: '45%',
       },
+      zIndex: {
+        top98: 998,
+        top: 999,
+      },
       keyframes: {
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },

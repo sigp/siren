@@ -11,6 +11,7 @@ import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHou
 import { useTranslation } from 'react-i18next'
 import Tooltip from '../../../components/ToolTip/Tooltip'
 import { REQUIRED_VALIDATOR_VERSION } from '../../../constants/constants'
+import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
 
 const ConfigureConnection = () => {
   const { t } = useTranslation()
@@ -35,6 +36,11 @@ const ConfigureConnection = () => {
             isValidValidatorClient,
             isVersionError,
             setType,
+            devices,
+            isAddDevice,
+            toggleDeviceInput,
+            hasMultiDevice,
+            storedDeviceName,
             ...props
           }) => (
             <>
@@ -104,29 +110,58 @@ const ConfigureConnection = () => {
                   )}
                 />
                 <div className='flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
-                  <Controller
-                    name='deviceName'
-                    control={control}
-                    render={({ field: { ref: _ref, ...props } }) => (
-                      <Input
-                        label={t('configScreen.deviceName')}
-                        placeholder='Local Host'
-                        {...props}
+                  <div className='flex-1 space-y-2 mr-6'>
+                    {isAddDevice && hasMultiDevice ? (
+                      <DeviceSelect
+                        type='black'
+                        uiMode={UiMode.DARK}
+                        devices={devices}
+                        value={storedDeviceName}
+                      />
+                    ) : (
+                      <Controller
+                        name='deviceName'
+                        control={control}
+                        render={({ field: { ref: _ref, ...props } }) => (
+                          <Input
+                            label={t('configScreen.deviceName')}
+                            placeholder='Local Host'
+                            {...props}
+                          />
+                        )}
                       />
                     )}
-                  />
-                  <Controller
-                    name='userName'
-                    control={control}
-                    render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
-                      <Input
-                        label={t('configScreen.userNameLabel')}
-                        placeholder={t('configScreen.userNamePlaceholder')}
-                        error={error?.message}
-                        {...props}
-                      />
+                    {hasMultiDevice && (
+                      <div onClick={toggleDeviceInput}>
+                        <Typography
+                          color='text-primaryBright'
+                          className='cursor-pointer flex items-center'
+                          isBold
+                          type='text-caption2'
+                        >
+                          {isAddDevice && (
+                            <span className='text-caption1 bi bi-plus-circle text-primaryBright mr-2' />
+                          )}{' '}
+                          {t(`deviceSelect.${isAddDevice ? 'addDevice' : 'selectDevice'}`)}
+                        </Typography>
+                      </div>
                     )}
-                  />
+                  </div>
+                  <div>
+                    <Controller
+                      name='userName'
+                      control={control}
+                      render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                        <Input
+                          className='w-auto'
+                          label={t('configScreen.userNameLabel')}
+                          placeholder={t('configScreen.userNamePlaceholder')}
+                          error={error?.message}
+                          {...props}
+                        />
+                      )}
+                    />
+                  </div>
                 </div>
                 <div className='w-full flex justify-between'>
                   <Tooltip

@@ -1,13 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ValidatorGraffitiResults, ValidatorInfo } from '../types/validator'
 import { useRecoilValue } from 'recoil'
-import { selectValidatorUrl } from '../recoil/selectors/selectValidatorUrl'
-import { apiToken } from '../recoil/atoms'
 import { fetchValidatorGraffiti } from '../api/lighthouse'
+import { activeDevice } from '../recoil/atoms'
 
 const useValidatorGraffiti = (validator?: ValidatorInfo) => {
-  const validatorUrl = useRecoilValue(selectValidatorUrl)
-  const token = useRecoilValue(apiToken)
+  const { apiToken, validatorUrl } = useRecoilValue(activeDevice)
   const [results, setResults] = useState<ValidatorGraffitiResults | undefined>()
 
   const fetchGraffiti = async (url: string, token: string) => {
@@ -23,10 +21,10 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
   }
 
   useEffect(() => {
-    if (token) {
-      void fetchGraffiti(validatorUrl, token)
+    if (apiToken && validatorUrl) {
+      void fetchGraffiti(validatorUrl, apiToken)
     }
-  }, [token, validatorUrl])
+  }, [apiToken, validatorUrl])
 
   const validatorGraffiti = useMemo(() => {
     if (!validator || !results) return

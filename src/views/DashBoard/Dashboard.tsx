@@ -1,17 +1,9 @@
 import SideBar from '../../components/SideBar/SideBar'
 import FootBar from '../../components/FootBar/FootBar'
-import React, { useEffect, Suspense } from 'react'
+import React, { useEffect } from 'react'
 import MainContent from './Content/MainContent'
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import {
-  activeCurrency,
-  beaconNetworkError,
-  dashView,
-  processingBlsValidators,
-  sessionAuthErrorCount,
-  uiMode,
-  validatorNetworkError,
-} from '../../recoil/atoms'
+import { activeCurrency, dashView, processingBlsValidators, uiMode } from '../../recoil/atoms'
 import { ContentView, Storage, UiMode } from '../../constants/enums'
 import Logs from './Content/Logs'
 import Settings from './Content/Settings'
@@ -20,30 +12,20 @@ import Grafana from './Content/Grafana'
 import TopBar from '../../components/TopBar/TopBar'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { ActiveCurrencyStorage, UiThemeStorage } from '../../types/storage'
-import Spinner from '../../components/Spinner/Spinner'
 import NetworkErrorModal from '../../components/NetworkErrorModal/NetworkErrorModal'
 import MainPollingWrapper from '../../wrappers/MainPollingWrapper'
 import ValidatorPollingWrapper from '../../wrappers/ValidatorPollingWrapper'
-
-const DashboardFallback = () => (
-  <div className='h-full w-full flex items-center justify-center'>
-    <Spinner />
-  </div>
-)
+import useAtomCleanup from '../../hooks/useAtomCleanup'
 
 const Dashboard = () => {
   const mode = useRecoilValue(uiMode)
   const content = useRecoilValue(dashView)
-  const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
-  const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
-  const setSessionAuthErrorCount = useSetRecoilState(sessionAuthErrorCount)
+  const { resetDashboardAtoms } = useAtomCleanup()
   const setIsProcess = useSetRecoilState(processingBlsValidators)
 
   useEffect(() => {
     return () => {
-      isBeaconNetworkError(false)
-      isValidatorNetworkError(false)
-      setSessionAuthErrorCount(0)
+      resetDashboardAtoms()
     }
   }, [])
 
@@ -106,9 +88,7 @@ const Dashboard = () => {
       <NetworkErrorModal />
       <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar />
-        <div className='flex-1 w-full overflow-scroll'>
-          <Suspense fallback={<DashboardFallback />}>{renderContent()}</Suspense>
-        </div>
+        <div className='flex-1 w-full overflow-scroll'>{renderContent()}</div>
         <FootBar />
       </div>
     </div>

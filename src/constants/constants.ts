@@ -6,7 +6,7 @@ import { ReactComponent as LogsLogo } from '../assets/images/logs.svg'
 import { ReactComponent as GrafanaLogo } from '../assets/images/grafana.svg'
 import { ReactComponent as SettingsLogo } from '../assets/images/settings.svg'
 import { ContentView } from './enums'
-import { EarningOption, ValidatorStatus } from '../types/validator'
+import { EarningOption } from '../types/validator'
 import { ClientProvider, LogType } from '../types'
 
 export type ViewType = {
@@ -47,69 +47,6 @@ export const VIEW = {
 
 export const PRIMARY_VIEWS = [VIEW.DASH, VIEW.VALIDATORS, VIEW.LOGS, VIEW.GRAFANA] as ViewType[]
 export const SECONDARY_VIEWS = [VIEW.SETTINGS] as ViewType[]
-
-export const FAKE_VALIDATORS = [
-  {
-    index: '1',
-    pubKey: '0xb9d94c35',
-    balance: 32.0963,
-    slashed: false,
-    rewards: 0.0963,
-    processed: 1,
-    missed: 0,
-    attested: 768,
-    aggregated: 560,
-    status: 'unknown' as ValidatorStatus,
-  },
-  {
-    index: '2',
-    pubKey: '0xb9da2c35',
-    balance: 2.0963,
-    rewards: 1.0963,
-    slashed: false,
-    processed: 2,
-    missed: 1,
-    attested: 450,
-    aggregated: 160,
-    status: 'queue' as ValidatorStatus,
-  },
-  {
-    index: '3',
-    pubKey: '0xb9da2c35',
-    balance: 25.0963,
-    rewards: 1.0963,
-    slashed: false,
-    processed: 2,
-    missed: 1,
-    attested: 450,
-    aggregated: 160,
-    status: 'active-slash' as ValidatorStatus,
-  },
-  {
-    index: '4',
-    pubKey: '0xb9da2c35',
-    balance: 22.0963,
-    rewards: 1.0963,
-    slashed: false,
-    processed: 2,
-    missed: 1,
-    attested: 450,
-    aggregated: 160,
-    status: 'active' as ValidatorStatus,
-  },
-  {
-    index: '5',
-    pubKey: '0xb9da2c35',
-    balance: 12.0963,
-    rewards: 1.0963,
-    slashed: false,
-    processed: 2,
-    missed: 1,
-    attested: 450,
-    aggregated: 160,
-    status: 'unknown' as ValidatorStatus,
-  },
-]
 
 export const BALANCE_COLORS = [
   'rgba(94, 65, 213, 1)',
@@ -231,8 +168,6 @@ export const REQUIRED_VALIDATOR_VERSION = {
 }
 
 export const MAX_PERSISTED_LOGS = 1000
-
-export const DEFAULT_MAX_NETWORK_ERROR = 3
 export const MAX_SESSION_UNLOCK_ATTEMPTS = 3
 
 export const MOCK_BLS_JSON = `[

@@ -19,6 +19,7 @@ export interface SelectDropDownProps {
   placeholder?: string
   value?: OptionType
   color?: TypographyColor
+  excludeSelection?: boolean
   isFilter?: boolean
   onSelect: (selection: OptionType) => void
 }
@@ -31,11 +32,25 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   className,
   label,
   isFilter,
+  excludeSelection,
   placeholder,
 }) => {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
   const [isOpen, toggle] = useState(false)
+  const activeSelection = options.find((option) => (option.value || option.title) === value)
+
+  const filteredOptions = useMemo(() => {
+    const formattedQuery = query.toLowerCase()
+    return options.filter((option) => {
+      const { value, title } = option
+      const isValue = value?.toLocaleString().toLowerCase().includes(formattedQuery)
+      const isTitle = title.toLowerCase().includes(formattedQuery)
+      const isExcluded = value === activeSelection?.value
+      return !(isExcluded && excludeSelection) && (isTitle || isValue || !query)
+    })
+  }, [query, options, excludeSelection, activeSelection])
+
   const classes = addClassString('w-36', [className])
 
   const toggleDropdown = () => toggle((prevState) => !prevState)
@@ -52,17 +67,6 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
     toggle(false)
   })
 
-  const activeSelection = options.find((option) => (option.value || option.title) === value)
-
-  const filteredOptions = useMemo(() => {
-    return options.filter((option) => {
-      const formattedQuery = query.toLowerCase()
-      const isValue = option?.value?.toLocaleString().toLowerCase().includes(formattedQuery)
-      const isTitle = option.title.toLowerCase().includes(formattedQuery)
-      return query ? isTitle || isValue : true
-    })
-  }, [query, options])
-
   return (
     <div className={classes}>
       {label && (
@@ -74,6 +78,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
         <button
           onClick={toggleDropdown}
           id='dropdownDefault'
+          disabled={!filteredOptions.length}
           data-dropdown-toggle='dropdown'
           className='w-full space-x-2 focus:outline-none text-center flex items-center justify-between'
           type='button'
@@ -99,11 +104,11 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
             {filteredOptions.map(({ title, value }, index) => (
               <li
                 onClick={() => makeSelection(value !== undefined ? value : title)}
-                className='block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white'
+                className='block cursor-pointer flex justify-between py-2 px-4 hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white'
                 key={index}
                 data-testid='option'
               >
-                <Typography className='capitalize'>{title}</Typography>
+                <Typography isCapitalize>{title}</Typography>
               </li>
             ))}
           </>

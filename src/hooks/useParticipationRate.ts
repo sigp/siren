@@ -1,15 +1,14 @@
 import { useRecoilValue } from 'recoil'
-import { beaconSyncInfo } from '../recoil/atoms'
+import { beaconSyncInfo, activeDevice } from '../recoil/atoms'
 import { slotsInEpoc } from '../constants/constants'
 import { useEffect, useState } from 'react'
 import { fetchValidatorInclusion } from '../api/beacon'
-import { selectBeaconUrl } from '../recoil/selectors/selectBeaconUrl'
 import { BeaconValidatorInclusionResults } from '../types/beacon'
 import { StatusColor } from '../types'
 
 const useParticipationRate = () => {
   const { head_slot } = useRecoilValue(beaconSyncInfo) || {}
-  const url = useRecoilValue(selectBeaconUrl)
+  const { beaconUrl } = useRecoilValue(activeDevice)
   const [isInsufficientData, setError] = useState(false)
   const closestEpochSlot = head_slot ? Math.floor(head_slot / slotsInEpoc) - 1 : undefined
   const [vcInclusionData, setData] = useState<BeaconValidatorInclusionResults | undefined>()
@@ -30,9 +29,9 @@ const useParticipationRate = () => {
 
   useEffect(() => {
     if (closestEpochSlot !== undefined) {
-      void fetchInclusion(url, closestEpochSlot)
+      void fetchInclusion(beaconUrl, closestEpochSlot)
     }
-  }, [closestEpochSlot, url])
+  }, [closestEpochSlot, beaconUrl])
 
   const { previous_epoch_target_attesting_gwei, previous_epoch_active_gwei } = vcInclusionData || {}
 

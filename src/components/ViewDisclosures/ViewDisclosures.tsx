@@ -4,6 +4,10 @@ import { FC, useState } from 'react'
 import Button, { ButtonFace } from '../Button/Button'
 import SessionAuthModal from '../SessionAuthModal/SessionAuthModal'
 import useUiMode from '../../hooks/useUiMode'
+import { useRecoilValue } from 'recoil'
+import { activeDevice } from '../../recoil/atoms'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { DeviceListStorage } from '../../types/storage'
 
 export interface ViewDisclosuresProps {
   onClick?: () => void
@@ -26,7 +30,10 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
 }) => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
+  const { apiToken, deviceName } = useRecoilValue(activeDevice)
   const [isSessionModal, toggleAuthModal] = useState(false)
+  const [devices] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
+  const encryptedToken = devices?.[deviceName]?.apiToken
 
   const closeAuthModal = () => toggleAuthModal(false)
   const openAuthModal = () => toggleAuthModal(true)
@@ -46,6 +53,8 @@ const ViewDisclosures: FC<ViewDisclosuresProps> = ({
           onSuccess={onSuccessAuth}
           isOpen={isSessionModal}
           onClose={closeAuthModal}
+          defaultToken={apiToken}
+          encryptedToken={encryptedToken}
         >
           <Button
             isLoading={isLoading}

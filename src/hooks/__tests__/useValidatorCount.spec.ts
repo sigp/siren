@@ -10,6 +10,11 @@ jest.mock('../../api/lighthouse', () => ({
   fetchValidatorCount: jest.fn(),
 }))
 
+jest.mock('recoil', () => ({
+  useRecoilValue: jest.fn(),
+  atom: jest.fn(),
+}))
+
 const mockFetchResult = {
   active_exiting: 10,
   active_ongoing: 0,
@@ -26,10 +31,12 @@ const mockFetchValidatorCount = fetchValidatorCount as jest.MockedFn<typeof fetc
 
 describe('useValidatorCount', () => {
   it('should return default count info', () => {
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     const { result } = renderHook(() => useValidatorCount())
     expect(result.current).toStrictEqual(DEFAULT_VALIDATOR_COUNT)
   })
   it('should call fetchCount when beacon node available', async () => {
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     mockedRecoilValue.mockReturnValue({
       protocol: Protocol.HTTP,
       address: 'mockAddress',

@@ -4,11 +4,12 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { sessionAuthValidation } from '../validation/sessionAuthValidation'
 import { OnboardView } from '../constants/enums'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { apiToken, onBoardView } from '../recoil/atoms'
+import { onBoardView, activeDevice, deviceSettings } from '../recoil/atoms'
 import useLocalStorage from '../hooks/useLocalStorage'
 import CryptoJS from 'crypto-js'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../utilities/displayToast'
+import { DeviceListStorage } from '../types/storage'
 
 export interface SessionAuthForm {
   password: string
@@ -29,8 +30,9 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
   const { t } = useTranslation()
   const setView = useSetRecoilState(onBoardView)
   const viewSetup = () => setView(OnboardView.SETUP)
-  const token = useRecoilValue(apiToken)
-  const [, storeApiToken] = useLocalStorage<string>('api-token', '')
+  const device = useRecoilValue(activeDevice)
+  const setDevices = useSetRecoilState(deviceSettings)
+  const [devices, storeDeviceList] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
 
   const {
     control,
@@ -47,18 +49,41 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
 
   const password = watch('password')
 
-  const onSubmit = () => {
-    if (!password) {
-      viewSetup()
-      return
+  const updateDevice = () => {
+    const { deviceName, apiToken } = device
+
+    const encryptedToken = CryptoJS.AES.encrypt(apiToken, password).toString()
+
+    const formattedDevice = {
+      ...device,
+      apiToken: encryptedToken,
     }
-    if (!isValid && password) {
-      displayToast(t('error.sessionAuth.invalidPassword'), 'error')
+
+    const updatedDeviceList = {
+      ...devices,
+      [deviceName]: formattedDevice,
+    }
+
+    setDevices(updatedDeviceList)
+    storeDeviceList(updatedDeviceList)
+  }
+
+  const onSubmit = () => {
+    if (!password || !isValid) {
+      if (!password) {
+        viewSetup()
+        return
+      }
+      if (!isValid) displayToast(t('error.sessionAuth.invalidPassword'), 'error')
       return
     }
 
-    storeApiToken(CryptoJS.AES.encrypt(token, password).toString())
-    viewSetup()
+    try {
+      updateDevice()
+      viewSetup()
+    } catch (e) {
+      console.error(e)
+    }
   }
 
   return (

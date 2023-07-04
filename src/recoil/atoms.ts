@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
-import { Endpoint, ValAliases } from '../types'
+import { ActiveDevice, DeviceList, ValAliases } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
 import { BeaconValidatorMetricResults } from '../types/beacon'
@@ -23,21 +23,6 @@ export const dashView = atom<ContentView>({
 export const onBoardView = atom<OnboardView>({
   key: 'OnboardView',
   default: OnboardView.CONFIGURE,
-})
-
-export const beaconNodeEndpoint = atom<Endpoint>({
-  key: 'BeaconNode',
-  default: undefined,
-})
-
-export const validatorClientEndpoint = atom<Endpoint>({
-  key: 'ValidatorClient',
-  default: undefined,
-})
-
-export const apiToken = atom<string>({
-  key: 'ApiToken',
-  default: undefined,
 })
 
 export const setupStep = atom<SetupSteps | undefined>({
@@ -147,5 +132,15 @@ export const processingBlsValidators = atom<(string | number)[]>({
 
 export const validatorAliases = atom<ValAliases>({
   key: 'validatorAliases',
+  default: undefined,
+})
+
+export const deviceSettings = atom<DeviceList>({
+  key: 'deviceSettings',
+  default: undefined,
+})
+
+export const activeDevice = atom<ActiveDevice>({
+  key: 'activeDevice',
   default: undefined,
 })

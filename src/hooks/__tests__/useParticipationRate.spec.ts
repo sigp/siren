@@ -44,6 +44,8 @@ describe('useParticipationRate hook', () => {
     expect(mockedFetchValidatorInclusion).toBeCalled()
   })
   it('should return default values', () => {
+    mockedRecoilValue.mockReturnValueOnce(undefined)
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     const { result } = renderHook(() => useParticipationRate())
     expect(result.current).toEqual({
       isInsufficientData: false,
@@ -52,6 +54,8 @@ describe('useParticipationRate hook', () => {
     })
   })
   it('should return participation rate', () => {
+    mockedRecoilValue.mockReturnValueOnce(undefined)
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
     jest.spyOn(React, 'useState').mockReturnValueOnce([mockParticipationResult, jest.fn()])
 
@@ -63,6 +67,8 @@ describe('useParticipationRate hook', () => {
     })
   })
   it('should return error status', () => {
+    mockedRecoilValue.mockReturnValueOnce(undefined)
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
     jest
       .spyOn(React, 'useState')
@@ -79,6 +85,8 @@ describe('useParticipationRate hook', () => {
     })
   })
   it('should return success status', () => {
+    mockedRecoilValue.mockReturnValueOnce(undefined)
+    mockedRecoilValue.mockReturnValueOnce('mocked-url')
     jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
     jest
       .spyOn(React, 'useState')

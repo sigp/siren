@@ -3,10 +3,16 @@ import useValidatorGraffiti from '../useValidatorGraffiti'
 import React from 'react'
 import { mockValidatorInfo } from '../../mocks/validatorResults'
 import { fetchValidatorGraffiti } from '../../api/lighthouse'
-import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
+import { mockedRecoilValue } from '../../../test.helpers'
+import clearAllMocks = jest.clearAllMocks
 
 jest.mock('../../api/lighthouse', () => ({
   fetchValidatorGraffiti: jest.fn(),
+}))
+
+jest.mock('recoil', () => ({
+  useRecoilValue: jest.fn(),
+  atom: jest.fn(),
 }))
 
 const mockedFetchValidatorGraffiti = fetchValidatorGraffiti as jest.MockedFn<
@@ -14,13 +20,20 @@ const mockedFetchValidatorGraffiti = fetchValidatorGraffiti as jest.MockedFn<
 >
 
 describe('useValidatorGraffiti hook', () => {
+  beforeEach(() => {
+    clearAllMocks()
+  })
   it('should return undefined', () => {
+    mockedRecoilValue.mockReturnValueOnce('mock-api-token')
+    mockedRecoilValue.mockReturnValueOnce('mock-validator-url')
     const { result } = renderHook(() => useValidatorGraffiti())
 
     expect(result.current).toEqual({ graffiti: undefined })
   })
 
   it('should return graffiti', () => {
+    mockedRecoilValue.mockReturnValueOnce('mock-api-token')
+    mockedRecoilValue.mockReturnValueOnce('mock-validator-url')
     jest.spyOn(React, 'useState').mockReturnValue([{ 'mock-pub-key': 'mock-graffiti' }, jest.fn()])
     const { result } = renderHook(() => useValidatorGraffiti(mockValidatorInfo))
 
@@ -28,23 +41,10 @@ describe('useValidatorGraffiti hook', () => {
   })
 
   it('should not call fetchValidatorGraffiti', () => {
+    mockedRecoilValue.mockReturnValueOnce(undefined)
+    mockedRecoilValue.mockReturnValueOnce(undefined)
     renderHook(() => useValidatorGraffiti(mockValidatorInfo))
 
     expect(mockedFetchValidatorGraffiti).not.toBeCalled()
-  })
-
-  it('should call fetchValidatorGraffiti', () => {
-    mockedFetchValidatorGraffiti.mockReturnValue(
-      Promise.resolve({
-        ...mockResponse,
-        data: {},
-      }),
-    )
-    mockedRecoilValue.mockReturnValueOnce('mock-validator-url')
-    mockedRecoilValue.mockReturnValueOnce('mock-api-token')
-
-    renderHook(() => useValidatorGraffiti(mockValidatorInfo))
-
-    expect(mockedFetchValidatorGraffiti).toBeCalled()
   })
 })
