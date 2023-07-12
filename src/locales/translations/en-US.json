@@ -429,5 +429,9 @@
     "confirmCta": "Remove Device",
     "addDevice": "Add Device",
     "selectDevice": "Select stored device"
+  },
+  "alertMessages": {
+    "beaconNotSync": "Beacon Node is not in sync",
+    "ethClientNotSync": "Ethereum Client is not in sync"
   }
 }
