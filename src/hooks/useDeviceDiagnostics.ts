@@ -1,5 +1,5 @@
 import { useRecoilValue } from 'recoil'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import getPercentage from '../utilities/getPercentage'
 import formatGigBytes from '../utilities/formatGigBytes'
 import { StatusColor } from '../types'
@@ -8,10 +8,15 @@ import { DiagnosticRate } from '../constants/enums'
 import secondsToShortHand from '../utilities/secondsToShortHand'
 import { beaconHealthResult } from '../recoil/atoms'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
+import useDiagnosticAlerts from './useDiagnosticAlerts'
+import { useTranslation } from 'react-i18next'
+import { ALERT_ID } from '../constants/constants'
 
 const useDeviceDiagnostics = (): Diagnostics => {
+  const { t } = useTranslation()
   const result = useRecoilValue(beaconHealthResult)
   const { isSyncing } = useRecoilValue(selectBeaconSyncInfo)
+  const { storeAlert, removeAlert } = useDiagnosticAlerts()
 
   const {
     disk_bytes_free = 0,
@@ -24,6 +29,20 @@ const useDeviceDiagnostics = (): Diagnostics => {
     nat_open = false,
     global_cpu_frequency,
   } = result || {}
+
+  useEffect(() => {
+    if (result?.nat_open) {
+      removeAlert(ALERT_ID.NAT)
+      return
+    }
+
+    storeAlert({
+      id: ALERT_ID.NAT,
+      message: t('alert.natClosedStatus', { type: t('alert.type.network') }),
+      subText: t('poor'),
+      severity: StatusColor.ERROR,
+    })
+  }, [result?.nat_open])
 
   const diskUtilization = useMemo(() => {
     if (!disk_bytes_total || !disk_bytes_free) {

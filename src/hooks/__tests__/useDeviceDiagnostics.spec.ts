@@ -6,8 +6,18 @@ import { mockedRecoilValue } from '../../../test.helpers'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
 import clearAllMocks = jest.clearAllMocks
 import { StatusColor } from '../../types'
-
 jest.mock('../../utilities/formatGigBytes', () => jest.fn())
+
+jest.mock('../useDiagnosticAlerts', () => ({
+  __esModule: true,
+  default: jest.fn(() => ({
+    alerts: [], // Your desired formatted list of alerts
+    storeAlert: jest.fn(),
+    updateAlert: jest.fn(),
+    dismissAlert: jest.fn(),
+    removeAlert: jest.fn(),
+  })),
+}))
 
 const mockedFormatGigBytes = formatGigBytes as jest.MockedFn<typeof formatGigBytes>
 

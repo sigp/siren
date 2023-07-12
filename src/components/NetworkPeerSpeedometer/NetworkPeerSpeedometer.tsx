@@ -5,11 +5,38 @@ import { uiMode, validatorPeerCount } from '../../recoil/atoms'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import Tooltip from '../ToolTip/Tooltip'
+import { StatusColor } from '../../types'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import { useEffect } from 'react'
+import { ALERT_ID } from '../../constants/constants'
 
 const NetworkPeerSpeedometer = () => {
   const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
   const peers = useRecoilValue(validatorPeerCount)
+  const { updateAlert } = useDiagnosticAlerts()
+
+  useEffect(() => {
+    if (!peers) return
+
+    if (peers <= 50) {
+      if (peers <= 20) {
+        updateAlert({
+          message: t('alert.peerCountLow', { type: t('alert.type.nodeValidator') }),
+          subText: t('poor'),
+          severity: StatusColor.ERROR,
+          id: ALERT_ID.PEER_COUNT,
+        })
+        return
+      }
+      updateAlert({
+        message: t('alert.peerCountMedium', { type: t('alert.type.nodeValidator') }),
+        subText: t('fair'),
+        severity: StatusColor.WARNING,
+        id: ALERT_ID.PEER_COUNT,
+      })
+    }
+  }, [peers])
 
   return (
     <Tooltip
