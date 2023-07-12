@@ -20,7 +20,9 @@ const useValidatorCount = (): ValidatorCountResult => {
   }
 
   useEffect(() => {
-    void fetchCount()
+    if (beaconUrl) {
+      void fetchCount()
+    }
   }, [beaconUrl])
 
   return data
