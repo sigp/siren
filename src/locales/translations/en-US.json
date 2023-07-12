@@ -432,6 +432,9 @@
   },
   "alertMessages": {
     "beaconNotSync": "Beacon Node is not in sync",
-    "ethClientNotSync": "Ethereum Client is not in sync"
+    "ethClientNotSync": "Ethereum Client is not in sync",
+    "excessiveWarningLogs": "Unusual amount of warning logs detected",
+    "critLog": "CRITICAL ERROR: ${message}",
+    "errorLog": "ERROR: ${message}"
   }
 }
