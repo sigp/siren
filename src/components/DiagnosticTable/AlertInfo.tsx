@@ -5,6 +5,7 @@ import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 import useDivDimensions from '../../hooks/useDivDimensions'
 import { useEffect, useMemo } from 'react'
 import sortAlertMessagesBySeverity from '../../utilities/sortAlerts'
+import { StatusColor } from '../../types'
 
 const AlertInfo = () => {
   const { t } = useTranslation()
@@ -43,11 +44,13 @@ const AlertInfo = () => {
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
               {sortedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
+                const count =
+                  severity === StatusColor.SUCCESS ? 1 : severity === StatusColor.WARNING ? 2 : 3
                 return (
                   <AlertCard
                     key={id}
                     status={severity}
-                    count={3}
+                    count={count}
                     onClick={() => dismissAlert(alert)}
                     subText={subText}
                     text={message}
