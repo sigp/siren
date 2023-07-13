@@ -26,7 +26,7 @@ const DropDown: FC<DropDownProps> = ({
     >
       <ul
         className={`text-sm max-h-32 overflow-scroll relative text-gray-700 dark:text-gray-200 ${
-          isChildrenArray && children.length >= 4 ? 'pb-6' : ''
+          isChildrenArray && children.length >= 4 ? '' : ''
         }`}
         aria-labelledby='dropdownDefault'
       >
