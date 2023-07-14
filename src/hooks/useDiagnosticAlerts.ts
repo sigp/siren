@@ -1,49 +1,63 @@
-import useDeviceDiagnostics from './useDeviceDiagnostics'
-import { useRecoilValue } from 'recoil'
-import { validatorPeerCount } from '../recoil/atoms'
+import { useRecoilState } from 'recoil'
+import { alertLogs } from '../recoil/atoms'
+import { AlertMessage } from '../types'
 import { useMemo } from 'react'
-import { Alert, StatusColor } from '../types'
-import { useTranslation } from 'react-i18next'
 
 const useDiagnosticAlerts = () => {
-  const { t } = useTranslation()
-  const { natOpen } = useDeviceDiagnostics()
-  const peers = useRecoilValue(validatorPeerCount)
+  const [alerts, setAlerts] = useRecoilState(alertLogs)
 
-  const natAlert = useMemo<Alert | undefined>(() => {
-    if (natOpen) return
+  const storeAlert = (alert: AlertMessage) => {
+    if (alerts.filter(({ id }) => id === alert.id).length <= 0) {
+      setAlerts((prev) => {
+        const list = prev.filter(({ id }) => id !== alert.id)
 
-    return {
-      message: t('alert.natClosedStatus', { type: t('alert.type.network') }),
-      subText: t('poor'),
-      severity: StatusColor.ERROR,
+        return [...list, alert]
+      })
     }
-  }, [natOpen])
+  }
 
-  const peerCountAlert = useMemo<Alert | undefined>(() => {
-    if (!peers && peers !== 0) return undefined
-
-    switch (true) {
-      case peers < 20:
-        return {
-          message: t('alert.peerCountLow', { type: t('alert.type.nodeValidator') }),
-          subText: t('poor'),
-          severity: StatusColor.ERROR,
-        }
-      case peers > 20 && peers < 50:
-        return {
-          message: t('alert.peerCountMedium', { type: t('alert.type.nodeValidator') }),
-          subText: t('fair'),
-          severity: StatusColor.WARNING,
-        }
-      default:
-        return undefined
+  const updateAlert = (alert: AlertMessage) => {
+    if (alerts.filter(({ id, isDismissed }) => id === alert.id && isDismissed).length <= 0) {
+      removeAlert(alert.id)
+      storeAlert(alert)
     }
-  }, [peers])
+  }
+
+  const dismissAlert = (alert: AlertMessage) => {
+    const loggedAlert = alerts.find(({ id }) => id === alert.id)
+
+    if (loggedAlert) {
+      setAlerts((prev) => {
+        const list = prev.filter(({ id }) => id !== loggedAlert.id)
+
+        return [...list, { ...loggedAlert, isDismissed: true }]
+      })
+    }
+  }
+
+  const removeAlert = (id: string) => {
+    setAlerts((prev) => prev.filter((alert) => id !== alert.id))
+  }
+
+  const resetDismissed = () => {
+    alerts.forEach(({ isDismissed, id }) => {
+      if (isDismissed) {
+        removeAlert(id)
+      }
+    })
+  }
+
+  const formattedList = useMemo(() => {
+    return alerts.filter(({ isDismissed }) => isDismissed !== true)
+  }, [alerts])
 
   return {
-    natAlert,
-    peerCountAlert,
+    alerts: formattedList,
+    storeAlert,
+    updateAlert,
+    dismissAlert,
+    removeAlert,
+    resetDismissed,
   }
 }
 

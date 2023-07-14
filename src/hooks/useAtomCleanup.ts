@@ -1,6 +1,7 @@
 import { useSetRecoilState } from 'recoil'
 import {
   activeDevice,
+  alertLogs,
   beaconHealthResult,
   beaconNetworkError,
   beaconSyncInfo,
@@ -36,6 +37,7 @@ const useAtomCleanup = () => {
   const isBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
   const setSessionAuthErrorCount = useSetRecoilState(sessionAuthErrorCount)
+  const setAlert = useSetRecoilState(alertLogs)
 
   const resetDashboardAtoms = () => {
     setDashView(ContentView.MAIN)
@@ -54,6 +56,7 @@ const useAtomCleanup = () => {
     setValSyncInfo(undefined as any)
     setBeaconSyncInfo(undefined as any)
     setValStateInfo(undefined as any)
+    setAlert([])
   }
 
   return {

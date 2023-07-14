@@ -2,39 +2,79 @@ import Typography from '../Typography/Typography'
 import AlertCard from '../AlertCard/AlertCard'
 import { useTranslation } from 'react-i18next'
 import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import useDivDimensions from '../../hooks/useDivDimensions'
+import { useEffect, useMemo, useState } from 'react'
+import sortAlertMessagesBySeverity from '../../utilities/sortAlerts'
+import { StatusColor } from '../../types'
+import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings'
 
 const AlertInfo = () => {
   const { t } = useTranslation()
-  const { natAlert, peerCountAlert } = useDiagnosticAlerts()
+  const { alerts, dismissAlert, resetDismissed } = useDiagnosticAlerts()
+  const { ref, dimensions } = useDivDimensions()
+  const [filter, setFilter] = useState('all')
+
+  const setFilterValue = (value: FilterValue) => setFilter(value)
+
+  const formattedAlerts = useMemo(() => {
+    let baseAlerts = alerts
+
+    if (filter !== 'all') {
+      baseAlerts = baseAlerts.filter(({ severity }) => severity === filter)
+    }
+
+    return sortAlertMessagesBySeverity(baseAlerts)
+  }, [alerts, filter])
+
+  const isFiller = formattedAlerts.length < 6
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      resetDismissed()
+    }, 60000)
+
+    return () => clearInterval(intervalId)
+  }, [])
+
   return (
-    <div className='h-full w-full flex flex-col'>
-      <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>
+    <div ref={ref} className='h-full w-full flex flex-col border-l-0 border-t-0 border-style500'>
+      <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-r-0 border-style500'>
         <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
           {t('alertInfo.alerts')}
         </Typography>
-        <Typography type='text-tiny' className='uppercase' color='text-dark400'>
-          {t('viewAll')}
-        </Typography>
+        <AlertFilterSettings value={filter as FilterValue} onChange={setFilterValue} />
       </div>
-      {natAlert && (
-        <AlertCard
-          status={natAlert.severity}
-          count={3}
-          subText={natAlert.subText}
-          text={natAlert.message}
-        />
+      {dimensions && (
+        <div
+          style={{ maxHeight: `${dimensions.height - 48}px` }}
+          className='h-full w-full flex flex-col'
+        >
+          {formattedAlerts.length > 0 && (
+            <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
+              {formattedAlerts.map((alert) => {
+                const { severity, subText, message, id } = alert
+                const count =
+                  severity === StatusColor.SUCCESS ? 1 : severity === StatusColor.WARNING ? 2 : 3
+                return (
+                  <AlertCard
+                    key={id}
+                    status={severity}
+                    count={count}
+                    onClick={() => dismissAlert(alert)}
+                    subText={subText}
+                    text={message}
+                  />
+                )
+              })}
+            </div>
+          )}
+          {isFiller && (
+            <div className='flex-1 flex items-center justify-center'>
+              <i className='bi bi-lightning-fill text-primary text-h3 opacity-20' />
+            </div>
+          )}
+        </div>
       )}
-      {peerCountAlert && (
-        <AlertCard
-          status={peerCountAlert.severity}
-          count={2}
-          subText={peerCountAlert.subText}
-          text={peerCountAlert.message}
-        />
-      )}
-      <div className='flex-1 md:border-l-0 border-t-0 border-style500 flex items-center justify-center'>
-        <i className='bi bi-lightning-fill text-primary text-h3 opacity-20' />
-      </div>
     </div>
   )
 }

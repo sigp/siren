@@ -1,8 +1,10 @@
 import useSSE from './useSSE'
-import { LogLevels, SSELog } from '../types'
-import { MutableRefObject, useRef } from 'react'
+import { LogLevels, SSELog, StatusColor } from '../types'
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import moment from 'moment'
-import { MAX_PERSISTED_LOGS } from '../constants/constants'
+import { ALERT_ID, MAX_PERSISTED_LOGS } from '../constants/constants'
+import useDiagnosticAlerts from './useDiagnosticAlerts'
+import { useTranslation } from 'react-i18next'
 
 export type trackedLogData = {
   data: SSELog[]
@@ -23,11 +25,13 @@ export const defaultLogData = {
 }
 
 const useTrackLogs = (url?: string, onError?: () => void): trackedLogData => {
+  const { t } = useTranslation()
   const dataRef = useRef<SSELog[]>([])
   const infoPerHour = useRef<number[]>([])
   const criticalPerHour = useRef<number[]>([])
   const warningsPerHour = useRef<number[]>([])
   const errorsPerHour = useRef<number[]>([])
+  const { storeAlert, removeAlert } = useDiagnosticAlerts()
 
   const incrementCounts = (log: SSELog) => {
     const { level } = log
@@ -99,6 +103,51 @@ const useTrackLogs = (url?: string, onError?: () => void): trackedLogData => {
   const errorCount = errorsPerHour.current.length
 
   const totalLogsPerHour = criticalCount + warningCount + errorCount + infoCount
+
+  const parsedCrit = useMemo(() => {
+    return dataRef.current.filter((data) => data.level === LogLevels.CRIT)
+  }, [dataRef, totalLogsPerHour])
+
+  useEffect(() => {
+    parsedCrit.forEach((crit) => {
+      storeAlert({
+        severity: StatusColor.ERROR,
+        message: t('alertMessages.critLog', { message: crit.msg }),
+        subText: t('poor'),
+        id: crit.msg.replace(' ', ''),
+      })
+    })
+  }, [parsedCrit])
+
+  const parsedErrors = useMemo(() => {
+    return dataRef.current.filter((data) => data.level === LogLevels.ERRO)
+  }, [dataRef, totalLogsPerHour])
+
+  useEffect(() => {
+    parsedErrors.forEach((error) => {
+      storeAlert({
+        severity: StatusColor.ERROR,
+        message: t('alertMessages.errorLog', { message: error.msg }),
+        subText: t('poor'),
+        id: error.msg.replace(' ', ''),
+      })
+    })
+  }, [parsedErrors])
+
+  useEffect(() => {
+    if (warningCount > 5) {
+      storeAlert({
+        id: ALERT_ID.WARNING_LOG,
+        message: t('alertMessages.excessiveWarningLogs'),
+        severity: StatusColor.WARNING,
+        subText: t('fair'),
+      })
+
+      return
+    }
+
+    removeAlert(ALERT_ID.WARNING_LOG)
+  }, [warningCount])
 
   return {
     data: dataRef.current,

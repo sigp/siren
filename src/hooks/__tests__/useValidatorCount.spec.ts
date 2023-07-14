@@ -31,12 +31,12 @@ const mockFetchValidatorCount = fetchValidatorCount as jest.MockedFn<typeof fetc
 
 describe('useValidatorCount', () => {
   it('should return default count info', () => {
-    mockedRecoilValue.mockReturnValueOnce('mocked-url')
+    mockedRecoilValue.mockReturnValueOnce({})
     const { result } = renderHook(() => useValidatorCount())
     expect(result.current).toStrictEqual(DEFAULT_VALIDATOR_COUNT)
   })
   it('should call fetchCount when beacon node available', async () => {
-    mockedRecoilValue.mockReturnValueOnce('mocked-url')
+    mockedRecoilValue.mockReturnValueOnce({ beaconUrl: 'mocked-url' })
     mockedRecoilValue.mockReturnValue({
       protocol: Protocol.HTTP,
       address: 'mockAddress',

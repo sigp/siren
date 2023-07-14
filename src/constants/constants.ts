@@ -190,3 +190,11 @@ export const LogTypeOptions = [
   { title: 'Validator', value: LogType.VALIDATOR },
   { title: 'Beacon', value: LogType.BEACON },
 ]
+
+export const ALERT_ID = {
+  VALIDATOR_SYNC: 'VALIDATOR_SYNC',
+  BEACON_SYNC: 'BEACON_SYNC',
+  NAT: 'NAT',
+  WARNING_LOG: 'WARNING_LOG',
+  PEER_COUNT: 'PEER_COUNT',
+}

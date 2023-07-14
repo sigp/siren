@@ -429,5 +429,16 @@
     "confirmCta": "Remove Device",
     "addDevice": "Add Device",
     "selectDevice": "Select stored device"
+  },
+  "alertMessages": {
+    "all": "All",
+    "severe": "Severe",
+    "warning": "Warning",
+    "fair": "Fair",
+    "beaconNotSync": "Beacon Node is not in sync",
+    "ethClientNotSync": "Ethereum Client is not in sync",
+    "excessiveWarningLogs": "Unusual amount of warning logs detected",
+    "critLog": "CRITICAL ERROR: {{message}}",
+    "errorLog": "ERROR: {{message}}"
   }
 }

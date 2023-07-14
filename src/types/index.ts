@@ -97,3 +97,11 @@ export interface ActiveDevice {
 export interface ValAliases {
   [key: string]: string
 }
+
+export interface AlertMessage {
+  severity: StatusColor
+  message: string
+  subText: string
+  id: string
+  isDismissed?: boolean
+}
