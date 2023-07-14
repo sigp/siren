@@ -15,8 +15,6 @@ const DropDown: FC<DropDownProps> = ({
   className = '',
   position = 'top-full left-0 z-50',
 }) => {
-  const isChildrenArray = Array.isArray(children)
-
   return (
     <div
       id='dropdown'
@@ -25,9 +23,7 @@ const DropDown: FC<DropDownProps> = ({
       } ${className} ${position} animate-fadeSlideIn bg-white rounded divide-y divide-gray-100 shadow dark:bg-black`}
     >
       <ul
-        className={`text-sm max-h-32 overflow-scroll relative text-gray-700 dark:text-gray-200 ${
-          isChildrenArray && children.length >= 4 ? '' : ''
-        }`}
+        className='text-sm max-h-32 overflow-scroll relative text-gray-700 dark:text-gray-200'
         aria-labelledby='dropdownDefault'
       >
         {children}

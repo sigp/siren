@@ -11,7 +11,7 @@ jest.mock('../../utilities/formatGigBytes', () => jest.fn())
 jest.mock('../useDiagnosticAlerts', () => ({
   __esModule: true,
   default: jest.fn(() => ({
-    alerts: [], // Your desired formatted list of alerts
+    alerts: [],
     storeAlert: jest.fn(),
     updateAlert: jest.fn(),
     dismissAlert: jest.fn(),
