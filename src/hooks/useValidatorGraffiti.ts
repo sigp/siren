@@ -1,10 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import { ValidatorGraffitiResults, ValidatorInfo } from '../types/validator'
 import { useRecoilValue } from 'recoil'
-import { fetchValidatorGraffiti } from '../api/lighthouse'
+import { fetchValidatorGraffiti, updateValidator } from '../api/lighthouse'
 import { activeDevice } from '../recoil/atoms'
+import displayToast from '../utilities/displayToast'
+import { useTranslation } from 'react-i18next'
 
 const useValidatorGraffiti = (validator?: ValidatorInfo) => {
+  const { t } = useTranslation()
+  const [isLoading, setLoading] = useState(false)
   const { apiToken, validatorUrl } = useRecoilValue(activeDevice)
   const [results, setResults] = useState<ValidatorGraffitiResults | undefined>()
 
@@ -17,6 +21,29 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
       }
     } catch (e) {
       console.error(e)
+    }
+  }
+  const updateGraffiti = async (graffiti: string) => {
+    const pubKey = validator?.pubKey
+
+    if (!pubKey) return
+
+    setLoading(true)
+
+    try {
+      const { status } = await updateValidator(validatorUrl, pubKey as string, apiToken, {
+        graffiti,
+      })
+
+      setLoading(false)
+
+      if (status === 200) {
+        setResults((prev) => ({ ...prev, [pubKey]: graffiti }))
+        displayToast(t('validatorEdit.graffiti.successUpdate'), 'success')
+      }
+    } catch (e) {
+      setLoading(false)
+      displayToast(t('validatorEdit.graffiti.errorUpdate'), 'error')
     }
   }
 
@@ -32,7 +59,9 @@ const useValidatorGraffiti = (validator?: ValidatorInfo) => {
   }, [validator, results])
 
   return {
+    isLoading,
     graffiti: validatorGraffiti,
+    updateGraffiti,
   }
 }
 

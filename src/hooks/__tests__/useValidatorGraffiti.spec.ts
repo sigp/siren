@@ -28,19 +28,31 @@ describe('useValidatorGraffiti hook', () => {
     mockedRecoilValue.mockReturnValueOnce('mock-validator-url')
     const { result } = renderHook(() => useValidatorGraffiti())
 
-    expect(result.current).toEqual({ graffiti: undefined })
+    expect(JSON.stringify(result.current)).toStrictEqual(
+      JSON.stringify({
+        graffiti: undefined,
+        isLoading: false,
+        updateGraffiti: () => {},
+      }),
+    )
   })
 
   it('should return graffiti', () => {
     mockedRecoilValue.mockReturnValueOnce('mock-api-token')
     mockedRecoilValue.mockReturnValueOnce('mock-validator-url')
-    jest.spyOn(React, 'useState').mockReturnValue([{ 'mock-pub-key': 'mock-graffiti' }, jest.fn()])
+    jest.spyOn(React, 'useState').mockReturnValueOnce([false, jest.fn()])
+    jest
+      .spyOn(React, 'useState')
+      .mockReturnValueOnce([{ 'mock-pub-key': 'mock-graffiti' }, jest.fn()])
     const { result } = renderHook(() => useValidatorGraffiti(mockValidatorInfo))
 
-    expect(result.current).toEqual({ graffiti: 'mock-graffiti' })
+    expect(JSON.stringify(result.current)).toEqual(
+      JSON.stringify({ isLoading: false, graffiti: 'mock-graffiti', updateGraffiti: () => {} }),
+    )
   })
 
   it('should not call fetchValidatorGraffiti', () => {
+    mockedRecoilValue.mockReturnValueOnce(false)
     mockedRecoilValue.mockReturnValueOnce(undefined)
     mockedRecoilValue.mockReturnValueOnce(undefined)
     renderHook(() => useValidatorGraffiti(mockValidatorInfo))
