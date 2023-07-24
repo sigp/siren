@@ -23,7 +23,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   uiMode?: UiMode
   isDisableToggle?: boolean
   isDisablePaste?: boolean
-  inputStyle?: 'primary' | 'secondary'
+  inputStyle?: 'primary' | 'secondary' | 'noBorder'
   icon?: string
   isAutoFocus?: boolean
 }
@@ -63,6 +63,8 @@ const Input: FC<InputProps> = ({
 
   const generateInputStyle = () => {
     switch (inputStyle) {
+      case 'noBorder':
+        return 'text-dark500 p-2 bg-transparent'
       case 'secondary':
         return 'text-dark500 border-style p-2 bg-transparent'
       default:
