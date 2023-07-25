@@ -1,6 +1,6 @@
 import RodalModal from '../RodalModal/RodalModal'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { isBlsExecutionModal, processingBlsValidators, activeDevice } from '../../recoil/atoms'
+import { activeDevice, isBlsExecutionModal, processingBlsValidators } from '../../recoil/atoms'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
@@ -9,7 +9,7 @@ import { useState } from 'react'
 import { MOCK_BLS_JSON, WithdrawalInfoLink } from '../../constants/constants'
 import GradientHeader from '../GradientHeader/GradientHeader'
 import { ButtonFace } from '../Button/Button'
-import { useTranslation, Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { broadcastBlsChange } from '../../api/beacon'
 import axios, { AxiosError } from 'axios'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -17,6 +17,7 @@ import { Storage } from '../../constants/enums'
 import isValidJSONArray from '../../utilities/isValidJson'
 import getValuesFromObjArray from '../../utilities/getValuesFromObjArray'
 import displayToast from '../../utilities/displayToast'
+import { ToastType } from '../../types'
 
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
@@ -42,7 +43,7 @@ const BlsExecutionModal = () => {
       message = t('error.invalidJson')
     }
 
-    displayToast(message, 'error')
+    displayToast(message, ToastType.ERROR)
   }
 
   const submitChange = async () => {
@@ -73,7 +74,7 @@ const BlsExecutionModal = () => {
       storeIsBlsProcessing(JSON.stringify(targetIndices))
       closeModal()
       setJson(MOCK_BLS_JSON)
-      displayToast(t('success.blsExecution'), 'success')
+      displayToast(t('success.blsExecution'), ToastType.SUCCESS)
     } catch (e) {
       setLoading(false)
       if (axios.isAxiosError(e)) {

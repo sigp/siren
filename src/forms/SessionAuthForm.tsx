@@ -4,12 +4,13 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { sessionAuthValidation } from '../validation/sessionAuthValidation'
 import { OnboardView } from '../constants/enums'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { onBoardView, activeDevice, deviceSettings } from '../recoil/atoms'
+import { activeDevice, deviceSettings, onBoardView } from '../recoil/atoms'
 import useLocalStorage from '../hooks/useLocalStorage'
 import CryptoJS from 'crypto-js'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../utilities/displayToast'
 import { DeviceListStorage } from '../types/storage'
+import { ToastType } from '../types'
 
 export interface SessionAuthForm {
   password: string
@@ -74,7 +75,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
         viewSetup()
         return
       }
-      if (!isValid) displayToast(t('error.sessionAuth.invalidPassword'), 'error')
+      if (!isValid) displayToast(t('error.sessionAuth.invalidPassword'), ToastType.ERROR)
       return
     }
 

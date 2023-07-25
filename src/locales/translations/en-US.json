@@ -423,6 +423,7 @@
     "nameRequired": "Name is required",
     "nameLimit": "Name cannot exceed 19 characters",
     "graffiti": {
+      "unexpectedError": "An unexpected error occurred while updating graffiti. Please try again.",
       "successUpdate": "Successfully updated validator graffiti",
       "errorUpdate": "Unable to update graffiti, be sure that \"--graffiti-file\" flag is not set"
     }
