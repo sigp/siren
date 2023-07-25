@@ -44,7 +44,7 @@ const ValidatorDetails = () => {
 
   const combinedStatus = getAvgEffectivenessStatus(combinedEffectiveness)
 
-  const { graffiti } = useValidatorGraffiti(validator)
+  const { isLoading, graffiti, updateGraffiti } = useValidatorGraffiti(validator)
 
   const usdBalance = (balance || 0) * (rates['USD'] || 0)
 
@@ -132,7 +132,7 @@ const ValidatorDetails = () => {
           </div>
         </div>
       </div>
-      <ValidatorGraffitiInput value={graffiti} />
+      <ValidatorGraffitiInput isLoading={isLoading} onSubmit={updateGraffiti} value={graffiti} />
       <ValidatorDetailTable validator={validator} />
       <ValidatorActions
         isExitAction={!isExited}

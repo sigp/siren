@@ -1,4 +1,4 @@
-import { Endpoint } from '../types'
+import { Endpoint, ToastType } from '../types'
 import { useCallback, useEffect, useState } from 'react'
 import { debounce } from '../utilities/debounce'
 import axios from 'axios'
@@ -28,9 +28,9 @@ const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, da
         if (!isToastAlert) return
 
         if (code === 'ERR_NETWORK') {
-          displayToast(t('error.networkError', { type }), 'error')
+          displayToast(t('error.networkError', { type }), ToastType.ERROR)
         } else {
-          displayToast(t('error.unknownError', { type }), 'error')
+          displayToast(t('error.unknownError', { type }), ToastType.ERROR)
         }
       }
     }),

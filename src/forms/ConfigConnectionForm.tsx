@@ -20,7 +20,7 @@ import { AxiosError } from 'axios'
 import { fetchVersion } from '../api/lighthouse'
 import { DeviceKeyStorage, DeviceListStorage } from '../types/storage'
 import { fetchBeaconVersion } from '../api/beacon'
-import { DeviceList, DeviceSettings, Endpoint } from '../types'
+import { DeviceList, DeviceSettings, Endpoint, ToastType } from '../types'
 import { useTranslation } from 'react-i18next'
 import isRequiredVersion from '../utilities/isRequiredVersion'
 import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
@@ -162,7 +162,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     if (e instanceof AxiosError && e.response?.status === 403) {
       message = t('error.invalidApiToken')
     }
-    displayToast(message, 'error')
+    displayToast(message, ToastType.ERROR)
   }
 
   const handleValidationErrors = (values: ConnectionForm) => {

@@ -7,7 +7,7 @@ import { ValidatorModalView } from '../../../constants/enums'
 import BasicValidatorMetrics from '../../BasicValidatorMetrics/BasicValidatorMetrics'
 import InfoBox, { InfoBoxType } from '../../InfoBox/InfoBox'
 import Button, { ButtonFace } from '../../Button/Button'
-import { useTranslation, Trans } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { signVoluntaryExit } from '../../../api/lighthouse'
 import { useRecoilValue } from 'recoil'
@@ -15,6 +15,7 @@ import { submitSignedExit } from '../../../api/beacon'
 import ExitDisclosure from '../../Disclosures/ExitDisclosure'
 import displayToast from '../../../utilities/displayToast'
 import { activeDevice } from '../../../recoil/atoms'
+import { ToastType } from '../../../types'
 
 export interface ValidatorExitProps {
   validator: ValidatorInfo
@@ -39,7 +40,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
       }
     } catch (e) {
       setLoading(false)
-      displayToast(t('error.unableToSignExit'), 'error')
+      displayToast(t('error.unableToSignExit'), ToastType.ERROR)
     }
   }
   const submitSignedMessage = async (data: SignedExitData) => {
@@ -48,12 +49,12 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
 
       if (status === 200) {
         setLoading(false)
-        displayToast(t('success.validatorExit'), 'success')
+        displayToast(t('success.validatorExit'), ToastType.SUCCESS)
         closeModal()
       }
     } catch (e) {
       setLoading(false)
-      displayToast(t('error.invalidExit'), 'error')
+      displayToast(t('error.invalidExit'), ToastType.ERROR)
     }
   }
 

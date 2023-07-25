@@ -1,10 +1,11 @@
 import { toast } from 'react-toastify'
+import { ToastType } from '../types'
 
-const displayToast = (message: string, type: 'error' | 'success', options?: any) => {
+const displayToast = (message: string, type: ToastType, options?: any) => {
   const toastOptions = {
     position: options?.position || 'top-right',
     autoClose: options?.autoClose || 5000,
-    style: type === 'success' ? { background: '#70D370' } : undefined,
+    style: type === ToastType.SUCCESS ? { background: '#70D370' } : undefined,
     theme: options?.theme || 'colored',
     hideProgressBar: options?.hideProgressBar || true,
     closeOnClick: options?.closeOnClick || true,
