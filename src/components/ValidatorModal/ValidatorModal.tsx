@@ -26,6 +26,7 @@ const ValidatorModal = () => {
   const [activeIndex, setIndex] = useState(0)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.EXIT)
   const isTablet = useMediaQuery('(max-width: 1024px)')
+  const isLargeScreen = useMediaQuery('(min-width: 1540px)')
 
   const closeModal = () => {
     setValidatorIndex(undefined)
@@ -65,7 +66,7 @@ const ValidatorModal = () => {
       isVisible={!!validator}
       styles={{
         width: 'fit-content',
-        maxWidth: isTablet ? '448px' : '900px',
+        maxWidth: isTablet ? '448px' : isLargeScreen ? '1200px' : '900px',
         height: isTablet ? '540px' : 'max-content',
       }}
       onClose={closeModal}

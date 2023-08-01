@@ -82,7 +82,7 @@ const ValidatorDetails = () => {
                     </Typography>
                   </div>
                   <EffectivenessBreakdown
-                    className='group-hover:block'
+                    className='group-hover:block @1540:w-80'
                     target={avgTargetEffectiveness}
                     head={avgHitEffectiveness}
                     targetDescription={t('validatorManagement.effectiveness.targetDescription')}
