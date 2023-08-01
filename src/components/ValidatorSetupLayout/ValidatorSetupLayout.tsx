@@ -8,6 +8,9 @@ export interface ValidatorSetupLayoutProps {
   title: string
   onStepBack: () => void
   onNext: () => void
+  onSecondaryAction?: () => void
+  secondaryCtaText?: string
+  secondaryCtaIcon?: string
   currentStep: string
   previousStep: string
   ctaText: string
@@ -24,8 +27,11 @@ const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
   currentStep,
   previousStep,
   ctaText,
+  onSecondaryAction,
+  secondaryCtaIcon,
+  secondaryCtaText,
   ctaType = ButtonFace.PRIMARY,
-  ctaIcon = 'bi-arrow-right',
+  ctaIcon,
   mediaQuery = '@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-center @1024:justify-center',
 }) => {
   return (
@@ -44,14 +50,26 @@ const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
 
         {children}
 
-        <Button
-          onClick={onNext}
-          className='mt-4 h-8 w-32 p-0 items-center justify-center'
-          type={ctaType}
-        >
-          {ctaText}
-          <i className={`ml-3 ${ctaIcon}`} />
-        </Button>
+        <div className='flex space-x-4'>
+          <Button
+            onClick={onNext}
+            className='mt-4 h-8 w-32 p-0 items-center justify-center capitalize'
+            type={ctaType}
+          >
+            {ctaText}
+            {ctaIcon && <i className={`ml-3 ${ctaIcon}`} />}
+          </Button>
+          {secondaryCtaText && (
+            <Button
+              onClick={onSecondaryAction}
+              className='mt-4 h-8 w-32 p-0 items-center justify-center capitalize'
+              type={ButtonFace.PRIMARY}
+            >
+              {secondaryCtaText}
+              {secondaryCtaIcon && <i className={`ml-3 ${secondaryCtaIcon}`} />}
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )
