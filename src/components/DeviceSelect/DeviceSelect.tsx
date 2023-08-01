@@ -68,11 +68,13 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
     setTargetKey('')
   }
 
+  const activeDevice = devices && value ? devices?.[value] : undefined
+
   const buttonClasses = addClassString('relative border border-style500 w-full p-3', [
     isBlack ? 'bg-black' : 'dark:bg-dark800 bg-white',
   ])
 
-  const itemClasses = addClassString('block group cursor-pointer flex justify-between py-2 px-4', [
+  const itemClasses = addClassString('block cursor-pointer flex justify-between py-2 px-4', [
     !isBlack && 'hover:bg-gray-100 dark:hover:bg-dark750 dark:hover:text-white',
     isBlack && 'bg-dark750 hover:bg-dark600 text-white',
   ])
@@ -83,6 +85,10 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
   const chevronClasses = addClassString('bi-chevron-down', [
     !isBlack && 'text-dark900 dark:text-dark300',
     isBlack && 'text-white',
+  ])
+
+  const selectDisplayClasses = addClassString('flex space-x-4', [
+    isBlack ? 'text-white' : 'dark:text-dark300',
   ])
 
   return (
@@ -107,9 +113,21 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
             className='w-full space-x-2 focus:outline-none text-center flex items-center justify-between'
             type='button'
           >
-            <Typography color={isBlack ? 'text-white' : undefined} className='capitalize'>
-              {value}
-            </Typography>
+            <div className={selectDisplayClasses}>
+              {activeDevice &&
+                (activeDevice.apiToken ? (
+                  <i className='bi bi-lock-fill' />
+                ) : (
+                  <i className='bi bi-unlock' />
+                ))}
+              <Typography
+                color={isBlack ? 'text-white' : undefined}
+                isUpperCase
+                className='capitalize'
+              >
+                {value}
+              </Typography>
+            </div>
             <i className={chevronClasses} />
           </button>
           <DropDown className='mt-2' isOpen={isOpen}>
@@ -120,18 +138,17 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
                 key={index}
                 data-testid='option'
               >
-                <Typography
-                  isCapitalize
-                  color={isBlack ? 'text-dark300' : undefined}
-                  darkMode={typographyClasses}
-                >
-                  {deviceKey}
-                </Typography>
-                <i
-                  onClick={(e) => confirmDelete(e, deviceKey)}
-                  className='bi bi-trash-fill hidden group-hover:block'
-                />
-                {isLocked && <i className='bi bi-lock group-hover:hidden' />}
+                <div className='flex space-x-4'>
+                  {isLocked ? <i className='bi bi-lock-fill' /> : <i className='bi bi-unlock' />}
+                  <Typography
+                    isCapitalize
+                    color={isBlack ? 'text-dark300' : undefined}
+                    darkMode={typographyClasses}
+                  >
+                    {deviceKey}
+                  </Typography>
+                </div>
+                <i onClick={(e) => confirmDelete(e, deviceKey)} className='bi bi-trash-fill' />
               </li>
             ))}
           </DropDown>
