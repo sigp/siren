@@ -52,7 +52,7 @@ const MainContent = () => {
                 <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
                   {t('lighthouseUiVersion')}
                 </Typography>
-                <PillIcon bgColor='bg-tertiary' text='BETA' />
+                <PillIcon bgColor='bg-tertiary' text='v.1.0.0' />
               </div>
               <div>
                 <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
