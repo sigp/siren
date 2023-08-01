@@ -15,6 +15,8 @@ export const selectBnChain = selector({
         return Network.Goerli
       case '1':
         return Network.Mainnet
+      case '4242':
+        return Network.LocalTestnet
       default:
         return
     }

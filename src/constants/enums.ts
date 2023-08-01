@@ -65,6 +65,7 @@ export enum ApiType {
 export enum Network {
   Goerli = 'Goerli',
   Mainnet = 'Mainnet',
+  LocalTestnet = 'Local TestNet',
 }
 
 export enum ValidatorModalView {
