@@ -34,7 +34,7 @@ const AlertFilterSettings: FC<AlertFilterSettingsProps> = ({ onChange, value }) 
   return (
     <div ref={ref} className='relative'>
       <i onClick={openDrop} className='bi-sliders2 text-dark400 cursor-pointer' />
-      <DropDown width='w-42' position='right-0' isOpen={isOpen}>
+      <DropDown isScroll={false} width='w-42' position='right-0' isOpen={isOpen}>
         {filterOptions.map((option, index) => (
           <li
             key={index}
