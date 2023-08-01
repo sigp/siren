@@ -53,9 +53,9 @@ const Button: FC<ButtonProps> = ({
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.LIGHT_ACTIVE:
-        return 'bg-primary80 text-primary'
+        return 'bg-primary80 text-primaryOverride'
       case ButtonFace.LIGHT:
-        return 'bg-primary100 text-primary'
+        return 'bg-primary100 text-primaryOverride'
       case ButtonFace.ICON:
         return 'h-full w-11 disabled:opacity-30 dark:bg-dark900 text-dark300 dark:text-white'
       case ButtonFace.TERTIARY:
