@@ -25,6 +25,7 @@
     }
   },
   "password": "Password",
+  "12char": "( Must contain 12 characters, lowercase, uppercase, numbers, and special characters )",
   "confirmPassword": "Confirm Password",
   "helloUser": "Hello {{user}},",
   "lighthouseVersion": "Lighthouse Version",
@@ -155,6 +156,7 @@
     "withdrawal": "Withdrawal"
   },
   "accountEarnings": {
+    "balanceTooltip": "The displayed balance is the accumulated validator rewards and does not include any balance withdrawn during reward payments.",
     "annualized": "annualized",
     "earnings": "Earnings",
     "chooseCurrency": "Choose Currency",
