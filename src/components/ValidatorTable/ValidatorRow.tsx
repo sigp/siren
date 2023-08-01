@@ -60,10 +60,10 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
 
   return (
     <tr className='w-full border-t-style500 h-12'>
-      <th className='px-2'>
+      <th onClick={viewValidator} className='px-2 cursor-pointer'>
         <div className='w-full flex justify-center'>{renderAvatar()}</div>
       </th>
-      <th className='w-28'>
+      <th onClick={viewValidator} className='w-28 cursor-pointer'>
         <Typography className='text-left' color='text-dark500' type='text-caption2'>
           {name}
         </Typography>

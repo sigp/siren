@@ -207,7 +207,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({ view = 'partial', isFilter, c
               </th>
               <th>
                 <div className='w-full flex justify-center'>
-                  <div className='w-8 h-8 bg-primary rounded-full flex items-center justify-center'>
+                  <div className='w-8 h-8 bg-primary dark:bg-primary150 rounded-full flex items-center justify-center'>
                     <div className='w-4 h-4'>
                       <ValidatorLogo className='text-white' />
                     </div>
