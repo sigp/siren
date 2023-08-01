@@ -45,10 +45,18 @@ const AccountEarning = () => {
 
   return (
     <EarningsLayout>
-      <div className='p-4 bg-primary200 w-28 text-center absolute z-30 top-0 right-10'>
-        <Typography color='text-white' type='text-caption1'>
-          {t('balance')}
-        </Typography>
+      <div className='p-4 bg-primary200 w-28 text-center absolute z-50 top-0 right-10'>
+        <Tooltip
+          className='cursor-pointer flex justify-center space-x-2'
+          id='balanceInfo'
+          maxWidth={350}
+          text={t('accountEarnings.balanceTooltip')}
+        >
+          <Typography color='text-white' type='text-caption1'>
+            {t('balance')}
+          </Typography>
+          <i className='bi bi-info-circle text-caption1 text-dark400' />
+        </Tooltip>
         <div className='w-full absolute h-1 bg-white bottom-0 left-0' />
       </div>
       <div className='relative z-30 w-full h-full'>
