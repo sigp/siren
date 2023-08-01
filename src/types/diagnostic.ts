@@ -38,7 +38,7 @@ export type ValidatorSyncResult = {
   latest_cached_block_number: string
   latest_cached_block_timestamp: string
   voting_target_timestamp: string
-  eth1_node_sync_status_percentage: string
+  eth1_node_sync_status_percentage: number
   lighthouse_is_cached_and_ready: boolean
 }
 
