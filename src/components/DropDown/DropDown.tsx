@@ -23,7 +23,7 @@ const DropDown: FC<DropDownProps> = ({
   ])
   const containerClasses = addClassString(
     'animate-fadeSlideIn bg-white rounded divide-y divide-gray-100 shadow dark:bg-black',
-    [position, className, width ? width : 'w-full', isOpen ? 'absolute' : 'hidden'],
+    [position, className, width || 'w-full', isOpen ? 'absolute' : 'hidden'],
   )
   return (
     <div id='dropdown' className={containerClasses}>
