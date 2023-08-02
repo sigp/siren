@@ -8,6 +8,7 @@ import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
 import Typography from '../Typography/Typography'
 import { DiscordUrl, LighthouseBookUrl } from '../../constants/constants'
+import ExternalLink from '../ExternalLink/ExternalLink'
 
 const DashboardOptions = () => {
   const { t } = useTranslation()
@@ -35,22 +36,22 @@ const DashboardOptions = () => {
             <Typography className='capitalize'>{t('sidebar.settings')}</Typography>
           </div>
         </DropDownItem>
-        <a href={DiscordUrl} target='_blank' rel='noreferrer'>
+        <ExternalLink href={DiscordUrl}>
           <DropDownItem>
             <div className='w-full flex space-x-2'>
               <i className='bi bi-discord' />
               <Typography className='capitalize'>Discord</Typography>
             </div>
           </DropDownItem>
-        </a>
-        <a href={LighthouseBookUrl} target='_blank' rel='noreferrer'>
+        </ExternalLink>
+        <ExternalLink href={LighthouseBookUrl}>
           <DropDownItem>
             <div className='w-full flex space-x-2'>
               <i className='bi bi-life-preserver' />
               <Typography className='capitalize'>{t('documentation')}</Typography>
             </div>
           </DropDownItem>
-        </a>
+        </ExternalLink>
       </DropDown>
     </div>
   )
