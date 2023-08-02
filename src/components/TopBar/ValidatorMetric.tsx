@@ -16,6 +16,7 @@ const ValidatorMetric = () => {
   useEffect(() => {
     if (isReady) {
       removeAlert(ALERT_ID.VALIDATOR_SYNC)
+      return
     }
 
     storeAlert({

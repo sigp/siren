@@ -10,9 +10,9 @@ export interface AlertCardProps extends StatusBarProps {
 
 const AlertCard: FC<AlertCardProps> = ({ text, subText, onClick, ...props }) => {
   return (
-    <div className='w-full h-14 group border-b-style500 flex justify-between items-center space-x-2 p-2'>
+    <div className='w-full h-14 @1540:h-22 group border-b-style500 flex justify-between items-center space-x-2 @1540:space-x-4 p-2'>
       <StatusBar {...props} />
-      <div className='w-full max-w-tiny'>
+      <div className='w-full max-w-tiny @1540:max-w-full'>
         <Typography type='text-caption2'>{text}</Typography>
         <Typography type='text-caption2' isUpperCase>
           {subText}

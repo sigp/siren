@@ -5,9 +5,10 @@ export interface CodeInputProps {
   onChange: (value: string) => void
   value: string
   placeholder?: string
+  onFocus?: () => void
 }
 
-const CodeInput: FC<CodeInputProps> = ({ onChange, value, placeholder }) => {
+const CodeInput: FC<CodeInputProps> = ({ onChange, value, placeholder, onFocus }) => {
   return (
     <div className='w-full max-h-48 overflow-scroll'>
       <CodeEditor
@@ -15,6 +16,7 @@ const CodeInput: FC<CodeInputProps> = ({ onChange, value, placeholder }) => {
         className='dark:bg-dark750'
         value={value}
         language='json'
+        onFocus={onFocus}
         placeholder={placeholder}
         onChange={(evn) => onChange(evn.target.value)}
         padding={15}

@@ -9,24 +9,22 @@ import { ALERT_ID } from '../../constants/constants'
 
 const BeaconMetric = () => {
   const { t } = useTranslation()
-  const { headSlot, slotDistance, isSyncing, beaconPercentage, beaconSyncTime } =
+  const { headSlot, slotDistance, isSyncing, beaconPercentage } =
     useRecoilValue(selectBeaconSyncInfo)
   const { storeAlert, removeAlert } = useDiagnosticAlerts()
 
   useEffect(() => {
-    if (beaconSyncTime <= 0) {
-      removeAlert(ALERT_ID.BEACON_SYNC)
-    }
-
-    if (beaconSyncTime > 0) {
+    if (isSyncing) {
       storeAlert({
         id: ALERT_ID.BEACON_SYNC,
         severity: StatusColor.WARNING,
         subText: t('fair'),
         message: t('alertMessages.beaconNotSync'),
       })
+    } else {
+      removeAlert(ALERT_ID.BEACON_SYNC)
     }
-  }, [beaconSyncTime])
+  }, [isSyncing])
 
   return (
     <SyncMetric

@@ -37,6 +37,7 @@ const NodeSync = () => {
       currentStep={t('syncing')}
       title={t('syncing')}
       ctaText={t('continue')}
+      ctaIcon='bi-arrow-right'
       mediaQuery='@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex @1024:items-start @1024:justify-center @1200:items-center'
     >
       <div className='w-full flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-2'>

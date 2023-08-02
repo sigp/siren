@@ -16,7 +16,7 @@ const ValidatorSummary = () => {
   }, [validators])
 
   return (
-    <div className='w-full max-w-850 flex flex-col lg:space-x-3 shadow lg:flex-row lg:divide-x divide-y lg:divide-y-0 dark:divide-dark600 dark:border dark:border-dark600'>
+    <div className='w-full max-w-850 @1540:max-w-1068 flex flex-col lg:space-x-3 shadow lg:flex-row lg:divide-x divide-y lg:divide-y-0 dark:divide-dark600 dark:border dark:border-dark600'>
       <div className='p-3 space-y-2'>
         <Typography type='text-caption2' isBold isUpperCase>
           {t('validators')}
@@ -43,7 +43,10 @@ const ValidatorSummary = () => {
           </Typography>
         </div>
       </div>
-      <ValidatorIncomeSummary validators={validators} className='p-3 space-y-2 w-full lg:w-42' />
+      <ValidatorIncomeSummary
+        validators={validators}
+        className='p-3 space-y-2 w-full lg:w-42 @1540:w-52'
+      />
       <OverallEffectiveness />
       <div className='p-3 space-y-2'>
         <Typography type='text-caption2' isBold isUpperCase>

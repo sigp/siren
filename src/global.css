@@ -140,3 +140,79 @@ input[type="number"]::-webkit-outer-spin-button {
 .exit-validator-modal .rodal {
     position: absolute!important;
 }
+
+.dark .dark\:text-primary, .dark .border-primary, .dark .placeholder\:text-primary {
+    color: #836FFF!important;
+}
+
+.dark .text-primary {
+    color: #836FFF;
+}
+
+@media (min-width: 1540px) {
+    .text-tiny {
+        @apply text-uTiny;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-caption2 {
+        @apply text-uCaption2;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-caption1 {
+        @apply text-uCaption1;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-body {
+        @apply text-uBody;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-subtitle1 {
+        @apply text-uSubtitle1;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-subtitle2 {
+        @apply text-uSubtitle3;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-subtitle3 {
+        @apply text-uSubtitle3;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-h1 {
+        @apply text-uH1;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-h2 {
+        @apply text-uH2;
+    }
+}
+
+
+@media (min-width: 1540px) {
+    .text-h3 {
+        @apply text-uH3;
+    }
+}
+
+@media (min-width: 1540px) {
+    .text-title {
+        @apply text-uTitle;
+    }
+}
+

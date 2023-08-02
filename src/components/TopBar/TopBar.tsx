@@ -11,6 +11,7 @@ import ValidatorMetric from './ValidatorMetric'
 import { useSetRecoilState } from 'recoil'
 import { isSideBarOpen } from '../../recoil/atoms'
 import BeaconNetwork from '../BeaconNetwork/BeaconNetwork'
+import DeviceName from '../DeviceName/DeviceName'
 
 const TopBar = () => {
   const { t } = useTranslation()
@@ -19,7 +20,7 @@ const TopBar = () => {
   const openSideBar = () => toggleSideBar(true)
 
   return (
-    <div className='w-full h-14 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
+    <div className='w-full h-14 @1540:h-18 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
       <div className='flex h-full'>
         <div className='flex items-center md:w-42 border-r border-borderLight dark:border-borderDark px-4'>
           <div
@@ -53,11 +54,14 @@ const TopBar = () => {
           </div>
           <SlasherLogo className='w-6 h-6 text-primary' />
         </div>
-      </div>
-      <div className='h-full flex'>
+        <Suspense fallback={<div />}>
+          <DeviceName />
+        </Suspense>
         <Suspense fallback={<div />}>
           <BeaconNetwork />
         </Suspense>
+      </div>
+      <div className='h-full flex'>
         <div className='h-full flex opacity-20'>
           <Wallet className='hidden lg:flex' borderStyle='border-l' />
           <Button

@@ -14,6 +14,7 @@ import Tooltip from '../ToolTip/Tooltip'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
+  extraLabel?: string
   tooltip?: string
   error?: string
   toolTipId?: string
@@ -30,6 +31,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input: FC<InputProps> = ({
   label,
+  extraLabel,
   tooltip,
   type,
   error,
@@ -120,6 +122,16 @@ const Input: FC<InputProps> = ({
               <i className='bi-question-circle-fill text-caption2 md:text-caption1 text-dark500' />
             </Tooltip>
           )}
+          {extraLabel && (
+            <Typography
+              family='font-archivo'
+              color='text-dark500'
+              className='uppercase'
+              type='text-caption2'
+            >
+              {extraLabel}
+            </Typography>
+          )}
         </div>
       )}
       <div className='relative w-full'>
@@ -138,7 +150,7 @@ const Input: FC<InputProps> = ({
             onClick={togglePassword}
             className={`cursor-pointer text-caption1 md:text-body ${
               inputType === 'password' ? 'bi-eye-slash-fill' : 'bi-eye-fill'
-            } text-dark500 absolute right-0 top-1/2 -translate-y-1/2`}
+            } text-dark500 absolute right-3 top-1/2 -translate-y-1/2`}
           />
         ) : icon ? (
           <i

@@ -16,15 +16,18 @@ const SessionConfig = () => {
 
   return (
     <SessionAuthForm>
-      {({ control, onSubmit }) => (
+      {({ control, onSubmit, onSkip }) => (
         <ValidatorSetupLayout
           onStepBack={viewConfig}
           onNext={onSubmit}
+          onSecondaryAction={onSkip}
           ctaType={ButtonFace.SECONDARY}
+          secondaryCtaText={'skip'}
+          secondaryCtaIcon={'bi-arrow-right'}
           title={t('sessionConfiguration.title')}
           currentStep={t('sessionConfiguration.currentStep')}
           previousStep={t('sessionConfiguration.prevStep')}
-          ctaText={t('continue')}
+          ctaText={t('authenticate')}
         >
           <div className='space-y-8 mb-12'>
             <Typography>{t('sessionConfiguration.description')}</Typography>
@@ -37,6 +40,7 @@ const SessionConfig = () => {
                     <Input
                       type='password'
                       label={t('password')}
+                      extraLabel={t('12char')}
                       error={error?.message}
                       uiMode={UiMode.LIGHT}
                       {...props}

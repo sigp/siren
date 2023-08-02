@@ -29,8 +29,7 @@ jobs:
                 arch: [
                        aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
-                       # Requires apple signature secrets
-                       # x86_64-apple-darwin,
+                       x86_64-apple-darwin,
                        x86_64-windows
                        ]
                 include:
@@ -38,9 +37,8 @@ jobs:
                         platform: ubuntu-latest
                     -   arch: x86_64-unknown-linux-gnu
                         platform: ubuntu-latest
-                    # Requires apple signature secrets
-                    #-   arch: x86_64-apple-darwin
-                        # platform: macos-latest
+                    -   arch: x86_64-apple-darwin
+                        platform: macos-latest
                     -   arch: x86_64-windows
                         platform: windows-2019
 
@@ -71,7 +69,7 @@ jobs:
               run: |
                  mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            - name: Move unsigned packages (windows)           
+            - name: Move unsigned packages (windows)
               if: startsWith(matrix.arch, 'x86_64-windows')
               run: |
                  move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
@@ -97,8 +95,7 @@ jobs:
                 arch: [
                        aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
-                       # Requires apple signature secrets
-                       # x86_64-apple-darwin,
+                       x86_64-apple-darwin,
                        x86_64-windows
                        ]
         steps:
@@ -128,25 +125,25 @@ jobs:
 
             - name: Upload signature (${{ matrix.arch }})
               uses: actions/upload-artifact@v3
-              with: 
+              with:
                 name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
                 path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
 
-#            - name: Upload signature (aarch64-unknown-linux-gnu)
-#              uses: actions/upload-artifact@v3
-#              with:
-#                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-#                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-#            - name: Upload signature (x86_64-unknown-linux-gnu)
-#              uses: actions/upload-artifact@v3
-#              with:
-#                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-#                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-#            - name: Upload signature (x86_64-windows)
-#              uses: actions/upload-artifact@v3
-#              with:
-#                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
-#                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+            - name: Upload signature (aarch64-unknown-linux-gnu)
+              uses: actions/upload-artifact@v3
+              with:
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+            - name: Upload signature (x86_64-unknown-linux-gnu)
+              uses: actions/upload-artifact@v3
+              with:
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+            - name: Upload signature (x86_64-windows)
+              uses: actions/upload-artifact@v3
+              with:
+                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
 
     draft-release:
         name: Draft Release

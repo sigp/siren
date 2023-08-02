@@ -163,7 +163,7 @@ export const CURRENCIES = [
 
 export const REQUIRED_VALIDATOR_VERSION = {
   major: 4,
-  minor: 2,
+  minor: 3,
   patch: 0,
 }
 
@@ -198,3 +198,5 @@ export const ALERT_ID = {
   WARNING_LOG: 'WARNING_LOG',
   PEER_COUNT: 'PEER_COUNT',
 }
+
+export const DEVICE_NAME_TRUNCATE = 10

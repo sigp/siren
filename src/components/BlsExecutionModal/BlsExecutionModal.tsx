@@ -5,7 +5,7 @@ import useMediaQuery from '../../hooks/useMediaQuery'
 import Typography from '../Typography/Typography'
 import CodeInput from '../CodeInput/CodeInput'
 import ValidatorDisclosure from '../Disclosures/ValidatorDisclosure'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { MOCK_BLS_JSON, WithdrawalInfoLink } from '../../constants/constants'
 import GradientHeader from '../GradientHeader/GradientHeader'
 import { ButtonFace } from '../Button/Button'
@@ -23,14 +23,21 @@ const BlsExecutionModal = () => {
   const { t } = useTranslation()
   const [isLoading, setLoading] = useState(false)
   const { beaconUrl } = useRecoilValue(activeDevice)
+  const [isFocus, setFocused] = useState(false)
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
   const isTablet = useMediaQuery('(max-width: 1024px)')
-  const [blsJson, setJson] = useState(MOCK_BLS_JSON)
+  const [blsJson, setJson] = useState<string>(MOCK_BLS_JSON)
   const [processingValidators, setIsProcess] = useRecoilState(processingBlsValidators)
   const [, storeIsBlsProcessing] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
 
-  const closeModal = () => toggleModal(false)
+  const closeModal = () => {
+    toggleModal(false)
+    setJson(MOCK_BLS_JSON)
+    setFocused(false)
+  }
   const setJsonValue = (value: string) => setJson(value)
+
+  const focusInput = () => setFocused(true)
 
   const handleError = (code?: number) => {
     let message = t('error.unknownError', { type: 'BEACON' })
@@ -85,6 +92,12 @@ const BlsExecutionModal = () => {
     }
   }
 
+  useEffect(() => {
+    if (isFocus) {
+      setJson('')
+    }
+  }, [isFocus])
+
   return (
     <RodalModal
       isVisible={isModal}
@@ -117,12 +130,13 @@ const BlsExecutionModal = () => {
               />
             </Trans>
           </Typography>
-          <CodeInput value={blsJson} onChange={setJsonValue} />
+          <CodeInput onFocus={focusInput} value={blsJson} onChange={setJsonValue} />
         </div>
         {isModal && (
           <div className='p-3 border-t-style100'>
             <ValidatorDisclosure
               isLoading={isLoading}
+              isDisabled={!blsJson}
               onAccept={submitChange}
               ctaType={ButtonFace.SECONDARY}
               ctaText={t('blsExecution.modal.cta')}

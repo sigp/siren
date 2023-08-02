@@ -21,6 +21,7 @@ export interface RenderProps {
   control: Control<SessionAuthForm>
   isLoading: boolean
   onSubmit: () => void
+  onSkip: () => void
 }
 
 export interface SessionAuthFormProps {
@@ -38,6 +39,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
   const {
     control,
     watch,
+    trigger,
     formState: { isValid },
   } = useForm({
     defaultValues: {
@@ -69,13 +71,12 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
     storeDeviceList(updatedDeviceList)
   }
 
-  const onSubmit = () => {
+  const onSkip = () => viewSetup()
+
+  const onSubmit = async () => {
     if (!password || !isValid) {
-      if (!password) {
-        viewSetup()
-        return
-      }
-      if (!isValid) displayToast(t('error.sessionAuth.invalidPassword'), ToastType.ERROR)
+      await trigger()
+      displayToast(t('error.sessionAuth.invalidPassword'), ToastType.ERROR)
       return
     }
 
@@ -94,6 +95,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
           control,
           isLoading: false,
           onSubmit,
+          onSkip,
         })}
     </form>
   )

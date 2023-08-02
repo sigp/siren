@@ -20,7 +20,7 @@ const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({ validator }) =>
   return (
     <div className='flex flex-col lg:space-x-3 shadow lg:flex-row lg:divide-x divide-y lg:divide-y-0 dark:divide-dark600 dark:border dark:border-dark600'>
       <div className='p-3 space-y-2'>
-        <Typography type='text-caption2' isUpperCase isBold>
+        <Typography type='text-caption2' className='text-left' isUpperCase isBold>
           {t('basicValidatorMetrics.ethRate')}
         </Typography>
         <div className='flex space-x-2.5'>
@@ -33,7 +33,7 @@ const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({ validator }) =>
         </div>
       </div>
       <div className='p-3 space-y-2.5'>
-        <Typography type='text-caption2' isUpperCase isBold>
+        <Typography type='text-caption2' className='text-left' isUpperCase isBold>
           {t('basicValidatorMetrics.validator')}
         </Typography>
         <div className='flex space-x-2'>

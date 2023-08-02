@@ -26,7 +26,9 @@ module.exports = {
         primary80: 'rgba(255, 255, 255, 0.8)',
         primary100: '#CCAFFF',
         primary200: '#7C5FEB',
+        primary150: '#836FFF',
         primary: '#5E41D5',
+        primaryOverride: '#5E41D5',
         primaryBright: '#5200FF',
         darkPrimary: '#1E1E1E',
         borderLight: '#EFEFEF',
@@ -62,6 +64,19 @@ module.exports = {
         caption1: '.75rem',
         'caption1.5': '.6rem',
         caption2: '.563rem',
+
+        uTiny: '.6rem',
+        uTitle: '5.610rem',
+        uH1: '4.5rem',
+        uH2: '3.5rem',
+        uH3: '2.6rem',
+        uSubtitle1: '1.95rem',
+        uSubtitle2: '1.6rem',
+        uSubtitle3: '1.3rem',
+        uBody: '1.2rem',
+        uCaption1: '1rem',
+        'uCaption1.5': '.85rem',
+        uCaption2: '.8rem',
       },
       minHeight: {
         60: '15rem',
@@ -81,6 +96,7 @@ module.exports = {
         20: '80px',
       },
       maxWidth: {
+        55: '55px',
         95: '95px',
         tiny: '165px',
         316: '316px',
@@ -102,6 +118,7 @@ module.exports = {
         '9/10': '90%',
       },
       height: {
+        18: '4.5rem',
         640: '640px',
         22: '5.688rem',
         '11/20': '55%',
@@ -152,6 +169,7 @@ module.exports = {
       },
       screens: {
         '@425': '425px',
+        '@1540': '1540px',
         '@1440': '1440px',
         '@1024': '1024px',
         '@1200': '1200px',

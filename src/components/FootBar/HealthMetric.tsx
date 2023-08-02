@@ -22,7 +22,7 @@ const HealthMetric = () => {
       title={t('healthCheck')}
       metric={`${t('uptime')} ${uptime}`}
       status={overallHealthStatus}
-      subTitle={`${t(healthCondition.toLowerCase())}, ${t('nodes')} ${
+      subTitle={`${t(healthCondition.toLowerCase()).toUpperCase()}, ${t('nodes')} ${
         isSyncing ? t('syncing') : t('synced')
       }...`}
       size='sm'

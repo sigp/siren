@@ -20,7 +20,7 @@ const SideBar = () => {
   const [view, setView] = useRecoilState(dashView)
   const [showSideBar, toggleSideBar] = useRecoilState(isSideBarOpen)
   const { mode, toggleUiMode } = useUiMode()
-  const isMobile = useMediaQuery('(max-width: 425px)')
+  const isMobile = useMediaQuery('(max-width: 768px)')
 
   const sideBarClasses = addClassString(
     'z-40 group-sidebar-hover:z-top98 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform',

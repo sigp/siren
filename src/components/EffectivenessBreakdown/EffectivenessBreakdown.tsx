@@ -26,7 +26,7 @@ const EffectivenessBreakdown: FC<EffectivenessBreakdownProps> = ({
   const hitStatus = getAvgEffectivenessStatus(head)
 
   const classes = addClassString(
-    'hidden absolute w-52 animate-fadeSlideIn left-0 z-50 shadow-xl bg-white dark:bg-black',
+    'hidden w-52 absolute animate-fadeSlideIn left-0 z-50 shadow-xl bg-white dark:bg-black',
     [className],
   )
 

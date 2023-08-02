@@ -39,6 +39,7 @@ const HealthCheck = () => {
       currentStep={t('healthCheck')}
       title={t('vcHealthCheck.title')}
       ctaText={t('continue')}
+      ctaIcon='bi-arrow-right'
       ctaType={ButtonFace.SECONDARY}
     >
       <Suspense fallback={<HealthFallBack />}>

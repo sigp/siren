@@ -62,7 +62,7 @@ const Settings = () => {
   }
 
   return (
-    <div className='relative z-50 w-full max-w-1440 px-5 py-8'>
+    <div className='relative w-full max-w-1440 px-5 py-8'>
       <LighthouseSvg className={svgClasses} />
       <div className='relative z-10 w-full pb-20 lg:pb-0'>
         <div className='w-full flex items-center justify-between pr-12'>
