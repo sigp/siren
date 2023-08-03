@@ -259,7 +259,7 @@
     },
     "invalidJson": "Invalid JSON data. Please ensure to use correct format.",
     "executionFailure": "Execution broadcast failed. Please ensure all fields and signature are valid.",
-    "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin in {{type}} config",
+    "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin \"*\" in {{type}} config",
     "unknownError": "Unknown {{type}} NODE error.",
     "validatorInfo": "Error Loading Validator Info...",
     "missingValidatorData": "Invalid Validator Node Data",

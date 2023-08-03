@@ -138,7 +138,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     validatorClient,
   )
 
-  const handleError = (e: unknown) => {
+  const handleError = (e: unknown, autoClose?: false | number) => {
     let message = 'Unknown Error'
     const requiredErrors = [
       'beaconDataRequired',
@@ -162,7 +162,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     if (e instanceof AxiosError && e.response?.status === 403) {
       message = t('error.invalidApiToken')
     }
-    displayToast(message, ToastType.ERROR)
+    displayToast(message, ToastType.ERROR, { autoClose })
   }
 
   const handleValidationErrors = (values: ConnectionForm) => {
@@ -285,11 +285,11 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     } catch (e) {
       if (!isValidBeaconNode || !isValidValidatorClient) {
         if (!isValidBeaconNode) {
-          handleError('invalidBeacon')
+          handleError('invalidBeacon', false)
         }
 
         if (!isValidValidatorClient) {
-          handleError('invalidValidator')
+          handleError('invalidValidator', false)
         }
         return
       }
