@@ -30,6 +30,7 @@ jobs:
                        aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
                        x86_64-apple-darwin,
+                       aarch64-apple-darwin,
                        x86_64-windows
                        ]
                 include:
@@ -38,6 +39,10 @@ jobs:
                     -   arch: x86_64-unknown-linux-gnu
                         platform: ubuntu-latest
                     -   arch: x86_64-apple-darwin
+                        arch_short: x64
+                        platform: macos-latest
+                    -   arch: aarch64-apple-darwin
+                        arch_short: arm64
                         platform: macos-latest
                     -   arch: x86_64-windows
                         platform: windows-2019
@@ -66,7 +71,12 @@ jobs:
                 APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
                 APPLE_KEY: ${{ secrets.APPLE_KEY }}
                 APPLE_ID: ${{ secrets.APPLE_ID }}
-              run: make release
+              if: startsWith(matrix.platform, 'macos-latest') != true
+                run: make release
+              else: 
+                run: |
+                  yarn build
+                  electron-forge make --arch=matrix.arch_short
 
             - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true
