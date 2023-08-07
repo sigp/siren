@@ -62,6 +62,10 @@ jobs:
             #       Builds
             # ==============================
             - name: Build Siren
+              env: 
+                APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+                APPLE_KEY: ${{ secrets.APPLE_KEY }}
+                APPLE_ID: ${{ secrets.APPLE_ID }}
               run: make release
 
             - name: Move unsigned packages (*nix)
