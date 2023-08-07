@@ -71,12 +71,14 @@ jobs:
                 APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
                 APPLE_KEY: ${{ secrets.APPLE_KEY }}
                 APPLE_ID: ${{ secrets.APPLE_ID }}
-              if: startsWith(matrix.platform, 'macos-latest') != true
-                run: make release
-              else: 
-                run: |
+                PLATFORM: ${{ matrix.platform }}
+              run: |
+                if [[ $PLATFORM != 'macos-latest' ]]; then
+                  make release
+                else
                   yarn build
-                  electron-forge make --arch=matrix.arch_short
+                  electron-forge make --arch=$matrix.arch_short
+                fi
 
             - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true
