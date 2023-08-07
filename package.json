@@ -119,6 +119,7 @@
     ]
   },
   "devDependencies": {
+    "@electron-prebuilt-compile: "*",
     "@electron-forge/cli": "^6.0.3",
     "@electron-forge/maker-squirrel": "^6.0.3",
     "@electron-forge/maker-zip": "^6.0.3",
