@@ -67,19 +67,21 @@ jobs:
             #       Builds
             # ==============================
             - name: Build Siren
+              env:
+              if: ${{ matrix.platform != 'macos-latest' }}
+              run: |
+                make release
+
+            - name: Build Siren (macOS)
               env: 
                 APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
                 APPLE_KEY: ${{ secrets.APPLE_KEY }}
                 APPLE_ID: ${{ secrets.APPLE_ID }}
-                PLATFORM: ${{ matrix.platform }}
+              if: ${{ matrix.platform == 'macos-latest' }} 
               run: |
-                if [[ $PLATFORM != 'macos-latest' ]]; then
-                  make release
-                else
-                  yarn
-                  yarn build
-                  electron-forge make --arch=${{ matrix.arch_short }}
-                fi
+                yarn
+                yarn build
+                electron-forge make --arch=${{ matrix.arch_short }}
 
             - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true
