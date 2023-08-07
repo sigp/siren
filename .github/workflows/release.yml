@@ -67,7 +67,6 @@ jobs:
             #       Builds
             # ==============================
             - name: Build Siren
-              env:
               if: ${{ matrix.platform != 'macos-latest' }}
               run: |
                 make release
