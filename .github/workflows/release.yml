@@ -78,7 +78,7 @@ jobs:
                 APPLE_ID: ${{ secrets.APPLE_ID }}
               if: ${{ matrix.platform == 'macos-latest' }} 
               run: |
-                npm install electron-forge
+                npm install electron-forge --force
                 yarn
                 yarn build
                 electron-forge make --arch=${{ matrix.arch_short }}
