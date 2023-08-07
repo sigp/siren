@@ -78,10 +78,7 @@ jobs:
                 APPLE_ID: ${{ secrets.APPLE_ID }}
               if: ${{ matrix.platform == 'macos-latest' }} 
               run: |
-                npm install -g electron-forge --force
-                yarn
-                yarn build
-                electron-forge make --arch=${{ matrix.arch_short }}
+                make arch=${{ matrix.arch_short }} release-macos
 
             - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true
