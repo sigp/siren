@@ -76,8 +76,9 @@ jobs:
                 if [[ $PLATFORM != 'macos-latest' ]]; then
                   make release
                 else
+                  yarn
                   yarn build
-                  electron-forge make --arch=$matrix.arch_short
+                  electron-forge make --arch=${{ matrix.arch_short }}
                 fi
 
             - name: Move unsigned packages (*nix)
