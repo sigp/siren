@@ -214,11 +214,12 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
   const formatDevice = (values: ConnectionForm): DeviceSettings => {
     const { beaconNode, validatorClient, deviceName } = values
     const formattedBnEndpoint = formatEndpoint(beaconNode) as string
-    const formattedVcEndpoint = `${formatEndpoint(validatorClient)}/lighthouse`
+    const formattedVcEndpoint = formatEndpoint(validatorClient) as string
     const settingName = deviceName || 'localhost'
 
     return {
-      validatorUrl: formattedVcEndpoint,
+      rawValidatorUrl: formattedVcEndpoint,
+      validatorUrl: `${formatEndpoint(validatorClient)}/lighthouse`,
       beaconUrl: formattedBnEndpoint,
       deviceName: settingName,
     }
