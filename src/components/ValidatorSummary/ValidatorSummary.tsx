@@ -6,10 +6,12 @@ import { useTranslation } from 'react-i18next'
 import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
 import ActiveValidatorCount from '../ActiveValidatorCount/ActiveValidatorCount'
 import OverallEffectiveness from '../OveralEffectiveness/OverallEffectiveness'
+import { selectActiveValidators } from '../../recoil/selectors/selectActiveValidators'
 
 const ValidatorSummary = () => {
   const { t } = useTranslation()
   const validators = useRecoilValue(selectValidatorInfos)
+  const activeValidators = useRecoilValue(selectActiveValidators)
 
   const totalBalance = useMemo(() => {
     return validators.map((validator) => validator.balance).reduce((a, b) => a + b, 0)
@@ -26,7 +28,7 @@ const ValidatorSummary = () => {
             {t('validatorManagement.summary.active')}
           </Typography>
           <Typography isBold type='text-caption1'>
-            {validators.length}
+            {activeValidators.length}
           </Typography>
         </div>
       </div>
