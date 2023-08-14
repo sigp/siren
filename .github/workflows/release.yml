@@ -30,6 +30,7 @@ jobs:
                        aarch64-unknown-linux-gnu,
                        x86_64-unknown-linux-gnu,
                        x86_64-apple-darwin,
+                       aarch64-apple-darwin,
                        x86_64-windows
                        ]
                 include:
@@ -38,6 +39,10 @@ jobs:
                     -   arch: x86_64-unknown-linux-gnu
                         platform: ubuntu-latest
                     -   arch: x86_64-apple-darwin
+                        arch_short: x64
+                        platform: macos-latest
+                    -   arch: aarch64-apple-darwin
+                        arch_short: arm64
                         platform: macos-latest
                     -   arch: x86_64-windows
                         platform: windows-2019
@@ -62,7 +67,18 @@ jobs:
             #       Builds
             # ==============================
             - name: Build Siren
-              run: make release
+              if: ${{ matrix.platform != 'macos-latest' }}
+              run: |
+                make release
+
+            - name: Build Siren (macOS)
+              env: 
+                APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+                APPLE_KEY: ${{ secrets.APPLE_KEY }}
+                APPLE_ID: ${{ secrets.APPLE_ID }}
+              if: ${{ matrix.platform == 'macos-latest' }} 
+              run: |
+                make arch=${{ matrix.arch_short }} release-macos
 
             - name: Move unsigned packages (*nix)
               if: startsWith(matrix.arch, 'x86_64-windows') != true

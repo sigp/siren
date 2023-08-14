@@ -11,7 +11,7 @@ module.exports = {
       // eslint-disable-next-line no-undef
       appleId: process.env.APPLE_ID,
       // eslint-disable-next-line no-undef
-      appleIdPassword: process.env.APPLE_PASSWORD,
+      appleIdPassword: process.env.APPLE_KEY,
       // eslint-disable-next-line no-undef
       teamId: process.env.APPLE_TEAM_ID,
     },

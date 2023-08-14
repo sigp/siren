@@ -18,6 +18,12 @@ docker:
 release:
 	yarn && yarn build-all
 
+release-macos:
+	npm install -g electron-forge --force
+	yarn 
+	yarn build
+	electron-forge make --arch=$arch
+
 # Remove compiled artifacts
 clean:
 	rm -r out
