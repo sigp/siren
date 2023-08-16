@@ -13,7 +13,7 @@ export const selectBeaconSyncInfo = selector<BeaconSyncInfo>({
 
     return {
       headSlot: head_slot,
-      slotDistance: head_slot + sync_distance,
+      slotDistance: distance,
       beaconPercentage: getPercentage(head_slot, distance),
       beaconSyncTime: sync_distance * 12,
       isSyncing: is_syncing,
