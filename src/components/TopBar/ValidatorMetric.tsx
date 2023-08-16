@@ -31,7 +31,7 @@ const ValidatorMetric = () => {
     <SyncMetric
       id='ethMain'
       borderStyle='border-r'
-      title='ETHEREUM MAINNET'
+      title={t('executionEngine')}
       subTitle={`${isReady ? t('synced') : t('syncing')} —`}
       percent={syncPercentage}
       amount={cachedHeadSlot}
