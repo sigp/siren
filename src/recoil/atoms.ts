@@ -40,7 +40,7 @@ export const beaconSyncInfo = atom<BeaconSyncResult>({
   default: undefined,
 })
 
-export const validatorStateInfo = atom<BeaconValidatorResult[]>({
+export const validatorStateInfo = atom<BeaconValidatorResult[] | undefined>({
   key: 'validatorStateInfo',
   default: undefined,
 })
@@ -130,7 +130,7 @@ export const processingBlsValidators = atom<(string | number)[]>({
   default: undefined,
 })
 
-export const validatorAliases = atom<ValAliases>({
+export const validatorAliases = atom<ValAliases | undefined>({
   key: 'validatorAliases',
   default: undefined,
 })
