@@ -17,7 +17,7 @@ const useValidatorEpochBalance = () => {
     return validatorCacheData && activeValidators.length && Object.values(validatorCacheData).length
       ? activeValidators
           .map(({ index, name }) => {
-            const data = validatorCacheData[index as any]
+            const data = validatorCacheData[index as any] || []
             return {
               index,
               name,
@@ -34,7 +34,7 @@ const useValidatorEpochBalance = () => {
 
   const formattedTimestamps = useMemo(() => {
     const data = validatorCacheData && Object.values(validatorCacheData)[0]
-    return data
+    return data && genesisBlock
       ? data.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
 

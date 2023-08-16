@@ -14,6 +14,7 @@ export enum ContentView {
 export enum AppView {
   ONBOARD = 'ONBOARD',
   DASHBOARD = 'DASHBOARD',
+  CHANGE_SCREEN = 'CHANGE_SCREEN',
   INIT = 'INIT',
 }
 

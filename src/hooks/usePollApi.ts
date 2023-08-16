@@ -45,6 +45,11 @@ const usePollApi = ({
     enabled: isReady && retries.current < maxErrors,
     refetchInterval: time,
     retry: 3,
+    cacheTime: 0,
+    initialData: undefined,
+    keepPreviousData: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     onError: () => {
       retries.current += 1
       if (retries.current >= maxErrors) {

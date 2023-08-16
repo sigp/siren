@@ -17,6 +17,7 @@ import {
   validatorStateInfo,
   validatorSyncInfo,
   validatorVersionData,
+  validatorAliases,
 } from '../recoil/atoms'
 import { ContentView } from '../constants/enums'
 
@@ -38,6 +39,7 @@ const useAtomCleanup = () => {
   const isValidatorNetworkError = useSetRecoilState(validatorNetworkError)
   const setSessionAuthErrorCount = useSetRecoilState(sessionAuthErrorCount)
   const setAlert = useSetRecoilState(alertLogs)
+  const setAliases = useSetRecoilState(validatorAliases)
 
   const resetDashboardAtoms = () => {
     setDashView(ContentView.MAIN)
@@ -55,8 +57,9 @@ const useAtomCleanup = () => {
     setDeviceSettings(undefined as any)
     setValSyncInfo(undefined as any)
     setBeaconSyncInfo(undefined as any)
-    setValStateInfo(undefined as any)
+    setValStateInfo(undefined)
     setAlert([])
+    setAliases(undefined)
   }
 
   return {
