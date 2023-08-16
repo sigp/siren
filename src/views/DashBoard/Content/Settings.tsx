@@ -71,7 +71,7 @@ const Settings = () => {
           </Typography>
           <Button onClick={viewConfig} type={ButtonFace.TERTIARY}>
             <i className='bi-box-arrow-left mr-2' />
-            Configuration
+            {t('configuration')}
           </Button>
         </div>
         <div className='w-full flex flex-col lg:flex-row pt-8'>
