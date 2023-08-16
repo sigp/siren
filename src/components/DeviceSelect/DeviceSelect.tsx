@@ -43,7 +43,7 @@ const DeviceSelect: FC<DeviceSelectProps> = ({ devices, value, uiMode, type }) =
   const select = (selection: string) => {
     if (devices?.[selection]) {
       setDeviceKey(selection)
-      setAppView(AppView.INIT)
+      setAppView(AppView.CHANGE_SCREEN)
     }
   }
   const toggleDropdown = () => toggle((prevState) => !prevState)
