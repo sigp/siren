@@ -25,6 +25,7 @@ const HealthMetric = () => {
       subTitle={`${t(healthCondition.toLowerCase()).toUpperCase()}, ${t('nodes')} ${
         isSyncing ? t('syncing') : t('synced')
       }...`}
+      maxWidth='w-fit'
       size='sm'
     />
   )
