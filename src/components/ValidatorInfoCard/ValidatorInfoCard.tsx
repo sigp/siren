@@ -16,7 +16,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, o
   const { t } = useTranslation()
   const { index, balance, pubKey, name } = validator
   const classes = addClassString(
-    'w-full lg:w-80 h-60 border-r-style100 px-8 lg:px-6 py-4 relative',
+    'w-full lg:w-80 h-60 lg:border-r-style100 px-8 lg:px-6 py-4 relative',
     [className],
   )
 

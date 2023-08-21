@@ -25,12 +25,12 @@ const ValidatorGraffitiInput: FC<ValidatorGraffitiInputProps> = ({
 
   return (
     <div className='w-full border-t flex'>
-      <div className='border-r py-2 px-6 w-42'>
+      <div className='border-r py-2 px-2 md:px-6 md:w-42'>
         <Typography type='text-caption1' className='w-1/2'>
           {t('validatorGraffiti')}
         </Typography>
       </div>
-      <div className='flex-1 flex justify-between items-center px-8 py-3'>
+      <div className='flex-1 flex justify-between items-center px-2 md:px-8 py-3'>
         <Input
           value={input}
           onChange={onChange}

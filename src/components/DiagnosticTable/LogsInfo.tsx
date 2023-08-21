@@ -35,7 +35,11 @@ const LogsInfo = () => {
           {t('logInfo.logs')}
         </Typography>
         <div onClick={viewAllLogs} className='cursor-pointer'>
-          <Typography type='text-tiny' className='uppercase' color='text-dark400'>
+          <Typography
+            type='text-tiny'
+            className='uppercase @1600:text-caption1'
+            color='text-dark400'
+          >
             {t('viewAll')}
           </Typography>
         </div>

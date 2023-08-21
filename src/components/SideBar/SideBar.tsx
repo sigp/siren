@@ -115,8 +115,8 @@ const SideBar = () => {
               />
             ))}
             <div onClick={toggleUi} className='w-full flex items-center'>
-              <SideBarText className='w-auto mr-4' text={t('sidebar.theme')} />
-              <UiModeIcon className='md:hidden' mode={mode} />
+              <SideBarText className='w-auto md:mr-4' text={t('sidebar.theme')} />
+              <UiModeIcon className='md:hidden mr-4' mode={mode} />
             </div>
           </ul>
         </div>
