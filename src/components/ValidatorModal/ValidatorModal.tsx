@@ -26,7 +26,6 @@ const ValidatorModal = () => {
   const validator = useRecoilValue(selectValidatorDetail)
   const [activeIndex, setIndex] = useState(0)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.EXIT)
-  const isMobile = useMediaQuery('(max-width: 766px)')
   const isTablet = useMediaQuery('(max-width: 768px)')
   const isLargeScreen = useMediaQuery('(min-width: 1540px)')
 
@@ -72,7 +71,7 @@ const ValidatorModal = () => {
       isVisible={!!validator && isReady}
       styles={{
         width: 'fit-content',
-        maxWidth: isMobile ? '99%' : isTablet ? '448px' : isLargeScreen ? '1200px' : '900px',
+        maxWidth: isTablet ? '99%' : isLargeScreen ? '1200px' : '900px',
         height: isTablet ? '540px' : 'max-content',
       }}
       onClose={closeModal}
