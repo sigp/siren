@@ -65,7 +65,7 @@ const Settings = () => {
     <div className='relative w-full max-w-1440 px-5 py-8'>
       <LighthouseSvg className={svgClasses} />
       <div className='relative z-10 w-full pb-20 lg:pb-0'>
-        <div className='w-full flex items-center justify-between pr-12'>
+        <div className='w-full flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 justify-between pr-12'>
           <Typography type='text-subtitle1' className='capitalize' fontWeight='font-light'>
             {t('sidebar.settings')}
           </Typography>
@@ -76,8 +76,8 @@ const Settings = () => {
         </div>
         <div className='w-full flex flex-col lg:flex-row pt-8'>
           <div className='flex-1'>
-            <div className='w-full flex max-w-xl justify-between'>
-              <div>
+            <div className='w-full flex flex-col md:flex-row max-w-xl justify-between'>
+              <div className='order-2 md:order-1'>
                 <Typography
                   type='text-subtitle2'
                   color='text-transparent'
@@ -87,7 +87,7 @@ const Settings = () => {
                   {t('settings.currentVersion')}
                 </Typography>
               </div>
-              <div className='flex items-center space-x-2'>
+              <div className='flex order-1 md:order-2 mb-8 md:mb-0 items-center space-x-2'>
                 <Typography
                   type='text-caption1'
                   isBold
@@ -153,7 +153,7 @@ const Settings = () => {
             </div>
           </div>
         </div>
-        <div className='w-full mt-6 lg:mt-0 px-4 md:px-0'>
+        <div className='w-full mt-6 lg:mt-0 px-0'>
           <Typography
             color='text-transparent'
             className='primary-gradient-text'

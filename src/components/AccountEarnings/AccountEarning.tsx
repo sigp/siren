@@ -45,7 +45,7 @@ const AccountEarning = () => {
 
   return (
     <EarningsLayout>
-      <div className='p-4 bg-primary200 w-28 text-center absolute z-50 top-0 right-10'>
+      <div className='p-4 bg-primary200 w-28 text-center absolute z-30 md:z-50 top-0 right-10'>
         <Tooltip
           className='cursor-pointer flex justify-center space-x-2'
           id='balanceInfo'
@@ -63,7 +63,7 @@ const AccountEarning = () => {
         <div className='w-full p-4'>
           <Typography
             fontWeight='font-light'
-            className='primary-gradient-text'
+            className='primary-gradient-text pointer-events-none'
             color='text-transparent'
             type='text-subtitle1'
             darkMode='dark:text-white'
@@ -130,9 +130,9 @@ const AccountEarning = () => {
               ))}
             </div>
           </div>
-          <div className='flex justify-between space-x-2 md:space-x-0 mt-2 p-4'>
+          <div className='flex justify-between space-x-2 md:space-x-0 mt-6 md:mt-2 md:p-4'>
             <div className='flex space-x-4'>
-              <EthLogo className='h-10 w-10' />
+              <EthLogo className='h-10 w-10 hidden md:block' />
               <Tooltip
                 className='cursor-pointer'
                 id='ethInfo'
@@ -162,7 +162,7 @@ const AccountEarning = () => {
               </Tooltip>
             </div>
             <div className='flex space-x-4'>
-              <UsdcLogo className='h-10 w-10' />
+              <UsdcLogo className='h-10 w-10 hidden md:block' />
               <Tooltip
                 className='cursor-pointer'
                 id='fiatInfo'

@@ -33,7 +33,7 @@ const SyncMetric: FC<SyncMetricProps> = ({
   ...props
 }) => {
   const classes = addClassString(
-    'flex h-14 max-h-full bg-white dark:bg-dark750 border-borderLight dark:border-dark900',
+    'flex max-h-full bg-white dark:bg-dark750 border-borderLight dark:border-dark900',
     [borderStyle, className],
   )
   return (

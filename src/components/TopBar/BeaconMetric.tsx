@@ -31,7 +31,7 @@ const BeaconMetric = () => {
       id='beaconChain'
       borderStyle='border-r'
       title='BEACON CHAIN'
-      className='ml-4'
+      className='md:ml-4'
       subTitle={`${isSyncing ? t('syncing') : slotDistance ? t('synced') : ''} —`}
       percent={beaconPercentage}
       amount={headSlot}

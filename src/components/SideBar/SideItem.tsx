@@ -25,7 +25,7 @@ const SideItem: FC<SideItemProps> = ({ children, isActive, className, onClick, i
           [!isActive && 'group-hover:block hidden'],
         )}
       />
-      <div className='w-4 h-4'>{children}</div>
+      <div className='w-4 h-4 @1600:w-5 @1600:h-5'>{children}</div>
     </li>
   )
   return isDisabled ? (

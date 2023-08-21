@@ -20,7 +20,7 @@ const TopBar = () => {
   const openSideBar = () => toggleSideBar(true)
 
   return (
-    <div className='w-full h-14 @1540:h-18 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
+    <div className='w-full lg:h-14 @1540:h-18 border-b bg-white dark:bg-dark750 border-borderLight dark:border-dark800 flex justify-between'>
       <div className='flex h-full'>
         <div className='flex items-center md:w-42 border-r border-borderLight dark:border-borderDark px-4'>
           <div
