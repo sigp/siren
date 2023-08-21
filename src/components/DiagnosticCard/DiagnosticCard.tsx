@@ -61,7 +61,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           maxWidth || 'max-w-full md:max-w-xs'
         } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
       default:
-        return `${maxWidth || 'max-w-xs @1600:max-w-full'} ${
+        return `${maxWidth || 'md:max-w-xs @1600:max-w-full'} ${
           maxHeight || 'max-h-30'
         } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
     }
