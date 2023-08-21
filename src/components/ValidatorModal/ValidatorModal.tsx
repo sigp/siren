@@ -26,7 +26,7 @@ const ValidatorModal = () => {
   const validator = useRecoilValue(selectValidatorDetail)
   const [activeIndex, setIndex] = useState(0)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.EXIT)
-  const isMobile = useMediaQuery('(max-width: 425px)')
+  const isMobile = useMediaQuery('(max-width: 766px)')
   const isTablet = useMediaQuery('(max-width: 768px)')
   const isLargeScreen = useMediaQuery('(min-width: 1540px)')
 
