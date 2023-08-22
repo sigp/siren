@@ -22,7 +22,6 @@ export const selectActiveValidators = selector<activeValidatorDetail[]>({
             index: String(index),
             name,
           }))
-          .slice(0, 10)
       : []
   },
 })
