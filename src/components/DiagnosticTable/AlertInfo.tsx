@@ -13,6 +13,7 @@ const AlertInfo = () => {
   const { t } = useTranslation()
   const { alerts, dismissAlert, resetDismissed } = useDiagnosticAlerts()
   const { ref, dimensions } = useDivDimensions()
+  const headerDimensions = useDivDimensions()
   const [filter, setFilter] = useState('all')
 
   const setFilterValue = (value: FilterValue) => setFilter(value)
@@ -40,7 +41,10 @@ const AlertInfo = () => {
 
   return (
     <div ref={ref} className='h-full w-full flex flex-col md:border-l-0 border-t-0 border-style500'>
-      <div className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-r-0 border-style500'>
+      <div
+        ref={headerDimensions.ref}
+        className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-r-0 border-style500'
+      >
         <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
           {t('alertInfo.alerts')}
         </Typography>
@@ -48,7 +52,13 @@ const AlertInfo = () => {
       </div>
       {dimensions && (
         <div
-          style={isMobile ? undefined : { maxHeight: `${dimensions.height}px` }}
+          style={
+            isMobile
+              ? undefined
+              : {
+                  maxHeight: `${dimensions.height - (headerDimensions?.dimensions?.height || 0)}px`,
+                }
+          }
           className='h-full w-full flex flex-col'
         >
           {formattedAlerts.length > 0 && (
