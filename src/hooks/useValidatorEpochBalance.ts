@@ -6,11 +6,11 @@ import { BALANCE_COLORS, secondsInSlot, slotsInEpoc } from '../constants/constan
 import moment from 'moment'
 import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
 import getAverageValue from '../utilities/getAverageValue'
-import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
+import { selectSlicedActiveValidators } from '../recoil/selectors/selectSlicedActiveValidators'
 
 const useValidatorEpochBalance = () => {
   const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
-  const activeValidators = useRecoilValue(selectActiveValidators)
+  const activeValidators = useRecoilValue(selectSlicedActiveValidators)
   const genesisBlock = useRecoilValue(selectGenesisBlock) as number
 
   const formattedEpochData = useMemo(() => {
