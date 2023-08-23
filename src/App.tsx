@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
 import SSELogProvider from './components/SSELogProvider/SSELogProvider'
 import SyncPollingWrapper from './wrappers/SyncPollingWrapper'
+import ChangeScreen from './views/ChangeScreen'
 
 function App() {
   const view = useRecoilValue(appView)
@@ -26,6 +27,8 @@ function App() {
         )
       case AppView.ONBOARD:
         return <Onboard />
+      case AppView.CHANGE_SCREEN:
+        return <ChangeScreen />
       default:
         return <InitScreen />
     }

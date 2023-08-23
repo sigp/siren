@@ -81,18 +81,14 @@ export interface DeviceList {
 }
 
 export interface DeviceSettings {
+  rawValidatorUrl: string
   validatorUrl: string
   beaconUrl: string
   apiToken?: string
   deviceName: string
 }
 
-export interface ActiveDevice {
-  validatorUrl: string
-  beaconUrl: string
-  apiToken: string
-  deviceName: string
-}
+export type ActiveDevice = Required<DeviceSettings>
 
 export interface ValAliases {
   [key: string]: string

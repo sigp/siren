@@ -43,7 +43,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
             </Typography>
           ) : (
             <div>
-              <Typography className='mr-12' type='text-caption1' darkMode='text-dark900'>
+              <Typography className='md:mr-12' type='text-caption1' darkMode='text-dark900'>
                 {t('blsExecution.warning.text')}
                 <span className='text-blue-500'>
                   <a href={WithdrawalInfoLink} target='_blank' rel='noreferrer'>

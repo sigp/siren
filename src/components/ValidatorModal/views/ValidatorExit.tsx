@@ -25,11 +25,12 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const { t } = useTranslation()
   const { pubKey } = validator
   const [isLoading, setLoading] = useState(false)
-  const { validatorUrl, apiToken, beaconUrl } = useRecoilValue(activeDevice)
+  const { rawValidatorUrl, apiToken, beaconUrl } = useRecoilValue(activeDevice)
   const [isAccept, setIsAccept] = useState(false)
   const { moveToView, closeModal } = useContext(ValidatorModalContext)
   const viewDetails = () => moveToView(ValidatorModalView.DETAILS)
-  const acceptBtnClasses = addClassString('', [isAccept && 'border-success text-success'])
+  const acceptBtnClasses = addClassString('', [isAccept && 'border-success !text-success'])
+  const checkMarkClasses = addClassString('bi bi-check-circle ml-4', [isAccept && 'text-success'])
 
   const getSignedExit = async (url: string): Promise<SignedExitData | undefined> => {
     try {
@@ -61,7 +62,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
   const confirmExit = async () => {
     setLoading(true)
 
-    const message = await getSignedExit(validatorUrl)
+    const message = await getSignedExit(rawValidatorUrl)
 
     if (message) {
       void (await submitSignedMessage(message))
@@ -102,7 +103,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator }) => {
         </InfoBox>
         <Button onClick={toggleAccept} className={acceptBtnClasses} type={ButtonFace.TERTIARY}>
           {t('validatorExit.iAccept')}
-          <i className='bi bi-check-circle ml-4' />
+          <i className={checkMarkClasses} />
         </Button>
       </div>
       <div className='p-3 border-t-style100'>

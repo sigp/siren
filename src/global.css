@@ -141,7 +141,7 @@ input[type="number"]::-webkit-outer-spin-button {
     position: absolute!important;
 }
 
-.dark .dark\:text-primary, .dark .border-primary, .dark .placeholder\:text-primary {
+.dark .dark\:text-primary, .dark .placeholder\:text-primary {
     color: #836FFF!important;
 }
 

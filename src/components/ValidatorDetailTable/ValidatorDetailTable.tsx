@@ -99,77 +99,77 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({ validator 
       </div>
       <div className='hidden lg:block border-t-style100 w-full'>
         <div className='w-full flex'>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('balance')}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('income')}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('proposed')}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('attested')}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('aggregated')}
             </Typography>
           </div>
-          <div className='w-12 py-4 px-6'>
+          <div className='w-12 @1600:w-20 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('in')}
             </Typography>
           </div>
-          <div className='w-24 py-4 px-6'>
+          <div className='w-24 @1600:w-32 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               {t('effectiveness')}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption2' color='text-dark500' isBold isUpperCase>
               Apr
             </Typography>
           </div>
         </div>
         <div className='border-t-style100 w-full flex'>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption1'>{balance?.toFixed(4)}</Typography>
           </div>
-          <div className='w-20 py-4 px-6'>
+          <div className='w-20 @1600:w-28 py-4 px-6'>
             <Typography type='text-caption1' color={incomeColor} darkMode={incomeColor}>
               {income.toFixed(4)}
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6 opacity-20'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6 opacity-20'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-20 py-4 px-6 opacity-20'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-12 py-4 px-6 opacity-20'>
+          <div className='w-12 @1600:w-20 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-24 py-4 px-6 opacity-20'>
+          <div className='w-24 @1600:w-32 py-4 px-6 opacity-20'>
             <Typography color='text-dark400' type='text-caption1'>
               -
             </Typography>

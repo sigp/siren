@@ -6,8 +6,8 @@ import { waitFor } from '@testing-library/react'
 import { formatUnits } from 'ethers/lib/utils'
 import clearAllMocks = jest.clearAllMocks
 
-jest.mock('../../recoil/selectors/selectActiveValidators', () => ({
-  selectActiveValidators: 'selectActiveValidators',
+jest.mock('../../recoil/selectors/selectSlicedActiveValidators', () => ({
+  selectSlicedActiveValidators: 'selectSlicedActiveValidators',
 }))
 
 jest.mock('../../recoil/atoms', () => ({
@@ -37,7 +37,7 @@ describe('useValidatorEpochBalance', () => {
     mockedRecoilValue.mockImplementation((data) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      if (data === 'selectActiveValidators') return mockActiveValidators
+      if (data === 'selectSlicedActiveValidators') return mockActiveValidators
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (data === 'validatorCacheBalanceResult') return mockValidatorCacheResults

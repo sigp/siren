@@ -6,18 +6,18 @@ import { BALANCE_COLORS, secondsInSlot, slotsInEpoc } from '../constants/constan
 import moment from 'moment'
 import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
 import getAverageValue from '../utilities/getAverageValue'
-import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
+import { selectSlicedActiveValidators } from '../recoil/selectors/selectSlicedActiveValidators'
 
 const useValidatorEpochBalance = () => {
   const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)
-  const activeValidators = useRecoilValue(selectActiveValidators)
+  const activeValidators = useRecoilValue(selectSlicedActiveValidators)
   const genesisBlock = useRecoilValue(selectGenesisBlock) as number
 
   const formattedEpochData = useMemo(() => {
     return validatorCacheData && activeValidators.length && Object.values(validatorCacheData).length
       ? activeValidators
           .map(({ index, name }) => {
-            const data = validatorCacheData[index as any]
+            const data = validatorCacheData[index as any] || []
             return {
               index,
               name,
@@ -34,7 +34,7 @@ const useValidatorEpochBalance = () => {
 
   const formattedTimestamps = useMemo(() => {
     const data = validatorCacheData && Object.values(validatorCacheData)[0]
-    return data
+    return data && genesisBlock
       ? data.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
 

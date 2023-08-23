@@ -139,6 +139,12 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
     }
   }, [chartEl, data, hasAnimated, mode])
 
+  useEffect(() => {
+    return () => {
+      Chart.getChart('stepChart')?.destroy()
+    }
+  }, [])
+
   return (
     <div onClick={onClick} className={addClassString('w-full h-full relative', [className])}>
       <canvas id='stepChart' ref={chartEl} />

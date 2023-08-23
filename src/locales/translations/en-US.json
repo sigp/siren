@@ -24,6 +24,8 @@
       "saturday": "Sat"
     }
   },
+  "configuration": "Configuration",
+  "executionEngine": "Execution Engine",
   "password": "Password",
   "12char": "( Must contain 12 characters, lowercase, uppercase, numbers, and special characters )",
   "confirmPassword": "Confirm Password",
