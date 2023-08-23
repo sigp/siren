@@ -22,7 +22,7 @@ release-macos:
 	npm install -g electron-forge --force
 	yarn 
 	yarn build
-	electron-forge make --arch=${arch:-$(uname -m)}
+	electron-forge make --arch=${arch}
 
 # Remove compiled artifacts
 clean:
