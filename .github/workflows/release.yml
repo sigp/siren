@@ -6,229 +6,232 @@ on:
       - v*
 
 env:
-    REPO_NAME: ${{ github.repository_owner }}/siren
-    IMAGE_NAME: sigmaprime/siren
+  REPO_NAME: ${{ github.repository_owner }}/siren
+  IMAGE_NAME: sigmaprime/siren
 
 jobs:
-    extract-version:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout sources
-              uses: actions/checkout@v3
-            - name: Extract version
-              run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
-              # Used for running without tags
-              # run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
-              id: extract_version
-        outputs:
-            VERSION: ${{ steps.extract_version.outputs.VERSION }}
-    build:
-        name: Build Release
-        strategy:
-            matrix:
-                arch: [
-                       aarch64-unknown-linux-gnu,
-                       x86_64-unknown-linux-gnu,
-                       x86_64-apple-darwin,
-                       x86_64-windows
-                       ]
-                include:
-                    -   arch: aarch64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                    -   arch: x86_64-unknown-linux-gnu
-                        platform: ubuntu-latest
-                    -   arch: x86_64-apple-darwin
-                        platform: macos-latest
-                    -   arch: x86_64-windows
-                        platform: windows-2019
+  extract-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - name: Extract version
+        run: echo "VERSION=$(echo ${GITHUB_REF#refs/tags/})" >> $GITHUB_OUTPUT
+        # Used for running without tags
+        # run: echo "VERSION=$(cat package.json | jq '.["version"]' | tr -d '"')" >> $GITHUB_OUTPUT
+        id: extract_version
+    outputs:
+      VERSION: ${{ steps.extract_version.outputs.VERSION }}
+  build:
+    name: Build Release
+    strategy:
+      matrix:
+        arch: [
+          aarch64-unknown-linux-gnu,
+          x86_64-unknown-linux-gnu,
+          # Requires apple signature secrets
+          # x86_64-apple-darwin,
+          x86_64-windows
+        ]
+        include:
+          -   arch: aarch64-unknown-linux-gnu
+              platform: ubuntu-latest
+          -   arch: x86_64-unknown-linux-gnu
+              platform: ubuntu-latest
+            # Requires apple signature secrets
+            #-   arch: x86_64-apple-darwin
+            # platform: macos-latest
+          -   arch: x86_64-windows
+              platform: windows-2019
 
-        runs-on: ${{ matrix.platform }}
-        needs: extract-version
-        steps:
-            - name: Checkout sources
-              uses: actions/checkout@v3
-            - name: Use node 18
-              uses: actions/setup-node@v3
-              with:
-                node-version: 18
-            - name: Configure Yarn Timeout
-              run: yarn config set network-timeout 300000
+    runs-on: ${{ matrix.platform }}
+    needs: extract-version
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v3
+      - name: Use node 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Configure Yarn Timeout
+        run: yarn config set network-timeout 300000
 
-            # ==============================
-            # Windows & Mac dependencies
-            # ==============================
+      # ==============================
+      # Windows & Mac dependencies
+      # ==============================
 
-            # ==============================
-            #       Builds
-            # ==============================
-            - name: Build Siren
-              run: make release
+      # ==============================
+      #       Builds
+      # ==============================
+      - name: Build Siren
+        run: make release
 
-            - name: Move unsigned packages (*nix)
-              if: startsWith(matrix.arch, 'x86_64-windows') != true
-              run: |
-                 mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+      - name: Move unsigned packages (*nix)
+        if: startsWith(matrix.arch, 'x86_64-windows') != true
+        run: |
+          mv out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            - name: Move unsigned packages (windows)
-              if: startsWith(matrix.arch, 'x86_64-windows')
-              run: |
-                 move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+      - name: Move unsigned packages (windows)
+        if: startsWith(matrix.arch, 'x86_64-windows')
+        run: |
+          move out/make/zip/*/*/*.zip ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            # =======================================================================
-            # Upload artifacts
-            # This is required to share artifacts between different jobs
-            # =======================================================================
+      # =======================================================================
+      # Upload artifacts
+      # This is required to share artifacts between different jobs
+      # =======================================================================
 
-            - name: Upload artifact
-              uses: actions/upload-artifact@v3
-              with:
-                  name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                  path: ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+          path: ./siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
 
-    sign:
-        name: Sign Release
-        runs-on: ubuntu-latest
-        needs: [extract-version, build]
-        strategy:
-            matrix:
-                arch: [
-                       aarch64-unknown-linux-gnu,
-                       x86_64-unknown-linux-gnu,
-                       x86_64-apple-darwin,
-                       x86_64-windows
-                       ]
-        steps:
-            - name: Download artifact
-              uses: actions/download-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+  sign:
+    name: Sign Release
+    runs-on: ubuntu-latest
+    needs: [extract-version, build]
+    strategy:
+      matrix:
+        arch: [
+          aarch64-unknown-linux-gnu,
+          x86_64-unknown-linux-gnu,
+          # Requires apple signature secrets
+          # x86_64-apple-darwin,
+          x86_64-windows
+        ]
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
 
-            - name: Move artifacts
-              run: |
-                mkdir artifacts
-                #find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
-                mv siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip artifacts/
-                ls -hal artifacts
-            - name: Configure GPG and create artifacts
-              env:
-                GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
-                GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-              run: |
-                export GPG_TTY=$(tty)
-                echo "$GPG_SIGNING_KEY" | gpg --batch --import
-                #for file in $(ls artifacts); do 
-                #  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/$file ;
-                #done
-                echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
-                ls -hal artifacts
-
-            - name: Upload signature (${{ matrix.arch }})
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
-                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
-
-            - name: Upload signature (aarch64-unknown-linux-gnu)
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
-            - name: Upload signature (x86_64-unknown-linux-gnu)
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
-            - name: Upload signature (x86_64-windows)
-              uses: actions/upload-artifact@v3
-              with:
-                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
-                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
-
-    draft-release:
-        name: Draft Release
-        needs: [build, extract-version]
-        runs-on: ubuntu-latest
+      - name: Move artifacts
+        run: |
+          mkdir artifacts
+          #find siren-*/ -type f -name "*.zip" -exec mv {} artifacts/ \;
+          mv siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip artifacts/
+          ls -hal artifacts
+      - name: Configure GPG and create artifacts
         env:
-          VERSION: ${{ needs.extract-version.outputs.VERSION }}
-        steps:
-            # This is necessary for generating the changelog. It has to come before "Download Artifacts" or else it deletes the artifacts.
-            - name: Checkout sources
-              uses: actions/checkout@v3
-              with:
-                fetch-depth: 0
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          export GPG_TTY=$(tty)
+          echo "$GPG_SIGNING_KEY" | gpg --batch --import
+          #for file in $(ls artifacts); do 
+          #  echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/$file ;
+          #done
+          echo "$GPG_PASSPHRASE" | gpg --passphrase-fd 0 --pinentry-mode loopback --batch -ab artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip
+          ls -hal artifacts
 
-            # ==============================
-            #       Download artifacts
-            # ==============================
+      - name: Upload signature (${{ matrix.arch }})
+        uses: actions/upload-artifact@v3
+        with:
+          name: siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
+          path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-${{ matrix.arch }}.zip.asc
 
-            - name: Download artifacts
-              uses: actions/download-artifact@v3
+  #            - name: Upload signature (aarch64-unknown-linux-gnu)
+  #              uses: actions/upload-artifact@v3
+  #              with:
+  #                name: siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+  #                path: artifacts//siren-${{ needs.extract-version.outputs.VERSION }}-aarch64-unknown-linux-gnu.zip.asc
+  #            - name: Upload signature (x86_64-unknown-linux-gnu)
+  #              uses: actions/upload-artifact@v3
+  #              with:
+  #                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+  #                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-unknown-linux-gnu.zip.asc
+  #            - name: Upload signature (x86_64-windows)
+  #              uses: actions/upload-artifact@v3
+  #              with:
+  #                name: siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
+  #                path: artifacts/siren-${{ needs.extract-version.outputs.VERSION }}-x86_64-windows.zip.asc
 
-            # ==============================
-            #       Create release draft
-            # ==============================
+  draft-release:
+    name: Draft Release
+    needs: [build, extract-version]
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.extract-version.outputs.VERSION }}
+    steps:
+      # This is necessary for generating the changelog. It has to come before "Download Artifacts" or else it deletes the artifacts.
+      - name: Checkout sources
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-            - name: Generate Full Changelog
-              id: changelog
-              run: |
-                echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
-                echo "$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 ${{ env.VERSION }}^)..${{ env.VERSION }})" >> $GITHUB_OUTPUT
-                echo "EOF" >> $GITHUB_OUTPUT
+      # ==============================
+      #       Download artifacts
+      # ==============================
 
-            - name: Create Release Draft
-              env:
-                GITHUB_USER: ${{ github.repository_owner }}
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
 
-              # The formatting here is borrowed from OpenEthereum: https://github.com/openethereum/openethereum/blob/main/.github/workflows/build.yml
-              run: |
-                  body=$(cat <<- "ENDBODY"
-                  <Release Name>
+      # ==============================
+      #       Create release draft
+      # ==============================
 
-                  ## Release Checklist (DELETE ME)
+      - name: Generate Full Changelog
+        id: changelog
+        run: |
+          echo "CHANGELOG<<EOF" >> $GITHUB_OUTPUT
+          echo "$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0 ${{ env.VERSION }}^)..${{ env.VERSION }})" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
-                  - [ ] Merge `unstable` -> `stable`.
-                  - [ ] Ensure docker images are published (check `latest` and the version tag).
-                  - [ ] Prepare Discord post.
+      - name: Create Release Draft
+        env:
+          GITHUB_USER: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-                  ## Summary
-
-                  Add a summary.
-
-                  ## Update Priority
-
-                  This table provides priorities for which classes of users should update particular components.
-
-                  |User Class |Beacon Node  | Validator Client|
-                  --- | --- | ---
-                  |Staking Users| <TODO> | <TODO> |
-                  |Non-Staking Users| <TODO>|---|
-
-                  ## All Changes
-
-                  ${{ steps.changelog.outputs.CHANGELOG }}
-
-                  ## Binaries
-
-                  [See pre-built binaries documentation.](https://lighthouse-book.sigmaprime.io/installation-binaries.html)
-
-                  The binaries are signed with Sigma Prime's PGP key: `15E66D941F697E28F49381F426416DC3F30674B0`
-
-                  | System | Architecture | Binary | PGP Signature |
-                  |:---:|:---:|:---:|:---|
-                  | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-apple-darwin.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip.asc) |
-                  | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip.asc) |
-                  | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip.asc) |
-                  | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-windows.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip.asc) |
-                  | | | | |
-                  | **System** | **Option** | - | **Resource** |
-                  | <img src="https://simpleicons.org/icons/docker.svg" style="width: 32px;"/> | Docker | [${{ env.VERSION }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}/tags?page=1&ordering=last_updated&name=${{ env.VERSION }}) | [${{ env.IMAGE_NAME }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}) |
-                  ENDBODY
-                  )
-                  assets=()
-                  for asset in ./siren-*.zip*; do
-                      assets+=("-a" "$asset/$asset")
-                  done
-                  tag_name="${{ env.VERSION }}"
-                  echo "$body" | hub release create --draft "${assets[@]}" -F "-" "$tag_name"
+        # The formatting here is borrowed from OpenEthereum: https://github.com/openethereum/openethereum/blob/main/.github/workflows/build.yml
+        run: |
+          body=$(cat <<- "ENDBODY"
+          <Release Name>
+          
+          ## Release Checklist (DELETE ME)
+          
+          - [ ] Merge `unstable` -> `stable`.
+          - [ ] Ensure docker images are published (check `latest` and the version tag).
+          - [ ] Prepare Discord post.
+          
+          ## Summary
+          
+          Add a summary.
+          
+          ## Update Priority
+          
+          This table provides priorities for which classes of users should update particular components.
+          
+          |User Class |Beacon Node  | Validator Client|
+          --- | --- | ---
+          |Staking Users| <TODO> | <TODO> |
+          |Non-Staking Users| <TODO>|---|
+          
+          ## All Changes
+          
+          ${{ steps.changelog.outputs.CHANGELOG }}
+          
+          ## Binaries
+          
+          [See pre-built binaries documentation.](https://lighthouse-book.sigmaprime.io/installation-binaries.html)
+          
+          The binaries are signed with Sigma Prime's PGP key: `15E66D941F697E28F49381F426416DC3F30674B0`
+          
+          | System | Architecture | Binary | PGP Signature |
+          |:---:|:---:|:---:|:---|
+          | <img src="https://simpleicons.org/icons/apple.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-apple-darwin.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-apple-darwin.zip.asc) |
+          | <img src="https://simpleicons.org/icons/linux.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-unknown-linux-gnu.zip.asc) |
+          | <img src="https://simpleicons.org/icons/raspberrypi.svg" style="width: 32px;"/> | aarch64 | [siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-aarch64-unknown-linux-gnu.zip.asc) |
+          | <img src="https://simpleicons.org/icons/windows.svg" style="width: 32px;"/> | x86_64 | [siren-${{ env.VERSION }}-x86_64-windows.zip](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip) | [PGP Signature](https://github.com/${{ env.REPO_NAME }}/releases/download/${{ env.VERSION }}/siren-${{ env.VERSION }}-x86_64-windows.zip.asc) |
+          | | | | |
+          | **System** | **Option** | - | **Resource** |
+          | <img src="https://simpleicons.org/icons/docker.svg" style="width: 32px;"/> | Docker | [${{ env.VERSION }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}/tags?page=1&ordering=last_updated&name=${{ env.VERSION }}) | [${{ env.IMAGE_NAME }}](https://hub.docker.com/r/${{ env.IMAGE_NAME }}) |
+          ENDBODY
+          )
+          assets=()
+          for asset in ./siren-*.zip*; do
+              assets+=("-a" "$asset/$asset")
+          done
+          tag_name="${{ env.VERSION }}"
+          echo "$body" | hub release create --draft "${assets[@]}" -F "-" "$tag_name"
