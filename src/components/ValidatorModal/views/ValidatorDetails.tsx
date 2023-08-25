@@ -1,8 +1,7 @@
 import { useRecoilValue } from 'recoil'
-import { processingBlsValidators } from '../../../recoil/atoms'
+import { exchangeRates, processingBlsValidators } from '../../../recoil/atoms'
 import { selectValidatorDetail } from '../../../recoil/selectors/selectValidatorDetails'
 import Typography from '../../Typography/Typography'
-import { selectEthExchangeRates } from '../../../recoil/selectors/selectEthExchangeRates'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import Status from '../../Status/Status'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +26,7 @@ const ValidatorDetails = () => {
   const validator = useRecoilValue(selectValidatorDetail)
   const processingValidators = useRecoilValue(processingBlsValidators)
   const { index, balance, status, withdrawalAddress } = validator || {}
-  const { rates } = useRecoilValue(selectEthExchangeRates)
+  const data = useRecoilValue(exchangeRates)
   const { avgTargetEffectiveness, avgHitEffectiveness } = useValidatorEffectiveness([String(index)])
 
   const isProcessing = Boolean(
@@ -46,7 +45,7 @@ const ValidatorDetails = () => {
 
   const { isLoading, graffiti, updateGraffiti } = useValidatorGraffiti(validator)
 
-  const usdBalance = (balance || 0) * (rates['USD'] || 0)
+  const usdBalance = (balance || 0) * (data?.rates['USD'] || 0)
 
   return validator ? (
     <div className='w-full relative'>

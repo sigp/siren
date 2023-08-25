@@ -7,7 +7,7 @@ const mockSetState = jest.fn()
 
 describe('Currency select component', () => {
   beforeEach(() => {
-    mockedRecoilValue.mockReturnValue({ rates: '', currencies: mockCurrencies })
+    mockedRecoilValue.mockReturnValue({ rates: {}, currencies: mockCurrencies })
   })
   it('should render correct list', () => {
     mockedRecoilState.mockReturnValue(['', mockSetState])

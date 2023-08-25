@@ -45,7 +45,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
     return options.filter((option) => {
       const { value, title } = option
       const isValue = value?.toLocaleString().toLowerCase().includes(formattedQuery)
-      const isTitle = title.toLowerCase().includes(formattedQuery)
+      const isTitle = title?.toLowerCase().includes(formattedQuery)
       const isExcluded = value === activeSelection?.value
       return !(isExcluded && excludeSelection) && (isTitle || isValue || !query)
     })
