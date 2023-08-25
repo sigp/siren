@@ -8,10 +8,9 @@ import { EARNINGS_OPTIONS } from '../../constants/constants'
 import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import Spinner from '../Spinner/Spinner'
 import { useRecoilValue } from 'recoil'
-import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import EarningsLayout from './EarningsLayout'
 import { selectCurrencyPrefix } from '../../recoil/selectors/selectCurrencyPrefix'
-import { activeCurrency } from '../../recoil/atoms'
+import { activeCurrency, exchangeRates } from '../../recoil/atoms'
 import CurrencySelect from '../CurrencySelect/CurrencySelect'
 import useEarningsEstimate from '../../hooks/useEarningsEstimate'
 import Tooltip from '../ToolTip/Tooltip'
@@ -30,11 +29,11 @@ const AccountEarning = () => {
   const currency = useRecoilValue(activeCurrency)
   const { estimate, totalEarnings, estimateSelection, selectEstimate } = useEarningsEstimate()
   const { formattedPrefix } = useRecoilValue(selectCurrencyPrefix)
-  const { rates } = useRecoilValue(selectEthExchangeRates)
+  const data = useRecoilValue(exchangeRates)
 
   const { estimatedApr, textColor } = useEpochAprEstimate()
 
-  const activeRate = rates[currency]
+  const activeRate = data?.rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
   const totalBalance = formattedRate * totalEarnings
   const estimatedRateConversion = formattedRate * estimate

@@ -1,6 +1,6 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
-import { ActiveDevice, AlertMessage, DeviceList, ValAliases } from '../types'
+import { ActiveDevice, AlertMessage, DeviceList, EthExchangeRates, ValAliases } from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
 import { BeaconValidatorMetricResults } from '../types/beacon'
@@ -82,6 +82,11 @@ export const validatorIndex = atom<number | undefined>({
 
 export const validatorPeerCount = atom<number | undefined>({
   key: 'validatorPeerCount',
+  default: undefined,
+})
+
+export const exchangeRates = atom<EthExchangeRates | undefined>({
+  key: 'exchangeRates',
   default: undefined,
 })
 

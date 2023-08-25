@@ -6,6 +6,7 @@ import useValidatorCachePolling from '../hooks/useValidatorCachePolling'
 import { FC, ReactElement, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { beaconNetworkError, validatorNetworkError } from '../recoil/atoms'
+import useExchangeRatePolling from '../hooks/useExchangeRatePolling'
 
 export interface MainPollingWrapperProps {
   children: ReactElement | ReactElement[]
@@ -16,6 +17,7 @@ const MainPollingWrapper: FC<MainPollingWrapperProps> = ({ children }) => {
   const isBnModal = useRecoilValue(beaconNetworkError)
   const isVcModal = useRecoilValue(validatorNetworkError)
 
+  useExchangeRatePolling({ isReady })
   useValidatorInfoPolling({ isReady: isReady && !isBnModal })
   useValidatorHealthPolling({ isReady: isReady && !isVcModal })
   useBeaconHealthPolling({ isReady: isReady && !isBnModal })

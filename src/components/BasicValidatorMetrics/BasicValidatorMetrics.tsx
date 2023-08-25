@@ -4,8 +4,8 @@ import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSum
 import { ValidatorInfo } from '../../types/validator'
 import { FC } from 'react'
 import { useRecoilValue } from 'recoil'
-import { selectEthExchangeRates } from '../../recoil/selectors/selectEthExchangeRates'
 import { useTranslation } from 'react-i18next'
+import { exchangeRates } from '../../recoil/atoms'
 
 export interface BasicValidatorMetricsProps {
   validator: ValidatorInfo
@@ -13,8 +13,8 @@ export interface BasicValidatorMetricsProps {
 
 const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({ validator }) => {
   const { t } = useTranslation()
-  const { rates } = useRecoilValue(selectEthExchangeRates)
-  const activeRate = rates.USD
+  const data = useRecoilValue(exchangeRates)
+  const activeRate = data?.rates.USD
   const { balance } = validator
 
   return (

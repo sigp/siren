@@ -106,3 +106,12 @@ export enum ToastType {
   ERROR = 'error',
   SUCCESS = 'success',
 }
+
+export type Rates = {
+  [currency: string]: number
+}
+
+export type EthExchangeRates = {
+  rates: Rates
+  currencies: string[]
+}
