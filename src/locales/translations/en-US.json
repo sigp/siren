@@ -31,7 +31,7 @@
   "confirmPassword": "Confirm Password",
   "helloUser": "Hello {{user}},",
   "lighthouseVersion": "Lighthouse Version",
-  "lighthouseUiVersion": "Lighthouse UI Version",
+  "lighthouseUiVersion": "Siren Version",
   "sessionAuth": "Session Auth",
   "configure": "Configure",
   "continue": "Continue",
