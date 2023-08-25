@@ -1,23 +1,48 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires,@typescript-eslint/ban-ts-comment
-// @ts-ignore
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { app, BrowserWindow } = require('electron')
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path')
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const url = require('url')
-// eslint-disable-next-line @typescript-eslint/no-var-requires
 const isDev = require('electron-is-dev')
 
 const createWindow = () => {
+  function UpsertKeyValue(obj, keyToChange, value) {
+    const keyToChangeLower = keyToChange.toLowerCase()
+    for (const key of Object.keys(obj)) {
+      if (key.toLowerCase() === keyToChangeLower) {
+        // Reassign old key
+        obj[key] = value
+        // Done
+        return
+      }
+    }
+    // Insert at end instead
+    obj[keyToChange] = value
+  }
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     icon: './assets/images/sigma.png',
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
+      // webSecurity: false
     },
   })
+
+  mainWindow.webContents.session.webRequest.onBeforeSendHeaders((details, callback) => {
+    const { requestHeaders } = details
+    UpsertKeyValue(requestHeaders, 'Access-Control-Allow-Origin', ['*'])
+    callback({ requestHeaders })
+  })
+
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const { responseHeaders } = details
+    UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Origin', ['*'])
+    UpsertKeyValue(responseHeaders, 'Access-Control-Allow-Headers', ['*'])
+    callback({
+      responseHeaders,
+    })
+  })
+
   mainWindow.maximize()
 
   // and load the index.html of the app.

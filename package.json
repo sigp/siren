@@ -1,5 +1,5 @@
 {
-  "main": "src/main.ts",
+  "main": "src/main.js",
   "description": "Electron Forge & Create React App Template",
   "license": "APACHE2",
   "author": "Sigma Prime",
