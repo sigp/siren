@@ -1,11 +1,11 @@
 {
   "main": "src/main.js",
-  "description": "Electron Forge & Create React App Template",
+  "description": "This is an open-source User Interface for the Lighthouse Ethereum Beacon Node and Validator Client.",
   "license": "APACHE2",
   "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@electron-forge/maker-dmg": "^6.0.5",
