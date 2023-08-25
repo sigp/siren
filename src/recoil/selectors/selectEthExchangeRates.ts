@@ -1,5 +1,6 @@
 import { selector } from 'recoil'
 import axios from 'axios'
+import { CoinbaseExchangeRateUrl } from '../../constants/constants'
 
 type Rates = {
   [currency: string]: number
@@ -15,7 +16,7 @@ export const selectEthExchangeRates = selector<EthExchangeRates>({
   get: async () => {
     let rates = {}
     try {
-      const { data } = await axios.get('https://api.coinbase.com/v2/exchange-rates?currency=ETH')
+      const { data } = await axios.get(CoinbaseExchangeRateUrl)
       rates = data.data.rates
     } catch (e) {
       console.error('error accessing exchange api')
