@@ -5,7 +5,7 @@
   "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "dependencies": {
     "@electron-forge/maker-dmg": "^6.0.5",
@@ -160,6 +160,5 @@
     "storybook-dark-mode": "^1.1.0",
     "storybook-tailwind-dark-mode": "^1.0.15",
     "webpack": "^5.74.0"
-  },
-  "_id": "lighthouse-ui@0.1.0"
+  }
 }

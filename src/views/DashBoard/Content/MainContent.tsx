@@ -21,10 +21,11 @@ import useLocalStorage from '../../../hooks/useLocalStorage'
 import { UsernameStorage } from '../../../types/storage'
 import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
 import PillIcon from '../../../components/PillIcon/PillIcon'
-import { sirenVersion } from '../../../constants/version'
+import pckJson from '../../../../package.json'
 
 const MainContent = () => {
   const { t } = useTranslation()
+  const { version } = pckJson
   const [username] = useLocalStorage<UsernameStorage>('username', undefined)
   const [name, setUsername] = useRecoilState(userName)
 
@@ -53,7 +54,7 @@ const MainContent = () => {
                 <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
                   {t('lighthouseUiVersion')}
                 </Typography>
-                <PillIcon bgColor='bg-tertiary' text={sirenVersion} />
+                <PillIcon bgColor='bg-tertiary' text={`v${version}`} />
               </div>
               <div>
                 <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
