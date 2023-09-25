@@ -1,1 +1,1 @@
-export const sirenVersion = 'v1.0.3'
+export const sirenVersion = 'v1.0.2'
