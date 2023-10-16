@@ -1,0 +1,22 @@
+name: debug some stuff
+
+on:
+  workflow_dispatch:
+
+run-name: debug gpg stuff
+jobs:
+  debug:
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - name: Configure GPG
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          export GPG_TTY=$(tty)
+          echo "$GPG_SIGNING_KEY" | gpg --batch --import
+      - name: check identities
+        run: |
+          gpg --list-signatures
