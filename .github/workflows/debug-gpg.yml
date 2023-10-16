@@ -2,6 +2,9 @@ name: debug
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - debug-gpg
 
 run-name: debug gpg stuff
 jobs:
