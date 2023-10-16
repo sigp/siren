@@ -19,8 +19,10 @@ jobs:
           export GPG_TTY=$(tty)
           echo "$GPG_SIGNING_KEY" | gpg --batch --import
       - name: check identities
+        env:
+          GPG_SIGNING_KEY: ${{ secrets.GPG_SIGNING_KEY }}
         run: |
           gpg --fingerprint
           gpg --list-keys
           gpg --list-signatures
-          gpg --show-keys --with-subkey-fingerprint
+          echo "$GPG_SIGNING_KEY" | gpg --show-keys --with-subkey-fingerprint
