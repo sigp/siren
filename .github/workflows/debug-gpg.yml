@@ -2,9 +2,6 @@ name: debug
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - debug-gpg
 
 run-name: debug gpg stuff
 jobs:
@@ -20,4 +17,6 @@ jobs:
           echo "$GPG_SIGNING_KEY" | gpg --batch --import
       - name: check identities
         run: |
+          gpg --fingerprint
+          gpg --list-keys
           gpg --list-signatures
