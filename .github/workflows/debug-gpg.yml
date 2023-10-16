@@ -1,4 +1,4 @@
-name: debug some stuff
+name: debug
 
 on:
   workflow_dispatch:
@@ -7,8 +7,6 @@ run-name: debug gpg stuff
 jobs:
   debug:
     runs-on: ubuntu-22.04
-    permissions:
-      contents: write
     steps:
       - name: Configure GPG
         env:
