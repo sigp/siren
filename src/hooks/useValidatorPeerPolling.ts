@@ -1,12 +1,13 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { activeDevice, beaconNetworkError, validatorPeerCount } from '../recoil/atoms'
 import usePollApi from './usePollApi'
-import { secondsInSlot } from '../constants/constants'
 import { useEffect } from 'react'
 import { PollingOptions } from '../types'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
 
 const useValidatorPeerPolling = (options?: PollingOptions) => {
-  const { time = secondsInSlot * 2000, isReady = true } = options || {}
+  const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)
+  const { time = SECONDS_PER_SLOT * 2000, isReady = true } = options || {}
   const { beaconUrl } = useRecoilValue(activeDevice)
   const setPeerCount = useSetRecoilState(validatorPeerCount)
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)

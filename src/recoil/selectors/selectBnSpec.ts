@@ -10,7 +10,7 @@ export const selectBnSpec = selector<BeaconNodeSpecResults>({
     try {
       const { data } = await fetchBnSpec(beaconUrl)
 
-      return data?.data
+      return { ...data?.data, SECONDS_PER_SLOT: Number(data?.data.SECONDS_PER_SLOT) }
     } catch (e) {
       console.error(e)
       return undefined

@@ -11,8 +11,10 @@ import calculateEpochEstimate from '../utilities/calculateEpochEstimate'
 import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
 import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
 
 const useValidatorEarnings = (indices?: string[]) => {
+  const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)
   const validators = useRecoilValue(selectValidatorInfos)
 
   const filteredCacheData = useFilteredValidatorCacheData(indices)
@@ -49,23 +51,23 @@ const useValidatorEarnings = (indices?: string[]) => {
   }, [filteredValidators])
 
   const hourlyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInHour, epochCaches),
-    [epochCaches],
+    () => calculateEpochEstimate(secondsInHour, SECONDS_PER_SLOT, epochCaches),
+    [epochCaches, SECONDS_PER_SLOT],
   )
 
   const dailyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInDay, epochCaches),
-    [epochCaches],
+    () => calculateEpochEstimate(secondsInDay, SECONDS_PER_SLOT, epochCaches),
+    [epochCaches, SECONDS_PER_SLOT],
   )
 
   const weeklyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInWeek, epochCaches),
-    [epochCaches],
+    () => calculateEpochEstimate(secondsInWeek, SECONDS_PER_SLOT, epochCaches),
+    [epochCaches, SECONDS_PER_SLOT],
   )
 
   const monthlyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInWeek * 4, epochCaches),
-    [epochCaches],
+    () => calculateEpochEstimate(secondsInWeek * 4, SECONDS_PER_SLOT, epochCaches),
+    [epochCaches, SECONDS_PER_SLOT],
   )
 
   const initialEth = filteredValidators.length * initialEthDeposit

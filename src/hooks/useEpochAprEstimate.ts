@@ -1,11 +1,14 @@
 import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 import { useMemo } from 'react'
 import { formatUnits } from 'ethers/lib/utils'
-import { secondsInDay, secondsInEpoch } from '../constants/constants'
+import { secondsInDay, slotsInEpoc } from '../constants/constants'
 import calculateAprPercentage from '../utilities/calculateAprPercentage'
 import formatBalanceColor from '../utilities/formatBalanceColor'
+import { useRecoilValue } from 'recoil'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
 
 const useEpochAprEstimate = (indices?: string[]) => {
+  const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)
   const filteredValidatorCache = useFilteredValidatorCacheData(indices)
 
   const formattedCache = useMemo(() => {
@@ -30,7 +33,8 @@ const useEpochAprEstimate = (indices?: string[]) => {
       const initialBalance = formattedWithdrawalCache[0]
       const currentBalance = formattedWithdrawalCache[formattedWithdrawalCache.length - 1]
       const rewards = currentBalance - initialBalance
-      const multiplier = (secondsInDay * 365) / secondsInEpoch / formattedWithdrawalCache.length
+      const multiplier =
+        (secondsInDay * 365) / (SECONDS_PER_SLOT * slotsInEpoc) / formattedWithdrawalCache.length
 
       const rewardsMultiplied = rewards * multiplier
       const projectedBalance = rewardsMultiplied + initialBalance

@@ -1,12 +1,14 @@
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { beaconNetworkError, beaconSyncInfo, activeDevice } from '../recoil/atoms'
 import { useEffect } from 'react'
-import { secondsInSlot } from '../constants/constants'
 import usePollApi from './usePollApi'
 import { PollingOptions } from '../types'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
 
 const useBeaconSyncPolling = (options?: PollingOptions) => {
-  const { time = secondsInSlot * 1000, isReady = true } = options || {}
+  const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)
+
+  const { time = SECONDS_PER_SLOT * 1000, isReady = true } = options || {}
   const { beaconUrl } = useRecoilValue(activeDevice)
   const url = `${beaconUrl}/eth/v1/node/syncing`
   const setBeaconSyncInfo = useSetRecoilState(beaconSyncInfo)

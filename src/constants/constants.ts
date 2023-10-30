@@ -96,9 +96,7 @@ export const CLIENT_PROVIDERS = [
 ] as ClientProvider[]
 
 export const initialEthDeposit = 32
-export const secondsInSlot = 12
 export const slotsInEpoc = 32
-export const secondsInEpoch = secondsInSlot * 32
 export const secondsInHour = 3600
 export const secondsInDay = 86400
 export const secondsInWeek = 604800
