@@ -8,6 +8,9 @@ import sortAlertMessagesBySeverity from '../../utilities/sortAlerts'
 import { StatusColor } from '../../types'
 import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { useRecoilValue } from 'recoil'
+import ProposerAlerts from '../ProposerAlerts/ProposerAlerts'
+import { proposerDuties } from '../../recoil/atoms'
 
 const AlertInfo = () => {
   const { t } = useTranslation()
@@ -15,6 +18,7 @@ const AlertInfo = () => {
   const { ref, dimensions } = useDivDimensions()
   const headerDimensions = useDivDimensions()
   const [filter, setFilter] = useState('all')
+  const duties = useRecoilValue(proposerDuties)
 
   const setFilterValue = (value: FilterValue) => setFilter(value)
   const isMobile = useMediaQuery('(max-width: 425px)')
@@ -29,7 +33,7 @@ const AlertInfo = () => {
     return sortAlertMessagesBySeverity(baseAlerts)
   }, [alerts, filter])
 
-  const isFiller = formattedAlerts.length < 6
+  const isFiller = formattedAlerts.length + (duties?.length || 0) < 6
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -61,7 +65,7 @@ const AlertInfo = () => {
           }
           className='h-full w-full flex flex-col'
         >
-          {formattedAlerts.length > 0 && (
+          {(formattedAlerts.length > 0 || duties?.length > 0) && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
               {formattedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
@@ -78,6 +82,9 @@ const AlertInfo = () => {
                   />
                 )
               })}
+              {duties?.length > 0 && (filter === 'all' || filter === StatusColor.SUCCESS) && (
+                <ProposerAlerts duties={duties} />
+              )}
             </div>
           )}
           {isFiller && (
