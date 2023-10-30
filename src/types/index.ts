@@ -115,3 +115,10 @@ export type EthExchangeRates = {
   rates: Rates
   currencies: string[]
 }
+
+export type ProposerDuty = {
+  pubkey: string
+  validator_index: string
+  slot: string
+  uuid: string
+}
