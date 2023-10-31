@@ -20,16 +20,11 @@ const ProposalAlert: FC<ProposalAlertProps> = ({ duty, time, isFuture, onDelete 
       <StatusBar count={3} status={StatusColor.SUCCESS} />
       <div className='w-full max-w-tiny @1540:max-w-full'>
         <Typography type='text-caption2'>
-          <Trans i18nKey={`alertMessages.proposerAlert.${isFuture ? 'future' : 'past'}`}>
-            <span className='font-bold'>
-              {{
-                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                // @ts-ignore
-                validator_index,
-              }}
-            </span>
-            {{ slot }}
-            {{ time }}
+          <Trans
+            i18nKey={`alertMessages.proposerAlert.${isFuture ? 'future' : 'past'}`}
+            values={{ validator_index, slot, time }}
+          >
+            <span className='font-bold underline' />
           </Trans>
         </Typography>
       </div>
