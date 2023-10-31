@@ -34,6 +34,9 @@ const AlertInfo = () => {
   }, [alerts, filter])
 
   const isFiller = formattedAlerts.length + (duties?.length || 0) < 6
+  const isAlerts = formattedAlerts.length > 0 || duties?.length > 0
+  const isProposerAlerts =
+    duties?.length > 0 && (filter === 'all' || filter === StatusColor.SUCCESS)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -65,7 +68,7 @@ const AlertInfo = () => {
           }
           className='h-full w-full flex flex-col'
         >
-          {(formattedAlerts.length > 0 || duties?.length > 0) && (
+          {isAlerts && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
               {formattedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
@@ -82,9 +85,7 @@ const AlertInfo = () => {
                   />
                 )
               })}
-              {duties?.length > 0 && (filter === 'all' || filter === StatusColor.SUCCESS) && (
-                <ProposerAlerts duties={duties} />
-              )}
+              {isProposerAlerts && <ProposerAlerts duties={duties} />}
             </div>
           )}
           {isFiller && (
