@@ -27,7 +27,13 @@ const ProposerAlerts: FC<ProposerAlertsProps> = ({ duties }) => {
     <>
       {duties.length >= 10
         ? groups.map((group, index) => (
-            <AlertGroup onClick={removeAlert} genesis={genesis} duties={group} key={index} />
+            <AlertGroup
+              onClick={removeAlert}
+              genesis={genesis}
+              secondsPerSlot={SECONDS_PER_SLOT}
+              duties={group}
+              key={index}
+            />
           ))
         : duties.map((duty, index) => {
             const { isFuture, shortHand } = getSlotTimeData(
