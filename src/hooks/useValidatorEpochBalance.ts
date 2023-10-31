@@ -40,7 +40,7 @@ const useValidatorEpochBalance = () => {
       ? data.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
 
-          return moment((genesisBlock + slot * Number(SECONDS_PER_SLOT)) * 1000).format('HH:mm')
+          return moment((genesisBlock + slot * SECONDS_PER_SLOT) * 1000).format('HH:mm')
         })
       : []
   }, [validatorCacheData, genesisBlock])
