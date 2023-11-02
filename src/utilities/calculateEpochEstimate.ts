@@ -1,9 +1,13 @@
 import { FormattedValidatorCache } from '../types/validator'
-import { secondsInEpoch } from '../constants/constants'
+import { slotsInEpoc } from '../constants/constants'
 import reduceAddNum from './reduceAddNum'
 import { formatUnits } from 'ethers/lib/utils'
 
-const calculateEpochEstimate = (timeInSeconds: number, epochs?: FormattedValidatorCache) => {
+const calculateEpochEstimate = (
+  timeInSeconds: number,
+  secondsInSlot: number,
+  epochs?: FormattedValidatorCache,
+) => {
   let difference = 0
   if (!epochs) return difference
 
@@ -12,7 +16,7 @@ const calculateEpochEstimate = (timeInSeconds: number, epochs?: FormattedValidat
 
   if (!epochCount || epochCount === 1) return difference
 
-  const timeMultiplier = timeInSeconds / (secondsInEpoch * epochCount)
+  const timeMultiplier = timeInSeconds / (secondsInSlot * slotsInEpoc * epochCount)
 
   difference =
     epochValues[epochValues.length - 1].reduce(reduceAddNum, 0) -

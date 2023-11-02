@@ -1,6 +1,13 @@
 import { atom } from 'recoil'
 import { AppView, ContentView, OnboardView, SetupSteps, UiMode } from '../constants/enums'
-import { ActiveDevice, AlertMessage, DeviceList, EthExchangeRates, ValAliases } from '../types'
+import {
+  ActiveDevice,
+  AlertMessage,
+  DeviceList,
+  EthExchangeRates,
+  ProposerDuty,
+  ValAliases,
+} from '../types'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
 import { BeaconValidatorMetricResults } from '../types/beacon'
@@ -152,5 +159,10 @@ export const activeDevice = atom<ActiveDevice>({
 
 export const alertLogs = atom<AlertMessage[]>({
   key: 'alertLogs',
+  default: [],
+})
+
+export const proposerDuties = atom<ProposerDuty[]>({
+  key: 'proposerDuties',
   default: [],
 })

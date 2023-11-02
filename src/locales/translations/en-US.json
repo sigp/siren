@@ -449,6 +449,16 @@
     "ethClientNotSync": "Ethereum Client is not in sync",
     "excessiveWarningLogs": "Unusual amount of warning logs detected",
     "critLog": "CRITICAL ERROR: {{message}}",
-    "errorLog": "ERROR: {{message}}"
-  }
+    "errorLog": "ERROR: {{message}}",
+    "groupedProposers": {
+      "past": "{{count}} validators were scheduled for block proposals in a previous epoch. Including indices: {{indices}}",
+      "future": "{{count}} validators are scheduled for block proposals in this epoch. Including indices: {{indices}}"
+    },
+    "proposerAlert": {
+      "past": "Validator <0>{{validator_index}}</0> was scheduled for block proposal at slot {{slot}} {{time}}",
+      "future": "Validator <0>{{validator_index}}</0> is scheduled for block proposal at slot {{slot}} {{time}}"
+    }
+  },
+  "collapseInfo": "Collapse Info",
+  "expandInfo": "Expand Info"
 }

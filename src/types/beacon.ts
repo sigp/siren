@@ -11,6 +11,7 @@ export type BeaconNodeSpecResults = {
   DEPOSIT_CHAIN_ID: string
   DEPOSIT_CONTRACT_ADDRESS: string
   DEPOSIT_NETWORK_ID: string
+  SECONDS_PER_SLOT: number
 }
 
 export type BeaconValidatorMetric = {

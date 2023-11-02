@@ -5,6 +5,7 @@ import { mockActiveValidators, mockValidatorCacheResults } from '../../mocks/val
 import { waitFor } from '@testing-library/react'
 import { formatUnits } from 'ethers/lib/utils'
 import clearAllMocks = jest.clearAllMocks
+import { mockBeaconSpec } from '../../mocks/beaconSpec'
 
 jest.mock('../../recoil/selectors/selectSlicedActiveValidators', () => ({
   selectSlicedActiveValidators: 'selectSlicedActiveValidators',
@@ -12,6 +13,10 @@ jest.mock('../../recoil/selectors/selectSlicedActiveValidators', () => ({
 
 jest.mock('../../recoil/atoms', () => ({
   validatorCacheBalanceResult: 'validatorCacheBalanceResult',
+}))
+
+jest.mock('../../recoil/selectors/selectBnSpec', () => ({
+  selectBnSpec: 'selectBnSpec',
 }))
 
 jest.mock('ethers/lib/utils', () => ({
@@ -25,6 +30,11 @@ describe('useValidatorEpochBalance', () => {
     clearAllMocks()
   })
   it('should return default values', () => {
+    mockedRecoilValue.mockImplementation((data) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (data === 'selectBnSpec') return mockBeaconSpec
+    })
     const { result } = renderHook(() => useValidatorEpochBalance())
 
     expect(result.current).toStrictEqual({
@@ -35,6 +45,9 @@ describe('useValidatorEpochBalance', () => {
   })
   it('should call fetch function', async () => {
     mockedRecoilValue.mockImplementation((data) => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      if (data === 'selectBnSpec') return mockBeaconSpec
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       if (data === 'selectSlicedActiveValidators') return mockActiveValidators
