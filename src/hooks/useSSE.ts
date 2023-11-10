@@ -8,32 +8,40 @@ interface UseSSEOptions {
   onError?: () => void
 }
 
-const useSSE = ({ url, wait = 0, callback, onError }: UseSSEOptions) => {
-  const [eventSource, controller, errorCount] = [
-    useRef<EventSource | null>(null),
-    useRef<AbortController | null>(null),
-    useRef<number>(0),
-  ]
+const useSSE = ({ url, wait = 0, callback, onError }: UseSSEOptions): void => {
+  const eventSourceRef = useRef<EventSource | null>(null)
+  const controllerRef = useRef<AbortController | null>(null)
+  const errorCountRef = useRef<number>(0)
 
   useEffect(() => {
     if (!url) return
 
-    eventSource.current = new EventSource(url)
-    controller.current = new AbortController()
+    const controller = new AbortController()
+    controllerRef.current = controller
 
-    eventSource.current.onmessage = throttle(callback, wait)
-    eventSource.current.onerror = () => {
-      if (errorCount.current++ >= 2) {
-        controller.current?.abort()
-        eventSource.current?.close()
-        eventSource.current = null
+    const eventSource = new EventSource(url)
+    eventSourceRef.current = eventSource
+
+    const throttledCallback = throttle(callback, wait)
+    eventSource.onmessage = (event) => throttledCallback(event)
+
+    eventSource.onerror = () => {
+      if (errorCountRef.current++ >= 2) {
+        controller.abort()
+        eventSource.close()
+        eventSourceRef.current = null
         onError?.()
       }
     }
 
+    eventSource.onopen = () => {
+      errorCountRef.current = 0
+    }
+
     return () => {
-      eventSource.current?.close()
-      eventSource.current = null
+      eventSource.close()
+      eventSourceRef.current = null
+      controllerRef.current = null
     }
   }, [url, wait, callback, onError])
 }
