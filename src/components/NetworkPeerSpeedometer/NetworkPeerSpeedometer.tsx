@@ -84,7 +84,7 @@ const NetworkPeerSpeedometer = () => {
             labelFontSize='6px'
             valueTextFontSize='9px'
             segmentColors={['tomato', 'gold', 'limegreen']}
-            value={peers}
+            value={peers || 0}
             maxValue={100}
             textColor={'transparent'}
           />
