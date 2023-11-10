@@ -63,7 +63,7 @@
   },
   "scripts": {
     "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:3000 && electron .",
+    "electron": "wait-on tcp:127.0.0.1:3000 && electron .",
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
