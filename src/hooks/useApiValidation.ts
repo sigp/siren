@@ -7,7 +7,12 @@ import { useTranslation } from 'react-i18next'
 import displayToast from '../utilities/displayToast'
 import formatEndpoint from '../utilities/formatEndpoint'
 
-const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, data?: Endpoint) => {
+const useApiValidation = (
+  path: string,
+  type: ApiType,
+  isToastAlert: boolean,
+  data?: Endpoint | undefined,
+) => {
   const { t } = useTranslation()
   const [isValid, setValidApi] = useState<boolean>(false)
 
@@ -22,12 +27,14 @@ const useApiValidation = (path: string, type: ApiType, isToastAlert: boolean, da
         if (status === 200) {
           setValidApi(true)
         }
-      } catch ({ code }) {
+      } catch (error) {
+        if (!axios.isAxiosError(error)) return
+
         setValidApi(false)
 
         if (!isToastAlert) return
 
-        if (code === 'ERR_NETWORK') {
+        if (error?.code === 'ERR_NETWORK') {
           displayToast(t('error.networkError', { type }), ToastType.ERROR)
         } else {
           displayToast(t('error.unknownError', { type }), ToastType.ERROR)
