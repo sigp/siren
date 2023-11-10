@@ -29,7 +29,11 @@ function App() {
           </Suspense>
         )
       case AppView.ONBOARD:
-        return <Onboard />
+        return (
+          <Suspense fallback={<AppLoadFallback />}>
+            <Onboard />
+          </Suspense>
+        )
       case AppView.CHANGE_SCREEN:
         return <ChangeScreen />
       default:
