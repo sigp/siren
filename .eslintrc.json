@@ -7,10 +7,10 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "prettier"
+        "prettier",
+        "plugin:storybook/recommended"
     ],
-    "overrides": [
-    ],
+    "overrides": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": "latest",
@@ -24,12 +24,20 @@
     "rules": {
         "react/react-in-jsx-scope": "off",
         "spaced-comment": "error",
-        "quotes": ["error", "single"],
+        "quotes": [
+            "error",
+            "single"
+        ],
         "no-duplicate-imports": "error",
         "react/prop-types": 0,
         "@typescript-eslint/no-empty-function": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }]
+        "@typescript-eslint/no-unused-vars": [
+            "error",
+            {
+                "argsIgnorePattern": "^_"
+            }
+        ]
     },
     "settings": {
         "import/resolver": {
