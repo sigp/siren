@@ -24,13 +24,14 @@ import {
   SigPTwitter,
 } from '../../../constants/constants'
 import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
+import { OptionalString } from '../../../types'
 
 const Settings = () => {
   const { t } = useTranslation()
   const { mode, toggleUiMode } = useUiMode()
   const devices = useRecoilValue(deviceSettings)
   const currentDevice = useRecoilValue(activeDevice)
-  const [userNameError, setError] = useState<string | undefined>()
+  const [userNameError, setError] = useState<OptionalString>()
   const [username, setUsername] = useRecoilState(userName)
   const setView = useSetRecoilState(onBoardView)
   const setAppView = useSetRecoilState(appView)

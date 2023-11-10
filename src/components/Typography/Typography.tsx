@@ -1,4 +1,5 @@
 import { FC, ReactNode, createElement } from 'react'
+import { OptionalString } from '../../types'
 
 const ELEMENT = {
   h1: 'h1',
@@ -47,12 +48,12 @@ export type TypographyType =
   | 'text-tiny'
 
 export interface TypographyProps {
-  className?: string
-  color?: TypographyColor
-  darkMode?: string
+  className?: OptionalString
+  color?: TypographyColor | undefined
+  darkMode?: OptionalString
   children: ReactNode | ReactNode[]
   as?: TagsSupported
-  type?: TypographyType
+  type?: TypographyType | undefined
   isBold?: boolean
   isUpperCase?: boolean
   isCapitalize?: boolean

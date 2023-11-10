@@ -1,11 +1,12 @@
 import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import addClassString from '../../utilities/addClassString'
+import { OptionalBoolean } from '../../types'
 
 export interface SideBarTextProps {
   text: string
   isActive?: boolean
-  isDisabled?: boolean
+  isDisabled?: OptionalBoolean
   onClick?: () => void
   className?: string
 }

@@ -18,7 +18,7 @@ export interface LogDisplayProps {
 const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
   const { t } = useTranslation()
   const [searchText, setText] = useState('')
-  const scrollableRef = useRef<HTMLDivElement>(null)
+  const scrollableRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (isLoading) {
@@ -35,8 +35,10 @@ const LogDisplay: FC<LogDisplayProps> = ({ type, logs, isLoading }) => {
   const scrollToBottom = () => {
     if (!scrollableRef.current) return
 
-    scrollableRef.current.scrollTo({
-      top: scrollableRef.current.scrollHeight,
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    scrollableRef.current?.scrollTo({
+      top: scrollableRef.current?.scrollHeight,
       behavior: 'smooth',
     })
   }

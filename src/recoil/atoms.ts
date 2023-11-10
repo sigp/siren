@@ -5,6 +5,7 @@ import {
   AlertMessage,
   DeviceList,
   EthExchangeRates,
+  OptionalString,
   ProposerDuty,
   ValAliases,
 } from '../types'
@@ -57,12 +58,12 @@ export const userName = atom<string>({
   default: undefined,
 })
 
-export const validatorVersionData = atom<string | undefined>({
+export const validatorVersionData = atom<OptionalString>({
   key: 'validatorVersionData',
   default: undefined,
 })
 
-export const beaconVersionData = atom<string | undefined>({
+export const beaconVersionData = atom<OptionalString>({
   key: 'beaconVersionData',
   default: undefined,
 })

@@ -5,7 +5,7 @@ import RodalModal from '../RodalModal/RodalModal'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import { DeviceKeyStorage, DeviceListStorage } from '../../types/storage'
 import { AppView, UiMode } from '../../constants/enums'
-import { DeviceList } from '../../types'
+import { DeviceList, OptionalString } from '../../types'
 import Typography from '../Typography/Typography'
 import DropDown from '../DropDown/DropDown'
 import useClickOutside from '../../hooks/useClickOutside'
@@ -14,8 +14,8 @@ import Button, { ButtonFace } from '../Button/Button'
 import { useTranslation, Trans } from 'react-i18next'
 
 export interface DeviceSelectProps {
-  devices?: DeviceList
-  value?: string
+  devices?: DeviceList | undefined
+  value?: OptionalString
   uiMode?: UiMode
   type?: 'default' | 'black'
 }

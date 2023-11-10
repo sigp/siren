@@ -37,7 +37,7 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
     getValues,
     reset,
     formState: { isValid },
-  } = useForm({
+  } = useForm<EditValidatorForm>({
     defaultValues: {
       nameString: '',
     },

@@ -62,7 +62,12 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
     </>
   )
   return isToolTip ? (
-    <Tooltip className={classes} id={toolTipId} maxWidth={toolTipWidth} text={toolTipText}>
+    <Tooltip
+      className={classes}
+      id={toolTipId as string}
+      maxWidth={toolTipWidth}
+      text={toolTipText as string}
+    >
       {renderContent()}
     </Tooltip>
   ) : (

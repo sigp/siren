@@ -20,7 +20,7 @@ import EditValidator from '../EditValidator/EditValidator'
 
 export interface ValidatorRowProps {
   validator: ValidatorInfo
-  view?: TableView
+  view?: TableView | undefined
 }
 
 const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {

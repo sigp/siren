@@ -58,13 +58,13 @@ const EditValidator: FC<EditValidatorProps> = ({ validator }) => {
             <div className='p-6 space-y-8'>
               <Controller
                 name='nameString'
-                control={control}
-                render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                control={control as any}
+                render={({ field: { ref: _ref, ...props }, fieldState }) => (
                   <Input
                     isAutoFocus
                     placeholder={formatDefaultValName(String(index))}
                     uiMode={mode}
-                    error={error?.message}
+                    error={fieldState.error?.message}
                     label={t('validatorEdit.label')}
                     {...props}
                   />

@@ -8,7 +8,7 @@ export interface RodalModalProps {
   children: ReactElement | ReactElement[]
   isVisible: boolean
   onClose?: () => void
-  uiMode?: { mode: UiMode }
+  uiMode?: { mode: UiMode } | undefined
   maxWidth?: number
   styles?: {
     backgroundColor?: string

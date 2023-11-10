@@ -1,16 +1,17 @@
 import React, { FC } from 'react'
-import { Tooltip as TooltipComponent, ITooltip } from 'react-tooltip'
+import { Tooltip as TooltipComponent, PlacesType } from 'react-tooltip'
 import useUiMode from '../../hooks/useUiMode'
 import { UiMode } from '../../constants/enums'
 import addClassString from '../../utilities/addClassString'
+import { OptionalString } from '../../types'
 
 export interface TooltipProps {
   id: string
   text: string
-  className?: string
-  maxWidth?: number
-  toolTipMode?: UiMode
-  place?: ITooltip['place']
+  className?: OptionalString
+  maxWidth?: number | undefined
+  toolTipMode?: UiMode | undefined
+  place?: PlacesType
   children?: React.ReactNode
 }
 
@@ -35,7 +36,7 @@ const Tooltip: FC<TooltipProps> = ({
       {children}
       <TooltipComponent
         className='shadow-xl z-50'
-        place={place}
+        place={place as PlacesType}
         style={{
           maxWidth,
           backgroundColor: isDarkMode ? '#7C5FEB' : '#FFFFFF',

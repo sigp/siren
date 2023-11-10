@@ -36,12 +36,12 @@ const SessionConfig = () => {
                 <Controller
                   name='password'
                   control={control}
-                  render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                  render={({ field: { ref: _ref, ...props }, fieldState }) => (
                     <Input
                       type='password'
                       label={t('password')}
                       extraLabel={t('12char')}
-                      error={error?.message}
+                      error={fieldState.error?.message}
                       uiMode={UiMode.LIGHT}
                       {...props}
                     />
@@ -50,13 +50,13 @@ const SessionConfig = () => {
                 <Controller
                   name='password_confirmation'
                   control={control}
-                  render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                  render={({ field: { ref: _ref, ...props }, fieldState }) => (
                     <Input
                       type='password'
                       isDisablePaste
                       isDisableToggle
                       label={t('confirmPassword')}
-                      error={error?.message}
+                      error={fieldState.error?.message}
                       uiMode={UiMode.LIGHT}
                       {...props}
                     />

@@ -1,20 +1,20 @@
-import { Control, Controller, UseFormGetValues } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import Toggle from '../Toggle/Toggle'
 import { ChangeEvent, FC } from 'react'
-import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import { ConnectionForm, EndPointType } from '../../forms/ConfigConnectionForm'
 import { Protocol, UiMode } from '../../constants/enums'
 import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import Tooltip from '../ToolTip/Tooltip'
+import { OptionalBoolean } from '../../types'
 
 export interface ProtocolInputProps {
   id: string
-  type?: EndPointType
+  type?: EndPointType | undefined
   control: Control<ConnectionForm>
-  setValue: UseFormSetValue<ConnectionForm>
-  getValues: UseFormGetValues<ConnectionForm>
-  isValid?: boolean
+  setValue: any
+  getValues: any
+  isValid?: OptionalBoolean
 }
 
 const ProtocolInput: FC<ProtocolInputProps> = ({
@@ -27,7 +27,7 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
 }) => {
   const { t } = useTranslation()
   const defaultType = type || 'beaconNode'
-  const protocol = getValues(`${defaultType}.protocol`)
+  const protocol = getValues(`${defaultType}.protocol` as any)
   const isValidatorClient = type === 'validatorClient'
   const uiMode = UiMode.DARK
   const onChangeProtocol = (value: boolean) => {
@@ -51,9 +51,7 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
     setValue('validatorClient.address', value)
   }
   const onChangePort = (e: ChangeEvent<HTMLInputElement>, type: EndPointType) => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    setValue(`${type}.port`, e.target.value ? Number(e.target.value) : '')
+    setValue(`${type}.port`, e.target.value ? Number(e.target.value) : ('' as any))
   }
 
   const renderPortInput = (type: EndPointType) => {
@@ -79,8 +77,8 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
           </Tooltip>
         </div>
         <Controller
-          name={`${isBnNode ? 'beaconNode' : 'validatorClient'}.port`}
-          control={control}
+          name={`${isBnNode ? 'beaconNode' : 'validatorClient'}.port` as any}
+          control={control as any}
           render={({ field: { ...props } }) => (
             <input
               className='text-body md:text-subtitle2 w-20 bg-transparent text-white outline-none appearance-none'
@@ -117,8 +115,8 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
             </Tooltip>
           </div>
           <Controller
-            name={`${defaultType}.protocol`}
-            control={control}
+            name={`${defaultType}.protocol` as any}
+            control={control as any}
             render={({ field: { value } }) => (
               <Toggle id={id} value={value === Protocol.HTTPS} onChange={onChangeProtocol} />
             )}
@@ -151,8 +149,8 @@ const ProtocolInput: FC<ProtocolInputProps> = ({
               className='flex-grow-0 lowercase md:text-subtitle2'
             >{`${protocol}://`}</Typography>
             <Controller
-              name={`${defaultType}.address`}
-              control={control}
+              name={`${defaultType}.address` as any}
+              control={control as any}
               render={({ field: { value } }) => (
                 <input
                   className='text-body w-full md:text-subtitle2 flex-1 bg-transparent text-white outline-none'

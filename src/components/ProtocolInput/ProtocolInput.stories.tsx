@@ -40,8 +40,8 @@ const Template: Story<ProtocolInputProps> = ({ type, id, isValid }) => (
           <ProtocolInput
             id={id}
             setValue={setValue}
-            getValues={getValues}
-            control={control}
+            getValues={getValues as any}
+            control={control as any}
             type={type}
             isValid={isValid}
           />

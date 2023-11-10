@@ -10,12 +10,13 @@ import Button, { ButtonFace } from '../Button/Button'
 import Input from '../Input/Input'
 import { MAX_SESSION_UNLOCK_ATTEMPTS } from '../../constants/constants'
 import { useTranslation } from 'react-i18next'
+import { OptionalString } from '../../types'
 
 export interface SessionAuthModalProps {
   onSuccess: (token?: string) => void
   onFail?: () => void
   isOpen: boolean
-  encryptedToken?: string
+  encryptedToken?: OptionalString
   defaultToken?: string
   onClose?: () => void
   children?: ReactElement | ReactElement[]
@@ -82,6 +83,8 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
   const confirmPassword = (token: string) => {
     const pattern = /^api-token-0x\w*$/
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const decryptedToken = CryptoJS.AES.decrypt(token, password).toString(CryptoJS.enc.Utf8)
       if (!decryptedToken.length || !pattern.test(decryptedToken)) {
         handleError()

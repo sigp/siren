@@ -122,3 +122,6 @@ export type ProposerDuty = {
   slot: string
   uuid: string
 }
+
+export type OptionalString = string | undefined
+export type OptionalBoolean = boolean | undefined

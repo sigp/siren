@@ -94,8 +94,8 @@ const ConfigureConnection = () => {
                 )}
                 <Controller
                   name='apiToken'
-                  control={control}
-                  render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                  control={control as any}
+                  render={({ field: { ref: _ref, ...props }, fieldState }) => (
                     <Input
                       label={t('configScreen.apiToken')}
                       toolTipId='apiToken'
@@ -104,7 +104,7 @@ const ConfigureConnection = () => {
                       tooltip={t('configScreen.apiTokenToolTip')}
                       placeholder='***-*****-******'
                       type='password'
-                      error={error?.message}
+                      error={fieldState.error?.message}
                       {...props}
                     />
                   )}
@@ -121,7 +121,7 @@ const ConfigureConnection = () => {
                     ) : (
                       <Controller
                         name='deviceName'
-                        control={control}
+                        control={control as any}
                         render={({ field: { ref: _ref, ...props } }) => (
                           <Input
                             label={t('configScreen.deviceName')}
@@ -150,13 +150,13 @@ const ConfigureConnection = () => {
                   <div>
                     <Controller
                       name='userName'
-                      control={control}
-                      render={({ field: { ref: _ref, ...props }, fieldState: { error } }) => (
+                      control={control as any}
+                      render={({ field: { ref: _ref, ...props }, fieldState }) => (
                         <Input
                           className='w-auto'
                           label={t('configScreen.userNameLabel')}
                           placeholder={t('configScreen.userNamePlaceholder')}
-                          error={error?.message}
+                          error={fieldState.error?.message}
                           {...props}
                         />
                       )}
@@ -184,7 +184,7 @@ const ConfigureConnection = () => {
                   </Tooltip>
                   <Controller
                     name='isRemember'
-                    control={control}
+                    control={control as any}
                     render={({ field: { ref: _ref, ...props } }) => (
                       <Toggle id='isRemember' {...props} />
                     )}
