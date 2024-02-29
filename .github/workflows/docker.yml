@@ -47,9 +47,9 @@ jobs:
         needs: [extract-version]
         steps:
             - name: Checkout sources
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Use node 18
-              uses: actions/setup-node@v3
+              uses: actions/setup-node@v4
               with:
                 node-version: 18
                 cache: 'yarn'
@@ -82,8 +82,8 @@ jobs:
             VERSION: ${{ needs.extract-version.outputs.VERSION }}
             VERSION_SUFFIX: ${{ needs.extract-version.outputs.VERSION_SUFFIX }}
         steps:
-            - uses: actions/checkout@v3
-            - uses: docker/setup-qemu-action@v2
+            - uses: actions/checkout@v4
+            - uses: docker/setup-qemu-action@v3
             - name: Dockerhub login
               run: |
                   echo "${DOCKER_PASSWORD}" | docker login --username ${DOCKER_USERNAME} --password-stdin
