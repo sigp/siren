@@ -1,14 +1,10 @@
-interface Obj {
-  [key: string]: any
-}
-
-const getValuesFromObjArray = (arr: Obj[], key: string): (string | number)[] => {
-  const keyParts = key.split('.')
-
-  return arr.reduce((acc: (string | number)[], obj: Obj) => {
-    const value = keyParts.reduce((val, part) => val?.[part], obj)
-    return typeof value === 'string' || typeof value === 'number' ? [...acc, value] : acc
-  }, [])
+const getValuesFromObjArray = (arr: { [key: string]: any }[], key: string): (string | number)[] => {
+  return arr
+    .map((obj): string | number | undefined => {
+      const value = key.split('.').reduce((val, part) => val?.[part], obj)
+      return typeof value === 'string' || typeof value === 'number' ? value : undefined
+    })
+    .filter((val): val is string | number => val !== undefined)
 }
 
 export default getValuesFromObjArray

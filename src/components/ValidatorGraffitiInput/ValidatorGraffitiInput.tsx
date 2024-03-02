@@ -3,9 +3,10 @@ import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
 import { useTranslation } from 'react-i18next'
 import { ChangeEvent, FC, useState } from 'react'
 import Input from '../Input/Input'
+import { OptionalString } from '../../types'
 
 export interface ValidatorGraffitiInputProps {
-  value?: string
+  value?: OptionalString
   isLoading?: boolean
   onSubmit: (value: string) => void
 }

@@ -6,13 +6,14 @@ type Dimensions = {
 }
 
 const useDivDimensions = (): { ref: RefObject<HTMLDivElement>; dimensions?: Dimensions } => {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLDivElement | null>(null)
   const [dimensions, setDimensions] = useState<Dimensions | undefined>(undefined)
 
   useEffect(() => {
     const handleResize = () => {
-      if (ref.current) {
-        const { width, height } = ref.current.getBoundingClientRect()
+      const refCurrent = ref.current
+      if (refCurrent) {
+        const { width, height } = refCurrent.getBoundingClientRect()
         setDimensions({ width, height })
       }
     }

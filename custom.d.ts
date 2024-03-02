@@ -12,3 +12,7 @@ declare module 'rodal'
 declare module 'svg-identicon'
 
 declare module 'crypto-js'
+
+declare module 'i18next'
+
+declare module '@testing-library/react'

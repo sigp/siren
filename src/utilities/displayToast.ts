@@ -13,7 +13,11 @@ const displayToast = (message: string, type: ToastType, options?: ToastOptions) 
     pauseOnHover: options?.pauseOnHover || true,
   }
 
-  toast[type](message, toastOptions)
+  if (type === ToastType.SUCCESS) {
+    toast.success(message, toastOptions)
+  } else {
+    toast.error(message, toastOptions)
+  }
 }
 
 export default displayToast

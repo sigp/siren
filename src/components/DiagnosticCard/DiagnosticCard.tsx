@@ -7,9 +7,9 @@ import Status from '../Status/Status'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
 import generateId from '../../utilities/generateId'
 import Tooltip from '../ToolTip/Tooltip'
-import { ITooltip } from 'react-tooltip'
+import { PlacesType } from 'react-tooltip'
 import addClassString from '../../utilities/addClassString'
-import { StatusColor } from '../../types'
+import { OptionalString, StatusColor } from '../../types'
 
 export type CardSize = 'lg' | 'md' | 'sm' | 'health'
 
@@ -22,12 +22,12 @@ export interface DiagnosticCardProps {
   subTitle: string
   border?: string
   subTitleHighlightColor?: string
-  maxHeight?: string
-  maxWidth?: string
+  maxHeight?: OptionalString
+  maxWidth?: OptionalString
   isBackground?: boolean
-  size?: CardSize
-  toolTipText?: string
-  toolTipPosition?: ITooltip['place']
+  size?: CardSize | undefined
+  toolTipText?: OptionalString
+  toolTipPosition?: PlacesType
   isDisabled?: boolean
 }
 
@@ -123,7 +123,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           className='h-full'
           maxWidth={250}
           id={toolTipId}
-          place={toolTipPosition}
+          place={toolTipPosition as PlacesType}
           text={toolTipText}
         >
           {renderContent()}

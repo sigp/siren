@@ -8,7 +8,7 @@ export interface ProposalAlertProps {
   duty: ProposerDuty
   time: string
   isFuture?: boolean
-  onDelete?: (uuid: string[]) => void
+  onDelete?: ((uuid: string[]) => void) | undefined
 }
 
 const ProposalAlert: FC<ProposalAlertProps> = ({ duty, time, isFuture, onDelete }) => {

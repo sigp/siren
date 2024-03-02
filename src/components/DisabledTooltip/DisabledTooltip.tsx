@@ -1,12 +1,12 @@
 import Tooltip from '../ToolTip/Tooltip'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ITooltip } from 'react-tooltip'
+import { PlacesType } from 'react-tooltip'
 
 export interface DisabledTooltipProps {
   children: ReactNode
   className?: string
-  place?: ITooltip['place']
+  place?: PlacesType
 }
 
 const DisabledTooltip: FC<DisabledTooltipProps> = ({ children, place, className }) => {
@@ -14,7 +14,7 @@ const DisabledTooltip: FC<DisabledTooltipProps> = ({ children, place, className 
   return (
     <Tooltip
       className={className}
-      place={place}
+      place={place as PlacesType}
       text={t('comingSoon')}
       id={Math.random().toString()}
     >

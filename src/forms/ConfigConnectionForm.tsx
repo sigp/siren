@@ -1,5 +1,5 @@
 import React, { FC, useEffect, useState } from 'react'
-import { Control, useForm, UseFormGetValues } from 'react-hook-form'
+import { Control, useForm, UseFormGetValues, FieldValues } from 'react-hook-form'
 import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
 import useApiValidation from '../hooks/useApiValidation'
@@ -99,7 +99,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     port: 5062,
   }
 
-  const { control, setValue, getValues, watch, trigger } = useForm({
+  const { control, setValue, getValues, watch, trigger } = useForm<ConnectionForm>({
     defaultValues: {
       beaconNode: storedBnNode || endPointDefault,
       validatorClient: storedVc || vcDefaultEndpoint,
@@ -112,7 +112,11 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     resolver: yupResolver(configValidation),
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const beaconNode = watch('beaconNode')
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const validatorClient = watch('validatorClient')
 
   useEffect(() => {
@@ -165,7 +169,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     displayToast(message, ToastType.ERROR, { autoClose })
   }
 
-  const handleValidationErrors = (values: ConnectionForm) => {
+  const handleValidationErrors = (values: FieldValues) => {
     const errors = validationErrors(values)
 
     if (errors.length) {
@@ -182,7 +186,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
     }
   }
 
-  const validationErrors = (values: ConnectionForm) => {
+  const validationErrors = (values: FieldValues) => {
     const { apiToken, userName, beaconNode, validatorClient } = values
     const errors = []
 
@@ -211,7 +215,7 @@ const ConfigConnectionForm: FC<ConfigConnectionFormProps> = ({ children }) => {
 
     return errors
   }
-  const formatDevice = (values: ConnectionForm): DeviceSettings => {
+  const formatDevice = (values: FieldValues): DeviceSettings => {
     const { beaconNode, validatorClient, deviceName } = values
     const formattedBnEndpoint = formatEndpoint(beaconNode) as string
     const formattedVcEndpoint = formatEndpoint(validatorClient) as string

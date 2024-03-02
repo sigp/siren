@@ -31,7 +31,7 @@ const useValidatorEarnings = (indices?: string[]) => {
         r[a.epoch] = r[a.epoch] || []
         r[a.epoch].push(a.total_balance)
         return r
-      }, Object.create(null))
+      }, Object.create({}))
   }, [filteredCacheData])
   const epochKeys = formattedEpochs ? Object.keys(formattedEpochs) : undefined
   const lastEpoch = epochKeys ? epochKeys[epochKeys.length - 1] : undefined
@@ -39,7 +39,7 @@ const useValidatorEarnings = (indices?: string[]) => {
   const [epochCaches, setCaches] = useState<FormattedValidatorCache | undefined>()
 
   useEffect(() => {
-    setCaches((prev) => Object.assign({}, prev, formattedEpochs))
+    setCaches((prev) => Object.assign({} as FormattedValidatorCache, prev, formattedEpochs))
   }, [lastEpoch])
 
   const total = useMemo(() => {

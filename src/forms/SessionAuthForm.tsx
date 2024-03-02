@@ -41,7 +41,7 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
     watch,
     trigger,
     formState: { isValid },
-  } = useForm({
+  } = useForm<SessionAuthForm>({
     defaultValues: {
       password: '',
       password_confirmation: '',
@@ -50,11 +50,15 @@ const SessionAuthForm: FC<SessionAuthFormProps> = ({ children }) => {
     resolver: yupResolver(sessionAuthValidation),
   })
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const password = watch('password')
 
   const updateDevice = () => {
     const { deviceName, apiToken } = device
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     const encryptedToken = CryptoJS.AES.encrypt(apiToken, password).toString()
 
     const formattedDevice = {

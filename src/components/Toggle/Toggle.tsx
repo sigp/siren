@@ -1,8 +1,9 @@
 import { FC } from 'react'
+import { OptionalBoolean } from '../../types'
 
 export interface ToggleProps {
   id: string
-  value?: boolean
+  value?: OptionalBoolean
   onChange: (value: boolean) => void
 }
 
