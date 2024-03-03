@@ -8,7 +8,6 @@
   "version": "1.0.2",
   "private": true,
   "dependencies": {
-    "@electron-forge/maker-dmg": "^6.0.5",
     "@hookform/resolvers": "^2.9.8",
     "@storybook/theming": "^7.5.3",
     "@testing-library/jest-dom": "^5.14.1",
@@ -27,8 +26,6 @@
     "concurrently": "5.2.0",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.0.3",
-    "electron-is-dev": "^2.0.0",
-    "electron-squirrel-startup": "^1.0.0",
     "eslint-import-resolver-typescript": "^3.5.1",
     "ethers": "^5.7.1",
     "husky": "^8.0.2",
@@ -63,7 +60,6 @@
   },
   "scripts": {
     "dev": "concurrently -k \"BROWSER=none npm start\" \"npm:electron\"",
-    "electron": "wait-on tcp:127.0.0.1:3000 && electron .",
     "start": "BROWSER=none react-scripts start",
     "build": "react-scripts build",
     "test": "jest",
@@ -75,9 +71,7 @@
     "test-storybook": "test-storybook",
     "lint": "eslint src/**/*.{ts,tsx}",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
-    "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+    "format": "prettier --write './src/**/*.{ts,tsx}' --config ./.prettierrc"
   },
   "eslintConfig": {
     "extends": [
@@ -119,9 +113,6 @@
     ]
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.3",
-    "@electron-forge/maker-squirrel": "^6.0.3",
-    "@electron-forge/maker-zip": "^6.0.3",
     "@faker-js/faker": "^7.5.0",
     "@storybook/addon-actions": "^7.5.3",
     "@storybook/addon-essentials": "^7.5.3",
@@ -139,7 +130,6 @@
     "@typescript-eslint/parser": "^5.38.0",
     "babel-plugin-named-exports-order": "^0.0.2",
     "chromatic": "^6.8.1",
-    "electron": "^21.3.0",
     "eslint": "8.22.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
