@@ -31,3 +31,7 @@ build-storybook.log
 /local-testnet/bls_to_execution_changes
 /out
 .env
+
+.next
+next-env.d.ts
+dist
