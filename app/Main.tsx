@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from 'react';
+import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
 import { fetchBeaconVersion, fetchSyncStatus } from '../src/api/beacon';
@@ -11,6 +11,7 @@ import Typography from '../src/components/Typography/Typography';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
 import { AppView, OnboardView } from '../src/constants/enums';
 import useLocalStorage from '../src/hooks/useLocalStorage';
+import useSWR from 'swr';
 import {
   activeDevice,
   appView,
@@ -25,6 +26,7 @@ import { DeviceSettings, ValAliases } from '../src/types';
 import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../src/types/storage';
 import formatSemanticVersion from '../utilities/formatSemanticVersion';
 import isRequiredVersion from '../utilities/isRequiredVersion';
+import axios from 'axios';
 
 export interface InitProps {
   beaconNodeVersion?: string | undefined
@@ -33,6 +35,10 @@ export interface InitProps {
 
 const Main:FC<InitProps> = ({beaconNodeVersion, apiTokenPath}) => {
   const { t } = useTranslation()
+  const fetcher = url => axios.get(url).then(res => res.data);
+  const {data} = useSWR('/api/lighthouse-version', fetcher)
+
+  console.log(data)
   const configError = !beaconNodeVersion || !apiTokenPath
   const { major, minor, patch } = REQUIRED_VALIDATOR_VERSION
   const vcVersion = beaconNodeVersion ? formatSemanticVersion(beaconNodeVersion as string) : undefined;
