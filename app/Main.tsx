@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSetRecoilState } from 'recoil';
+import useSWR from 'swr';
 import { fetchBeaconVersion, fetchSyncStatus } from '../src/api/beacon';
 import { fetchVersion } from '../src/api/lighthouse';
 import AppDescription from '../src/components/AppDescription/AppDescription';
@@ -11,7 +13,6 @@ import Typography from '../src/components/Typography/Typography';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
 import { AppView, OnboardView } from '../src/constants/enums';
 import useLocalStorage from '../src/hooks/useLocalStorage';
-import useSWR from 'swr';
 import {
   activeDevice,
   appView,
@@ -26,7 +27,6 @@ import { DeviceSettings, ValAliases } from '../src/types';
 import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../src/types/storage';
 import formatSemanticVersion from '../utilities/formatSemanticVersion';
 import isRequiredVersion from '../utilities/isRequiredVersion';
-import axios from 'axios';
 
 export interface InitProps {
   beaconNodeVersion?: string | undefined
