@@ -1,8 +1,8 @@
-import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
-import { activeDevice } from '../../recoil/atoms'
 import { DEVICE_NAME_TRUNCATE } from '../../constants/constants'
+import { activeDevice } from '../../recoil/atoms'
+import Typography from '../Typography/Typography'
 
 const DeviceName = () => {
   const { t } = useTranslation()

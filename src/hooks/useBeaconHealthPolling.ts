@@ -1,8 +1,8 @@
+import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { beaconHealthResult, beaconNetworkError, activeDevice } from '../recoil/atoms'
-import usePollApi from './usePollApi'
-import { useEffect } from 'react'
 import { PollingOptions } from '../types'
+import usePollApi from './usePollApi'
 
 const useBeaconHealthPolling = (options?: PollingOptions) => {
   const { time = 6000, isReady = true } = options || {}

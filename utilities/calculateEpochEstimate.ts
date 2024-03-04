@@ -1,5 +1,5 @@
-import { FormattedValidatorCache } from '../types/validator'
-import { slotsInEpoc } from '../constants/constants'
+import { FormattedValidatorCache } from '../src/types/validator'
+import { slotsInEpoc } from '../src/constants/constants'
 import reduceAddNum from './reduceAddNum'
 import { formatUnits } from 'ethers/lib/utils'
 

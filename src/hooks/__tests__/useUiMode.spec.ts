@@ -1,7 +1,7 @@
-import useUiMode from '../useUiMode'
 import { renderHook } from '@testing-library/react-hooks'
 import { mockedRecoilState } from '../../../test.helpers'
 import { UiMode } from '../../constants/enums'
+import useUiMode from '../useUiMode'
 import clearAllMocks = jest.clearAllMocks
 
 const toggleUiMode = () => jest.fn()

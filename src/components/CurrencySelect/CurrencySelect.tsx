@@ -1,11 +1,11 @@
-import { CURRENCIES } from '../../constants/constants'
-import { useRecoilState, useRecoilValue } from 'recoil'
-import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 import { useTranslation } from 'react-i18next'
-import { activeCurrency, exchangeRates } from '../../recoil/atoms'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import { ActiveCurrencyStorage } from '../../types/storage'
+import { useRecoilState, useRecoilValue } from 'recoil'
+import { CURRENCIES } from '../../constants/constants'
 import { Storage } from '../../constants/enums'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import { activeCurrency, exchangeRates } from '../../recoil/atoms'
+import { ActiveCurrencyStorage } from '../../types/storage'
+import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown'
 
 const CurrencySelect = () => {
   const { t } = useTranslation()

@@ -1,7 +1,7 @@
+import { Suspense } from 'react'
+import AlertInfo from './AlertInfo'
 import HardwareInfo from './HardwareInfo'
 import LogsInfo from './LogsInfo'
-import AlertInfo from './AlertInfo'
-import { Suspense } from 'react'
 import TableColumnFallback from './TableColumnFallback'
 
 const DiagnosticTable = () => {

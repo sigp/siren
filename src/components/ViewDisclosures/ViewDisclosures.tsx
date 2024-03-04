@@ -1,13 +1,13 @@
-import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import useUiMode from '../../hooks/useUiMode'
+import { activeDevice } from '../../recoil/atoms'
+import { DeviceListStorage } from '../../types/storage'
 import Button, { ButtonFace } from '../Button/Button'
 import SessionAuthModal from '../SessionAuthModal/SessionAuthModal'
-import useUiMode from '../../hooks/useUiMode'
-import { useRecoilValue } from 'recoil'
-import { activeDevice } from '../../recoil/atoms'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import { DeviceListStorage } from '../../types/storage'
+import Typography from '../Typography/Typography'
 
 export interface ViewDisclosuresProps {
   onClick?: () => void

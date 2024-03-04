@@ -1,10 +1,10 @@
-import { SignedExitData } from '../types/validator'
-import { signVoluntaryExit } from '../api/lighthouse'
-import displayToast from '../utilities/displayToast'
-import { ToastType } from '../types'
-import { submitSignedExit } from '../api/beacon'
-import { useTranslation } from 'react-i18next'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import displayToast from '../../utilities/displayToast'
+import { submitSignedExit } from '../api/beacon'
+import { signVoluntaryExit } from '../api/lighthouse'
+import { ToastType } from '../types'
+import { SignedExitData } from '../types/validator'
 
 const useExitValidator = (apiToken: string, pubKey: string, beaconUrl: string) => {
   const { t } = useTranslation()

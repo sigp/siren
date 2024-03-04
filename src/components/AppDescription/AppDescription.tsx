@@ -1,6 +1,6 @@
-import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next'
 import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import Typography from '../Typography/Typography'
 
 export interface AppDescriptionProps {
   view: 'settings' | 'init'

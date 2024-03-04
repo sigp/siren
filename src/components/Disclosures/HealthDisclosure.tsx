@@ -1,10 +1,10 @@
-import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 import React, { useState } from 'react'
-import healthDisclosure from '../../assets/images/healthDisclosure.png'
-import Typography from '../Typography/Typography'
-import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import { useTranslation } from 'react-i18next'
+import healthDisclosure from '../../assets/images/healthDisclosure.png'
 import { UiMode } from '../../constants/enums'
+import DisclosureModal from '../DisclosureModal/DisclosureModal'
+import Typography from '../Typography/Typography'
+import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 
 const HealthDisclosure = () => {
   const { t } = useTranslation()

@@ -1,10 +1,10 @@
 import React, { FC, useState } from 'react'
-import ViewDisclosures, { ViewDisclosuresProps } from '../ViewDisclosures/ViewDisclosures'
-import DisclosureModal from '../DisclosureModal/DisclosureModal'
-import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
-import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
 import useUiMode from '../../hooks/useUiMode'
+import DisclosureModal from '../DisclosureModal/DisclosureModal'
+import Typography from '../Typography/Typography'
+import ViewDisclosures, { ViewDisclosuresProps } from '../ViewDisclosures/ViewDisclosures'
 
 type ValidatorDisclosureProps = Omit<ViewDisclosuresProps, 'onClick'>
 

@@ -1,8 +1,8 @@
 import React, { FC, ReactNode } from 'react'
-import { TypographyFamily, TypographyType } from '../Typography/Typography'
-import Spinner from '../Spinner/Spinner'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
+import Spinner from '../Spinner/Spinner'
+import { TypographyFamily, TypographyType } from '../Typography/Typography'
 
 export enum ButtonFace {
   PRIMARY = 'PRIMARY',

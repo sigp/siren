@@ -1,10 +1,10 @@
-import ViewDisclosures, { ViewDisclosuresProps } from '../ViewDisclosures/ViewDisclosures'
 import React, { FC, useState } from 'react'
-import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
-import Typography from '../Typography/Typography'
-import DisclosureModal from '../DisclosureModal/DisclosureModal'
 import { useTranslation } from 'react-i18next'
+import validatorDisclosure from '../../assets/images/validatorDisclosure.png'
 import useUiMode from '../../hooks/useUiMode'
+import DisclosureModal from '../DisclosureModal/DisclosureModal'
+import Typography from '../Typography/Typography'
+import ViewDisclosures, { ViewDisclosuresProps } from '../ViewDisclosures/ViewDisclosures'
 
 export type ExitDisclosureProps = Omit<ViewDisclosuresProps, 'onClick'> & {
   isLoading?: boolean

@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
-import DisclosureModal from '../DisclosureModal/DisclosureModal'
-import syncDisclosure from '../../assets/images/syncDisclosure.png'
-import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import syncDisclosure from '../../assets/images/syncDisclosure.png'
 import { UiMode } from '../../constants/enums'
+import DisclosureModal from '../DisclosureModal/DisclosureModal'
+import Typography from '../Typography/Typography'
+import ViewDisclosures from '../ViewDisclosures/ViewDisclosures'
 
 const SyncDisclosure = () => {
   const { t } = useTranslation()

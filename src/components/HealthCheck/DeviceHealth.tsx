@@ -1,9 +1,9 @@
-import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { useTranslation } from 'react-i18next'
-import addSuffixString from '../../utilities/addSuffixString'
+import addSuffixString from '../../../utilities/addSuffixString'
+import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 
 const DeviceHealth = () => {
   const { t } = useTranslation()

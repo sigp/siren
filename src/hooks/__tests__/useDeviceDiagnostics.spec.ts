@@ -1,11 +1,11 @@
-import useDeviceDiagnostics from '../useDeviceDiagnostics'
 import { renderHook } from '@testing-library/react-hooks'
-import formatGigBytes from '../../utilities/formatGigBytes'
-import { mockBeaconHealthResult } from '../../mocks/beaconHealthResult'
 import { mockedRecoilValue } from '../../../test.helpers'
+import formatGigBytes from '../../../utilities/formatGigBytes'
+import { mockBeaconHealthResult } from '../../mocks/beaconHealthResult'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
-import clearAllMocks = jest.clearAllMocks
 import { StatusColor } from '../../types'
+import useDeviceDiagnostics from '../useDeviceDiagnostics'
+import clearAllMocks = jest.clearAllMocks
 jest.mock('../../utilities/formatGigBytes', () => jest.fn())
 
 jest.mock('../useDiagnosticAlerts', () => ({

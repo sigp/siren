@@ -1,5 +1,5 @@
 import formatAtHeadSlotStatus from '../formatAtHeadSlotStatus'
-import { StatusColor } from '../../types'
+import { StatusColor } from '../../src/types'
 
 describe('formatAtHeadSlotStatus', () => {
   it('should return correct status', () => {

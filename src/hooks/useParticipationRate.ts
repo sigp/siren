@@ -1,10 +1,10 @@
-import { useRecoilValue } from 'recoil'
-import { beaconSyncInfo, activeDevice } from '../recoil/atoms'
-import { slotsInEpoc } from '../constants/constants'
 import { useEffect, useState } from 'react'
+import { useRecoilValue } from 'recoil'
 import { fetchValidatorInclusion } from '../api/beacon'
-import { BeaconValidatorInclusionResults } from '../types/beacon'
+import { slotsInEpoc } from '../constants/constants'
+import { beaconSyncInfo, activeDevice } from '../recoil/atoms'
 import { StatusColor } from '../types'
+import { BeaconValidatorInclusionResults } from '../types/beacon'
 
 const useParticipationRate = () => {
   const { head_slot } = useRecoilValue(beaconSyncInfo) || {}

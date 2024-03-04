@@ -1,10 +1,10 @@
-import Typography from '../Typography/Typography'
-import Status from '../Status/Status'
 import { useTranslation } from 'react-i18next'
-import getAvgEffectivenessStatus from '../../utilities/getAvgEffectivenessStatus'
-import EffectivenessBreakdown from '../EffectivenessBreakdown/EffectivenessBreakdown'
-import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
+import getAvgEffectivenessStatus from '../../../utilities/getAvgEffectivenessStatus'
+import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
 import useValidatorEffectiveness from '../../hooks/useValidatorEffectiveness'
+import EffectivenessBreakdown from '../EffectivenessBreakdown/EffectivenessBreakdown'
+import Status from '../Status/Status'
+import Typography from '../Typography/Typography'
 
 const OverallEffectiveness = () => {
   const { t } = useTranslation()

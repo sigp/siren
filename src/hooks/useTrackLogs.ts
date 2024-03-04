@@ -1,10 +1,10 @@
-import useSSE from './useSSE'
-import { LogLevels, SSELog, StatusColor } from '../types'
-import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import moment from 'moment'
-import { ALERT_ID, MAX_PERSISTED_LOGS } from '../constants/constants'
-import useDiagnosticAlerts from './useDiagnosticAlerts'
+import { MutableRefObject, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { ALERT_ID, MAX_PERSISTED_LOGS } from '../constants/constants'
+import { LogLevels, SSELog, StatusColor } from '../types'
+import useDiagnosticAlerts from './useDiagnosticAlerts'
+import useSSE from './useSSE'
 
 export type trackedLogData = {
   data: SSELog[]

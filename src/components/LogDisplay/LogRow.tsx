@@ -1,6 +1,6 @@
+import { FC, useState } from 'react'
 import { LogLevels, SSELog } from '../../types'
 import Typography from '../Typography/Typography'
-import { FC, useState } from 'react'
 
 export interface LogRowProps {
   log: SSELog

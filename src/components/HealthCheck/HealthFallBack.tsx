@@ -1,5 +1,5 @@
-import Spinner from '../Spinner/Spinner'
 import { FC } from 'react'
+import Spinner from '../Spinner/Spinner'
 
 export interface HealthFallBackProps {
   size?: 'sm' | 'lg'

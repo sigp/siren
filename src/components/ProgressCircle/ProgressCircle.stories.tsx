@@ -1,5 +1,5 @@
-import ProgressCircle, { ProgressCircleProps } from './ProgressCircle'
 import { Story } from '@storybook/react'
+import ProgressCircle, { ProgressCircleProps } from './ProgressCircle'
 
 export default {
   title: 'Progress Circle',

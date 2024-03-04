@@ -1,5 +1,5 @@
-import Typography, { TypographyColor } from '../Typography/Typography'
 import { FC } from 'react'
+import Typography, { TypographyColor } from '../Typography/Typography'
 
 interface SocialIconProps {
   title: string

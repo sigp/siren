@@ -1,11 +1,11 @@
-import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
-import { useMemo } from 'react'
 import { formatUnits } from 'ethers/lib/utils'
-import { secondsInDay, slotsInEpoc } from '../constants/constants'
-import calculateAprPercentage from '../utilities/calculateAprPercentage'
-import formatBalanceColor from '../utilities/formatBalanceColor'
+import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
+import calculateAprPercentage from '../../utilities/calculateAprPercentage'
+import formatBalanceColor from '../../utilities/formatBalanceColor'
+import { secondsInDay, slotsInEpoc } from '../constants/constants'
 import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 
 const useEpochAprEstimate = (indices?: string[]) => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

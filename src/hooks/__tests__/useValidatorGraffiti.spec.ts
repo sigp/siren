@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react-hooks'
-import useValidatorGraffiti from '../useValidatorGraffiti'
 import React from 'react'
-import { mockValidatorInfo } from '../../mocks/validatorResults'
-import { fetchValidatorGraffiti } from '../../api/lighthouse'
 import { mockedRecoilValue } from '../../../test.helpers'
+import { fetchValidatorGraffiti } from '../../api/lighthouse'
+import { mockValidatorInfo } from '../../mocks/validatorResults'
+import useValidatorGraffiti from '../useValidatorGraffiti'
 import clearAllMocks = jest.clearAllMocks
 
 jest.mock('../../api/lighthouse', () => ({

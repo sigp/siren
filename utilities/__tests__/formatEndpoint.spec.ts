@@ -1,5 +1,5 @@
 import formatEndpoint from '../formatEndpoint'
-import { Protocol } from '../../constants/enums'
+import { Protocol } from '../../src/constants/enums'
 
 describe('format endpoint util', () => {
   it('should return the correct format', () => {

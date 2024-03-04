@@ -1,5 +1,5 @@
-import { Protocol } from '../constants/enums'
-import { Endpoint } from '../types'
+import { Protocol } from '../src/constants/enums'
+import { Endpoint } from '../src/types'
 
 const parseEndpointString = (endpointString?: string): Endpoint | undefined => {
   if (!endpointString) return

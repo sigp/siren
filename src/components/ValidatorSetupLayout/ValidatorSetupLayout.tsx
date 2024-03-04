@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography'
-import Button, { ButtonFace } from '../Button/Button'
 import { FC, ReactNode } from 'react'
 import BreadCrumb from '../BreadCrumb/BreadCrumb'
+import Button, { ButtonFace } from '../Button/Button'
+import Typography from '../Typography/Typography'
 
 export interface ValidatorSetupLayoutProps {
   children: ReactNode | ReactNode[]

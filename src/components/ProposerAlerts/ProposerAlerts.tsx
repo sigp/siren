@@ -1,13 +1,13 @@
 import { FC } from 'react'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import getSlotTimeData from '../../../utilities/getSlotTimeData'
+import groupArray from '../../../utilities/groupArray'
+import { proposerDuties } from '../../recoil/atoms'
+import { selectBnSpec } from '../../recoil/selectors/selectBnSpec'
+import { selectGenesisBlock } from '../../recoil/selectors/selectGenesisBlock'
 import { ProposerDuty } from '../../types'
-import groupArray from '../../utilities/groupArray'
 import AlertGroup from './AlertGroup'
 import ProposalAlert from './ProposalAlert'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { selectGenesisBlock } from '../../recoil/selectors/selectGenesisBlock'
-import { selectBnSpec } from '../../recoil/selectors/selectBnSpec'
-import { proposerDuties } from '../../recoil/atoms'
-import getSlotTimeData from '../../utilities/getSlotTimeData'
 
 export interface ProposerAlertsProps {
   duties: ProposerDuty[]

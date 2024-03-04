@@ -1,6 +1,6 @@
 import { selector } from 'recoil'
-import { validatorSearch } from '../atoms'
 import { ValidatorInfo } from '../../types/validator'
+import { validatorSearch } from '../atoms'
 import { selectValidatorInfos } from './selectValidatorInfos'
 
 export const selectFilteredValidators = selector<ValidatorInfo[]>({

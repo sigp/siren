@@ -1,8 +1,8 @@
-import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
-import { useTranslation } from 'react-i18next'
-import { LogCounts, StatusColor } from '../../types'
 import { FC } from 'react'
-import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
+import { useTranslation } from 'react-i18next'
+import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
+import { LogCounts, StatusColor } from '../../types'
+import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 
 export interface LogStatsProps {
   critToolTip?: string

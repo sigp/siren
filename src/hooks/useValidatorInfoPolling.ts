@@ -1,11 +1,11 @@
-import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil'
 import { useEffect } from 'react'
-import { selectValidators } from '../recoil/selectors/selectValidators'
+import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from 'recoil'
 import { activeDevice, validatorStateInfo } from '../recoil/atoms'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { selectValidators } from '../recoil/selectors/selectValidators'
+import { PollingOptions } from '../types'
 import { Validator } from '../types/validator'
 import usePollApi from './usePollApi'
-import { PollingOptions } from '../types'
-import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
 
 const useValidatorInfoPolling = (options?: PollingOptions) => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

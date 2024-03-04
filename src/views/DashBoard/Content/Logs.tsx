@@ -1,13 +1,13 @@
-import Typography from '../../../components/Typography/Typography'
-import LogDisplay from '../../../components/LogDisplay/LogDisplay'
 import { useContext, useEffect, useMemo, useState } from 'react'
-import { SSEContext } from '../../../components/SSELogProvider/SSELogProvider'
-import { LogType } from '../../../types'
-import SelectDropDown, { OptionType } from '../../../components/SelectDropDown/SelectDropDown'
-import { LogTypeOptions } from '../../../constants/constants'
-import Toggle from '../../../components/Toggle/Toggle'
-import Button, { ButtonFace } from '../../../components/Button/Button'
 import { useTranslation } from 'react-i18next'
+import Button, { ButtonFace } from '../../../components/Button/Button'
+import LogDisplay from '../../../components/LogDisplay/LogDisplay'
+import SelectDropDown, { OptionType } from '../../../components/SelectDropDown/SelectDropDown'
+import { SSEContext } from '../../../components/SSELogProvider/SSELogProvider'
+import Toggle from '../../../components/Toggle/Toggle'
+import Typography from '../../../components/Typography/Typography'
+import { LogTypeOptions } from '../../../constants/constants'
+import { LogType } from '../../../types'
 
 const Logs = () => {
   const { t } = useTranslation()

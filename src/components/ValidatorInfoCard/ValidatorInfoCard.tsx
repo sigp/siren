@@ -1,10 +1,10 @@
-import Waves from '../../assets/images/waves.png'
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import { ValidatorInfo } from '../../types/validator'
 import { useTranslation } from 'react-i18next'
+import addClassString from '../../../utilities/addClassString'
+import Waves from '../../assets/images/waves.png'
+import { ValidatorInfo } from '../../types/validator'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
-import addClassString from '../../utilities/addClassString'
+import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoCardProps {
   validator: ValidatorInfo

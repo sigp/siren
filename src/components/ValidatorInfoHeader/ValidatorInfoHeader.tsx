@@ -1,11 +1,11 @@
-import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
-import { ValidatorInfo } from '../../types/validator'
 import { FC } from 'react'
-import Typography from '../Typography/Typography'
-import Waves from '../../assets/images/waves.png'
-import { useRecoilValue } from 'recoil'
-import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 import { useTranslation, Trans } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
+import Waves from '../../assets/images/waves.png'
+import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
+import { ValidatorInfo } from '../../types/validator'
+import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoHeaderProps {
   validator: ValidatorInfo

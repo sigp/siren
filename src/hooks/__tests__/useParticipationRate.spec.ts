@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react-hooks'
-import useParticipationRate from '../useParticipationRate'
 import React from 'react'
-import { fetchValidatorInclusion } from '../../api/beacon'
 import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
+import { fetchValidatorInclusion } from '../../api/beacon'
 import { mockBeaconSyncResult } from '../../mocks/beaconSyncResults'
 import { StatusColor } from '../../types'
+import useParticipationRate from '../useParticipationRate'
 
 const mockParticipationResult = {
   current_epoch_active_gwei: 13022634000000000,

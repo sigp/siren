@@ -1,19 +1,19 @@
+
+import { createElement, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import addClassString from '../../../utilities/addClassString'
 import { ReactComponent as LightHouseLogo } from '../../assets/images/lightHouse.svg'
 import { ReactComponent as LightHouseFullLogo } from '../../assets/images/lightHouseFull.svg'
-
-import SideItem from './SideItem'
-import SideBarText from './SideBarText'
 import { PRIMARY_VIEWS, SECONDARY_VIEWS } from '../../constants/constants'
-import { createElement, useCallback } from 'react'
-import { useRecoilState } from 'recoil'
-import { dashView, isSideBarOpen } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
-import { useTranslation } from 'react-i18next'
-import useUiMode from '../../hooks/useUiMode'
-import UiModeIcon from '../UiModeIcon/UiModeIcon'
-import useMediaQuery from '../../hooks/useMediaQuery'
-import addClassString from '../../utilities/addClassString'
 import useClickOutside from '../../hooks/useClickOutside'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import useUiMode from '../../hooks/useUiMode'
+import { dashView, isSideBarOpen } from '../../recoil/atoms'
+import UiModeIcon from '../UiModeIcon/UiModeIcon'
+import SideBarText from './SideBarText'
+import SideItem from './SideItem'
 
 const SideBar = () => {
   const { t } = useTranslation()

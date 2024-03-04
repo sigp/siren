@@ -1,5 +1,5 @@
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
+import Typography from '../Typography/Typography'
 
 export type OverviewStatus = 'text-success' | 'text-warning' | 'text-error'
 

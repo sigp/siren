@@ -1,10 +1,20 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AxiosError } from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { Control, useForm, UseFormGetValues, FieldValues } from 'react-hook-form'
-import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
+import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
+import displayToast from '../../utilities/displayToast'
+import formatEndpoint from '../../utilities/formatEndpoint'
+import isRequiredVersion from '../../utilities/isRequiredVersion'
+import parseEndpointString from '../../utilities/parseEndpointString'
+import { fetchBeaconVersion } from '../api/beacon'
+import { fetchVersion } from '../api/lighthouse'
+import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
+import { ApiType, ConfigType, ContentView, OnboardView, Protocol } from '../constants/enums'
 import useApiValidation from '../hooks/useApiValidation'
 import useLocalStorage from '../hooks/useLocalStorage'
-import { useSetRecoilState } from 'recoil'
 import {
   activeDevice,
   beaconVersionData,
@@ -14,19 +24,9 @@ import {
   userName,
   validatorVersionData,
 } from '../recoil/atoms'
-import { configValidation } from '../validation/configValidation'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { AxiosError } from 'axios'
-import { fetchVersion } from '../api/lighthouse'
-import { DeviceKeyStorage, DeviceListStorage } from '../types/storage'
-import { fetchBeaconVersion } from '../api/beacon'
 import { DeviceList, DeviceSettings, Endpoint, ToastType } from '../types'
-import { useTranslation } from 'react-i18next'
-import isRequiredVersion from '../utilities/isRequiredVersion'
-import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
-import displayToast from '../utilities/displayToast'
-import formatEndpoint from '../utilities/formatEndpoint'
-import parseEndpointString from '../utilities/parseEndpointString'
+import { DeviceKeyStorage, DeviceListStorage } from '../types/storage'
+import { configValidation } from '../validation/configValidation'
 
 export type EndPointType = 'beaconNode' | 'validatorClient'
 

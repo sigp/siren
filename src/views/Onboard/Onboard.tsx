@@ -1,11 +1,11 @@
-import { useRecoilState } from 'recoil'
-import { onBoardView } from '../../recoil/atoms'
-import { OnboardView } from '../../constants/enums'
-import SelectProvider from './views/SelectProvider'
-import ConfigureConnection from './views/ConfigureConnection'
-import ValidatorSetup from './views/ValidatorSetup/ValidatorSetup'
-import SessionConfig from './views/SessionConfig'
 import { useEffect } from 'react'
+import { useRecoilState } from 'recoil'
+import { OnboardView } from '../../constants/enums'
+import { onBoardView } from '../../recoil/atoms'
+import ConfigureConnection from './views/ConfigureConnection'
+import SelectProvider from './views/SelectProvider'
+import SessionConfig from './views/SessionConfig'
+import ValidatorSetup from './views/ValidatorSetup/ValidatorSetup'
 
 const Onboard = () => {
   const [view, setView] = useRecoilState(onBoardView)

@@ -1,5 +1,5 @@
-import { useCallback, useRef } from 'react'
 import axios, { Method } from 'axios'
+import { useCallback, useRef } from 'react'
 import { useQuery } from 'react-query'
 
 const usePollApi = ({

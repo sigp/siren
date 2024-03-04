@@ -9,9 +9,9 @@ import {
   ProposerDuty,
   ValAliases,
 } from '../types'
+import { BeaconValidatorMetricResults } from '../types/beacon'
 import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../types/diagnostic'
 import { BeaconValidatorResult, ValidatorCache } from '../types/validator'
-import { BeaconValidatorMetricResults } from '../types/beacon'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',

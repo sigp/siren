@@ -1,10 +1,10 @@
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import addClassString from '../../../utilities/addClassString'
+import getAvgEffectivenessStatus from '../../../utilities/getAvgEffectivenessStatus'
+import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
 import Status from '../Status/Status'
 import Typography from '../Typography/Typography'
-import getAvgEffectivenessStatus from '../../utilities/getAvgEffectivenessStatus'
-import { FC } from 'react'
-import addClassString from '../../utilities/addClassString'
-import { useTranslation } from 'react-i18next'
-import toFixedIfNecessary from '../../utilities/toFixedIfNecessary'
 
 export interface EffectivenessBreakdownProps {
   target?: number

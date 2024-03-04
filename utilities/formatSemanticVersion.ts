@@ -1,4 +1,4 @@
-import { SemanticVersion } from '../types'
+import { SemanticVersion } from '../src/types'
 
 const formatSemanticVersion = (version: string): SemanticVersion | undefined => {
   let vString = version

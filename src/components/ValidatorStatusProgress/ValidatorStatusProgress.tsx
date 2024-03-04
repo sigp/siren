@@ -1,10 +1,10 @@
-import { ValidatorStatus } from '../../types/validator'
 import { FC } from 'react'
-import Typography from '../Typography/Typography'
-import ProgressIcon from './ProgressIcon'
-import getValidatorStatusStage from '../../utilities/getValidatorStatusStage'
-import ProgressBar from './ProgressBar'
 import { useTranslation } from 'react-i18next'
+import getValidatorStatusStage from '../../../utilities/getValidatorStatusStage'
+import { ValidatorStatus } from '../../types/validator'
+import Typography from '../Typography/Typography'
+import ProgressBar from './ProgressBar'
+import ProgressIcon from './ProgressIcon'
 
 export interface ValidatorStatusProgressProps {
   status: ValidatorStatus

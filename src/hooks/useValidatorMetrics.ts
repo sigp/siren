@@ -1,10 +1,10 @@
-import usePrevious from './usePrevious'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { fetchValidatorMetrics } from '../api/beacon'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { fetchValidatorMetrics } from '../api/beacon'
 import { activeDevice, validatorCacheBalanceResult, validatorMetrics } from '../recoil/atoms'
 import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
 import { ValidatorMetricEpoch } from '../types/beacon'
+import usePrevious from './usePrevious'
 
 const useValidatorMetrics = () => {
   const validatorCacheData = useRecoilValue(validatorCacheBalanceResult)

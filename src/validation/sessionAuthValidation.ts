@@ -1,5 +1,5 @@
-import * as yup from 'yup'
 import i18n from 'i18next'
+import * as yup from 'yup'
 
 export const sessionAuthValidation = yup.object().shape({
   password: yup

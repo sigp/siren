@@ -1,10 +1,10 @@
-import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
-import { DEFAULT_VALIDATOR_COUNT } from '../../constants/constants'
-import { renderHook } from '@testing-library/react-hooks'
-import useValidatorCount from '../useValidatorCount'
-import { Protocol } from '../../constants/enums'
-import { fetchValidatorCount } from '../../api/lighthouse'
 import { waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react-hooks'
+import { mockedRecoilValue, mockResponse } from '../../../test.helpers'
+import { fetchValidatorCount } from '../../api/lighthouse'
+import { DEFAULT_VALIDATOR_COUNT } from '../../constants/constants'
+import { Protocol } from '../../constants/enums'
+import useValidatorCount from '../useValidatorCount'
 
 jest.mock('../../api/lighthouse', () => ({
   fetchValidatorCount: jest.fn(),

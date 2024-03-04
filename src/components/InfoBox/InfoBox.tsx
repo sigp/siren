@@ -1,5 +1,5 @@
-import addClassString from '../../utilities/addClassString'
 import React, { FC, ReactNode } from 'react'
+import addClassString from '../../../utilities/addClassString'
 import Typography from '../Typography/Typography'
 
 export enum InfoBoxType {

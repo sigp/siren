@@ -1,14 +1,14 @@
-import ReactSpeedometer, { CustomSegmentLabelPosition } from 'react-d3-speedometer'
-import { UiMode } from '../../constants/enums'
-import { useRecoilValue } from 'recoil'
-import { uiMode, validatorPeerCount } from '../../recoil/atoms'
-import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next'
-import Tooltip from '../ToolTip/Tooltip'
-import { StatusColor } from '../../types'
-import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 import { useEffect } from 'react'
+import ReactSpeedometer, { CustomSegmentLabelPosition } from 'react-d3-speedometer'
+import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
 import { ALERT_ID } from '../../constants/constants'
+import { UiMode } from '../../constants/enums'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import { uiMode, validatorPeerCount } from '../../recoil/atoms'
+import { StatusColor } from '../../types'
+import Tooltip from '../ToolTip/Tooltip'
+import Typography from '../Typography/Typography'
 
 const NetworkPeerSpeedometer = () => {
   const { t } = useTranslation()

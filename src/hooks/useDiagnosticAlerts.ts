@@ -1,7 +1,7 @@
+import { useMemo } from 'react'
 import { useRecoilState } from 'recoil'
 import { alertLogs } from '../recoil/atoms'
 import { AlertMessage } from '../types'
-import { useMemo } from 'react'
 
 const useDiagnosticAlerts = () => {
   const [alerts, setAlerts] = useRecoilState(alertLogs)

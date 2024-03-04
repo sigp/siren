@@ -1,11 +1,11 @@
-import Typography from '../Typography/Typography'
-import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverviewText'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
-import Status from '../Status/Status'
-import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
 import { Trans, useTranslation } from 'react-i18next'
-import HealthDisclosure from '../Disclosures/HealthDisclosure'
+import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { StatusColor } from '../../types'
+import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverviewText'
+import HealthDisclosure from '../Disclosures/HealthDisclosure'
+import Status from '../Status/Status'
+import Typography from '../Typography/Typography'
 
 const HealthOverview = () => {
   const { t } = useTranslation()

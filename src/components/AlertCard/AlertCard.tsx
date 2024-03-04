@@ -1,6 +1,6 @@
+import { FC } from 'react'
 import StatusBar, { StatusBarProps } from '../StatusBar/StatusBar'
 import Typography from '../Typography/Typography'
-import { FC } from 'react'
 
 export interface AlertCardProps extends StatusBarProps {
   text: string

@@ -1,13 +1,13 @@
-import useValidatorInfoPolling from '../hooks/useValidatorInfoPolling'
-import useValidatorHealthPolling from '../hooks/useValidatorHealthPolling'
-import useBeaconHealthPolling from '../hooks/useBeaconHealthPolling'
-import useValidatorPeerPolling from '../hooks/useValidatorPeerPolling'
-import useValidatorCachePolling from '../hooks/useValidatorCachePolling'
 import { FC, ReactElement, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
-import { beaconNetworkError, validatorNetworkError } from '../recoil/atoms'
+import useBeaconHealthPolling from '../hooks/useBeaconHealthPolling'
 import useExchangeRatePolling from '../hooks/useExchangeRatePolling'
 import useProposerDutiesPolling from '../hooks/useProposerDutiesPolling'
+import useValidatorCachePolling from '../hooks/useValidatorCachePolling'
+import useValidatorHealthPolling from '../hooks/useValidatorHealthPolling'
+import useValidatorInfoPolling from '../hooks/useValidatorInfoPolling'
+import useValidatorPeerPolling from '../hooks/useValidatorPeerPolling'
+import { beaconNetworkError, validatorNetworkError } from '../recoil/atoms'
 
 export interface MainPollingWrapperProps {
   children: ReactElement | ReactElement[]

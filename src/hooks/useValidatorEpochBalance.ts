@@ -1,13 +1,13 @@
-import { useRecoilValue } from 'recoil'
-import { useMemo } from 'react'
 import { formatUnits } from 'ethers/lib/utils'
-import { validatorCacheBalanceResult } from '../recoil/atoms'
-import { BALANCE_COLORS, slotsInEpoc } from '../constants/constants'
 import moment from 'moment'
-import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
-import getAverageValue from '../utilities/getAverageValue'
-import { selectSlicedActiveValidators } from '../recoil/selectors/selectSlicedActiveValidators'
+import { useMemo } from 'react'
+import { useRecoilValue } from 'recoil'
+import getAverageValue from '../../utilities/getAverageValue'
+import { BALANCE_COLORS, slotsInEpoc } from '../constants/constants'
+import { validatorCacheBalanceResult } from '../recoil/atoms'
 import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { selectGenesisBlock } from '../recoil/selectors/selectGenesisBlock'
+import { selectSlicedActiveValidators } from '../recoil/selectors/selectSlicedActiveValidators'
 
 const useValidatorEpochBalance = () => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

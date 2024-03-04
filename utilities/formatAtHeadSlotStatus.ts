@@ -1,4 +1,4 @@
-import { StatusColor } from '../types'
+import { StatusColor } from '../src/types'
 
 const formatAtHeadSlotStatus = (status?: number): StatusColor => {
   if (status === undefined) return StatusColor.DARK

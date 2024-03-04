@@ -1,7 +1,7 @@
-import useBeaconSyncPolling from '../hooks/useBeaconSyncPolling'
-import useValidatorSyncPolling from '../hooks/useValidatorSyncPolling'
 import { FC, ReactElement, useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
+import useBeaconSyncPolling from '../hooks/useBeaconSyncPolling'
+import useValidatorSyncPolling from '../hooks/useValidatorSyncPolling'
 import { beaconNetworkError } from '../recoil/atoms'
 
 export interface SyncPollingWrapperProps {

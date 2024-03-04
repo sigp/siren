@@ -1,5 +1,11 @@
 import { Protocol } from '../constants/enums'
 
+export interface NextFetchRequestInit extends RequestInit {
+  next?: {
+    revalidate?: number;
+  };
+}
+
 export enum StatusColor {
   DARK = 'bg-dark100',
   SUCCESS = 'bg-success',

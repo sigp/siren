@@ -1,8 +1,8 @@
 import { renderHook, act } from '@testing-library/react-hooks'
-import useExitValidator from '../useExitValidator'
-import { signVoluntaryExit } from '../../api/lighthouse'
+import displayToast from '../../../utilities/displayToast'
 import { submitSignedExit } from '../../api/beacon'
-import displayToast from '../../utilities/displayToast'
+import { signVoluntaryExit } from '../../api/lighthouse'
+import useExitValidator from '../useExitValidator'
 
 jest.mock('../../api/lighthouse')
 jest.mock('../../api/beacon')

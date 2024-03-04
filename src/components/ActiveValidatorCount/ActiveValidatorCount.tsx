@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography'
 import { useTranslation } from 'react-i18next'
+import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import useValidatorCount from '../../hooks/useValidatorCount'
-import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
+import Typography from '../Typography/Typography'
 
 const ActiveValidatorCount = () => {
   const { t } = useTranslation()

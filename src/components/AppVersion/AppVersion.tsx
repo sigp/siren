@@ -1,9 +1,9 @@
-import { useRecoilValue } from 'recoil'
-import { selectValidatorVersion } from '../../recoil/selectors/selectValidatorVersion'
-import { selectBeaconVersion } from '../../recoil/selectors/selectBeaconVersion'
-import Typography from '../Typography/Typography'
-import { NodeVersion } from '../../types'
 import { FC } from 'react'
+import { useRecoilValue } from 'recoil'
+import { selectBeaconVersion } from '../../recoil/selectors/selectBeaconVersion'
+import { selectValidatorVersion } from '../../recoil/selectors/selectValidatorVersion'
+import { NodeVersion } from '../../types'
+import Typography from '../Typography/Typography'
 
 interface VersionTextProps {
   data: NodeVersion

@@ -1,11 +1,11 @@
-import SyncMetric from '../SyncMetric/SyncMetric'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
-import { useEffect } from 'react'
-import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
-import { StatusColor } from '../../types'
 import { ALERT_ID } from '../../constants/constants'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import { StatusColor } from '../../types'
+import SyncMetric from '../SyncMetric/SyncMetric'
 
 const BeaconMetric = () => {
   const { t } = useTranslation()

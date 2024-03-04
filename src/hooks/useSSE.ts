@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react'
 import { throttle } from 'lodash'
+import { useEffect, useRef } from 'react'
 
 interface UseSSEOptions {
   url?: string

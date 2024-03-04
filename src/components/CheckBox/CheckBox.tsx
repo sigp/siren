@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
 
 export interface CheckBoxProps {
   className?: string

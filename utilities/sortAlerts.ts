@@ -1,4 +1,4 @@
-import { AlertMessage, StatusColor } from '../types'
+import { AlertMessage, StatusColor } from '../src/types'
 
 const sortAlertMessagesBySeverity = (alertMessages: AlertMessage[]): AlertMessage[] => {
   const severityOrder: StatusColor[] = [

@@ -1,6 +1,6 @@
 import { FC } from 'react'
+import addClassString from '../../../utilities/addClassString'
 import Typography from '../Typography/Typography'
-import addClassString from '../../utilities/addClassString'
 
 export interface PillIconProps {
   text: string

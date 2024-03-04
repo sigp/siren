@@ -1,7 +1,7 @@
 import { selector } from 'recoil'
-import { activeCurrency } from '../atoms'
-import { CurrencyPrefix } from '../../types'
 import { CURRENCY_PREFIX } from '../../constants/currencies'
+import { CurrencyPrefix } from '../../types'
+import { activeCurrency } from '../atoms'
 
 export const selectCurrencyPrefix = selector<CurrencyPrefix>({
   key: 'selectCurrencyPrefix',

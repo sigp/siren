@@ -1,9 +1,9 @@
+import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { beaconNetworkError, beaconSyncInfo, activeDevice } from '../recoil/atoms'
-import { useEffect } from 'react'
-import usePollApi from './usePollApi'
-import { PollingOptions } from '../types'
 import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { PollingOptions } from '../types'
+import usePollApi from './usePollApi'
 
 const useBeaconSyncPolling = (options?: PollingOptions) => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

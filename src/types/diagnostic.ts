@@ -1,5 +1,5 @@
-import { StatusColor } from './index'
 import { DiagnosticRate } from '../constants/enums'
+import { StatusColor } from './index'
 
 export type HealthDiagnosticResult = {
   app_uptime: number

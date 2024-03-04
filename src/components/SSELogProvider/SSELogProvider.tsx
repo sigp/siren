@@ -1,6 +1,6 @@
-import useTrackLogs, { defaultLogData, trackedLogData } from '../../hooks/useTrackLogs'
 import { FC, ReactElement, createContext, useState, useEffect, useCallback } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
+import useTrackLogs, { defaultLogData, trackedLogData } from '../../hooks/useTrackLogs'
 import { beaconNetworkError, validatorNetworkError, activeDevice } from '../../recoil/atoms'
 
 export interface SSELogWrapperProps {

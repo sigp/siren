@@ -1,5 +1,5 @@
-import SyncMetric, { SyncMetricProps } from './SyncMetric'
 import { Story } from '@storybook/react'
+import SyncMetric, { SyncMetricProps } from './SyncMetric'
 
 export default {
   key: 'SyncMetric',

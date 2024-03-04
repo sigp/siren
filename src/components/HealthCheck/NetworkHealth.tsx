@@ -1,13 +1,13 @@
-import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import secondsToShortHand from '../../utilities/secondsToShortHand'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import secondsToShortHand from '../../../utilities/secondsToShortHand'
+import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
 import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { StatusColor } from '../../types'
+import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 
 const NetworkHealth = () => {
   const { t } = useTranslation()

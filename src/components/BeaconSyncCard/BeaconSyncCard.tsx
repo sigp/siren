@@ -1,9 +1,9 @@
-import SyncCard from '../SyncCard/SyncCard'
-import secondsToShortHand from '../../utilities/secondsToShortHand'
-import { useRecoilValue } from 'recoil'
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
-import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
+import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
+import secondsToShortHand from '../../../utilities/secondsToShortHand'
+import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
+import SyncCard from '../SyncCard/SyncCard'
 
 const BeaconSyncCard = () => {
   const { t } = useTranslation()

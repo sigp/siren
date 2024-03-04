@@ -1,8 +1,8 @@
 import { useRecoilState } from 'recoil'
-import { uiMode } from '../recoil/atoms'
-import useLocalStorage from './useLocalStorage'
-import { UiThemeStorage } from '../types/storage'
 import { Storage, UiMode } from '../constants/enums'
+import { uiMode } from '../recoil/atoms'
+import { UiThemeStorage } from '../types/storage'
+import useLocalStorage from './useLocalStorage'
 
 const useUiMode = (): { mode: UiMode; toggleUiMode: () => void } => {
   const [mode, setMode] = useRecoilState(uiMode)

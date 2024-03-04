@@ -1,5 +1,3 @@
-import { FC, useEffect, useRef, useState } from 'react'
-
 import {
   CategoryScale,
   Chart,
@@ -12,10 +10,12 @@ import {
   PointElement,
   Tooltip,
 } from 'chart.js'
+import { FC, useEffect, useRef, useState } from 'react'
+
 import { useRecoilValue } from 'recoil'
-import { uiMode } from '../../recoil/atoms'
+import addClassString from '../../../utilities/addClassString'
 import { UiMode } from '../../constants/enums'
-import addClassString from '../../utilities/addClassString'
+import { uiMode } from '../../recoil/atoms'
 
 Chart.register(
   CategoryScale,
