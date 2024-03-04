@@ -1,5 +1,5 @@
-import { ReactComponent as IconSpinner } from '../../assets/images/spinner.svg'
-import { ReactComponent as IconLogo } from '../../assets/images/lightHouse.svg'
+import IconLogo from '../../assets/images/lightHouse.svg'
+import IconSpinner from '../../assets/images/spinner.svg'
 
 const LoadingSpinner = () => {
   return (

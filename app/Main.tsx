@@ -1,31 +1,49 @@
-import Typography from '../components/Typography/Typography'
-import useLocalStorage from '../hooks/useLocalStorage'
-import { useCallback, useEffect, useState } from 'react'
-import { useSetRecoilState } from 'recoil'
+import { FC, useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSetRecoilState } from 'recoil';
+import { fetchBeaconVersion, fetchSyncStatus } from '../src/api/beacon';
+import { fetchVersion } from '../src/api/lighthouse';
+import AppDescription from '../src/components/AppDescription/AppDescription';
+import InfoBox, { InfoBoxType } from '../src/components/InfoBox/InfoBox';
+import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
+import RodalModal from '../src/components/RodalModal/RodalModal';
+import Typography from '../src/components/Typography/Typography';
+import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
+import { AppView, OnboardView } from '../src/constants/enums';
+import useLocalStorage from '../src/hooks/useLocalStorage';
 import {
-  appView,
-  userName,
-  onBoardView,
-  beaconVersionData,
-  validatorVersionData,
   activeDevice,
+  appView,
+  beaconVersionData,
   deviceSettings,
+  onBoardView,
+  userName,
   validatorAliases,
-} from '../recoil/atoms'
-import { AppView, OnboardView, UiMode } from '../constants/enums'
-import LoadingSpinner from '../components/LoadingSpinner/LoadingSpinner'
-import { fetchVersion } from '../api/lighthouse'
-import { fetchBeaconVersion, fetchSyncStatus } from '../api/beacon'
-import { useTranslation } from 'react-i18next'
-import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../types/storage'
-import AppDescription from '../components/AppDescription/AppDescription'
-import SessionAuthModal from '../components/SessionAuthModal/SessionAuthModal'
-import isRequiredVersion from '../utilities/isRequiredVersion'
-import { REQUIRED_VALIDATOR_VERSION } from '../constants/constants'
-import { DeviceSettings, ValAliases } from '../types'
+  validatorVersionData
+} from '../src/recoil/atoms';
+import { DeviceSettings, ValAliases } from '../src/types';
+import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../src/types/storage';
+import formatSemanticVersion from '../utilities/formatSemanticVersion';
+import isRequiredVersion from '../utilities/isRequiredVersion';
 
-const InitScreen = () => {
+export interface InitProps {
+  beaconNodeVersion?: string | undefined
+  apiTokenPath?: string | undefined
+}
+
+const Main:FC<InitProps> = ({beaconNodeVersion, apiTokenPath}) => {
   const { t } = useTranslation()
+  const configError = !beaconNodeVersion || !apiTokenPath
+  const { major, minor, patch } = REQUIRED_VALIDATOR_VERSION
+  const vcVersion = beaconNodeVersion ? formatSemanticVersion(beaconNodeVersion as string) : undefined;
+  const versionError = true
+  // const isVersion = beaconNodeVersion && isRequiredVersion(beaconNodeVersion, REQUIRED_VALIDATOR_VERSION)
+  const isVersion = false
+
+  console.log(isVersion)
+
+
+
   const [isReady, setReady] = useState(false)
   const [step, setStep] = useState<number>(0)
   const setView = useSetRecoilState(appView)
@@ -120,34 +138,53 @@ const InitScreen = () => {
     [storedDevice],
   )
 
-  const closeModal = () => {
-    toggleAuthModal(false)
-    moveToView(AppView.ONBOARD)
-  }
-
-  useEffect(() => {
-    if (isReady) return
-
-    setAlias(aliases)
-
-    if (!storedDevice?.apiToken || !username || !devices) {
-      moveToView(AppView.ONBOARD)
-      return
-    }
-    setUserName(username)
-    setDevices(devices)
-    toggleAuthModal(true)
-  }, [aliases, storedDevice, devices, username, isReady])
+  // useEffect(() => {
+  //   if (isReady) return
+  //
+  //   setAlias(aliases)
+  //
+  //   if (!storedDevice?.apiToken || !username || !devices) {
+  //     moveToView(AppView.ONBOARD)
+  //     return
+  //   }
+  //   setUserName(username)
+  //   setDevices(devices)
+  //   toggleAuthModal(true)
+  // }, [aliases, storedDevice, devices, username, isReady])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
-      <SessionAuthModal
-        mode={UiMode.LIGHT}
-        onClose={closeModal}
-        onSuccess={finishInit}
-        encryptedToken={storedDevice?.apiToken}
-        isOpen={isAuthModal}
-      />
+      <RodalModal isVisible={configError}>
+        <div className="p-6">
+          <InfoBox type={InfoBoxType.ERROR}>
+            <div className="space-y-4">
+              <Typography type="text-caption1" color="text-error">Configuration Error</Typography>
+              <Typography type="text-caption1">Siren was unable to establish a successful connection to designated...Please review your configuration file and make appropriate adjustments. For additional information refer to the Lighthouse Book.</Typography>
+              <div className="border-b border-error w-fit cursor-pointer">
+                <Typography type="text-caption1" color="text-error">Learn about Siren configuration here</Typography>
+              </div>
+            </div>
+          </InfoBox>
+        </div>
+      </RodalModal>
+
+      {vcVersion && (
+        <RodalModal isVisible={versionError}>
+          <div className="p-6">
+            <InfoBox type={InfoBoxType.WARNING}>
+              <div className="space-y-4">
+                {/* <Typography type="text-caption1" color="text-error">Version Requirement Error</Typography> */}
+                <Typography type="text-caption1">
+                  Lighthouse version {vcVersion.major}.{vcVersion.minor}.{vcVersion.patch} is currently detected. For Siren to function properly, a minimum version of {major}.{minor}.{patch} for Lighthouse is required. Please ensure your Lighthouse version meets or exceeds this requirement before proceeding.
+                </Typography>
+                <div className="border-b border-error w-fit cursor-pointer">
+                  <Typography type="text-caption1" color="text-error">Upgrade to latest Lighthouse here</Typography>
+                </div>
+              </div>
+            </InfoBox>
+          </div>
+        </RodalModal>
+      )}
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />
@@ -188,4 +225,4 @@ const InitScreen = () => {
   )
 }
 
-export default InitScreen
+export default Main
