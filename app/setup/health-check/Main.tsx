@@ -1,14 +1,14 @@
 'use client'
 
-import { ButtonFace } from '../../../src/components/Button/Button';
 import { FC } from 'react';
-import DeviceHealth from '../../../src/components/HealthCheck/DeviceHealth';
-import NetworkHealth from '../../../src/components/HealthCheck/NetworkHealth';
-import HealthOverview from '../../../src/components/HealthCheck/HealthOverview';
-import ValidatorSetupLayout from '../../../src/components/ValidatorSetupLayout/ValidatorSetupLayout';
 import { useTranslation } from 'react-i18next';
-import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../../../src/types/diagnostic';
 import useSWR from 'swr';
+import { ButtonFace } from '../../../src/components/Button/Button';
+import DeviceHealth from '../../../src/components/HealthCheck/DeviceHealth';
+import HealthOverview from '../../../src/components/HealthCheck/HealthOverview';
+import NetworkHealth from '../../../src/components/HealthCheck/NetworkHealth';
+import ValidatorSetupLayout from '../../../src/components/ValidatorSetupLayout/ValidatorSetupLayout';
+import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../../../src/types/diagnostic';
 import swrGetFetcher from '../../../utilities/swrGetFetcher';
 
 export interface MainProps {

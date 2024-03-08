@@ -1,6 +1,6 @@
 import '../../../src/global.css'
-import Wrapper from './Wrapper';
 import { fetchBeaconHealth, fetchBeaconSync, fetchExecutionSync } from '../../api/beacon';
+import Wrapper from './Wrapper';
 
 export default async function Page() {
   const healthData = await fetchBeaconHealth()

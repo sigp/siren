@@ -1,8 +1,8 @@
 'use client'
 
 import React, { FC } from 'react';
-import Main, { MainProps } from './Main';
 import Providers from '../../Providers';
+import Main, { MainProps } from './Main';
 import '../../../src/i18n'
 
 const Wrapper:FC<MainProps> = (props) => {

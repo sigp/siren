@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRouter } from 'next/navigation'
 import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useSWRMutation from 'swr/mutation';
@@ -11,7 +12,6 @@ import Typography from '../src/components/Typography/Typography';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
 import formatSemanticVersion from '../utilities/formatSemanticVersion';
 import isRequiredVersion from '../utilities/isRequiredVersion';
-import { useRouter } from 'next/navigation'
 import swrGetFetcher from '../utilities/swrGetFetcher';
 
 export interface InitProps {

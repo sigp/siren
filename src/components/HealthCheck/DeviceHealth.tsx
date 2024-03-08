@@ -1,11 +1,11 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next'
 import addSuffixString from '../../../utilities/addSuffixString'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { HealthDiagnosticResult } from '../../types/diagnostic';
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { HealthDiagnosticResult } from '../../types/diagnostic';
-import { FC } from 'react';
 
 export interface DeviceHealthProps {
   health: HealthDiagnosticResult

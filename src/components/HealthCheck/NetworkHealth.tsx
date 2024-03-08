@@ -1,14 +1,14 @@
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next'
+import formatBnSyncInfo from '../../../utilities/formatBnSyncInfo';
+import formatExecSyncInfo from '../../../utilities/formatExecSyncInfo';
 import secondsToShortHand from '../../../utilities/secondsToShortHand'
 import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { StatusColor } from '../../types'
+import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../../types/diagnostic';
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../../types/diagnostic';
-import { FC } from 'react';
-import formatBnSyncInfo from '../../../utilities/formatBnSyncInfo';
-import formatExecSyncInfo from '../../../utilities/formatExecSyncInfo';
 
 export interface NetworkHealthProps {
   bnSyncInfo: BeaconSyncResult
