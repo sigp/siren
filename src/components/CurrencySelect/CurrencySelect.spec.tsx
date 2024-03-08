@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import CurrencySelect from './CurrencySelect'
 import { mockedRecoilState, mockedRecoilValue } from '../../../test.helpers'
 import { mockCurrencies } from '../../mocks/currencyResults'
+import CurrencySelect from './CurrencySelect'
 
 const mockSetState = jest.fn()
 

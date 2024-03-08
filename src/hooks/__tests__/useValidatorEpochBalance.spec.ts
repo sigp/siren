@@ -1,11 +1,11 @@
-import useValidatorEpochBalance from '../useValidatorEpochBalance'
-import { renderHook } from '@testing-library/react-hooks'
-import { mockedRecoilValue } from '../../../test.helpers'
-import { mockActiveValidators, mockValidatorCacheResults } from '../../mocks/validatorResults'
 import { waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react-hooks'
 import { formatUnits } from 'ethers/lib/utils'
-import clearAllMocks = jest.clearAllMocks
+import { mockedRecoilValue } from '../../../test.helpers'
 import { mockBeaconSpec } from '../../mocks/beaconSpec'
+import { mockActiveValidators, mockValidatorCacheResults } from '../../mocks/validatorResults'
+import useValidatorEpochBalance from '../useValidatorEpochBalance'
+import clearAllMocks = jest.clearAllMocks
 
 jest.mock('../../recoil/selectors/selectSlicedActiveValidators', () => ({
   selectSlicedActiveValidators: 'selectSlicedActiveValidators',

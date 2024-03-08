@@ -1,11 +1,11 @@
-import { AppView, OnboardView } from '../../constants/enums'
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { appView, beaconNetworkError, onBoardView, validatorNetworkError } from '../../recoil/atoms'
-import Typography from '../Typography/Typography'
-import Button, { ButtonFace } from '../Button/Button'
-import { DiscordUrl } from '../../constants/constants'
 import { Trans, useTranslation } from 'react-i18next'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import { DiscordUrl } from '../../constants/constants'
+import { AppView, OnboardView } from '../../constants/enums'
+import { appView, beaconNetworkError, onBoardView, validatorNetworkError } from '../../recoil/atoms'
+import Button, { ButtonFace } from '../Button/Button'
 import RodalModal from '../RodalModal/RodalModal'
+import Typography from '../Typography/Typography'
 
 const NetworkErrorModal = () => {
   const { t } = useTranslation()

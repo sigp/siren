@@ -1,4 +1,4 @@
-import { ValidatorStatus } from '../types/validator'
+import { ValidatorStatus } from '../src/types/validator'
 
 const getValidatorStatusStage = (status: ValidatorStatus): number => {
   switch (true) {

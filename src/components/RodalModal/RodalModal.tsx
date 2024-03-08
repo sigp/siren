@@ -1,8 +1,8 @@
-import { UiMode } from '../../constants/enums'
 import { FC, ReactElement } from 'react'
 import Rodal from 'rodal'
-import useUiMode from '../../hooks/useUiMode'
+import { UiMode } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import useUiMode from '../../hooks/useUiMode'
 
 export interface RodalModalProps {
   children: ReactElement | ReactElement[]
@@ -21,10 +21,12 @@ export interface RodalModalProps {
 }
 
 const RodalModal: FC<RodalModalProps> = ({ children, isVisible, uiMode, onClose, styles }) => {
-  const { mode } = uiMode || useUiMode()
+  const { mode } = useUiMode()
+
+  const uiStyle = uiMode || mode
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const {
-    backgroundColor = mode === UiMode.DARK ? '#1E1E1E' : 'white',
+    backgroundColor = uiStyle === UiMode.DARK ? '#1E1E1E' : 'white',
     width = '100%',
     maxWidth = isTablet ? '448px' : '649px',
     height = 'max-content',

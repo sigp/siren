@@ -1,4 +1,4 @@
-import { StatusColor } from '../types'
+import { StatusColor } from '../src/types'
 
 const getAvgEffectivenessStatus = (average?: number | undefined): StatusColor => {
   if (average === undefined || isNaN(average)) {

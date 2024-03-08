@@ -1,8 +1,8 @@
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
+import Typography from '../Typography/Typography'
 
 export interface BeaconChaLinkProps {
   index: number

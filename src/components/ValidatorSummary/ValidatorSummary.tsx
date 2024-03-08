@@ -1,12 +1,12 @@
-import { useRecoilValue } from 'recoil'
-import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
-import Typography from '../Typography/Typography'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
+import { useRecoilValue } from 'recoil'
+import { selectActiveValidators } from '../../recoil/selectors/selectActiveValidators'
+import { selectValidatorInfos } from '../../recoil/selectors/selectValidatorInfos'
 import ActiveValidatorCount from '../ActiveValidatorCount/ActiveValidatorCount'
 import OverallEffectiveness from '../OveralEffectiveness/OverallEffectiveness'
-import { selectActiveValidators } from '../../recoil/selectors/selectActiveValidators'
+import Typography from '../Typography/Typography'
+import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
 
 const ValidatorSummary = () => {
   const { t } = useTranslation()

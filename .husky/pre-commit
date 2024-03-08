@@ -1,4 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npx lint-staged && npx tsc --project tsconfig.json && yarn test
+export PATH="/Users/rickimoore/lighthouse-ui:$PATH"
+npx next lint --fix

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
-import BeaconNetwork from './BeaconNetwork'
 import { mockedRecoilValue } from '../../../test.helpers'
 import { Network } from '../../constants/enums'
+import BeaconNetwork from './BeaconNetwork'
 
 describe('Beacon Network component', () => {
   it('should not render if cannot detect network', () => {

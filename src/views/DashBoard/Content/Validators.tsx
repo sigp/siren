@@ -1,17 +1,17 @@
 import { Suspense } from 'react'
-import { useTranslation } from 'react-i18next'
-import Typography from '../../../components/Typography/Typography'
-import ValidatorSummary from '../../../components/ValidatorSummary/ValidatorSummary'
-import ValidatorSearchInput from '../../../components/ValidatorSearchInput/ValidatorSearchInput'
-import Button, { ButtonFace } from '../../../components/Button/Button'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useTranslation } from 'react-i18next'
+import BlsExecutionModal from '../../../components/BlsExecutionModal/BlsExecutionModal'
+import Button, { ButtonFace } from '../../../components/Button/Button'
+import DisabledTooltip from '../../../components/DisabledTooltip/DisabledTooltip'
+import Typography from '../../../components/Typography/Typography'
+import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
+import ValidatorSearchInput from '../../../components/ValidatorSearchInput/ValidatorSearchInput'
+import ValidatorSummary from '../../../components/ValidatorSummary/ValidatorSummary'
 import ValidatorTable, {
   TableErrorFallback,
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
-import ValidatorModal from '../../../components/ValidatorModal/ValidatorModal'
-import DisabledTooltip from '../../../components/DisabledTooltip/DisabledTooltip'
-import BlsExecutionModal from '../../../components/BlsExecutionModal/BlsExecutionModal'
 
 const Validators = () => {
   const { t } = useTranslation()

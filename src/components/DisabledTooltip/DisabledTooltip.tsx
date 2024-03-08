@@ -1,7 +1,7 @@
-import Tooltip from '../ToolTip/Tooltip'
 import { FC, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { PlacesType } from 'react-tooltip'
+import Tooltip from '../ToolTip/Tooltip'
 
 export interface DisabledTooltipProps {
   children: ReactNode

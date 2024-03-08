@@ -1,7 +1,7 @@
 import { Story } from '@storybook/react'
-import SelectDropDown, { OptionType, SelectDropDownProps } from './SelectDropDown'
 import { useState } from 'react'
 import { EARNINGS_OPTIONS } from '../../constants/constants'
+import SelectDropDown, { OptionType, SelectDropDownProps } from './SelectDropDown'
 
 export default {
   key: 'SelectDropDown',

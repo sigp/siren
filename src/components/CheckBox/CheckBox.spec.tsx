@@ -1,5 +1,5 @@
-import CheckBox from './CheckBox'
 import { render, screen } from '@testing-library/react'
+import CheckBox from './CheckBox'
 
 describe('CheckBox component', () => {
   it('should render with correct id', () => {

@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography'
-import Button, { ButtonFace } from '../Button/Button'
 import { FC, ReactNode } from 'react'
 import BreadCrumb from '../BreadCrumb/BreadCrumb'
+import Button, { ButtonFace } from '../Button/Button'
+import Typography from '../Typography/Typography'
 
 export interface ValidatorSetupLayoutProps {
   children: ReactNode | ReactNode[]
@@ -12,7 +12,7 @@ export interface ValidatorSetupLayoutProps {
   secondaryCtaText?: string
   secondaryCtaIcon?: string
   currentStep: string
-  previousStep: string
+  previousStep?: string
   ctaText: string
   ctaIcon?: string
   mediaQuery?: string
@@ -37,7 +37,7 @@ const ValidatorSetupLayout: FC<ValidatorSetupLayoutProps> = ({
   return (
     <div className={`w-full h-full py-12 px-6 overflow-scroll ${mediaQuery}`}>
       <div className='w-full max-w-1142'>
-        <BreadCrumb onClick={onStepBack} current={currentStep} previous={previousStep} />
+        {previousStep && <BreadCrumb onClick={onStepBack} current={currentStep} previous={previousStep} />}
         <Typography
           type='text-subtitle2'
           fontWeight='font-light'

@@ -1,14 +1,14 @@
-import HealthCheck from './Steps/HealthCheck'
-import { SetupSteps } from '../../../../constants/enums'
-import { useRecoilState, useSetRecoilState } from 'recoil'
-import { beaconNetworkError, setupStep, validatorNetworkError } from '../../../../recoil/atoms'
-import useLocalStorage from '../../../../hooks/useLocalStorage'
 import React, { useEffect } from 'react'
-import { HealthCheckStorage } from '../../../../types/storage'
-import NodeSync from './Steps/NodeSync'
-import useBeaconSyncPolling from '../../../../hooks/useBeaconSyncPolling'
-import useValidatorSyncPolling from '../../../../hooks/useValidatorSyncPolling'
+import { useRecoilState, useSetRecoilState } from 'recoil'
 import NetworkErrorModal from '../../../../components/NetworkErrorModal/NetworkErrorModal'
+import { SetupSteps } from '../../../../constants/enums'
+import useBeaconSyncPolling from '../../../../hooks/useBeaconSyncPolling'
+import useLocalStorage from '../../../../hooks/useLocalStorage'
+import useValidatorSyncPolling from '../../../../hooks/useValidatorSyncPolling'
+import { beaconNetworkError, setupStep, validatorNetworkError } from '../../../../recoil/atoms'
+import { HealthCheckStorage } from '../../../../types/storage'
+import HealthCheck from './Steps/HealthCheck'
+import NodeSync from './Steps/NodeSync'
 
 const ValidatorSetup = () => {
   const [view, setView] = useRecoilState(setupStep)

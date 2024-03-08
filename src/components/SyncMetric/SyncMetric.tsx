@@ -1,9 +1,9 @@
 import { FC } from 'react'
-import Typography from '../Typography/Typography'
+import addClassString from '../../../utilities/addClassString'
+import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import ProgressCircle, { ProgressCircleProps } from '../ProgressCircle/ProgressCircle'
-import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
 import Spinner from '../Spinner/Spinner'
-import addClassString from '../../utilities/addClassString'
+import Typography from '../Typography/Typography'
 
 export const SyncMetricFallback = () => {
   return (

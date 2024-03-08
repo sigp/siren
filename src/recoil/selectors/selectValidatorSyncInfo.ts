@@ -1,6 +1,6 @@
 import { selector } from 'recoil'
-import { validatorSyncInfo } from '../atoms'
 import { ValidatorSyncInfo } from '../../types/diagnostic'
+import { validatorSyncInfo } from '../atoms'
 
 export const selectValidatorSyncInfo = selector<ValidatorSyncInfo>({
   key: 'selectValidatorSyncInfo',

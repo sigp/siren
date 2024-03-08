@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { validatorCacheBalanceResult, activeDevice } from '../recoil/atoms'
-import usePollApi from './usePollApi'
-import { ValidatorCacheResults } from '../types/validator'
-import { PollingOptions } from '../types'
 import { selectSlicedActiveValidators } from '../recoil/selectors/selectSlicedActiveValidators'
+import { PollingOptions } from '../types'
+import { ValidatorCacheResults } from '../types/validator'
+import usePollApi from './usePollApi'
 
 const useValidatorCachePolling = (options?: PollingOptions) => {
   const { time = 60000, isReady = true } = options || {}

@@ -1,9 +1,9 @@
+import { ChangeEvent, FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { OptionalString } from '../../types'
+import Input from '../Input/Input'
 import Typography from '../Typography/Typography'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
-import { useTranslation } from 'react-i18next'
-import { ChangeEvent, FC, useState } from 'react'
-import Input from '../Input/Input'
-import { OptionalString } from '../../types'
 
 export interface ValidatorGraffitiInputProps {
   value?: OptionalString

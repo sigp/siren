@@ -1,11 +1,17 @@
-import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next'
-import addSuffixString from '../../utilities/addSuffixString'
+import addSuffixString from '../../../utilities/addSuffixString'
+import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
+import { HealthDiagnosticResult } from '../../types/diagnostic';
+import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 
-const DeviceHealth = () => {
+export interface DeviceHealthProps {
+  health: HealthDiagnosticResult
+}
+
+const DeviceHealth:FC<DeviceHealthProps> = ({health}) => {
   const { t } = useTranslation()
   const {
     totalDiskSpace,
@@ -17,7 +23,7 @@ const DeviceHealth = () => {
     cpuUtilization,
     cpuStatus,
     frequency,
-  } = useDeviceDiagnostics()
+  } = useDeviceDiagnostics(health)
 
   return (
     <div className='w-full md:h-24 flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-2'>

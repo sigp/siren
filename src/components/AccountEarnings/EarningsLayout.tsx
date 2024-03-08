@@ -1,5 +1,5 @@
-import Waves from '../../assets/images/waves.png'
 import { FC, ReactElement } from 'react'
+import Waves from '../../assets/images/waves.png'
 
 export interface EarningsLayoutProps {
   children: ReactElement | ReactElement[]

@@ -1,11 +1,11 @@
-import Typography from '../Typography/Typography'
-import { formatLocalCurrency } from '../../utilities/formatLocalCurrency'
-import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
-import { ValidatorInfo } from '../../types/validator'
 import { FC } from 'react'
-import { useRecoilValue } from 'recoil'
 import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
+import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import { exchangeRates } from '../../recoil/atoms'
+import { ValidatorInfo } from '../../types/validator'
+import Typography from '../Typography/Typography'
+import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
 
 export interface BasicValidatorMetricsProps {
   validator: ValidatorInfo

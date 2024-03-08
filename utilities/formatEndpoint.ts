@@ -1,4 +1,4 @@
-import { Endpoint } from '../types'
+import { Endpoint } from '../src/types'
 
 const formatEndpoint = (endpoint?: Endpoint) => {
   if (!endpoint) return

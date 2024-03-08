@@ -1,9 +1,9 @@
-import { selector } from 'recoil'
-import { BeaconValidatorResult, ValidatorInfo } from '../../types/validator'
 import { formatUnits } from 'ethers/lib/utils'
+import { selector } from 'recoil'
+import formatDefaultValName from '../../../utilities/formatDefaultValName'
 import { initialEthDeposit } from '../../constants/constants'
+import { BeaconValidatorResult, ValidatorInfo } from '../../types/validator'
 import { validatorAliases, validatorStateInfo } from '../atoms'
-import formatDefaultValName from '../../utilities/formatDefaultValName'
 
 export const selectValidatorInfos = selector<ValidatorInfo[]>({
   key: 'ValidatorInfos',

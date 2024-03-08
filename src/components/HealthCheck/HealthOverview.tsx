@@ -1,16 +1,22 @@
-import Typography from '../Typography/Typography'
-import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverviewText'
-import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
-import Status from '../Status/Status'
-import { ReactComponent as HealthSvg } from '../../assets/images/health.svg'
+import { FC } from 'react';
 import { Trans, useTranslation } from 'react-i18next'
-import HealthDisclosure from '../Disclosures/HealthDisclosure'
+import HealthSvg from '../../assets/images/health.svg'
+import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { StatusColor } from '../../types'
+import { HealthDiagnosticResult } from '../../types/diagnostic';
+import DiagnosticOverviewText from '../DiagnosticOverviewText/DiagnosticOverviewText'
+import HealthDisclosure from '../Disclosures/HealthDisclosure'
+import Status from '../Status/Status'
+import Typography from '../Typography/Typography'
 
-const HealthOverview = () => {
+export interface HealthOverviewProps {
+  bnHealth: HealthDiagnosticResult
+}
+
+const HealthOverview:FC<HealthOverviewProps> = ({bnHealth}) => {
   const { t } = useTranslation()
   const { totalDiskFree, uptime, healthCondition, overallHealthStatus, ramStatus, cpuStatus } =
-    useDeviceDiagnostics()
+    useDeviceDiagnostics(bnHealth)
 
   const isSufficientSpace = totalDiskFree > 240
   const isSufficientRam = ramStatus === StatusColor.SUCCESS

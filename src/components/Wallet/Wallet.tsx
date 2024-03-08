@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import Typography from '../Typography/Typography'
-import { ReactComponent as WalletDefault } from '../../assets/images/wallet.svg'
 import { useTranslation } from 'react-i18next'
+import { ReactComponent as WalletDefault } from '../../assets/images/wallet.svg'
+import Typography from '../Typography/Typography'
 
 export interface WalletProps {
   borderStyle?: string

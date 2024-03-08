@@ -1,6 +1,6 @@
-import Status, { StatusProps } from './Status'
 import { Story } from '@storybook/react'
 import { StatusColor } from '../../types'
+import Status, { StatusProps } from './Status'
 
 export default {
   title: 'Status Dot',

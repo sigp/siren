@@ -1,7 +1,7 @@
 import { FC, ReactElement } from 'react'
-import addClassString from '../../utilities/addClassString'
-import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
+import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 
 export interface SideItemProps {
   children: ReactElement

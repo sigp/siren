@@ -1,15 +1,15 @@
 import { FC } from 'react'
-import Typography, { TypographyType } from '../Typography/Typography'
-import network from '../../assets/images/network.svg'
-import { ReactComponent as NotAvailable } from '../../assets/images/notAvalilable.svg'
-import darkNetwork from '../../assets/images/darkNetwork.svg'
-import Status from '../Status/Status'
-import ProgressCircle from '../ProgressCircle/ProgressCircle'
-import generateId from '../../utilities/generateId'
-import Tooltip from '../ToolTip/Tooltip'
 import { PlacesType } from 'react-tooltip'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
+import generateId from '../../../utilities/generateId'
+import DarkNetwork from '../../assets/images/darkNetwork.svg'
+import Network from '../../assets/images/network.svg'
+import NotAvailable from '../../assets/images/notAvalilable.svg'
 import { OptionalString, StatusColor } from '../../types'
+import ProgressCircle from '../ProgressCircle/ProgressCircle'
+import Status from '../Status/Status'
+import Tooltip from '../ToolTip/Tooltip'
+import Typography, { TypographyType } from '../Typography/Typography'
 
 export type CardSize = 'lg' | 'md' | 'sm' | 'health'
 
@@ -77,8 +77,8 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
         size !== 'sm' &&
         isBackground && (
           <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
-            <img className='w-full dark:hidden' src={network} alt='network' />
-            <img className='w-full hidden dark:block' src={darkNetwork} alt='network' />
+            <Network className='w-full dark:hidden' />
+            <DarkNetwork className='w-full hidden dark:block' />
           </div>
         )
       )}

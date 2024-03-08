@@ -1,17 +1,17 @@
 import React, { Suspense } from 'react'
+import { ToastContainer } from 'react-toastify'
 import { useRecoilValue } from 'recoil'
-import { appView } from './recoil/atoms'
+import Main from '../app/Main'
+import AppLoadFallback from './components/Fallback/AppLoadFallback'
+import SSELogProvider from './components/SSELogProvider/SSELogProvider'
 import { AppView } from './constants/enums'
+import { appView } from './recoil/atoms'
+import ChangeScreen from './views/ChangeScreen'
 import Dashboard from './views/DashBoard/Dashboard'
 import Onboard from './views/Onboard/Onboard'
-import InitScreen from './views/InitScreen'
-import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
-import SSELogProvider from './components/SSELogProvider/SSELogProvider'
 import SyncPollingWrapper from './wrappers/SyncPollingWrapper'
-import ChangeScreen from './views/ChangeScreen'
-import AppLoadFallback from './components/Fallback/AppLoadFallback'
 
 function App() {
   const view = useRecoilValue(appView)
@@ -37,7 +37,7 @@ function App() {
       case AppView.CHANGE_SCREEN:
         return <ChangeScreen />
       default:
-        return <InitScreen />
+        return <Main />
     }
   }
 

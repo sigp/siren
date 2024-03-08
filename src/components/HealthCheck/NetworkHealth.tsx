@@ -1,19 +1,26 @@
-import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
-import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
-import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
-import secondsToShortHand from '../../utilities/secondsToShortHand'
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil'
-import { selectBeaconSyncInfo } from '../../recoil/selectors/selectBeaconSyncInfo'
-import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
+import formatBnSyncInfo from '../../../utilities/formatBnSyncInfo';
+import formatExecSyncInfo from '../../../utilities/formatExecSyncInfo';
+import secondsToShortHand from '../../../utilities/secondsToShortHand'
+import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import { StatusColor } from '../../types'
+import { BeaconSyncResult, HealthDiagnosticResult, ValidatorSyncResult } from '../../types/diagnostic';
+import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
+import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
 
-const NetworkHealth = () => {
+export interface NetworkHealthProps {
+  bnSyncInfo: BeaconSyncResult
+  bnHealth: HealthDiagnosticResult
+  exSyncInfo: ValidatorSyncResult
+}
+
+const NetworkHealth:FC<NetworkHealthProps> = ({bnSyncInfo, exSyncInfo, bnHealth}) => {
   const { t } = useTranslation()
-  const { beaconPercentage, beaconSyncTime } = useRecoilValue(selectBeaconSyncInfo)
-  const { isReady, syncPercentage } = useRecoilValue(selectValidatorSyncInfo)
-  const { networkName, natOpen } = useDeviceDiagnostics()
+  const { beaconPercentage, beaconSyncTime } = formatBnSyncInfo(bnSyncInfo)
+  const { isReady, syncPercentage } = formatExecSyncInfo(exSyncInfo)
+  const { networkName, natOpen } = useDeviceDiagnostics(bnHealth)
 
   const remainingBeaconTime = secondsToShortHand(beaconSyncTime || 0)
 

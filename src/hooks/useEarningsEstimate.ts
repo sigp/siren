@@ -1,5 +1,5 @@
-import useValidatorEarnings from './useValidatorEarnings'
 import { useState } from 'react'
+import useValidatorEarnings from './useValidatorEarnings'
 
 const useEarningsEstimate = (indices?: string[]) => {
   const [estimateSelection, setEstimate] = useState<number | undefined>(undefined)

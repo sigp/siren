@@ -1,8 +1,8 @@
-import { ProposerDuty, StatusColor } from '../../types'
 import { FC } from 'react'
+import { Trans } from 'react-i18next'
+import { ProposerDuty, StatusColor } from '../../types'
 import StatusBar from '../StatusBar/StatusBar'
 import Typography from '../Typography/Typography'
-import { Trans } from 'react-i18next'
 
 export interface ProposalAlertProps {
   duty: ProposerDuty

@@ -1,8 +1,8 @@
+import { Suspense } from 'react'
+import { ReactComponent as Siren } from '../../assets/images/siren.svg'
+import { DiscordUrl, LighthouseBookUrl } from '../../constants/constants'
 import Button, { ButtonFace } from '../Button/Button'
 import HealthMetric, { HealthMetricFallback } from './HealthMetric'
-import { Suspense } from 'react'
-import { DiscordUrl, LighthouseBookUrl } from '../../constants/constants'
-import { ReactComponent as Siren } from '../../assets/images/siren.svg'
 
 const FootBar = () => {
   return (

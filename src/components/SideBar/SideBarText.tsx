@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
+import Typography from '../Typography/Typography'
 
 export interface SideBarTextProps {
   text: string

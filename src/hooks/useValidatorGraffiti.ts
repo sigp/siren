@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { ValidatorGraffitiResults, ValidatorInfo } from '../types/validator'
+import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import displayToast from '../../utilities/displayToast'
 import { fetchValidatorGraffiti, updateValidator } from '../api/lighthouse'
 import { activeDevice } from '../recoil/atoms'
-import displayToast from '../utilities/displayToast'
-import { useTranslation } from 'react-i18next'
 import { ToastType } from '../types'
+import { ValidatorGraffitiResults, ValidatorInfo } from '../types/validator'
 
 const useValidatorGraffiti = (validator?: ValidatorInfo) => {
   const { t } = useTranslation()

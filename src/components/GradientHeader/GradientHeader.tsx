@@ -1,6 +1,6 @@
-import Waves from '../../assets/images/waves.png'
 import { FC } from 'react'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
+import Waves from '../../assets/images/waves.png'
 import Typography from '../Typography/Typography'
 
 export interface GradientHeaderProps {

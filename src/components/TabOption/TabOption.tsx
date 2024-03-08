@@ -1,7 +1,7 @@
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import Tooltip from '../ToolTip/Tooltip'
 import { UiMode } from '../../constants/enums'
+import Tooltip from '../ToolTip/Tooltip'
+import Typography from '../Typography/Typography'
 
 export interface TabOptionProps {
   toolTipId?: string

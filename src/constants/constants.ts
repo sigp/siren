@@ -1,13 +1,13 @@
 import { FunctionComponent, SVGProps } from 'react'
 
 import { ReactComponent as DashLogo } from '../assets/images/dashboard.svg'
-import { ReactComponent as ValidatorLogo } from '../assets/images/validators.svg'
-import { ReactComponent as LogsLogo } from '../assets/images/logs.svg'
 import { ReactComponent as GrafanaLogo } from '../assets/images/grafana.svg'
+import { ReactComponent as LogsLogo } from '../assets/images/logs.svg'
 import { ReactComponent as SettingsLogo } from '../assets/images/settings.svg'
-import { ContentView } from './enums'
-import { EarningOption } from '../types/validator'
+import { ReactComponent as ValidatorLogo } from '../assets/images/validators.svg'
 import { ClientProvider, LogType } from '../types'
+import { EarningOption } from '../types/validator'
+import { ContentView } from './enums'
 
 export type ViewType = {
   title: string

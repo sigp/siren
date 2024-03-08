@@ -1,7 +1,7 @@
 import { selector } from 'recoil'
-import { beaconVersionData } from '../atoms'
+import formatNodeVersion from '../../../utilities/formatNodeVersion'
 import { NodeVersion } from '../../types'
-import formatNodeVersion from '../../utilities/formatNodeVersion'
+import { beaconVersionData } from '../atoms'
 
 export const selectBeaconVersion = selector<NodeVersion | undefined>({
   key: 'selectBeaconVersion',

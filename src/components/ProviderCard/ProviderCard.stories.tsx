@@ -1,5 +1,5 @@
-import ProviderCard, { ProviderCardProps } from './ProviderCard'
 import { Story } from '@storybook/react'
+import ProviderCard, { ProviderCardProps } from './ProviderCard'
 
 export default {
   key: 'ProviderCard',

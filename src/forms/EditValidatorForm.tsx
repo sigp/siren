@@ -1,14 +1,14 @@
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
 import { FC, ReactElement } from 'react'
 import { Control, useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { editValidatorValidation } from '../validation/editValidatorValidation'
-import { ValidatorInfo } from '../types/validator'
-import { useSetRecoilState } from 'recoil'
-import { validatorAliases } from '../recoil/atoms'
-import displayToast from '../utilities/displayToast'
-import useLocalStorage from '../hooks/useLocalStorage'
-import { ToastType, ValAliases } from '../types'
 import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
+import displayToast from '../../utilities/displayToast'
+import useLocalStorage from '../hooks/useLocalStorage'
+import { validatorAliases } from '../recoil/atoms'
+import { ToastType, ValAliases } from '../types'
+import { ValidatorInfo } from '../types/validator'
+import { editValidatorValidation } from '../validation/editValidatorValidation'
 
 export interface EditValidatorFormProps {
   validator: ValidatorInfo

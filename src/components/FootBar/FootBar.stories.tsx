@@ -1,5 +1,5 @@
-import FootBar from './FootBar'
 import { Story } from '@storybook/react'
+import FootBar from './FootBar'
 
 export default {
   key: 'FootBar',

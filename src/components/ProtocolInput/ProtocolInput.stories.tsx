@@ -1,8 +1,8 @@
-import ProtocolInput, { ProtocolInputProps } from './ProtocolInput'
 import { Story } from '@storybook/react'
-import { Control, useForm, UseFormGetValues } from 'react-hook-form'
 import React, { FC } from 'react'
+import { Control, useForm, UseFormGetValues } from 'react-hook-form'
 import { UseFormSetValue } from 'react-hook-form/dist/types/form'
+import ProtocolInput, { ProtocolInputProps } from './ProtocolInput'
 
 export interface RenderProps {
   control: Control<any>

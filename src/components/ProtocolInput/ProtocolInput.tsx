@@ -1,12 +1,12 @@
-import { Control, Controller } from 'react-hook-form'
-import Toggle from '../Toggle/Toggle'
 import { ChangeEvent, FC } from 'react'
-import { ConnectionForm, EndPointType } from '../../forms/ConfigConnectionForm'
-import { Protocol, UiMode } from '../../constants/enums'
-import Typography from '../Typography/Typography'
+import { Control, Controller } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import Tooltip from '../ToolTip/Tooltip'
+import { Protocol, UiMode } from '../../constants/enums'
+import { ConnectionForm, EndPointType } from '../../forms/ConfigConnectionForm'
 import { OptionalBoolean } from '../../types'
+import Toggle from '../Toggle/Toggle'
+import Tooltip from '../ToolTip/Tooltip'
+import Typography from '../Typography/Typography'
 
 export interface ProtocolInputProps {
   id: string

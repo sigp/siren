@@ -1,14 +1,14 @@
-import { useRecoilValue } from 'recoil'
-import { beaconHealthResult, beaconSyncInfo, validatorHealthResult } from '../../recoil/atoms'
-import NetworkStatBlock from './NetworkStatBlock'
 import { useTranslation } from 'react-i18next'
-import secondsToShortHand from '../../utilities/secondsToShortHand'
-import Spinner from '../Spinner/Spinner'
-import formatAtHeadSlotStatus from '../../utilities/formatAtHeadSlotStatus'
-import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer'
+import { useRecoilValue } from 'recoil'
+import addClassString from '../../../utilities/addClassString'
+import formatAtHeadSlotStatus from '../../../utilities/formatAtHeadSlotStatus'
+import secondsToShortHand from '../../../utilities/secondsToShortHand'
 import useParticipationRate from '../../hooks/useParticipationRate'
-import addClassString from '../../utilities/addClassString'
+import { beaconHealthResult, beaconSyncInfo, validatorHealthResult } from '../../recoil/atoms'
 import { StatusColor } from '../../types'
+import NetworkPeerSpeedometer from '../NetworkPeerSpeedometer/NetworkPeerSpeedometer'
+import Spinner from '../Spinner/Spinner'
+import NetworkStatBlock from './NetworkStatBlock'
 
 export const NetworkStatsFallback = () => (
   <div className='w-full h-18 lg:h-16 xl:h-14 border-style500 shadow flex items-center justify-center'>

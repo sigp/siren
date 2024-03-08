@@ -1,21 +1,17 @@
-import Typography from '../../../components/Typography/Typography'
-import AppVersion from '../../../components/AppVersion/AppVersion'
-import useUiMode from '../../../hooks/useUiMode'
-import { AppView, OnboardView, UiMode } from '../../../constants/enums'
-import Toggle from '../../../components/Toggle/Toggle'
-import UiModeIcon from '../../../components/UiModeIcon/UiModeIcon'
-import SocialIcon from '../../../components/SocialIcon/SocialIcon'
-import Input from '../../../components/Input/Input'
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
-import { activeDevice, appView, deviceSettings, onBoardView, userName } from '../../../recoil/atoms'
-import useLocalStorage from '../../../hooks/useLocalStorage'
-import { UsernameStorage } from '../../../types/storage'
-import { ReactComponent as LighthouseSvg } from '../../../assets/images/lighthouse-black.svg'
-import { useTranslation } from 'react-i18next'
-import AppDescription from '../../../components/AppDescription/AppDescription'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil'
+import addClassString from '../../../../utilities/addClassString'
+import { ReactComponent as LighthouseSvg } from '../../../assets/images/lighthouse-black.svg'
+import AppDescription from '../../../components/AppDescription/AppDescription'
+import AppVersion from '../../../components/AppVersion/AppVersion'
 import Button, { ButtonFace } from '../../../components/Button/Button'
-import addClassString from '../../../utilities/addClassString'
+import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
+import Input from '../../../components/Input/Input'
+import SocialIcon from '../../../components/SocialIcon/SocialIcon'
+import Toggle from '../../../components/Toggle/Toggle'
+import Typography from '../../../components/Typography/Typography'
+import UiModeIcon from '../../../components/UiModeIcon/UiModeIcon'
 import {
   DiscordUrl,
   LighthouseBookUrl,
@@ -23,8 +19,12 @@ import {
   SigPIoUrl,
   SigPTwitter,
 } from '../../../constants/constants'
-import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
+import { AppView, OnboardView, UiMode } from '../../../constants/enums'
+import useLocalStorage from '../../../hooks/useLocalStorage'
+import useUiMode from '../../../hooks/useUiMode'
+import { activeDevice, appView, deviceSettings, onBoardView, userName } from '../../../recoil/atoms'
 import { OptionalString } from '../../../types'
+import { UsernameStorage } from '../../../types/storage'
 
 const Settings = () => {
   const { t } = useTranslation()

@@ -1,5 +1,5 @@
 import getAvgEffectivenessStatus from '../getAvgEffectivenessStatus'
-import { StatusColor } from '../../types'
+import { StatusColor } from '../../src/types'
 
 describe('getAvgEffectivenessStatus', () => {
   it('should return DARK status when average is undefined', () => {

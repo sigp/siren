@@ -1,7 +1,7 @@
-import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
+import Typography from '../Typography/Typography'
+import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
 
 export interface ValidatorCardActionProps {
   className?: string

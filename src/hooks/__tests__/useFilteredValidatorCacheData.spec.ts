@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react-hooks'
-import useFilteredValidatorCacheData from '../useFilteredValidatorCacheData'
 import { mockedRecoilValue } from '../../../test.helpers'
 import { mockValidatorCache } from '../../mocks/validatorResults'
+import useFilteredValidatorCacheData from '../useFilteredValidatorCacheData'
 import clearAllMocks = jest.clearAllMocks
 
 describe('useFilteredValidatorCacheData hook', () => {

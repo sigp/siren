@@ -1,14 +1,14 @@
-import DropDown from '../DropDown/DropDown'
 import React, { useState } from 'react'
-import DropDownItem from '../DropDown/DropDownItem'
-import useClickOutside from '../../hooks/useClickOutside'
-import { useSetRecoilState } from 'recoil'
-import { dashView } from '../../recoil/atoms'
-import { ContentView } from '../../constants/enums'
 import { useTranslation } from 'react-i18next'
-import Typography from '../Typography/Typography'
+import { useSetRecoilState } from 'recoil'
 import { DiscordUrl, LighthouseBookUrl } from '../../constants/constants'
+import { ContentView } from '../../constants/enums'
+import useClickOutside from '../../hooks/useClickOutside'
+import { dashView } from '../../recoil/atoms'
+import DropDown from '../DropDown/DropDown'
+import DropDownItem from '../DropDown/DropDownItem'
 import ExternalLink from '../ExternalLink/ExternalLink'
+import Typography from '../Typography/Typography'
 
 const DashboardOptions = () => {
   const { t } = useTranslation()

@@ -1,17 +1,17 @@
-import { useRecoilValue } from 'recoil'
 import { useEffect, useMemo, useState } from 'react'
-import { FormattedValidatorCache } from '../types/validator'
+import { useRecoilValue } from 'recoil'
+import calculateAprPercentage from '../../utilities/calculateAprPercentage'
+import calculateEpochEstimate from '../../utilities/calculateEpochEstimate'
 import {
   initialEthDeposit,
   secondsInDay,
   secondsInHour,
   secondsInWeek,
 } from '../constants/constants'
-import calculateEpochEstimate from '../utilities/calculateEpochEstimate'
-import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
-import calculateAprPercentage from '../utilities/calculateAprPercentage'
-import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { selectValidatorInfos } from '../recoil/selectors/selectValidatorInfos'
+import { FormattedValidatorCache } from '../types/validator'
+import useFilteredValidatorCacheData from './useFilteredValidatorCacheData'
 
 const useValidatorEarnings = (indices?: string[]) => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

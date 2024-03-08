@@ -1,13 +1,13 @@
 import { FC, useEffect, useMemo, useRef, useState } from 'react'
-import Typography from '../Typography/Typography'
-import { LogType } from '../../types'
-import { trackedLogData } from '../../hooks/useTrackLogs'
-import Spinner from '../Spinner/Spinner'
-import Input from '../Input/Input'
-import { debounce } from '../../utilities/debounce'
-import LogStats from '../LogStats/LogStats'
-import LogRow from './LogRow'
 import { useTranslation } from 'react-i18next'
+import { debounce } from '../../../utilities/debounce'
+import { trackedLogData } from '../../hooks/useTrackLogs'
+import { LogType } from '../../types'
+import Input from '../Input/Input'
+import LogStats from '../LogStats/LogStats'
+import Spinner from '../Spinner/Spinner'
+import Typography from '../Typography/Typography'
+import LogRow from './LogRow'
 
 export interface LogDisplayProps {
   type: LogType

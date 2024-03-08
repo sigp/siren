@@ -1,8 +1,8 @@
-import Input from '../Input/Input'
-import useUiMode from '../../hooks/useUiMode'
-import { useRecoilState } from 'recoil'
-import { validatorSearch } from '../../recoil/atoms'
 import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import useUiMode from '../../hooks/useUiMode'
+import { validatorSearch } from '../../recoil/atoms'
+import Input from '../Input/Input'
 
 const ValidatorSearchInput = () => {
   const { t } = useTranslation()

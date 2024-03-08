@@ -1,7 +1,7 @@
 import { selector } from 'recoil'
-import { beaconSyncInfo } from '../atoms'
-import getPercentage from '../../utilities/getPercentage'
+import getPercentage from '../../../utilities/getPercentage'
 import { BeaconSyncInfo } from '../../types/diagnostic'
+import { beaconSyncInfo } from '../atoms'
 
 export const selectBeaconSyncInfo = selector<BeaconSyncInfo>({
   key: 'formattedBeaconSyncInfo',

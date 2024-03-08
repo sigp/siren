@@ -1,8 +1,8 @@
+import { useEffect } from 'react'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import { validatorHealthResult, validatorNetworkError, activeDevice } from '../recoil/atoms'
-import usePollApi from './usePollApi'
-import { useEffect } from 'react'
 import { PollingOptions } from '../types'
+import usePollApi from './usePollApi'
 
 const useValidatorHealthPolling = (options?: PollingOptions) => {
   const { time = 6000, isReady = true } = options || {}

@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { selectBnChain } from '../../recoil/selectors/selectBnChain'
 import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next'
 
 const BeaconNetwork = () => {
   const { t } = useTranslation()

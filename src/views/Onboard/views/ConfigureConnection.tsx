@@ -1,24 +1,24 @@
-import Typography from '../../../components/Typography/Typography'
-import ConfigConnectionForm from '../../../forms/ConfigConnectionForm'
-import TabOption from '../../../components/TabOption/TabOption'
-import { ConfigType, UiMode } from '../../../constants/enums'
-import ProtocolInput from '../../../components/ProtocolInput/ProtocolInput'
-import Input from '../../../components/Input/Input'
 import { Controller } from 'react-hook-form'
-import Toggle from '../../../components/Toggle/Toggle'
-import Button, { ButtonFace } from '../../../components/Button/Button'
-import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
+// import { ReactComponent as LightHouseSVG } from '../../../assets/images/lightHouseLarge.svg'
 import { useTranslation } from 'react-i18next'
-import Tooltip from '../../../components/ToolTip/Tooltip'
-import { REQUIRED_VALIDATOR_VERSION } from '../../../constants/constants'
+import Button, { ButtonFace } from '../../../components/Button/Button'
 import DeviceSelect from '../../../components/DeviceSelect/DeviceSelect'
+import Input from '../../../components/Input/Input'
+import ProtocolInput from '../../../components/ProtocolInput/ProtocolInput'
+import TabOption from '../../../components/TabOption/TabOption'
+import Toggle from '../../../components/Toggle/Toggle'
+import Tooltip from '../../../components/ToolTip/Tooltip'
+import Typography from '../../../components/Typography/Typography'
+import { REQUIRED_VALIDATOR_VERSION } from '../../../constants/constants'
+import { ConfigType, UiMode } from '../../../constants/enums'
+import ConfigConnectionForm from '../../../forms/ConfigConnectionForm'
 
 const ConfigureConnection = () => {
   const { t } = useTranslation()
   const { major, minor, patch } = REQUIRED_VALIDATOR_VERSION
   return (
     <div className='flex-1 relative w-full flex flex-col relative justify-center bg-black'>
-      <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' />
+      {/* <LightHouseSVG className='hidden lg:block absolute w-3/4 @1024:w-9/10 xl:w-full -right-45 @1440:-right-35 top-0 animate-spin-slow' /> */}
       <div className='h-full w-full overflow-scroll scrollbar-hide lg:max-w-xl xl:max-w-2xl @1440:max-w-3xl p-6 pt-16 md:p-12 md:pt-24 lg:pl-18 lg:pr-0 xl:pl-24 @1440:pl-28'>
         <Typography
           color='text-transparent'

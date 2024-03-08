@@ -1,27 +1,27 @@
-import Typography from '../../../components/Typography/Typography'
+import { Suspense, useEffect } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import { useTranslation } from 'react-i18next'
+import { useRecoilState } from 'recoil'
+import pckJson from '../../../../package.json'
 import AccountEarning, {
   AccountEarningFallback,
 } from '../../../components/AccountEarnings/AccountEarning'
+import AppVersion from '../../../components/AppVersion/AppVersion'
+import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
+import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
 import NetworkStats, { NetworkStatsFallback } from '../../../components/NetworkStats/NetworkStats'
+import PillIcon from '../../../components/PillIcon/PillIcon'
+import Typography from '../../../components/Typography/Typography'
+import ValidatorBalances, {
+  ValidatorBalanceFallback,
+} from '../../../components/ValidatorBalances/ValidatorBalances'
 import ValidatorTable, {
   TableErrorFallback,
   TableFallback,
 } from '../../../components/ValidatorTable/ValidatorTable'
-import DiagnosticTable from '../../../components/DiagnosticTable/DiagnosticTable'
-import ValidatorBalances, {
-  ValidatorBalanceFallback,
-} from '../../../components/ValidatorBalances/ValidatorBalances'
-import { useTranslation } from 'react-i18next'
-import { Suspense, useEffect } from 'react'
-import { ErrorBoundary } from 'react-error-boundary'
-import { useRecoilState } from 'recoil'
-import { userName } from '../../../recoil/atoms'
-import AppVersion from '../../../components/AppVersion/AppVersion'
 import useLocalStorage from '../../../hooks/useLocalStorage'
+import { userName } from '../../../recoil/atoms'
 import { UsernameStorage } from '../../../types/storage'
-import DashboardOptions from '../../../components/DashboardOptions/DashboardOptions'
-import PillIcon from '../../../components/PillIcon/PillIcon'
-import pckJson from '../../../../package.json'
 
 const MainContent = () => {
   const { t } = useTranslation()

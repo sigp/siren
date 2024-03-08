@@ -1,8 +1,8 @@
-import DropDown from '../DropDown/DropDown'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import useClickOutside from '../../hooks/useClickOutside'
 import { StatusColor } from '../../types'
-import { useTranslation } from 'react-i18next'
+import DropDown from '../DropDown/DropDown'
 
 export type FilterValue = StatusColor | 'all'
 

@@ -1,7 +1,7 @@
-import useEarningsEstimate from '../useEarningsEstimate'
 import { renderHook } from '@testing-library/react-hooks'
-import useValidatorEarnings from '../useValidatorEarnings'
 import React from 'react'
+import useEarningsEstimate from '../useEarningsEstimate'
+import useValidatorEarnings from '../useValidatorEarnings'
 
 jest.mock('../useValidatorEarnings', () => jest.fn())
 const mockedEstimates = {

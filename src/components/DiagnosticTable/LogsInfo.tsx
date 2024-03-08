@@ -1,13 +1,13 @@
-import Typography from '../Typography/Typography'
-import { useTranslation } from 'react-i18next'
 import { useContext, useMemo } from 'react'
-import { SSEContext } from '../SSELogProvider/SSELogProvider'
-import LogStats from '../LogStats/LogStats'
-import { LogCounts } from '../../types'
-import useMediaQuery from '../../hooks/useMediaQuery'
+import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
-import { dashView } from '../../recoil/atoms'
 import { ContentView } from '../../constants/enums'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import { dashView } from '../../recoil/atoms'
+import { LogCounts } from '../../types'
+import LogStats from '../LogStats/LogStats'
+import { SSEContext } from '../SSELogProvider/SSELogProvider'
+import Typography from '../Typography/Typography'
 
 const LogsInfo = () => {
   const { t } = useTranslation()

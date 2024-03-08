@@ -1,10 +1,10 @@
-import { ProposerDuty, StatusColor } from '../../types'
 import { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import getSlotTimeData from '../../../utilities/getSlotTimeData'
+import { ProposerDuty, StatusColor } from '../../types'
 import StatusBar from '../StatusBar/StatusBar'
 import Typography from '../Typography/Typography'
 import ProposalAlert from './ProposalAlert'
-import getSlotTimeData from '../../utilities/getSlotTimeData'
-import { useTranslation } from 'react-i18next'
 
 export interface AlertGroupProps {
   duties: ProposerDuty[]

@@ -1,6 +1,6 @@
-import DiagnosticCard, { DiagnosticCardProps } from './DiagnosticCard'
 import { Story } from '@storybook/react'
 import { StatusColor } from '../../types'
+import DiagnosticCard, { DiagnosticCardProps } from './DiagnosticCard'
 
 export default {
   title: 'Diagnostic Card',

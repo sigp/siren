@@ -1,9 +1,9 @@
-import Typography from '../Typography/Typography'
 import { FC } from 'react'
-import { ValidatorInfo } from '../../types/validator'
-import formatBalanceColor from '../../utilities/formatBalanceColor'
 import { useTranslation } from 'react-i18next'
+import formatBalanceColor from '../../../utilities/formatBalanceColor'
 import useEpochAprEstimate from '../../hooks/useEpochAprEstimate'
+import { ValidatorInfo } from '../../types/validator'
+import Typography from '../Typography/Typography'
 
 export interface ValidatorDetailTableProps {
   validator: ValidatorInfo

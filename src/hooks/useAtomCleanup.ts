@@ -1,4 +1,5 @@
 import { useSetRecoilState } from 'recoil'
+import { ContentView } from '../constants/enums'
 import {
   activeDevice,
   alertLogs,
@@ -19,7 +20,6 @@ import {
   validatorVersionData,
   validatorAliases,
 } from '../recoil/atoms'
-import { ContentView } from '../constants/enums'
 
 const useAtomCleanup = () => {
   const setDashView = useSetRecoilState(dashView)

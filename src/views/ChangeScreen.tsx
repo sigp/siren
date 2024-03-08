@@ -1,9 +1,9 @@
-import Spinner from '../components/Spinner/Spinner'
-import { useSetRecoilState, useRecoilValue } from 'recoil'
-import { appView, uiMode } from '../recoil/atoms'
-import { AppView, UiMode } from '../constants/enums'
 import { useLayoutEffect } from 'react'
-import addClassString from '../utilities/addClassString'
+import { useSetRecoilState, useRecoilValue } from 'recoil'
+import addClassString from '../../utilities/addClassString'
+import Spinner from '../components/Spinner/Spinner'
+import { AppView, UiMode } from '../constants/enums'
+import { appView, uiMode } from '../recoil/atoms'
 
 const ChangeScreen = () => {
   const mode = useRecoilValue(uiMode)

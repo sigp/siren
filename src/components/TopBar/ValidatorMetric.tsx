@@ -1,11 +1,11 @@
-import SyncMetric from '../SyncMetric/SyncMetric'
-import { useRecoilValue } from 'recoil'
-import { useTranslation } from 'react-i18next'
-import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
 import { useEffect } from 'react'
-import { StatusColor } from '../../types'
-import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
 import { ALERT_ID } from '../../constants/constants'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import { selectValidatorSyncInfo } from '../../recoil/selectors/selectValidatorSyncInfo'
+import { StatusColor } from '../../types'
+import SyncMetric from '../SyncMetric/SyncMetric'
 
 const ValidatorMetric = () => {
   const { t } = useTranslation()

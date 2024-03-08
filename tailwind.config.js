@@ -47,9 +47,9 @@ module.exports = {
         lighthouse: 'url(\'./assets/images/lightHouseBg.png\')',
       },
       fontFamily: {
-        openSauce: ['OpenSauce', 'sans-serif'],
-        roboto: ['Roboto', 'sans-serif'],
-        archivo: ['Archivo', 'sans-serif'],
+        openSauce: 'var(--openSauce)',
+        roboto: 'var(--roboto)',
+        archivo: 'var(--archivo)',
       },
       fontSize: {
         tiny: '8px',

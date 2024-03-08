@@ -1,5 +1,5 @@
-import Input, { InputProps } from './Input'
 import { Story } from '@storybook/react'
+import Input, { InputProps } from './Input'
 
 export default {
   key: 'Input',

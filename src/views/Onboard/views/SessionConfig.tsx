@@ -1,13 +1,13 @@
+import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
+import { ButtonFace } from '../../../components/Button/Button'
+import Input from '../../../components/Input/Input'
+import Typography from '../../../components/Typography/Typography'
 import ValidatorSetupLayout from '../../../components/ValidatorSetupLayout/ValidatorSetupLayout'
 import { OnboardView, UiMode } from '../../../constants/enums'
-import { useSetRecoilState } from 'recoil'
-import { onBoardView } from '../../../recoil/atoms'
-import Typography from '../../../components/Typography/Typography'
-import Input from '../../../components/Input/Input'
 import SessionAuthForm from '../../../forms/SessionAuthForm'
-import { Controller } from 'react-hook-form'
-import { ButtonFace } from '../../../components/Button/Button'
-import { useTranslation } from 'react-i18next'
+import { onBoardView } from '../../../recoil/atoms'
 
 const SessionConfig = () => {
   const { t } = useTranslation()

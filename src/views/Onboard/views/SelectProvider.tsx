@@ -1,8 +1,8 @@
-import Typography from '../../../components/Typography/Typography'
-import ProviderCard from '../../../components/ProviderCard/ProviderCard'
-import { CLIENT_PROVIDERS } from '../../../constants/constants'
-import Button from '../../../components/Button/Button'
 import { useState } from 'react'
+import Button from '../../../components/Button/Button'
+import ProviderCard from '../../../components/ProviderCard/ProviderCard'
+import Typography from '../../../components/Typography/Typography'
+import { CLIENT_PROVIDERS } from '../../../constants/constants'
 
 const SelectProvider = () => {
   const [activeIndex, setActive] = useState<number | undefined>(undefined)

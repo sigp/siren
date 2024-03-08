@@ -1,6 +1,6 @@
-import Toggle, { ToggleProps } from './Toggle'
 import { Story } from '@storybook/react'
 import { useState } from 'react'
+import Toggle, { ToggleProps } from './Toggle'
 
 export default {
   key: 'Toggle',

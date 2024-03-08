@@ -1,7 +1,7 @@
-import useEpochAprEstimate from '../useEpochAprEstimate'
 import { renderHook } from '@testing-library/react-hooks'
-import { mockedRecoilValue } from '../../../test.helpers'
 import { formatUnits } from 'ethers/lib/utils'
+import { mockedRecoilValue } from '../../../test.helpers'
+import { mockBeaconSpec } from '../../mocks/beaconSpec'
 import {
   mockValidatorCache,
   mockedWithdrawalCash,
@@ -9,7 +9,7 @@ import {
   mockShortValidatorCache,
   mockedRecentWithdrawalCash,
 } from '../../mocks/validatorResults'
-import { mockBeaconSpec } from '../../mocks/beaconSpec'
+import useEpochAprEstimate from '../useEpochAprEstimate'
 import useFilteredValidatorCacheData from '../useFilteredValidatorCacheData'
 
 jest.mock('../useFilteredValidatorCacheData', () => jest.fn())

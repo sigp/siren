@@ -1,9 +1,9 @@
 import { ChangeEvent, FC, useMemo, useState } from 'react'
-import useClickOutside from '../../hooks/useClickOutside'
-import Typography, { TypographyColor } from '../Typography/Typography'
-import DropDown from '../DropDown/DropDown'
 import { useTranslation } from 'react-i18next'
-import addClassString from '../../utilities/addClassString'
+import addClassString from '../../../utilities/addClassString'
+import useClickOutside from '../../hooks/useClickOutside'
+import DropDown from '../DropDown/DropDown'
+import Typography, { TypographyColor } from '../Typography/Typography'
 
 export type OptionType = string | number
 

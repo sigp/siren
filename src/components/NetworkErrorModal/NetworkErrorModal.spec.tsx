@@ -1,8 +1,8 @@
-import NetworkErrorModal from './NetworkErrorModal'
 import { fireEvent, render, screen } from '@testing-library/react'
-import useUiMode from '../../hooks/useUiMode'
 import { mockedSetRecoilState, mockedRecoilValue } from '../../../test.helpers'
 import { UiMode } from '../../constants/enums'
+import useUiMode from '../../hooks/useUiMode'
+import NetworkErrorModal from './NetworkErrorModal'
 import clearAllMocks = jest.clearAllMocks
 
 jest.mock('../../hooks/useMediaQuery', () => jest.fn(() => false))

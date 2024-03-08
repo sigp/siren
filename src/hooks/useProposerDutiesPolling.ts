@@ -1,12 +1,12 @@
-import { useRecoilValue, useSetRecoilState } from 'recoil'
-import { activeDevice, beaconSyncInfo, proposerDuties } from '../recoil/atoms'
-import { slotsInEpoc } from '../constants/constants'
-import usePollApi from './usePollApi'
-import { PollingOptions, ProposerDuty } from '../types'
 import { useEffect } from 'react'
-import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray'
+import { slotsInEpoc } from '../constants/constants'
+import { activeDevice, beaconSyncInfo, proposerDuties } from '../recoil/atoms'
 import { selectActiveValidators } from '../recoil/selectors/selectActiveValidators'
-import formatUniqueObjectArray from '../utilities/formatUniqueObjectArray'
+import { selectBnSpec } from '../recoil/selectors/selectBnSpec'
+import { PollingOptions, ProposerDuty } from '../types'
+import usePollApi from './usePollApi'
 
 const useProposerDutiesPolling = (options?: PollingOptions) => {
   const { SECONDS_PER_SLOT } = useRecoilValue(selectBnSpec)

@@ -1,14 +1,14 @@
-import Typography from '../Typography/Typography'
-import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
-import ValidatorCardAction from './ValidatorCardAction'
-import { useTranslation } from 'react-i18next'
 import { FC, useContext } from 'react'
-import { ValidatorModalContext } from './ValidatorModal'
+import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
-import { isBlsExecutionModal } from '../../recoil/atoms'
 import { WithdrawalInfoLink } from '../../constants/constants'
 import { ValidatorModalView } from '../../constants/enums'
+import { isBlsExecutionModal } from '../../recoil/atoms'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import InfoBox, { InfoBoxType } from '../InfoBox/InfoBox'
+import Typography from '../Typography/Typography'
+import ValidatorCardAction from './ValidatorCardAction'
+import { ValidatorModalContext } from './ValidatorModal'
 
 export interface ValidatorActionsProps {
   isConversionRequired?: boolean
