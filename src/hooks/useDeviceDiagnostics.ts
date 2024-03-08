@@ -1,48 +1,46 @@
-import { useEffect, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useMemo } from 'react'
+// import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import formatGigBytes from '../../utilities/formatGigBytes'
 import getPercentage from '../../utilities/getPercentage'
 import secondsToShortHand from '../../utilities/secondsToShortHand'
-import { ALERT_ID } from '../constants/constants'
+// import { ALERT_ID } from '../constants/constants'
 import { DiagnosticRate } from '../constants/enums'
-import { beaconHealthResult } from '../recoil/atoms'
 import { selectBeaconSyncInfo } from '../recoil/selectors/selectBeaconSyncInfo'
 import { StatusColor } from '../types'
-import { Diagnostics } from '../types/diagnostic'
-import useDiagnosticAlerts from './useDiagnosticAlerts'
+import { Diagnostics, HealthDiagnosticResult } from '../types/diagnostic';
+// import useDiagnosticAlerts from './useDiagnosticAlerts'
 
-const useDeviceDiagnostics = (): Diagnostics => {
-  const { t } = useTranslation()
-  const result = useRecoilValue(beaconHealthResult)
+const useDeviceDiagnostics = (result: HealthDiagnosticResult): Diagnostics => {
+  // const { t } = useTranslation()
   const { isSyncing } = useRecoilValue(selectBeaconSyncInfo)
-  const { storeAlert, removeAlert } = useDiagnosticAlerts()
+  // const { storeAlert, removeAlert } = useDiagnosticAlerts()
 
   const {
-    disk_bytes_free = 0,
-    disk_bytes_total = 0,
-    used_memory = 0,
-    total_memory = 0,
-    sys_loadavg_5 = 0,
-    app_uptime = 0,
+    disk_bytes_free,
+    disk_bytes_total,
+    used_memory,
+    total_memory,
+    sys_loadavg_5,
+    app_uptime,
     network_name,
-    nat_open = false,
+    nat_open,
     global_cpu_frequency,
-  } = result || {}
+  } = result
 
-  useEffect(() => {
-    if (result?.nat_open) {
-      removeAlert(ALERT_ID.NAT)
-      return
-    }
-
-    storeAlert({
-      id: ALERT_ID.NAT,
-      message: t('alert.natClosedStatus', { type: t('alert.type.network') }),
-      subText: t('poor'),
-      severity: StatusColor.ERROR,
-    })
-  }, [result?.nat_open])
+  // useEffect(() => {
+  //   if (result?.nat_open) {
+  //     removeAlert(ALERT_ID.NAT)
+  //     return
+  //   }
+  //
+  //   storeAlert({
+  //     id: ALERT_ID.NAT,
+  //     message: t('alert.natClosedStatus', { type: t('alert.type.network') }),
+  //     subText: t('poor'),
+  //     severity: StatusColor.ERROR,
+  //   })
+  // }, [result?.nat_open])
 
   const diskUtilization = useMemo(() => {
     if (!disk_bytes_total || !disk_bytes_free) {

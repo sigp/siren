@@ -4,8 +4,14 @@ import { DiagnosticRate, DiagnosticType } from '../../constants/enums'
 import useDeviceDiagnostics from '../../hooks/useDeviceDiagnostics'
 import DiagnosticCard from '../DiagnosticCard/DiagnosticCard'
 import DiagnosticSummaryCard from '../DiagnosticSummaryCard/DiagnosticSummaryCard'
+import { HealthDiagnosticResult } from '../../types/diagnostic';
+import { FC } from 'react';
 
-const DeviceHealth = () => {
+export interface DeviceHealthProps {
+  health: HealthDiagnosticResult
+}
+
+const DeviceHealth:FC<DeviceHealthProps> = ({health}) => {
   const { t } = useTranslation()
   const {
     totalDiskSpace,
@@ -17,7 +23,7 @@ const DeviceHealth = () => {
     cpuUtilization,
     cpuStatus,
     frequency,
-  } = useDeviceDiagnostics()
+  } = useDeviceDiagnostics(health)
 
   return (
     <div className='w-full md:h-24 flex flex-col space-y-3 md:space-y-0 md:flex-row md:space-x-2'>

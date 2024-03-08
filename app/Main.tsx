@@ -1,32 +1,18 @@
 import axios from 'axios';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
-import useSWR from 'swr';
-import { fetchBeaconVersion, fetchSyncStatus } from '../src/api/beacon';
-import { fetchVersion } from '../src/api/lighthouse';
+import useSWRMutation from 'swr/mutation';
+import AlertIcon from '../src/components/AlertIcon/AlertIcon';
 import AppDescription from '../src/components/AppDescription/AppDescription';
-import InfoBox, { InfoBoxType } from '../src/components/InfoBox/InfoBox';
+import Button, { ButtonFace } from '../src/components/Button/Button';
 import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
 import RodalModal from '../src/components/RodalModal/RodalModal';
 import Typography from '../src/components/Typography/Typography';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
-import { AppView, OnboardView } from '../src/constants/enums';
-import useLocalStorage from '../src/hooks/useLocalStorage';
-import {
-  activeDevice,
-  appView,
-  beaconVersionData,
-  deviceSettings,
-  onBoardView,
-  userName,
-  validatorAliases,
-  validatorVersionData
-} from '../src/recoil/atoms';
-import { DeviceSettings, ValAliases } from '../src/types';
-import { DeviceKeyStorage, DeviceListStorage, UsernameStorage } from '../src/types/storage';
 import formatSemanticVersion from '../utilities/formatSemanticVersion';
 import isRequiredVersion from '../utilities/isRequiredVersion';
+import { useRouter } from 'next/navigation'
+import swrGetFetcher from '../utilities/swrGetFetcher';
 
 export interface InitProps {
   beaconNodeVersion?: string | undefined
@@ -35,159 +21,74 @@ export interface InitProps {
 
 const Main:FC<InitProps> = ({beaconNodeVersion, apiTokenPath}) => {
   const { t } = useTranslation()
-  const fetcher = url => axios.get(url).then(res => res.data);
-  const {data} = useSWR('/api/lighthouse-version', fetcher)
+  const router = useRouter()
+  const {data, trigger} = useSWRMutation('/api/lighthouse-version', swrGetFetcher)
+  const [isVersionError, setError] = useState(false)
 
-  console.log(data)
   const configError = !beaconNodeVersion || !apiTokenPath
   const { major, minor, patch } = REQUIRED_VALIDATOR_VERSION
   const vcVersion = beaconNodeVersion ? formatSemanticVersion(beaconNodeVersion as string) : undefined;
-  const versionError = true
-  // const isVersion = beaconNodeVersion && isRequiredVersion(beaconNodeVersion, REQUIRED_VALIDATOR_VERSION)
-  const isVersion = false
 
-  console.log(isVersion)
+  const [step, setStep] = useState<number>(1)
 
+  useEffect(() => {
+    if(data) {
+      const { version } = data.data
 
-
-  const [isReady, setReady] = useState(false)
-  const [step, setStep] = useState<number>(0)
-  const setView = useSetRecoilState(appView)
-  const [isAuthModal, toggleAuthModal] = useState(false)
-  const setOnboardView = useSetRecoilState(onBoardView)
-  const setUserName = useSetRecoilState(userName)
-  const setBeaconVersion = useSetRecoilState(beaconVersionData)
-  const setValidatorVersion = useSetRecoilState(validatorVersionData)
-  const setActiveDevice = useSetRecoilState(activeDevice)
-  const setDevices = useSetRecoilState(deviceSettings)
-  const [deviceKey] = useLocalStorage<DeviceKeyStorage>('deviceKey', undefined)
-  const [devices] = useLocalStorage<DeviceListStorage>('deviceList', undefined)
-  const setAlias = useSetRecoilState(validatorAliases)
-  const [username] = useLocalStorage<UsernameStorage>('username', undefined)
-  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
-
-  const storedDevice = devices?.[deviceKey || '']
-  const moveToView = (view: AppView) => {
-    setTimeout(() => {
-      setView(view)
-    }, 1000)
-  }
-  const moveToOnboard = () => moveToView(AppView.ONBOARD)
-
-  const incrementStep = () => setStep((prev) => prev + 1)
-
-  const fetchAndValidateVersion = async (
-    device: DeviceSettings,
-    apiToken: string,
-  ): Promise<boolean> => {
-    const { validatorUrl, beaconUrl } = device
-    const [vcResult, beaconResult] = await Promise.all([
-      fetchVersion(validatorUrl, apiToken),
-      fetchBeaconVersion(beaconUrl),
-    ])
-
-    const vcVersion = vcResult.data.data.version
-
-    setBeaconVersion(beaconResult.data.data.version)
-    setValidatorVersion(vcVersion)
-
-    return isRequiredVersion(vcVersion, REQUIRED_VALIDATOR_VERSION)
-  }
-
-  const setNodeInfo = async (device: DeviceSettings, token: string) => {
-    try {
-      incrementStep()
-
-      const isValidVersion = await fetchAndValidateVersion(device, token)
-
-      if (!isValidVersion) {
-        setOnboardView(OnboardView.CONFIGURE)
-        moveToOnboard()
+      if(!isRequiredVersion(version, REQUIRED_VALIDATOR_VERSION)) {
+        setError(true)
         return
       }
 
-      setActiveDevice({
-        ...device,
-        apiToken: token,
-      })
-
-      await checkSyncStatus(device.beaconUrl)
-    } catch (e) {
-      moveToOnboard()
+      router.push('/setup/health-check')
     }
-  }
-  const checkSyncStatus = async (beaconNode: string) => {
-    try {
-      incrementStep()
+  }, [data])
 
-      const { data } = await fetchSyncStatus(beaconNode)
-
-      if (data.is_syncing) {
-        setOnboardView(OnboardView.SETUP)
-        moveToOnboard()
-        return
-      }
-
-      moveToView(AppView.DASHBOARD)
-    } catch (e) {
-      moveToOnboard()
-    }
-  }
-  const finishInit = useCallback(
-    (token?: string) => {
-      if (storedDevice && token) {
-        toggleAuthModal(false)
-        void setNodeInfo(storedDevice, token)
-        setReady(true)
-      }
-    },
-    [storedDevice],
-  )
-
-  // useEffect(() => {
-  //   if (isReady) return
-  //
-  //   setAlias(aliases)
-  //
-  //   if (!storedDevice?.apiToken || !username || !devices) {
-  //     moveToView(AppView.ONBOARD)
-  //     return
-  //   }
-  //   setUserName(username)
-  //   setDevices(devices)
-  //   toggleAuthModal(true)
-  // }, [aliases, storedDevice, devices, username, isReady])
+  useEffect(() => {
+    void trigger().then(() => setStep(2))
+  }, [trigger, setStep])
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
-      <RodalModal isVisible={configError}>
+      <RodalModal styles={{ maxWidth: '500px' }} isVisible={configError}>
         <div className="p-6">
-          <InfoBox type={InfoBoxType.ERROR}>
-            <div className="space-y-4">
-              <Typography type="text-caption1" color="text-error">Configuration Error</Typography>
-              <Typography type="text-caption1">Siren was unable to establish a successful connection to designated...Please review your configuration file and make appropriate adjustments. For additional information refer to the Lighthouse Book.</Typography>
-              <div className="border-b border-error w-fit cursor-pointer">
-                <Typography type="text-caption1" color="text-error">Learn about Siren configuration here</Typography>
+          <div className="pb-2 border-b mb-6 flex items-center space-x-4">
+            <AlertIcon className="h-12 w-12" type="error"/>
+            <Typography type="text-subtitle3" isUpperCase fontWeight="font-light">Configuration Error!</Typography>
+          </div>
+          <div className="space-y-4">
+            <Typography type="text-caption1">Siren was unable to establish a successful connection to designated...Please review your configuration file and make appropriate adjustments. For additional information refer to the Lighthouse Book.</Typography>
+          </div>
+          <div className="w-full flex justify-end pt-8">
+            <Button type={ButtonFace.SECONDARY}>
+              <div className="flex items-center">
+                <Typography color="text-white" isUpperCase type="text-caption1" family="font-roboto">Learn More</Typography>
+                <i className="bi-box-arrow-up-right text-caption1 ml-2"/>
               </div>
-            </div>
-          </InfoBox>
+            </Button>
+          </div>
         </div>
       </RodalModal>
-
       {vcVersion && (
-        <RodalModal isVisible={versionError}>
+        <RodalModal styles={{ maxWidth: '500px' }} isVisible={isVersionError}>
           <div className="p-6">
-            <InfoBox type={InfoBoxType.WARNING}>
-              <div className="space-y-4">
-                {/* <Typography type="text-caption1" color="text-error">Version Requirement Error</Typography> */}
-                <Typography type="text-caption1">
-                  Lighthouse version {vcVersion.major}.{vcVersion.minor}.{vcVersion.patch} is currently detected. For Siren to function properly, a minimum version of {major}.{minor}.{patch} for Lighthouse is required. Please ensure your Lighthouse version meets or exceeds this requirement before proceeding.
-                </Typography>
-                <div className="border-b border-error w-fit cursor-pointer">
-                  <Typography type="text-caption1" color="text-error">Upgrade to latest Lighthouse here</Typography>
+            <div className="pb-2 border-b mb-6 flex items-center space-x-4">
+              <AlertIcon className="h-8 w-8" type="warning"/>
+              <Typography type="text-subtitle3" isUpperCase fontWeight="font-light">Version Update!</Typography>
+            </div>
+            <div className="space-y-4">
+              <Typography type="text-caption1">
+                Siren detected <span className="font-bold">Lighthouse v{vcVersion.major}.{vcVersion.minor}.{vcVersion.patch}</span>. To function properly, Siren requires a minimum of <span className="font-bold">Lighthouse v{major}.{minor}.{patch}</span>. Please ensure your Lighthouse version meets or exceeds this requirement in order to proceed.
+              </Typography>
+            </div>
+            <div className="w-full flex justify-end pt-8">
+              <Button type={ButtonFace.SECONDARY}>
+                <div className="flex items-center">
+                  <Typography color="text-white" isUpperCase type="text-caption1" family="font-roboto">Update Lighthouse</Typography>
+                  <i className="bi-box-arrow-up-right text-caption1 ml-2"/>
                 </div>
-              </div>
-            </InfoBox>
+              </Button>
+            </div>
           </div>
         </RodalModal>
       )}
