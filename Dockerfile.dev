@@ -1,12 +1,17 @@
 ARG node_version=18
 ARG node_image=node:${node_version}
-FROM $node_image
+
+FROM $node_image AS dev
+
+COPY . /app/
+WORKDIR /app/backend
 
 ENV NODE_ENV=development
 
-EXPOSE 5000/tcp
-COPY . /app/
-WORKDIR /app
+# install (dev) deps
+# on GitHub runners, timeouts occur in emulated containers
+RUN yarn --network-timeout 300000
 
-RUN yarn install
-CMD ["yarn", "run", "dev"]
+ENTRYPOINT /app/docker-entrypoint-dev.sh
+
+# run with docker run --rm -ti -p 3000:3000 -v $PWD/.env:/app/.env:ro your-image-name
