@@ -4,12 +4,12 @@ ARG node_image=node:${node_version}
 FROM $node_image AS dev
 
 COPY . /app/
-WORKDIR /app/backend
-
 ENV NODE_ENV=development
 
-# install (dev) deps
-# on GitHub runners, timeouts occur in emulated containers
+WORKDIR /app/backend
+RUN yarn --network-timeout 300000
+
+WORKDIR /app
 RUN yarn --network-timeout 300000
 
 ENTRYPOINT /app/docker-entrypoint-dev.sh
