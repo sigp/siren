@@ -1,8 +1,10 @@
 #!/bin/bash 
 
-. /app/.env
+set -a; \
+. /app/.env; \
+set +a
 
-if [ SSL_ENABLED = 'true' ] ; then 
+if [ $SSL_ENABLED = true ] ; then 
   ## generate cert if not present 
   if [ ! -f /certs/cert.pem ] ; then 
     openssl req -x509 -newkey rsa:4096 -keyout /certs/key.pem -out /certs/cert.pem -days 365 -passout pass:'sigmaprime' -subj "/C=AU/CN=siren/emailAddress=noreply@sigmaprime.io"
