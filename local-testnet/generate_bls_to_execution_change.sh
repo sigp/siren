@@ -2,9 +2,9 @@
 # 
 # This script generates a BLS to execution change for given validator indices on the local testnet.
 #
-# Prerequisites: jq, docker
+# Prerequisites: `kurtosis`, `yq`, `jq`, `docker`
 
-source ./vars.env
+set -Eeuo pipefail
 
 # The index position for the keys to start generating withdrawal credentials in ERC-2334 format.
 VALIDATOR_START_INDEX=$1
@@ -12,7 +12,15 @@ VALIDATOR_START_INDEX=$1
 VALIDATOR_INDICES=$2
 # The execution (Eth1) address you want to change to for withdrawals.
 EXECUTION_ADDRESS=$3
-BEACON_API_URL='http://localhost:8001'
+
+SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+ENCLAVE_NAME=local-testnet
+NETWORK_PARAMS_FILE=$SCRIPT_DIR/network_params.yaml
+
+BEACON_API_URL=`kurtosis port print $ENCLAVE_NAME cl-1-lighthouse-geth http`
+# Constant defined: https://github.com/kurtosis-tech/ethereum-package/blob/main/src/package_io/constants.star#L82
+GENESIS_FORK_VERSION='0x10000038'
+MNEMONIC_PHRASE=$(yq eval ".network_params.preregistered_validator_keys_mnemonic" $NETWORK_PARAMS_FILE)
 
 function print_help() {
   echo ""
@@ -22,14 +30,6 @@ function print_help() {
   echo "Example:"
   echo "$0 0 0,1,2 0x49011adbCC3bC9c0307BB07F37Dda1a1a9c69d2E"
 }
-
-vars=("GENESIS_FORK_VERSION" "MNEMONIC_PHRASE")
-for varname in "${vars[@]}"; do
-  if [ -z "${!varname}" ]; then
-    echo "Error: Variable $varname is not set. Please set it in vars.env" >&2
-    exit 1
-  fi
-done
 
 args=("VALIDATOR_START_INDEX" "VALIDATOR_INDICES" "EXECUTION_ADDRESS")
 for argname in "${args[@]}"; do
