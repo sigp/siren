@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
+    "@leodeslf/perlin-noise": "^1.1.2",
     "@storybook/theming": "^7.5.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.14.1",

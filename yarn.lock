@@ -1994,6 +1994,11 @@
   resolved "https://registry.yarnpkg.com/@kurkle/color/-/color-0.3.2.tgz#5acd38242e8bde4f9986e7913c8fdf49d3aa199f"
   integrity sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==
 
+"@leodeslf/perlin-noise@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@leodeslf/perlin-noise/-/perlin-noise-1.1.2.tgz#50a94d459457e8eae2ffd50ad2e97e6cb2ad30f1"
+  integrity sha512-P8KDWuUYLW2lCKl817GizbfVdbv7ffCTMZYz82gnNxWQM6Ela2X6ttKZJj54Km7NMVAegS7vcaO+FTOXVgy0/A==
+
 "@mdx-js/react@^2.1.5":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@mdx-js/react/-/react-2.3.0.tgz#4208bd6d70f0d0831def28ef28c26149b03180b3"
