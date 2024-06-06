@@ -74,7 +74,13 @@ const Main = () => {
         return
       }
 
-      router.push(redirect || '/setup/health-check')
+      let nextRoute = '/setup/health-check'
+
+      if(Cookies.get('health-check')) {
+        nextRoute = '/dashboard'
+      }
+
+      router.push(redirect || nextRoute)
     }
   }, [beaconNodeVersion, lighthouseVersion, router, redirect])
 

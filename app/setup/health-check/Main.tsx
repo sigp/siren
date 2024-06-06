@@ -1,6 +1,7 @@
 'use client'
 
-import React, { FC } from 'react'
+import Cookies from 'js-cookie';
+import React, { FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next'
 import { ButtonFace } from '../../../src/components/Button/Button'
 import DeviceHealth from '../../../src/components/HealthCheck/DeviceHealth'
@@ -33,6 +34,10 @@ const Main: FC<MainProps> = ({ initNodeHealth, beaconSpec, initSyncData }) => {
   })
 
   const { beaconSync: isSyncing } = syncData
+
+  useEffect(() => {
+    Cookies.set('health-check', 'true')
+  }, [])
 
   return (
     <div className='relative h-screen w-screen overflow-hidden flex'>
