@@ -461,6 +461,15 @@
   },
   "collapseInfo": "Collapse Info",
   "expandInfo": "Expand Info",
+  "configModal": {
+    "title": "Configuration Error!",
+    "learnMore": "Learn More",
+    "description": "Siren was unable to establish a successful connection to designated {{subject}} node... Please review your configuration file and make appropriate adjustments. For additional information refer to the Lighthouse Book."
+  },
+  "versionModal": {
+    "title": "Version Update!",
+    "message": "Siren detects <0>Lighthouse v{{version}}</0>. However to function properly, Siren requires a minimum of <1>Lighthouse v{{requirement}}</1>. Please ensure your Lighthouse version meets or exceeds this requirement in order to proceed."
+  },
   "authPrompt": {
     "authRequired": "This action requires authentication. Please provide your session password to continue. Please review your configuration file and make appropriate adjustments if necessary.",
     "authenticate": "Authenticate",

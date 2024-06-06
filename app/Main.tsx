@@ -5,13 +5,12 @@ import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import AlertIcon from '../src/components/AlertIcon/AlertIcon';
 import AppDescription from '../src/components/AppDescription/AppDescription';
 import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt';
-import Button, { ButtonFace } from '../src/components/Button/Button';
+import ConfigModal from '../src/components/ConfigModal/ConfigModal';
 import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
-import RodalModal from '../src/components/RodalModal/RodalModal';
 import Typography from '../src/components/Typography/Typography';
+import VersionModal from '../src/components/VersionModal/VersionModal';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
 import { UiMode } from '../src/constants/enums';
 import { ToastType } from '../src/types';
@@ -80,7 +79,6 @@ const Main = () => {
   }, [beaconNodeVersion, lighthouseVersion, router, redirect])
 
   const configError = !beaconNodeVersion || !lighthouseVersion
-  const { major, minor, patch } = REQUIRED_VALIDATOR_VERSION
   const vcVersion = beaconNodeVersion
     ? formatSemanticVersion(beaconNodeVersion as string)
     : undefined
@@ -105,81 +103,11 @@ const Main = () => {
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
-      <RodalModal styles={{ maxWidth: '500px' }} isVisible={isReady && configError && !!sessionToken}>
-        <div className='p-6'>
-          <div className='pb-2 border-b mb-6 flex items-center space-x-4'>
-            <AlertIcon className='h-12 w-12' type='error' />
-            <Typography type='text-subtitle3' isUpperCase fontWeight='font-light'>
-              Configuration Error!
-            </Typography>
-          </div>
-          <div className='space-y-4'>
-            <Typography type='text-caption1'>
-              Siren was unable to establish a successful connection to designated{' '}
-              {!beaconNodeVersion ? 'Beacon' : ''}{' '}
-              {!beaconNodeVersion && !lighthouseVersion ? 'and' : ''}{' '}
-              {!lighthouseVersion ? 'Validator' : ''} node...Please review your configuration file
-              and make appropriate adjustments. For additional information refer to the Lighthouse
-              Book.
-            </Typography>
-          </div>
-          <div className='w-full flex justify-end pt-8'>
-            <Button type={ButtonFace.SECONDARY}>
-              <div className='flex items-center'>
-                <Typography
-                  color='text-white'
-                  isUpperCase
-                  type='text-caption1'
-                  family='font-roboto'
-                >
-                  Learn More
-                </Typography>
-                <i className='bi-box-arrow-up-right text-caption1 ml-2' />
-              </div>
-            </Button>
-          </div>
-        </div>
-      </RodalModal>
+      <ConfigModal
+        isReady={isReady && configError && !!sessionToken}
+        beaconNodeVersion={beaconNodeVersion} lighthouseVersion={lighthouseVersion} />
       {vcVersion && (
-        <RodalModal styles={{ maxWidth: '500px' }} isVisible={isReady && isVersionError}>
-          <div className='p-6'>
-            <div className='pb-2 border-b mb-6 flex items-center space-x-4'>
-              <AlertIcon className='h-8 w-8' type='warning' />
-              <Typography type='text-subtitle3' isUpperCase fontWeight='font-light'>
-                Version Update!
-              </Typography>
-            </div>
-            <div className='space-y-4'>
-              <Typography type='text-caption1'>
-                Siren detected{' '}
-                <span className='font-bold'>
-                  Lighthouse v{vcVersion.major}.{vcVersion.minor}.{vcVersion.patch}
-                </span>
-                . To function properly, Siren requires a minimum of{' '}
-                <span className='font-bold'>
-                  Lighthouse v{major}.{minor}.{patch}
-                </span>
-                . Please ensure your Lighthouse version meets or exceeds this requirement in order
-                to proceed.
-              </Typography>
-            </div>
-            <div className='w-full flex justify-end pt-8'>
-              <Button type={ButtonFace.SECONDARY}>
-                <div className='flex items-center'>
-                  <Typography
-                    color='text-white'
-                    isUpperCase
-                    type='text-caption1'
-                    family='font-roboto'
-                  >
-                    Update Lighthouse
-                  </Typography>
-                  <i className='bi-box-arrow-up-right text-caption1 ml-2' />
-                </div>
-              </Button>
-            </div>
-          </div>
-        </RodalModal>
+        <VersionModal currentVersion={vcVersion}  isVisible={isReady && isVersionError}/>
       )}
       <AuthPrompt mode={UiMode.LIGHT} isLoading={isLoading} isVisible={!sessionToken} onSubmit={storeSessionCookie}/>
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
