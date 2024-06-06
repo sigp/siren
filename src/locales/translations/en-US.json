@@ -468,6 +468,7 @@
   },
   "versionModal": {
     "title": "Version Update!",
+    "update": "Update Lighthouse",
     "message": "Siren detects <0>Lighthouse v{{version}}</0>. However to function properly, Siren requires a minimum of <1>Lighthouse v{{requirement}}</1>. Please ensure your Lighthouse version meets or exceeds this requirement in order to proceed."
   },
   "authPrompt": {

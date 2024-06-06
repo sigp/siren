@@ -46,7 +46,7 @@ const VersionModal:FC<VersionModalProps> = ({isVisible, currentVersion}) => {
                 type='text-caption1'
                 family='font-roboto'
               >
-                Update Lighthouse
+                {t('versionModal.update')}
               </Typography>
               <i className='bi-box-arrow-up-right text-caption1 ml-2' />
             </div>
