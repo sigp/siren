@@ -463,6 +463,7 @@
   "expandInfo": "Expand Info",
   "authPrompt": {
     "authRequired": "This action requires authentication. Please provide your session password to continue. Please review your configuration file and make appropriate adjustments if necessary.",
-    "authenticate": "Authenticate"
+    "authenticate": "Authenticate",
+    "authError": "Unable to verify session password"
   }
 }

@@ -99,7 +99,7 @@ const Main = () => {
 
     } catch (e) {
       setLoading(false)
-      displayToast('Unable to verify session password', ToastType.ERROR)
+      displayToast(t('authPrompt.authError'), ToastType.ERROR)
     }
   }
 
