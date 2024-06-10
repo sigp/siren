@@ -29,7 +29,7 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
       <AuthenticationForm isVisible={isVisible} onSubmit={onSubmit}>
         {({control, onClick, isValid}) => (
           <div>
-            <AnimatedHeader isReady={isReady} className="w-full h-24 overflow-hidden bg-gradient-to-r from-primary to-tertiary"/>
+            <AnimatedHeader name="auth-prompt" isReady={isReady} className="w-full h-24 overflow-hidden bg-gradient-to-r from-primary to-tertiary"/>
             <div className="p-6 relative">
               <div className="w-18 h-18 rounded-full p-1 absolute left-1/2 -translate-x-1/2 flex item-center justify-center top-0 -translate-y-1/2 bg-gradient-to-r from-primary to-tertiary">
                 <Lighthouse className="text-white"/>

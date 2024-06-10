@@ -12,7 +12,7 @@ export interface TopographyCanvasProps {
   animate?: boolean,
   color?: string,
   flex?: boolean
-  speed?: number
+  speed?: number | undefined
 }
 
 const TopographyCanvas: FC<TopographyCanvasProps> = ({ width, height, name, animate, color = 'white', speed = 0.3, flex = false }) => {
