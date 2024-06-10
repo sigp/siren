@@ -3,7 +3,8 @@ import Cookies from 'js-cookie';
 import moment from 'moment';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LogData, StatusColor } from '../../types';
+import displayToast from '../../../utilities/displayToast';
+import { LogData, StatusColor, ToastType } from '../../types';
 import AlertCard from '../AlertCard/AlertCard';
 
 export interface LogAlertsProps {
@@ -26,25 +27,29 @@ const PriorityLogAlerts:FC<LogAlertsProps> = ({alerts}) => {
   const dismissAlert = async (id: number) => {
     try {
       const token = Cookies.get('session-token')
-      await axios.get(`/api/dismiss-log?index=${id}`, {
+      const {status} = await axios.get(`/api/dismiss-log?index=${id}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
 
-      setData(prev => {
-        let log = prev.find(alert => alert.id === id)
+      if(status === 200) {
+        setData(prev => {
+          let log = prev.find(alert => alert.id === id)
 
-        if(!log) {
-          return prev
-        }
+          if(!log) {
+            return prev
+          }
 
-        log.isHidden = true
+          log.isHidden = true
 
-        return [...prev.filter(alert => alert.id !== id), log] as LogData[]
-      })
+          return [...prev.filter(alert => alert.id !== id), log] as LogData[]
+        })
+        displayToast(t('alertMessages.dismiss.success'), ToastType.SUCCESS)
+      }
     } catch (e) {
-      console.log('error updating log...')
+      console.error('error updating log...')
+      displayToast(t('alertMessages.dismiss.error'), ToastType.ERROR)
     }
   }
 
