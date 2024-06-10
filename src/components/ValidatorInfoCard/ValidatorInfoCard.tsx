@@ -24,7 +24,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, i
   return (
     <Link href={`/dashboard/validators?id=${index}`}>
       <div className={classes}>
-        <AnimatedHeader name="validator-card" speed={.2} isReady={isAnimate} className="z-10 w-full h-full absolute left-0 top-0"/>
+        <AnimatedHeader name="validatorcard" speed={.2} isReady={isAnimate} className="z-10 w-full h-full absolute left-0 top-0"/>
         <div className='w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative'>
           <div className='w-full flex justify-between'>
             <IdenticonIcon size={144} type='CIRCULAR' hash={pubKey} />
