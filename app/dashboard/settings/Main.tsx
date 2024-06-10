@@ -119,15 +119,6 @@ const Main: FC<MainProps> = (props) => {
                 </div>
               </div>
               <AppVersion bnVersion={bnVersion} vcVersion={lighthouseVersion} className='mt-4' />
-              {/* <Typography */}
-              {/*   type='text-caption2' */}
-              {/*   color='text-transparent' */}
-              {/*   isBold */}
-              {/*   className='primary-gradient-text uppercase mt-6' */}
-              {/*   fontWeight='font-light' */}
-              {/* > */}
-              {/*   {t('settings.updates.nonAvailable')} */}
-              {/* </Typography> */}
             </div>
             <div className='flex-1 mt-8 lg:mt-0 lg:px-12'>
               <AppDescription view='settings' />
