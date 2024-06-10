@@ -1,11 +1,42 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
-export const metadata: Metadata = {
+export const metas = {
   title: 'Siren',
-  description:
-    'User interface built for Lighthouse that connects to a Lighthouse Beacon Node and a Lighthouse Validator Client to monitor performance and display key validator metrics.',
+  description: 'User interface built for Lighthouse that connects to a Lighthouse Beacon Node and a Lighthouse Validator Client to monitor performance and display key validator metrics.',
+  image: '/siren.png',
 }
+
+export const metadata: Metadata = {
+  // metadataBase: new URL('http://localhost'),
+  ...metas,
+  twitter: {
+    title: metas.title,
+    description: metas.description,
+    creator: 'sigmaPrime',
+    images: [metas.image],
+  },
+  openGraph: {
+    title: metas.title,
+    description: metas.description,
+    siteName: metas.title,
+    locale: 'en_US',
+    type: 'website',
+    images: [
+      {
+        url: metas.image,
+        width: 800,
+        height: 600,
+      },
+      {
+        url: metas.image,
+        width: 1800,
+        height: 1600,
+        alt: metas.title,
+      },
+    ],
+  }
+} as any
 
 const openSauce = localFont({
   src: [
