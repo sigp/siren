@@ -8,6 +8,6 @@ export async function GET(req: Request) {
     const {version} = await fetchBeaconNodeVersion(token)
     return NextResponse.json({ version })
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch lighthouse version' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch beacon version' }, { status: 500 })
   }
 }

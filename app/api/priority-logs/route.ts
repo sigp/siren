@@ -8,6 +8,6 @@ export async function GET(req: Request) {
     const data = await fetchLogMetrics(token)
     return NextResponse.json(data)
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch validator cache' }, { status: 500 })
+    return NextResponse.json({ error: 'Failed to fetch priority logs' }, { status: 500 })
   }
 }
