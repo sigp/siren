@@ -105,13 +105,13 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { data: valDuties } = useSWRPolling('/api/validator-duties', {
+  const { data: valDuties } = useSWRPolling<ProposerDuty[]>('/api/validator-duties', {
     refreshInterval: halfEpochInterval,
     fallbackData: initProposerDuties,
     networkError,
   })
 
-  const { data: logMetrics } = useSWRPolling('/api/priority-logs', {
+  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/priority-logs', {
     refreshInterval: slotInterval / 2,
     fallbackData: initLogMetrics,
     networkError,
