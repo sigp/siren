@@ -4,7 +4,7 @@ import Topography, { TopographyCanvasProps } from '../Topography/Topography';
 
 export interface AnimatedHeaderProps extends Omit<TopographyCanvasProps, 'height' | 'width'> {
   className: string
-  isReady?: boolean
+  isReady?: boolean | undefined
 }
 
 const AnimatedHeader:FC<AnimatedHeaderProps> = ({className, isReady, speed, name}) => {

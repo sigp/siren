@@ -19,9 +19,11 @@ import Typography from '../../Typography/Typography'
 import ValidatorInfoHeader from '../../ValidatorInfoHeader/ValidatorInfoHeader'
 import { ValidatorModalContext } from '../ValidatorModal'
 
-export interface ValidatorExitProps extends BasicValidatorMetricsProps {}
+export interface ValidatorExitProps extends BasicValidatorMetricsProps {
+  isAnimate: boolean
+}
 
-const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData }) => {
+const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, isAnimate }) => {
   const { t } = useTranslation()
   const { pubKey } = validator
   const { mode } = useUiMode()
@@ -109,7 +111,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData }
           </div>
           <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
         </div>
-        <ValidatorInfoHeader validator={validator} />
+        <ValidatorInfoHeader isAnimate={isAnimate} validator={validator} />
         <div className='p-6 space-y-6'>
           <Typography type='text-caption1' isBold isUpperCase>
             <Trans i18nKey='validatorExit.management'>

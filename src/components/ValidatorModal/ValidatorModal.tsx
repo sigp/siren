@@ -62,7 +62,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
 
     switch (view) {
       case ValidatorModalView.EXIT:
-        return <ValidatorExit validatorEpochData={validatorEpochData} validator={validator} />
+        return <ValidatorExit isAnimate={isFinishAnim} validatorEpochData={validatorEpochData} validator={validator} />
       default:
         return <div />
     }

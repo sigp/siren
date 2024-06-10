@@ -138,7 +138,7 @@ const BlsExecutionModal = () => {
         onClose={closeModal}
       >
         <div>
-          <GradientHeader isAnim={isFinishAnim} title={t('blsExecution.modal.title')} />
+          <GradientHeader speed={.1} name="bls-gradient-header" isReady={isFinishAnim} title={t('blsExecution.modal.title')} />
           <div className='p-6 space-y-4'>
             <Typography type='text-caption1'>
               <Trans i18nKey='blsExecution.modal.subTitle'>

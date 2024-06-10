@@ -1,20 +1,19 @@
 import { FC } from 'react'
 import addClassString from '../../../utilities/addClassString'
-import AnimatedHeader from '../AnimatedHeader/AnimatedHeader';
+import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader';
 import Typography from '../Typography/Typography'
 
-export interface GradientHeaderProps {
+export interface GradientHeaderProps extends AnimatedHeaderProps {
   className?: string
   title?: string
-  isAnim: boolean
 }
 
-const GradientHeader: FC<GradientHeaderProps> = ({ className, title, isAnim }) => {
+const GradientHeader: FC<GradientHeaderProps> = ({ className, title, isReady, name, speed }) => {
   const classes = addClassString('w-full h-36 relative overflow-hidden', [className])
 
   return (
     <div className={classes}>
-      <AnimatedHeader isReady={isAnim} name="gradient-header" className="w-full h-full"/>
+      <AnimatedHeader speed={speed} isReady={isReady} name={name} className="w-full h-full"/>
       <div className='absolute top-0 left-0 w-3/4 h-full bg-gradient-to-r from-white dark:from-dark750 via-white dark:via-dark750 to-transparent' />
       {title && (
         <div className='absolute top-0 left-0 w-full h-full flex items-center p-5 z-20'>
