@@ -27,9 +27,9 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
   return (
     <RodalModal onAnimationEnd={showAnim as any} styles={{ maxWidth: '500px' }} onClose={onClose} isVisible={isVisible}>
       <AuthenticationForm isVisible={isVisible} onSubmit={onSubmit}>
-        {({control, onClick, isValid}) => (
+        {({control, isValid}) => (
           <div>
-            <AnimatedHeader name="auth-prompt" isReady={isReady} className="w-full h-24 overflow-hidden bg-gradient-to-r from-primary to-tertiary"/>
+            <AnimatedHeader speed={.1} name="auth-prompt" isReady={isReady} className="w-full h-24 overflow-hidden bg-gradient-to-r from-primary to-tertiary"/>
             <div className="p-6 relative">
               <div className="w-18 h-18 rounded-full p-1 absolute left-1/2 -translate-x-1/2 flex item-center justify-center top-0 -translate-y-1/2 bg-gradient-to-r from-primary to-tertiary">
                 <Lighthouse className="text-white"/>
@@ -71,7 +71,7 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
                 />
               </div>
               <div className="w-full flex items-center justify-center mt-4">
-                <Button renderAs="submit" onClick={onClick} isDisabled={!isValid} isLoading={isLoading} className="mt-4" type={ButtonFace.SECONDARY}>{t('authPrompt.authenticate')}</Button>
+                <Button renderAs="submit" isDisabled={!isValid} isLoading={isLoading} className="mt-4" type={ButtonFace.SECONDARY}>{t('authPrompt.authenticate')}</Button>
               </div>
             </div>
           </div>

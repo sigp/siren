@@ -15,7 +15,6 @@ export interface AuthForm {
 export interface RenderProps {
   control: Control<AuthForm>
   isValid: boolean
-  onClick: () => void
 }
 
 const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }) => {
@@ -42,7 +41,6 @@ const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }
   const password = watch('password')
   const name = watch('username')
 
-  const onClick = () => onSubmit(password, name)
   const submitForm = (e: FormEvent) => {
     e.preventDefault()
     if(password) {
@@ -56,7 +54,6 @@ const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }
         children({
           control,
           isValid: !!password,
-          onClick,
         })}
     </form>
   )
