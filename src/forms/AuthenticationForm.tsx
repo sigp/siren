@@ -1,9 +1,10 @@
 import { FC, FormEvent, ReactElement, useEffect } from 'react';
 import { Control, useForm } from 'react-hook-form'
+import useLocalStorage from '../hooks/useLocalStorage';
 
 export interface AuthFormProps {
   children: (props: RenderProps) => ReactElement
-  onSubmit: (token: string) => void
+  onSubmit: (token: string, username: string) => void
   isVisible: boolean
 }
 
@@ -18,12 +19,15 @@ export interface RenderProps {
 }
 
 const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }) => {
+  const [username] = useLocalStorage<string>('username', 'Keeper')
+
   const {
     control,
     watch,
     reset,
   } = useForm<AuthForm>({
     defaultValues: {
+      username,
       password: '',
     },
     mode: 'onChange'
@@ -36,12 +40,13 @@ const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }
   }, [isVisible, reset])
 
   const password = watch('password')
+  const name = watch('username')
 
-  const onClick = () => onSubmit(password)
+  const onClick = () => onSubmit(password, name)
   const submitForm = (e: FormEvent) => {
     e.preventDefault()
     if(password) {
-      onSubmit(password)
+      onSubmit(password, name)
     }
   }
 
