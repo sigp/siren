@@ -25,6 +25,7 @@ const BlsExecutionModal = () => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
   const [isAuthPromptLoading, setAuthPromptLoad] = useState(false)
+  const [isFinishAnim, setFinished] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isFocus, setFocused] = useState(false)
   const [isModal, toggleModal] = useRecoilState(isBlsExecutionModal)
@@ -122,10 +123,13 @@ const BlsExecutionModal = () => {
     }
   }, [isFocus])
 
+  const finishAnim = () => setFinished(true)
+
   return (
     <>
       <RodalModal
         isVisible={isModal}
+        onAnimationEnd={finishAnim as any}
         styles={{
           width: 'fit-content',
           maxWidth: isTablet ? '448px' : '900px',
@@ -134,7 +138,7 @@ const BlsExecutionModal = () => {
         onClose={closeModal}
       >
         <div>
-          <GradientHeader title={t('blsExecution.modal.title')} />
+          <GradientHeader isAnim={isFinishAnim} title={t('blsExecution.modal.title')} />
           <div className='p-6 space-y-4'>
             <Typography type='text-caption1'>
               <Trans i18nKey='blsExecution.modal.subTitle'>
