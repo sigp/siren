@@ -22,7 +22,7 @@ export const ValidatorModalContext = createContext<ValidatorModalContextProps>({
   closeModal: () => {},
 })
 
-export interface ValidatorModalProps extends Omit<ValidatorDetailsProps, 'validatorMetrics'> {}
+export interface ValidatorModalProps extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'> {}
 
 const ValidatorModal: FC<ValidatorModalProps> = ({
   validator,
@@ -31,6 +31,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
   const [isReady, setReady] = useState(false)
   const router = useRouter()
   const [activeIndex, setIndex] = useState(0)
+  const [isFinishAnim, setFinished] = useState(false)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.EXIT)
   const isTablet = useMediaQuery('(max-width: 768px)')
   const isLargeScreen = useMediaQuery('(min-width: 1540px)')
@@ -81,9 +82,11 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
       setIndex(1)
     }, 200)
   }
+  const finishAnim = () => setFinished(true)
 
   return (
     <RodalModal
+      onAnimationEnd={finishAnim as any}
       isVisible={!!validator && isReady}
       styles={{
         width: 'fit-content',
@@ -96,6 +99,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
         <ValidatorModalContext.Provider value={{ moveToView, closeModal }}>
           <Carousel swiping={false} slideIndex={activeIndex} dragging={false} withoutControls>
             <ValidatorDetails
+              isAnimate={isFinishAnim}
               validator={validator}
               validatorCacheData={validatorCacheData}
               validatorMetrics={validatorMetric}
