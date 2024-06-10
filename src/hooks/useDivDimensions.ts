@@ -1,13 +1,21 @@
-import { useEffect, useState, useRef, RefObject } from 'react'
+import { useEffect, useState, useRef, RefObject, useCallback } from 'react';
 
 type Dimensions = {
   width: number
   height: number
 }
 
-const useDivDimensions = (): { ref: RefObject<HTMLDivElement>; dimensions?: Dimensions } => {
+const useDivDimensions = (): { ref: RefObject<HTMLDivElement>; dimensions?: Dimensions, measure: () => void } => {
   const ref = useRef<HTMLDivElement | null>(null)
   const [dimensions, setDimensions] = useState<Dimensions | undefined>(undefined)
+
+  const measure = useCallback(() => {
+    const refCurrent = ref.current;
+    if (refCurrent) {
+      const { width, height } = refCurrent.getBoundingClientRect();
+      setDimensions({ width, height });
+    }
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,6 +37,7 @@ const useDivDimensions = (): { ref: RefObject<HTMLDivElement>; dimensions?: Dime
   return {
     ref,
     dimensions,
+    measure
   }
 }
 
