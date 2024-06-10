@@ -8,10 +8,6 @@ export async function GET(req: Request) {
     const index = url.searchParams.get('index')
     const token = getReqAuthToken(req)
 
-    if (!index) {
-      return NextResponse.json({ error: 'No validator index found' }, { status: 400 });
-    }
-
     if (!token) {
       return NextResponse.json({ error: 'Authentication token is missing' }, { status: 401 });
     }
