@@ -14,7 +14,7 @@ import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  label?: string
+  label?: string | undefined
   extraLabel?: string
   tooltip?: string
   error?: Message | undefined

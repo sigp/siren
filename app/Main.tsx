@@ -13,6 +13,7 @@ import Typography from '../src/components/Typography/Typography';
 import VersionModal from '../src/components/VersionModal/VersionModal';
 import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
 import { UiMode } from '../src/constants/enums';
+import useLocalStorage from '../src/hooks/useLocalStorage';
 import { ToastType } from '../src/types';
 import displayToast from '../utilities/displayToast';
 import formatSemanticVersion from '../utilities/formatSemanticVersion';
@@ -29,6 +30,7 @@ const Main = () => {
   const [isReady, setReady] = useState(false)
   const [isVersionError, setVersionError] = useState(false)
   const [sessionToken, setToken] = useState(Cookies.get('session-token'))
+  const [, setUsername] = useLocalStorage<string>('username', 'Keeper')
 
   const [beaconNodeVersion, setBeaconVersion] = useState('')
   const [lighthouseVersion, setLighthouseVersion] = useState('')
@@ -89,9 +91,10 @@ const Main = () => {
     ? formatSemanticVersion(beaconNodeVersion as string)
     : undefined
 
-  const storeSessionCookie = async (password: string) => {
+  const storeSessionCookie = async (password: string, username: string) => {
     try {
       setLoading(true)
+      setUsername(username)
       const {status, data} = await axios.post('/api/authenticate', {password})
       const token = data.token;
       setLoading(false)
@@ -115,7 +118,7 @@ const Main = () => {
       {vcVersion && (
         <VersionModal currentVersion={vcVersion}  isVisible={isReady && isVersionError}/>
       )}
-      <AuthPrompt mode={UiMode.LIGHT} isLoading={isLoading} isVisible={!sessionToken} onSubmit={storeSessionCookie}/>
+      <AuthPrompt isNamePrompt mode={UiMode.LIGHT} isLoading={isLoading} isVisible={!sessionToken} onSubmit={storeSessionCookie}/>
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />
