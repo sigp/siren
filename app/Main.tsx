@@ -31,6 +31,7 @@ const Main = () => {
   const [isVersionError, setVersionError] = useState(false)
   const [sessionToken, setToken] = useState(Cookies.get('session-token'))
   const [, setUsername] = useLocalStorage<string>('username', 'Keeper')
+  const [healthCheck] = useLocalStorage<boolean>('health-check', false)
 
   const [beaconNodeVersion, setBeaconVersion] = useState('')
   const [lighthouseVersion, setLighthouseVersion] = useState('')
@@ -78,7 +79,7 @@ const Main = () => {
 
       let nextRoute = '/setup/health-check'
 
-      if(Cookies.get('health-check')) {
+      if(healthCheck) {
         nextRoute = '/dashboard'
       }
 
