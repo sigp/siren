@@ -158,7 +158,7 @@ describe('BeaconController', () => {
 
       const httpExecutionResponse: AxiosResponse = { data: { data: {
             previous_epoch_target_attesting_gwei: 100,
-            previous_epoch_active_gwei: 100,
+            current_epoch_active_gwei: 100,
           } } } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpExecutionResponse));
 

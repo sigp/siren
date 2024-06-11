@@ -142,11 +142,11 @@ export class BeaconService {
 
         const {
           previous_epoch_target_attesting_gwei,
-          previous_epoch_active_gwei,
+          current_epoch_active_gwei,
         } = data.data;
 
         const rate = Math.round(
-          (previous_epoch_target_attesting_gwei / previous_epoch_active_gwei) *
+          (previous_epoch_target_attesting_gwei / current_epoch_active_gwei) *
           100,
         );
 
