@@ -6,7 +6,7 @@ export const fetchValStates = async (token: string,) =>
   await fetchFromApi(`${backendUrl}/validator/states`, token)
 export const fetchValCaches = async (token: string,) =>
   await fetchFromApi(`${backendUrl}/validator/caches`, token)
-export const fetchValMetrics = async (token: string, index?: string) =>
+export const fetchValMetrics = async (token: string, index?: string | null) =>
   await fetchFromApi(`${backendUrl}/validator/metrics${index ? `/${index}` : ''}`, token)
 export const signVoluntaryExit = async (data: any, token: string) =>
   await fetchFromApi(`${backendUrl}/validator/sign-exit`, token,{

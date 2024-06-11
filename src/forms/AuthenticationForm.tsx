@@ -9,6 +9,7 @@ export interface AuthFormProps {
 }
 
 export interface AuthForm {
+  username: string
   password: string
 }
 

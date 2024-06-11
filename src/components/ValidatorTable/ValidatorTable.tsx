@@ -39,12 +39,13 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
     validators?.length ? (
       <div
         className={`${className || ''} w-full ${view === 'partial' ? 'lg:max-h-60.5' : ''} ${
-          isTablet ? 'flex flex-wrap space-y-4' : 'overflow-scroll mt-2 border-style500'
+          isTablet ? 'flex flex-wrap space-y-4 justify-center' : 'overflow-scroll mt-2 border-style500'
         }`}
       >
         {isTablet ? (
           validators.map((validator, index) => (
             <ValidatorInfoCard
+              animate={false}
               className='shadow cursor-pointer'
               key={index}
               validator={validator}

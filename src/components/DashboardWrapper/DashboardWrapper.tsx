@@ -43,6 +43,14 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
     setBeaconSpec(beaconSpec)
   }, [beaconSpec, setBeaconSpec])
 
+  useEffect(() => {
+    if (uiTheme === UiMode.DARK) {
+      document.body.style.backgroundColor = '#1E1E1E';
+    } else {
+      document.body.style.backgroundColor = '#ffffff';
+    }
+  }, [uiTheme]);
+
   return (
     <div
       className={`${

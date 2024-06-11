@@ -138,7 +138,6 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
         </div>
         <div className='p-3 border-t-style100'>
           <ExitDisclosure
-            isSensitive
             isLoading={isLoading}
             isDisabled={!isAccept}
             onAccept={triggerPrompt}

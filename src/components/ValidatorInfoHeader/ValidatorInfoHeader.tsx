@@ -9,7 +9,7 @@ import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoHeaderProps {
   validator: ValidatorInfo
-  isAnimate: boolean
+  isAnimate?: boolean
 }
 
 const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimate }) => {

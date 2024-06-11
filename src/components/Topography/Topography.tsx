@@ -9,7 +9,7 @@ export interface TopographyCanvasProps {
   height: number,
   width: number,
   name: string,
-  animate?: boolean,
+  animate?: boolean | undefined,
   color?: string,
   flex?: boolean
   speed?: number | undefined

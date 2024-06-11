@@ -3,17 +3,16 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import { ValidatorInfo } from '../../types/validator'
-import AnimatedHeader from '../AnimatedHeader/AnimatedHeader';
+import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader';
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import Typography from '../Typography/Typography'
 
-export interface ValidatorInfoCardProps {
+export interface ValidatorInfoCardProps extends Omit<AnimatedHeaderProps, 'className' | 'name'>{
   validator: ValidatorInfo
-  isAnimate: boolean
   className?: string
 }
 
-const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, isAnimate }) => {
+const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, isReady, animate }) => {
   const { t } = useTranslation()
   const { index, balance, pubKey, name } = validator
   const classes = addClassString(
@@ -24,7 +23,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, i
   return (
     <Link href={`/dashboard/validators?id=${index}`}>
       <div className={classes}>
-        <AnimatedHeader name="validatorcard" speed={.2} isReady={isAnimate} className="z-10 w-full h-full absolute left-0 top-0"/>
+        <AnimatedHeader name="validatorcard" animate={animate} speed={.2} isReady={isReady} className="z-10 w-full h-full absolute left-0 top-0"/>
         <div className='w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative'>
           <div className='w-full flex justify-between'>
             <IdenticonIcon size={144} type='CIRCULAR' hash={pubKey} />

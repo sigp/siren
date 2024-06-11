@@ -15,3 +15,5 @@ declare module 'crypto-js'
 declare module 'i18next'
 
 declare module '@testing-library/react'
+
+declare module '@leodeslf/perlin-noise';

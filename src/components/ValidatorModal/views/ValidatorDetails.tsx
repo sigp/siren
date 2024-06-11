@@ -58,7 +58,7 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
     <>
       <div className='w-full relative'>
         <div className='w-full flex flex-col lg:flex-row'>
-          <ValidatorInfoCard isAnimate={isAnimate} validator={validator} />
+          <ValidatorInfoCard animate isReady={isAnimate} validator={validator} />
           <div className='flex-1 flex py-4 justify-center items-center'>
             <div className='w-11/12 space-y-2'>
               <div className='w-full flex flex-col border-style100 lg:flex-row lg:shadow'>

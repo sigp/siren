@@ -7,7 +7,7 @@ export interface AnimatedHeaderProps extends Omit<TopographyCanvasProps, 'height
   isReady?: boolean | undefined
 }
 
-const AnimatedHeader:FC<AnimatedHeaderProps> = ({className, isReady, speed, name}) => {
+const AnimatedHeader:FC<AnimatedHeaderProps> = ({className, isReady, speed, name, animate = true}) => {
   const { ref, dimensions, measure } = useDivDimensions()
 
   useEffect(() => {
@@ -16,11 +16,13 @@ const AnimatedHeader:FC<AnimatedHeaderProps> = ({className, isReady, speed, name
     }
   }, [isReady, measure])
 
+  const validDimensions = (dimensions?.width || 0) > 0 && (dimensions?.height || 0) > 0;
+
   return (
     <div ref={ref} className={className}>
       <div className="w-full h-full opacity-20 -translate-y-1/2">
-        {dimensions?.width > 0 && (
-          <Topography speed={speed} height={dimensions.height * 2} width={dimensions.width} name={name} animate/>
+        {dimensions && validDimensions && (
+          <Topography speed={speed} height={dimensions.height * 2} width={dimensions.width} name={name} animate={animate}/>
         )}
       </div>
     </div>

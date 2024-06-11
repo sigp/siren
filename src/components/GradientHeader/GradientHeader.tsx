@@ -3,7 +3,7 @@ import addClassString from '../../../utilities/addClassString'
 import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader';
 import Typography from '../Typography/Typography'
 
-export interface GradientHeaderProps extends AnimatedHeaderProps {
+export interface GradientHeaderProps extends Omit<AnimatedHeaderProps, 'className'> {
   className?: string
   title?: string
 }
