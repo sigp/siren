@@ -248,7 +248,7 @@ const Main: FC<MainProps> = (props) => {
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          <ValidatorTable validators={validatorStates} validatorCacheData={validatorCache} className='mt-8 lg:mt-2' />
+          <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
           <DiagnosticTable
             metrics={logMetrics}
             bnSpec={beaconSpec}

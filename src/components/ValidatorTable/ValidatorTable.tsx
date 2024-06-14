@@ -1,9 +1,11 @@
-import { FC } from 'react'
+import {motion} from 'framer-motion';
+import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next'
+import Lighthouse from '../../assets/images/lightHouse.svg';
 import SatelliteLogo from '../../assets/images/satellite.svg'
 import ValidatorLogo from '../../assets/images/validators.svg'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { ValidatorCache, ValidatorInfo } from '../../types/validator'
+import { ValidatorInfo } from '../../types/validator'
 import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import Spinner from '../Spinner/Spinner'
 import Typography from '../Typography/Typography'
@@ -14,9 +16,10 @@ export type TableView = 'partial' | 'full'
 
 export interface ValidatorTableProps {
   view?: TableView
+  isPaginated?: boolean
   className?: string
-  validatorCacheData: ValidatorCache
   validators: ValidatorInfo[]
+  scrollPercentage?: number
 }
 
 export const TableFallback = () => (
@@ -28,32 +31,51 @@ export const TableFallback = () => (
 const ValidatorTable: FC<ValidatorTableProps> = ({
   view = 'partial',
   validators,
-  validatorCacheData,
   className,
+  scrollPercentage,
+  isPaginated
 }) => {
   const { t } = useTranslation()
+  const initialViewCount = 15
+  const totalPages = Math.ceil(validators.length / initialViewCount)
+
+  const [pagination, setPage] = useState(1)
+
+  const paginatedValidators = useMemo<ValidatorInfo[]>(() => {
+    return isPaginated ? validators.slice(0, initialViewCount * pagination) : validators
+  }, [validators, isPaginated, pagination])
+
+  useEffect(() => {
+    if(scrollPercentage && isPaginated && scrollPercentage === 100) {
+      setPage(prev => {
+        const nextPage = prev + 1
+        return nextPage > totalPages ? prev : nextPage
+      })
+    }
+  }, [scrollPercentage, isPaginated, totalPages])
 
   const isTablet = useMediaQuery('(max-width: 768px)')
 
   return validators ? (
     validators?.length ? (
-      <div
-        className={`${className || ''} w-full ${view === 'partial' ? 'lg:max-h-60.5' : ''} ${
-          isTablet ? 'flex flex-wrap space-y-4 justify-center' : 'overflow-scroll mt-2 border-style500'
-        }`}
-      >
-        {isTablet ? (
-          validators.map((validator, index) => (
-            <ValidatorInfoCard
-              animate={false}
-              className='shadow cursor-pointer'
-              key={index}
-              validator={validator}
-            />
-          ))
-        ) : (
-          <table className='relative table-auto w-full'>
-            <thead className='sticky z-30 top-0 left-0 bg-white dark:bg-darkPrimary'>
+      <>
+        <div
+          className={`${className || ''} w-full ${view === 'partial' ? 'lg:max-h-60.5' : ''} ${
+            isTablet ? 'flex flex-wrap space-y-4 justify-center' : 'overflow-scroll mt-2 border-style500'
+          }`}
+        >
+          {isTablet ? (
+            validators.map((validator, index) => (
+              <ValidatorInfoCard
+                animate={false}
+                className='shadow cursor-pointer'
+                key={index}
+                validator={validator}
+              />
+            ))
+          ) : (
+            <table className='relative table-auto w-full'>
+              <thead className='sticky z-30 top-0 left-0 bg-white dark:bg-darkPrimary'>
               <tr className='w-full h-12'>
                 <th>
                   <div className='w-full flex justify-center'>
@@ -210,20 +232,36 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                   </div>
                 </th>
               </tr>
-            </thead>
-            <tbody>
-              {validators.map((validator, index) => (
+              </thead>
+              <tbody>
+              {paginatedValidators.map((validator, index) => (
                 <ValidatorRow
                   view={view}
-                  validatorCacheData={validatorCacheData}
                   validator={validator}
                   key={index}
                 />
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          )}
+        </div>
+        {scrollPercentage && scrollPercentage >= 98 && totalPages !== pagination && (
+          <div className="w-full mt-12 h-0 relative">
+            <motion.div
+              className="opacity-20 w-fit absolute left-1/2 -translate-x-1/2"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <Lighthouse className="w-8 text-white"/>
+            </motion.div>
+          </div>
         )}
-      </div>
+      </>
     ) : (
       <div className='w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700 min-h-60 opacity-70'>
         <Typography>{t('noResultsFound')}</Typography>

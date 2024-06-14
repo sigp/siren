@@ -2,6 +2,9 @@ import Link from 'next/link'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useValidatorName from '../../hooks/useValidatorName';
+import { ValAliases } from '../../types';
 import { ValidatorInfo } from '../../types/validator'
 import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader';
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
@@ -14,11 +17,14 @@ export interface ValidatorInfoCardProps extends Omit<AnimatedHeaderProps, 'class
 
 const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, isReady, animate }) => {
   const { t } = useTranslation()
-  const { index, balance, pubKey, name } = validator
+  const { index, balance, pubKey } = validator
+  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
   const classes = addClassString(
     'w-full lg:w-80 h-60 lg:border-r-style100 px-8 lg:px-6 py-4 relative overflow-hidden',
     [className],
   )
+
+  const validatorName = useValidatorName(validator, aliases)
 
   return (
     <Link href={`/dashboard/validators?id=${index}`}>
@@ -32,7 +38,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, i
                 <Typography type='text-caption1' color='text-dark300'>
                   {index}
                 </Typography>
-                <Typography>{name}</Typography>
+                <Typography>{validatorName}</Typography>
               </div>
               <div className='space-y-2'>
                 <div>

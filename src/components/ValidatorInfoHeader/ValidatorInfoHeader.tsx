@@ -1,7 +1,10 @@
 import { FC } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import useLocalStorage from '../../hooks/useLocalStorage';
+import useValidatorName from '../../hooks/useValidatorName';
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
+import { ValAliases } from '../../types';
 import { ValidatorInfo } from '../../types/validator'
 import GradientHeader from '../GradientHeader/GradientHeader';
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
@@ -10,17 +13,20 @@ import Typography from '../Typography/Typography'
 export interface ValidatorInfoHeaderProps {
   validator: ValidatorInfo
   isAnimate?: boolean
+  animName: string
 }
 
-const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimate }) => {
+const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimate, animName }) => {
   const { t } = useTranslation()
-  const { pubKey, name, index, balance } = validator
+  const { pubKey, index, balance } = validator
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
+  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const validatorName = useValidatorName(validator, aliases)
 
   return (
     <div className='w-full relative'>
       <div className="absolute overflow-hidden z-10 top-0 left-0 w-full h-full">
-        <GradientHeader speed={.15} name="exit-gradient-header" className="h-full" isReady={isAnimate} />
+        <GradientHeader speed={.15} name={animName} className="h-full" isReady={isAnimate} />
       </div>
       <div className='w-full z-20 flex relative p-6'>
         <div className='w-42 mr-2'>
@@ -28,7 +34,7 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
         </div>
         <div className='flex-1 flex justify-between'>
           <div>
-            <Typography className='text-left'>{name}</Typography>
+            <Typography className='text-left'>{validatorName}</Typography>
             <a target='_blank' rel='noreferrer' href={`${baseUrl}/${index}`}>
               <Typography
                 type='text-caption1'

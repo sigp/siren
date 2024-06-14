@@ -1,5 +1,6 @@
 import axios, { AxiosError } from 'axios'
 import Cookies from 'js-cookie';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -24,6 +25,10 @@ import Typography from '../Typography/Typography'
 const BlsExecutionModal = () => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const [isRendered, setRender] = useState(false)
+  const modalView = searchParams.get('view')
   const [isAuthPromptLoading, setAuthPromptLoad] = useState(false)
   const [isFinishAnim, setFinished] = useState(false)
   const [isLoading, setLoading] = useState(false)
@@ -35,10 +40,21 @@ const BlsExecutionModal = () => {
   const [processingValidators, setIsProcess] = useRecoilState(processingBlsValidators)
   const [, storeIsBlsProcessing] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
 
+  useEffect(() => {
+    if(isRendered) return
+
+    if(modalView === 'bls') {
+      toggleModal(true)
+    }
+
+    setRender(true)
+  }, [modalView, isRendered])
+
   const closeModal = () => {
     toggleModal(false)
     setJson(MOCK_BLS_JSON)
     setFocused(false)
+    router.push('/dashboard/validators')
   }
   const setJsonValue = (value: string) => setJson(value)
 

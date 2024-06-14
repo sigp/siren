@@ -120,3 +120,18 @@ export const beaconNodeSpec = atom<BeaconNodeSpecResults>({
   key: 'beaconNodeSpec',
   default: undefined,
 })
+
+export const activeValidatorId = atom<number | undefined>({
+  key: 'activeValidatorId',
+  default: undefined
+})
+
+export const isEditValidator = atom<boolean>({
+  key: 'isEditValidator',
+  default: undefined
+})
+
+export const isValidatorDetail = atom<boolean>({
+  key: 'isValidatorDetail',
+  default: undefined
+})

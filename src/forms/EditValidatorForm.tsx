@@ -1,10 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { FC, ReactElement } from 'react'
+import { FC, FormEvent, ReactElement, useState } from 'react';
 import { Control, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import displayToast from '../../utilities/displayToast'
 import useLocalStorage from '../hooks/useLocalStorage'
+import useValidatorName from '../hooks/useValidatorName';
 import { validatorAliases } from '../recoil/atoms'
 import { ToastType, ValAliases } from '../types'
 import { ValidatorInfo } from '../types/validator'
@@ -23,22 +24,20 @@ export interface RenderProps {
   control: Control<EditValidatorForm>
   isLoading: boolean
   isValid: boolean
-  onSubmit: () => void
 }
 
 const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) => {
   const { t } = useTranslation()
-  const { index, name } = validator
+  const { index } = validator
+  const [isLoading, setLoading] = useState(false)
   const setAlias = useSetRecoilState(validatorAliases)
   const [aliases, storeValAliases] = useLocalStorage<ValAliases>('val-aliases', {})
 
-  const storedAliasIndex = Object.keys(aliases).find((index) => Number(index) === validator.index)
-  const validatorName = storedAliasIndex ? aliases[storedAliasIndex] : name
+  const validatorName = useValidatorName(validator, aliases)
 
   const {
     control,
     getValues,
-    reset,
     formState: { isValid },
   } = useForm<EditValidatorForm>({
     defaultValues: {
@@ -48,24 +47,27 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
     resolver: yupResolver(editValidatorValidation),
   })
 
-  const onSubmit = () => {
+  const onSubmit = (e: FormEvent) => {
+    e.preventDefault()
+    setLoading(true)
     const { nameString } = getValues()
+
+    if(!nameString) return
+
     setAlias((prev) => ({ ...prev, [index]: nameString }))
     storeValAliases({ ...aliases, [index]: nameString })
 
     displayToast(t('validatorEdit.successUpdate'), ToastType.SUCCESS)
-
-    reset()
+    setLoading(false)
   }
 
   return (
-    <form className='w-full h-full' action=''>
+    <form className='w-full h-full' onSubmit={onSubmit}>
       {children &&
         children({
           control,
-          isLoading: false,
+          isLoading,
           isValid,
-          onSubmit,
         })}
     </form>
   )

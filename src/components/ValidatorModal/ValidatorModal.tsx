@@ -1,10 +1,12 @@
 import { useRouter } from 'next/navigation'
 import Carousel from 'nuka-carousel'
 import { createContext, FC, useEffect, useMemo, useState } from 'react'
+import { useSetRecoilState } from 'recoil';
 import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData'
 import { ValidatorModalView } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import useSWRPolling from '../../hooks/useSWRPolling';
+import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms';
 import { ValidatorMetricResult } from '../../types/beacon';
 import { ValidatorBalanceInfo } from '../../types/validator'
 import RodalModal from '../RodalModal/RodalModal'
@@ -30,6 +32,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
 }) => {
   const [isReady, setReady] = useState(false)
   const router = useRouter()
+  const setActiveValidatorId = useSetRecoilState(activeValidatorId)
+  const setValDetail = useSetRecoilState(isValidatorDetail)
   const [activeIndex, setIndex] = useState(0)
   const [isFinishAnim, setFinished] = useState(false)
   const [view, setView] = useState<ValidatorModalView>(ValidatorModalView.EXIT)
@@ -52,6 +56,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
 
   const closeModal = () => {
     router.push('/dashboard/validators')
+    setActiveValidatorId(undefined);
+    setValDetail(false)
     setTimeout(() => {
       setView(ValidatorModalView.DETAILS)
       setIndex(0)

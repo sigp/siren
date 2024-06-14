@@ -1,3 +1,4 @@
+import { useRouter } from 'next/navigation';
 import { FC, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
@@ -22,6 +23,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
   isExitAction = true,
 }) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
   const { closeModal, moveToView } = useContext(ValidatorModalContext)
   const viewExitAction = () => moveToView(ValidatorModalView.EXIT)
@@ -29,6 +31,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
     closeModal()
     setTimeout(() => {
       toggleBlsModal(true)
+      router.push('/dashboard/validators?view=bls')
     }, 200)
   }
 

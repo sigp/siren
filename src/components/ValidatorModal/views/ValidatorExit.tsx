@@ -111,7 +111,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
           </div>
           <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
         </div>
-        <ValidatorInfoHeader isAnimate={isAnimate} validator={validator} />
+        <ValidatorInfoHeader animName="exit-gradient-header" isAnimate={isAnimate} validator={validator} />
         <div className='p-6 space-y-6'>
           <Typography type='text-caption1' isBold isUpperCase>
             <Trans i18nKey='validatorExit.management'>

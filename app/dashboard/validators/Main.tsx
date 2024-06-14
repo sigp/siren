@@ -1,13 +1,15 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
-import React, { FC, useEffect, useMemo, useState } from 'react'
+import { useMotionValueEvent, useScroll } from 'framer-motion';
+import { useRouter, useSearchParams } from 'next/navigation';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next'
-import { useSetRecoilState } from 'recoil'
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import BlsExecutionModal from '../../../src/components/BlsExecutionModal/BlsExecutionModal';
 import Button, { ButtonFace } from '../../../src/components/Button/Button'
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import DisabledTooltip from '../../../src/components/DisabledTooltip/DisabledTooltip'
+import EditValidatorModal from '../../../src/components/EditValidatorModal/EditValidatorModal';
 import Typography from '../../../src/components/Typography/Typography'
 import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
 import ValidatorSearchInput from '../../../src/components/ValidatorSearchInput/ValidatorSearchInput'
@@ -16,7 +18,7 @@ import ValidatorTable from '../../../src/components/ValidatorTable/ValidatorTabl
 import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { exchangeRates } from '../../../src/recoil/atoms'
+import { activeValidatorId, exchangeRates, isEditValidator, isValidatorDetail } from '../../../src/recoil/atoms';
 import {
   BeaconNodeSpecResults,
   SyncData, ValidatorMetricResult
@@ -46,9 +48,29 @@ const Main: FC<MainProps> = (props) => {
     initValMetrics,
   } = props
 
+  const [scrollPercentage, setPercentage] = useState(0)
+
+  const container = useRef<HTMLDivElement | null>(null)
+  const { scrollY } = useScroll({
+    container
+  })
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if(container?.current) {
+      const totalHeight = container.current.scrollHeight - container.current.clientHeight;
+      setPercentage(Math.round((latest / totalHeight) * 100))
+    }
+  })
+
+  const router = useRouter()
   const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH } = beaconSpec
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const [search, setSearch] = useState('')
+  const [activeValId, setValidatorId] = useRecoilState(activeValidatorId)
+  const [isEditVal, setIsEditValidator] = useRecoilState(isEditValidator)
+  const setValDetail = useSetRecoilState(isValidatorDetail)
+  const [isValDetail] = useRecoilState(isValidatorDetail)
+  const [isRendered, setRender] = useState(false)
 
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
 
@@ -58,6 +80,7 @@ const Main: FC<MainProps> = (props) => {
   const epochInterval = slotInterval * Number(SLOTS_PER_EPOCH)
   const searchParams = useSearchParams()
   const validatorId = searchParams.get('id')
+  const modalView = searchParams.get('view')
   const { data: exchangeData } = useSWRPolling(CoinbaseExchangeRateUrl, {
     refreshInterval: 60 * 1000,
     networkError,
@@ -105,10 +128,28 @@ const Main: FC<MainProps> = (props) => {
   const rates = exchangeData?.data.rates
 
   const activeValidator = useMemo(() => {
-    if (!validatorId) return
+    if (activeValId === undefined) return
 
-    return validatorStates.find(({ index }) => Number(validatorId) === index)
-  }, [validatorId, validatorStates])
+    return validatorStates.find(({ index }) => Number(activeValId) === index)
+  }, [activeValId, validatorStates])
+
+  useEffect(() => {
+    if(isRendered) return
+
+    if(validatorId) {
+      setValidatorId(Number(validatorId))
+    }
+
+    if(modalView === 'detail') {
+      setValDetail(true)
+    }
+
+    if(modalView === 'edit') {
+      setIsEditValidator(true)
+    }
+
+    setRender(true)
+  }, [validatorId, isRendered, modalView])
 
   useEffect(() => {
     if (rates) {
@@ -119,17 +160,23 @@ const Main: FC<MainProps> = (props) => {
     }
   }, [rates, setExchangeRate])
 
+  const closeEditValModal = () => {
+    setIsEditValidator(false);
+    setValidatorId(undefined)
+    router.push('/dashboard/validators')
+  }
+
   return (
-    <DashboardWrapper
-      syncData={syncData}
-      beaconSpec={beaconSpec}
-      isBeaconError={isBeaconError}
-      isValidatorError={isValidatorError}
-      nodeHealth={nodeHealth}
-    >
-      <>
-        <BlsExecutionModal />
-        <div className='w-full grid grid-cols-1 lg:block pb-12 p-4 mb-28 lg:mb-0'>
+    <>
+      <DashboardWrapper
+        scrollRef={container}
+        syncData={syncData}
+        beaconSpec={beaconSpec}
+        isBeaconError={isBeaconError}
+        isValidatorError={isValidatorError}
+        nodeHealth={nodeHealth}
+      >
+        <div className='w-full grid grid-cols-1 lg:block pb-12 p-4 mb-28 lg:mb-28'>
           <div className='w-full space-y-6 mb-6'>
             <div className='w-full flex flex-col items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>
               <Typography fontWeight='font-light' type='text-subtitle1' className='capitalize'>
@@ -172,19 +219,26 @@ const Main: FC<MainProps> = (props) => {
             </div>
           </div>
           <ValidatorTable
-            validatorCacheData={validatorCache}
+            scrollPercentage={scrollPercentage}
+            isPaginated
             validators={filteredValidators}
             view='full'
           />
-          {activeValidator && (
-            <ValidatorModal
-              validator={activeValidator}
-              validatorCacheData={validatorCache}
-            />
-          )}
         </div>
-      </>
-    </DashboardWrapper>
+      </DashboardWrapper>
+      <BlsExecutionModal />
+      {isValDetail && activeValidator && (
+        <ValidatorModal
+          validator={activeValidator}
+          validatorCacheData={validatorCache}
+        />
+      )}
+      {
+        isEditVal && activeValidator && (
+          <EditValidatorModal validator={activeValidator} validatorCacheData={validatorCache} onClose={closeEditValModal}/>
+        )
+      }
+    </>
   )
 }
 
