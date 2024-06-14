@@ -87,7 +87,7 @@ const SideBar = () => {
             ))}
           </ul>
         </div>
-        <div className='w-full py-4'>
+        <div className='w-full pb-6'>
           <ul className='space-y-4 pl-4'>
             {SECONDARY_VIEWS.map(({ title, key, isDisabled, href }) => (
               <SideBarText
@@ -100,7 +100,7 @@ const SideBar = () => {
             ))}
             <div onClick={toggleUi} className='w-full flex items-center'>
               <SideBarText className='w-auto md:mr-4' text={t('sidebar.theme')} />
-              <UiModeIcon className='md:hidden mr-4' mode={mode} />
+              <UiModeIcon className='md:hidden mr-4 ml-4 md:ml-0' mode={mode} />
             </div>
           </ul>
         </div>
