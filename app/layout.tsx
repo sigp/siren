@@ -94,6 +94,24 @@ const archivo = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
+    <head>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+              (function() {
+                try {
+                  const theme = JSON.parse(localStorage.getItem('UI')?.trim() || 'null');
+                  if (theme === "DARK") {
+                    document.documentElement.classList.add('dark');
+                  }
+                } catch (e) {
+                  console.error('Failed to parse theme from localStorage:', e);
+                }
+              })();
+            `,
+        }}
+      />
+    </head>
       <body className={`${openSauce.variable} ${roboto.variable} ${archivo.variable}`}>
         <div id='root'>{children}</div>
       </body>
