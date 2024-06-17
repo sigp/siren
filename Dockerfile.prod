@@ -1,10 +1,10 @@
-ARG node_version=18
+ARG node_version=18.18
 ARG node_image=node:${node_version}
 
 FROM $node_image AS dev
 
 RUN apt update;\
-    apt install -y nginx 
+    apt install -y nginx
 
 COPY . /app/
 RUN rm /etc/nginx/sites-enabled/default; \
@@ -19,6 +19,5 @@ RUN yarn --network-timeout 300000
 WORKDIR /app
 RUN yarn --network-timeout 300000
 
-ENTRYPOINT /app/docker-assets/docker-entrypoint-dev.sh
+ENTRYPOINT /app/docker-assets/docker-entrypoint-prod.sh
 
-# run with docker run --rm -ti -p 3000:3000 -v $PWD/.env:/app/.env:ro your-image-name
