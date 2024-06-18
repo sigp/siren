@@ -17,9 +17,8 @@ fi
 nginx &
 
 cd /app/backend
-yarn start &
+yarn start:prod &
 
 cd /app
 
-node siren.js
-
+yarn start
