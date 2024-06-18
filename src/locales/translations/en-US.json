@@ -480,5 +480,10 @@
     "authenticate": "Authenticate",
     "noPasswordFound": "No Session Password found",
     "invalidPassword": "Invalid password. Please try again."
+  },
+  "errorPage": {
+    "title": "Opps!",
+    "subText": "Siren seems to have encountered an unexpected error. Please review your configuration and or node connections to continue to your dashboard.",
+    "cta": "Go Back"
   }
 }
