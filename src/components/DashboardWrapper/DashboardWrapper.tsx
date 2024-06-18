@@ -1,15 +1,15 @@
 import React, { FC, MutableRefObject, ReactNode, useEffect } from 'react';
-import { useSetRecoilState } from 'recoil'
-import { Storage, UiMode } from '../../constants/enums'
-import useLocalStorage from '../../hooks/useLocalStorage'
-import { beaconNodeSpec, uiMode } from '../../recoil/atoms'
-import { BeaconNodeSpecResults, SyncData } from '../../types/beacon'
-import { Diagnostics } from '../../types/diagnostic'
-import { UiThemeStorage } from '../../types/storage'
-import FootBar from '../FootBar/FootBar'
-import NetworkErrorModal from '../NetworkErrorModal/NetworkErrorModal'
-import SideBar from '../SideBar/SideBar'
-import TopBar from '../TopBar/TopBar'
+import { useSetRecoilState } from 'recoil';
+import { Storage, UiMode } from '../../constants/enums';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { beaconNodeSpec, uiMode } from '../../recoil/atoms';
+import { BeaconNodeSpecResults, SyncData } from '../../types/beacon';
+import { Diagnostics } from '../../types/diagnostic';
+import { UiThemeStorage } from '../../types/storage';
+import FootBar from '../FootBar/FootBar';
+import NetworkErrorModal from '../NetworkErrorModal/NetworkErrorModal';
+import SideBar from '../SideBar/SideBar';
+import TopBar from '../TopBar/TopBar';
 
 export interface DashboardWrapperProps {
   children: ReactNode | ReactNode[]
@@ -39,6 +39,9 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
 
   useEffect(() => {
     setUiTheme(uiThemeStorage || UiMode.LIGHT)
+    if(uiThemeStorage === UiMode.DARK) {
+      document.body.style.backgroundColor = '#1E1E1E';
+    }
   }, [uiThemeStorage, setUiTheme])
 
   useEffect(() => {
