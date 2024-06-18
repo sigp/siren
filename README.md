@@ -56,36 +56,36 @@ $ yarn dev
 #### Docker (Recommended)
 
 Docker is the recommended way to run a webserver that hosts Siren and can be
-connected to via a web browser. For now, we only have a development docker image.
+connected to via a web browser.
 
 `docker` is required to be installed with the service running.
 
-Recommended config for using the development docker image (assuming the BN/VC API's are exposed on your localhost):
+Recommended config for using the docker image (assuming the BN/VC API's are exposed on your localhost):
 
 ```
 PORT=3000
 BACKEND_URL=http://127.0.0.1:3001
 VALIDATOR_URL=http://host.docker.internal:5062
 BEACON_URL=http://host.docker.internal:5052
+SSL_ENABLED=true
 ```
 
 The docker image can be built and run with the following commands:
 ```
-$ docker build -f Dockerfile.dev -t siren .
+$ docker build -f Dockerfile.prod -t siren .
 ```
 
 Then to run the image:
 
 ```
-$ docker run --rm -ti -p 3000:3000 -v $PWD/.env:/app/.env:ro siren
+$ docker run --rm -ti --name siren -p 3443:443 -v $PWD/.env:/app/.env:ro siren
 ```
 Linux users may want to add this flag: 
 `--add-host=host.docker.internal:host-gateway`
 
+This will open port 3443 and allow your browser to connect. 
 
-This will open port 3000 and allow your browser to connect. 
-
-To view Siren, simply go to `http://localhost:3000` in your web browser.
+To view Siren, simply go to `http://localhost:3443` in your web browser.
 
 
 # Running a Local Testnet
