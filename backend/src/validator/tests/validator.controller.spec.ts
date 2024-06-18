@@ -80,8 +80,6 @@ describe('ValidatorController', () => {
 
     const results = await controller.getValidatorAuth()
 
-    console.log(process.env.VALIDATOR_URL)
-
     expect(results).toEqual({data: 'mock-auth-key'})
     expect(mockHttpService.request).toBeCalledWith({method: "GET", url: "mock-url/lighthouse/auth"})
   });
