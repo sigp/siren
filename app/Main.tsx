@@ -107,7 +107,7 @@ const Main = () => {
 
     } catch (e) {
       setLoading(false)
-      displayToast(t('authPrompt.authError'), ToastType.ERROR)
+      displayToast(t(e.response.data.error), ToastType.ERROR)
     }
   }
 

@@ -12,6 +12,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({token}, {status: 200})
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to fetch validator metrics' }, { status: 500 })
+    return NextResponse.json({ error: error.response.data.message }, { status: 500 })
   }
 }

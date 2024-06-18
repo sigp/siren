@@ -8,8 +8,12 @@ export class AppService {
   private sessionPassword = process.env.SESSION_PASSWORD;
 
   async authenticateSessionPassword(password: string) {
+    if(!this.sessionPassword) {
+      throw new Error('authPrompt.noPasswordFound')
+    }
+
     if(password !== this.sessionPassword) {
-      throw new UnauthorizedException('Invalid session password...')
+      throw new UnauthorizedException('authPrompt.invalidPassword')
     }
 
     const payload = {sub: 'authenticated_session'}
