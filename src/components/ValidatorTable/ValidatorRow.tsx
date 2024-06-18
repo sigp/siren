@@ -37,7 +37,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { pubKey, index, balance, rewards, status, withdrawalAddress, name } = validator
   const rewardColor = formatBalanceColor(rewards)
   const baseBeaconChaUrl = useRecoilValue(selectBeaconChaBaseUrl)
-  const valHref = `/dashboard/validators?id=${index}`
+  const valHrefBase = `/dashboard/validators?id=${index}`
+  const detailHref = `${valHrefBase}&view=detail`
+  const editHref = `${valHrefBase}&view=edit`
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
 
   useEffect(() => {
@@ -54,13 +56,13 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const editValidator = (id: number) => {
     setActiveValidatorId(id);
     setIsEditValidator(true)
-    router.push(`${valHref}&view=edit`)
+    router.push(editHref)
   }
 
   const viewDetail = (id: number) => {
     setActiveValidatorId(id);
     setValDetail(true)
-    router.push(`${valHref}&view=detail`)
+    router.push(detailHref)
   }
 
   const renderAvatar = useCallback(() => {
@@ -86,7 +88,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         {view === 'full' ? (
           <div onClick={() => viewDetail(index)} className='w-full flex justify-center'>{renderAvatar()}</div>
           ) : (
-          <Link href={valHref}>
+          <Link href={detailHref}>
             <div className='w-full flex justify-center'>{renderAvatar()}</div>
           </Link>
         )}
@@ -99,7 +101,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
             </Typography>
           </div>
         ) : (
-          <Link href={valHref}>
+          <Link href={detailHref}>
             <Typography className='text-left' color='text-dark500' type='text-caption2'>
               {validatorName}
             </Typography>
@@ -226,7 +228,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
               </div>
             </div>
           ) : (
-            <Link href={valHref}>
+            <Link href={detailHref}>
               <div className='cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
                 <div className='w-4 h-4'>
                   <ValidatorLogo className='text-primary' />

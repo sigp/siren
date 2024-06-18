@@ -131,7 +131,7 @@ export const EARNINGS_OPTIONS = [
 ] as EarningOption[]
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
-export const GoerliBeaconChaValidatorUrl = 'https://goerli.beaconcha.in/validator'
+export const HoleskyBeaconChaValidatorUrl = 'https://holesky.beaconcha.in/validator'
 export const DiscordUrl = 'https://discord.gg/mB3VZQpYvN'
 export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'
 export const SigPGithubUrl = 'https://github.com/sigp'
@@ -139,18 +139,6 @@ export const SigPTwitter = 'https://twitter.com/sigp_io'
 export const SigPIoUrl = 'https://sigmaprime.io/'
 export const WithdrawalInfoLink = 'https://launchpad.ethereum.org/en/withdrawals'
 export const CoinbaseExchangeRateUrl = 'https://api.coinbase.com/v2/exchange-rates?currency=ETH'
-
-export const DEFAULT_VALIDATOR_COUNT = {
-  active_exiting: 0,
-  active_ongoing: 0,
-  active_slashed: 0,
-  exited_slashed: 0,
-  exited_unslashed: 0,
-  pending_initialized: 0,
-  pending_queued: 0,
-  withdrawal_done: 0,
-  withdrawal_possible: 0,
-}
 
 export const CURRENCIES = [
   'AUD',

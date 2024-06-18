@@ -27,7 +27,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({ validator, className, i
   const validatorName = useValidatorName(validator, aliases)
 
   return (
-    <Link href={`/dashboard/validators?id=${index}`}>
+    <Link href={`/dashboard/validators?id=${index}&view=detail`}>
       <div className={classes}>
         <AnimatedHeader name="validatorcard" animate={animate} speed={.2} isReady={isReady} className="z-10 w-full h-full absolute left-0 top-0"/>
         <div className='w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative'>
