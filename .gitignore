@@ -7,6 +7,8 @@
 
 .idea
 
+certs
+
 # testing
 /coverage
 
