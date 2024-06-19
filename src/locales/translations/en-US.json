@@ -479,7 +479,8 @@
     "authRequired": "This action requires authentication. Please provide your session password to continue. Please review your configuration file and make appropriate adjustments if necessary.",
     "authenticate": "Authenticate",
     "noPasswordFound": "No Session Password found",
-    "invalidPassword": "Invalid password. Please try again."
+    "invalidPassword": "Invalid password. Please try again.",
+    "unableToReach": "Unable to reach backend."
   },
   "errorPage": {
     "title": "Opps!",
