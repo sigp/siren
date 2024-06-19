@@ -32,8 +32,6 @@ RUN rm /etc/nginx/sites-enabled/default; \
     rm /etc/nginx/http.d/default.conf; \
     ln -s /app/docker-assets/siren-http.conf /etc/nginx/http.d/siren-http.conf
 
-ENTRYPOINT /app/docker-assets/docker-entrypoint-prod.sh
-
 COPY --from=builder /app/backend/package.json /app/backend/package.json
 COPY --from=builder /app/backend/node_modules /app/backend/node_modules
 COPY --from=builder /app/backend/dist /app/backend/dist
@@ -43,3 +41,5 @@ COPY --from=builder /app/package.json /app/package.json
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/.next /app/.next
+
+ENTRYPOINT /app/docker-assets/docker-entrypoint.sh
