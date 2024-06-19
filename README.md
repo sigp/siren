@@ -72,7 +72,7 @@ SSL_ENABLED=true
 
 The docker image can be built and run with the following commands:
 ```
-$ docker build -f Dockerfile.prod -t siren .
+$ docker build -f Dockerfile -t siren .
 ```
 
 Then to run the image:
@@ -85,8 +85,9 @@ Linux users may want to add this flag:
 
 This will open port 3443 and allow your browser to connect. 
 
-To view Siren, simply go to `http://localhost:3443` in your web browser.
+To start Siren, visit `https://localhost:3443` in your web browser. (ignore the certificate warning). 
 
+Advanced users can mount their own certificate with `-v $PWD/certs:/certs` (the config expects 3 files: `/certs/cert.pem` `/certs/key.pem` `/certs/key.pass`)
 
 # Running a Local Testnet
 
