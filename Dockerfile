@@ -25,7 +25,7 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 RUN npm install --global pm2
-RUN apk add -U nginx
+RUN apk add -U nginx openssl
 
 COPY ./docker-assets /app/docker-assets/
 RUN rm /etc/nginx/sites-enabled/default; \
