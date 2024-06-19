@@ -3,7 +3,14 @@ ARG node_image=node:${node_version}
 
 FROM $node_image AS dev
 
+RUN apt update;\
+    apt install -y nginx 
+
 COPY . /app/
+RUN rm /etc/nginx/sites-enabled/default; \
+    rm /etc/nginx/conf.d/default.conf; \
+    ln -s /app/docker-assets/siren-http.conf /etc/nginx/conf.d/siren-http.conf
+
 ENV NODE_ENV=development
 
 WORKDIR /app/backend
@@ -12,6 +19,6 @@ RUN yarn --network-timeout 300000
 WORKDIR /app
 RUN yarn --network-timeout 300000
 
-ENTRYPOINT /app/docker-entrypoint-dev.sh
+ENTRYPOINT /app/docker-assets/docker-entrypoint-dev.sh
 
 # run with docker run --rm -ti -p 3000:3000 -v $PWD/.env:/app/.env:ro your-image-name

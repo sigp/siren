@@ -105,9 +105,9 @@ const Main = () => {
         Cookies.set('session-token', token)
       }
 
-    } catch (e) {
+    } catch (e: any) {
       setLoading(false)
-      displayToast(t(e.response.data.error), ToastType.ERROR)
+      displayToast(t(e.response.data.error as string), ToastType.ERROR)
     }
   }
 

@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     const token = res.data.access_token
 
     return NextResponse.json({token}, {status: 200})
-  } catch (error) {
+  } catch (error: any) {
     let message = error?.response?.data?.message
 
     if(!message) {

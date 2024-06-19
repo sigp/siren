@@ -28,7 +28,7 @@ const SSELogProvider: FC<SSELogWrapperProps> = React.memo(function ({ children, 
   const [, setTrigger] = useState(false)
   const setBeaconNetworkError = useSetRecoilState(beaconNetworkError)
   const setValidatorNetworkError = useSetRecoilState(validatorNetworkError)
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>(undefined)
+  const [intervalId, setIntervalId] = useState<any | undefined>(undefined)
   const [isReady, setReady] = useState(false)
 
   useEffect(() => {
