@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/ash
 
 set -a; \
 . /app/.env; \
@@ -11,14 +11,13 @@ if [ $SSL_ENABLED = true ] ; then
     echo 'sigmaprime' > /certs/key.pass
   fi
   ## nginx ssl stuff
-    ln -s /app/docker-assets/siren-https.conf /etc/nginx/conf.d/siren-https.conf
+    ln -s /app/docker-assets/siren-https.conf /etc/nginx/http.d/siren-https.conf
 fi
 
 nginx &
 
 cd /app/backend
-yarn start:prod &
+PM2_HOME='~/.pm2-backend' pm2-runtime yarn --interpreter sh -- start:prod &
 
 cd /app
-
-yarn start
+PM2_HOME='~/.pm2-frontend' pm2-runtime yarn --interpreter sh -- start 
