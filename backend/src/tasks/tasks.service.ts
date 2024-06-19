@@ -65,7 +65,7 @@ export class TasksService implements OnApplicationBootstrap {
 
     } catch (e) {
       console.error('Unable to bootstrap application repositories...')
-      console.error(this.utilsService.getErrorMessage(e.code))
+      console.error(this.utilsService.getErrorMessage(e?.response?.data.code || e.code))
       process.kill(process.pid, 'SIGINT');
       process.exit(0);
     }

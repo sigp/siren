@@ -18,7 +18,8 @@ export class UtilsService {
     private httpService: HttpService
   ) {}
 
-  getErrorMessage(code: string): string {
+  getErrorMessage(code: string | number): string {
+    console.log(code)
     if(code === 'ECONNREFUSED') {
       return 'Unable to connect to Beacon and Validator endpoints...'
     }
@@ -31,7 +32,11 @@ export class UtilsService {
       return 'No api token found, please update env configuration...'
     }
 
-    if(code === 'ERR_BAD_REQUEST') {
+    if(code === 'ERR_INVALID_URL') {
+      return 'Invalid node url, please update env configuration...'
+    }
+
+    if(code === 403) {
       return 'Api token invalid, please update env configuration...'
     }
 
