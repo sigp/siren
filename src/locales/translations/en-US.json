@@ -480,7 +480,8 @@
     "authenticate": "Authenticate",
     "noPasswordFound": "No Session Password found",
     "invalidPassword": "Invalid password. Please try again.",
-    "unableToReach": "Unable to reach backend."
+    "unableToReach": "Unable to reach backend.",
+    "defaultErrorMessage": "Error reaching backend server..."
   },
   "errorPage": {
     "title": "Opps!",

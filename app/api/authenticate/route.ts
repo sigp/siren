@@ -18,6 +18,11 @@ export async function POST(req: Request) {
 
     return NextResponse.json({token}, {status: 200})
   } catch (error) {
-    return NextResponse.json({ error: error.response.data.message }, { status: 500 })
+    let message = error?.response?.data?.message
+
+    if(!message) {
+      message = 'authPrompt.defaultErrorMessage'
+    }
+    return NextResponse.json({ error: message }, { status: 500 })
   }
 }
