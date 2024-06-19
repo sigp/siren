@@ -28,8 +28,7 @@ RUN npm install --global pm2
 RUN apk add -U nginx openssl
 
 COPY ./docker-assets /app/docker-assets/
-RUN rm /etc/nginx/sites-enabled/default; \
-    rm /etc/nginx/http.d/default.conf; \
+RUN rm /etc/nginx/http.d/default.conf; \
     ln -s /app/docker-assets/siren-http.conf /etc/nginx/http.d/siren-http.conf
 
 COPY --from=builder /app/backend/package.json /app/backend/package.json
