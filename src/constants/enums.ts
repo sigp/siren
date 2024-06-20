@@ -25,11 +25,6 @@ export enum OnboardView {
   SETUP = 'SETUP',
 }
 
-export enum ConfigType {
-  BASIC = 'BASIC',
-  ADVANCED = 'ADVANCED',
-}
-
 export enum Protocol {
   HTTP = 'http',
   HTTPS = 'https',
@@ -47,27 +42,18 @@ export enum DiagnosticRate {
   GREAT = 'GREAT',
 }
 
-export enum SetupSteps {
-  HEALTH = 'HEALTH',
-  SYNC = 'SYNC',
-}
-
 export enum Storage {
   UI = 'UI',
   CURRENCY = 'CURRENCY',
   BLS_PROCESSING = 'BLS_PROCESSING',
 }
 
-export enum ApiType {
-  VALIDATOR = 'VALIDATOR',
-  BEACON = 'BEACON',
-}
-
 export enum Network {
   Goerli = 'Goerli',
   Mainnet = 'Mainnet',
   LocalTestnet = 'Local TestNet',
-  Holesky = 'Holesky'
+  Holesky = 'Holesky',
+  Sepolia = 'Sepolia'
 }
 
 export enum ValidatorModalView {
