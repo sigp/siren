@@ -25,14 +25,14 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
   const showAnim = () => setReady(true)
 
   return (
-    <RodalModal onAnimationEnd={showAnim as any} styles={{ maxWidth: '500px' }} onClose={onClose} isVisible={isVisible}>
+    <RodalModal onAnimationEnd={showAnim as any} styles={{ maxWidth: '500px', height: 'auto', maxHeight: '550px' }} onClose={onClose} isVisible={isVisible}>
       <AuthenticationForm isVisible={isVisible} onSubmit={onSubmit}>
         {({control, isValid}) => (
           <div>
             <AnimatedHeader speed={.1} name="auth-prompt" isReady={isReady} className="w-full h-24 overflow-hidden bg-gradient-to-r from-primary to-tertiary"/>
             <div className="p-6 relative">
-              <div className="w-18 h-18 rounded-full p-1 absolute left-1/2 -translate-x-1/2 flex item-center justify-center top-0 -translate-y-1/2 bg-gradient-to-r from-primary to-tertiary">
-                <Lighthouse className="text-white"/>
+              <div className="rounded-full p-1 absolute left-1/2 -translate-x-1/2 flex item-center justify-center top-0 -translate-y-1/2 bg-gradient-to-r from-primary to-tertiary">
+                <Lighthouse className="text-white w-18 h-18"/>
               </div>
               <div className="py-8">
                 <Typography type="text-caption1" color="text-dark500">

@@ -38,6 +38,7 @@ const EditValidatorModal:FC<EditValidatorModalProps> = ({onClose, validator, val
       styles={{
         width: 'fit-content',
         maxWidth: isTablet ? '448px' : '900px',
+        maxHeight: '500px',
         height: isTablet ? '540px' : 'max-content',
       }}
       onAnimationEnd={initAnim as any}

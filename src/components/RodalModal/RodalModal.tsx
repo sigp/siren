@@ -16,6 +16,7 @@ export interface RodalModalProps {
     width?: string
     maxWidth?: string
     height?: string
+    maxHeight?: string
     overflow?: string
     zIndex?: number
   }
@@ -33,6 +34,7 @@ const RodalModal: FC<RodalModalProps> = ({ children, isVisible, uiMode, onClose,
     height = 'max-content',
     overflow = 'scroll',
     zIndex = 999,
+    maxHeight,
   } = styles || {}
 
   const closeModal = () => onClose?.()
@@ -48,6 +50,7 @@ const RodalModal: FC<RodalModalProps> = ({ children, isVisible, uiMode, onClose,
         width,
         maxWidth,
         height,
+        maxHeight,
         overflow,
         zIndex,
       }}
