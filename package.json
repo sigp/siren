@@ -10,7 +10,6 @@
   "dependencies": {
     "@hookform/resolvers": "^2.9.8",
     "@leodeslf/perlin-noise": "^1.1.2",
-    "@storybook/theming": "^7.5.3",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "15.0.6",
@@ -75,9 +74,6 @@
     "test": "jest",
     "cleanup": "prettier --write .",
     "coverage": "jest --coverage",
-    "storybook": "storybook dev -p 6006 -s public",
-    "build-storybook": "storybook build -s public",
-    "test-storybook": "test-storybook",
     "lint": "next lint",
     "prepare": "husky"
   },
@@ -101,18 +97,6 @@
   },
   "devDependencies": {
     "@faker-js/faker": "^7.5.0",
-    "@storybook/addon-actions": "^7.5.3",
-    "@storybook/addon-essentials": "^7.5.3",
-    "@storybook/addon-interactions": "^7.5.3",
-    "@storybook/addon-links": "^7.5.3",
-    "@storybook/addon-postcss": "^2.0.0",
-    "@storybook/addons": "^7.5.3",
-    "@storybook/node-logger": "^7.5.3",
-    "@storybook/preset-create-react-app": "^7.5.3",
-    "@storybook/react": "^7.5.3",
-    "@storybook/react-webpack5": "^7.5.3",
-    "@storybook/test-runner": "^0.14.0",
-    "@storybook/testing-library": "^0.2.2",
     "@types/eventsource": "^1.1.15",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.6",
@@ -131,12 +115,6 @@
     "prettier": "3.2.5",
     "prop-types": "^15.8.1",
     "react-test-renderer": "^18.2.0",
-    "storybook": "^7.5.3",
-    "storybook-dark-mode": "^3.0.1",
-    "storybook-tailwind-dark-mode": "^1.0.22",
     "webpack": "^5.74.0"
-  },
-  "resolutions": {
-    "@storybook/react-docgen-typescript-plugin": "1.0.6--canary.9.cd77847.0"
   }
 }
