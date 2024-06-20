@@ -175,27 +175,6 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
               <div className='w-full flex justify-center'>
                 <ValidatorActionIcon
                   border='border border-primary100 dark:border-primary'
-                  icon='bi-arrow-down-circle'
-                />
-              </div>
-            </DisabledTooltip>
-          </th>
-          <th className='px-2'>
-            <DisabledTooltip>
-              <div className='w-full flex justify-center'>
-                <ValidatorActionIcon
-                  border='border border-dark700'
-                  color='text-dark700 dark:text-dark400'
-                  icon='bi-box-arrow-right'
-                />
-              </div>
-            </DisabledTooltip>
-          </th>
-          <th className='px-2'>
-            <DisabledTooltip>
-              <div className='w-full flex justify-center'>
-                <ValidatorActionIcon
-                  border='border border-primary100 dark:border-primary'
                   icon='bi-key-fill'
                 />
               </div>

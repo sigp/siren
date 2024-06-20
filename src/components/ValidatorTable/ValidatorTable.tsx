@@ -154,7 +154,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                     color='text-dark500'
                     type='text-tiny'
                     isUpperCase
-                    className='text-left'
+                    className='text-center'
                   >
                     {t('status')}
                   </Typography>
@@ -169,26 +169,6 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                         className='text-center'
                       >
                         {t('run')}
-                      </Typography>
-                    </th>
-                    <th className='pl-2'>
-                      <Typography
-                        color='text-dark500'
-                        type='text-tiny'
-                        isUpperCase
-                        className='text-center'
-                      >
-                        {t('deposit')}
-                      </Typography>
-                    </th>
-                    <th className='pl-2'>
-                      <Typography
-                        color='text-dark500'
-                        type='text-tiny'
-                        isUpperCase
-                        className='text-center'
-                      >
-                        {t('exit')}
                       </Typography>
                     </th>
                     <th className='pl-2'>
