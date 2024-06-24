@@ -1,7 +1,7 @@
 import { FormattedValidatorCache } from '../src/types/validator'
 import { slotsInEpoc } from '../src/constants/constants'
 import reduceAddNum from './reduceAddNum'
-import { formatUnits } from 'ethers/lib/utils'
+import { formatUnits } from 'ethers'
 
 const calculateEpochEstimate = (
   timeInSeconds: number,

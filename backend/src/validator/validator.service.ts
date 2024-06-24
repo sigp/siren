@@ -5,7 +5,7 @@ import {
   BeaconValidatorResult, ValidatorCache, ValidatorDetail, ValidatorInfo
 } from '../../../src/types/validator';
 import formatDefaultValName from '../../../utilities/formatDefaultValName';
-import { formatUnits } from 'ethers/lib/utils';
+import { formatUnits } from 'ethers';
 import { Metric } from './entities/metric.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';

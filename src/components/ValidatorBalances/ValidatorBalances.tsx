@@ -1,4 +1,4 @@
-import { formatUnits } from 'ethers/lib/utils'
+import { formatUnits } from 'ethers'
 import moment from 'moment/moment'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'

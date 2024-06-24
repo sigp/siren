@@ -1,8 +1,8 @@
 import calculateEpochEstimate from '../calculateEpochEstimate'
 import { secondsInHour } from '../../src/constants/constants'
-import { formatUnits } from 'ethers/lib/utils'
+import { formatUnits } from 'ethers'
 
-jest.mock('ethers/lib/utils', () => ({
+jest.mock('ethers', () => ({
   formatUnits: jest.fn(),
 }))
 
