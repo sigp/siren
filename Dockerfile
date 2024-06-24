@@ -4,19 +4,18 @@ ARG node_image=node:${node_version}
 FROM $node_image AS builder
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
-    NODE_ENV=development
+    NODE_ENV=production
 WORKDIR /app
 COPY . /app/
 
 RUN yarn --network-timeout 300000; \
-    NODE_ENV=production yarn build
+    yarn build
 WORKDIR /app/backend
 RUN yarn --network-timeout 300000; \
-    NODE_ENV=production yarn build
+    yarn build
 
 FROM alpine AS intermediate
 
-COPY ./.env.example /app/
 COPY ./docker-assets /app/docker-assets/
 
 COPY --from=builder /app/backend/package.json /app/backend/package.json
@@ -27,7 +26,6 @@ COPY --from=builder /app/siren.js /app/package.json /app/
 COPY --from=builder /app/node_modules /app/node_modules
 COPY --from=builder /app/public /app/public
 COPY --from=builder /app/.next /app/.next
-
 
 FROM node:${node_version}-alpine AS production
 
