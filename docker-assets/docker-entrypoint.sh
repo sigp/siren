@@ -9,6 +9,7 @@ VALIDATOR_URL=${VALIDATOR_URL:-http://your-VC-ip:5062}
 API_TOKEN=${API_TOKEN:-"get-it-from-'.lighthouse/validators/api-token.txt'"}
 SESSION_PASSWORD=${SESSION_PASSWORD:-default-siren-password}
 SSL_ENABLED=${SSL_ENABLED:-true}
+DEBUG=${DEBUG:-false}
 set +a
 
 # if bn/vc api unreachable, print message and exit
