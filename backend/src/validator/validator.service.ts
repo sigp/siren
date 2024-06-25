@@ -132,7 +132,6 @@ export class ValidatorService {
     try {
       const options = index ? {where: {index}} : undefined
       const metrics = await this.utilsService.fetchAll(Metric, options)
-      console.log(metrics)
       const metricsData = metrics.map(metric => JSON.parse(metric.data))
 
       const targetEffectiveness = getAverageKeyValue(metricsData, 'attestation_target_hit_percentage')

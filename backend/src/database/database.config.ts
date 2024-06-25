@@ -5,4 +5,5 @@ export const dataBaseConfig: SequelizeModuleOptions = {
   storage: '.db/data.sqlite3',
   autoLoadModels: true,
   synchronize: true,
+  logging: false,
 };

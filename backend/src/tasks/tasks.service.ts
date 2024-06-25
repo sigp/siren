@@ -41,6 +41,7 @@ export class TasksService implements OnApplicationBootstrap {
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
   private sessionPassword = process.env.SESSION_PASSWORD;
+  private isDebug = process.env.DEBUG;
 
   async onApplicationBootstrap(): Promise<void> {
     try {
@@ -73,7 +74,9 @@ export class TasksService implements OnApplicationBootstrap {
 
   private initLogCleaningScheduler() {
     this.setDynamicInterval('clean-logs', 60000, async () => {
-      console.log('cleaning logs database....')
+      if(this.isDebug) {
+        console.log('cleaning logs database....')
+      }
       const thresholdDate = moment().subtract(24, 'hours').toDate();
 
       await this.logRepository.destroy({
@@ -89,7 +92,9 @@ export class TasksService implements OnApplicationBootstrap {
   private async initMetricsCleaningScheduler() {
     const interval = await this.utilsService.getEpochInterval(1)
     this.setDynamicInterval('clean-metrics', interval / 2, async () => {
-      console.log('cleaning metric database....')
+      if(this.isDebug) {
+        console.log('cleaning metric database....')
+      }
 
       const { SLOTS_PER_EPOCH, SECONDS_PER_SLOT} = await this.cacheManager.get('specs') as BeaconNodeSpecResults
       const secondsPerEpoch = (Number(SLOTS_PER_EPOCH) * Number(SECONDS_PER_SLOT))
@@ -145,7 +150,9 @@ export class TasksService implements OnApplicationBootstrap {
   }
 
   private async syncValidatorData() {
-    console.log('Syncing validator data...')
+    if(this.isDebug) {
+      console.log('Syncing validator data...')
+    }
 
     const { data } = await this.utilsService.sendHttpRequest({
       url: `${this.validatorUrl}/lighthouse/validators`,

@@ -14,6 +14,8 @@ export class LogsService {
     private logRepository: typeof Log
   ) {}
 
+  private isDebug = process.env.DEBUG;
+
   private logTypes = [LogType.BEACON, LogType.VALIDATOR];
 
   private sseStreams: Map<string, Subject<any>> = new Map();
@@ -39,7 +41,9 @@ export class LogsService {
 
       if(level !== LogLevels.INFO) {
         this.logRepository.create({type, level, data: JSON.stringify(newData), isHidden: false}, {ignoreDuplicates: true})
-        console.log(newData, type,'------------------------------------------ log --------------------------------------')
+        if(this.isDebug) {
+          console.log(newData, type,'------------------------------------------ log --------------------------------------')
+        }
       }
 
       sseStream.next(event.data);

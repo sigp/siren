@@ -17,6 +17,7 @@ export class BeaconService {
     private utilsService: UtilsService
   ) {}
   private beaconUrl = process.env.BEACON_URL;
+  private isDebug = process.env.DEBUG;
 
   async fetchBeaconNodeVersion(): Promise<string> {
     try {
@@ -113,7 +114,9 @@ export class BeaconService {
         url: `${this.beaconUrl}/eth/v1/node/syncing`,
       });
 
-      console.log(`fetching 2nd syncData from node for ${api}.....`)
+      if(this.isDebug) {
+        console.log(`fetching 2nd syncData from node for ${api}.....`)
+      }
 
       syncData = {
         beaconSync: {
@@ -121,7 +124,9 @@ export class BeaconService {
         }
       }
     } else {
-      console.log(`fetching cached syncData for ${api}.....`)
+      if(this.isDebug) {
+        console.log(`fetching cached syncData for ${api}.....`)
+      }
     }
 
     return  syncData.beaconSync.headSlot;
