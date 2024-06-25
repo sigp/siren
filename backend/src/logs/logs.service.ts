@@ -14,7 +14,7 @@ export class LogsService {
     private logRepository: typeof Log
   ) {}
 
-  private isDebug = process.env.DEBUG;
+  private isDebug = process.env.DEBUG === 'true';
 
   private logTypes = [LogType.BEACON, LogType.VALIDATOR];
 

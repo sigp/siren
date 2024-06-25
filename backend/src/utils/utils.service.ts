@@ -18,7 +18,7 @@ export class UtilsService {
     private httpService: HttpService
   ) {}
 
-  private isDebug = process.env.DEBUG;
+  private isDebug = process.env.DEBUG === 'true';
 
   getErrorMessage(code: string | number): string {
     console.log(code)

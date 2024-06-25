@@ -41,7 +41,7 @@ export class TasksService implements OnApplicationBootstrap {
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
   private sessionPassword = process.env.SESSION_PASSWORD;
-  private isDebug = process.env.DEBUG;
+  private isDebug = process.env.DEBUG === 'true';
 
   async onApplicationBootstrap(): Promise<void> {
     try {

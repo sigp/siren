@@ -17,7 +17,7 @@ export class BeaconService {
     private utilsService: UtilsService
   ) {}
   private beaconUrl = process.env.BEACON_URL;
-  private isDebug = process.env.DEBUG;
+  private isDebug = process.env.DEBUG === 'true';
 
   async fetchBeaconNodeVersion(): Promise<string> {
     try {
