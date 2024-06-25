@@ -37,7 +37,7 @@ const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
 
   const fetchGraffiti = async () => {
     try {
-      const { data } = await axios.get(`/api/validator-graffiti?index=${index}`, config)
+      const { data } = await axios.get(`/api/validator-graffiti/${index}`, config)
 
       if (data) {
         setGraffiti(data.data)

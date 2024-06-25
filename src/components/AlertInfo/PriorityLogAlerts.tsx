@@ -27,7 +27,7 @@ const PriorityLogAlerts:FC<LogAlertsProps> = ({alerts}) => {
   const dismissAlert = async (id: number) => {
     try {
       const token = Cookies.get('session-token')
-      const {status} = await axios.get(`/api/dismiss-log?index=${id}`, {
+      const {status} = await axios.put(`/api/dismiss-log/${id}`, undefined,{
         headers: {
           Authorization: `Bearer ${token}`
         }

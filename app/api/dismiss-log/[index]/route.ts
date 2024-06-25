@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import getReqAuthToken from '../../../utilities/getReqAuthToken';
-import { dismissLogAlert } from '../logs';
+import getReqAuthToken from '../../../../utilities/getReqAuthToken';
+import { dismissLogAlert } from '../../logs';
 
-export async function GET(req: Request) {
+export async function PUT(req: Request, context: any) {
   try {
-    const url = new URL(req.url);
-    const index = url.searchParams.get('index');
+    const { index } = context.params;
     const token = getReqAuthToken(req);
 
     if (!index) {

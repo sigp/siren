@@ -42,7 +42,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
   const { index, status } = validator
 
   const { data: validatorMetric } = useSWRPolling<ValidatorMetricResult>(
-    status !== 'withdrawal_done' ? `/api/validator-metrics?index=${index}` : null,
+    status !== 'withdrawal_done' ? `/api/validator-metrics/${index}` : null,
     { refreshInterval: 5 * 1000 },
   )
 
