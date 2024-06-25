@@ -8,8 +8,6 @@ export async function POST(req: Request) {
     const {password} = await req.json();
     const res = await axios.post(`${backendUrl}/authenticate`, {password});
 
-    console.log(res)
-
     if(!res?.data) {
       return NextResponse.json({ error: 'authPrompt.unableToReach' }, { status: 500 })
     }

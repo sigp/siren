@@ -21,7 +21,6 @@ export class UtilsService {
   private isDebug = process.env.DEBUG === 'true';
 
   getErrorMessage(code: string | number): string {
-    console.log(code)
     if(code === 'ECONNREFUSED') {
       return 'Unable to connect to Beacon and Validator endpoints...'
     }
