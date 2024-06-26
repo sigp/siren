@@ -65,7 +65,7 @@ const SideBar = () => {
               </SideItem>
             ))}
             <div className='w-full h-6 flex items-center justify-center'>
-              <UiModeIcon onClick={toggleUiMode} mode={mode} />
+              <UiModeIcon onClick={toggleUi} mode={mode} />
             </div>
           </ul>
         </div>
