@@ -222,8 +222,8 @@ export class BeaconService {
       })
     }
      catch (e) {
-      console.error(e);
-      throwServerError('Unable to fetch proposer data');
+      console.error(e?.response?.data);
+      return [];
     }
   }
 
