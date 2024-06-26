@@ -51,7 +51,6 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
     }
     displayToast(message, ToastType.ERROR)
     setPromptLoading(false)
-    // setAuthPrompt(false)
     setLoading(false)
   }
 
@@ -101,7 +100,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   return (
     <>
       <div className='pt-2 exit-validator-modal relative'>
-        <AuthPrompt mode={mode} isLoading={isPromptLoading} onClose={closePrompt} isVisible={isAuthPrompt} onSubmit={confirmExit}/>
+        <AuthPrompt mode={mode} isLoading={isPromptLoading} maxHeight="400px" onClose={closePrompt} isVisible={isAuthPrompt} onSubmit={confirmExit}/>
         <div className='py-4 px-6 flex justify-between'>
           <div className='space-x-4 flex items-center'>
             <i onClick={viewDetails} className='bi-chevron-left dark:text-dark300 cursor-pointer' />
