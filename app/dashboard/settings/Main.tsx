@@ -1,33 +1,27 @@
-'use client'
+'use client';
 
-import React, { FC, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import LighthouseSvg from '../../../src/assets/images/lighthouse-black.svg'
-import AppDescription from '../../../src/components/AppDescription/AppDescription'
-import AppVersion from '../../../src/components/AppVersion/AppVersion'
-import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
-import Input from '../../../src/components/Input/Input'
-import SocialIcon from '../../../src/components/SocialIcon/SocialIcon'
-import Toggle from '../../../src/components/Toggle/Toggle'
-import Typography from '../../../src/components/Typography/Typography'
-import UiModeIcon from '../../../src/components/UiModeIcon/UiModeIcon'
-import {
-  DiscordUrl,
-  LighthouseBookUrl,
-  SigPGithubUrl,
-  SigPIoUrl,
-  SigPTwitter,
-} from '../../../src/constants/constants'
-import { UiMode } from '../../../src/constants/enums'
-import useLocalStorage from '../../../src/hooks/useLocalStorage'
-import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
-import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import useUiMode from '../../../src/hooks/useUiMode'
-import { OptionalString } from '../../../src/types'
-import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
-import { Diagnostics } from '../../../src/types/diagnostic'
-import { UsernameStorage } from '../../../src/types/storage'
-import addClassString from '../../../utilities/addClassString'
+import React, { FC, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import LighthouseSvg from '../../../src/assets/images/lighthouse-black.svg';
+import AppDescription from '../../../src/components/AppDescription/AppDescription';
+import AppVersion from '../../../src/components/AppVersion/AppVersion';
+import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper';
+import Input from '../../../src/components/Input/Input';
+import SocialIcon from '../../../src/components/SocialIcon/SocialIcon';
+import Toggle from '../../../src/components/Toggle/Toggle';
+import Typography from '../../../src/components/Typography/Typography';
+import UiModeIcon from '../../../src/components/UiModeIcon/UiModeIcon';
+import { DiscordUrl, LighthouseBookUrl, SigPGithubUrl, SigPIoUrl, SigPTwitter } from '../../../src/constants/constants';
+import { UiMode } from '../../../src/constants/enums';
+import useLocalStorage from '../../../src/hooks/useLocalStorage';
+import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor';
+import useSWRPolling from '../../../src/hooks/useSWRPolling';
+import useUiMode from '../../../src/hooks/useUiMode';
+import { OptionalString } from '../../../src/types';
+import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon';
+import { Diagnostics } from '../../../src/types/diagnostic';
+import { UsernameStorage } from '../../../src/types/storage';
+import addClassString from '../../../utilities/addClassString';
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -115,7 +109,7 @@ const Main: FC<MainProps> = (props) => {
                     {t('sidebar.theme')}
                   </Typography>
                   <UiModeIcon mode={mode} />
-                  <Toggle id='uiModeToggle' value={mode === UiMode.DARK} onChange={toggleUiMode} />
+                  <Toggle id='uiModeToggle' value={mode === UiMode.DARK} onChange={(value: boolean) => toggleUiMode(value ? UiMode.DARK : UiMode.LIGHT)} />
                 </div>
               </div>
               <AppVersion bnVersion={bnVersion} vcVersion={lighthouseVersion} className='mt-4' />

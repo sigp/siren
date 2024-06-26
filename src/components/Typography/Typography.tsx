@@ -19,6 +19,7 @@ type TagsSupported = (typeof tagsSupported)[number]
 export type TypographyFamily = 'font-openSauce' | 'font-roboto' | 'font-archivo'
 
 export type TypographyColor =
+  | 'text-darkFull'
   | 'text-dark900'
   | 'text-dark500'
   | 'text-dark300'
