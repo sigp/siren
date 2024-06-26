@@ -10,7 +10,7 @@ const Main = () => {
     <div className="relative space-y-12 z-50 w-96 -translate-x-96">
       <div>
         <Typography darkMode="text-white" isBold color="text-white" type="text-h2">{t('errorPage.title')}</Typography>
-        <Typography color="text-white" darkMode="text-white" type="text-subtitle3">{t('error.title')}</Typography>
+        <Typography color="text-white" darkMode="text-white" type="text-subtitle3">{t('errorPage.subText')}</Typography>
       </div>
       <div>
         <Button href="/" type={ButtonFace.SECONDARY}>{t('errorPage.cta')}</Button>

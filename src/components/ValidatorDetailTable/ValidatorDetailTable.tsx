@@ -153,28 +153,28 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({
               {income.toFixed(4)}
             </Typography>
           </div>
-          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-40'>
+            <Typography color='text-darkFull' darkMode="dark:text-dark400" type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-40'>
+            <Typography color='text-darkFull' darkMode="dark:text-dark400" type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-20 @1600:w-28 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
+          <div className='w-20 @1600:w-28 py-4 px-6 opacity-40'>
+            <Typography color='text-darkFull' darkMode="dark:text-dark400" type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-12 @1600:w-20 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
+          <div className='w-12 @1600:w-20 py-4 px-6 opacity-40'>
+            <Typography color='text-darkFull' darkMode="dark:text-dark400" type='text-caption1'>
               -
             </Typography>
           </div>
-          <div className='w-24 @1600:w-32 py-4 px-6 opacity-20'>
-            <Typography color='text-dark400' type='text-caption1'>
+          <div className='w-24 @1600:w-32 py-4 px-6 opacity-40'>
+            <Typography color='text-darkFull' darkMode="dark:text-dark400" type='text-caption1'>
               -
             </Typography>
           </div>
