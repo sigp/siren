@@ -39,6 +39,7 @@ const Main: FC<MainProps> = ({ initNodeHealth, beaconSpec, initSyncData }) => {
 
   useEffect(() => {
     setHealthCheck(true)
+    document.documentElement.classList.remove('dark');
   }, [])
 
   const nextUrl = beaconPercentage >= 95 ? '/dashboard' : '/setup/node-sync'
