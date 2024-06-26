@@ -23,7 +23,7 @@ developers. Specifically the [Lighthouse UI](https://lighthouse-book.sigmaprime.
 
 Docker is the recommended way to run Siren. This will expose Siren as a webapp. 
 
-Configuration is done through environemnt variables, the best way to get started is by copying `.env.example` to `.env` and editing the relevant sections (typically, this would at least include `BEACON_URL`, `VALIDATOR_URL` and `API_TOKEN`)
+Configuration is done through environment variables, the best way to get started is by copying `.env.example` to `.env` and editing the relevant sections (typically, this would at least include `BEACON_URL`, `VALIDATOR_URL` and `API_TOKEN`)
 
 Then to run the image:
 
@@ -47,9 +47,13 @@ The docker image can be built with the following command:
 
 ### Building locally
 
-Building from source requires `Node v18.18` and `yarn`.
+To build from source, ensure that your system has `Node v18.18` and `yarn` installed. Start by configuring your environment variables. The recommended approach is to duplicate the `.env.example` file, rename it to `.env`, and modify the necessary settings. Essential variables typically include `BEACON_URL`, `VALIDATOR_URL`, and `API_TOKEN`.
 
 #### Build and run the backend
+Navigate to the backend directory `cd backend`. Install all required Node packages by running `yarn`. Once the installation is complete, compile the backend with `yarn build`. Deploy the backend in a production environment, `yarn start:production`. This ensures optimal performance.
+
 
 #### Build and run the frontend
+After initializing the backend, return to the root directory. Install all frontend dependencies by executing `yarn`. Build the frontend using `yarn build`. Start the frontend production server with `yarn start`. 
 
+This will allow you to access siren at `http://localhost:3000` by default. 
