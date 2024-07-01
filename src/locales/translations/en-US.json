@@ -482,6 +482,10 @@
     "invalidPassword": "Invalid password. Please try again.",
     "unableToReach": "Unable to reach backend.",
     "defaultErrorMessage": "Error reaching backend server...",
+    "tooltip": {
+      "displayName": "Display name for the Siren dashboard",
+      "sessionPassword": "Required password set in the configuration file"
+    },
     "label": {
       "name": "Name",
       "sessionPassword": "Session Password"
