@@ -77,7 +77,7 @@ const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
 
   return (
     <>
-      <AuthPrompt isLoading={isLoading} mode={mode} onClose={closeAuth} isVisible={isAuth} onSubmit={updateGraffiti} />
+      <AuthPrompt isLoading={isLoading} maxHeight="400px" mode={mode} onClose={closeAuth} isVisible={isAuth} onSubmit={updateGraffiti} />
       <ValidatorGraffitiInput isLoading={isLoading} onSubmit={storeGraffitiInput} value={graffiti} />
     </>
   )
