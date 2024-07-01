@@ -481,7 +481,11 @@
     "noPasswordFound": "No Session Password found",
     "invalidPassword": "Invalid password. Please try again.",
     "unableToReach": "Unable to reach backend.",
-    "defaultErrorMessage": "Error reaching backend server..."
+    "defaultErrorMessage": "Error reaching backend server...",
+    "label": {
+      "name": "Name",
+      "sessionPassword": "Session Password"
+    }
   },
   "errorPage": {
     "title": "Opps!",

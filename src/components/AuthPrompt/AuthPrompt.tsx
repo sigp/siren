@@ -47,7 +47,7 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
                     control={control as any}
                     render={({ field: { ref: _ref, ...props }, fieldState }) => (
                       <Input
-                        label="Name"
+                        label={t('authPrompt.label.name')}
                         uiMode={mode}
                         error={fieldState.error?.message}
                         {...props}
@@ -61,7 +61,7 @@ const AuthPrompt:FC<AuthModalProps> = ({onSubmit, isVisible, isLoading, mode, on
                   render={({ field: { ref: _ref, ...props }, fieldState }) => (
                     <Input
                       isAutoFocus
-                      label={isNamePrompt ? 'Session Password' : undefined}
+                      label={isNamePrompt ? t('authPrompt.label.sessionPassword') : undefined}
                       autoComplete="new-password"
                       type="password"
                       uiMode={mode}
