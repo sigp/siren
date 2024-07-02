@@ -325,7 +325,7 @@
       "index": "Index",
       "balance": "Balance",
       "slotsBehind": "Slots Behind",
-      "exploreBeaconChai": "Explore more on beaconchai.in dashbaoard",
+      "exploreBeaconCha": "Explore more on beaconcha.in dashbaoard",
       "explore": "Explore",
       "status": "Status",
       "deposit": "Deposit",
@@ -392,7 +392,7 @@
     "balance": "Balance"
   },
   "validatorInfoHeader": {
-    "viewOnBeaconChain": "View on BeaconChai.in",
+    "viewOnBeaconChain": "View on BeaconCha.in",
     "validatorBalance": "Validator <0></0> Balance"
   },
   "validatorExit": {
