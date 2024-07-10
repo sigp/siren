@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -12,7 +13,8 @@ const useSWRPolling = <T = any>(
     networkError?: boolean
   },
   callBack?: (url: string | null) => void,
-): {data: T} => {
+): {data: T, refreshData: (nextUrl?: string) => Promise<void>, isLoading: boolean} => {
+  const apiToken = Cookies.get('session-token')
   const { refreshInterval = 12000, fallbackData, errorRetryCount = 2, networkError } = config || {}
   const [errorCount, setErrors] = useState(0)
 
@@ -25,14 +27,24 @@ const useSWRPolling = <T = any>(
     callBack?.(api)
   }
 
-  const { data } = useSWR<T>([errorCount <= errorRetryCount && !networkError ? api : null, Cookies.get('session-token')], swrGetFetcher, {
+  const { data, mutate, isLoading } = useSWR<T>([errorCount <= errorRetryCount && !networkError ? api : null, apiToken], swrGetFetcher, {
     refreshInterval,
     fallbackData,
     errorRetryCount,
     onError: incrementCount,
   })
 
-  return {data: data as T}
+  const refreshData = async (nextUrl?: string) => {
+    const { data } = await axios.get((nextUrl || api) as string, {
+      headers: {
+        Authorization: `Bearer ${apiToken}`
+      }
+    })
+
+    await mutate(data, {revalidate: false})
+  }
+
+  return {data: data as T, refreshData, isLoading}
 }
 
 export default useSWRPolling

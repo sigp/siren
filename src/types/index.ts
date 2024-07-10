@@ -53,9 +53,14 @@ export type LogData = {
 }
 
 export type LogMetric = {
-  warningLogs: LogData[],
-  errorLogs: LogData[],
-  criticalLogs: LogData[],
+  warningLogs: number,
+  errorLogs: number,
+  criticalLogs: number,
+}
+
+export type PriorityLogResults = {
+  logs: LogData[],
+  hasNextPage: boolean
 }
 
 export enum LogType {

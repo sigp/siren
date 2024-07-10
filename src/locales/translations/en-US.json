@@ -445,6 +445,12 @@
     "severe": "Severe",
     "warning": "Warning",
     "fair": "Fair",
+    "priority": "PRIORITY LOG",
+    "log": {
+      "loadMore": "Load more logs",
+      "ERRO": "ERROR LOG",
+      "CRIT": "CRITICAL LOG"
+    },
     "dismiss": {
       "success": "Successfully dismissed alert!",
       "error": "Error occurred, unable to dismiss alert!"
