@@ -55,6 +55,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
   const chartEl = useRef(null)
   const mode = useRecoilValue(uiMode)
   const [hasAnimated, toggleAnimated] = useState(false)
+  const uiGridColor = mode === UiMode.LIGHT ? '#F3F5FB' : 'rgba(255, 255, 255, 0.03)'
 
   useEffect(() => {
     const ctx = chartEl.current
@@ -110,7 +111,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
         scales: {
           x: {
             grid: {
-              color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB',
+              color: uiGridColor,
             },
           },
           y: {
@@ -119,7 +120,7 @@ const StepChart: FC<StepChartProps> = ({ data, stepSize, onClick, className }) =
               stepSize,
             },
             grid: {
-              color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.03)' : '#F3F5FB',
+              color: uiGridColor,
             },
           },
         },
