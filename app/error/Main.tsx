@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import Button, { ButtonFace } from '../../src/components/Button/Button';
 import Typography from '../../src/components/Typography/Typography';
+import '../../src/i18n'
 
 const Main = () => {
   const {t} = useTranslation()
