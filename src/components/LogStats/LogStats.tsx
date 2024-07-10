@@ -1,6 +1,5 @@
-import { FC, useMemo } from 'react';
+import { FC } from 'react';
 import { useTranslation } from 'react-i18next'
-import timeFilterObjArray from '../../../utilities/timeFilterObjArray';
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
 import { LogMetric, StatusColor } from '../../types';
 import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
@@ -27,33 +26,17 @@ const LogStats: FC<LogStatsProps> = ({
   const { t } = useTranslation()
   const { criticalLogs, warningLogs, errorLogs } = metrics
 
-  const hourlyCriticalLogs = useMemo(() => {
-    return timeFilterObjArray(criticalLogs, 'createdAt', 'minutes', 60)
-  }, [criticalLogs])
-
-  const hourlyWarningLogs = useMemo(() => {
-    return timeFilterObjArray(warningLogs, 'createdAt', 'minutes', 60)
-  }, [warningLogs])
-
-  const hourlyErrorLogs = useMemo(() => {
-    return timeFilterObjArray(errorLogs, 'createdAt', 'minutes', 60)
-  }, [errorLogs])
-
-  const criticalMetrics = hourlyCriticalLogs.length
-  const warningMetrics = hourlyWarningLogs.length
-  const errorMetrics = hourlyErrorLogs.length
-
-  const critStatus = criticalMetrics > 0
+  const critStatus = criticalLogs > 0
     ? StatusColor.ERROR
     : StatusColor.SUCCESS
-  const errorStatus = errorMetrics <= 0
+  const errorStatus = errorLogs <= 0
     ? StatusColor.SUCCESS
-    : errorMetrics <= 2
+    : errorLogs <= 2
       ? StatusColor.WARNING
       : StatusColor.ERROR
-  const warnStatus = warningMetrics < 5
+  const warnStatus = warningLogs < 5
     ? StatusColor.SUCCESS
-    : warningMetrics <= 50
+    : warningLogs <= 50
       ? StatusColor.WARNING
       : StatusColor.ERROR
 
@@ -68,7 +51,7 @@ const LogStats: FC<LogStatsProps> = ({
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('critical')}
-        metric={`${toFixedIfNecessary(criticalMetrics, 2)} / HR`}
+        metric={`${toFixedIfNecessary(criticalLogs, 2)} / HR`}
       />
       <DiagnosticCard
         isBackground={false}
@@ -80,7 +63,7 @@ const LogStats: FC<LogStatsProps> = ({
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${toFixedIfNecessary(errorMetrics, 2)} / HR`}
+        metric={`${toFixedIfNecessary(errorLogs, 2)} / HR`}
       />
       <DiagnosticCard
         isBackground={false}
@@ -92,7 +75,7 @@ const LogStats: FC<LogStatsProps> = ({
         size={size}
         border='border-t-0 md:border-l-0 border-style500'
         subTitle={t('logInfo.validatorLogs')}
-        metric={`${toFixedIfNecessary(warningMetrics, 2)} / HR`}
+        metric={`${toFixedIfNecessary(warningLogs, 2)} / HR`}
       />
     </>
   )

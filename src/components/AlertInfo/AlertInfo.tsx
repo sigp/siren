@@ -6,29 +6,26 @@ import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts';
 import useDivDimensions from '../../hooks/useDivDimensions';
 import useMediaQuery from '../../hooks/useMediaQuery';
 import { proposerDuties } from '../../recoil/atoms';
-import { LogLevels, StatusColor } from '../../types';
-import AlertCard from '../AlertCard/AlertCard';
+import { PriorityLogResults, StatusColor } from '../../types';
 import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings';
-import { LogsInfoProps } from '../DiagnosticTable/LogsInfo';
 import ProposerAlerts, { ProposerAlertsProps } from '../ProposerAlerts/ProposerAlerts';
 import Typography from '../Typography/Typography';
 import PriorityLogAlerts from './PriorityLogAlerts';
+import StandardAlerts from './StandardAlerts';
 
-export interface AlertInfoProps extends Omit<ProposerAlertsProps, 'duties'>, LogsInfoProps {}
+export interface AlertInfoProps extends Omit<ProposerAlertsProps, 'duties'> {
+  logData: PriorityLogResults
+  isLoadingPriority: boolean
+  onLoadMore?: (() => void) | undefined
+}
 
-const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
+const AlertInfo: FC<AlertInfoProps> = ({logData, isLoadingPriority, onLoadMore, ...props}) => {
   const { t } = useTranslation()
   const { alerts, dismissAlert, resetDismissed } = useDiagnosticAlerts()
   const { ref, dimensions } = useDivDimensions()
   const headerDimensions = useDivDimensions()
   const [filter, setFilter] = useState('all')
   const duties = useRecoilValue(proposerDuties)
-
-  const priorityLogAlerts = useMemo(() => {
-    return Object.values(metrics).flat().filter(({level}) =>
-      level === LogLevels.CRIT || level === LogLevels.ERRO)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [metrics]);
 
   const setFilterValue = (value: FilterValue) => setFilter(value)
   const isMobile = useMediaQuery('(max-width: 425px)')
@@ -42,14 +39,13 @@ const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
 
     return sortAlertMessagesBySeverity(baseAlerts)
   }, [alerts, filter])
-
-  const isSeverFilter = (filter === 'all' || filter === StatusColor.ERROR)
-
-  const isFiller = formattedAlerts.length + (duties?.length || 0) + (priorityLogAlerts.length || 0) < 6
-  const isPriorityAlerts = priorityLogAlerts.length > 0
+  const isPriorityAlerts = logData.logs.length > 0 && (filter === 'all' || filter === StatusColor.ERROR)
   const isAlerts = formattedAlerts.length > 0 || duties?.length > 0 || isPriorityAlerts
   const isProposerAlerts =
     duties?.length > 0 && (filter === 'all' || filter === StatusColor.SUCCESS)
+
+  const totalAlertCount = formattedAlerts.length + (isPriorityAlerts ? duties.length + 1 : 0) + (isPriorityAlerts ? logData.logs.length : 0);
+  const isFiller = totalAlertCount < 6
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -77,28 +73,14 @@ const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
               ? undefined
               : {
                   maxHeight: `${dimensions.height - (headerDimensions?.dimensions?.height || 0)}px`,
-                }
+                } as any
           }
           className='h-full w-full flex flex-col'
         >
           {isAlerts && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
-              {isPriorityAlerts && isSeverFilter && (<PriorityLogAlerts alerts={priorityLogAlerts} />)}
-              {formattedAlerts.map((alert) => {
-                const { severity, subText, message, id } = alert
-                const count =
-                  severity === StatusColor.SUCCESS ? 1 : severity === StatusColor.WARNING ? 2 : 3
-                return (
-                  <AlertCard
-                    key={id}
-                    status={severity}
-                    count={count}
-                    onClick={() => dismissAlert(alert)}
-                    subText={subText}
-                    text={message}
-                  />
-                )
-              })}
+              {isPriorityAlerts && <PriorityLogAlerts hasNextPage={logData.hasNextPage} isLoading={isLoadingPriority} onLoadMore={onLoadMore} alerts={logData.logs} />}
+              <StandardAlerts onDismiss={dismissAlert} alerts={formattedAlerts} />
               {isProposerAlerts && <ProposerAlerts {...props} duties={duties} />}
             </div>
           )}
