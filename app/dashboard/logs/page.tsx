@@ -1,15 +1,16 @@
-import '../../../src/global.css'
+import '../../../src/global.css';
 import { redirect } from 'next/navigation';
+import { LogType } from '../../../src/types';
 import getSessionCookie from '../../../utilities/getSessionCookie';
-import { fetchBeaconSpec, fetchNodeHealth, fetchSyncData } from '../../api/beacon'
+import { fetchBeaconSpec, fetchNodeHealth, fetchSyncData } from '../../api/beacon';
 import { fetchLogMetrics } from '../../api/logs';
-import Wrapper from './Wrapper'
+import Wrapper from './Wrapper';
 
 export default async function Page() {
   try {
     const token = getSessionCookie()
 
-    const logMetrics = await fetchLogMetrics(token)
+    const logMetrics = await fetchLogMetrics(token, LogType.VALIDATOR)
     const beaconSpec = await fetchBeaconSpec(token)
     const syncData = await fetchSyncData(token)
     const nodeHealth = await fetchNodeHealth(token)

@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import LogControls from '../../../src/components/LogControls/LogControls'
 import LogDisplay from '../../../src/components/LogDisplay/LogDisplay'
@@ -42,19 +42,11 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLog
     networkError,
   })
 
-  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/priority-logs', {
+  const { data: logMetrics } = useSWRPolling<LogMetric>(`/api/log-metrics/${logType}`, {
     refreshInterval: slotInterval / 2,
     fallbackData: initLogMetrics,
     networkError,
   })
-
-  const filteredLogs = useMemo(() => {
-    return {
-      warningLogs: logMetrics.warningLogs.filter(({type}) => type === logType),
-      errorLogs: logMetrics.errorLogs.filter(({type}) => type === logType),
-      criticalLogs: logMetrics.criticalLogs.filter(({type}) => type === logType)
-    }
-  }, [logMetrics, logType])
 
   const toggleLogType = (selection: OptionType) => {
     if (selection === logType) return
@@ -79,7 +71,7 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLog
     >
       <div className='w-full h-full pt-8 p-2 md:p-6 flex flex-col'>
         <LogControls logType={logType} onSetLoading={setLoading} onTypeSelect={toggleLogType} />
-        <LogDisplay priorityLogs={filteredLogs} isLoading={isLoading} type={logType} />
+        <LogDisplay metrics={logMetrics} isLoading={isLoading} type={logType} />
       </div>
     </DashboardWrapper>
   )

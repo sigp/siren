@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -17,7 +17,7 @@ import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms';
-import { LogMetric, ProposerDuty, StatusColor } from '../../src/types';
+import { LogMetric, PriorityLogResults, ProposerDuty, StatusColor } from '../../src/types';
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
 import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
@@ -36,6 +36,7 @@ export interface MainProps {
   initInclusionRate: ValidatorInclusionData
   initProposerDuties: ProposerDuty[]
   initLogMetrics: LogMetric
+  initPriorityLogs: PriorityLogResults
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -52,6 +53,7 @@ const Main: FC<MainProps> = (props) => {
     genesisTime,
     initProposerDuties,
     initLogMetrics,
+    initPriorityLogs
   } = props
 
   const { t } = useTranslation()
@@ -62,6 +64,7 @@ const Main: FC<MainProps> = (props) => {
   const [username] = useLocalStorage<string>('username', 'Keeper')
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const setDuties = useSetRecoilState(proposerDuties)
+  const [priorityAlertPage, setPage] = useState(1)
 
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
 
@@ -111,9 +114,15 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/priority-logs', {
+  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/log-metrics', {
     refreshInterval: slotInterval / 2,
     fallbackData: initLogMetrics,
+    networkError,
+  })
+
+  const { data: priorityLogs, isLoading } = useSWRPolling<PriorityLogResults>(`/api/priority-logs/${priorityAlertPage}`, {
+    refreshInterval: slotInterval / 2,
+    fallbackData: initPriorityLogs,
     networkError,
   })
 
@@ -122,7 +131,7 @@ const Main: FC<MainProps> = (props) => {
   const { isReady } = executionSync
   const { connected } = peerData
   const { natOpen } = nodeHealth
-  const warningCount = logMetrics.warningLogs?.length || 0
+  const warningCount = logMetrics.warningLogs || 0
 
   useEffect(() => {
     setDuties(prev => formatUniqueObjectArray([...prev, ...valDuties]))
@@ -215,6 +224,8 @@ const Main: FC<MainProps> = (props) => {
     removeAlert(ALERT_ID.WARNING_LOG)
   }, [warningCount, storeAlert, removeAlert])
 
+  const loadMoreLogs = async () => setPage(prev => prev + 1)
+
   return (
     <DashboardWrapper
       syncData={syncData}
@@ -250,6 +261,9 @@ const Main: FC<MainProps> = (props) => {
           />
           <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
           <DiagnosticTable
+            isLoadingPriority={isLoading}
+            logData={priorityLogs}
+            onLoadMore={loadMoreLogs}
             metrics={logMetrics}
             bnSpec={beaconSpec}
             syncData={syncData}

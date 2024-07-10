@@ -1,17 +1,18 @@
-import '../../src/global.css'
+import '../../src/global.css';
 import { redirect } from 'next/navigation';
 import getSessionCookie from '../../utilities/getSessionCookie';
 import {
   fetchBeaconSpec,
   fetchInclusionRate,
   fetchNodeHealth,
-  fetchPeerData, fetchProposerDuties,
+  fetchPeerData,
+  fetchProposerDuties,
   fetchSyncData
 } from '../api/beacon';
-import { fetchBeaconNodeVersion, fetchGenesisData, fetchValidatorVersion } from '../api/config'
-import { fetchLogMetrics } from '../api/logs';
-import { fetchValCaches, fetchValStates } from '../api/validator'
-import Wrapper from './Wrapper'
+import { fetchBeaconNodeVersion, fetchGenesisData, fetchValidatorVersion } from '../api/config';
+import { fetchLogMetrics, fetchPriorityLogs } from '../api/logs';
+import { fetchValCaches, fetchValStates } from '../api/validator';
+import Wrapper from './Wrapper';
 
 export default async function Page() {
   try {
@@ -29,10 +30,12 @@ export default async function Page() {
     const lighthouseVersion = await fetchValidatorVersion(token)
     const proposerDuties = await fetchProposerDuties(token)
     const logMetrics = await fetchLogMetrics(token)
+    const priorityLogs = await fetchPriorityLogs(token)
 
     return (
       <Wrapper
         initProposerDuties={proposerDuties}
+        initPriorityLogs={priorityLogs}
         initValCaches={caches}
         initValStates={states}
         initNodeHealth={nodeHealth}
