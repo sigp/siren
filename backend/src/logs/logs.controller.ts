@@ -3,6 +3,7 @@ import { Controller, Get, Res, Req, Param, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LogsService } from './logs.service';
 import { SessionGuard } from '../session.guard';
+import { LogType } from '../../../src/types';
 
 @Controller('logs')
 @UseGuards(SessionGuard)
@@ -21,9 +22,24 @@ export class LogsController {
     this.logsService.getSseStream(req, res, `${beaconUrl}/lighthouse/logs`);
   }
 
+  @Get('priority')
+  getPriorityLogs() {
+    return this.logsService.readPriorityLogs()
+  }
+
+  @Get('priority/:page')
+  getPriorityLogsPage(@Param('page') page: string) {
+    return this.logsService.readPriorityLogs(page)
+  }
+
   @Get('metrics')
   getLogMetrics() {
-    return this.logsService.readLogMetrics()
+    return this.logsService.fetchLogCounts()
+  }
+
+  @Get('metrics/:type')
+  getLogTypeMetrics(@Param('type') type: LogType) {
+    return this.logsService.fetchLogCounts(type)
   }
 
   @Get('dismiss/:index')

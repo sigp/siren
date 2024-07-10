@@ -10,6 +10,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Log } from '../entities/log.entity';
 import { Sequelize } from 'sequelize-typescript';
 import { mockCritLog, mockErrorLog, mockWarningLog } from '../../../../src/mocks/logs';
+import { LogType } from '../../../../src/types';
 
 describe('LogsController', () => {
   let logsService: LogsService;
@@ -74,14 +75,42 @@ describe('LogsController', () => {
 
   it('should return log metrics', async () => {
     const data = {
-      warningLogs: [mockWarningLog],
-      errorLogs: [mockErrorLog],
-      criticalLogs: [mockCritLog],
+      warningLogs: 1,
+      errorLogs: 1,
+      criticalLogs: 1,
     };
 
     const result = await controller.getLogMetrics();
     expect(result).toEqual(data);
   });
+
+  it('should return validator log metrics', async () => {
+    const data = {
+      warningLogs: 0,
+      errorLogs: 0,
+      criticalLogs: 1,
+    };
+
+    const result = await controller.getLogTypeMetrics(LogType.VALIDATOR);
+    expect(result).toEqual(data);
+  });
+
+  it('should return beacon log metrics', async () => {
+    const data = {
+      warningLogs: 1,
+      errorLogs: 1,
+      criticalLogs: 0,
+    };
+
+    const result = await controller.getLogTypeMetrics(LogType.BEACON);
+    expect(result).toEqual(data);
+  });
+
+  it('should return priority logs', async () => {
+    const result = await controller.getPriorityLogs()
+
+    expect(result).toEqual({logs: [mockErrorLog, mockCritLog], hasNextPage: false})
+  })
 
   it('should update log metrics', async () => {
     const result = await controller.dismissLogAlert('1');

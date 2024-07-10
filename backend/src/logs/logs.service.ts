@@ -79,14 +79,18 @@ export class LogsService {
     }
   }
 
-  async readLogMetrics(type?: LogType) {
+  async fetchLogCounts(type?: LogType) {
     if(type && !this.logTypes.includes(type)) {
       throw new Error('Invalid log type');
     }
 
     let warnOptions = { where: { level: LogLevels.WARN } } as any
     let errorOptions = { where: { level: LogLevels.ERRO } } as any
-    let critOptions = { where: { level: LogLevels.CRIT } } as any
+    let critOptions = {
+      where: { level: LogLevels.CRIT },
+      createdAt: {
+        [Op.gte]: new Date(Date.now() - 60 * 60 * 1000)
+      } } as any
 
     if(type) {
       warnOptions.where.type = { [Op.eq]: type };
@@ -94,14 +98,47 @@ export class LogsService {
       critOptions.where.type = { [Op.eq]: type };
     }
 
-    const warningLogs = (await this.logRepository.findAll(warnOptions)).map(data => data.dataValues)
-    const errorLogs = (await this.logRepository.findAll(errorOptions)).map(data => data.dataValues)
-    const criticalLogs = (await this.logRepository.findAll(critOptions)).map(data => data.dataValues)
+    const { count: warningLogs } = await this.logRepository.findAndCountAll(warnOptions)
+    const { count: errorLogs } = await this.logRepository.findAndCountAll(errorOptions)
+    const { count: criticalLogs } = await this.logRepository.findAndCountAll(critOptions)
 
     return {
       warningLogs,
       errorLogs,
       criticalLogs
+    }
+  }
+
+  async readPriorityLogs(page?: string) {
+    const formattedPage = page || 1
+    const max = 15
+    const limit = Number(formattedPage) * max
+
+    let options = {
+      where: {
+        [Op.and]: [
+          {
+            [Op.or]: [
+              { level: LogLevels.CRIT },
+              { level: LogLevels.ERRO }
+            ]
+          },
+          {
+            isHidden: false
+          }
+        ]
+      },
+      limit: limit + 1,
+      order: [['createdAt', 'DESC']]
+    } as any
+
+    const results = (await this.logRepository.findAll(options)).map(data => data.dataValues)
+
+    const hasNextPage = results.length > limit
+
+    return {
+      logs: results.slice(0, limit),
+      hasNextPage
     }
   }
 
