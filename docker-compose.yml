@@ -6,3 +6,6 @@ services:
 #      - "4080:80"  # uncomment this line when using `SSL_ENABLED=false`
     env_file:
       - .env
+#    uncomment these 2 lines if you use docker on linux and want to use the special host `host.docker.internal` as your BN/VC address
+#    extra_hosts:
+#      - "host.docker.internal:host-gateway"
