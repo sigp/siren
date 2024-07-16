@@ -38,8 +38,7 @@ if [ $SSL_ENABLED = true ] ; then
   ## generate cert if not present
   if [ ! -f /certs/cert.pem ] ; then
     mkdir -p /certs
-    openssl req -x509 -newkey rsa:4096 -keyout /certs/key.pem -out /certs/cert.pem -days 365 -passout pass:'sigmaprime' -subj "/C=AU/CN=siren/emailAddress=noreply@sigmaprime.io"
-    echo 'sigmaprime' > /certs/key.pass
+    openssl req -nodes -x509 -newkey rsa:4096 -keyout /certs/key.pem -out /certs/cert.pem -days 365 -subj "/C=AU/CN=siren/emailAddress=noreply@sigmaprime.io"
   fi
   ln -s /app/docker-assets/siren-https.conf /etc/nginx/conf.d/siren-https.conf
 fi
