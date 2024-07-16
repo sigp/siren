@@ -1,3 +1,4 @@
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
@@ -8,7 +9,6 @@ import { SyncData } from '../../types/beacon'
 import BeaconNetwork from '../BeaconNetwork/BeaconNetwork'
 import Button, { ButtonFace } from '../Button/Button'
 import Typography from '../Typography/Typography'
-import Wallet from '../Wallet/Wallet'
 import BeaconMetric from './BeaconMetric'
 import ValidatorMetric from './ValidatorMetric'
 
@@ -57,7 +57,8 @@ const TopBar: FC<TopBarProps> = ({ syncData }) => {
       </div>
       <div className='h-full flex'>
         <div className='h-full flex opacity-20'>
-          <Wallet className='hidden lg:flex' borderStyle='border-l' />
+          <ConnectButton/>
+          {/* <Wallet className='hidden lg:flex' borderStyle='border-l' /> */}
           <Button
             className='hidden md:block items-center border-l border-borderLight dark:border-borderDark'
             type={ButtonFace.ICON}
