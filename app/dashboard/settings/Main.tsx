@@ -17,7 +17,7 @@ import useLocalStorage from '../../../src/hooks/useLocalStorage';
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor';
 import useSWRPolling from '../../../src/hooks/useSWRPolling';
 import useUiMode from '../../../src/hooks/useUiMode';
-import { OptionalString } from '../../../src/types';
+import { ActivityResponse, OptionalString } from '../../../src/types';
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon';
 import { Diagnostics } from '../../../src/types/diagnostic';
 import { UsernameStorage } from '../../../src/types/storage';
@@ -29,11 +29,12 @@ export interface MainProps {
   beaconSpec: BeaconNodeSpecResults
   bnVersion: string
   lighthouseVersion: string
+  initActivityData: ActivityResponse
 }
 
 const Main: FC<MainProps> = (props) => {
   const { t } = useTranslation()
-  const { initNodeHealth, initSyncData, beaconSpec, lighthouseVersion, bnVersion } = props
+  const { initNodeHealth, initSyncData, beaconSpec, lighthouseVersion, bnVersion, initActivityData } = props
 
   const { SECONDS_PER_SLOT } = beaconSpec
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
@@ -71,6 +72,7 @@ const Main: FC<MainProps> = (props) => {
 
   return (
     <DashboardWrapper
+      initActivityData={initActivityData}
       syncData={syncData}
       beaconSpec={beaconSpec}
       isBeaconError={isBeaconError}

@@ -5,7 +5,7 @@ import LogDisplay from '../../../src/components/LogDisplay/LogDisplay'
 import { OptionType } from '../../../src/components/SelectDropDown/SelectDropDown'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { LogMetric, LogType } from '../../../src/types';
+import { ActivityResponse, LogMetric, LogType } from '../../../src/types';
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 
@@ -14,9 +14,10 @@ export interface MainProps {
   beaconSpec: BeaconNodeSpecResults
   initSyncData: SyncData
   initLogMetrics: LogMetric
+  initActivityData: ActivityResponse
 }
 
-const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLogMetrics }) => {
+const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLogMetrics, initActivityData }) => {
   const { SECONDS_PER_SLOT } = beaconSpec
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
   const networkError = isValidatorError || isBeaconError
@@ -71,6 +72,7 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLog
 
   return (
     <DashboardWrapper
+      initActivityData={initActivityData}
       syncData={syncData}
       beaconSpec={beaconSpec}
       isBeaconError={isBeaconError}

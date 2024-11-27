@@ -1,6 +1,7 @@
 import '../../src/global.css'
 import { redirect } from 'next/navigation';
 import getSessionCookie from '../../utilities/getSessionCookie';
+import { fetchActivities } from '../api/activities';
 import {
   fetchBeaconSpec,
   fetchInclusionRate,
@@ -29,9 +30,11 @@ export default async function Page() {
     const lighthouseVersion = await fetchValidatorVersion(token)
     const proposerDuties = await fetchProposerDuties(token)
     const logMetrics = await fetchLogMetrics(token)
+    const activities = await fetchActivities({ token })
 
     return (
       <Wrapper
+        initActivityData={activities}
         initProposerDuties={proposerDuties}
         initValCaches={caches}
         initValStates={states}

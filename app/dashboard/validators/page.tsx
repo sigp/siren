@@ -1,6 +1,7 @@
 import '../../../src/global.css'
 import { redirect } from 'next/navigation';
 import getSessionCookie from '../../../utilities/getSessionCookie';
+import { fetchActivities } from '../../api/activities';
 import {
   fetchBeaconSpec,
   fetchNodeHealth,
@@ -21,9 +22,11 @@ export default async function Page() {
     const states = await fetchValStates(token)
     const caches = await fetchValCaches(token)
     const metrics = await fetchValMetrics(token)
+    const activities = await fetchActivities({ token })
 
     return (
       <Wrapper
+        initActivityData={activities}
         initValMetrics={metrics}
         initNodeHealth={bnHealth}
         initSyncData={syncData}
