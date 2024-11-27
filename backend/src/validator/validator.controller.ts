@@ -54,4 +54,9 @@ export class ValidatorController {
   async signVoluntaryExit(@Body() signData) {
     return this.validatorService.signVoluntaryExit(signData.pubKey)
   }
+
+  @Post('import-keystore')
+  async importValKeystore(@Body() keystoreData) {
+    return this.validatorService.importValidatorKeystore(keystoreData.data)
+  }
 }

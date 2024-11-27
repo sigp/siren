@@ -1,22 +1,23 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { throwServerError } from '../utilities';
 import { UtilsService } from '../utils/utils.service';
-import {
-  BeaconValidatorResult, ValidatorCache, ValidatorDetail, ValidatorInfo
-} from '../../../src/types/validator';
+import { BeaconValidatorResult, ValidatorCache, ValidatorDetail, ValidatorInfo } from '../../../src/types/validator';
 import formatDefaultValName from '../../../utilities/formatDefaultValName';
-import { formatUnits } from 'ethers';
+import { formatUnits, formatEther } from 'ethers';
 import { Metric } from './entities/metric.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { ValidatorMetricResult } from '../../../src/types/beacon';
+import { ActivityService } from '../activity/activity.service';
+import { ActivityType } from '../../../src/types';
 
 @Injectable()
 export class ValidatorService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private utilsService: UtilsService
+    private utilsService: UtilsService,
+    private activityService: ActivityService
   ) {}
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
@@ -62,11 +63,12 @@ export class ValidatorService {
         const sortedStates = [...states.data].sort(
           (a: BeaconValidatorResult, b: BeaconValidatorResult) =>
             Number(a.index) - Number(b.index),
-        );
+        ) as BeaconValidatorResult[];
 
         return sortedStates.map(
-          ({ validator, index, status, balance }: BeaconValidatorResult) => {
-            let initialBalance = 32;
+          ({ validator, index, status, balance }) => {
+            const { pubkey, effective_balance, slashed, withdrawal_credentials } = validator
+            let initialBalance = Number(formatUnits(effective_balance, 'gwei'));
 
             if(status === 'withdrawal_done') {
               initialBalance = 0
@@ -74,12 +76,12 @@ export class ValidatorService {
 
             return {
               name: formatDefaultValName(index),
-              pubKey: validator.pubkey,
+              pubKey: pubkey,
               balance: Number(formatUnits(balance, 'gwei')),
               rewards: Number(formatUnits(balance, 'gwei')) - initialBalance,
               index: Number(index),
-              slashed: validator.slashed,
-              withdrawalAddress: validator.withdrawal_credentials,
+              slashed,
+              withdrawalAddress: withdrawal_credentials,
               status: status,
               processed: 0,
               missed: 0,
@@ -177,6 +179,11 @@ export class ValidatorService {
           ...this.config.headers
         }
         }})
+
+      if(status === 200) {
+        await this.activityService.storeActivity('', data.pubKey, ActivityType.GRAFFITI)
+      }
+
       return status
     } catch (e) {
       console.error(e)
@@ -194,6 +201,28 @@ export class ValidatorService {
     } catch (e) {
       console.error(e)
       throwServerError('Unable to sign voluntary exit')
+    }
+  }
+
+  async importValidatorKeystore(data: any) {
+    const requestData = {
+      data: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json',
+        ...this.config.headers
+      },
+    };
+
+    try {
+      const { data } = await this.utilsService.sendHttpRequest({url: `${this.validatorUrl}/lighthouse/validators/keystore`, method: 'POST', config: requestData})
+
+      if(data) {
+        await this.activityService.storeActivity('', data.data.voting_pubkey, ActivityType.IMPORT)
+        return data
+      }
+    } catch (e) {
+      console.error(e)
+      throwServerError('Unable to import validator keystore')
     }
   }
 }

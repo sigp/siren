@@ -13,6 +13,7 @@ import { mockValCacheResults, mockValInfoResult } from '../../../../src/mocks/va
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Metric } from '../entities/metric.entity';
 import { Sequelize } from 'sequelize-typescript';
+import { ActivityModule } from '../../activity/activity.module';
 
 describe('ValidatorController', () => {
   let controller: ValidatorController;
@@ -36,6 +37,7 @@ describe('ValidatorController', () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
         UtilsModule,
+        ActivityModule,
         CacheModule.register(),
         SequelizeModule.forFeature([Metric]),
         SequelizeModule.forRoot({
@@ -47,7 +49,7 @@ describe('ValidatorController', () => {
         JwtModule.register({
           global: true,
           secret: 'fake-value',
-          signOptions: { expiresIn: '7200s' }, // set to 2 hours
+          signOptions: { expiresIn: '7200s' },
         })
       ],
       providers: [
@@ -108,7 +110,14 @@ describe('ValidatorController', () => {
     it('should return correct data from node', async () => {
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
       mockCacheManager.get.mockResolvedValueOnce(null);
-      mockCacheManager.get.mockResolvedValueOnce(mockValCacheValues);
+      mockCacheManager.get.mockResolvedValueOnce([
+        {
+          index: '1',
+          pubkey: 'mock-pubkey',
+          status: 'active_ongoing',
+          withdrawal_credentials: 'fake-creds'
+        }
+      ]);
 
       const httpBeaconResponse: AxiosResponse = { data: { data: mockStateResults  } } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
