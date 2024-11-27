@@ -1,7 +1,7 @@
 import { selector } from 'recoil';
 import {
   BeaconChaValidatorUrl,
-  HoleskyBeaconChaValidatorUrl,
+  HoleskyBeaconChaValidatorUrl, KubernetsValidatorUrl,
   SepoliaBeaconChaValidatorUrl
 } from '../../constants/constants';
 import { Network } from '../../constants/enums';
@@ -19,7 +19,7 @@ export const selectBeaconChaBaseUrl = selector({
       case Network.Sepolia:
         return SepoliaBeaconChaValidatorUrl
       default:
-        return ''
+        return KubernetsValidatorUrl
     }
   },
 })
