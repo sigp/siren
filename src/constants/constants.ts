@@ -5,7 +5,7 @@ import GrafanaLogo from '../assets/images/grafana.svg'
 import LogsLogo from '../assets/images/logs.svg'
 import SettingsLogo from '../assets/images/settings.svg'
 import ValidatorLogo from '../assets/images/validators.svg'
-import { ClientProvider, LogType } from '../types'
+import { LogType } from '../types'
 import { EarningOption } from '../types/validator'
 import { ContentView } from './enums'
 
@@ -67,40 +67,6 @@ export const BALANCE_COLORS = [
   'rgba(94, 65, 213, .1)',
 ]
 
-export const CLIENT_PROVIDERS = [
-  {
-    provider: 'GETH',
-    title: 'Decentralized Full Node',
-    subTitle: 'Ethereum Foundation',
-    language: 'Go',
-  },
-  {
-    provider: 'Open Ethereum',
-    title: 'Decentralized Lightclient',
-    subTitle: 'Parity / Open Ethereum',
-    language: 'Rust',
-  },
-  {
-    provider: 'Nethermind',
-    title: 'Enterprise Grade Full Node',
-    subTitle: 'Nethermind',
-    language: '.NET',
-  },
-  {
-    provider: 'Infura',
-    title: 'Centralized Cloud Provider',
-    subTitle: 'Consensys',
-    language: 'API',
-  },
-  {
-    provider: 'Besu',
-    title: 'Enterprise Public / Private Permission',
-
-    subTitle: 'Hyperledger',
-    language: 'Javascript',
-  },
-] as ClientProvider[]
-
 export const initialEthDeposit = 32
 export const slotsInEpoc = 32
 export const secondsInHour = 3600
@@ -133,6 +99,7 @@ export const EARNINGS_OPTIONS = [
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
 export const HoleskyBeaconChaValidatorUrl = 'https://holesky.beaconcha.in/validator'
 export const SepoliaBeaconChaValidatorUrl = 'https://sepolia.beaconcha.in/validator'
+export const KubernetsValidatorUrl = 'http://127.0.0.1:64498/validator'
 export const DiscordUrl = 'https://discord.gg/mB3VZQpYvN'
 export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'
 export const SigPGithubUrl = 'https://github.com/sigp'
@@ -194,3 +161,4 @@ export const ALERT_ID = {
 }
 
 export const DEVICE_NAME_TRUNCATE = 10
+export const EFFECTIVE_BALANCE = 32
