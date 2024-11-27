@@ -1,10 +1,5 @@
 'use client'
 
-import '@rainbow-me/rainbowkit/styles.css';
-import {
-  getDefaultConfig,
-  RainbowKitProvider,
-} from '@rainbow-me/rainbowkit';
 import {
   QueryClientProvider,
   QueryClient,
@@ -16,17 +11,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 import 'react-toastify/dist/ReactToastify.min.css'
 import 'rodal/lib/rodal.css'
 import { WagmiProvider } from 'wagmi';
-import {
-  mainnet,
-  holesky
-} from 'wagmi/chains';
-const config = getDefaultConfig({
-  appName: 'SIREN',
-  projectId: 'SIREN',
-  chains: [mainnet, holesky],
-  ssr: true,
-} as any);
-
+import createWagmiConfig from '../utilities/createWagmiConfig';
 const queryClient = new QueryClient()
 
 export interface ProviderProps {
@@ -36,12 +21,10 @@ export interface ProviderProps {
 const Providers: FC<ProviderProps> = ({ children }) => {
   return (
     <RecoilRoot>
-      <WagmiProvider config={config as any}>
+      <WagmiProvider reconnectOnMount config={createWagmiConfig()}>
         <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider>
-            {children}
-            <ToastContainer />
-          </RainbowKitProvider>
+          {children}
+          <ToastContainer />
         </QueryClientProvider>
       </WagmiProvider>
     </RecoilRoot>
