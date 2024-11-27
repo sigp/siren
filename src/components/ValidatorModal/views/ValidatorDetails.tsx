@@ -48,7 +48,7 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
     processingValidators && index && processingValidators.includes(index.toString()),
   )
 
-  const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
+  const isBls = withdrawalAddress ?  isBlsAddress(withdrawalAddress) : false
   const isExited = validator?.status.includes('exit') || validator?.status.includes('withdrawal')
   const combinedStatus = getAvgEffectivenessStatus(totalEffectiveness)
 

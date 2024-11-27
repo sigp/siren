@@ -49,7 +49,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const valName = useValidatorName(validator, aliases)
   const validatorName = isReady ? valName : name
 
-  const isConversionRequired = isBlsAddress(withdrawalAddress)
+  const isConversionRequired = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false
   const isValidatorProcessing =
     processingValidators && processingValidators.includes(validator.index.toString())
 
