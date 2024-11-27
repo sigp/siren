@@ -20,3 +20,8 @@ export const updateValGraffiti = async (token: string, data: any) =>
     method: 'PUT',
     body: JSON.stringify(data)
   })
+export const importValidatorKeystore = async (data: any, token: string) =>
+  await fetchFromApi(`${backendUrl}/validator/import-keystore`, token,{
+    method: 'POST',
+    body: JSON.stringify(data)
+  })
