@@ -19,7 +19,7 @@ export interface ValidatorTableProps {
   isPaginated?: boolean
   className?: string
   validators: ValidatorInfo[]
-  scrollPercentage?: number
+  scrollPercentage?: number | undefined
 }
 
 export const TableFallback = () => (
@@ -225,7 +225,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
             </table>
           )}
         </div>
-        {scrollPercentage && scrollPercentage >= 98 && totalPages !== pagination && (
+        {scrollPercentage && scrollPercentage >= 98 && totalPages !== pagination ? (
           <div className="w-full mt-12 h-0 relative">
             <motion.div
               className="opacity-20 w-fit absolute left-1/2 -translate-x-1/2"
@@ -240,7 +240,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
               <Lighthouse className="w-8 text-white"/>
             </motion.div>
           </div>
-        )}
+        ) : null}
       </>
     ) : (
       <div className='w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700 min-h-60 opacity-70'>

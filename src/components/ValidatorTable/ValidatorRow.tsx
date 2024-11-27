@@ -3,6 +3,7 @@ import { useRouter } from 'next/navigation';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue, useSetRecoilState } from 'recoil';
+import addClassString from '../../../utilities/addClassString';
 import formatBalanceColor from '../../../utilities/formatBalanceColor'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import isBlsAddress from '../../../utilities/isBlsAddress'
@@ -41,6 +42,17 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const detailHref = `${valHrefBase}&view=detail`
   const editHref = `${valHrefBase}&view=edit`
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const hasIndex = index !== undefined
+
+  const validatorDetailBtnClass = addClassString('cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center', [
+    !hasIndex && 'opacity-30 pointer-events-none'
+  ])
+
+  const editValidatorBtnClass = addClassString('w-full flex justify-center', [
+    !hasIndex && 'opacity-30 pointer-events-none'
+  ])
+
+  const validatorIconClass = addClassString('px-2' , [index ? 'cursor-pointer' : ''])
 
   useEffect(() => {
     setReady(true)
@@ -53,14 +65,14 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const isValidatorProcessing =
     processingValidators && processingValidators.includes(validator.index.toString())
 
-  const editValidator = (id: number) => {
-    setActiveValidatorId(id);
+  const editValidator = () => {
+    setActiveValidatorId(index);
     setIsEditValidator(true)
     router.push(editHref)
   }
 
-  const viewDetail = (id: number) => {
-    setActiveValidatorId(id);
+  const viewDetail = () => {
+    setActiveValidatorId(index);
     setValDetail(true)
     router.push(detailHref)
   }
@@ -84,9 +96,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
 
   return (
     <tr className='w-full border-t-style500 h-12'>
-      <th className='px-2 cursor-pointer'>
-        {view === 'full' ? (
-          <div onClick={() => viewDetail(index)} className='w-full flex justify-center'>{renderAvatar()}</div>
+      <th className={validatorIconClass}>
+        {!hasIndex ? (
+          <div className='w-full flex justify-center'>{renderAvatar()}</div>
+        ) : view === 'full' ? (
+          <div onClick={viewDetail} className='w-full flex justify-center'>{renderAvatar()}</div>
           ) : (
           <Link href={detailHref}>
             <div className='w-full flex justify-center'>{renderAvatar()}</div>
@@ -94,8 +108,10 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         )}
       </th>
       <th className='w-28 cursor-pointer'>
-        {view === 'full' ? (
-          <div onClick={() => viewDetail(index)}>
+        {!hasIndex ? (
+          <Typography className='text-left' color='text-dark500' type='text-caption2'>---</Typography>
+        ) : view === 'full' ? (
+          <div onClick={viewDetail}>
             <Typography className='text-left' color='text-dark500' type='text-caption2'>
               {validatorName}
             </Typography>
@@ -110,7 +126,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='border-r-style500 px-2'>
         <Typography color='text-dark500' type='text-caption1'>
-          {index}
+          {hasIndex ? index : '---'}
         </Typography>
       </th>
       <th className='px-2'>
@@ -120,7 +136,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='px-2'>
         <Typography type='text-caption1' className='text-left' darkMode='dark:text-white' isBold>
-          {balance.toFixed(4)}
+          {balance?.toFixed(4)}
         </Typography>
       </th>
       <th className='px-2'>
@@ -130,7 +146,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           type='text-caption1'
           className='uppercase'
         >
-          {rewards.toFixed(4)}
+          {rewards?.toFixed(4)}
         </Typography>
       </th>
       <th className='px-1 opacity-20'>
@@ -181,9 +197,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
             </DisabledTooltip>
           </th>
           <th className='px-2'>
-            <div className='w-full flex justify-center'>
+            <div className={editValidatorBtnClass}>
               <ValidatorActionIcon
-                onClick={() => editValidator(index)}
+                onClick={editValidator}
                 border='border border-primary100 dark:border-primary'
                 icon='bi-pencil-square'
               />
@@ -193,7 +209,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       )}
       <th className='border-r-style500 px-2'>
         <div className='w-full flex justify-center'>
-          <a target='_blank' rel='noreferrer' href={`${baseBeaconChaUrl}/${index}`}>
+          <a target='_blank' rel='noreferrer' href={`${baseBeaconChaUrl}/${index || pubKey}`}>
             <ValidatorActionIcon icon='bi-box-arrow-in-up-right' />
           </a>
         </div>
@@ -201,12 +217,12 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       <th className='px-2'>
         <div className='w-full flex justify-center'>
           {view === 'full' ? (
-            <div onClick={() => viewDetail(index)} className='cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
+            <div onClick={hasIndex ? viewDetail : null} className={validatorDetailBtnClass}>
               <div className='w-4 h-4'>
                 <ValidatorLogo className='text-primary' />
               </div>
             </div>
-          ) : (
+          ) : hasIndex ? (
             <Link href={detailHref}>
               <div className='cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
                 <div className='w-4 h-4'>
@@ -214,6 +230,12 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
                 </div>
               </div>
             </Link>
+          ) : (
+            <div className='cursor-pointer opacity-30 pointer-events-none w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
+              <div className='w-4 h-4'>
+                <ValidatorLogo className='text-primary' />
+              </div>
+            </div>
           )}
         </div>
       </th>
