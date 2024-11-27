@@ -24,3 +24,6 @@ export const submitSignedExit = async (data: any, token: string) =>
     method: 'POST',
     body: JSON.stringify(data)
   })
+
+export const fetchValidatorStatus = async (token: string, pubKey: string) =>
+  await fetchFromApi(`${backendUrl}/beacon/validator-status/${pubKey}`, token)

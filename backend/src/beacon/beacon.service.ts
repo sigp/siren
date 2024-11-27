@@ -247,4 +247,18 @@ export class BeaconService {
       throwServerError('Unable to sign voluntary exit')
     }
   }
+
+  async fetchValidatorStatus(pubKey: string) {
+    const { data: states } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/beacon/states/head/validators?id=${pubKey}`,
+    });
+
+    const valData = states.data;
+
+    if(valData.length > 0) {
+      return {data: valData[0]}
+    }
+
+    return {data: null}
+  }
 }
