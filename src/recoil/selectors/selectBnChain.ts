@@ -15,14 +15,12 @@ export const selectBnChain = selector({
         return Network.Goerli
       case '1':
         return Network.Mainnet
-      case '4242':
-        return Network.LocalTestnet
       case '17000':
         return Network.Holesky
       case '11155111':
         return Network.Sepolia
       default:
-        return
+        return Network.LocalTestnet
     }
   },
 })
