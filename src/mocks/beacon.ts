@@ -49,7 +49,7 @@ export const mockStateResults = [{
   validator: {
     activation_eligibility_epoch: '123',
     activation_epoch: '1',
-    effective_balance: '320000000000',
+    effective_balance: '32000000000',
     exit_epoch: '1234',
     pubkey: 'mock-pubkey',
     slashed: false,
