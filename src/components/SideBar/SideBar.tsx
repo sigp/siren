@@ -43,7 +43,7 @@ const SideBar = () => {
   }
 
   return (
-    <div className='relative group-sidebar'>
+    <div className='max-w-[4vw] relative group-sidebar'>
       <div className='flex-col justify-between z-50 group-sidebar-hover:z-top relative hidden md:flex w-14.5 flex-shrink-0 h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700'>
         <div className='w-full'>
           <div className='w-full h-16 flex justify-center pt-3.5'>
