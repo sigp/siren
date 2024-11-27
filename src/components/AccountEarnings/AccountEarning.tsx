@@ -42,11 +42,11 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
 
   const { estimate, totalEarnings, estimateSelection, selectEstimate } =
     useEarningsEstimate(validatorEpochData)
-  const data = useRecoilValue(exchangeRates)
+  const exchangeData = useRecoilValue(exchangeRates)
 
   const { estimatedApr, textColor } = useEpochAprEstimate(validatorCacheData)
 
-  const activeRate = data?.rates[currency]
+  const activeRate = exchangeData?.rates[currency]
   const formattedRate = activeRate ? Number(activeRate) : 0
   const totalBalance = formattedRate * totalEarnings
   const estimatedRateConversion = formattedRate * estimate
@@ -103,7 +103,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
           <div className='w-full mt-6 flex items-center'>
             <LightHouseLogo className='hidden md:block text-white w-16 h-16' />
             <div className='flex-1 ml-2 md:ml-6 md:ml-12 flex items-center space-x-2 justify-between'>
-              <CurrencySelect selection={currency} onSelect={selectCurrency} />
+              <CurrencySelect rates={exchangeData} selection={currency} onSelect={selectCurrency} />
               <div className='flex items-center flex-wrap justify-end md:justify-start md:text-left text-right space-y-4 md:space-y-0 md:space-x-4'>
                 <div>
                   <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
