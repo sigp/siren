@@ -1,3 +1,4 @@
+import { FC, SVGProps } from 'react';
 import { Protocol } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import {
@@ -133,4 +134,89 @@ export interface SetupProps {
   beaconSpec: BeaconNodeSpecResults
   initNodeHealth: Diagnostics
   initSyncData: SyncData
+}
+
+export enum ChainId {
+  MAINNET = 'MAINNET',
+  HOLESKY = 'HOLESKY',
+  LOCALTESTNET = 'LOCALTESTNET'
+}
+
+export enum ValidatorManagementView {
+  MAIN = 'MAIN',
+  ADD = 'ADD',
+  CREATE = 'CREATE',
+  RECOVER = 'RECOVER',
+  IMPORT = 'IMPORT'
+}
+
+export type AddValidatorOption = {
+  title: string,
+  subTitle: string,
+  caption: string,
+  isDisabled: boolean,
+  isRecommended: boolean,
+  SVG: FC<SVGProps<SVGSVGElement>>
+  view: ValidatorManagementView
+}
+
+export type ValidatorCandidate = {
+  id: string,
+  index: number | undefined,
+  pubKey?: string,
+  name: string | undefined,
+  withdrawalCredentials: string | undefined
+  keyStorePassword: string | undefined
+  isValidIndex?: boolean
+  isVerifiedCredentials?: boolean
+}
+
+export type ValidatorRewardEstimate = {
+  apr: number,
+  totalAnnualRewards: number
+}
+
+export enum ActivityType {
+  DEPOSIT = 'DEPOSIT',
+  IMPORT = 'IMPORT',
+  GRAFFITI = 'GRAFFITI',
+  WITHDRAWAL = 'WITHDRAWAL'
+}
+
+export type ActivityResponse = {
+  count: number,
+  rows: Activity[]
+}
+
+export type Activity = {
+  type: ActivityType,
+  pubKey: string,
+  id: number,
+  data: string,
+  hasSeen: boolean,
+  createdAt: string,
+  updatedAt: string
+}
+
+export type TxStatus = 'pending' | 'error' | 'success'
+
+export type DepositData = {
+  txHash: string
+  keyStore: any
+  pubKey: string
+  mnemonicIndex: number
+  status: TxStatus
+}
+
+export enum TimeUnit {
+  YEAR = 'YEAR',
+  MONTH = 'MONTH',
+  WEEK = 'WEEK',
+  DAY = 'DAY',
+  HOUR = 'HOUR'
+}
+
+export enum NetworkId {
+  HOLESKY = '17000',
+  MAINNET = '1'
 }
