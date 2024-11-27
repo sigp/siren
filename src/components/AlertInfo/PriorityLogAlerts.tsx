@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import moment from 'moment';
 import { FC, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -26,12 +25,7 @@ const PriorityLogAlerts:FC<LogAlertsProps> = ({alerts}) => {
 
   const dismissAlert = async (id: number) => {
     try {
-      const token = Cookies.get('session-token')
-      const {status} = await axios.put(`/api/dismiss-log/${id}`, undefined,{
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
+      const {status} = await axios.put(`/api/dismiss-log/${id}`, undefined)
 
       if(status === 200) {
         setData(prev => {

@@ -1,5 +1,4 @@
 import axios, { AxiosError } from 'axios'
-import Cookies from 'js-cookie';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
@@ -84,13 +83,7 @@ const BlsExecutionModal = () => {
     let targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('session-token')}`
-        }
-      }
-
-      const {status} = await axios.post('/api/bls-execution', {data: blsJson, password}, config)
+      const {status} = await axios.post('/api/bls-execution', {data: blsJson, password})
 
       setLoading(false)
 
