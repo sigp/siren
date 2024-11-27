@@ -7,6 +7,11 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     })
 
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false
+    };
+
     return config
   },
 }
