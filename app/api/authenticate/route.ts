@@ -14,7 +14,15 @@ export async function POST(req: Request) {
 
     const token = res.data.access_token
 
-    return NextResponse.json({token}, {status: 200})
+    const response = NextResponse.json(true, {status: 200})
+
+    response.cookies.set('session-token', token, {
+      httpOnly: true,
+      secure: true,
+      path: '/',
+    } as any);
+
+    return response
   } catch (error: any) {
     let message = error?.response?.data?.message
 

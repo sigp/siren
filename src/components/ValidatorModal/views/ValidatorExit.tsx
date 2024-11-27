@@ -1,5 +1,4 @@
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import { FC, useContext, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import addClassString from '../../../../utilities/addClassString'
@@ -27,12 +26,6 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   const { t } = useTranslation()
   const { pubKey } = validator
   const { mode } = useUiMode()
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('session-token')}`
-    }
-  }
   const [isPromptLoading, setPromptLoading] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isAccept, setIsAccept] = useState(false)
@@ -47,7 +40,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
     let message = defaultMessage
 
     if(e.response.status === 401) {
-      message = 'Unauthorized. Invalid session password provided.'
+      message = t('invalidSessionPassword')
     }
     displayToast(message, ToastType.ERROR)
     setPromptLoading(false)
@@ -56,7 +49,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
 
   const getSignedExit = async (password: string): Promise<SignedExitData | undefined> => {
     try {
-      const { data } = await axios.post('/api/sign-validator-exit', {pubKey, password}, config)
+      const { data } = await axios.post('/api/sign-validator-exit', {pubKey, password})
 
       return data
     } catch (e) {
@@ -65,7 +58,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   }
   const submitSignedMessage = async (data: {data: SignedExitData, password: string}) => {
     try {
-      const { status } = await axios.post('/api/execute-validator-exit', data, config)
+      const { status } = await axios.post('/api/execute-validator-exit', data)
 
       if (status === 200) {
         displayToast(t('success.validatorExit'), ToastType.SUCCESS)
