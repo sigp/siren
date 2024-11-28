@@ -4,7 +4,7 @@ import { UtilsService } from './utils.service';
 import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
-  imports: [HttpModule, CacheModule.register(),],
+  imports: [HttpModule, CacheModule.register()],
   providers: [UtilsService],
   exports: [UtilsService],
 })

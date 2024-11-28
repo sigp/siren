@@ -37,7 +37,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   excludeSelection,
   placeholder,
   position,
-  labelClass = 'xl:text-body'
+  labelClass = 'xl:text-body',
 }) => {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')

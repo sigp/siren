@@ -9,7 +9,11 @@ import { Cache } from 'cache-manager';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Log } from '../entities/log.entity';
 import { Sequelize } from 'sequelize-typescript';
-import { mockCritLog, mockErrorLog, mockWarningLog } from '../../../../src/mocks/logs';
+import {
+  mockCritLog,
+  mockErrorLog,
+  mockWarningLog,
+} from '../../../../src/mocks/logs';
 
 describe('LogsController', () => {
   let logsService: LogsService;
@@ -61,11 +65,7 @@ describe('LogsController', () => {
 
     mockCacheManager.get.mockResolvedValue(null);
 
-    await Log.bulkCreate([
-      mockWarningLog,
-      mockErrorLog,
-      mockCritLog,
-    ]);
+    await Log.bulkCreate([mockWarningLog, mockErrorLog, mockCritLog]);
   });
 
   afterEach(async () => {

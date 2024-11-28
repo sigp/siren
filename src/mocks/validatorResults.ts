@@ -129,32 +129,30 @@ export const mockValidatorInfo = {
 }
 
 export const mockValInfoResult = {
-  "validators": {
-    "1": {
-      "info": {
-        "epoch": "100",
-        "total_balance": "5000"
-      }
+  validators: {
+    '1': {
+      info: {
+        epoch: '100',
+        total_balance: '5000',
+      },
     },
-    "2": {
-      "info": {
-        "epoch": "101",
-        "total_balance": "10000"
-      }
+    '2': {
+      info: {
+        epoch: '101',
+        total_balance: '10000',
+      },
     },
-    "3": {
-      "info": {
-        "epoch": "102",
-        "total_balance": "7500"
-      }
-    }
-  }
+    '3': {
+      info: {
+        epoch: '102',
+        total_balance: '7500',
+      },
+    },
+  },
 }
 
-export const  mockValCacheResults = {
-  1: { epoch: "100", total_balance: "5000" },
-  2: { epoch: "101", total_balance: "10000" },
-  3: { epoch: "102", total_balance: "7500" }
+export const mockValCacheResults = {
+  1: { epoch: '100', total_balance: '5000' },
+  2: { epoch: '101', total_balance: '10000' },
+  3: { epoch: '102', total_balance: '7500' },
 }
-
-

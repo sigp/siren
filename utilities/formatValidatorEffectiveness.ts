@@ -11,7 +11,8 @@ const formatValidatorEffectiveness = (
     .filter(Boolean)
 
   const avgTargetEffectiveness =
-    targetMetrics.map((metric) => metric.attestation_target_hit_percentage)
+    targetMetrics
+      .map((metric) => metric.attestation_target_hit_percentage)
       .reduce((a, b) => a + b, 0) / targetMetrics?.length
 
   const avgHitEffectiveness =

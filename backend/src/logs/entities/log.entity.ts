@@ -1,6 +1,12 @@
-import {Table, Column, Model, PrimaryKey, AutoIncrement, Unique} from 'sequelize-typescript'
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AutoIncrement,
+  Unique,
+} from 'sequelize-typescript';
 import { LogLevels, LogType } from '../../../../src/types';
-
 
 @Table({
   tableName: 'logs',
@@ -22,5 +28,5 @@ export class Log extends Model {
   data: string;
 
   @Column
-  isHidden: boolean
+  isHidden: boolean;
 }

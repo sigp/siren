@@ -4,7 +4,7 @@ import getSlotTimeData from '../../../utilities/getSlotTimeData'
 import groupArray from '../../../utilities/groupArray'
 import { proposerDuties } from '../../recoil/atoms'
 import { ProposerDuty } from '../../types'
-import { BeaconNodeSpecResults, SyncData } from '../../types/beacon';
+import { BeaconNodeSpecResults, SyncData } from '../../types/beacon'
 import AlertGroup from './AlertGroup'
 import ProposalAlert from './ProposalAlert'
 
@@ -16,7 +16,9 @@ export interface ProposerAlertsProps {
 
 const ProposerAlerts: FC<ProposerAlertsProps> = ({ duties, bnSpec, syncData }) => {
   const { SECONDS_PER_SLOT } = bnSpec
-  const { beaconSync: {headSlot} } = syncData
+  const {
+    beaconSync: { headSlot },
+  } = syncData
   const setProposers = useSetRecoilState(proposerDuties)
   const groups = groupArray(duties, 10)
 

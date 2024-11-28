@@ -1,5 +1,5 @@
-import { motion, useAnimationControls } from 'framer-motion';
-import React, { FC, ReactNode, useEffect } from 'react';
+import { motion, useAnimationControls } from 'framer-motion'
+import React, { FC, ReactNode, useEffect } from 'react'
 import addClassString from '../../../utilities/addClassString'
 import AlertIcon from '../AlertIcon/AlertIcon'
 import Typography from '../Typography/Typography'
@@ -20,7 +20,14 @@ export interface InfoBoxProps {
   className?: string
 }
 
-const InfoBox: FC<InfoBoxProps> = ({ type, children, text, isActive = true, animDelay, className }) => {
+const InfoBox: FC<InfoBoxProps> = ({
+  type,
+  children,
+  text,
+  isActive = true,
+  animDelay,
+  className,
+}) => {
   const isWarning = type === InfoBoxType.WARNING
   const isInfo = type === InfoBoxType.INFO
   const isError = type === InfoBoxType.ERROR
@@ -29,20 +36,31 @@ const InfoBox: FC<InfoBoxProps> = ({ type, children, text, isActive = true, anim
   const controls = useAnimationControls()
 
   useEffect(() => {
-    if(isActive) {
+    if (isActive) {
       controls.start({
-        scale: 1
+        scale: 1,
       })
     }
   }, [isActive, controls])
 
   const warningClasses = addClassString(
     'w-full flex flex-col md:flex-row space-y-4 md:space-y-0 items-center p-6 rounded',
-    [isInfo && 'bg-dark100 dark:bg-dark500', isError && 'bg-lightError', isWarning && 'bg-warning200', isNotice && 'bg-primary100 dark:bg-primaryF2', className],
+    [
+      isInfo && 'bg-dark100 dark:bg-dark500',
+      isError && 'bg-lightError',
+      isWarning && 'bg-warning200',
+      isNotice && 'bg-primary100 dark:bg-primaryF2',
+      className,
+    ],
   )
 
   return (
-    <motion.div initial={{scale: .9}} animate={controls} transition={{delay: animDelay}} className={warningClasses}>
+    <motion.div
+      initial={{ scale: 0.9 }}
+      animate={controls}
+      transition={{ delay: animDelay }}
+      className={warningClasses}
+    >
       <AlertIcon className={isNotice ? 'h-16 w-16' : 'h-12 w-12'} type={type} />
       {children ? (
         children

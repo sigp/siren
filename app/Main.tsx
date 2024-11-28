@@ -1,22 +1,22 @@
-'use client';
+'use client'
 
-import axios from 'axios';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import AppDescription from '../src/components/AppDescription/AppDescription';
-import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt';
-import ConfigModal from '../src/components/ConfigModal/ConfigModal';
-import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
-import Typography from '../src/components/Typography/Typography';
-import VersionModal from '../src/components/VersionModal/VersionModal';
-import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
-import { UiMode } from '../src/constants/enums';
-import useLocalStorage from '../src/hooks/useLocalStorage';
-import { ToastType } from '../src/types';
-import displayToast from '../utilities/displayToast';
-import formatSemanticVersion from '../utilities/formatSemanticVersion';
-import isRequiredVersion from '../utilities/isRequiredVersion';
+import axios from 'axios'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import AppDescription from '../src/components/AppDescription/AppDescription'
+import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt'
+import ConfigModal from '../src/components/ConfigModal/ConfigModal'
+import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner'
+import Typography from '../src/components/Typography/Typography'
+import VersionModal from '../src/components/VersionModal/VersionModal'
+import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants'
+import { UiMode } from '../src/constants/enums'
+import useLocalStorage from '../src/hooks/useLocalStorage'
+import { ToastType } from '../src/types'
+import displayToast from '../utilities/displayToast'
+import formatSemanticVersion from '../utilities/formatSemanticVersion'
+import isRequiredVersion from '../utilities/isRequiredVersion'
 
 const Main = () => {
   const { t } = useTranslation()
@@ -38,7 +38,7 @@ const Main = () => {
     try {
       const [beaconResults, lightResults] = await Promise.all([
         axios.get('/api/beacon-version'),
-        axios.get('/api/lighthouse-version')
+        axios.get('/api/lighthouse-version'),
       ])
 
       setBeaconVersion(beaconResults.data.version)
@@ -56,8 +56,7 @@ const Main = () => {
   }, [])
 
   useEffect(() => {
-    if(beaconNodeVersion && lighthouseVersion) {
-
+    if (beaconNodeVersion && lighthouseVersion) {
       if (!isRequiredVersion(lighthouseVersion, REQUIRED_VALIDATOR_VERSION)) {
         setVersionError(true)
         return
@@ -65,7 +64,7 @@ const Main = () => {
 
       let nextRoute = '/setup/health-check'
 
-      if(healthCheck) {
+      if (healthCheck) {
         nextRoute = '/dashboard'
       }
 
@@ -82,12 +81,11 @@ const Main = () => {
     try {
       setLoading(true)
       setUsername(username)
-      const {status} = await axios.post('/api/authenticate', {password})
+      const { status } = await axios.post('/api/authenticate', { password })
 
-      if(status === 200) {
+      if (status === 200) {
         await fetchNodeVersion()
       }
-
     } catch (e: any) {
       displayToast(t(e.response.data.error as string), ToastType.ERROR)
     } finally {
@@ -99,11 +97,19 @@ const Main = () => {
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
       <ConfigModal
         isReady={isReady && configError && isAuthenticated}
-        beaconNodeVersion={beaconNodeVersion} lighthouseVersion={lighthouseVersion} />
+        beaconNodeVersion={beaconNodeVersion}
+        lighthouseVersion={lighthouseVersion}
+      />
       {vcVersion && (
-        <VersionModal currentVersion={vcVersion}  isVisible={isReady && isVersionError}/>
+        <VersionModal currentVersion={vcVersion} isVisible={isReady && isVersionError} />
       )}
-      <AuthPrompt isNamePrompt mode={UiMode.LIGHT} isLoading={isLoading} isVisible={isReady && !isAuthenticated} onSubmit={storeSessionCookie}/>
+      <AuthPrompt
+        isNamePrompt
+        mode={UiMode.LIGHT}
+        isLoading={isLoading}
+        isVisible={isReady && !isAuthenticated}
+        onSubmit={storeSessionCookie}
+      />
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />

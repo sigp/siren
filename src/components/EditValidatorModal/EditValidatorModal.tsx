@@ -1,18 +1,18 @@
-import { FC, useMemo, useState } from 'react';
-import { Controller } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
-import formatDefaultValName from '../../../utilities/formatDefaultValName';
-import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData';
-import EditValidatorForm from '../../forms/EditValidatorForm';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import useUiMode from '../../hooks/useUiMode';
-import { ValidatorBalanceInfo, ValidatorCache, ValidatorInfo } from '../../types/validator';
-import BasicValidatorMetrics from '../BasicValidatorMetrics/BasicValidatorMetrics';
-import Button, { ButtonFace } from '../Button/Button';
-import Input from '../Input/Input';
-import RodalModal from '../RodalModal/RodalModal';
-import Typography from '../Typography/Typography';
-import ValidatorInfoHeader from '../ValidatorInfoHeader/ValidatorInfoHeader';
+import { FC, useMemo, useState } from 'react'
+import { Controller } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
+import formatDefaultValName from '../../../utilities/formatDefaultValName'
+import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData'
+import EditValidatorForm from '../../forms/EditValidatorForm'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import useUiMode from '../../hooks/useUiMode'
+import { ValidatorBalanceInfo, ValidatorCache, ValidatorInfo } from '../../types/validator'
+import BasicValidatorMetrics from '../BasicValidatorMetrics/BasicValidatorMetrics'
+import Button, { ButtonFace } from '../Button/Button'
+import Input from '../Input/Input'
+import RodalModal from '../RodalModal/RodalModal'
+import Typography from '../Typography/Typography'
+import ValidatorInfoHeader from '../ValidatorInfoHeader/ValidatorInfoHeader'
 
 export interface EditValidatorModalProps {
   onClose: () => void
@@ -20,9 +20,13 @@ export interface EditValidatorModalProps {
   validatorCacheData: ValidatorCache
 }
 
-const EditValidatorModal:FC<EditValidatorModalProps> = ({onClose, validator, validatorCacheData}) => {
-  const {t} = useTranslation()
-  const {index} = validator
+const EditValidatorModal: FC<EditValidatorModalProps> = ({
+  onClose,
+  validator,
+  validatorCacheData,
+}) => {
+  const { t } = useTranslation()
+  const { index } = validator
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const { mode } = useUiMode()
   const [isAnim, setIsAnim] = useState(false)
@@ -53,7 +57,7 @@ const EditValidatorModal:FC<EditValidatorModalProps> = ({onClose, validator, val
         </div>
         <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
       </div>
-      <ValidatorInfoHeader isAnimate={isAnim} animName="editvalidator" validator={validator} />
+      <ValidatorInfoHeader isAnimate={isAnim} animName='editvalidator' validator={validator} />
       <EditValidatorForm validator={validator}>
         {({ control, isValid, isLoading }) => (
           <div className='p-6 space-y-8'>
@@ -72,7 +76,12 @@ const EditValidatorModal:FC<EditValidatorModalProps> = ({onClose, validator, val
               )}
             />
             <div className='flex justify-end'>
-              <Button isDisabled={!isValid} renderAs="submit" isLoading={isLoading} type={ButtonFace.SECONDARY}>
+              <Button
+                isDisabled={!isValid}
+                renderAs='submit'
+                isLoading={isLoading}
+                type={ButtonFace.SECONDARY}
+              >
                 {t('validatorEdit.cta')}
               </Button>
             </div>

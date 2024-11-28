@@ -1,12 +1,6 @@
 import { atom } from 'recoil'
 import { AppView, OnboardView, UiMode } from '../constants/enums'
-import {
-  ActiveDevice,
-  AlertMessage,
-  EthExchangeRates,
-  ProposerDuty,
-  ValAliases,
-} from '../types'
+import { ActiveDevice, AlertMessage, EthExchangeRates, ProposerDuty, ValAliases } from '../types'
 import { BeaconNodeSpecResults } from '../types/beacon'
 import { HealthDiagnosticResult } from '../types/diagnostic'
 
@@ -97,20 +91,20 @@ export const beaconNodeSpec = atom<BeaconNodeSpecResults>({
 
 export const activeValidatorId = atom<number | undefined>({
   key: 'activeValidatorId',
-  default: undefined
+  default: undefined,
 })
 
 export const isEditValidator = atom<boolean>({
   key: 'isEditValidator',
-  default: undefined
+  default: undefined,
 })
 
 export const isValidatorDetail = atom<boolean>({
   key: 'isValidatorDetail',
-  default: undefined
+  default: undefined,
 })
 
 export const isWalletConnectModal = atom<boolean>({
   key: 'isWalletConnectModal',
-  default: false
+  default: false,
 })

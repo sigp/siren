@@ -1,5 +1,5 @@
 import { BeaconSyncInfo, ValidatorSyncInfo } from './diagnostic'
-import { NetworkId } from './index';
+import { NetworkId } from './index'
 
 export type SyncData = {
   beaconSync: BeaconSyncInfo
@@ -35,7 +35,7 @@ export type BeaconValidatorMetricResults = {
 }
 
 export type ValidatorMetricResult = {
-  targetEffectiveness: number,
-  hitEffectiveness: number,
+  targetEffectiveness: number
+  hitEffectiveness: number
   totalEffectiveness: number
 }

@@ -1,13 +1,13 @@
-import {verifyMessage, isAddress} from 'ethers';
-import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSignMessage } from 'wagmi';
-import addClassString from '../../../utilities/addClassString';
-import { ValidatorCandidate } from '../../types';
-import Button, { ButtonFace } from '../Button/Button';
-import Typography from '../Typography/Typography';
-import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow';
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn';
+import { verifyMessage, isAddress } from 'ethers'
+import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSignMessage } from 'wagmi'
+import addClassString from '../../../utilities/addClassString'
+import { ValidatorCandidate } from '../../types'
+import Button, { ButtonFace } from '../Button/Button'
+import Typography from '../Typography/Typography'
+import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
+import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
 
 export interface ValidatorCredentialRowProps {
   validator: ValidatorCandidate
@@ -15,8 +15,12 @@ export interface ValidatorCredentialRowProps {
   onSetVerification: (id: string, verification: boolean) => void
 }
 
-const ValidatorCredentialRow:FC<ValidatorCredentialRowProps> = ({validator, onSetCredential, onSetVerification}) => {
-  const {t} = useTranslation()
+const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
+  validator,
+  onSetCredential,
+  onSetVerification,
+}) => {
+  const { t } = useTranslation()
   const { id, index, isVerifiedCredentials } = validator
   const [credentialInput, setCredentialInput] = useState('')
   const [isLoading, setLoading] = useState(false)
@@ -24,11 +28,7 @@ const ValidatorCredentialRow:FC<ValidatorCredentialRowProps> = ({validator, onSe
   const [errorMsg, setError] = useState('')
   const messageSignature = t('validatorManagement.withdrawalCredentials.confirmOwnership')
 
-  const {
-    data,
-    signMessage,
-    error,
-  } = useSignMessage({account: credentialInput});
+  const { data, signMessage, error } = useSignMessage({ account: credentialInput })
 
   const setCredential = (e) => {
     const value = e.target.value
@@ -37,11 +37,11 @@ const ValidatorCredentialRow:FC<ValidatorCredentialRowProps> = ({validator, onSe
     setCredentialInput(value)
     onSetVerification(id, false)
 
-    const isValid = isAddress(value);
+    const isValid = isAddress(value)
 
-    if(!isValid) {
+    if (!isValid) {
       setError(t('validatorManagement.withdrawalCredentials.invalidAddress'))
-      return;
+      return
     }
 
     onSetCredential(id, value)
@@ -55,11 +55,11 @@ const ValidatorCredentialRow:FC<ValidatorCredentialRowProps> = ({validator, onSe
   }
 
   useEffect(() => {
-    if(!data) return
+    if (!data) return
 
     const signedAddress = verifyMessage(messageSignature, data)
 
-    if(signedAddress === credentialInput) {
+    if (signedAddress === credentialInput) {
       onSetVerification(id, true)
     } else {
       onSetVerification(id, false)
@@ -69,38 +69,61 @@ const ValidatorCredentialRow:FC<ValidatorCredentialRowProps> = ({validator, onSe
   }, [data])
 
   useEffect(() => {
-    if(error) {
+    if (error) {
       console.log(error)
       setLoading(false)
     }
   }, [error])
 
-  const inputClasses = addClassString('w-full h-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none bg-transparent border-style', [errorMsg && 'border-error'])
-  const containerClasses = addClassString('w-full relative flex items-center max-w-[500px] pr-4', [errorMsg && 'h-24'])
+  const inputClasses = addClassString(
+    'w-full h-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none bg-transparent border-style',
+    [errorMsg && 'border-error'],
+  )
+  const containerClasses = addClassString('w-full relative flex items-center max-w-[500px] pr-4', [
+    errorMsg && 'h-24',
+  ])
 
   return (
-    <ValidatorCandidateRow isError={Boolean(errorMsg)} data={validator} index={index ? Number(index) : undefined}>
+    <ValidatorCandidateRow
+      isError={Boolean(errorMsg)}
+      data={validator}
+      index={index ? Number(index) : undefined}
+    >
       <div className={containerClasses}>
-        <div className="flex h-[32px] w-full h-full items-center">
-          <div className="w-full relative">
-            <input value={credentialInput} onChange={setCredential}
-                   className={inputClasses} type="text" />
-            {isVerifiedCredentials && <i className="bi-check-lg absolute right-5 text-success top-1/2 -translate-y-1/2"/>}
+        <div className='flex h-[32px] w-full h-full items-center'>
+          <div className='w-full relative'>
+            <input
+              value={credentialInput}
+              onChange={setCredential}
+              className={inputClasses}
+              type='text'
+            />
+            {isVerifiedCredentials && (
+              <i className='bi-check-lg absolute right-5 text-success top-1/2 -translate-y-1/2' />
+            )}
           </div>
-          {
-            !isVerifiedCredentials ? (
-              <div className="full">
-                <WalletActionBtn textSize="text-caption1">
-                  <Button padding="px-4 py-1" className="py-1" isLoading={isLoading}
-                          isDisabled={!credentialInput || !isValidAddress} onClick={verifyCredentials} type={ButtonFace.TERTIARY}>{t('verify')}</Button>
-                </WalletActionBtn>
-              </div>
-            ) : null
-          }
+          {!isVerifiedCredentials ? (
+            <div className='full'>
+              <WalletActionBtn textSize='text-caption1'>
+                <Button
+                  padding='px-4 py-1'
+                  className='py-1'
+                  isLoading={isLoading}
+                  isDisabled={!credentialInput || !isValidAddress}
+                  onClick={verifyCredentials}
+                  type={ButtonFace.TERTIARY}
+                >
+                  {t('verify')}
+                </Button>
+              </WalletActionBtn>
+            </div>
+          ) : null}
         </div>
         {errorMsg ? (
-          <div className="absolute bottom-1 left-0">
-            <Typography color="text-error" darkMode="dark:text-error" type="text-caption1">{errorMsg}</Typography>
+          <div className='absolute bottom-1 left-0'>
+            <Typography color='text-error' darkMode='dark:text-error' type='text-caption1'>
+              {errorMsg}
+            </Typography>
           </div>
         ) : null}
       </div>

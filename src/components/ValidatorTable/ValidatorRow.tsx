@@ -1,16 +1,21 @@
 import Link from 'next/link'
-import { useRouter } from 'next/navigation';
-import { FC, useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation'
+import { FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import addClassString from '../../../utilities/addClassString';
+import { useRecoilValue, useSetRecoilState } from 'recoil'
+import addClassString from '../../../utilities/addClassString'
 import formatBalanceColor from '../../../utilities/formatBalanceColor'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import isBlsAddress from '../../../utilities/isBlsAddress'
 import ValidatorLogo from '../../assets/images/validators.svg'
 import useLocalStorage from '../../hooks/useLocalStorage'
-import useValidatorName from '../../hooks/useValidatorName';
-import { activeValidatorId, isEditValidator, isValidatorDetail, processingBlsValidators } from '../../recoil/atoms';
+import useValidatorName from '../../hooks/useValidatorName'
+import {
+  activeValidatorId,
+  isEditValidator,
+  isValidatorDetail,
+  processingBlsValidators,
+} from '../../recoil/atoms'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
@@ -44,15 +49,16 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
   const hasIndex = index !== undefined
 
-  const validatorDetailBtnClass = addClassString('cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center', [
-    !hasIndex && 'opacity-30 pointer-events-none'
-  ])
+  const validatorDetailBtnClass = addClassString(
+    'cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center',
+    [!hasIndex && 'opacity-30 pointer-events-none'],
+  )
 
   const editValidatorBtnClass = addClassString('w-full flex justify-center', [
-    !hasIndex && 'opacity-30 pointer-events-none'
+    !hasIndex && 'opacity-30 pointer-events-none',
   ])
 
-  const validatorIconClass = addClassString('px-2' , [index ? 'cursor-pointer' : ''])
+  const validatorIconClass = addClassString('px-2', [index ? 'cursor-pointer' : ''])
 
   useEffect(() => {
     setReady(true)
@@ -66,13 +72,13 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     processingValidators && processingValidators.includes(validator.index.toString())
 
   const editValidator = () => {
-    setActiveValidatorId(index);
+    setActiveValidatorId(index)
     setIsEditValidator(true)
     router.push(editHref)
   }
 
   const viewDetail = () => {
-    setActiveValidatorId(index);
+    setActiveValidatorId(index)
     setValDetail(true)
     router.push(detailHref)
   }
@@ -100,8 +106,10 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         {!hasIndex ? (
           <div className='w-full flex justify-center'>{renderAvatar()}</div>
         ) : view === 'full' ? (
-          <div onClick={viewDetail} className='w-full flex justify-center'>{renderAvatar()}</div>
-          ) : (
+          <div onClick={viewDetail} className='w-full flex justify-center'>
+            {renderAvatar()}
+          </div>
+        ) : (
           <Link href={detailHref}>
             <div className='w-full flex justify-center'>{renderAvatar()}</div>
           </Link>
@@ -109,7 +117,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='w-28 cursor-pointer'>
         {!hasIndex ? (
-          <Typography className='text-left' color='text-dark500' type='text-caption2'>---</Typography>
+          <Typography className='text-left' color='text-dark500' type='text-caption2'>
+            ---
+          </Typography>
         ) : view === 'full' ? (
           <div onClick={viewDetail}>
             <Typography className='text-left' color='text-dark500' type='text-caption2'>

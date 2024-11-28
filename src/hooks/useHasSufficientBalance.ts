@@ -1,5 +1,5 @@
-import { useMemo } from 'react';
-import useAccountBalance from './useAccountBalance';
+import { useMemo } from 'react'
+import useAccountBalance from './useAccountBalance'
 
 const useHasSufficientBalance = (amount: bigint) => {
   const { balanceData } = useAccountBalance()

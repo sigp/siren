@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC, useEffect } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import BeaconSyncCard from '../../../src/components/BeaconSyncCard/BeaconSyncCard'
 import SyncDisclosure from '../../../src/components/Disclosures/SyncDisclosure'
@@ -29,7 +29,7 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec }) => {
   const { beaconSync, executionSync } = syncData
 
   useEffect(() => {
-    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.remove('dark')
   }, [])
 
   return (

@@ -1,8 +1,8 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import timeFilterObjArray from '../../../utilities/timeFilterObjArray';
+import timeFilterObjArray from '../../../utilities/timeFilterObjArray'
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
-import { LogMetric, StatusColor } from '../../types';
+import { LogMetric, StatusColor } from '../../types'
 import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 
 export interface LogStatsProps {
@@ -43,19 +43,19 @@ const LogStats: FC<LogStatsProps> = ({
   const warningMetrics = hourlyWarningLogs.length
   const errorMetrics = hourlyErrorLogs.length
 
-  const critStatus = criticalMetrics > 0
-    ? StatusColor.ERROR
-    : StatusColor.SUCCESS
-  const errorStatus = errorMetrics <= 0
-    ? StatusColor.SUCCESS
-    : errorMetrics <= 2
-      ? StatusColor.WARNING
-      : StatusColor.ERROR
-  const warnStatus = warningMetrics < 5
-    ? StatusColor.SUCCESS
-    : warningMetrics <= 50
-      ? StatusColor.WARNING
-      : StatusColor.ERROR
+  const critStatus = criticalMetrics > 0 ? StatusColor.ERROR : StatusColor.SUCCESS
+  const errorStatus =
+    errorMetrics <= 0
+      ? StatusColor.SUCCESS
+      : errorMetrics <= 2
+        ? StatusColor.WARNING
+        : StatusColor.ERROR
+  const warnStatus =
+    warningMetrics < 5
+      ? StatusColor.SUCCESS
+      : warningMetrics <= 50
+        ? StatusColor.WARNING
+        : StatusColor.ERROR
 
   return (
     <>

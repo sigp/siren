@@ -8,7 +8,9 @@ import {
   ValidatorInfo,
 } from '../../types/validator'
 import ActiveValidatorCount from '../ActiveValidatorCount/ActiveValidatorCount'
-import OverallEffectiveness, { OverallEffectivenessProps } from '../OveralEffectiveness/OverallEffectiveness';
+import OverallEffectiveness, {
+  OverallEffectivenessProps,
+} from '../OveralEffectiveness/OverallEffectiveness'
 import Typography from '../Typography/Typography'
 import ValidatorIncomeSummary from '../ValidatorIncomeSummary/ValidatorIncomeSummary'
 
@@ -22,7 +24,7 @@ const ValidatorSummary: FC<ValidatorSummaryProps> = ({
   validators,
   validatorNetworkData,
   validatorCacheData,
-  validatorMetricResult
+  validatorMetricResult,
 }) => {
   const { t } = useTranslation()
   const activeValidators = useMemo(() => {

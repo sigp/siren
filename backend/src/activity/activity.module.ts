@@ -8,6 +8,6 @@ import { Activity } from './entities/activity.entity';
   imports: [SequelizeModule.forFeature([Activity])],
   controllers: [ActivityController],
   providers: [ActivityService],
-  exports: [ActivityService]
+  exports: [ActivityService],
 })
 export class ActivityModule {}

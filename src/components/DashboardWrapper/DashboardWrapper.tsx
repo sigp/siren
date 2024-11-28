@@ -1,19 +1,19 @@
-import React, { FC, MutableRefObject, ReactNode, useEffect, useState } from 'react';
-import { useSetRecoilState } from 'recoil';
-import addClassString from '../../../utilities/addClassString';
-import { Storage } from '../../constants/enums';
-import useLocalStorage from '../../hooks/useLocalStorage';
-import useUiMode from '../../hooks/useUiMode';
-import { beaconNodeSpec } from '../../recoil/atoms';
-import { ActivityResponse } from '../../types';
-import { BeaconNodeSpecResults, SyncData } from '../../types/beacon';
-import { Diagnostics } from '../../types/diagnostic';
-import { UiThemeStorage } from '../../types/storage';
-import ConnectWalletModal from '../ConnectWalletModal/ConnectWalletModal';
-import FootBar from '../FootBar/FootBar';
-import NetworkErrorModal from '../NetworkErrorModal/NetworkErrorModal';
-import SideBar from '../SideBar/SideBar';
-import TopBar from '../TopBar/TopBar';
+import React, { FC, MutableRefObject, ReactNode, useEffect, useState } from 'react'
+import { useSetRecoilState } from 'recoil'
+import addClassString from '../../../utilities/addClassString'
+import { Storage } from '../../constants/enums'
+import useLocalStorage from '../../hooks/useLocalStorage'
+import useUiMode from '../../hooks/useUiMode'
+import { beaconNodeSpec } from '../../recoil/atoms'
+import { ActivityResponse } from '../../types'
+import { BeaconNodeSpecResults, SyncData } from '../../types/beacon'
+import { Diagnostics } from '../../types/diagnostic'
+import { UiThemeStorage } from '../../types/storage'
+import ConnectWalletModal from '../ConnectWalletModal/ConnectWalletModal'
+import FootBar from '../FootBar/FootBar'
+import NetworkErrorModal from '../NetworkErrorModal/NetworkErrorModal'
+import SideBar from '../SideBar/SideBar'
+import TopBar from '../TopBar/TopBar'
 
 export interface DashboardWrapperProps {
   children: ReactNode | ReactNode[]
@@ -36,7 +36,7 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
   beaconSpec,
   scrollRef,
   initActivityData,
-  className
+  className,
 }) => {
   const {
     beaconSync: { isSyncing },
@@ -48,7 +48,7 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
   const containerClasses = addClassString('flex-1 w-full overflow-scroll', [className])
 
   useEffect(() => {
-    if(isReady) {
+    if (isReady) {
       toggleUiMode(uiThemeStorage)
     }
 
@@ -60,9 +60,7 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
   }, [beaconSpec, setBeaconSpec])
 
   return (
-    <div
-      className={`w-screen h-screen flex overflow-hidden relative`}
-    >
+    <div className={`w-screen h-screen flex overflow-hidden relative`}>
       <SideBar />
       <NetworkErrorModal
         isBeaconNetworkError={isBeaconError}
@@ -70,10 +68,12 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
       />
       <div className='flex flex-1 max-w-[96vw] flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar initActivityData={initActivityData} beaconSpec={beaconSpec} syncData={syncData} />
-        <div ref={scrollRef} className={containerClasses}>{children}</div>
+        <div ref={scrollRef} className={containerClasses}>
+          {children}
+        </div>
         <FootBar nodeHealth={nodeHealth} isSyncing={isSyncing} />
       </div>
-      <ConnectWalletModal/>
+      <ConnectWalletModal />
     </div>
   )
 }

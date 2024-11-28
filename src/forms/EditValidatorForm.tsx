@@ -1,11 +1,11 @@
 import { yupResolver } from '@hookform/resolvers/yup/dist/yup'
-import { FC, FormEvent, ReactElement, useState } from 'react';
+import { FC, FormEvent, ReactElement, useState } from 'react'
 import { Control, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import displayToast from '../../utilities/displayToast'
 import useLocalStorage from '../hooks/useLocalStorage'
-import useValidatorName from '../hooks/useValidatorName';
+import useValidatorName from '../hooks/useValidatorName'
 import { validatorAliases } from '../recoil/atoms'
 import { ToastType, ValAliases } from '../types'
 import { ValidatorInfo } from '../types/validator'
@@ -52,7 +52,7 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
     setLoading(true)
     const { nameString } = getValues()
 
-    if(!nameString) return
+    if (!nameString) return
 
     setAlias((prev) => ({ ...prev, [index]: nameString }))
     storeValAliases({ ...aliases, [index]: nameString })

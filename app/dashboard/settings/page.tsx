@@ -1,7 +1,7 @@
 import '../../../src/global.css'
-import { redirect } from 'next/navigation';
-import getSessionCookie from '../../../utilities/getSessionCookie';
-import { fetchActivities } from '../../api/activities';
+import { redirect } from 'next/navigation'
+import getSessionCookie from '../../../utilities/getSessionCookie'
+import { fetchActivities } from '../../api/activities'
 import { fetchBeaconSpec, fetchNodeHealth, fetchSyncData } from '../../api/beacon'
 import { fetchBeaconNodeVersion, fetchValidatorVersion } from '../../api/config'
 import Wrapper from './Wrapper'

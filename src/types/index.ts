@@ -1,9 +1,7 @@
-import { FC, SVGProps } from 'react';
+import { FC, SVGProps } from 'react'
 import { Protocol } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
-import {
-  Diagnostics,
-} from './diagnostic'
+import { Diagnostics } from './diagnostic'
 
 export interface NextFetchRequestInit extends RequestInit {
   next?: {
@@ -37,18 +35,18 @@ export type SemanticVersion = {
 
 export type LogData = {
   id: number
-  level: LogLevels,
-  type: LogType,
+  level: LogLevels
+  type: LogType
   data: string
-  isHidden: boolean,
+  isHidden: boolean
   createdAt: string
   updatedAt: string
 }
 
 export type LogMetric = {
-  warningLogs: LogData[],
-  errorLogs: LogData[],
-  criticalLogs: LogData[],
+  warningLogs: LogData[]
+  errorLogs: LogData[]
+  criticalLogs: LogData[]
 }
 
 export enum LogType {
@@ -131,7 +129,7 @@ export interface SetupProps {
 export enum ChainId {
   MAINNET = 'MAINNET',
   HOLESKY = 'HOLESKY',
-  LOCALTESTNET = 'LOCALTESTNET'
+  LOCALTESTNET = 'LOCALTESTNET',
 }
 
 export enum ValidatorManagementView {
@@ -139,24 +137,24 @@ export enum ValidatorManagementView {
   ADD = 'ADD',
   CREATE = 'CREATE',
   RECOVER = 'RECOVER',
-  IMPORT = 'IMPORT'
+  IMPORT = 'IMPORT',
 }
 
 export type AddValidatorOption = {
-  title: string,
-  subTitle: string,
-  caption: string,
-  isDisabled: boolean,
-  isRecommended: boolean,
+  title: string
+  subTitle: string
+  caption: string
+  isDisabled: boolean
+  isRecommended: boolean
   SVG: FC<SVGProps<SVGSVGElement>>
   view: ValidatorManagementView
 }
 
 export type ValidatorCandidate = {
-  id: string,
-  index: number | undefined,
-  pubKey?: string,
-  name: string | undefined,
+  id: string
+  index: number | undefined
+  pubKey?: string
+  name: string | undefined
   withdrawalCredentials: string | undefined
   keyStorePassword: string | undefined
   isValidIndex?: boolean
@@ -164,7 +162,7 @@ export type ValidatorCandidate = {
 }
 
 export type ValidatorRewardEstimate = {
-  apr: number,
+  apr: number
   totalAnnualRewards: number
 }
 
@@ -172,21 +170,21 @@ export enum ActivityType {
   DEPOSIT = 'DEPOSIT',
   IMPORT = 'IMPORT',
   GRAFFITI = 'GRAFFITI',
-  WITHDRAWAL = 'WITHDRAWAL'
+  WITHDRAWAL = 'WITHDRAWAL',
 }
 
 export type ActivityResponse = {
-  count: number,
+  count: number
   rows: Activity[]
 }
 
 export type Activity = {
-  type: ActivityType,
-  pubKey: string,
-  id: number,
-  data: string,
-  hasSeen: boolean,
-  createdAt: string,
+  type: ActivityType
+  pubKey: string
+  id: number
+  data: string
+  hasSeen: boolean
+  createdAt: string
   updatedAt: string
 }
 
@@ -205,10 +203,10 @@ export enum TimeUnit {
   MONTH = 'MONTH',
   WEEK = 'WEEK',
   DAY = 'DAY',
-  HOUR = 'HOUR'
+  HOUR = 'HOUR',
 }
 
 export enum NetworkId {
   HOLESKY = '17000',
-  MAINNET = '1'
+  MAINNET = '1',
 }

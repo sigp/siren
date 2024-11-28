@@ -12,7 +12,7 @@ import {
   mockedSyncNodeResults,
   mockedSyncResults,
   mockEpochCacheValue,
-  mockValCacheValues
+  mockValCacheValues,
 } from '../../../../src/mocks/beacon';
 import { StatusColor } from '../../../../src/types';
 
@@ -39,15 +39,15 @@ describe('BeaconController', () => {
           global: true,
           secret: 'fake-value',
           signOptions: { expiresIn: '7200s' }, // set to 2 hours
-        })
+        }),
       ],
-      providers: [
-        BeaconService
-      ],
+      providers: [BeaconService],
       controllers: [BeaconController],
     })
-      .overrideProvider(CACHE_MANAGER).useValue(mockCacheManager)
-      .overrideProvider(HttpService).useValue(mockHttpService)
+      .overrideProvider(CACHE_MANAGER)
+      .useValue(mockCacheManager)
+      .overrideProvider(HttpService)
+      .useValue(mockHttpService)
       .compile();
 
     controller = module.get<BeaconController>(BeaconController);
@@ -82,7 +82,9 @@ describe('BeaconController', () => {
 
     it('should get beacon node version from node if empty cache', async () => {
       const mockBeaconNodeVersion = { data: 'mock-version' };
-      const httpResponse: AxiosResponse = { data: { data: mockBeaconNodeVersion } } as AxiosResponse;
+      const httpResponse: AxiosResponse = {
+        data: { data: mockBeaconNodeVersion },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpResponse));
       mockCacheManager.get.mockResolvedValueOnce(null);
 
@@ -91,7 +93,7 @@ describe('BeaconController', () => {
       expect(result).toEqual(mockBeaconNodeVersion);
       expect(httpService.request).toHaveBeenCalled();
     });
-  })
+  });
 
   describe('getNodeGenesis', () => {
     it('should get genesis from cache', async () => {
@@ -104,15 +106,16 @@ describe('BeaconController', () => {
     });
 
     it('should get genesis from node if empty cache', async () => {
-      const httpResponse: AxiosResponse = { data: { data: { genesis_time: '1' } } } as AxiosResponse;
+      const httpResponse: AxiosResponse = {
+        data: { data: { genesis_time: '1' } },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpResponse));
       mockCacheManager.get.mockResolvedValueOnce(null);
-
 
       const result = await controller.getNodeGenesis();
       expect(result).toEqual(1);
     });
-  })
+  });
 
   describe('getSyncData', () => {
     it('should fetch data from cache', async () => {
@@ -125,10 +128,14 @@ describe('BeaconController', () => {
     });
 
     it('should return correct data from node', async () => {
-      const httpBeaconResponse: AxiosResponse = { data: { data: mockedSyncNodeResults.beacon } } as AxiosResponse;
+      const httpBeaconResponse: AxiosResponse = {
+        data: { data: mockedSyncNodeResults.beacon },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
-      const httpExecutionResponse: AxiosResponse = { data: { data: mockedSyncNodeResults.execution } } as AxiosResponse;
+      const httpExecutionResponse: AxiosResponse = {
+        data: { data: mockedSyncNodeResults.execution },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpExecutionResponse));
 
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
@@ -136,7 +143,7 @@ describe('BeaconController', () => {
       const result = await controller.getSyncData();
       expect(result).toEqual(mockedSyncResults);
     });
-  })
+  });
 
   describe('getInclusionData', () => {
     it('should fetch data from cache', async () => {
@@ -154,21 +161,27 @@ describe('BeaconController', () => {
       mockCacheManager.get.mockResolvedValueOnce({ SLOTS_PER_EPOCH: '32' });
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
       mockCacheManager.get.mockResolvedValueOnce(null);
-      mockCacheManager.get.mockResolvedValueOnce({beaconSync: {headSlot: 12}});
+      mockCacheManager.get.mockResolvedValueOnce({
+        beaconSync: { headSlot: 12 },
+      });
 
-      const httpExecutionResponse: AxiosResponse = { data: { data: {
+      const httpExecutionResponse: AxiosResponse = {
+        data: {
+          data: {
             previous_epoch_target_attesting_gwei: 100,
             current_epoch_active_gwei: 100,
-          } } } as AxiosResponse;
+          },
+        },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpExecutionResponse));
 
       const result = await controller.getInclusionData();
       expect(result).toEqual({
         rate: 100,
-        status: StatusColor.SUCCESS
+        status: StatusColor.SUCCESS,
       });
     });
-  })
+  });
 
   describe('getPeerData', () => {
     it('should get data from cache', async () => {
@@ -183,13 +196,15 @@ describe('BeaconController', () => {
     it('should return correct data from node', async () => {
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
 
-      const httpBeaconResponse: AxiosResponse = { data: { data: {connected: '100'} } } as AxiosResponse;
+      const httpBeaconResponse: AxiosResponse = {
+        data: { data: { connected: '100' } },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
       const result = await controller.getPeerData();
-      expect(result).toEqual({connected: 100});
+      expect(result).toEqual({ connected: 100 });
     });
-  })
+  });
 
   describe('getValidatorCount', () => {
     it('should get data from cache', async () => {
@@ -202,13 +217,15 @@ describe('BeaconController', () => {
     });
 
     it('should return correct data from node', async () => {
-      const httpBeaconResponse: AxiosResponse = { data: { data: 100 } } as AxiosResponse;
+      const httpBeaconResponse: AxiosResponse = {
+        data: { data: 100 },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
       const result = await controller.getValidatorCount();
       expect(result).toEqual(100);
     });
-  })
+  });
 
   describe('getProposerDuties', () => {
     it('should get data from cache', async () => {
@@ -224,19 +241,27 @@ describe('BeaconController', () => {
       mockCacheManager.get.mockResolvedValueOnce(mockEpochCacheValue);
       mockCacheManager.get.mockResolvedValueOnce(null);
       mockCacheManager.get.mockResolvedValueOnce(mockValCacheValues);
-      mockCacheManager.get.mockResolvedValueOnce({beaconSync: {headSlot: 12}});
+      mockCacheManager.get.mockResolvedValueOnce({
+        beaconSync: { headSlot: 12 },
+      });
 
-      const httpBeaconResponse: AxiosResponse = { data: { data: [
+      const httpBeaconResponse: AxiosResponse = {
+        data: {
+          data: [
             {
               pubkey: 'fake-pub',
               validator_index: '1',
               slot: '123',
-            }
-          ] } } as AxiosResponse;
+            },
+          ],
+        },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
       const result = await controller.getProposerDuties();
-      expect(result).toEqual([{"pubkey": "fake-pub", "slot": "123", "uuid": "1231", "validator_index": "1"}]);
+      expect(result).toEqual([
+        { pubkey: 'fake-pub', slot: '123', uuid: '1231', validator_index: '1' },
+      ]);
     });
-  })
+  });
 });

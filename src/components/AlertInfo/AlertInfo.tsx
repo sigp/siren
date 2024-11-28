@@ -1,22 +1,22 @@
-import { FC, useEffect, useMemo, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useRecoilValue } from 'recoil';
-import sortAlertMessagesBySeverity from '../../../utilities/sortAlerts';
-import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts';
-import useDivDimensions from '../../hooks/useDivDimensions';
-import useMediaQuery from '../../hooks/useMediaQuery';
-import { proposerDuties } from '../../recoil/atoms';
-import { LogLevels, StatusColor } from '../../types';
-import AlertCard from '../AlertCard/AlertCard';
-import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings';
-import { LogsInfoProps } from '../DiagnosticTable/LogsInfo';
-import ProposerAlerts, { ProposerAlertsProps } from '../ProposerAlerts/ProposerAlerts';
-import Typography from '../Typography/Typography';
-import PriorityLogAlerts from './PriorityLogAlerts';
+import { FC, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
+import sortAlertMessagesBySeverity from '../../../utilities/sortAlerts'
+import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
+import useDivDimensions from '../../hooks/useDivDimensions'
+import useMediaQuery from '../../hooks/useMediaQuery'
+import { proposerDuties } from '../../recoil/atoms'
+import { LogLevels, StatusColor } from '../../types'
+import AlertCard from '../AlertCard/AlertCard'
+import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings'
+import { LogsInfoProps } from '../DiagnosticTable/LogsInfo'
+import ProposerAlerts, { ProposerAlertsProps } from '../ProposerAlerts/ProposerAlerts'
+import Typography from '../Typography/Typography'
+import PriorityLogAlerts from './PriorityLogAlerts'
 
 export interface AlertInfoProps extends Omit<ProposerAlertsProps, 'duties'>, LogsInfoProps {}
 
-const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
+const AlertInfo: FC<AlertInfoProps> = ({ metrics, ...props }) => {
   const { t } = useTranslation()
   const { alerts, dismissAlert, resetDismissed } = useDiagnosticAlerts()
   const { ref, dimensions } = useDivDimensions()
@@ -25,10 +25,11 @@ const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
   const duties = useRecoilValue(proposerDuties)
 
   const priorityLogAlerts = useMemo(() => {
-    return Object.values(metrics).flat().filter(({level}) =>
-      level === LogLevels.CRIT || level === LogLevels.ERRO)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  }, [metrics]);
+    return Object.values(metrics)
+      .flat()
+      .filter(({ level }) => level === LogLevels.CRIT || level === LogLevels.ERRO)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+  }, [metrics])
 
   const setFilterValue = (value: FilterValue) => setFilter(value)
   const isMobile = useMediaQuery('(max-width: 425px)')
@@ -43,9 +44,10 @@ const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
     return sortAlertMessagesBySeverity(baseAlerts)
   }, [alerts, filter])
 
-  const isSeverFilter = (filter === 'all' || filter === StatusColor.ERROR)
+  const isSeverFilter = filter === 'all' || filter === StatusColor.ERROR
 
-  const isFiller = formattedAlerts.length + (duties?.length || 0) + (priorityLogAlerts.length || 0) < 6
+  const isFiller =
+    formattedAlerts.length + (duties?.length || 0) + (priorityLogAlerts.length || 0) < 6
   const isPriorityAlerts = priorityLogAlerts.length > 0
   const isAlerts = formattedAlerts.length > 0 || duties?.length > 0 || isPriorityAlerts
   const isProposerAlerts =
@@ -83,7 +85,9 @@ const AlertInfo: FC<AlertInfoProps> = ({metrics, ...props}) => {
         >
           {isAlerts && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
-              {isPriorityAlerts && isSeverFilter && (<PriorityLogAlerts alerts={priorityLogAlerts} />)}
+              {isPriorityAlerts && isSeverFilter && (
+                <PriorityLogAlerts alerts={priorityLogAlerts} />
+              )}
               {formattedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
                 const count =

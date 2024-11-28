@@ -1,10 +1,10 @@
-import { useAccount, UseAccountReturnType, useBalance, UseBalanceParameters } from 'wagmi';
+import { useAccount, UseAccountReturnType, useBalance, UseBalanceParameters } from 'wagmi'
 
 export type BalanceReturn = {
-  decimals: number;
-  formatted: string;
-  symbol: string;
-  value: bigint;
+  decimals: number
+  formatted: string
+  symbol: string
+  value: bigint
 }
 
 export interface UseAccountBalanceResult extends UseAccountReturnType {
@@ -22,13 +22,13 @@ const useAccountBalance = (props?: UseBalanceParameters): UseAccountBalanceResul
     query: {
       ...query,
       enabled: Boolean(address),
-      refetchInterval
+      refetchInterval,
     },
   })
 
   return {
     ...account,
-    balanceData: data
+    balanceData: data,
   }
 }
 

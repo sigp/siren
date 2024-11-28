@@ -1,8 +1,8 @@
 import React, { FC, ReactElement, createContext, useState, useEffect, useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
-import useSSEData, { defaultLogData } from '../../hooks/useSSEData';
+import useSSEData, { defaultLogData } from '../../hooks/useSSEData'
 import { beaconNetworkError, validatorNetworkError } from '../../recoil/atoms'
-import { SSELog } from '../../types';
+import { SSELog } from '../../types'
 
 export interface SSELogWrapperProps {
   trigger?: number
@@ -59,8 +59,12 @@ const SSELogProvider: FC<SSELogWrapperProps> = React.memo(function ({ children, 
     setValidatorNetworkError(true)
   }, [clearRefreshInterval, setValidatorNetworkError])
 
-  const beaconLogs = useSSEData({url: '/beacon-logs', onError: handleBeaconLogError, isReady})
-  const validatorLogs = useSSEData({url: '/validator-logs', onError: handleValidatorLogError, isReady})
+  const beaconLogs = useSSEData({ url: '/beacon-logs', onError: handleBeaconLogError, isReady })
+  const validatorLogs = useSSEData({
+    url: '/validator-logs',
+    onError: handleValidatorLogError,
+    isReady,
+  })
 
   const triggerRefresh = useCallback(() => {
     setTrigger((prevTrigger) => !prevTrigger)

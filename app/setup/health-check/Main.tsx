@@ -1,17 +1,17 @@
 'use client'
 
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ButtonFace } from '../../../src/components/Button/Button'
 import DeviceHealth from '../../../src/components/HealthCheck/DeviceHealth'
 import HealthOverview from '../../../src/components/HealthCheck/HealthOverview'
 import NetworkHealth from '../../../src/components/HealthCheck/NetworkHealth'
 import ValidatorSetupLayout from '../../../src/components/ValidatorSetupLayout/ValidatorSetupLayout'
-import useLocalStorage from '../../../src/hooks/useLocalStorage';
+import useLocalStorage from '../../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import { SetupProps } from '../../../src/types'
-import { SyncData } from '../../../src/types/beacon';
+import { SyncData } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 
 export interface MainProps extends SetupProps {}
@@ -35,11 +35,13 @@ const Main: FC<MainProps> = ({ initNodeHealth, beaconSpec, initSyncData }) => {
     networkError,
   })
 
-  const { beaconSync: { isSyncing, beaconPercentage } } = syncData
+  const {
+    beaconSync: { isSyncing, beaconPercentage },
+  } = syncData
 
   useEffect(() => {
     setHealthCheck(true)
-    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.remove('dark')
   }, [])
 
   const nextUrl = beaconPercentage >= 95 ? '/dashboard' : '/setup/node-sync'

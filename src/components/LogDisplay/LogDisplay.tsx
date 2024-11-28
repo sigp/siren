@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { debounce } from '../../../utilities/debounce'
-import { LogMetric, LogType } from '../../types';
+import { LogMetric, LogType } from '../../types'
 import Input from '../Input/Input'
 import LogStats from '../LogStats/LogStats'
 import Spinner from '../Spinner/Spinner'

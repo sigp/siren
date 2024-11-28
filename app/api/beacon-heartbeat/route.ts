@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import getReqAuthToken from '../../../utilities/getReqAuthToken';
+import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchBeaconNodeVersion } from '../config'
 
 const errorMessage = 'Failed to maintain beacon heartbeat'

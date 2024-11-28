@@ -1,8 +1,8 @@
-import { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { NetworkId, TxStatus } from '../../../../../../../types';
-import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus';
-import Typography from '../../../../../../Typography/Typography';
+import { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { NetworkId, TxStatus } from '../../../../../../../types'
+import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
+import Typography from '../../../../../../Typography/Typography'
 
 export interface ValidateTransactionStepProps {
   txStatus: TxStatus | undefined
@@ -11,20 +11,33 @@ export interface ValidateTransactionStepProps {
   onRetry: () => void
 }
 
-const ValidateTransactionStep:FC<ValidateTransactionStepProps> = ({txStatus, txHash, networkId, onRetry}) => {
-  const {t} = useTranslation()
+const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
+  txStatus,
+  txHash,
+  networkId,
+  onRetry,
+}) => {
+  const { t } = useTranslation()
   const isError = txStatus === 'error'
 
   return (
-    <div className="p-4 space-y-2">
-      <TransactionStatus title={t(`validatorManagement.txStatuses.${txStatus}.title`)}
-           text={!isError ? t(`validatorManagement.txStatuses.${txStatus}.text`) : undefined}
-             networkId={networkId} status={txStatus || 'pending'} txHash={txHash}>
+    <div className='p-4 space-y-2'>
+      <TransactionStatus
+        title={t(`validatorManagement.txStatuses.${txStatus}.title`)}
+        text={!isError ? t(`validatorManagement.txStatuses.${txStatus}.text`) : undefined}
+        networkId={networkId}
+        status={txStatus || 'pending'}
+        txHash={txHash}
+      >
         {isError && (
-          <div className="space-y-2">
-            <Typography type="text-caption1">{t('validatorManagement.txStatuses.error.text')}</Typography>
-            <div onClick={onRetry} className="cursor-pointer">
-              <Typography type="text-caption1" className="underline">{t('validatorManagement.retryTransaction')}</Typography>
+          <div className='space-y-2'>
+            <Typography type='text-caption1'>
+              {t('validatorManagement.txStatuses.error.text')}
+            </Typography>
+            <div onClick={onRetry} className='cursor-pointer'>
+              <Typography type='text-caption1' className='underline'>
+                {t('validatorManagement.retryTransaction')}
+              </Typography>
             </div>
           </div>
         )}

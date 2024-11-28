@@ -1,18 +1,18 @@
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
-import LightHouseFullLogo from '../../assets/images/lightHouseFull.svg';
-import SlasherLogo from '../../assets/images/slasher.svg';
-import { isSideBarOpen } from '../../recoil/atoms';
-import { ActivityResponse } from '../../types';
-import { BeaconNodeSpecResults, SyncData } from '../../types/beacon';
-import ActivityHistory from '../ActivityHistory/ActivityHistory';
-import BeaconNetwork from '../BeaconNetwork/BeaconNetwork';
-import Button, { ButtonFace } from '../Button/Button';
-import Typography from '../Typography/Typography';
-import WalletProvider from '../Wallet/WalletProvider';
-import BeaconMetric from './BeaconMetric';
-import ValidatorMetric from './ValidatorMetric';
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
+import LightHouseFullLogo from '../../assets/images/lightHouseFull.svg'
+import SlasherLogo from '../../assets/images/slasher.svg'
+import { isSideBarOpen } from '../../recoil/atoms'
+import { ActivityResponse } from '../../types'
+import { BeaconNodeSpecResults, SyncData } from '../../types/beacon'
+import ActivityHistory from '../ActivityHistory/ActivityHistory'
+import BeaconNetwork from '../BeaconNetwork/BeaconNetwork'
+import Button, { ButtonFace } from '../Button/Button'
+import Typography from '../Typography/Typography'
+import WalletProvider from '../Wallet/WalletProvider'
+import BeaconMetric from './BeaconMetric'
+import ValidatorMetric from './ValidatorMetric'
 
 export interface TopBarProps {
   syncData: SyncData
@@ -63,10 +63,13 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
       <div className='h-full flex'>
         <div className='h-full flex'>
           <WalletProvider beaconSpec={beaconSpec} />
-          <div className="flex">
-            <ActivityHistory depositNetworkId={DEPOSIT_NETWORK_ID} initActivityData={initActivityData}/>
-            <div className="border-l-style">
-              <div className="opacity-30">
+          <div className='flex'>
+            <ActivityHistory
+              depositNetworkId={DEPOSIT_NETWORK_ID}
+              initActivityData={initActivityData}
+            />
+            <div className='border-l-style'>
+              <div className='opacity-30'>
                 <Button
                   isDisabled
                   className='hidden md:block items-center dark:border-borderDark'

@@ -1,21 +1,21 @@
-import axios from 'axios';
-import { FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import displayToast from '../../../utilities/displayToast';
-import useUiMode from '../../hooks/useUiMode';
-import { ToastType } from '../../types';
-import { ValidatorInfo } from '../../types/validator';
-import AuthPrompt from '../AuthPrompt/AuthPrompt';
-import ValidatorGraffitiInput from '../ValidatorGraffitiInput/ValidatorGraffitiInput';
+import axios from 'axios'
+import { FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import displayToast from '../../../utilities/displayToast'
+import useUiMode from '../../hooks/useUiMode'
+import { ToastType } from '../../types'
+import { ValidatorInfo } from '../../types/validator'
+import AuthPrompt from '../AuthPrompt/AuthPrompt'
+import ValidatorGraffitiInput from '../ValidatorGraffitiInput/ValidatorGraffitiInput'
 
 export interface ValidatorGraffitiProps {
   validator: ValidatorInfo
 }
 
-const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
+const ValidatorGraffiti: FC<ValidatorGraffitiProps> = ({ validator }) => {
   const { t } = useTranslation()
   const { index, pubKey } = validator
-  const {mode} = useUiMode()
+  const { mode } = useUiMode()
 
   const [isAuth, setAuth] = useState(false)
   const [graffitiInput, setGraffitiInput] = useState('')
@@ -26,7 +26,6 @@ const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
     setGraffitiInput(value)
     setAuth(true)
   }
-
 
   const fetchGraffiti = async () => {
     try {
@@ -45,10 +44,13 @@ const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
     setAuth(false)
 
     try {
-      const { status } = await axios.put('/api/update-graffiti', {graffiti: graffitiInput, pubKey, password})
+      const { status } = await axios.put('/api/update-graffiti', {
+        graffiti: graffitiInput,
+        pubKey,
+        password,
+      })
 
       setLoading(false)
-
 
       if (status === 200) {
         setGraffiti(graffitiInput)
@@ -70,8 +72,19 @@ const ValidatorGraffiti:FC<ValidatorGraffitiProps> = ({validator}) => {
 
   return (
     <>
-      <AuthPrompt isLoading={isLoading} maxHeight="400px" mode={mode} onClose={closeAuth} isVisible={isAuth} onSubmit={updateGraffiti} />
-      <ValidatorGraffitiInput isLoading={isLoading} onSubmit={storeGraffitiInput} value={graffiti} />
+      <AuthPrompt
+        isLoading={isLoading}
+        maxHeight='400px'
+        mode={mode}
+        onClose={closeAuth}
+        isVisible={isAuth}
+        onSubmit={updateGraffiti}
+      />
+      <ValidatorGraffitiInput
+        isLoading={isLoading}
+        onSubmit={storeGraffitiInput}
+        value={graffiti}
+      />
     </>
   )
 }

@@ -70,7 +70,7 @@
   }
 
   .primary-gradient-l-r {
-    @apply bg-gradient-to-r from-primary to-tertiary
+    @apply bg-gradient-to-r from-primary to-tertiary;
   }
 }
 

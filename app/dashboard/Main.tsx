@@ -1,30 +1,27 @@
-'use client';
+'use client'
 
-import React, { FC, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSetRecoilState } from 'recoil';
-import pckJson from '../../package.json';
-import AccountEarning from '../../src/components/AccountEarnings/AccountEarning';
-import AppGreeting from '../../src/components/AppGreeting/AppGreeting';
-import DashboardWrapper from '../../src/components/DashboardWrapper/DashboardWrapper';
-import DiagnosticTable from '../../src/components/DiagnosticTable/DiagnosticTable';
-import NetworkStats from '../../src/components/NetworkStats/NetworkStats';
-import ValidatorBalances from '../../src/components/ValidatorBalances/ValidatorBalances';
-import ValidatorTable from '../../src/components/ValidatorTable/ValidatorTable';
-import {
-  ALERT_ID,
-  CoinbaseExchangeRateUrl,
-} from '../../src/constants/constants';
-import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts';
-import useLocalStorage from '../../src/hooks/useLocalStorage';
-import useNetworkMonitor from '../../src/hooks/useNetworkMonitor';
-import useSWRPolling from '../../src/hooks/useSWRPolling';
-import { exchangeRates, proposerDuties } from '../../src/recoil/atoms';
-import { ActivityResponse, LogMetric, ProposerDuty, StatusColor } from '../../src/types';
-import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon';
-import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic';
-import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator';
-import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray';
+import React, { FC, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
+import pckJson from '../../package.json'
+import AccountEarning from '../../src/components/AccountEarnings/AccountEarning'
+import AppGreeting from '../../src/components/AppGreeting/AppGreeting'
+import DashboardWrapper from '../../src/components/DashboardWrapper/DashboardWrapper'
+import DiagnosticTable from '../../src/components/DiagnosticTable/DiagnosticTable'
+import NetworkStats from '../../src/components/NetworkStats/NetworkStats'
+import ValidatorBalances from '../../src/components/ValidatorBalances/ValidatorBalances'
+import ValidatorTable from '../../src/components/ValidatorTable/ValidatorTable'
+import { ALERT_ID, CoinbaseExchangeRateUrl } from '../../src/constants/constants'
+import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
+import useLocalStorage from '../../src/hooks/useLocalStorage'
+import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
+import useSWRPolling from '../../src/hooks/useSWRPolling'
+import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
+import { ActivityResponse, LogMetric, ProposerDuty, StatusColor } from '../../src/types'
+import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
+import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
+import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
+import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray'
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -56,7 +53,7 @@ const Main: FC<MainProps> = (props) => {
     genesisTime,
     initProposerDuties,
     initLogMetrics,
-    initActivityData
+    initActivityData,
   } = props
 
   const { t } = useTranslation()
@@ -129,7 +126,7 @@ const Main: FC<MainProps> = (props) => {
   const warningCount = logMetrics.warningLogs?.length || 0
 
   useEffect(() => {
-    setDuties(prev => formatUniqueObjectArray([...prev, ...valDuties]))
+    setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
   }, [valDuties])
 
   useEffect(() => {

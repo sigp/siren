@@ -1,7 +1,7 @@
-import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
-import { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import addClassString from '../../../utilities/addClassString';
-import Lighthouse from '../../assets/images/lightHouse.svg';
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion'
+import { FC, ReactNode, useEffect, useRef, useState } from 'react'
+import addClassString from '../../../utilities/addClassString'
+import Lighthouse from '../../assets/images/lightHouse.svg'
 
 export interface FlexedOverflowProps {
   className?: string
@@ -11,25 +11,31 @@ export interface FlexedOverflowProps {
   isScrollAnim?: boolean
 }
 
-const FlexedOverflow:FC<FlexedOverflowProps> = ({children, className, isAutoScroll, onScrollBottom, isScrollAnim}) => {
-  const container = useRef(null);
+const FlexedOverflow: FC<FlexedOverflowProps> = ({
+  children,
+  className,
+  isAutoScroll,
+  onScrollBottom,
+  isScrollAnim,
+}) => {
+  const container = useRef(null)
   const [scrollPercentage, setPercentage] = useState(0)
   const classes = addClassString('absolute top-0 left-0 w-full h-full overflow-scroll', [className])
-  const animClasses = addClassString('h-12 w-full' , [isScrollAnim ? 'opacity-100' : 'opacity-0'])
+  const animClasses = addClassString('h-12 w-full', [isScrollAnim ? 'opacity-100' : 'opacity-0'])
 
   const { scrollY } = useScroll({
-    container
+    container,
   })
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if(container?.current) {
-      const totalHeight = container.current.scrollHeight - container.current.clientHeight;
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    if (container?.current) {
+      const totalHeight = container.current.scrollHeight - container.current.clientHeight
       setPercentage(Math.round((latest / totalHeight) * 100))
     }
   })
 
   useEffect(() => {
-    if(scrollPercentage === 100 && onScrollBottom) {
+    if (scrollPercentage === 100 && onScrollBottom) {
       onScrollBottom()
     }
   }, [scrollPercentage])
@@ -39,21 +45,21 @@ const FlexedOverflow:FC<FlexedOverflowProps> = ({children, className, isAutoScro
       container.current.scrollTo({
         top: container.current.scrollHeight,
         behavior: 'smooth',
-      });
+      })
     }
-  }, [children.length, isAutoScroll]);
+  }, [children.length, isAutoScroll])
 
   return (
-    <div className="flex-1 relative">
+    <div className='flex-1 relative'>
       <div ref={container} className={classes}>
         {children}
         <div className={animClasses}>
           <motion.div
-            className="opacity-20 w-fit absolute left-1/2 -translate-x-1/2 flex items-center justify-center"
+            className='opacity-20 w-fit absolute left-1/2 -translate-x-1/2 flex items-center justify-center'
             animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
           >
-            <Lighthouse className="w-8 text-white"/>
+            <Lighthouse className='w-8 text-white' />
           </motion.div>
         </div>
       </div>

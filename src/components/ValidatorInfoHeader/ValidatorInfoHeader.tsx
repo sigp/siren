@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
-import useLocalStorage from '../../hooks/useLocalStorage';
-import useValidatorName from '../../hooks/useValidatorName';
+import useLocalStorage from '../../hooks/useLocalStorage'
+import useValidatorName from '../../hooks/useValidatorName'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
-import { ValAliases } from '../../types';
+import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
-import GradientHeader from '../GradientHeader/GradientHeader';
+import GradientHeader from '../GradientHeader/GradientHeader'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import Typography from '../Typography/Typography'
 
@@ -25,8 +25,8 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
 
   return (
     <div className='w-full relative'>
-      <div className="absolute overflow-hidden z-10 top-0 left-0 w-full h-full">
-        <GradientHeader speed={.15} name={animName} className="h-full" isReady={isAnimate} />
+      <div className='absolute overflow-hidden z-10 top-0 left-0 w-full h-full'>
+        <GradientHeader speed={0.15} name={animName} className='h-full' isReady={isAnimate} />
       </div>
       <div className='w-full z-20 flex relative p-6'>
         <div className='w-42 mr-2'>

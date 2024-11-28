@@ -1,11 +1,11 @@
-import React, { FC } from 'react';
-import { useTranslation } from 'react-i18next';
-import { ValidatorInfo } from '../../types/validator';
-import Button, { ButtonFace } from '../Button/Button';
-import DisabledTooltip from '../DisabledTooltip/DisabledTooltip';
-import Typography from '../Typography/Typography';
-import ValidatorSearchInput from '../ValidatorSearchInput/ValidatorSearchInput';
-import ValidatorTable from '../ValidatorTable/ValidatorTable';
+import React, { FC } from 'react'
+import { useTranslation } from 'react-i18next'
+import { ValidatorInfo } from '../../types/validator'
+import Button, { ButtonFace } from '../Button/Button'
+import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
+import Typography from '../Typography/Typography'
+import ValidatorSearchInput from '../ValidatorSearchInput/ValidatorSearchInput'
+import ValidatorTable from '../ValidatorTable/ValidatorTable'
 
 export interface MainViewProps {
   scrollPercentage?: number | undefined
@@ -15,11 +15,17 @@ export interface MainViewProps {
   search: string
 }
 
-const MainView:FC<MainViewProps> = ({scrollPercentage, validators, onChangeView, onSetSearch, search}) => {
-  const {t} = useTranslation()
+const MainView: FC<MainViewProps> = ({
+  scrollPercentage,
+  validators,
+  onChangeView,
+  onSetSearch,
+  search,
+}) => {
+  const { t } = useTranslation()
 
   return (
-    <div className="w-full space-y-6">
+    <div className='w-full space-y-6'>
       <div className='flex flex-col lg:flex-row justify-between lg:items-center'>
         <Typography
           type='text-subtitle2'
@@ -40,8 +46,7 @@ const MainView:FC<MainViewProps> = ({scrollPercentage, validators, onChangeView,
               </Button>
             </DisabledTooltip>
             <Button onClick={onChangeView} type={ButtonFace.SECONDARY}>
-              {t('validatorManagement.actions.add')}{' '}
-              <i className='bi-plus-circle-fill ml-3' />
+              {t('validatorManagement.actions.add')} <i className='bi-plus-circle-fill ml-3' />
             </Button>
           </div>
         </div>

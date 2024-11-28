@@ -34,14 +34,15 @@ describe('NodeController', () => {
           global: true,
           secret: 'fake-value',
           signOptions: { expiresIn: '7200s' }, // set to 2 hours
-        })
+        }),
       ],
-      providers: [
-        NodeService
-      ],
+      providers: [NodeService],
       controllers: [NodeController],
-    }).overrideProvider(CACHE_MANAGER).useValue(mockCacheManager)
-      .overrideProvider(HttpService).useValue(mockHttpService)
+    })
+      .overrideProvider(CACHE_MANAGER)
+      .useValue(mockCacheManager)
+      .overrideProvider(HttpService)
+      .useValue(mockHttpService)
       .compile();
 
     controller = module.get<NodeController>(NodeController);
@@ -69,7 +70,9 @@ describe('NodeController', () => {
     it('should return correct data from node', async () => {
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
 
-      const httpBeaconResponse: AxiosResponse = { data: { data: {
+      const httpBeaconResponse: AxiosResponse = {
+        data: {
+          data: {
             disk_bytes_free: '132070244352',
             disk_bytes_total: '132070244352',
             used_memory: '16',
@@ -79,15 +82,18 @@ describe('NodeController', () => {
             network_name: 'example',
             nat_open: false,
             global_cpu_frequency: 100,
-          }  } } as AxiosResponse;
+          },
+        },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
-      const httpVcResponse: AxiosResponse = { data: { data: { app_uptime: 600 } } } as AxiosResponse;
+      const httpVcResponse: AxiosResponse = {
+        data: { data: { app_uptime: 600 } },
+      } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpVcResponse));
-
 
       const result = await controller.getHealthData();
       expect(result).toEqual(mockDiagnostics);
     });
-  })
+  });
 });

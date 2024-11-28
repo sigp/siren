@@ -1,8 +1,18 @@
-import { Body, Controller, Get, Post, Put, Param, UseGuards, Query, Req, Res} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Put,
+  Param,
+  UseGuards,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { ActivityService } from './activity.service';
 import { SessionGuard } from '../session.guard';
 import { Request, Response } from 'express';
-
 
 @Controller('activity')
 @UseGuards(SessionGuard)
@@ -16,14 +26,13 @@ export class ActivityController {
     @Query('order') order?: string,
     @Query('since') since?: string,
   ) {
-
-    return this.activityService.fetchActivities(offset, limit, order, since)
+    return this.activityService.fetchActivities(offset, limit, order, since);
   }
 
   @Post('/')
   async logActivity(@Body() activity) {
-    const {data, pubKey, type} = activity
-    return this.activityService.storeActivity(data, pubKey, type)
+    const { data, pubKey, type } = activity;
+    return this.activityService.storeActivity(data, pubKey, type);
   }
 
   @Put(':id/read')

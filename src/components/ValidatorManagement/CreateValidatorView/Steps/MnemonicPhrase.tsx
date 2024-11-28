@@ -1,14 +1,14 @@
-import { debounce } from 'lodash';
-import { FC, InputHTMLAttributes, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import addClassString from '../../../../../utilities/addClassString';
-import displayToast from '../../../../../utilities/displayToast';
-import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen';
-import { ToastType } from '../../../../types';
-import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox';
-import Spinner from '../../../Spinner/Spinner';
-import Typography from '../../../Typography/Typography';
-import StepOptions from '../StepOptions';
+import { debounce } from 'lodash'
+import { FC, InputHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import addClassString from '../../../../../utilities/addClassString'
+import displayToast from '../../../../../utilities/displayToast'
+import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen'
+import { ToastType } from '../../../../types'
+import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
+import Spinner from '../../../Spinner/Spinner'
+import Typography from '../../../Typography/Typography'
+import StepOptions from '../StepOptions'
 
 export interface MnemonicPhraseProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   onNextStep: () => void
@@ -16,15 +16,22 @@ export interface MnemonicPhraseProps extends InputHTMLAttributes<HTMLTextAreaEle
   isActive: boolean
 }
 
-const MnemonicPhrase:FC<MnemonicPhraseProps> = ({onNextStep, onBackStep, onChange, value, isActive}) => {
-  const {t} = useTranslation()
+const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
+  onNextStep,
+  onBackStep,
+  onChange,
+  value,
+  isActive,
+}) => {
+  const { t } = useTranslation()
   const [isValidKeyPhrase, setIsValidPhrase] = useState(false)
   const [isValidated, setIsValidated] = useState(false)
   const isEmpty = !value || !isValidated
   const isDisabledNext = isEmpty || !isValidKeyPhrase
-  const textAreaClasses = addClassString('w-full text-dark900 dark:bg-dark600_20 dark:text-dark300 font-openSauce text-caption1 p-4 outline-none bg-transparent rounded-sm border pr-12', [
-    isEmpty ? 'border-style' : isValidKeyPhrase ? 'border-success' : 'border-error'
-  ])
+  const textAreaClasses = addClassString(
+    'w-full text-dark900 dark:bg-dark600_20 dark:text-dark300 font-openSauce text-caption1 p-4 outline-none bg-transparent rounded-sm border pr-12',
+    [isEmpty ? 'border-style' : isValidKeyPhrase ? 'border-success' : 'border-error'],
+  )
 
   const { generatePubKey } = useChainSafeKeygen()
 
@@ -39,15 +46,15 @@ const MnemonicPhrase:FC<MnemonicPhraseProps> = ({onNextStep, onBackStep, onChang
       setIsValidPhrase(false)
       setIsValidated(true)
 
-      if(e instanceof Error && e.message.includes('NON_NEGATIVE_NUMBER')) {
+      if (e instanceof Error && e.message.includes('NON_NEGATIVE_NUMBER')) {
         message = 'Index must be a non-negative number'
       }
 
-      if(e instanceof Error && e.message.includes('TOO_LARGE_INDEX')) {
+      if (e instanceof Error && e.message.includes('TOO_LARGE_INDEX')) {
         message = 'Index number out of bounds. Must be greater than 0 and less than 4294967295'
       }
 
-      if(e instanceof Error && e.message.includes('INVALID_ADDRESS')) {
+      if (e instanceof Error && e.message.includes('INVALID_ADDRESS')) {
         message = 'Invalid ETH address'
       }
 
@@ -58,42 +65,53 @@ const MnemonicPhrase:FC<MnemonicPhraseProps> = ({onNextStep, onBackStep, onChang
 
   const debouncedValidateKeyPhraseRef = useRef(
     debounce((phrase: string) => {
-      void validateKeyPhrase(phrase);
-    }, 1000)
-  );
+      void validateKeyPhrase(phrase)
+    }, 1000),
+  )
 
   useEffect(() => {
-    setIsValidated(false);
-    if(!value) {
-      return;
+    setIsValidated(false)
+    if (!value) {
+      return
     }
 
-    debouncedValidateKeyPhraseRef.current(value as string);
-
+    debouncedValidateKeyPhraseRef.current(value as string)
   }, [value])
 
   return (
-    <div className="w-full h-full space-y-6">
+    <div className='w-full h-full space-y-6'>
       <div>
-        <Typography type="text-caption1">{t('validatorManagement.mnemonicPhrase.title')} --</Typography>
-        <Typography type="text-subtitle2" fontWeight="font-light">{t('validatorManagement.mnemonicPhrase.subtitle')}</Typography>
+        <Typography type='text-caption1'>
+          {t('validatorManagement.mnemonicPhrase.title')} --
+        </Typography>
+        <Typography type='text-subtitle2' fontWeight='font-light'>
+          {t('validatorManagement.mnemonicPhrase.subtitle')}
+        </Typography>
       </div>
-      <div className="mt-4 w-[65%] space-y-8">
-        <InfoBox isActive={isActive} animDelay={.4} type={InfoBoxType.NOTICE}>
-          <div className="space-y-2">
-            <Typography type="text-caption1" darkMode="text-dark900" color="text-dark900">
+      <div className='mt-4 w-[65%] space-y-8'>
+        <InfoBox isActive={isActive} animDelay={0.4} type={InfoBoxType.NOTICE}>
+          <div className='space-y-2'>
+            <Typography type='text-caption1' darkMode='text-dark900' color='text-dark900'>
               {t('validatorManagement.mnemonicPhrase.warningText')}
             </Typography>
           </div>
         </InfoBox>
-        <div className="relative">
-          {value && !isValidated && <Spinner size="w-6 h-6" className="absolute top-2 right-0"/>}
-          <textarea onChange={onChange}
-                    placeholder={t('validatorManagement.mnemonicPhrase.placeholder')}
-                    className={textAreaClasses} cols="30" rows="10"/>
+        <div className='relative'>
+          {value && !isValidated && <Spinner size='w-6 h-6' className='absolute top-2 right-0' />}
+          <textarea
+            onChange={onChange}
+            placeholder={t('validatorManagement.mnemonicPhrase.placeholder')}
+            className={textAreaClasses}
+            cols='30'
+            rows='10'
+          />
         </div>
       </div>
-      <StepOptions onBackStep={onBackStep} onNextStep={onNextStep} isDisabledNext={isDisabledNext}/>
+      <StepOptions
+        onBackStep={onBackStep}
+        onNextStep={onNextStep}
+        isDisabledNext={isDisabledNext}
+      />
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MAX_PERSISTED_LOGS } from '../constants/constants'
 
 type AnyObject = { [key: string]: any }
@@ -12,12 +12,11 @@ export const defaultLogData = {
 }
 
 export type sseOptions = {
-  url: string,
-  onError?: () => void,
-  isReady: boolean,
+  url: string
+  onError?: () => void
+  isReady: boolean
   isStateStore?: boolean
 }
-
 
 const useSSEData = (options: sseOptions): sseData => {
   const { url, onError, isReady, isStateStore } = options
@@ -98,7 +97,7 @@ const useSSEData = (options: sseOptions): sseData => {
   }, [url, updateData, onError, isReady])
 
   return {
-    data: isStateStore ? dataState :  dataRef.current,
+    data: isStateStore ? dataState : dataRef.current,
   }
 }
 

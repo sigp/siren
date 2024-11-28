@@ -23,11 +23,11 @@ export class LogsController {
 
   @Get('metrics')
   getLogMetrics() {
-    return this.logsService.readLogMetrics()
+    return this.logsService.readLogMetrics();
   }
 
   @Get('dismiss/:index')
   dismissLogAlert(@Param('index') index: string) {
-    return this.logsService.dismissLog(index)
+    return this.logsService.dismissLog(index);
   }
 }

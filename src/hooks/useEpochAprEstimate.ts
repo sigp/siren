@@ -1,4 +1,4 @@
-import {formatUnits} from 'ethers';
+import { formatUnits } from 'ethers'
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
 import calculateAprPercentage from '../../utilities/calculateAprPercentage'

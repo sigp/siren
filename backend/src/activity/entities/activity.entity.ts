@@ -1,6 +1,11 @@
-import {Table, Column, Model, PrimaryKey, AutoIncrement} from 'sequelize-typescript'
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AutoIncrement,
+} from 'sequelize-typescript';
 import { ActivityType } from '../../../../src/types';
-
 
 @Table({
   tableName: 'activities',

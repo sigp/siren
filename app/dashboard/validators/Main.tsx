@@ -1,27 +1,32 @@
-'use client';
+'use client'
 
-import { useMotionValueEvent, useScroll } from 'framer-motion';
-import { useRouter, useSearchParams } from 'next/navigation';
-import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import BlsExecutionModal from '../../../src/components/BlsExecutionModal/BlsExecutionModal';
-import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper';
-import EditValidatorModal from '../../../src/components/EditValidatorModal/EditValidatorModal';
-import Typography from '../../../src/components/Typography/Typography';
-import AddValidatorView from '../../../src/components/ValidatorManagement/AddValidatorView/AddValidatorView';
-import CreateValidatorView from '../../../src/components/ValidatorManagement/CreateValidatorView/CreateValidatorView';
-import MainView from '../../../src/components/ValidatorManagement/MainView';
-import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal';
-import ValidatorSummary from '../../../src/components/ValidatorSummary/ValidatorSummary';
-import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants';
-import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor';
-import useSWRPolling from '../../../src/hooks/useSWRPolling';
-import { activeValidatorId, exchangeRates, isEditValidator, isValidatorDetail } from '../../../src/recoil/atoms';
-import { ActivityResponse, ValidatorManagementView } from '../../../src/types';
-import { BeaconNodeSpecResults, SyncData, ValidatorMetricResult } from '../../../src/types/beacon';
-import { Diagnostics } from '../../../src/types/diagnostic';
-import { ValidatorCache, ValidatorCountResult, ValidatorInfo } from '../../../src/types/validator';
+import { useMotionValueEvent, useScroll } from 'framer-motion'
+import { useRouter, useSearchParams } from 'next/navigation'
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useRecoilState, useSetRecoilState } from 'recoil'
+import BlsExecutionModal from '../../../src/components/BlsExecutionModal/BlsExecutionModal'
+import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
+import EditValidatorModal from '../../../src/components/EditValidatorModal/EditValidatorModal'
+import Typography from '../../../src/components/Typography/Typography'
+import AddValidatorView from '../../../src/components/ValidatorManagement/AddValidatorView/AddValidatorView'
+import CreateValidatorView from '../../../src/components/ValidatorManagement/CreateValidatorView/CreateValidatorView'
+import MainView from '../../../src/components/ValidatorManagement/MainView'
+import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
+import ValidatorSummary from '../../../src/components/ValidatorSummary/ValidatorSummary'
+import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
+import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
+import useSWRPolling from '../../../src/hooks/useSWRPolling'
+import {
+  activeValidatorId,
+  exchangeRates,
+  isEditValidator,
+  isValidatorDetail,
+} from '../../../src/recoil/atoms'
+import { ActivityResponse, ValidatorManagementView } from '../../../src/types'
+import { BeaconNodeSpecResults, SyncData, ValidatorMetricResult } from '../../../src/types/beacon'
+import { Diagnostics } from '../../../src/types/diagnostic'
+import { ValidatorCache, ValidatorCountResult, ValidatorInfo } from '../../../src/types/validator'
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -44,19 +49,19 @@ const Main: FC<MainProps> = (props) => {
     initValStates,
     initValCaches,
     initValMetrics,
-    initActivityData
+    initActivityData,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
 
   const container = useRef<HTMLDivElement | null>(null)
   const { scrollY } = useScroll({
-    container
+    container,
   })
 
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    if(container?.current) {
-      const totalHeight = container.current.scrollHeight - container.current.clientHeight;
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    if (container?.current) {
+      const totalHeight = container.current.scrollHeight - container.current.clientHeight
       setPercentage(Math.round((latest / totalHeight) * 100))
     }
   })
@@ -112,7 +117,10 @@ const Main: FC<MainProps> = (props) => {
     fallbackData: initSyncData,
     networkError,
   })
-  const { data: validatorMetrics } = useSWRPolling<ValidatorMetricResult>('/api/validator-metrics', { refreshInterval: epochInterval / 2, fallbackData: initValMetrics, networkError })
+  const { data: validatorMetrics } = useSWRPolling<ValidatorMetricResult>(
+    '/api/validator-metrics',
+    { refreshInterval: epochInterval / 2, fallbackData: initValMetrics, networkError },
+  )
 
   const filteredValidators = useMemo(() => {
     return validatorStates.filter((validator) => {
@@ -135,17 +143,17 @@ const Main: FC<MainProps> = (props) => {
   }, [activeValId, validatorStates])
 
   useEffect(() => {
-    if(isRendered) return
+    if (isRendered) return
 
-    if(validatorId) {
+    if (validatorId) {
       setValidatorId(Number(validatorId))
     }
 
-    if(modalView === 'detail') {
+    if (modalView === 'detail') {
       setValDetail(true)
     }
 
-    if(modalView === 'edit') {
+    if (modalView === 'edit') {
       setIsEditValidator(true)
     }
 
@@ -162,7 +170,7 @@ const Main: FC<MainProps> = (props) => {
   }, [rates, setExchangeRate])
 
   const closeEditValModal = () => {
-    setIsEditValidator(false);
+    setIsEditValidator(false)
     setValidatorId(undefined)
     router.push('/dashboard/validators')
   }
@@ -172,7 +180,7 @@ const Main: FC<MainProps> = (props) => {
   const viewMain = () => changeView(ValidatorManagementView.MAIN)
 
   const goBack = () => {
-    if(view === ValidatorManagementView.CREATE) {
+    if (view === ValidatorManagementView.CREATE) {
       viewAddValidator()
     } else {
       viewMain()
@@ -183,7 +191,7 @@ const Main: FC<MainProps> = (props) => {
       case ValidatorManagementView.CREATE:
         return t('validatorManagement.titles.create')
       case ValidatorManagementView.ADD:
-        return t('validatorManagement.titles.add');
+        return t('validatorManagement.titles.add')
       default:
         return t('validatorManagement.titles.main')
     }
@@ -191,16 +199,20 @@ const Main: FC<MainProps> = (props) => {
   const renderView = (view) => {
     switch (view) {
       case ValidatorManagementView.CREATE:
-        return <CreateValidatorView onChangeView={changeView} validatorNetworkData={valNetworkData}/>
+        return (
+          <CreateValidatorView onChangeView={changeView} validatorNetworkData={valNetworkData} />
+        )
       case ValidatorManagementView.ADD:
-        return <AddValidatorView onChangeView={changeView}/>
+        return <AddValidatorView onChangeView={changeView} />
       default:
         return (
           <MainView
             validators={filteredValidators}
-            search={search} onSetSearch={setSearch}
+            search={search}
+            onSetSearch={setSearch}
             onChangeView={viewAddValidator}
-            scrollPercentage={scrollPercentage} />
+            scrollPercentage={scrollPercentage}
+          />
         )
     }
   }
@@ -218,8 +230,13 @@ const Main: FC<MainProps> = (props) => {
       >
         <div className='w-full flex flex-col pb-12 p-4'>
           <div className='w-full mb-6 flex flex-col items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>
-            <div className="space-x-4 flex items-center">
-              {view !== ValidatorManagementView.MAIN && <i onClick={goBack} className="cursor-pointer active:scale-80 bi bi-chevron-left text-dark900 dark:text-dark300"/>}
+            <div className='space-x-4 flex items-center'>
+              {view !== ValidatorManagementView.MAIN && (
+                <i
+                  onClick={goBack}
+                  className='cursor-pointer active:scale-80 bi bi-chevron-left text-dark900 dark:text-dark300'
+                />
+              )}
               <Typography fontWeight='font-light' type='text-subtitle1' className='capitalize'>
                 {getPageTitle(view)}
               </Typography>
@@ -236,16 +253,15 @@ const Main: FC<MainProps> = (props) => {
       </DashboardWrapper>
       <BlsExecutionModal />
       {isValDetail && activeValidator && (
-        <ValidatorModal
+        <ValidatorModal validator={activeValidator} validatorCacheData={validatorCache} />
+      )}
+      {isEditVal && activeValidator && (
+        <EditValidatorModal
           validator={activeValidator}
           validatorCacheData={validatorCache}
+          onClose={closeEditValModal}
         />
       )}
-      {
-        isEditVal && activeValidator && (
-          <EditValidatorModal validator={activeValidator} validatorCacheData={validatorCache} onClose={closeEditValModal}/>
-        )
-      }
     </>
   )
 }

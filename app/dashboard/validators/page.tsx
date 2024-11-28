@@ -1,14 +1,14 @@
 import '../../../src/global.css'
-import { redirect } from 'next/navigation';
-import getSessionCookie from '../../../utilities/getSessionCookie';
-import { fetchActivities } from '../../api/activities';
+import { redirect } from 'next/navigation'
+import getSessionCookie from '../../../utilities/getSessionCookie'
+import { fetchActivities } from '../../api/activities'
 import {
   fetchBeaconSpec,
   fetchNodeHealth,
   fetchSyncData,
   fetchValidatorCountData,
 } from '../../api/beacon'
-import { fetchValCaches, fetchValMetrics, fetchValStates } from '../../api/validator';
+import { fetchValCaches, fetchValMetrics, fetchValStates } from '../../api/validator'
 import Wrapper from './Wrapper'
 
 export default async function Page() {

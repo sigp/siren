@@ -1,16 +1,17 @@
 import '../../src/global.css'
-import { redirect } from 'next/navigation';
-import getSessionCookie from '../../utilities/getSessionCookie';
-import { fetchActivities } from '../api/activities';
+import { redirect } from 'next/navigation'
+import getSessionCookie from '../../utilities/getSessionCookie'
+import { fetchActivities } from '../api/activities'
 import {
   fetchBeaconSpec,
   fetchInclusionRate,
   fetchNodeHealth,
-  fetchPeerData, fetchProposerDuties,
-  fetchSyncData
-} from '../api/beacon';
+  fetchPeerData,
+  fetchProposerDuties,
+  fetchSyncData,
+} from '../api/beacon'
 import { fetchBeaconNodeVersion, fetchGenesisData, fetchValidatorVersion } from '../api/config'
-import { fetchLogMetrics } from '../api/logs';
+import { fetchLogMetrics } from '../api/logs'
 import { fetchValCaches, fetchValStates } from '../api/validator'
 import Wrapper from './Wrapper'
 

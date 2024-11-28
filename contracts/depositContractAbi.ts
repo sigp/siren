@@ -1,4 +1,4 @@
-import { AbiItem } from 'web3-utils';
+import { AbiItem } from 'web3-utils'
 
 export const contractAbi = [
   {
@@ -57,4 +57,4 @@ export const contractAbi = [
     payable: false,
     type: 'function',
   },
-] as const;
+] as const

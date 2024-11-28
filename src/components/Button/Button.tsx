@@ -1,4 +1,4 @@
-import { motion, MotionProps } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion'
 import React, { FC, ReactNode } from 'react'
 import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
@@ -48,7 +48,7 @@ const Button: FC<ButtonProps> = ({
   isLoading,
   initial,
   animate,
-  transition
+  transition,
 }) => {
   const buttonContentClasses = addClassString('flex space-x-2', [isLoading && 'opacity-0'])
   const spinnerContentClasses = addClassString('', [

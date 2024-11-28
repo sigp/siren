@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Activity } from './entities/activity.entity';
 import { ActivityType } from '../../../src/types';
 import { UpdateOptions, Op } from 'sequelize';
-import {Response} from 'express';
+import { Response } from 'express';
 
 @Injectable()
 export class ActivityService {
@@ -27,64 +27,67 @@ export class ActivityService {
     this.clients.forEach((client) => client.write(message));
   }
 
-  public async storeActivity (data: string, pubKey: string, type: ActivityType) {
+  public async storeActivity(data: string, pubKey: string, type: ActivityType) {
     try {
       const result = await this.activityRepository.create({
         data,
         pubKey,
         type,
-        hasSeen: false
-      })
+        hasSeen: false,
+      });
 
-      this.sendMessageToClients(result.dataValues)
+      this.sendMessageToClients(result.dataValues);
 
-      return {data: true}
+      return { data: true };
     } catch (e) {
-      return {data: false}
+      return { data: false };
     }
   }
 
-  public async fetchActivities (offset: string | undefined, limit: string | undefined, order: string | undefined, since: string | undefined) {
-    let orderQuery = order?.toUpperCase()
-    const queryLimit = limit ? Number(limit) : 10
+  public async fetchActivities(
+    offset: string | undefined,
+    limit: string | undefined,
+    order: string | undefined,
+    since: string | undefined,
+  ) {
+    let orderQuery = order?.toUpperCase();
+    const queryLimit = limit ? Number(limit) : 10;
 
-    if(orderQuery !== 'ASC' && orderQuery !== 'DESC') {
-      orderQuery = 'DESC'
+    if (orderQuery !== 'ASC' && orderQuery !== 'DESC') {
+      orderQuery = 'DESC';
     }
 
     const whereClause = since
       ? {
-        createdAt: {
-          [Op.gt]: new Date(since),
-        },
-      }
+          createdAt: {
+            [Op.gt]: new Date(since),
+          },
+        }
       : undefined;
 
-    if(whereClause) {
+    if (whereClause) {
       return {
         count: await this.activityRepository.count(),
         rows: await this.activityRepository.findAll({
           where: whereClause,
-          order: [
-            ['createdAt', orderQuery]
-          ]
-        })
-      }
+          order: [['createdAt', orderQuery]],
+        }),
+      };
     }
 
     return this.activityRepository.findAndCountAll({
       limit: queryLimit === 0 ? undefined : queryLimit,
       offset: Number(offset) || 0,
       where: whereClause,
-      order: [
-        ['createdAt', orderQuery]
-      ]
-    })
+      order: [['createdAt', orderQuery]],
+    });
   }
 
   public async updateHasSeen(id: string, status: boolean) {
     try {
-      return await this.activityRepository.update({hasSeen: status}, { where: { id } } as UpdateOptions)
+      return await this.activityRepository.update({ hasSeen: status }, {
+        where: { id },
+      } as UpdateOptions);
     } catch (e) {
       throw e;
     }

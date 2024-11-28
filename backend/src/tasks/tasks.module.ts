@@ -8,7 +8,12 @@ import { LogsModule } from '../logs/logs.module';
 import { Log } from '../logs/entities/log.entity';
 
 @Module({
-  imports: [UtilsModule, LogsModule, CacheModule.register(), SequelizeModule.forFeature([Metric, Log])],
+  imports: [
+    UtilsModule,
+    LogsModule,
+    CacheModule.register(),
+    SequelizeModule.forFeature([Metric, Log]),
+  ],
   providers: [TasksService],
 })
 export class TasksModule {}

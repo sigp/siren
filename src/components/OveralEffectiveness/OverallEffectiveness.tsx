@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import getAvgEffectivenessStatus from '../../../utilities/getAvgEffectivenessStatus'
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
-import { ValidatorMetricResult } from '../../types/beacon';
+import { ValidatorMetricResult } from '../../types/beacon'
 import EffectivenessBreakdown from '../EffectivenessBreakdown/EffectivenessBreakdown'
 import Status from '../Status/Status'
 import Typography from '../Typography/Typography'
@@ -11,7 +11,7 @@ export interface OverallEffectivenessProps {
   validatorMetricResult: ValidatorMetricResult
 }
 
-const OverallEffectiveness: FC<OverallEffectivenessProps> = ({ validatorMetricResult}) => {
+const OverallEffectiveness: FC<OverallEffectivenessProps> = ({ validatorMetricResult }) => {
   const { t } = useTranslation()
   const { targetEffectiveness, hitEffectiveness, totalEffectiveness } = validatorMetricResult
   const status = getAvgEffectivenessStatus(totalEffectiveness)
