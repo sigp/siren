@@ -16,7 +16,6 @@ export interface AuthModalProps extends Omit<AuthFormProps, 'children'> {
   isNamePrompt?: boolean
   onClose?: () => void
   mode: UiMode
-  maxHeight?: string
 }
 
 const AuthPrompt: FC<AuthModalProps> = ({
@@ -26,7 +25,6 @@ const AuthPrompt: FC<AuthModalProps> = ({
   mode,
   onClose,
   isNamePrompt,
-  maxHeight = '550px',
 }) => {
   const { t } = useTranslation()
   const [isReady, setReady] = useState(false)
@@ -36,7 +34,7 @@ const AuthPrompt: FC<AuthModalProps> = ({
   return (
     <RodalModal
       onAnimationEnd={showAnim as any}
-      styles={{ maxWidth: '500px', height: 'auto', maxHeight }}
+      styles={{ maxWidth: '500px' }}
       onClose={onClose}
       isVisible={isVisible}
     >

@@ -74,7 +74,6 @@ const ValidatorGraffiti: FC<ValidatorGraffitiProps> = ({ validator }) => {
     <>
       <AuthPrompt
         isLoading={isLoading}
-        maxHeight='400px'
         mode={mode}
         onClose={closeAuth}
         isVisible={isAuth}

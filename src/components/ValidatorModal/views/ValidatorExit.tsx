@@ -96,7 +96,6 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
         <AuthPrompt
           mode={mode}
           isLoading={isPromptLoading}
-          maxHeight='400px'
           onClose={closePrompt}
           isVisible={isAuthPrompt}
           onSubmit={confirmExit}
