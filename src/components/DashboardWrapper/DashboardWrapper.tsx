@@ -60,13 +60,13 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
   }, [beaconSpec, setBeaconSpec])
 
   return (
-    <div className={`w-screen h-screen flex overflow-hidden relative`}>
+    <div className='w-screen h-screen flex overflow-hidden relative'>
       <SideBar />
       <NetworkErrorModal
         isBeaconNetworkError={isBeaconError}
         isValidatorNetworkError={isValidatorError}
       />
-      <div className='flex flex-1 max-w-[96vw] flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
+      <div className='flex flex-1 flex-col bg-white dark:bg-darkPrimary items-center justify-center'>
         <TopBar initActivityData={initActivityData} beaconSpec={beaconSpec} syncData={syncData} />
         <div ref={scrollRef} className={containerClasses}>
           {children}

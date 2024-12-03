@@ -28,7 +28,7 @@ const AddValidatorAction: FC<AddValidatorActionProps> = ({
   animate,
   index,
 }) => {
-  const actionClass = addClassString('flex-1 max-w-80 h-[409px]', [className])
+  const actionClass = addClassString('flex-1 w-full lg:max-w-80 h-[409px]', [className])
   const highlightClass = addClassString(
     'w-full h-full ease-in duration-500 transition-opacity bg-gradient-to-b dark:bg-gradient-to-b from-primary to-tertiary',
     [!isRecommended && 'opacity-0 group-hover:opacity-100'],

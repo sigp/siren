@@ -50,10 +50,10 @@ const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirm
       data={candidate}
       index={index !== undefined ? Number(index) : undefined}
     >
-      <div className='p-8 flex-1 space-y-8'>
+      <div className='p-8 flex-1 space-y-12'>
         <div className='relative'>
           {isValid && (
-            <i className='bi bi-check-circle text-success text-caption absolute top-2 -left-5' />
+            <i className='bi bi-check text-success text-caption 2xl:text-subtitle3 absolute top-2 -left-5' />
           )}
           <Input
             placeholder={t('password')}
@@ -66,7 +66,7 @@ const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirm
         </div>
         <div className='relative'>
           {isValid && (
-            <i className='bi bi-check-circle text-success text-caption absolute top-2 -left-5' />
+            <i className='bi bi-check text-success text-caption 2xl:text-subtitle3 absolute top-2 -left-5' />
           )}
           <Input
             placeholder={t('confirmPassword')}

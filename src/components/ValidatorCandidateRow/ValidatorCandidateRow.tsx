@@ -41,7 +41,7 @@ const ValidatorCandidateRow: FC<ValidatorCandidateRowProps> = ({
         <div className='px-4 flex space-x-6 py-2 items-center'>
           <div className='flex space-x-2 items-center'>
             <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
-            <div className='w-[180px] border-r relative'>
+            <div className='hidden lg:block relative w-[180px] 2xl:w-[220px] border-r'>
               {onUpdateCandidate ? (
                 <InlineInput
                   containerClass='w-full'

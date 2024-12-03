@@ -83,7 +83,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
           {t('validatorManagement.keystoreAuthentication.subTitle')}
         </Typography>
       </div>
-      <div className='w-full flex flex-col flex-1 max-w-[750px] space-y-6'>
+      <div className='w-full flex flex-col flex-1 max-w-[750px] 2xl:max-w-[900px] space-y-6'>
         {candidateCount < 2 || isAll ? (
           <InfoBox
             isActive
@@ -117,7 +117,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
               </div>
             </div>
           </div>
-          {isAll ? (
+          {isAll || candidateCount === 1 ? (
             <KeystoreAuthRow
               onConfirmation={updateSharedCandidatePassword}
               candidate={groupCandidate}

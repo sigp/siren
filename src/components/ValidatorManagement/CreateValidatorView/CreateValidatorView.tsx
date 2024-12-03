@@ -97,10 +97,14 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
                 className='flex-1 h-11 bg-dark25 dark:bg-dark750 flex items-center justify-center border-r dark:border-r-dark600 last:border-r-0'
               >
                 <div className='flex space-x-2 items-center'>
-                  <div className='w-3 h-3 flex items-center justify-center border dark:border-dark300 text-dark900 rounded-full'>
-                    <Typography type='text-xTiny'>{index + 1}</Typography>
+                  <div className='w-6 h-6 lg:w-3 lg:h-3 flex items-center justify-center border dark:border-dark300 text-dark900 rounded-full'>
+                    <Typography type='text-caption' className='lg:text-xTiny'>
+                      {index + 1}
+                    </Typography>
                   </div>
-                  <Typography type='text-caption1'>{step}</Typography>
+                  <Typography className='hidden lg:block' type='text-caption1'>
+                    {step}
+                  </Typography>
                 </div>
               </div>
             ))}

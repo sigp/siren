@@ -13,7 +13,7 @@ export interface AddValOptionProps {
 
 const AddValOption: FC<AddValOptionProps> = ({ data, onChangeView, animControls, index }) => {
   const { isDisabled, view, isRecommended, title, subTitle, caption, SVG } = data
-  const containerClass = addClassString('flex-1 max-w-80 h-[409px]', [
+  const containerClass = addClassString('flex-1 w-full lg:max-w-80 h-[409px]', [
     isDisabled && 'opacity-15 dark:opacity-40 pointer-events-none',
   ])
   return (
@@ -28,7 +28,7 @@ const AddValOption: FC<AddValOptionProps> = ({ data, onChangeView, animControls,
         subTitle={subTitle}
         caption={caption}
       >
-        <SVG className='absolute left-1/2 inset-0 top-[50px] z-20 w-[300px] h-[300px]' />
+        <SVG className='absolute left-1/2 inset-0 top-[50px] z-20 w-full lg:w-[300px] h-[300px]' />
       </AddValidatorAction>
     </div>
   )

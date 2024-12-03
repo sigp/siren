@@ -196,7 +196,7 @@ const Main: FC<MainProps> = (props) => {
         return t('validatorManagement.titles.main')
     }
   }
-  const renderView = (view) => {
+  const renderView = (view: ValidatorManagementView) => {
     switch (view) {
       case ValidatorManagementView.CREATE:
         return (
@@ -228,8 +228,8 @@ const Main: FC<MainProps> = (props) => {
         isValidatorError={isValidatorError}
         nodeHealth={nodeHealth}
       >
-        <div className='w-full flex flex-col pb-12 p-4'>
-          <div className='w-full mb-6 flex flex-col items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>
+        <div className='w-full flex flex-col pb-12 p-4 max-w-[96vw]'>
+          <div className='w-full mb-6 flex flex-col lg:items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>
             <div className='space-x-4 flex items-center'>
               {view !== ValidatorManagementView.MAIN && (
                 <i
@@ -237,7 +237,11 @@ const Main: FC<MainProps> = (props) => {
                   className='cursor-pointer active:scale-80 bi bi-chevron-left text-dark900 dark:text-dark300'
                 />
               )}
-              <Typography fontWeight='font-light' type='text-subtitle1' className='capitalize'>
+              <Typography
+                fontWeight='font-light'
+                type='text-subtitle2'
+                className='capitalize lg:text-subtitle1'
+              >
                 {getPageTitle(view)}
               </Typography>
             </div>

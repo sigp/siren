@@ -88,7 +88,7 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
           {t('validatorManagement.mnemonicPhrase.subtitle')}
         </Typography>
       </div>
-      <div className='mt-4 w-[65%] space-y-8'>
+      <div className='mt-4 w-full lg:w-[65%] space-y-8'>
         <InfoBox isActive={isActive} animDelay={0.4} type={InfoBoxType.NOTICE}>
           <div className='space-y-2'>
             <Typography type='text-caption1' darkMode='text-dark900' color='text-dark900'>

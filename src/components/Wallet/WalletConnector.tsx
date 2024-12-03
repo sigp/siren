@@ -32,7 +32,7 @@ const WalletConnector = () => {
         </Button>
       </div>
       {isOpen ? (
-        <div className='absolute w-[256px] top-full translate-y-1 left-1/2 -translate-x-1/2'>
+        <div className='absolute w-[256px] top-full translate-y-1 right-0 lg:left-1/2 lg:-translate-x-1/2 lg:right-auto'>
           <motion.div
             initial={{ y: -80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}

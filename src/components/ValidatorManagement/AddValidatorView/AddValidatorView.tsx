@@ -59,7 +59,7 @@ const AddValidatorView: FC<AddValidatorViewProps> = ({ onChangeView }) => {
           {t('validatorManagement.addValidator.subTitle')}
         </Typography>
       </div>
-      <div className='w-full flex space-x-12'>
+      <div className='w-full flex flex-col space-y-6 lg:space-y-0 lg:flex-row lg:space-x-12'>
         {options.map((option, index) => (
           <AddValOption
             key={index}

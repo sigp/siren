@@ -75,10 +75,10 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const switchNetwork = () => switchChain({ chainId: Number(DEPOSIT_NETWORK_ID) })
 
   return (
-    <div ref={ref as any} className='z-10 relative'>
+    <div ref={ref as any} className='z-10 h-full relative'>
       <div
         onClick={openWallet}
-        className='relative z-20 hidden lg:flex items-center space-x-4 justify-between w-52 h-14 py-2 px-4 cursor-pointer max-h-full border-l-style'
+        className='relative z-20 flex items-center space-x-4 justify-between w-52 h-full py-2 px-4 cursor-pointer max-h-full border-l-style'
       >
         <div className='relative'>
           <WalletDefault className='h-10 w-10 rounded-full' />
