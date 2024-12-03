@@ -29,6 +29,17 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
   const count = candidates.length
   const divRef = useRef(null)
 
+  const inputSize = () => {
+    switch (true) {
+      case count >= 100:
+        return 12
+      case count >= 10:
+        return 10
+      default:
+        return 8
+    }
+  }
+
   useEffect(() => {
     if (divRef.current) {
       divRef.current.scrollTo({
@@ -39,15 +50,15 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
   }, [count])
 
   return (
-    <div className='w-[75%]'>
+    <div className='w-full lg:w-[75%]'>
       <div className='w-full border-style flex'>
-        <div className='flex-1 flex space-x-4 items-center px-4'>
+        <div className='lg:flex-1 flex space-x-4 items-center px-4'>
           <div className='w-8 h-8 flex items-center justify-center'>
             <div className='w-4 h-4'>
               <ValidatorLogo className='text-dark900 dark:text-dark200' />
             </div>
           </div>
-          <Typography>{t('validatorManagement.validators')}</Typography>
+          <Typography className='hidden lg:block'>{t('validatorManagement.validators')}</Typography>
         </div>
         <div className='group cursor-pointer flex border-l-style px-4 space-x-14 items-center'>
           <Typography isUpperCase isBold type='text-caption2'>
@@ -58,10 +69,11 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
           </Typography>
           <div className='border-r px-4 mr-4'>
             <InlineInput
+              max={999}
               placeholder={String(count)}
               type='number'
               onChange={onQuickSetCandidates}
-              inputClass='w-8'
+              inputClass={`w-${inputSize()}`}
             >
               <div className='flex space-x-2 items-center'>
                 <i className='opacity-0 group-hover:opacity-100 bi-pencil-square text-dark900 dark:text-dark300' />
