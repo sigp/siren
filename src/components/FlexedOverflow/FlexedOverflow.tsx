@@ -53,15 +53,17 @@ const FlexedOverflow: FC<FlexedOverflowProps> = ({
     <div className='flex-1 relative'>
       <div ref={container} className={classes}>
         {children}
-        <div className={animClasses}>
-          <motion.div
-            className='opacity-20 w-fit absolute left-1/2 -translate-x-1/2 flex items-center justify-center'
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-          >
-            <Lighthouse className='w-8 text-white' />
-          </motion.div>
-        </div>
+        {!!onScrollBottom && (
+          <div className={animClasses}>
+            <motion.div
+              className='opacity-20 w-fit absolute left-1/2 -translate-x-1/2 flex items-center justify-center'
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            >
+              <Lighthouse className='w-8 text-white' />
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   )
