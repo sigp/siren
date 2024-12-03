@@ -1,4 +1,3 @@
-import { AbiItem } from 'web3-utils'
 
 export const contractAbi = [
   {
