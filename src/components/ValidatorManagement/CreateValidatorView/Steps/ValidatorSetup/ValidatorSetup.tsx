@@ -1,7 +1,8 @@
 import { ChangeEvent, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
-import { ValidatorCandidate } from '../../../../../types'
+import displayToast from '../../../../../../utilities/displayToast'
+import { ToastType, ValidatorCandidate } from '../../../../../types'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../StepOptions'
 import ValSetupTable, { ValSetupTableProps } from './ValSetupTable'
@@ -44,6 +45,11 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange
       return
     }
 
+    if (count > 999) {
+      displayToast(t('tooManyValidatorWarning'), ToastType.WARNING)
+      return
+    }
+
     onValidatorChange(
       Array.from({ length: Number(e.target.value) }, () => ({
         id: getRandomId(),
@@ -56,12 +62,12 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange
   }
 
   return (
-    <div className='w-full h-full space-y-6'>
+    <div className='w-full lg:h-full space-y-6'>
       <Typography type='text-caption1'>
         {t('validatorManagement.validatorSetup.title')} --
       </Typography>
-      <div className='w-1/3'>
-        <Typography type='text-subtitle2' fontWeight='font-light'>
+      <div className='w-1/2 lg:w-1/3'>
+        <Typography type='text-subtitle3' className='lg:text-subtitle2' fontWeight='font-light'>
           {t('validatorManagement.validatorSetup.subTitle')}
         </Typography>
       </div>

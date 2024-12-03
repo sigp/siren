@@ -99,6 +99,7 @@ export interface AlertMessage {
 export enum ToastType {
   ERROR = 'error',
   SUCCESS = 'success',
+  WARNING = 'WARNING',
 }
 
 export type Rates = {
