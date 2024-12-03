@@ -89,6 +89,7 @@ const useValidatorDeposit = ({
                 type: ActivityType.DEPOSIT,
                 pubKey: pubkey,
               })
+              setLoading(false)
             } catch (e) {
               console.error(e, 'error storing activity')
             }
@@ -98,8 +99,6 @@ const useValidatorDeposit = ({
     } catch (e) {
       handleDepositError(e)
       console.log(e)
-    } finally {
-      setLoading(false)
     }
   }
 
