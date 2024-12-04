@@ -35,7 +35,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   const [isSharedCredentialVerified, setIsSharedCredentialVerified] = useState(false)
 
   useEffect(() => {
-    setIsAll(valCount >= 2)
+    setIsAll(valCount > 1)
   }, [valCount])
 
   const isValidAddress = isAll

@@ -70,7 +70,9 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
     setSharedKeystorePassword(password)
 
   useEffect(() => {
-    setIsAll(candidateCount > 1)
+    if (candidateCount > 1) {
+      setIsAll(true)
+    }
   }, [candidateCount])
 
   return (
@@ -117,10 +119,16 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
               </div>
             </div>
           </div>
-          {isAll || candidateCount === 1 ? (
+          {isAll ? (
             <KeystoreAuthRow
               onConfirmation={updateSharedCandidatePassword}
               candidate={groupCandidate}
+            />
+          ) : candidateCount === 1 ? (
+            <KeystoreAuthRow
+              onConfirmation={updateCandidatePassword}
+              candidate={candidates[0]}
+              index={candidates[0].index}
             />
           ) : (
             <FlexedOverflow>
