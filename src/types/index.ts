@@ -1,5 +1,6 @@
 import { FC, SVGProps } from 'react'
 import { Protocol } from '../constants/enums'
+import { KeyStoreData } from '../hooks/useLodestarDepositData'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
 
@@ -190,10 +191,11 @@ export type Activity = {
 }
 
 export type TxStatus = 'pending' | 'error' | 'success'
+export type TxHash = `0x${string}`
 
 export type DepositData = {
-  txHash: string
-  keyStore: any
+  txHash: TxHash
+  keyStore: KeyStoreData
   pubKey: string
   mnemonicIndex: number
   status: TxStatus

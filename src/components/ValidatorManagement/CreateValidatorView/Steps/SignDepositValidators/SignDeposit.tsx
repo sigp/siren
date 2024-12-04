@@ -16,7 +16,7 @@ const SignDeposit: FC<SignDepositProps> = ({
 }) => {
   return candidates.length > 1 ? (
     <MultiDeposits
-      sharedWithdrawalCredentials={sharedWithdrawalCredentials as string}
+      sharedWithdrawalCredentials={sharedWithdrawalCredentials}
       sharedKeystorePassword={sharedKeystorePassword}
       candidates={candidates}
       {...props}

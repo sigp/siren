@@ -25,7 +25,7 @@ const WalletConnector = () => {
   }, [error])
 
   return (
-    <div ref={ref} className='relative h-full'>
+    <div ref={ref as any} className='relative h-full'>
       <div className='h-full flex items-center justify-center pr-4'>
         <Button onClick={openConnectorMenu} type={ButtonFace.TERTIARY}>
           {t('connectWallet')}

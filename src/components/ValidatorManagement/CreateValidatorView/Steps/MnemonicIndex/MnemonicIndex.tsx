@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ChangeEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, FC, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import useChainSafeKeygen from '../../../../../hooks/useChainSafeKeygen'
 import { NetworkId, ValidatorCandidate } from '../../../../../types'
@@ -29,7 +29,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   isActive,
 }) => {
   const { t } = useTranslation()
-  const inputRef = useRef(null)
+  const inputRef = useRef<HTMLInputElement>(null)
   const [startIndex, setIndex] = useState<number | undefined>(undefined)
   const { generatePubKey } = useChainSafeKeygen()
   const [indexedValidatorCandidates, setIndexedCandidates] = useState<ValidatorCandidate[]>([])
@@ -46,7 +46,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
 
     const potentialIndices = candidates.map((validator, index) => ({
       ...validator,
-      index: startIndex + index,
+      index: (startIndex || 0) + index,
       isPending: true,
     }))
 
@@ -74,7 +74,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
     }
 
     const limitConcurrency = async (tasks: ValidatorCandidate[], length: number) => {
-      const results = []
+      const results = [] as ValidatorCandidate[]
       let index = 0
 
       const executeTask = async () => {
@@ -111,11 +111,13 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
 
   const stepBack = () => {
     setIndexedCandidates([])
-    inputRef.current.value = ''
+    if (inputRef.current) {
+      inputRef.current.value = ''
+    }
     onBackStep()
   }
 
-  const handleEnterKey = async (event) => {
+  const handleEnterKey = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && startIndex !== undefined && startIndex > 0) {
       await validateIndices()
     }

@@ -51,6 +51,7 @@ export type TypographyType =
   | 'text-tiny'
   | 'text-xTiny'
   | 'text-sm'
+  | 'text-caption1.5'
 
 export interface TypographyProps {
   className?: OptionalString

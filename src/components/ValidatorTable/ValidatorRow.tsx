@@ -227,7 +227,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       <th className='px-2'>
         <div className='w-full flex justify-center'>
           {view === 'full' ? (
-            <div onClick={hasIndex ? viewDetail : null} className={validatorDetailBtnClass}>
+            <div onClick={hasIndex ? viewDetail : undefined} className={validatorDetailBtnClass}>
               <div className='w-4 h-4'>
                 <ValidatorLogo className='text-primary' />
               </div>

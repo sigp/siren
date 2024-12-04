@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import displayToast from '../../../utilities/displayToast'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
+import { KeyStoreData } from '../../hooks/useLodestarDepositData'
 import useValidatorDeposit, { ValidatorDepositConfig } from '../../hooks/useValidatorDeposit'
-import { DepositData, ToastType, ValidatorCandidate } from '../../types'
+import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import Spinner from '../Spinner/Spinner'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
@@ -12,7 +13,7 @@ import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
 
 export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, 'validator'> {
   candidate: ValidatorCandidate
-  onDeposit: (txHash: string, keyStore: any, pubKey: string, mnemonicIndex: number) => void
+  onDeposit: (txHash: TxHash, keyStore: KeyStoreData, pubKey: string, mnemonicIndex: number) => void
   data: DepositData | undefined
 }
 

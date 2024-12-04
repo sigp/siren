@@ -1,4 +1,5 @@
 import { useAccount, UseAccountReturnType, useBalance, UseBalanceParameters } from 'wagmi'
+import { ChainWithIcon } from '../types/wallet'
 
 export type BalanceReturn = {
   decimals: number
@@ -7,16 +8,22 @@ export type BalanceReturn = {
   value: bigint
 }
 
-export interface UseAccountBalanceResult extends UseAccountReturnType {
+export interface useAccountBalanceParameters extends UseBalanceParameters {
+  refetchInterval?: number | undefined
+}
+
+export interface UseAccountBalanceResult extends Omit<UseAccountReturnType, 'address' | 'chain'> {
+  chain?: ChainWithIcon
+  address?: string | undefined
   balanceData: BalanceReturn | undefined
 }
 
-const useAccountBalance = (props?: UseBalanceParameters): UseAccountBalanceResult => {
+const useAccountBalance = (props?: useAccountBalanceParameters): UseAccountBalanceResult => {
   const { query, refetchInterval = 6000 } = props || {}
   const account = useAccount()
-  const { address } = account
+  const { address, chain } = account
 
-  const { data } = useBalance({
+  const { data: balanceData } = useBalance({
     ...props,
     address,
     query: {
@@ -28,7 +35,8 @@ const useAccountBalance = (props?: UseBalanceParameters): UseAccountBalanceResul
 
   return {
     ...account,
-    balanceData: data,
+    chain: chain as ChainWithIcon,
+    balanceData,
   }
 }
 

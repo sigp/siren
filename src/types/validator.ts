@@ -30,7 +30,7 @@ export type ValidatorDetail = {
 export type ValidatorInfo = {
   name: string | undefined
   balance: number
-  index: number | undefined
+  index: number
   pubKey: string
   rewards: number
   slashed: boolean

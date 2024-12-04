@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
-import { TxStatus } from '../types'
+import { TxHash, TxStatus } from '../types'
 
 export type useResolveTransactionOnceReturnType = {
   txStatus: TxStatus | undefined
 }
 
-const useResolveTransactionOnce = (txHash: string): useResolveTransactionOnceReturnType => {
+const useResolveTransactionOnce = (
+  txHash: TxHash | undefined,
+): useResolveTransactionOnceReturnType => {
   const [isEnabledFetch, setIsEnabledFetch] = useState<boolean>(true)
   const {
     isFetched,

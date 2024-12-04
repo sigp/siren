@@ -4,15 +4,16 @@ import { useTranslation } from 'react-i18next'
 import displayToast from '../../../utilities/displayToast'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
+import { KeyStoreData } from '../../hooks/useLodestarDepositData'
 import useResolveTransactionOnce from '../../hooks/useResolveTransactionOnce'
-import { DepositData, NetworkId, ToastType, TxStatus } from '../../types'
+import { DepositData, NetworkId, ToastType, TxHash, TxStatus } from '../../types'
 import ExternalLink from '../ExternalLink/ExternalLink'
 import TransactionStatus from '../TransactionStatus/TransactionStatus'
 import Typography from '../Typography/Typography'
 
 export interface ValidatorDepositImportProps {
   depositData: DepositData
-  onRetryTx: (txHash: string) => void
+  onRetryTx: (txHash: TxHash) => void
   onUpdateStatus: (pubKey: string, status: TxStatus) => void
   depositNetworkId: NetworkId
 }
@@ -32,7 +33,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   const [importError, setImportError] = useState(false)
   const { txStatus } = useResolveTransactionOnce(txHash)
 
-  const importValidator = async (keyStore) => {
+  const importValidator = async (keyStore: KeyStoreData) => {
     try {
       const response = await axios.post('/api/validator-import', { data: keyStore })
 

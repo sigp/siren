@@ -1,5 +1,5 @@
 import { verifyMessage, isAddress } from 'ethers'
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSignMessage } from 'wagmi'
 import addClassString from '../../../utilities/addClassString'
@@ -28,9 +28,9 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
   const [errorMsg, setError] = useState('')
   const messageSignature = t('validatorManagement.withdrawalCredentials.confirmOwnership')
 
-  const { data, signMessage, error } = useSignMessage({ account: credentialInput })
+  const { data, signMessage, error } = useSignMessage()
 
-  const setCredential = (e) => {
+  const setCredential = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     onSetCredential(id, '')
     setError('')

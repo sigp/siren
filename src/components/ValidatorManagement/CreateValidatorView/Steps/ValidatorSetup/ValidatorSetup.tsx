@@ -4,14 +4,16 @@ import { v4 as uuidv4 } from 'uuid'
 import displayToast from '../../../../../../utilities/displayToast'
 import { ToastType, ValidatorCandidate } from '../../../../../types'
 import Typography from '../../../../Typography/Typography'
-import StepOptions from '../../StepOptions'
+import StepOptions, { StepOptionsProps } from '../../StepOptions'
 import ValSetupTable, { ValSetupTableProps } from './ValSetupTable'
 
-export interface ValidatorSetupProps extends Pick<ValSetupTableProps, 'candidates' | 'onContinue'> {
+export interface ValidatorSetupProps
+  extends Pick<ValSetupTableProps, 'candidates'>,
+    Pick<StepOptionsProps, 'onNextStep'> {
   onValidatorChange: (vals: ValidatorCandidate[]) => void
 }
 
-const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange, onContinue }) => {
+const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange, onNextStep }) => {
   const { t } = useTranslation()
   const getRandomId = () => uuidv4().toString()
 
@@ -79,7 +81,7 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange
         onQuickSetCandidates={quickSetValidators}
         onRemoveLastCandidate={removeLastValidator}
       />
-      {candidates.length > 0 ? <StepOptions onNextStep={onContinue} /> : null}
+      {candidates.length > 0 ? <StepOptions onNextStep={onNextStep} /> : null}
     </div>
   )
 }

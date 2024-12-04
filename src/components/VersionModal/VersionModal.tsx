@@ -4,6 +4,7 @@ import { REQUIRED_VALIDATOR_VERSION } from '../../constants/constants'
 import { SemanticVersion } from '../../types'
 import AlertIcon from '../AlertIcon/AlertIcon'
 import Button, { ButtonFace } from '../Button/Button'
+import { InfoBoxType } from '../InfoBox/InfoBox'
 import RodalModal from '../RodalModal/RodalModal'
 import Typography from '../Typography/Typography'
 
@@ -21,7 +22,7 @@ const VersionModal: FC<VersionModalProps> = ({ isVisible, currentVersion }) => {
     <RodalModal styles={{ maxWidth: '500px' }} isVisible={isVisible}>
       <div className='p-6'>
         <div className='pb-2 border-b mb-6 flex items-center space-x-4'>
-          <AlertIcon className='h-8 w-8' type='warning' />
+          <AlertIcon className='h-8 w-8' type={InfoBoxType.WARNING} />
           <Typography type='text-subtitle3' isUpperCase fontWeight='font-light'>
             {t('versionModal.title')}
           </Typography>

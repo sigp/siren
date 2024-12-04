@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
 import formatEthAddress from '../../../../../../../utilities/formatEthAddress'
+import { KeyStoreData } from '../../../../../../hooks/useLodestarDepositData'
 import useResolveTransactionOnce from '../../../../../../hooks/useResolveTransactionOnce'
 import useValidatorDeposit from '../../../../../../hooks/useValidatorDeposit'
 import { ToastType, ValidatorCandidate } from '../../../../../../types'
@@ -76,7 +77,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   const acknowledgeRisk = () => setIsAcknowledge(true)
 
-  const importValidator = async (keyStore) => {
+  const importValidator = async (keyStore: KeyStoreData) => {
     try {
       const response = await axios.post('/api/validator-import', { data: keyStore })
 

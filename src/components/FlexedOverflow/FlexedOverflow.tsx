@@ -18,7 +18,7 @@ const FlexedOverflow: FC<FlexedOverflowProps> = ({
   onScrollBottom,
   isScrollAnim,
 }) => {
-  const container = useRef(null)
+  const container = useRef<HTMLDivElement>(null) // Explicitly typed ref
   const [scrollPercentage, setPercentage] = useState(0)
   const classes = addClassString('absolute top-0 left-0 w-full h-full overflow-scroll', [className])
   const animClasses = addClassString('h-12 w-full', [isScrollAnim ? 'opacity-100' : 'opacity-0'])
@@ -29,7 +29,7 @@ const FlexedOverflow: FC<FlexedOverflowProps> = ({
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     if (container?.current) {
-      const totalHeight = container.current.scrollHeight - container.current.clientHeight
+      const totalHeight = container.current.scrollHeight - container.current.clientHeight // Type-safe access
       setPercentage(Math.round((latest / totalHeight) * 100))
     }
   })
@@ -47,7 +47,7 @@ const FlexedOverflow: FC<FlexedOverflowProps> = ({
         behavior: 'smooth',
       })
     }
-  }, [children.length, isAutoScroll])
+  }, [children, isAutoScroll])
 
   return (
     <div className='flex-1 relative'>

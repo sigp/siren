@@ -27,7 +27,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
   } = props
   const { t } = useTranslation()
   const count = candidates.length
-  const divRef = useRef(null)
+  const divRef = useRef<HTMLDivElement>(null)
 
   const inputSize = () => {
     switch (true) {

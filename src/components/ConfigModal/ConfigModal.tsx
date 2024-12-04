@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import AlertIcon from '../AlertIcon/AlertIcon'
 import Button, { ButtonFace } from '../Button/Button'
+import { InfoBoxType } from '../InfoBox/InfoBox'
 import RodalModal from '../RodalModal/RodalModal'
 import Typography from '../Typography/Typography'
 
@@ -18,7 +19,7 @@ const ConfigModal: FC<ConfigModalProps> = ({ isReady, beaconNodeVersion, lightho
     <RodalModal styles={{ maxWidth: '500px' }} isVisible={isReady}>
       <div className='p-6'>
         <div className='pb-2 border-b mb-6 flex items-center space-x-4'>
-          <AlertIcon className='h-12 w-12' type='error' />
+          <AlertIcon className='h-12 w-12' type={InfoBoxType.ERROR} />
           <Typography type='text-subtitle3' isUpperCase fontWeight='font-light'>
             {t('configModal.title')}
           </Typography>

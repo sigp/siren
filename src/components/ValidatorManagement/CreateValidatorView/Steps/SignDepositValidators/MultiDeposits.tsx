@@ -2,7 +2,8 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
-import { DepositData, TxStatus, ValidatorCandidate } from '../../../../../types'
+import { KeyStoreData } from '../../../../../hooks/useLodestarDepositData'
+import { DepositData, TxHash, TxStatus, ValidatorCandidate } from '../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
 import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import Typography from '../../../../Typography/Typography'
@@ -12,8 +13,8 @@ import AcceptRisks from './AcceptRisks'
 
 export interface MultiDepositsProps {
   candidates: ValidatorCandidate[]
-  sharedKeystorePassword: string
-  sharedWithdrawalCredentials: string
+  sharedKeystorePassword: string | undefined
+  sharedWithdrawalCredentials: string | undefined
   beaconSpec: BeaconNodeSpecResults
   mnemonic: string
 }
@@ -32,8 +33,8 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
 
   const acknowledgeRisk = () => setIsAcknowledgeRisk(true)
   const storeDepositInfo = (
-    txHash: string,
-    keyStore: any,
+    txHash: TxHash,
+    keyStore: KeyStoreData,
     pubKey: string,
     mnemonicIndex: number,
   ) => {
@@ -55,7 +56,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
     }
   }
 
-  const removeTransaction = (txHash: string) => {
+  const removeTransaction = (txHash: TxHash) => {
     setDepositData((prev) => prev.filter((data) => data.txHash !== txHash))
   }
 
@@ -94,8 +95,9 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                     mnemonic={mnemonic}
                     candidate={{
                       ...validator,
-                      keyStorePassword: sharedKeystorePassword,
-                      withdrawalCredentials: sharedWithdrawalCredentials,
+                      keyStorePassword: sharedKeystorePassword || validator.keyStorePassword,
+                      withdrawalCredentials:
+                        sharedWithdrawalCredentials || validator.withdrawalCredentials,
                     }}
                   />
                 ))}

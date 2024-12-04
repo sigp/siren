@@ -2,7 +2,6 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Chain } from 'viem/types/chain'
 import { useDisconnect, useSwitchChain } from 'wagmi'
 import copyToClipboard from '../../../utilities/copyToClipboard'
 import formatChainId from '../../../utilities/formatChainId'
@@ -12,12 +11,13 @@ import WalletDefault from '../../assets/images/wallet.svg'
 import { BalanceReturn } from '../../hooks/useAccountBalance'
 import useClickOutside from '../../hooks/useClickOutside'
 import { BeaconNodeSpecResults } from '../../types/beacon'
+import { ChainWithIcon } from '../../types/wallet'
 import Typography from '../Typography/Typography'
 
 export interface WalletProps {
   beaconSpec: BeaconNodeSpecResults
   balanceData: BalanceReturn
-  chain: Chain
+  chain: ChainWithIcon
   address: string
   currency: {
     prefix: string
@@ -30,7 +30,7 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const { rate, prefix } = currency
   const { formatted, symbol } = balanceData
   const { id, iconUrl, hasIcon, name } = chain
-  const ethRate = Math.round(rate || 0) * formatted
+  const ethRate = Math.round(rate || 0) * (Number(formatted) || 0)
   const [isOpen, setOpen] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
   const { DEPOSIT_NETWORK_ID } = beaconSpec
@@ -39,6 +39,8 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const { switchChain } = useSwitchChain()
   const chainId = formatChainId(String(id))
   const formattedAddress = formatEthAddress(address, 4)
+
+  const disconnectWallet = () => disconnect()
 
   const copyAddress = async () => {
     try {
@@ -173,7 +175,7 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
               )}
             </div>
             <div
-              onClick={disconnect}
+              onClick={disconnectWallet}
               className='cursor-pointer hover:scale-95 transition duration-200 ease-in-out space-x-2 px-2 py-4 group border-b-style last:border-none flex items-center'
             >
               <i className='bi bi-box-arrow-right text-dark500' />

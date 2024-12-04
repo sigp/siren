@@ -18,17 +18,17 @@ const createWagmiConfig = () => {
       },
       nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
       testnet: true,
-    })
+    } as any)
   }
 
-  const chains = [mainnet, holesky]
+  const chains = [mainnet, holesky] as any
   const transports = {
     [mainnet.id]: http(),
     [holesky.id]: http(),
-  }
+  } as any
 
-  if (customLocalhost) {
-    chains.push(customLocalhost)
+  if (customLocalhost !== undefined) {
+    chains.push(customLocalhost as any)
     transports[customLocalhost.id] = http()
   }
 

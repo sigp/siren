@@ -2,7 +2,9 @@ import Link, { LinkProps } from 'next/link'
 import { FC } from 'react'
 import Typography, { TypographyProps } from '../Typography/Typography'
 
-export interface ExternalLinkProps extends LinkProps, Omit<TypographyProps, 'children'> {
+export interface ExternalLinkProps
+  extends Omit<LinkProps, 'as'>,
+    Omit<TypographyProps, 'children' | 'as'> {
   text: string
 }
 
@@ -15,7 +17,7 @@ const ExternalLink: FC<ExternalLinkProps> = ({
 }) => {
   return (
     <div>
-      <Link href={href} target='_blank'>
+      <Link href={href} target='_blank' passHref>
         <div className='flex space-x-2 items-center'>
           <Typography color={color} type={type} className='underline' {...props}>
             {text}

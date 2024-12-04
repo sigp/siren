@@ -1,4 +1,4 @@
-const parseCookies = (cookieHeader: string | undefined) => {
+const parseCookies = (cookieHeader: string | null) => {
   if (!cookieHeader) return {}
   return cookieHeader.split(';').reduce(
     (acc, cookie) => {

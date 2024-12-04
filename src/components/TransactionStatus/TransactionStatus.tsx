@@ -3,12 +3,12 @@ import { FC, ReactNode } from 'react'
 import addClassString from '../../../utilities/addClassString'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
-import { NetworkId, TxStatus } from '../../types'
+import { NetworkId, TxHash, TxStatus } from '../../types'
 import Typography from '../Typography/Typography'
 
 export interface TransactionStatusProps {
   id?: string | number
-  txHash: string
+  txHash: TxHash
   status: TxStatus
   title: string
   text?: string | undefined
@@ -63,14 +63,14 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
             <Link href={etherScanLink} target='_blank'>
               <div className='flex space-x-2 items-center'>
                 <Typography color='text-dark400' type='text-caption1' className='underline'>
-                  {formatEthAddress(txHash)}
+                  {formatEthAddress(txHash as string)}
                 </Typography>
                 <i className='text-dark400 text-caption1 bi-box-arrow-up-right' />
               </div>
             </Link>
           ) : (
             <Typography color='text-dark400' type='text-caption1' className='underline'>
-              {formatEthAddress(txHash)}
+              {formatEthAddress(txHash as string)}
             </Typography>
           )}
         </div>

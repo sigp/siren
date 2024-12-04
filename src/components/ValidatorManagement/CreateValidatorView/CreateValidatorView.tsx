@@ -3,7 +3,6 @@ import Carousel from 'nuka-carousel'
 import { ChangeEvent, FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
-import { useAccount } from 'wagmi'
 import { EFFECTIVE_BALANCE } from '../../../constants/constants'
 import { beaconNodeSpec } from '../../../recoil/atoms'
 import {
@@ -52,7 +51,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const [sharedWithdrawalCredentials, setSharedCredentials] = useState('')
   const [sharedKeystorePassword, setSharedKeystorePassword] = useState('')
   const [isRisk, setIsRisk] = useState(false)
-  const { isConnected } = useAccount()
 
   const { active_ongoing } = validatorNetworkData
   const totalCandidates = candidates.length
@@ -118,7 +116,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
               candidateCount={totalCandidates}
             >
               <ValidatorSetup
-                onContinue={incrementStep}
+                onNextStep={incrementStep}
                 onValidatorChange={setNewValidators}
                 candidates={candidates}
               />
@@ -159,7 +157,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
               candidateCount={totalCandidates}
             >
               <WithdrawalCredentials
-                isConnected={isConnected}
                 onShowRisk={showRiskMessage}
                 isActive={step === 3}
                 candidates={candidates}
@@ -192,7 +189,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
                 sharedWithdrawalCredentials={sharedWithdrawalCredentials}
                 onComplete={viewManagement}
                 rewardEstimate={calculatedRewards}
-                candidateCount={totalCandidates}
                 mnemonic={keyPhrase}
                 candidates={candidates}
               />
