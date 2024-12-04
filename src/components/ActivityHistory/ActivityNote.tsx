@@ -49,27 +49,31 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         const activityData = JSON.parse(data)
         return (
           <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans i18nKey='activityHistory.activities.deposit.text'>
-              <span className='underline font-bold'>
-                {{ txHash: formatEthAddress(activityData.txHash) }}
-              </span>
-            </Trans>
+            <Trans
+              i18nKey='activityHistory.activities.deposit.text'
+              components={{ span: <span className='underline font-bold' /> }}
+              values={{ txHash: formatEthAddress(activityData.txHash) }}
+            />
           </Typography>
         )
       case ActivityType.IMPORT:
         return (
           <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans i18nKey='activityHistory.activities.validatorImport.text'>
-              <span className='underline font-bold'>{{ pubKey: formatEthAddress(pubKey) }}</span>
-            </Trans>
+            <Trans
+              i18nKey='activityHistory.activities.validatorImport.text'
+              components={{ span: <span className='underline font-bold' /> }}
+              values={{ pubKey: formatEthAddress(pubKey) }}
+            />
           </Typography>
         )
       case ActivityType.GRAFFITI:
         return (
           <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans i18nKey='activityHistory.activities.updateGraffiti.text'>
-              <span className='underline font-bold'>{{ pubKey: formatEthAddress(pubKey) }}</span>
-            </Trans>
+            <Trans
+              i18nKey='activityHistory.activities.updateGraffiti.text'
+              components={{ span: <span className='underline font-bold' /> }}
+              values={{ pubKey: formatEthAddress(pubKey) }}
+            />
           </Typography>
         )
       default:
