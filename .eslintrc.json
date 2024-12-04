@@ -1,5 +1,5 @@
 {
-  "plugins": ["@typescript-eslint", "import", "react-hooks", "unused-imports"],
+  "plugins": ["@typescript-eslint", "import", "unused-imports"],
   "extends": ["next/core-web-vitals"],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
