@@ -1,6 +1,7 @@
 import { create, IKeystore } from '@chainsafe/bls-keystore'
-import { fromHexString, toHexString } from '@chainsafe/ssz'
+import { fromHexString, toHexString, Type } from '@chainsafe/ssz'
 import { DOMAIN_DEPOSIT } from '@lodestar/params'
+import { DomainType, Domain, Root, Version } from '@lodestar/types'
 import { ssz } from '@lodestar/types/phase0'
 import { isAddress, getBytes } from 'ethers'
 import { useState } from 'react'
@@ -34,7 +35,7 @@ export type useLodestarDepositDataReturnType = {
   generateKeystore: (
     mnemonic: string,
     index: number,
-    keyStorePassword,
+    keyStorePassword: string,
     keyDerivationPath?: string,
   ) => Promise<KeyStoreData>
 }
@@ -43,10 +44,38 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
   const [isLoading, setLoading] = useState<boolean>(false)
   const { deriveValidatorKeys } = useChainSafeKeygen()
 
+  const computeForkDataRoot = (currentVersion: Version, genesisValidatorsRoot: Root) => {
+    const forkData = {
+      currentVersion,
+      genesisValidatorsRoot,
+    }
+    return ssz.ForkData.hashTreeRoot(forkData)
+  }
+
+  const computeDomain = (
+    domainType: DomainType,
+    forkVersion: Version,
+    genesisValidatorRoot: Root,
+  ) => {
+    const forkDataRoot = computeForkDataRoot(forkVersion, genesisValidatorRoot)
+    const domain = new Uint8Array(32)
+    domain.set(domainType, 0)
+    domain.set(forkDataRoot.slice(0, 28), 4)
+    return domain
+  }
+
+  const computeSigningRoot = <T>(type: Type<T>, sszObject: T, domain: Domain) => {
+    const domainWrappedObject = {
+      objectRoot: type.hashTreeRoot(sszObject),
+      domain,
+    }
+    return ssz.SigningData.hashTreeRoot(domainWrappedObject)
+  }
+
   const generateKeystore = async (
     mnemonic: string,
     index: number,
-    keyStorePassword,
+    keyStorePassword: string,
     keyDerivationPath = 'm/12381/3600/0/0/0',
   ): Promise<KeyStoreData> => {
     setLoading(true)
@@ -94,18 +123,18 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
 
       const depositMessage = { pubkey: publicKey.toBytes(), withdrawalCredentials, amount }
 
-      const { ZERO_HASH, computeDomain, computeSigningRoot } = await import(
-        '@lodestar/state-transition'
+      const domain = computeDomain(
+        DOMAIN_DEPOSIT,
+        getBytes(genesisForkVersion),
+        Buffer.alloc(32, 0),
       )
-
-      const domain = computeDomain(DOMAIN_DEPOSIT, getBytes(genesisForkVersion), ZERO_HASH)
       const signingRoot = computeSigningRoot(ssz.DepositMessage, depositMessage, domain)
       const depositData = { ...depositMessage, signature: secretKey.sign(signingRoot).toBytes() }
 
       const depositDataRoot = ssz.DepositData.hashTreeRoot(depositData)
 
       return {
-        ...(ssz.DepositData.toJson(depositData) as DepositDataJson),
+        ...(ssz.DepositData.toJson(depositData) as any),
         deposit_data_root: toHexString(depositDataRoot),
       }
     } catch (e) {
