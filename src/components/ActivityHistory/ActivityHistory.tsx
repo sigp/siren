@@ -85,7 +85,9 @@ const ActivityHistory: FC<ActivityHistoryProps> = ({ initActivityData, depositNe
   const hasUnseenHistory = data.some((row) => !row.hasSeen)
 
   const sortedHistory = useMemo(() => {
-    return [...data].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+    return [...data].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    )
   }, [data])
 
   const chunkedHistory = useMemo(() => {
@@ -122,7 +124,7 @@ const ActivityHistory: FC<ActivityHistoryProps> = ({ initActivityData, depositNe
                 animate={{ x: 0 }}
                 transition={{ duration: 0.3, type: 'spring', delay: 0.2 }}
                 exit={{ x: '100%' }}
-                ref={ref}
+                ref={ref as any}
                 className='p-8 w-full h-full flex flex-col bg-white dark:bg-dark750'
               >
                 <div className='py-8 border-b-style mb-8'>
