@@ -39,4 +39,4 @@ RUN rm /etc/nginx/sites-enabled/default; \
 
 COPY --from=intermediate /app /app/
 
-ENTRYPOINT /app/docker-assets/docker-entrypoint.sh
+ENTRYPOINT ["/app/docker-assets/docker-entrypoint.sh"]
