@@ -653,8 +653,8 @@
     }
   },
   "errorPage": {
-    "title": "Opps!",
-    "subText": "Siren seems to have encountered an unexpected error. Please review your configuration and or node connections to continue to your dashboard.",
+    "title": "Oops!",
+    "subText": "Siren seems to have encountered an unexpected error. Please review your configuration and/or node connections to continue to your dashboard.",
     "cta": "Go Back"
   },
   "understandAndAccept": "I Understand & Accept",
