@@ -2,7 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../../../../../../utilities/getBeaconChaLink'
-import { NetworkId } from '../../../../../../../types'
+import { NetworkId, TxHash } from '../../../../../../../types'
 import ExternalLink from '../../../../../../ExternalLink/ExternalLink'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
 import Typography from '../../../../../../Typography/Typography'
@@ -10,7 +10,7 @@ import Typography from '../../../../../../Typography/Typography'
 export interface ImportValidatorStepProps {
   networkId: NetworkId
   pubKey: string
-  txHash: string
+  txHash: TxHash | undefined
   isImportError: boolean
 }
 
@@ -24,7 +24,7 @@ const ImportValidatorStep: FC<ImportValidatorStepProps> = ({
   const shortHandPubKey = formatEthAddress(pubKey)
   const beaconChaLink = getBeaconChaLink(networkId, `/validator/${pubKey}`)
 
-  return (
+  return txHash ? (
     <div className='py-4'>
       <TransactionStatus
         networkId={networkId}
@@ -48,7 +48,7 @@ const ImportValidatorStep: FC<ImportValidatorStepProps> = ({
         )}
       </TransactionStatus>
     </div>
-  )
+  ) : null
 }
 
 export default ImportValidatorStep

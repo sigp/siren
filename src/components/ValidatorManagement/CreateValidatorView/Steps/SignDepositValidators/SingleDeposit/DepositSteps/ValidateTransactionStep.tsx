@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NetworkId, TxStatus } from '../../../../../../../types'
+import { NetworkId, TxHash, TxStatus } from '../../../../../../../types'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
 import Typography from '../../../../../../Typography/Typography'
 
 export interface ValidateTransactionStepProps {
   txStatus: TxStatus | undefined
-  txHash: string
+  txHash: TxHash | undefined
   networkId: NetworkId
   onRetry: () => void
 }
@@ -20,7 +20,7 @@ const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
   const { t } = useTranslation()
   const isError = txStatus === 'error'
 
-  return (
+  return txHash ? (
     <div className='p-4 space-y-2'>
       <TransactionStatus
         title={t(`validatorManagement.txStatuses.${txStatus}.title`)}
@@ -43,7 +43,7 @@ const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
         )}
       </TransactionStatus>
     </div>
-  )
+  ) : null
 }
 
 export default ValidateTransactionStep
