@@ -15,7 +15,8 @@ export interface MnemonicIndexRowProps {
 
 const MnemonicIndexRow: FC<MnemonicIndexRowProps> = ({ candidate, depositNetworkId }) => {
   const { t } = useTranslation()
-  const { isValidIndex, isPending, index, pubKey } = candidate
+  const { isValidIndex, index, pubKey } = candidate
+  const isPending = !Boolean(pubKey)
   const validClasses = addClassString('p-2 border rounded', [
     isPending
       ? 'border-style'
@@ -28,7 +29,7 @@ const MnemonicIndexRow: FC<MnemonicIndexRowProps> = ({ candidate, depositNetwork
   ])
 
   return (
-    <ValidatorCandidateRow index={index} isValidate data={candidate}>
+    <ValidatorCandidateRow index={index} data={candidate}>
       <div className={containerClasses}>
         {pubKey && (
           <ExternalLink

@@ -35,7 +35,7 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
 
   const { generatePubKey } = useChainSafeKeygen()
 
-  const validateKeyPhrase = async (phrase) => {
+  const validateKeyPhrase = async (phrase: string) => {
     try {
       await generatePubKey(phrase, 0)
 
@@ -102,8 +102,8 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
             onChange={onChange}
             placeholder={t('validatorManagement.mnemonicPhrase.placeholder')}
             className={textAreaClasses}
-            cols='30'
-            rows='10'
+            cols={30}
+            rows={10}
           />
         </div>
       </div>
