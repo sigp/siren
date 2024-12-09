@@ -271,6 +271,9 @@
     "blsExecution": "BLS Change Execution submitted. Kindly wait while the execution is being processed."
   },
   "error": {
+    "nonNegativeIndex": "Index must be a non-negative number",
+    "tooLargeIndex": "Index number out of bounds. Must be greater than 0 and less than 4294967295",
+    "invalidEthAddress": "Invalid ETH address",
     "invalidPassword": "Invalid Session Password",
     "length": "12 characters min",
     "passwordMatch": "Confirmation must match password",

@@ -47,15 +47,15 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
       setIsValidated(true)
 
       if (e instanceof Error && e.message.includes('NON_NEGATIVE_NUMBER')) {
-        message = 'Index must be a non-negative number'
+        message = t('error.nonNegativeIndex')
       }
 
       if (e instanceof Error && e.message.includes('TOO_LARGE_INDEX')) {
-        message = 'Index number out of bounds. Must be greater than 0 and less than 4294967295'
+        message = t('error.tooLargeIndex')
       }
 
       if (e instanceof Error && e.message.includes('INVALID_ADDRESS')) {
-        message = 'Invalid ETH address'
+        message = t('error.invalidEthAddress')
       }
 
       displayToast(message, ToastType.ERROR)
