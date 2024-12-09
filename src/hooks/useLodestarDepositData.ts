@@ -76,7 +76,6 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     mnemonic: string,
     index: number,
     keyStorePassword: string,
-    keyDerivationPath = 'm/12381/3600/0/0/0',
   ): Promise<KeyStoreData> => {
     setLoading(true)
 
@@ -86,7 +85,7 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
         keyStorePassword,
         secretKey.toBytes(),
         publicKey.toBytes(),
-        keyDerivationPath,
+        'm/12381/3600/0/0/0',
       )
 
       return {
