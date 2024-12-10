@@ -9,9 +9,9 @@ on:
       - v*
 
 env:
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/siren
+  DOCKER_PASSWORD: ${{ secrets.DH_KEY }}
+  DOCKER_USERNAME: ${{ secrets.DH_ORG }}
+  IMAGE_NAME: ${{ secrets.DH_ORG }}/siren
 
 jobs:
   # Extract the VERSION which is either `latest` or `vX.Y.Z`, and the VERSION_SUFFIX
