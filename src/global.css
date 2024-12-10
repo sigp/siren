@@ -13,6 +13,18 @@
     @apply border border-borderLight dark:border-borderDark;
   }
 
+  .border-l-style {
+    @apply border-l border-borderLight dark:border-borderDark;
+  }
+
+  .border-r-style {
+    @apply border-r border-borderLight dark:border-borderDark;
+  }
+
+  .border-b-style {
+    @apply border-b border-borderLight dark:border-borderDark;
+  }
+
   .border-style500 {
     @apply border border-dark200 dark:border-dark500;
   }
@@ -55,6 +67,10 @@
 
   .primary-gradient-text {
     @apply bg-gradient-to-r from-primaryBright to-tertiary w-max bg-clip-text;
+  }
+
+  .primary-gradient-l-r {
+    @apply bg-gradient-to-r from-primary to-tertiary;
   }
 }
 
@@ -172,4 +188,8 @@ input[type='checkbox']:not(:checked) {
   .text-title {
     @apply text-uTitle;
   }
+}
+
+.createSlide .slide {
+  max-width: 100vw;
 }

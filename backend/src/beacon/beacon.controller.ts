@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { BeaconService } from './beacon.service';
 import { SessionGuard } from '../session.guard';
 import { AuthGuard } from '../auth.guard';
@@ -10,7 +10,7 @@ export class BeaconController {
 
   @Get('spec')
   async getBeaconSpec() {
-    return this.beaconService.fetchSpecData()
+    return this.beaconService.fetchSpecData();
   }
 
   @Get('version')
@@ -57,6 +57,11 @@ export class BeaconController {
   @Post('execute-exit')
   @UseGuards(AuthGuard)
   async executeVoluntaryExit(@Body() message) {
-    return this.beaconService.submitSignedExit(message.data)
+    return this.beaconService.submitSignedExit(message.data);
+  }
+
+  @Get('validator-status/:pubKey')
+  async fetchValidatorStatus(@Param('pubKey') pubKey: string) {
+    return this.beaconService.fetchValidatorStatus(pubKey);
   }
 }

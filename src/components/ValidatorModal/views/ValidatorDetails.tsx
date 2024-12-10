@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react';
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { formatLocalCurrency } from '../../../../utilities/formatLocalCurrency'
@@ -7,7 +7,7 @@ import getAvgEffectivenessStatus from '../../../../utilities/getAvgEffectiveness
 import isBlsAddress from '../../../../utilities/isBlsAddress'
 import toFixedIfNecessary from '../../../../utilities/toFixedIfNecessary'
 import { exchangeRates, processingBlsValidators } from '../../../recoil/atoms'
-import { ValidatorMetricResult } from '../../../types/beacon';
+import { ValidatorMetricResult } from '../../../types/beacon'
 import { ValidatorBalanceInfo, ValidatorCache, ValidatorInfo } from '../../../types/validator'
 import BeaconChaLink from '../../BeaconChaLink/BeaconChaLink'
 import ValidatorDisclosure from '../../Disclosures/ValidatorDisclosure'
@@ -16,7 +16,7 @@ import Status from '../../Status/Status'
 import StatusIcon from '../../StatusIcon/StatusIcon'
 import Typography from '../../Typography/Typography'
 import ValidatorDetailTable from '../../ValidatorDetailTable/ValidatorDetailTable'
-import ValidatorGraffiti from '../../ValidatorGraffiti/ValidatorGraffiti';
+import ValidatorGraffiti from '../../ValidatorGraffiti/ValidatorGraffiti'
 import ValidatorIncomeSummary from '../../ValidatorIncomeSummary/ValidatorIncomeSummary'
 import ValidatorInfoCard from '../../ValidatorInfoCard/ValidatorInfoCard'
 import ValidatorStatusProgress from '../../ValidatorStatusProgress/ValidatorStatusProgress'
@@ -48,7 +48,7 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
     processingValidators && index && processingValidators.includes(index.toString()),
   )
 
-  const isBls = Boolean(withdrawalAddress && isBlsAddress(withdrawalAddress))
+  const isBls = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false
   const isExited = validator?.status.includes('exit') || validator?.status.includes('withdrawal')
   const combinedStatus = getAvgEffectivenessStatus(totalEffectiveness)
 
@@ -139,7 +139,7 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
             </div>
           </div>
         </div>
-        <ValidatorGraffiti validator={validator}/>
+        <ValidatorGraffiti validator={validator} />
         <ValidatorDetailTable validator={validator} validatorCacheData={validatorCacheData} />
         <ValidatorActions
           isExitAction={!isExited}

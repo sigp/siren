@@ -1,5 +1,10 @@
-import {Table, Column, Model, PrimaryKey, AutoIncrement} from 'sequelize-typescript'
-
+import {
+  Table,
+  Column,
+  Model,
+  PrimaryKey,
+  AutoIncrement,
+} from 'sequelize-typescript';
 
 @Table({
   tableName: 'validator-metrics',

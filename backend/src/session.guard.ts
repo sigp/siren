@@ -19,12 +19,9 @@ export class SessionGuard implements CanActivate {
       throw new UnauthorizedException();
     }
     try {
-      request['user'] = await this.jwtService.verifyAsync(
-        token,
-        {
-          secret: this.apiToken
-        }
-      );
+      request['user'] = await this.jwtService.verifyAsync(token, {
+        secret: this.apiToken,
+      });
     } catch {
       throw new UnauthorizedException();
     }

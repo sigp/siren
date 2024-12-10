@@ -8,10 +8,11 @@ import { NodeModule } from './node/node.module';
 import { LogsModule } from './logs/logs.module';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { dataBaseConfig } from './database/database.config';
-import {ScheduleModule} from '@nestjs/schedule'
+import { ScheduleModule } from '@nestjs/schedule';
 import { TasksModule } from './tasks/tasks.module';
 import { JwtModule } from '@nestjs/jwt';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
+import { ActivityModule } from './activity/activity.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
     BeaconModule,
     ValidatorModule,
     NodeModule,
+    ActivityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

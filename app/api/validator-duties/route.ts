@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import getReqAuthToken from '../../../utilities/getReqAuthToken';
-import { fetchProposerDuties } from '../beacon';
+import getReqAuthToken from '../../../utilities/getReqAuthToken'
+import { fetchProposerDuties } from '../beacon'
 
 export async function GET(req: Request) {
   try {

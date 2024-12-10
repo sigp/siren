@@ -8,4 +8,5 @@ export const fetchValidatorAuthKey = async (token: string) =>
   await fetchFromApi(`${backendUrl}/validator/auth-key`, token)
 export const fetchValidatorVersion = async (token: string) =>
   await fetchFromApi(`${backendUrl}/validator/version`, token)
-export const fetchGenesisData = async (token: string) => await fetchFromApi(`${backendUrl}/beacon/genesis`, token)
+export const fetchGenesisData = async (token: string) =>
+  await fetchFromApi(`${backendUrl}/beacon/genesis`, token)

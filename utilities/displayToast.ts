@@ -15,6 +15,8 @@ const displayToast = (message: string, type: ToastType, options?: ToastOptions) 
 
   if (type === ToastType.SUCCESS) {
     toast.success(message, toastOptions)
+  } else if (type === ToastType.WARNING) {
+    toast.warning(message, toastOptions)
   } else {
     toast.error(message, toastOptions)
   }

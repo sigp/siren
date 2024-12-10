@@ -1,13 +1,13 @@
 import { useRouter } from 'next/navigation'
 import Carousel from 'nuka-carousel'
 import { createContext, FC, useEffect, useMemo, useState } from 'react'
-import { useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil'
 import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData'
 import { ValidatorModalView } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import useSWRPolling from '../../hooks/useSWRPolling';
-import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms';
-import { ValidatorMetricResult } from '../../types/beacon';
+import useSWRPolling from '../../hooks/useSWRPolling'
+import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms'
+import { ValidatorMetricResult } from '../../types/beacon'
 import { ValidatorBalanceInfo } from '../../types/validator'
 import RodalModal from '../RodalModal/RodalModal'
 import Spinner from '../Spinner/Spinner'
@@ -24,12 +24,10 @@ export const ValidatorModalContext = createContext<ValidatorModalContextProps>({
   closeModal: () => {},
 })
 
-export interface ValidatorModalProps extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'> {}
+export interface ValidatorModalProps
+  extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'> {}
 
-const ValidatorModal: FC<ValidatorModalProps> = ({
-  validator,
-  validatorCacheData,
-}) => {
+const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData }) => {
   const [isReady, setReady] = useState(false)
   const router = useRouter()
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
@@ -56,7 +54,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
 
   const closeModal = () => {
     router.push('/dashboard/validators')
-    setActiveValidatorId(undefined);
+    setActiveValidatorId(undefined)
     setValDetail(false)
     setTimeout(() => {
       setView(ValidatorModalView.DETAILS)
@@ -68,7 +66,13 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
 
     switch (view) {
       case ValidatorModalView.EXIT:
-        return <ValidatorExit isAnimate={isFinishAnim} validatorEpochData={validatorEpochData} validator={validator} />
+        return (
+          <ValidatorExit
+            isAnimate={isFinishAnim}
+            validatorEpochData={validatorEpochData}
+            validator={validator}
+          />
+        )
       default:
         return <div />
     }

@@ -10,16 +10,16 @@ require('dotenv').config()
 const backendUrl = process.env.BACKEND_URL
 
 const handleSSe = (res, req, url) => {
-  const cookies = req.headers.cookie;
-  let authToken = '';
+  const cookies = req.headers.cookie
+  let authToken = ''
 
   if (cookies) {
-    cookies.split(';').forEach(cookie => {
-      const [name, value] = cookie.split('=').map(c => c.trim());
+    cookies.split(';').forEach((cookie) => {
+      const [name, value] = cookie.split('=').map((c) => c.trim())
       if (name === 'session-token') {
-        authToken = value;
+        authToken = value
       }
-    });
+    })
   }
 
   res.writeHead(200, {
@@ -32,8 +32,8 @@ const handleSSe = (res, req, url) => {
 
   const eventSource = new EventSource(url, {
     headers: {
-      'Authorization': `Bearer ${authToken}`
-    }
+      Authorization: `Bearer ${authToken}`,
+    },
   })
   eventSource.onmessage = (e) => {
     res.write(`data: ${e.data}\n\n`)
@@ -60,6 +60,7 @@ const handleSSe = (res, req, url) => {
 
 app.prepare().then(() => {
   const server = express()
+  server.get('/activity-stream', (req, res) => handleSSe(res, req, `${backendUrl}/activity/stream`))
   server.get('/validator-logs', (req, res) => handleSSe(res, req, `${backendUrl}/logs/validator`))
   server.get('/beacon-logs', (req, res) => handleSSe(res, req, `${backendUrl}/logs/beacon`))
 

@@ -1,5 +1,5 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { mockValidatorCache } from '../../mocks/validatorResults';
+import { mockValidatorCache } from '../../mocks/validatorResults'
 import useFilteredValidatorCacheData from '../useFilteredValidatorCacheData'
 import clearAllMocks = jest.clearAllMocks
 
@@ -14,9 +14,12 @@ describe('useFilteredValidatorCacheData hook', () => {
   })
 
   it('should return filtered data', () => {
-    const { result } = renderHook(() => useFilteredValidatorCacheData(mockValidatorCache, ['1234568']))
+    const { result } = renderHook(() =>
+      useFilteredValidatorCacheData(mockValidatorCache, ['1234568']),
+    )
 
-    expect(result.current).toStrictEqual({1234568: [
+    expect(result.current).toStrictEqual({
+      1234568: [
         { epoch: 12345678, total_balance: 33 },
         { epoch: 12345679, total_balance: 33.00002 },
         { epoch: 12345679, total_balance: 33.000025 },
@@ -27,6 +30,7 @@ describe('useFilteredValidatorCacheData hook', () => {
         { epoch: 12345679, total_balance: 33.000047 },
         { epoch: 12345679, total_balance: 33.00005 },
         { epoch: 12345679, total_balance: 33.000054 },
-      ],})
+      ],
+    })
   })
 })

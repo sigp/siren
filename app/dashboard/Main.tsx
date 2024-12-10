@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react';
+import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -16,12 +16,12 @@ import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
 import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
-import { exchangeRates, proposerDuties } from '../../src/recoil/atoms';
-import { LogMetric, ProposerDuty, StatusColor } from '../../src/types';
+import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
+import { ActivityResponse, LogMetric, ProposerDuty, StatusColor } from '../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
 import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
-import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray';
+import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray'
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -36,6 +36,7 @@ export interface MainProps {
   initInclusionRate: ValidatorInclusionData
   initProposerDuties: ProposerDuty[]
   initLogMetrics: LogMetric
+  initActivityData: ActivityResponse
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -52,10 +53,10 @@ const Main: FC<MainProps> = (props) => {
     genesisTime,
     initProposerDuties,
     initLogMetrics,
+    initActivityData,
   } = props
 
   const { t } = useTranslation()
-
   const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH } = beaconSpec
   const { version } = pckJson
   const { updateAlert, storeAlert, removeAlert } = useDiagnosticAlerts()
@@ -125,7 +126,7 @@ const Main: FC<MainProps> = (props) => {
   const warningCount = logMetrics.warningLogs?.length || 0
 
   useEffect(() => {
-    setDuties(prev => formatUniqueObjectArray([...prev, ...valDuties]))
+    setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
   }, [valDuties])
 
   useEffect(() => {
@@ -217,6 +218,7 @@ const Main: FC<MainProps> = (props) => {
 
   return (
     <DashboardWrapper
+      initActivityData={initActivityData}
       syncData={syncData}
       nodeHealth={nodeHealth}
       beaconSpec={beaconSpec}

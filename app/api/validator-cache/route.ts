@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import getReqAuthToken from '../../../utilities/getReqAuthToken';
+import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchValCaches } from '../validator'
 
 export async function GET(req: Request) {

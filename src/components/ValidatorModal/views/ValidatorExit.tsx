@@ -1,14 +1,13 @@
-import axios from 'axios';
-import Cookies from 'js-cookie';
+import axios from 'axios'
 import { FC, useContext, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import addClassString from '../../../../utilities/addClassString'
-import displayToast from '../../../../utilities/displayToast';
+import displayToast from '../../../../utilities/displayToast'
 import { ValidatorModalView } from '../../../constants/enums'
-import useUiMode from '../../../hooks/useUiMode';
-import { ToastType } from '../../../types';
-import { SignedExitData } from '../../../types/validator';
-import AuthPrompt from '../../AuthPrompt/AuthPrompt';
+import useUiMode from '../../../hooks/useUiMode'
+import { ToastType } from '../../../types'
+import { SignedExitData } from '../../../types/validator'
+import AuthPrompt from '../../AuthPrompt/AuthPrompt'
 import BasicValidatorMetrics, {
   BasicValidatorMetricsProps,
 } from '../../BasicValidatorMetrics/BasicValidatorMetrics'
@@ -27,12 +26,6 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   const { t } = useTranslation()
   const { pubKey } = validator
   const { mode } = useUiMode()
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${Cookies.get('session-token')}`
-    }
-  }
   const [isPromptLoading, setPromptLoading] = useState(false)
   const [isLoading, setLoading] = useState(false)
   const [isAccept, setIsAccept] = useState(false)
@@ -46,8 +39,8 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   const handleError = (e: any, defaultMessage: string) => {
     let message = defaultMessage
 
-    if(e.response.status === 401) {
-      message = 'Unauthorized. Invalid session password provided.'
+    if (e.response.status === 401) {
+      message = t('invalidSessionPassword')
     }
     displayToast(message, ToastType.ERROR)
     setPromptLoading(false)
@@ -56,16 +49,16 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
 
   const getSignedExit = async (password: string): Promise<SignedExitData | undefined> => {
     try {
-      const { data } = await axios.post('/api/sign-validator-exit', {pubKey, password}, config)
+      const { data } = await axios.post('/api/sign-validator-exit', { pubKey, password })
 
       return data
     } catch (e) {
       handleError(e, t('error.unableToSignExit'))
     }
   }
-  const submitSignedMessage = async (data: {data: SignedExitData, password: string}) => {
+  const submitSignedMessage = async (data: { data: SignedExitData; password: string }) => {
     try {
-      const { status } = await axios.post('/api/execute-validator-exit', data, config)
+      const { status } = await axios.post('/api/execute-validator-exit', data)
 
       if (status === 200) {
         displayToast(t('success.validatorExit'), ToastType.SUCCESS)
@@ -81,7 +74,7 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
     const message = await getSignedExit(password)
 
     if (message) {
-      await submitSignedMessage({data: message, password})
+      await submitSignedMessage({ data: message, password })
       setPromptLoading(false)
       setAuthPrompt(false)
       closeModal()
@@ -100,7 +93,13 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
   return (
     <>
       <div className='pt-2 exit-validator-modal relative'>
-        <AuthPrompt mode={mode} isLoading={isPromptLoading} maxHeight="400px" onClose={closePrompt} isVisible={isAuthPrompt} onSubmit={confirmExit}/>
+        <AuthPrompt
+          mode={mode}
+          isLoading={isPromptLoading}
+          onClose={closePrompt}
+          isVisible={isAuthPrompt}
+          onSubmit={confirmExit}
+        />
         <div className='py-4 px-6 flex justify-between'>
           <div className='space-x-4 flex items-center'>
             <i onClick={viewDetails} className='bi-chevron-left dark:text-dark300 cursor-pointer' />
@@ -110,7 +109,11 @@ const ValidatorExit: FC<ValidatorExitProps> = ({ validator, validatorEpochData, 
           </div>
           <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
         </div>
-        <ValidatorInfoHeader animName="exit-gradient-header" isAnimate={isAnimate} validator={validator} />
+        <ValidatorInfoHeader
+          animName='exit-gradient-header'
+          isAnimate={isAnimate}
+          validator={validator}
+        />
         <div className='p-6 space-y-6'>
           <Typography type='text-caption1' isBold isUpperCase>
             <Trans i18nKey='validatorExit.management'>

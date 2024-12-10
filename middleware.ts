@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers';
-import isExpiredToken from './utilities/isExpiredToken';
+import { cookies } from 'next/headers'
+import isExpiredToken from './utilities/isExpiredToken'
 
 const restrictedEndpoints = [
   '/setup/health-check',
@@ -10,7 +10,6 @@ const restrictedEndpoints = [
   '/dashboard/settings',
   '/dashboard/validators',
 ] as any
-
 
 const redirectToInitPage = (request: any, nextPath: string) => {
   return NextResponse.redirect(new URL(`/?redirect=${nextPath}`, request.url))
@@ -26,11 +25,11 @@ export async function middleware(request) {
 
     const token = cookies().get('session-token').value
 
-    if(!token) {
+    if (!token) {
       return redirectToInitPage(request, pathname)
     }
 
-    if(isExpiredToken(token)) {
+    if (isExpiredToken(token)) {
       return redirectToInitPage(request, pathname)
     }
 

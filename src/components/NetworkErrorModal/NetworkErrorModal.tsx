@@ -36,10 +36,11 @@ const NetworkErrorModal: FC<NetworkErrorModalProps> = ({
         </Typography>
         <div className='max-w-xl mb-8'>
           <Typography data-testid='networkText' className='text-center'>
-            <Trans i18nKey='networkErrorModal.affectedNetworks'>
-              <span className='font-bold' />
-              {{ network: effectedNetworkText() }}
-            </Trans>{' '}
+            <Trans
+              i18nKey='networkErrorModal.affectedNetworks'
+              components={{ span: <span className='font-bold' /> }}
+              values={{ network: effectedNetworkText() }}
+            />
             <Trans i18nKey='networkErrorModal.reconfigureOrContact'>
               <a className='font-bold underline' target='_blank' rel='noreferrer' href={DiscordUrl}>
                 discord

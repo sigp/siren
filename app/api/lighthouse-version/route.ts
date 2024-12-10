@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import getReqAuthToken from '../../../utilities/getReqAuthToken';
+import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchValidatorVersion } from '../config'
 
 export async function GET(req: Request) {

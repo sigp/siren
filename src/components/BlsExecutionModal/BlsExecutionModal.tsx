@@ -1,6 +1,5 @@
 import axios, { AxiosError } from 'axios'
-import Cookies from 'js-cookie';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { useRecoilState } from 'recoil'
@@ -11,10 +10,10 @@ import { MOCK_BLS_JSON, WithdrawalInfoLink } from '../../constants/constants'
 import { Storage } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import useUiMode from '../../hooks/useUiMode';
+import useUiMode from '../../hooks/useUiMode'
 import { isBlsExecutionModal, processingBlsValidators } from '../../recoil/atoms'
 import { ToastType } from '../../types'
-import AuthPrompt from '../AuthPrompt/AuthPrompt';
+import AuthPrompt from '../AuthPrompt/AuthPrompt'
 import { ButtonFace } from '../Button/Button'
 import CodeInput from '../CodeInput/CodeInput'
 import ValidatorDisclosure from '../Disclosures/ValidatorDisclosure'
@@ -41,9 +40,9 @@ const BlsExecutionModal = () => {
   const [, storeIsBlsProcessing] = useLocalStorage<string>(Storage.BLS_PROCESSING, '')
 
   useEffect(() => {
-    if(isRendered) return
+    if (isRendered) return
 
-    if(modalView === 'bls') {
+    if (modalView === 'bls') {
       toggleModal(true)
     }
 
@@ -71,7 +70,7 @@ const BlsExecutionModal = () => {
       message = t('error.invalidJson')
     }
 
-    if(code === 401) {
+    if (code === 401) {
       message = 'Unauthorized. Invalid session password.'
     }
 
@@ -84,13 +83,7 @@ const BlsExecutionModal = () => {
     let targetIndices = getValuesFromObjArray(JSON.parse(blsJson), 'message.validator_index')
 
     try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${Cookies.get('session-token')}`
-        }
-      }
-
-      const {status} = await axios.post('/api/bls-execution', {data: blsJson, password}, config)
+      const { status } = await axios.post('/api/bls-execution', { data: blsJson, password })
 
       setLoading(false)
 
@@ -154,7 +147,12 @@ const BlsExecutionModal = () => {
         onClose={closeModal}
       >
         <div>
-          <GradientHeader speed={.1} name="bls-gradient-header" isReady={isFinishAnim} title={t('blsExecution.modal.title')} />
+          <GradientHeader
+            speed={0.1}
+            name='bls-gradient-header'
+            isReady={isFinishAnim}
+            title={t('blsExecution.modal.title')}
+          />
           <div className='p-6 space-y-4'>
             <Typography type='text-caption1'>
               <Trans i18nKey='blsExecution.modal.subTitle'>
@@ -190,7 +188,13 @@ const BlsExecutionModal = () => {
           )}
         </div>
       </RodalModal>
-      <AuthPrompt mode={mode} isLoading={isAuthPromptLoading} isVisible={isAuthModal} onClose={closeAuthPrompt} onSubmit={submitChange}/>
+      <AuthPrompt
+        mode={mode}
+        isLoading={isAuthPromptLoading}
+        isVisible={isAuthModal}
+        onClose={closeAuthPrompt}
+        onSubmit={submitChange}
+      />
     </>
   )
 }

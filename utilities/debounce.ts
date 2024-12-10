@@ -1,23 +1,20 @@
 export function debounce<T extends (...args: any[]) => any>(
   ms: number,
   callback: T,
-): (...args: any[]) => Promise<ReturnType<T>> {
+): (...args: any[]) => void {
   let timer: NodeJS.Timeout | undefined
+  let lastCallId: symbol | null = null
 
   return (...args: any[]) => {
-    if (timer) {
-      clearTimeout(timer)
-    }
+    const callId = Symbol('debounceCall')
+    lastCallId = callId
 
-    return new Promise<ReturnType<T>>((resolve, reject) => {
-      timer = setTimeout(() => {
-        try {
-          const returnValue = callback(...args) as ReturnType<T>
-          resolve(returnValue)
-        } catch (error) {
-          reject(error)
-        }
-      }, ms)
-    })
+    if (timer) clearTimeout(timer)
+
+    timer = setTimeout(() => {
+      if (callId === lastCallId) {
+        callback(...args)
+      }
+    }, ms)
   }
 }

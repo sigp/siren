@@ -22,7 +22,14 @@ export interface RodalModalProps {
   }
 }
 
-const RodalModal: FC<RodalModalProps> = ({ children, isVisible, uiMode, onClose, styles, onAnimationEnd }) => {
+const RodalModal: FC<RodalModalProps> = ({
+  children,
+  isVisible,
+  uiMode,
+  onClose,
+  styles,
+  onAnimationEnd,
+}) => {
   const { mode } = useUiMode()
 
   const uiStyle = uiMode || mode

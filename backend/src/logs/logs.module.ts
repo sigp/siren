@@ -9,6 +9,6 @@ import { Log } from './entities/log.entity';
   imports: [UtilsModule, SequelizeModule.forFeature([Log])],
   controllers: [LogsController],
   providers: [LogsService],
-  exports: [LogsService]
+  exports: [LogsService],
 })
 export class LogsModule {}

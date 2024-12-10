@@ -1,4 +1,4 @@
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
 import { FC, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
@@ -37,7 +37,7 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
 
   return (
     <div className='w-full border-t-style100 space-y-4 p-4'>
-      <Typography type='text-caption1'>{t('validatorManagement.title')}</Typography>
+      <Typography type='text-caption1'>{t('validatorManagement.management')}</Typography>
       {isConversionRequired ? (
         <InfoBox type={isProcessing ? InfoBoxType.INFO : InfoBoxType.WARNING}>
           {isProcessing ? (

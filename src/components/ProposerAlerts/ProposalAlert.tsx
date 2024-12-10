@@ -23,9 +23,8 @@ const ProposalAlert: FC<ProposalAlertProps> = ({ duty, time, isFuture, onDelete 
           <Trans
             i18nKey={`alertMessages.proposerAlert.${isFuture ? 'future' : 'past'}`}
             values={{ validator_index, slot, time }}
-          >
-            <span className='font-bold underline' />
-          </Trans>
+            components={{ span: <span className='font-bold underline' /> }}
+          />
         </Typography>
       </div>
       {onDelete && (

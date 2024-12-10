@@ -16,11 +16,13 @@ export interface SelectDropDownProps {
   options: SelectOption[]
   className?: string
   label?: string
+  labelClass?: string
   placeholder?: string
   value?: OptionType
   color?: TypographyColor
   excludeSelection?: boolean
   isFilter?: boolean
+  position?: string
   onSelect: (selection: OptionType) => void
 }
 
@@ -34,6 +36,8 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   isFilter,
   excludeSelection,
   placeholder,
+  position,
+  labelClass = 'xl:text-body',
 }) => {
   const { t } = useTranslation()
   const [query, setQuery] = useState('')
@@ -70,7 +74,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
   return (
     <div className={classes}>
       {label && (
-        <Typography type='text-caption1' color={color} className='xl:text-body'>
+        <Typography type='text-caption1' color={color} className={labelClass}>
           {label}
         </Typography>
       )}
@@ -83,12 +87,12 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
           className='w-full space-x-2 focus:outline-none text-center flex items-center justify-between'
           type='button'
         >
-          <Typography color={color} className='capitalize'>
+          <Typography color={color} isCapitalize>
             {activeSelection ? activeSelection.title : placeholder || t('makeSelection')}
           </Typography>
           <i className={`bi-chevron-down ${color || 'text-dark900'} dark:text-dark300`} />
         </button>
-        <DropDown className='mt-2' isOpen={isOpen}>
+        <DropDown position={position} className='mt-2' isOpen={isOpen}>
           <>
             {isFilter && (
               <div className='w-full bg-white dark:bg-black sticky top-0'>

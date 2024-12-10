@@ -1,16 +1,21 @@
 import React, { FC, ReactElement, createContext, useState, useEffect, useCallback } from 'react'
 import { useSetRecoilState } from 'recoil'
-import useTrackLogs, { defaultLogData, trackedLogData } from '../../hooks/useTrackLogs'
+import useSSEData, { defaultLogData } from '../../hooks/useSSEData'
 import { beaconNetworkError, validatorNetworkError } from '../../recoil/atoms'
+import { SSELog } from '../../types'
 
 export interface SSELogWrapperProps {
   trigger?: number
   children: ReactElement | ReactElement[]
 }
 
+type logData = {
+  data: SSELog[]
+}
+
 export const SSEContext = createContext<{
-  beaconLogs: trackedLogData
-  vcLogs: trackedLogData
+  beaconLogs: logData
+  vcLogs: logData
   intervalId: NodeJS.Timer | undefined
   clearRefreshInterval: () => void
   startRefreshInterval: () => void
@@ -54,8 +59,12 @@ const SSELogProvider: FC<SSELogWrapperProps> = React.memo(function ({ children, 
     setValidatorNetworkError(true)
   }, [clearRefreshInterval, setValidatorNetworkError])
 
-  const beaconLogs = useTrackLogs('/beacon-logs', handleBeaconLogError, isReady)
-  const validatorLogs = useTrackLogs('/validator-logs', handleValidatorLogError, isReady)
+  const beaconLogs = useSSEData({ url: '/beacon-logs', onError: handleBeaconLogError, isReady })
+  const validatorLogs = useSSEData({
+    url: '/validator-logs',
+    onError: handleValidatorLogError,
+    isReady,
+  })
 
   const triggerRefresh = useCallback(() => {
     setTrigger((prevTrigger) => !prevTrigger)
@@ -87,8 +96,8 @@ const SSELogProvider: FC<SSELogWrapperProps> = React.memo(function ({ children, 
   return (
     <SSEContext.Provider
       value={{
-        beaconLogs: beaconLogs,
-        vcLogs: validatorLogs,
+        beaconLogs: beaconLogs as logData,
+        vcLogs: validatorLogs as logData,
         intervalId,
         startRefreshInterval,
         clearRefreshInterval,

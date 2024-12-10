@@ -1,11 +1,11 @@
-import { FC, useEffect, useMemo, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react'
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import LogControls from '../../../src/components/LogControls/LogControls'
 import LogDisplay from '../../../src/components/LogDisplay/LogDisplay'
 import { OptionType } from '../../../src/components/SelectDropDown/SelectDropDown'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { LogMetric, LogType } from '../../../src/types';
+import { ActivityResponse, LogMetric, LogType } from '../../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 
@@ -14,9 +14,16 @@ export interface MainProps {
   beaconSpec: BeaconNodeSpecResults
   initSyncData: SyncData
   initLogMetrics: LogMetric
+  initActivityData: ActivityResponse
 }
 
-const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLogMetrics }) => {
+const Main: FC<MainProps> = ({
+  initSyncData,
+  beaconSpec,
+  initNodeHealth,
+  initLogMetrics,
+  initActivityData,
+}) => {
   const { SECONDS_PER_SLOT } = beaconSpec
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
   const networkError = isValidatorError || isBeaconError
@@ -50,9 +57,9 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLog
 
   const filteredLogs = useMemo(() => {
     return {
-      warningLogs: logMetrics.warningLogs.filter(({type}) => type === logType),
-      errorLogs: logMetrics.errorLogs.filter(({type}) => type === logType),
-      criticalLogs: logMetrics.criticalLogs.filter(({type}) => type === logType)
+      warningLogs: logMetrics.warningLogs.filter(({ type }) => type === logType),
+      errorLogs: logMetrics.errorLogs.filter(({ type }) => type === logType),
+      criticalLogs: logMetrics.criticalLogs.filter(({ type }) => type === logType),
     }
   }, [logMetrics, logType])
 
@@ -71,6 +78,7 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec, initNodeHealth, initLog
 
   return (
     <DashboardWrapper
+      initActivityData={initActivityData}
       syncData={syncData}
       beaconSpec={beaconSpec}
       isBeaconError={isBeaconError}

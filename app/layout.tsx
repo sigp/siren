@@ -1,9 +1,10 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 
-export const metas = {
+const metas = {
   title: 'Siren',
-  description: 'User interface built for Lighthouse that connects to a Lighthouse Beacon Node and a Lighthouse Validator Client to monitor performance and display key validator metrics.',
+  description:
+    'User interface built for Lighthouse that connects to a Lighthouse Beacon Node and a Lighthouse Validator Client to monitor performance and display key validator metrics.',
   image: '/siren.png',
 }
 
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
         alt: metas.title,
       },
     ],
-  }
+  },
 } as any
 
 const openSauce = localFont({
@@ -94,10 +95,10 @@ const archivo = localFont({
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='en'>
-    <head>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
               (function() {
                 try {
                   const theme = JSON.parse(localStorage.getItem('UI')?.trim() || 'null');
@@ -109,9 +110,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 }
               })();
             `,
-        }}
-      />
-    </head>
+          }}
+        />
+      </head>
       <body className={`${openSauce.variable} ${roboto.variable} ${archivo.variable}`}>
         <div id='root'>{children}</div>
       </body>

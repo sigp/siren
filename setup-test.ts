@@ -10,7 +10,7 @@ jest.mock('recoil', () => ({
   selector: jest.fn(),
 }))
 
-process.env.SESSION_PASSWORD = 'mock-password';
+process.env.SESSION_PASSWORD = 'mock-password'
 
 jest.mock('i18next', () => ({
   t: mockT,

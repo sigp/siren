@@ -1,24 +1,22 @@
-'use client';
+'use client'
 
-import axios from 'axios';
-import Cookies from 'js-cookie';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import AppDescription from '../src/components/AppDescription/AppDescription';
-import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt';
-import ConfigModal from '../src/components/ConfigModal/ConfigModal';
-import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner';
-import Typography from '../src/components/Typography/Typography';
-import VersionModal from '../src/components/VersionModal/VersionModal';
-import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants';
-import { UiMode } from '../src/constants/enums';
-import useLocalStorage from '../src/hooks/useLocalStorage';
-import { ToastType } from '../src/types';
-import displayToast from '../utilities/displayToast';
-import formatSemanticVersion from '../utilities/formatSemanticVersion';
-import isExpiredToken from '../utilities/isExpiredToken';
-import isRequiredVersion from '../utilities/isRequiredVersion';
+import axios from 'axios'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import AppDescription from '../src/components/AppDescription/AppDescription'
+import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt'
+import ConfigModal from '../src/components/ConfigModal/ConfigModal'
+import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner'
+import Typography from '../src/components/Typography/Typography'
+import VersionModal from '../src/components/VersionModal/VersionModal'
+import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants'
+import { UiMode } from '../src/constants/enums'
+import useLocalStorage from '../src/hooks/useLocalStorage'
+import { ToastType } from '../src/types'
+import displayToast from '../utilities/displayToast'
+import formatSemanticVersion from '../utilities/formatSemanticVersion'
+import isRequiredVersion from '../utilities/isRequiredVersion'
 
 const Main = () => {
   const { t } = useTranslation()
@@ -29,49 +27,36 @@ const Main = () => {
   const [step] = useState<number>(1)
   const [isReady, setReady] = useState(false)
   const [isVersionError, setVersionError] = useState(false)
-  const [sessionToken, setToken] = useState(Cookies.get('session-token'))
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [, setUsername] = useLocalStorage<string>('username', 'Keeper')
   const [healthCheck] = useLocalStorage<boolean>('health-check', false)
 
   const [beaconNodeVersion, setBeaconVersion] = useState('')
   const [lighthouseVersion, setLighthouseVersion] = useState('')
 
-  useEffect(() => {
-    if(sessionToken) {
-      if(isExpiredToken(sessionToken)) {
-        setToken(undefined)
-        return
-      }
+  const fetchNodeVersion = async () => {
+    try {
+      const [beaconResults, lightResults] = await Promise.all([
+        axios.get('/api/beacon-version'),
+        axios.get('/api/lighthouse-version'),
+      ])
 
-      (async () => {
-        try {
-          const config = {
-            headers: {
-              Authorization: `Bearer ${sessionToken}`
-            }
-          }
-
-          const [beaconResults, lightResults] = await Promise.all([
-            axios.get('/api/beacon-version', config),
-            axios.get('/api/lighthouse-version', config)
-          ])
-
-          setBeaconVersion(beaconResults.data.version)
-          setLighthouseVersion(lightResults.data.version)
-
-          setReady(true)
-
-        } catch (e) {
-          setReady(true)
-          console.error(e)
-        }
-      })()
+      setBeaconVersion(beaconResults.data.version)
+      setLighthouseVersion(lightResults.data.version)
+      setIsAuthenticated(true)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setReady(true)
     }
-  }, [sessionToken])
+  }
 
   useEffect(() => {
-    if(beaconNodeVersion && lighthouseVersion) {
+    void fetchNodeVersion()
+  }, [])
 
+  useEffect(() => {
+    if (beaconNodeVersion && lighthouseVersion) {
       if (!isRequiredVersion(lighthouseVersion, REQUIRED_VALIDATOR_VERSION)) {
         setVersionError(true)
         return
@@ -79,7 +64,7 @@ const Main = () => {
 
       let nextRoute = '/setup/health-check'
 
-      if(healthCheck) {
+      if (healthCheck) {
         nextRoute = '/dashboard'
       }
 
@@ -96,30 +81,35 @@ const Main = () => {
     try {
       setLoading(true)
       setUsername(username)
-      const {status, data} = await axios.post('/api/authenticate', {password})
-      const token = data.token;
-      setLoading(false)
+      const { status } = await axios.post('/api/authenticate', { password })
 
-      if(status === 200) {
-        setToken(token)
-        Cookies.set('session-token', token)
+      if (status === 200) {
+        await fetchNodeVersion()
       }
-
     } catch (e: any) {
-      setLoading(false)
       displayToast(t(e.response.data.error as string), ToastType.ERROR)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
     <div className='relative w-screen h-screen bg-gradient-to-r from-primary to-tertiary'>
       <ConfigModal
-        isReady={isReady && configError && !!sessionToken}
-        beaconNodeVersion={beaconNodeVersion} lighthouseVersion={lighthouseVersion} />
+        isReady={isReady && configError && isAuthenticated}
+        beaconNodeVersion={beaconNodeVersion}
+        lighthouseVersion={lighthouseVersion}
+      />
       {vcVersion && (
-        <VersionModal currentVersion={vcVersion}  isVisible={isReady && isVersionError}/>
+        <VersionModal currentVersion={vcVersion} isVisible={isReady && isVersionError} />
       )}
-      <AuthPrompt isNamePrompt mode={UiMode.LIGHT} isLoading={isLoading} isVisible={!sessionToken} onSubmit={storeSessionCookie}/>
+      <AuthPrompt
+        isNamePrompt
+        mode={UiMode.LIGHT}
+        isLoading={isLoading}
+        isVisible={isReady && !isAuthenticated}
+        onSubmit={storeSessionCookie}
+      />
       <div className='absolute top-0 left-0 w-full h-full bg-cover bg-lighthouse' />
       <div className='absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2'>
         <LoadingSpinner />

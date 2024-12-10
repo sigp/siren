@@ -1,21 +1,28 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil'
 import { CURRENCIES } from '../../constants/constants'
-import { exchangeRates } from '../../recoil/atoms'
-import SelectDropDown, { OptionType } from '../SelectDropDown/SelectDropDown';
+import { EthExchangeRates } from '../../types'
+import SelectDropDown, { OptionType, SelectDropDownProps } from '../SelectDropDown/SelectDropDown'
+import { TypographyColor } from '../Typography/Typography'
 
-export interface CurrencySelectProps {
+export interface CurrencySelectProps extends Omit<SelectDropDownProps, 'options'> {
   onSelect: (selection: OptionType) => void
   selection: string
+  color?: TypographyColor
+  rates: EthExchangeRates | undefined
 }
 
-const CurrencySelect: FC<CurrencySelectProps> = ({ selection, onSelect }) => {
+const CurrencySelect: FC<CurrencySelectProps> = ({
+  selection,
+  onSelect,
+  color = 'text-white',
+  rates,
+  ...rest
+}) => {
   const { t } = useTranslation()
-  const data = useRecoilValue(exchangeRates)
 
-  const currencyOptions = data
-    ? [...data.currencies]
+  const currencyOptions = rates
+    ? [...rates.currencies]
         .filter((currency) => CURRENCIES.includes(currency))
         .sort()
         .map((currency) => ({ title: currency }))
@@ -24,11 +31,12 @@ const CurrencySelect: FC<CurrencySelectProps> = ({ selection, onSelect }) => {
   return (
     <SelectDropDown
       isFilter
-      color='text-white'
+      color={color as TypographyColor}
       label={t('accountEarnings.chooseCurrency')}
       value={selection}
       onSelect={onSelect}
       options={currencyOptions}
+      {...rest}
     />
   )
 }

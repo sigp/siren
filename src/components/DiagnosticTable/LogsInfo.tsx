@@ -1,8 +1,8 @@
 import Link from 'next/link'
-import { FC } from 'react';
+import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { LogMetric } from '../../types';
+import { LogMetric } from '../../types'
 import LogStats from '../LogStats/LogStats'
 import Typography from '../Typography/Typography'
 
@@ -10,7 +10,7 @@ export interface LogsInfoProps {
   metrics: LogMetric
 }
 
-const LogsInfo:FC<LogsInfoProps> = ({metrics}) => {
+const LogsInfo: FC<LogsInfoProps> = ({ metrics }) => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery('(max-width: 425px)')
   const size = isMobile ? 'health' : 'md'

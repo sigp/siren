@@ -11,7 +11,7 @@ import { Op } from 'sequelize';
 export class LogsService {
   constructor(
     @InjectModel(Log)
-    private logRepository: typeof Log
+    private logRepository: typeof Log,
   ) {}
 
   private isDebug = process.env.DEBUG === 'true';
@@ -21,28 +21,34 @@ export class LogsService {
   private sseStreams: Map<string, Subject<any>> = new Map();
 
   public async startSse(url: string, type: LogType) {
-    console.log(`starting sse ${url}, ${type}...`)
+    console.log(`starting sse ${url}, ${type}...`);
     const eventSource = new EventSource(url);
 
     const sseStream: Subject<any> = new Subject();
-    this.sseStreams.set(url, sseStream)
-
+    this.sseStreams.set(url, sseStream);
 
     eventSource.onmessage = (event) => {
-      let newData
+      let newData;
 
       try {
-        newData = JSON.parse(JSON.parse(event.data))
+        newData = JSON.parse(JSON.parse(event.data));
       } catch (e) {
-        newData = JSON.parse(event.data) as SSELog
+        newData = JSON.parse(event.data) as SSELog;
       }
 
-      const { level } = newData
+      const { level } = newData;
 
-      if(level !== LogLevels.INFO) {
-        this.logRepository.create({type, level, data: JSON.stringify(newData), isHidden: false}, {ignoreDuplicates: true})
-        if(this.isDebug) {
-          console.log(newData, type,'------------------------------------------ log --------------------------------------')
+      if (level !== LogLevels.INFO) {
+        this.logRepository.create(
+          { type, level, data: JSON.stringify(newData), isHidden: false },
+          { ignoreDuplicates: true },
+        );
+        if (this.isDebug) {
+          console.log(
+            newData,
+            type,
+            '------------------------------------------ log --------------------------------------',
+          );
         }
       }
 
@@ -61,7 +67,7 @@ export class LogsService {
       });
       res.flushHeaders();
 
-      sseStream.subscribe(data => {
+      sseStream.subscribe((data) => {
         res.write(`data: ${data}\n\n`);
       });
 
@@ -80,32 +86,41 @@ export class LogsService {
   }
 
   async readLogMetrics(type?: LogType) {
-    if(type && !this.logTypes.includes(type)) {
+    if (type && !this.logTypes.includes(type)) {
       throw new Error('Invalid log type');
     }
 
-    let warnOptions = { where: { level: LogLevels.WARN } } as any
-    let errorOptions = { where: { level: LogLevels.ERRO } } as any
-    let critOptions = { where: { level: LogLevels.CRIT } } as any
+    let warnOptions = { where: { level: LogLevels.WARN } } as any;
+    let errorOptions = { where: { level: LogLevels.ERRO } } as any;
+    let critOptions = { where: { level: LogLevels.CRIT } } as any;
 
-    if(type) {
+    if (type) {
       warnOptions.where.type = { [Op.eq]: type };
       errorOptions.where.type = { [Op.eq]: type };
       critOptions.where.type = { [Op.eq]: type };
     }
 
-    const warningLogs = (await this.logRepository.findAll(warnOptions)).map(data => data.dataValues)
-    const errorLogs = (await this.logRepository.findAll(errorOptions)).map(data => data.dataValues)
-    const criticalLogs = (await this.logRepository.findAll(critOptions)).map(data => data.dataValues)
+    const warningLogs = (await this.logRepository.findAll(warnOptions)).map(
+      (data) => data.dataValues,
+    );
+    const errorLogs = (await this.logRepository.findAll(errorOptions)).map(
+      (data) => data.dataValues,
+    );
+    const criticalLogs = (await this.logRepository.findAll(critOptions)).map(
+      (data) => data.dataValues,
+    );
 
     return {
       warningLogs,
       errorLogs,
-      criticalLogs
-    }
+      criticalLogs,
+    };
   }
 
   async dismissLog(id: string) {
-    return await this.logRepository.update({isHidden: true}, {where: {id}})
+    return await this.logRepository.update(
+      { isHidden: true },
+      { where: { id } },
+    );
   }
 }

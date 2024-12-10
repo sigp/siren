@@ -8,6 +8,6 @@ export class AppController {
   @HttpCode(HttpStatus.OK)
   @Post('authenticate')
   authenticate(@Body() data: Record<string, any>) {
-    return this.appService.authenticateSessionPassword(data.password)
+    return this.appService.authenticateSessionPassword(data.password);
   }
 }

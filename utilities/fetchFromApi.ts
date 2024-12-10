@@ -6,8 +6,8 @@ const fetchFromApi = async (url: string, token: string, options?: NextFetchReque
     cache: 'no-store',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   }
 
   const finalOptions: RequestInit = { ...defaultOptions, ...options }

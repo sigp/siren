@@ -24,6 +24,23 @@
       "saturday": "Sat"
     }
   },
+  "copied": "Copied!",
+  "wrongNetwork": "You are connected to the wrong chain. Click to switch networks.",
+  "switchNetwork": "Switch Network",
+  "invalidSessionPassword": "Unauthorized. Invalid session password provided.",
+  "unexpectedErrorWalletConnect": "Unexpected error occurred while connecting to wallet provider",
+  "connect": "Connect",
+  "connectWallet": "Connect Wallet",
+  "insufficientFunds": "Insufficient Funds",
+  "year": "year",
+  "month": "month",
+  "week": "week",
+  "hour": "hour",
+  "waiting": "waiting",
+  "available": "available",
+  "inUse": "in use",
+  "verify": "Verify",
+  "address": "Address",
   "configuration": "Configuration",
   "executionEngine": "Execution Engine",
   "password": "Password",
@@ -35,6 +52,8 @@
   "sessionAuth": "Session Auth",
   "configure": "Configure",
   "continue": "Continue",
+  "next": "Next",
+  "back": "Back",
   "comingSoon": "Coming Soon",
   "disk": "Disk",
   "cpu": "CPU",
@@ -45,6 +64,7 @@
   "documentation": "Documentation",
   "device": "Device",
   "network": "Network",
+  "networkId": "Network ID",
   "fair": "fair",
   "poor": "poor",
   "good": "good",
@@ -52,6 +72,7 @@
   "node": "Node",
   "viewDisclosures": "view important disclosures",
   "learnMore": "Learn More",
+  "tooManyValidatorWarning": "It is not recommended to add this many validators at once. You can more when finished with the ones below.",
   "disclosure": {
     "healthCheck": {
       "title": "Health Check Disclosure",
@@ -144,6 +165,7 @@
     "active": "Active",
     "queue": "Queue",
     "success": "Success",
+    "deposit": "Deposited",
     "active-slash": "active-slash",
     "active_ongoing": "Active Ongoing",
     "pending_initialized": "Init Pending",
@@ -249,16 +271,17 @@
     "blsExecution": "BLS Change Execution submitted. Kindly wait while the execution is being processed."
   },
   "error": {
-    "sessionAuth": {
-      "invalidPassword": "Invalid Session Password",
-      "length": "Password must be at least 12 characters",
-      "passwordMatch": "Confirmation must match password",
-      "confirmationRequired": "Password confirmation is required",
-      "lowercaseRequired": "Password must contain at least one lowercase letter",
-      "uppercaseRequired": "Password must contain at least one uppercase letter",
-      "numberRequired": "Password must contain at least one number",
-      "specialCharRequired": "Password must contain at least one special character"
-    },
+    "nonNegativeIndex": "Index must be a non-negative number",
+    "tooLargeIndex": "Index number out of bounds. Must be greater than 0 and less than 4294967295",
+    "invalidEthAddress": "Invalid ETH address",
+    "invalidPassword": "Invalid Session Password",
+    "length": "12 characters min",
+    "passwordMatch": "Confirmation must match password",
+    "confirmationRequired": "Password confirmation is required",
+    "lowercaseRequired": "1 lowercase letter",
+    "uppercaseRequired": "1 uppercase letter",
+    "numberRequired": "1 number",
+    "specialCharRequired": "1 special character",
     "invalidJson": "Invalid JSON data. Please ensure to use correct format.",
     "executionFailure": "Execution broadcast failed. Please ensure all fields and signature are valid.",
     "networkError": "{{type}} NODE NETWORK ERROR: Make sure your IP is correct and/or CORS is correctly configured. Use --http-allow-origin \"*\" in {{type}} config",
@@ -271,6 +294,9 @@
     "validatorDataRequired": "Validator Node requires protocol, address and port",
     "unableToSignExit": "Unable to sign voluntary exit message",
     "invalidExit": "Invalid voluntary exit",
+    "unexpectedDepositError": "Unexpected error while trying to make deposit.",
+    "userRejectedTransaction": "User rejected the transaction request.",
+    "unexpectedValidatorImportError": "Unexpected error while importing validator",
     "userName": {
       "maxLength": "Username cannot exceed 14 characters",
       "required": "User name is required"
@@ -289,10 +315,21 @@
     }
   },
   "validatorManagement": {
+    "validators": "Validators",
     "search": "search",
-    "title": "Validator Management",
+    "customValidatorName": "Custom Validator Name",
+    "manageValidators": "Manage Validators",
+    "makeDeposit": "Make Deposit",
+    "titles": {
+      "main": "Validator Management",
+      "add": "Add Validator",
+      "create": "Create Validator"
+    },
+    "management": "Validator Management",
+    "transactionStatus": "Transaction Status",
     "overview": "Overview",
     "day": "Day",
+    "invalidMnemonic": "Invalid mnemonic phrase. Please review and try again.",
     "effectiveness": {
       "targetVote": "Target Vote",
       "headVote": "Head Vote",
@@ -332,6 +369,133 @@
       "pending": "Pending",
       "active": "Active",
       "exit": "Exit"
+    },
+    "addValidator": {
+      "title": "How would you like to add a validator?",
+      "subTitle": "Select from the most suitable method listed below based on your specific circumstance.",
+      "options": {
+        "recover": {
+          "title": "Recover Validator",
+          "subTitle": "Recover a validator from a Secret Recovery phrase.",
+          "caption": "Lost access to validator. Recover it using secret recovery phase."
+        },
+        "import": {
+          "title": "Import Validator",
+          "subTitle": "Import validator keys from password protected keystore.",
+          "caption": "Import a validator from EF launchpad or from another client instance."
+        },
+        "create": {
+          "title": "Create New Validator",
+          "subTitle": "Deposit ETH and Create Validator.",
+          "caption": "Have not deposited any funds. Stake your ETH. Create keys."
+        }
+      }
+    },
+    "createValidator": {
+      "steps": {
+        "setup": "Validator Setup",
+        "verification": "Phrase Verification",
+        "indexing": "Mnemonic Indexing",
+        "credentials": "Withdrawal Credentials",
+        "deposit": "Sign and Deposit"
+      }
+    },
+    "credentialRiskModal": {
+      "text": "You have not verified one or more of your designated withdrawal credentials. Please be aware if these credentials are set incorrectly they can not be changed and may result in a lose of funds."
+    },
+    "investmentRewards": {
+      "stakeRequired": "Stake <0></0> Required",
+      "calculatedReward": "Calculated <0></0> Reward",
+      "investment": "Investment",
+      "rewards": "Rewards",
+      "perUnit": "per {{unit}}",
+      "selectTimeframe": "Select Timeframe"
+    },
+    "validatorSetup": {
+      "title": "Validator Setup",
+      "subTitle": "Choose how many validators you would like to initiate.",
+      "quickAdd": "Quick <0></0> Add",
+      "warningText": "We want to make sure you're fully informed before proceeding with this action. Please be aware this action involves significant considerations and risks. Be sure you're comfortable with the amount of ETH you'll need to allocate based on the number of validators you wish to create.",
+      "cta": "Ready to proceed? Click here to add your validator."
+    },
+    "mnemonicPhrase": {
+      "title": "Mnemonic Phrase",
+      "subtitle": "Enter Mnemonic Phrase Key",
+      "warningText": "Never disclose your Mnemonic Phrase, it is your private key and sole access method to your validators. Please take appropriate measures to ensure it is stored safely.",
+      "placeholder": "cat dog bear rabbit lion..."
+    },
+    "mnemonicIndexing": {
+      "title": "Mnemonic Indexing",
+      "subTitle": "Set your Mnemonic Sequence",
+      "caption": "You validator mnemonic index is used to generate unique validator public keys, deposit and keystore data. Its important to keep track of any already used indices. Be sure to double check any public key generated with Siren on Beaconcha.in.",
+      "warningText": "It is important you keep track of your mnemonic indices when creating new validators. We must ensure each index is unique to prevent depositing funds to pre-existing validators. Enter an unused index above and we will check if it is free to use."
+    },
+    "withdrawalCredentials": {
+      "title": "Withdrawal Credentials",
+      "subTitle": "Set your ETH withdrawal address",
+      "warningText": "This address will be the sole destination for all newly created validator's rewards during scheduled deposits and cannot be changed once set. It must be a regular Ethereum address, and maintaining secure access to its credentials is absolutely essential to prevent loss of funds.",
+      "assignAllValidators": "Assign to all validators",
+      "validatorGroup": "Validator Group",
+      "confirmOwnership": "I confirm that I am indeed the owner of this wallet address.",
+      "invalidAddress": "Invalid address string",
+      "incorrectSignature": "incorrect address signature"
+    },
+    "keystoreAuthentication": {
+      "title": "Keystore Authentication",
+      "subTitle": "Secure your validator keystore data",
+      "warningText": "A strong keystore password is essential to protect your validator's private key from unauthorized access and potential financial losses. Use a complex, unique password and store it securely to ensure your staking assets and network contributions remain safe."
+    },
+    "retryTransaction": "Retry Transaction",
+    "reviewStatus": "Review validator status {{pubKey}}",
+    "txStatuses": {
+      "validatorComplete": {
+        "title": "Validator Complete",
+        "text": "Validator has been successfully deposited and imported into Lighthouse. Please confirm deposit transaction with link above."
+      },
+      "pending": {
+        "title": "Pending Transaction",
+        "text": "Your transaction is currently being processed. Please wait for confirmation"
+      },
+      "success": {
+        "title": "Success Transaction",
+        "text": "Your transaction has been successfully confirmed on the blockchain."
+      },
+      "error": {
+        "title": "Transaction Error",
+        "text": "There was an error processing your transaction. Please review the transaction link above and try again."
+      },
+      "importPending": {
+        "title": "Importing Validator",
+        "text": "Siren is importing your new validator into lighthouse. This will take a short moment."
+      },
+      "importError": {
+        "title": "Import Error",
+        "text": "Siren was unable to import the new validator with pubkey - {{pubKey}}. Please review deposit transaction with link above."
+      }
+    },
+    "signAndDeposit": {
+      "title": "Validator Deposit",
+      "subTitle": "Make your ETH deposit",
+      "errorTransaction": "Transaction Error",
+      "successTransaction": "Successful Transaction",
+      "pendingTransaction": "Pending Transaction",
+      "validatorComplete": "Validator Complete",
+      "depositText": "Please ensure that you're using the correct network when making your validator deposit.",
+      "unexpectedImportError": "Unexpected error occurred while importing validator deposited with tx-hash {{txHash}} and pubKey {{pubKey}}.",
+      "stepTitles": {
+        "makeDeposit": "Make Deposit",
+        "verifyTransaction": "Verify Transaction",
+        "importValidator": "Import Validator"
+      },
+      "successScreen": {
+        "title": "Validator Created Successfully",
+        "text": "Your validator has been successfully deposited on-chain and imported into Lighthouse. It may take around 16-24 hours until your deposit is processed by the beacon chain."
+      }
+    },
+    "acceptRiskInfo": {
+      "title": "Acknowledging the risks.",
+      "text": "Setting up a validator involves moving a large amount of personal assets. It’s very important to double-check that you are on the correct network and have set everything up properly before continuing. If the information is not correct, it could lead to a permanent loss of funds.",
+      "pleaseReview": "Please review the details below carefully before making the deposit."
     }
   },
   "alert": {
@@ -355,7 +519,7 @@
     "beaconAndValidator": "Beacon Node and Validator Client",
     "beaconNode": "Beacon Node",
     "validatorClient": "Validator Client",
-    "affectedNetworks": "Siren failed to maintain connection to the designated <0>{{network}}</0>.",
+    "affectedNetworks": "Siren failed to maintain connection to the designated <span>{{network}}</span>. ",
     "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
   },
   "sessionConfiguration": {
@@ -459,8 +623,8 @@
       "future": "{{count}} validators are scheduled for block proposals in this epoch. Including indices: {{indices}}"
     },
     "proposerAlert": {
-      "past": "Validator <0>{{validator_index}}</0> was scheduled for block proposal at slot {{slot}} {{time}}",
-      "future": "Validator <0>{{validator_index}}</0> is scheduled for block proposal at slot {{slot}} {{time}}"
+      "past": "Validator <span>{{validator_index}}</span> was scheduled for block proposal at slot {{slot}} {{time}}",
+      "future": "Validator <span>{{validator_index}}</span> is scheduled for block proposal at slot {{slot}} {{time}}"
     }
   },
   "collapseInfo": "Collapse Info",
@@ -492,8 +656,28 @@
     }
   },
   "errorPage": {
-    "title": "Opps!",
-    "subText": "Siren seems to have encountered an unexpected error. Please review your configuration and or node connections to continue to your dashboard.",
+    "title": "Oops!",
+    "subText": "Siren seems to have encountered an unexpected error. Please review your configuration and/or node connections to continue to your dashboard.",
     "cta": "Go Back"
+  },
+  "understandAndAccept": "I Understand & Accept",
+  "activityHistory": {
+    "title": "Activity History",
+    "noActivity": "No recent activity",
+    "unableToFetch": "Unable to fetch history",
+    "activities": {
+      "deposit": {
+        "title": "Deposit Transaction",
+        "text": "Funds sent to the Deposit Contract with transaction hash: <span>{{txHash}}</span>. Click here to review the transaction details on Etherscan."
+      },
+      "validatorImport": {
+        "title": "Validator Imported",
+        "text": "Validator with pubkey: <span>{{pubKey}}</span> imported successfully. Click here to review your validator's status with Beaconcha.in."
+      },
+      "updateGraffiti": {
+        "title": "Validator Graffiti Updated",
+        "text": "Validator with pubkey: <span>{{pubKey}}</span> graffiti updated successfully. Review the changes in the Validator Management view."
+      }
+    }
   }
 }

@@ -22,10 +22,10 @@ const SideBar = () => {
   const isMobile = useMediaQuery('(max-width: 768px)')
 
   const sideBarClasses = addClassString(
-    'z-40 group-sidebar-hover:z-top98 flex flex-col shadow-xl justify-between h-screen w-42 absolute top-0 left-0 bg-white border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform',
+    'z-40 group-sidebar-hover:z-top98 flex flex-col shadow-xl justify-between h-screen w-screen md:w-42 absolute top-0 left-0 bg-white border dark:bg-dark750 border-dark10 dark:border-dark700  transition-transform',
     [
       !isMobile && '-translate-x-44 group-sidebar-hover:translate-x-14',
-      isMobile && !showSideBar && '-translate-x-44',
+      isMobile && !showSideBar && '-translate-x-full md:-translate-x-44',
     ],
   )
 
@@ -43,7 +43,7 @@ const SideBar = () => {
   }
 
   return (
-    <div className='relative group-sidebar'>
+    <div className='lg:max-w-[4vw] relative group-sidebar'>
       <div className='flex-col justify-between z-50 group-sidebar-hover:z-top relative hidden md:flex w-14.5 flex-shrink-0 h-screen border bg-white dark:bg-dark750 border-l-0 border-dark200 dark:border-dark700'>
         <div className='w-full'>
           <div className='w-full h-16 flex justify-center pt-3.5'>

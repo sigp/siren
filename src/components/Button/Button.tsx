@@ -1,3 +1,4 @@
+import { motion, MotionProps } from 'framer-motion'
 import React, { FC, ReactNode } from 'react'
 import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
@@ -7,6 +8,7 @@ import { TypographyFamily, TypographyType } from '../Typography/Typography'
 export enum ButtonFace {
   PRIMARY = 'PRIMARY',
   SECONDARY = 'SECONDARY',
+  ERROR = 'ERROR',
   TERTIARY = 'TERTIARY',
   ICON = 'ICON',
   LIGHT = 'LIGHT',
@@ -14,7 +16,7 @@ export enum ButtonFace {
   WHITE = 'WHITE',
 }
 
-export interface ButtonProps {
+export interface ButtonProps extends MotionProps {
   type?: ButtonFace | undefined
   isDisabled?: OptionalBoolean
   font?: TypographyFamily
@@ -44,6 +46,9 @@ const Button: FC<ButtonProps> = ({
   padding = 'px-4 py-2',
   renderAs = 'button',
   isLoading,
+  initial,
+  animate,
+  transition,
 }) => {
   const buttonContentClasses = addClassString('flex space-x-2', [isLoading && 'opacity-0'])
   const spinnerContentClasses = addClassString('', [
@@ -58,31 +63,36 @@ const Button: FC<ButtonProps> = ({
       case ButtonFace.LIGHT:
         return 'bg-primary100 text-primaryOverride'
       case ButtonFace.ICON:
-        return 'h-full w-11 disabled:opacity-30 dark:bg-dark900 text-dark300 dark:text-white'
+        return 'h-full w-11 text-dark300 dark:text-white'
       case ButtonFace.TERTIARY:
-        return 'border border-primary text-primary'
+        return 'border border-primary text-primary hover:opacity-80'
       case ButtonFace.SECONDARY:
-        return 'bg-primary text-white disabled:cursor-default disabled:opacity-30'
+        return 'bg-primary text-white'
       case ButtonFace.WHITE:
         return 'bg-transparent disabled:border-dark300 disabled:text-dark300 disabled:cursor-default border border-white text-white'
+      case ButtonFace.ERROR:
+        return 'border border-error text-error hover:opacity-80'
       default:
         return 'border border-black text-black disabled:border-dark300 disabled:text-dark300 disabled:pointer-events-none'
     }
   }
 
   const renderButton = () => (
-    <button
+    <motion.button
+      initial={initial}
+      animate={animate}
+      transition={transition}
       data-testid={dataTestId}
       type={renderAs}
       onClick={onClick}
       disabled={isDisabled}
       className={`${formatFaceStyle()} ${font} ${fontType} ${className} ${
         isLoading && 'pointer-events-none'
-      } relative box-border ${padding} w-fit cursor-pointer disabled:cursor-default flex space-x-2`}
+      } relative box-border ${padding} active:scale-95 transition-all duration-100 ease-in w-fit cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-30 flex justify-center space-x-2`}
     >
       <div className={buttonContentClasses}>{children}</div>
       {isLoading && <Spinner className={spinnerContentClasses} size='h-6 w-6' />}
-    </button>
+    </motion.button>
   )
   return href ? (
     <a href={href} target={target}>

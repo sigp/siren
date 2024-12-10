@@ -1,11 +1,12 @@
-import { selector } from 'recoil';
+import { selector } from 'recoil'
 import {
   BeaconChaValidatorUrl,
   HoleskyBeaconChaValidatorUrl,
-  SepoliaBeaconChaValidatorUrl
-} from '../../constants/constants';
-import { Network } from '../../constants/enums';
-import { selectBnChain } from './selectBnChain';
+  KubernetsValidatorUrl,
+  SepoliaBeaconChaValidatorUrl,
+} from '../../constants/constants'
+import { Network } from '../../constants/enums'
+import { selectBnChain } from './selectBnChain'
 
 export const selectBeaconChaBaseUrl = selector({
   key: 'selectBeaconChaBaseUrl',
@@ -19,7 +20,7 @@ export const selectBeaconChaBaseUrl = selector({
       case Network.Sepolia:
         return SepoliaBeaconChaValidatorUrl
       default:
-        return ''
+        return KubernetsValidatorUrl
     }
   },
 })

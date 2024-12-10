@@ -1,6 +1,6 @@
 import '../../../src/global.css'
-import { redirect } from 'next/navigation';
-import getSessionCookie from '../../../utilities/getSessionCookie';
+import { redirect } from 'next/navigation'
+import getSessionCookie from '../../../utilities/getSessionCookie'
 import { fetchBeaconSpec, fetchSyncData } from '../../api/beacon'
 import Wrapper from './Wrapper'
 
