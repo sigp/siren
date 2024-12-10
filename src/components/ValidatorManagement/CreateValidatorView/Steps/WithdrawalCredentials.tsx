@@ -16,7 +16,7 @@ export interface WithdrawalCredentialsProps {
   isActive: boolean
   onShowRisk: () => void
   sharedCredentials: string
-  onUpdateSharedCredentials: (credentials: string) => void
+  onUpdateSharedCredentials: (credentials?: string) => void
 }
 
 const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
@@ -45,31 +45,18 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
     ? isSharedCredentialVerified
     : candidates.every(({ isVerifiedCredentials }) => isVerifiedCredentials)
 
-  const updateSharedCredentials = (_id: string, withdrawalCredentials: string): void =>
-    onUpdateSharedCredentials(withdrawalCredentials)
-  const updateSharedCredentialVerification = (_id: string, verification: boolean): void =>
-    setIsSharedCredentialVerified(verification)
+  const updateSharedCandidateData = (_id: string, candidate: ValidatorCandidate) => {
+    const { withdrawalCredentials, isVerifiedCredentials } = candidate
 
-  const updateCandidateCredential = (id: string, withdrawalCredentials: string): void => {
-    const index = candidates.findIndex((item) => item.id === id)
-    if (index !== -1) {
-      const updatedCandidates = [...candidates]
-      updatedCandidates[index] = {
-        ...updatedCandidates[index],
-        withdrawalCredentials: withdrawalCredentials,
-      }
-      onValidatorChange(updatedCandidates)
-    }
+    setIsSharedCredentialVerified(Boolean(isVerifiedCredentials))
+    onUpdateSharedCredentials(withdrawalCredentials)
   }
 
-  const updateCandidateVerification = (id: string, verification: boolean): void => {
+  const updateCandidate = (id: string, candidate: ValidatorCandidate) => {
     const index = candidates.findIndex((item) => item.id === id)
     if (index !== -1) {
       const updatedCandidates = [...candidates]
-      updatedCandidates[index] = {
-        ...updatedCandidates[index],
-        isVerifiedCredentials: verification,
-      }
+      updatedCandidates[index] = candidate
       onValidatorChange(updatedCandidates)
     }
   }
@@ -141,7 +128,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
           <div className='overflow-scroll w-full max-h-[200px]'>
             {isAll ? (
               <ValidatorCredentialRow
-                validator={
+                validatorCandidate={
                   {
                     id: 'all',
                     name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
@@ -149,16 +136,14 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
                     isVerifiedCredentials: isVerifiedAddress,
                   } as ValidatorCandidate
                 }
-                onSetCredential={updateSharedCredentials}
-                onSetVerification={updateSharedCredentialVerification}
+                onUpdateCandidate={updateSharedCandidateData}
               />
             ) : (
               candidates.map((validator, index) => (
                 <ValidatorCredentialRow
                   key={index}
-                  validator={validator}
-                  onSetCredential={updateCandidateCredential}
-                  onSetVerification={updateCandidateVerification}
+                  validatorCandidate={validator}
+                  onUpdateCandidate={updateCandidate}
                 />
               ))
             )}
