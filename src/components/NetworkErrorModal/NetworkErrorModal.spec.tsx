@@ -42,8 +42,8 @@ jest.mock('react-i18next', () => ({
       const DiscordLink = React.Children.toArray(children)[0]
       return (
         <>
-          Please review and update configuration settings. If this issue persists please contact our team in{' '}
-          {DiscordLink}.
+          Please review and update configuration settings. If this issue persists please contact our
+          team in {DiscordLink}.
         </>
       )
     }
