@@ -167,15 +167,15 @@ export class BeaconService {
             current_epoch_active_gwei,
           } = data.data;
 
-          const rate = Math.round(
+          const rate =
             (previous_epoch_target_attesting_gwei / current_epoch_active_gwei) *
-              100,
-          );
+            100;
+          const truncatedRate = Math.trunc(rate * 100) / 100;
 
-          const status = getStatus(rate);
+          const status = getStatus(truncatedRate);
 
           return {
-            rate,
+            rate: truncatedRate,
             status,
           };
         },
