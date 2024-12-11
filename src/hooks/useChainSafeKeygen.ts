@@ -12,7 +12,6 @@ export type useChainSafeKeygenReturnType = {
 }
 
 const useChainSafeKeygen = (): useChainSafeKeygenReturnType => {
-
   const deriveValidatorKeys = async (
     mnemonic: string,
     index: number,
