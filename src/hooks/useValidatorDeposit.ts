@@ -44,7 +44,7 @@ const useValidatorDeposit = ({
       errorMessage = 'error.userRejectedTransaction'
     }
 
-    if(error.includes('INVALID_ADDRESS_LENGTH')) {
+    if (error.includes('INVALID_ADDRESS_LENGTH')) {
       errorMessage = 'error.invalidAddressLength'
     }
 

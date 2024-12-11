@@ -96,18 +96,17 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
 
   const generateWithdrawalCredentials = (withdrawalAddress: string): Uint8Array => {
     const checkSumAddress = getAddress(withdrawalAddress)
-    const addressBytes = fromHexString(checkSumAddress.replace('0x', ''));
+    const addressBytes = fromHexString(checkSumAddress.replace('0x', ''))
 
-    if(addressBytes.length !== 20) {
+    if (addressBytes.length !== 20) {
       throw new Error('INVALID_ADDRESS_LENGTH')
     }
 
-    const withdrawalCredentials = new Uint8Array(32);
+    const withdrawalCredentials = new Uint8Array(32)
 
-    withdrawalCredentials[0] = 0x01;
+    withdrawalCredentials[0] = 0x01
 
     withdrawalCredentials.set(addressBytes, 12)
-
 
     return withdrawalCredentials
   }
