@@ -38,19 +38,22 @@ const useValidatorDeposit = ({
   const { generateDepositData, generateKeystore } = useLodestarDepositData(GENESIS_FORK_VERSION)
 
   const handleDepositError = (e: any) => {
-    const error = (e as Error).message.toLowerCase()
+    const error = (e as Error).message
     let errorMessage = 'error.unexpectedDepositError'
-    if (error.includes('user rejected the request')) {
+    if (error.toLowerCase().includes('user rejected the request')) {
       errorMessage = 'error.userRejectedTransaction'
     }
 
-    console.error(e)
+    if (error.includes('INVALID_ADDRESS_LENGTH')) {
+      errorMessage = 'error.invalidAddressLength'
+    }
 
     setError(errorMessage)
   }
 
   const makeDeposit = async () => {
     setLoading(true)
+    setError('')
 
     try {
       if (!keyStorePassword) {
@@ -102,6 +105,7 @@ const useValidatorDeposit = ({
       )
     } catch (e) {
       handleDepositError(e)
+      setLoading(false)
       console.log(e)
     }
   }

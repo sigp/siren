@@ -290,6 +290,7 @@
     "missingValidatorData": "Invalid Validator Node Data",
     "apiTokenRequired": "Api Token is required",
     "invalidApiToken": "Invalid Api Token",
+    "invalidAddressLength": "Invalid withdrawal address length. Please review and try again.",
     "beaconDataRequired": "Beacon Node requires protocol, address and port",
     "validatorDataRequired": "Validator Node requires protocol, address and port",
     "unableToSignExit": "Unable to sign voluntary exit message",

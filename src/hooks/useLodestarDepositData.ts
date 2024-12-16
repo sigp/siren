@@ -3,8 +3,7 @@ import { fromHexString, toHexString, Type } from '@chainsafe/ssz'
 import { DOMAIN_DEPOSIT } from '@lodestar/params'
 import { DomainType, Domain, Root, Version } from '@lodestar/types'
 import { ssz } from '@lodestar/types/phase0'
-import { isAddress, getBytes } from 'ethers'
-import { useState } from 'react'
+import { getAddress, getBytes } from 'ethers'
 import useChainSafeKeygen from './useChainSafeKeygen'
 
 interface DepositDataJson {
@@ -25,7 +24,6 @@ export interface KeyStoreData {
 }
 
 export type useLodestarDepositDataReturnType = {
-  isLoading: boolean
   generateDepositData: (
     mnemonic: string,
     index: number,
@@ -41,7 +39,6 @@ export type useLodestarDepositDataReturnType = {
 }
 
 const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositDataReturnType => {
-  const [isLoading, setLoading] = useState<boolean>(false)
   const { deriveValidatorKeys } = useChainSafeKeygen()
 
   const computeForkDataRoot = (currentVersion: Version, genesisValidatorsRoot: Root) => {
@@ -77,8 +74,6 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     index: number,
     keyStorePassword: string,
   ): Promise<KeyStoreData> => {
-    setLoading(true)
-
     try {
       const { secretKey, publicKey } = await deriveValidatorKeys(mnemonic, index)
       const keystore = await create(
@@ -96,9 +91,24 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     } catch (e) {
       console.error(e)
       throw e
-    } finally {
-      setLoading(false)
     }
+  }
+
+  const generateWithdrawalCredentials = (withdrawalAddress: string): Uint8Array => {
+    const checkSumAddress = getAddress(withdrawalAddress)
+    const addressBytes = fromHexString(checkSumAddress.replace('0x', ''))
+
+    if (addressBytes.length !== 20) {
+      throw new Error('INVALID_ADDRESS_LENGTH')
+    }
+
+    const withdrawalCredentials = new Uint8Array(32)
+
+    withdrawalCredentials[0] = 0x01
+
+    withdrawalCredentials.set(addressBytes, 12)
+
+    return withdrawalCredentials
   }
 
   const generateDepositData = async (
@@ -107,18 +117,10 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     withdrawalAddress: string,
     amount: number,
   ): Promise<DepositData> => {
-    if (!isAddress(withdrawalAddress)) {
-      throw new Error('INVALID_ADDRESS')
-    }
-
-    setLoading(true)
-
     try {
       const { secretKey, publicKey } = await deriveValidatorKeys(mnemonic, index)
 
-      const withdrawalCredentials = fromHexString(
-        '0x010000000000000000000000' + withdrawalAddress.replace('0x', ''),
-      )
+      const withdrawalCredentials = generateWithdrawalCredentials(withdrawalAddress)
 
       const depositMessage = { pubkey: publicKey.toBytes(), withdrawalCredentials, amount }
 
@@ -139,15 +141,12 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     } catch (e) {
       console.error(e)
       throw e
-    } finally {
-      setLoading(false)
     }
   }
 
   return {
     generateDepositData,
     generateKeystore,
-    isLoading,
   }
 }
 
