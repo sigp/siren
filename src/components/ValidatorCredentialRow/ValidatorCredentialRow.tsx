@@ -1,51 +1,58 @@
-import { verifyMessage, isAddress } from 'ethers'
-import { ChangeEvent, FC, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useSignMessage } from 'wagmi'
-import addClassString from '../../../utilities/addClassString'
-import { ValidatorCandidate } from '../../types'
-import Button, { ButtonFace } from '../Button/Button'
-import Typography from '../Typography/Typography'
-import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
+import { getAddress, verifyMessage } from 'ethers';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSignMessage } from 'wagmi';
+import addClassString from '../../../utilities/addClassString';
+import { ValidatorCandidate } from '../../types';
+import Button, { ButtonFace } from '../Button/Button';
+import Typography from '../Typography/Typography';
+import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow';
+import WalletActionBtn from '../WalletActionBtn/WalletActionBtn';
 
 export interface ValidatorCredentialRowProps {
-  validator: ValidatorCandidate
-  onSetCredential: (id: string, credential: string) => void
-  onSetVerification: (id: string, verification: boolean) => void
+  validatorCandidate: ValidatorCandidate
+  onUpdateCandidate: (id: string, candidate: ValidatorCandidate) => void
 }
 
 const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
-  validator,
-  onSetCredential,
-  onSetVerification,
+  validatorCandidate,
+                                                                   onUpdateCandidate
 }) => {
   const { t } = useTranslation()
-  const { id, index, isVerifiedCredentials } = validator
+  const { id, index, isVerifiedCredentials } = validatorCandidate
   const [credentialInput, setCredentialInput] = useState('')
   const [isLoading, setLoading] = useState(false)
   const [isValidAddress, setIsValidAddress] = useState(false)
   const [errorMsg, setError] = useState('')
   const messageSignature = t('validatorManagement.withdrawalCredentials.confirmOwnership')
 
-  const { data, signMessage, error } = useSignMessage()
+  const { data, signMessage, error, reset } = useSignMessage()
 
-  const setCredential = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
-    onSetCredential(id, '')
-    setError('')
-    setCredentialInput(value)
-    onSetVerification(id, false)
+  const handleError = (e) => {
+    let message = 'error.unexpectedAddressError'
 
-    const isValid = isAddress(value)
-
-    if (!isValid) {
-      setError(t('validatorManagement.withdrawalCredentials.invalidAddress'))
-      return
+    if (e?.code === "INVALID_ARGUMENT") {
+      message = 'error.invalidAddressFormat'
     }
 
-    onSetCredential(id, value)
-    setIsValidAddress(isValid)
+    setError(t(message))
+  }
+
+  const setCredential = (e: ChangeEvent<HTMLInputElement>) => {
+    onUpdateCandidate(id, {...validatorCandidate, withdrawalCredentials: '', isVerifiedCredentials: false})
+    setError('')
+    setIsValidAddress(false)
+    reset()
+
+    try {
+      const value = e.target.value
+      setCredentialInput(value)
+      const checkSumAddress = getAddress(value)
+      onUpdateCandidate(id, {...validatorCandidate, withdrawalCredentials: checkSumAddress})
+      setIsValidAddress(true)
+    } catch (e) {
+      handleError(e)
+    }
   }
 
   const verifyCredentials = () => {
@@ -57,16 +64,23 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
   useEffect(() => {
     if (!data) return
 
-    const signedAddress = verifyMessage(messageSignature, data)
+    try {
+      const signedAddress = verifyMessage(messageSignature, data)
+      const checkSumAddress = getAddress(credentialInput)
+      const isVerifiedCredentials = signedAddress === checkSumAddress
 
-    if (signedAddress === credentialInput) {
-      onSetVerification(id, true)
-    } else {
-      onSetVerification(id, false)
-      setError(t('validatorManagement.withdrawalCredentials.incorrectSignature'))
+      onUpdateCandidate(id, {...validatorCandidate, isVerifiedCredentials })
+
+      if(!isVerifiedCredentials) {
+        setError(t('validatorManagement.withdrawalCredentials.incorrectSignature'))
+      }
+
+    } catch (e) {
+      handleError(e)
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
-  }, [data])
+  }, [data, validatorCandidate, credentialInput])
 
   useEffect(() => {
     if (error) {
@@ -86,7 +100,7 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
   return (
     <ValidatorCandidateRow
       isError={Boolean(errorMsg)}
-      data={validator}
+      data={validatorCandidate}
       index={index ? Number(index) : undefined}
     >
       <div className={containerClasses}>
