@@ -15,7 +15,7 @@ export interface WithdrawalCredentialsProps {
   onValidatorChange: (vals: ValidatorCandidate[]) => void
   isActive: boolean
   onShowRisk: () => void
-  sharedCredentials: string
+  sharedCredentials?: string | undefined
   onUpdateSharedCredentials: (credentials?: string) => void
 }
 
@@ -62,7 +62,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   }
 
   const toggleAssignAllCredentials = (): void => {
-    onUpdateSharedCredentials('')
+    onUpdateSharedCredentials(undefined)
     const updatedCandidates = candidates.map((validator) => ({
       ...validator,
       withdrawalCredentials: '',

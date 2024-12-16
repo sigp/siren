@@ -48,7 +48,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   ]
   const [candidates, setValidatorCandidates] = useState<ValidatorCandidate[]>([])
   const [keyPhrase, setKeyPhrase] = useState('')
-  const [sharedWithdrawalCredentials, setSharedCredentials] = useState('')
+  const [sharedWithdrawalCredentials, setSharedCredentials] = useState<string | undefined>()
   const [sharedKeystorePassword, setSharedKeystorePassword] = useState('')
   const [isRisk, setIsRisk] = useState(false)
 
@@ -73,7 +73,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const decrementStep = () => setStep((prevStep) => Math.max(prevStep - 1, 0))
   const setNewValidators = (vals: ValidatorCandidate[]) => setValidatorCandidates(vals)
   const setPhrase = (e: ChangeEvent<HTMLTextAreaElement>) => setKeyPhrase(e.target.value)
-  const setCredentials = (credentials: string) => setSharedCredentials(credentials)
+  const updateSharedCredentials = (credentials?: string) => setSharedCredentials(credentials)
   const setKeystorePassword = (password: string) => setSharedKeystorePassword(password)
 
   const showRiskMessage = () => setIsRisk(true)
@@ -163,7 +163,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
                 onValidatorChange={setNewValidators}
                 onBackStep={decrementStep}
                 onNextStep={incrementStep}
-                onUpdateSharedCredentials={setCredentials}
+                onUpdateSharedCredentials={updateSharedCredentials}
                 sharedCredentials={sharedWithdrawalCredentials}
               />
             </CreateValidatorStep>
