@@ -1,13 +1,13 @@
-import { getAddress, verifyMessage } from 'ethers';
-import { ChangeEvent, FC, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSignMessage } from 'wagmi';
-import addClassString from '../../../utilities/addClassString';
-import { ValidatorCandidate } from '../../types';
-import Button, { ButtonFace } from '../Button/Button';
-import Typography from '../Typography/Typography';
-import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow';
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn';
+import { getAddress, verifyMessage } from 'ethers'
+import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSignMessage } from 'wagmi'
+import addClassString from '../../../utilities/addClassString'
+import { ValidatorCandidate } from '../../types'
+import Button, { ButtonFace } from '../Button/Button'
+import Typography from '../Typography/Typography'
+import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
+import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
 
 export interface ValidatorCredentialRowProps {
   validatorCandidate: ValidatorCandidate
@@ -16,7 +16,7 @@ export interface ValidatorCredentialRowProps {
 
 const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
   validatorCandidate,
-                                                                   onUpdateCandidate
+  onUpdateCandidate,
 }) => {
   const { t } = useTranslation()
   const { id, index, isVerifiedCredentials } = validatorCandidate
@@ -28,10 +28,10 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
 
   const { data, signMessage, error, reset } = useSignMessage()
 
-  const handleError = (e) => {
+  const handleError = (e: any) => {
     let message = 'error.unexpectedAddressError'
 
-    if (e?.code === "INVALID_ARGUMENT") {
+    if (e?.code === 'INVALID_ARGUMENT') {
       message = 'error.invalidAddressFormat'
     }
 
@@ -39,7 +39,11 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
   }
 
   const setCredential = (e: ChangeEvent<HTMLInputElement>) => {
-    onUpdateCandidate(id, {...validatorCandidate, withdrawalCredentials: '', isVerifiedCredentials: false})
+    onUpdateCandidate(id, {
+      ...validatorCandidate,
+      withdrawalCredentials: undefined,
+      isVerifiedCredentials: false,
+    })
     setError('')
     setIsValidAddress(false)
     reset()
@@ -48,7 +52,7 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
       const value = e.target.value
       setCredentialInput(value)
       const checkSumAddress = getAddress(value)
-      onUpdateCandidate(id, {...validatorCandidate, withdrawalCredentials: checkSumAddress})
+      onUpdateCandidate(id, { ...validatorCandidate, withdrawalCredentials: checkSumAddress })
       setIsValidAddress(true)
     } catch (e) {
       handleError(e)
@@ -69,12 +73,11 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
       const checkSumAddress = getAddress(credentialInput)
       const isVerifiedCredentials = signedAddress === checkSumAddress
 
-      onUpdateCandidate(id, {...validatorCandidate, isVerifiedCredentials })
+      onUpdateCandidate(id, { ...validatorCandidate, isVerifiedCredentials })
 
-      if(!isVerifiedCredentials) {
+      if (!isVerifiedCredentials) {
         setError(t('validatorManagement.withdrawalCredentials.incorrectSignature'))
       }
-
     } catch (e) {
       handleError(e)
     } finally {
