@@ -13,6 +13,7 @@ import {
 import { ActivityService } from './activity.service';
 import { SessionGuard } from '../session.guard';
 import { Request, Response } from 'express';
+import { KEEP_ALIVE_MESSAGE, SSE_HEADER } from '../../../src/constants/sse';
 
 @Controller('activity')
 @UseGuards(SessionGuard)
@@ -42,19 +43,14 @@ export class ActivityController {
 
   @Get('stream')
   sse(@Req() req: Request, @Res() res: Response) {
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-      'X-Accel-Buffering': 'no',
-    });
+    res.writeHead(200, SSE_HEADER);
 
     res.flushHeaders();
 
     this.activityService.addClient(res);
 
     const heartbeatInterval = setInterval(() => {
-      res.write(': keep-alive\n\n');
+      res.write(KEEP_ALIVE_MESSAGE);
     }, 10000);
 
     req.on('close', () => {
