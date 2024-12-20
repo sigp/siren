@@ -1,8 +1,8 @@
-// src/logs/logs.controller.ts
 import { Controller, Get, Res, Req, Param, UseGuards } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LogsService } from './logs.service';
 import { SessionGuard } from '../session.guard';
+import { KEEP_ALIVE_MESSAGE, SSE_HEADER } from '../../../src/constants/sse';
 
 @Controller('logs')
 @UseGuards(SessionGuard)
@@ -24,6 +24,25 @@ export class LogsController {
   @Get('metrics')
   getLogMetrics() {
     return this.logsService.readLogMetrics();
+  }
+
+  @Get('priority-log-stream')
+  sse(@Req() req: Request, @Res() res: Response) {
+    res.writeHead(200, SSE_HEADER);
+
+    res.flushHeaders();
+
+    this.logsService.addClient(res);
+
+    const heartbeatInterval = setInterval(() => {
+      res.write(KEEP_ALIVE_MESSAGE);
+    }, 10000);
+
+    req.on('close', () => {
+      clearInterval(heartbeatInterval);
+      this.logsService.removeClient(res);
+      res.end();
+    });
   }
 
   @Get('dismiss/:index')

@@ -23,7 +23,7 @@
     "@types/jest": "^29.5.12",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.6",
-    "@types/react": "18.3.12",
+    "@types/react": "19.0.2",
     "@uiw/react-textarea-code-editor": "^2.1.1",
     "autoprefixer": "^10.4.19",
     "axios": "^0.27.2",
@@ -85,7 +85,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "22.10.1",
+    "@types/node": "22.10.2",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "eslint": "8.57.0",
     "eslint-config-next": "^15.0.3",
