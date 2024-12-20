@@ -62,6 +62,9 @@ const handleSSe = (res, req, url) => {
 app.prepare().then(() => {
   const server = express()
   server.get('/activity-stream', (req, res) => handleSSe(res, req, `${backendUrl}/activity/stream`))
+  server.get('/priority-log-stream', (req, res) =>
+    handleSSe(res, req, `${backendUrl}/logs/priority-log-stream`),
+  )
   server.get('/validator-logs', (req, res) => handleSSe(res, req, `${backendUrl}/logs/validator`))
   server.get('/beacon-logs', (req, res) => handleSSe(res, req, `${backendUrl}/logs/beacon`))
 

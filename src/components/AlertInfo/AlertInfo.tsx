@@ -5,6 +5,7 @@ import sortAlertMessagesBySeverity from '../../../utilities/sortAlerts'
 import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 import useDivDimensions from '../../hooks/useDivDimensions'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import useSSEData from '../../hooks/useSSEData'
 import { proposerDuties } from '../../recoil/atoms'
 import { LogLevels, StatusColor } from '../../types'
 import AlertCard from '../AlertCard/AlertCard'
@@ -23,6 +24,14 @@ const AlertInfo: FC<AlertInfoProps> = ({ metrics, ...props }) => {
   const headerDimensions = useDivDimensions()
   const [filter, setFilter] = useState('all')
   const duties = useRecoilValue(proposerDuties)
+
+  const { data: streamedData } = useSSEData({
+    url: '/priority-log-stream',
+    isReady: true,
+    isStateStore: true,
+  })
+
+  console.log(streamedData)
 
   const priorityLogAlerts = useMemo(() => {
     return Object.values(metrics)

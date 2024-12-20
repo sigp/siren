@@ -6,6 +6,7 @@ import { LogLevels, LogType, SSELog } from '../../../src/types';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './entities/log.entity';
 import { Op } from 'sequelize';
+import { ClientManager } from '../utils/client-manager';
 
 @Injectable()
 export class LogsService {
@@ -20,6 +21,20 @@ export class LogsService {
 
   private sseStreams: Map<string, Subject<any>> = new Map();
 
+  private clientManager = new ClientManager();
+
+  public addClient(client: Response) {
+    this.clientManager.addClient(client);
+  }
+
+  public removeClient(client: Response) {
+    this.clientManager.removeClient(client);
+  }
+
+  public sendMessageToClients(data: any) {
+    this.clientManager.sendMessageToClients(data);
+  }
+
   public async startSse(url: string, type: LogType) {
     console.log(`starting sse ${url}, ${type}...`);
     const eventSource = new EventSource(url);
@@ -27,7 +42,7 @@ export class LogsService {
     const sseStream: Subject<any> = new Subject();
     this.sseStreams.set(url, sseStream);
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = async (event) => {
       let newData;
 
       try {
@@ -39,10 +54,13 @@ export class LogsService {
       const { level } = newData;
 
       if (level !== LogLevels.INFO) {
-        this.logRepository.create(
+        const result = (await this.logRepository.create(
           { type, level, data: JSON.stringify(newData), isHidden: false },
           { ignoreDuplicates: true },
-        );
+        )) as any;
+
+        this.sendMessageToClients(result.dataValues);
+
         if (this.isDebug) {
           console.log(
             newData,
