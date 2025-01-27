@@ -162,3 +162,4 @@ export const ALERT_ID = {
 
 export const DEVICE_NAME_TRUNCATE = 10
 export const EFFECTIVE_BALANCE = 32
+export const FETCH_LOG_LIMIT = 15

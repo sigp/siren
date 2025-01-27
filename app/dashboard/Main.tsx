@@ -17,7 +17,13 @@ import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
-import { ActivityResponse, LogMetric, ProposerDuty, StatusColor } from '../../src/types'
+import {
+  ActivityResponse,
+  LogData,
+  Metric,
+  ProposerDuty,
+  StatusColor
+} from '../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
 import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
@@ -35,8 +41,9 @@ export interface MainProps {
   initValCaches: ValidatorCache
   initInclusionRate: ValidatorInclusionData
   initProposerDuties: ProposerDuty[]
-  initLogMetrics: LogMetric
   initActivityData: ActivityResponse
+  initMetrics: Metric
+  initPriorityLogs: LogData[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -52,8 +59,9 @@ const Main: FC<MainProps> = (props) => {
     lighthouseVersion,
     genesisTime,
     initProposerDuties,
-    initLogMetrics,
     initActivityData,
+    initMetrics,
+    initPriorityLogs
   } = props
 
   const { t } = useTranslation()
@@ -112,9 +120,9 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/priority-logs', {
+  const { data: metrics } = useSWRPolling<Metric>('/api/log-metrics', {
     refreshInterval: slotInterval / 2,
-    fallbackData: initLogMetrics,
+    fallbackData: initMetrics,
     networkError,
   })
 
@@ -123,7 +131,7 @@ const Main: FC<MainProps> = (props) => {
   const { isReady } = executionSync
   const { connected } = peerData
   const { natOpen } = nodeHealth
-  const warningCount = logMetrics.warningLogs?.length || 0
+  const warningCount = metrics.warningCount || 0
 
   useEffect(() => {
     setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
@@ -252,7 +260,8 @@ const Main: FC<MainProps> = (props) => {
           />
           <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
           <DiagnosticTable
-            metrics={logMetrics}
+            priorityLogs={initPriorityLogs}
+            logMetrics={metrics}
             bnSpec={beaconSpec}
             syncData={syncData}
             beanHealth={nodeHealth}

@@ -50,6 +50,12 @@ export type LogMetric = {
   criticalLogs: LogData[]
 }
 
+export type Metric = {
+  warningCount: number
+  errorCount: number
+  criticalCount: number
+}
+
 export enum LogType {
   VALIDATOR = 'VALIDATOR',
   BEACON = 'BEACON',

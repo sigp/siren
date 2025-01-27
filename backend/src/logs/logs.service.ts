@@ -59,7 +59,9 @@ export class LogsService {
           { ignoreDuplicates: true },
         )) as any;
 
-        this.sendMessageToClients(result.dataValues);
+        if(level === LogLevels.ERRO || level === LogLevels.CRIT) {
+          this.sendMessageToClients(result.dataValues);
+        }
 
         if (this.isDebug) {
           console.log(
@@ -133,6 +135,97 @@ export class LogsService {
       errorLogs,
       criticalLogs,
     };
+  }
+
+  async readMetrics(type?: LogType) {
+    if (type && !this.logTypes.includes(type)) {
+      throw new Error('Invalid log type');
+    }
+
+    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
+
+    const warnOptions: any = {
+      where: {
+        level: LogLevels.WARN,
+        createdAt: {
+          [Op.gte]: oneHourAgo,
+        },
+      },
+    };
+    const errorOptions: any = {
+      where: {
+        level: LogLevels.ERRO,
+        createdAt: {
+          [Op.gte]: oneHourAgo,
+        },
+      },
+    };
+    const critOptions: any = {
+      where: {
+        level: LogLevels.CRIT,
+        createdAt: {
+          [Op.gte]: oneHourAgo,
+        },
+      },
+    };
+
+    if (type) {
+      warnOptions.where.type = { [Op.eq]: type };
+      errorOptions.where.type = { [Op.eq]: type };
+      critOptions.where.type = { [Op.eq]: type };
+    }
+
+    const [warningCount, errorCount, criticalCount] = await Promise.all([
+      this.logRepository.count(warnOptions),
+      this.logRepository.count(errorOptions),
+      this.logRepository.count(critOptions),
+    ]);
+
+    return {
+      warningCount,
+      errorCount,
+      criticalCount,
+    };
+
+
+  }
+
+  public async paginatedPriorityLogs(
+    type?: LogType,
+    order?: string | undefined,
+    since?: string | undefined,
+    limit?: string | undefined,
+  ) {
+    let orderQuery = order?.toUpperCase();
+    const queryLimit = limit ? Number(limit) : 16;
+
+    if (orderQuery !== 'ASC' && orderQuery !== 'DESC') {
+      orderQuery = 'DESC';
+    }
+
+    // Build a single where object
+    const whereClause: any = {};
+
+    // If we have a 'since' timestamp, fetch only items older than that
+    if (since) {
+      whereClause.createdAt = {
+        [Op.lt]: new Date(since),
+      };
+    }
+
+    // If 'type' is provided, match that type
+    if (type) {
+      whereClause.type = type;
+    }
+
+    whereClause.level = { [Op.in]: [LogLevels.CRIT, LogLevels.ERRO] };
+    whereClause.isHidden = false
+
+    return this.logRepository.findAll({
+      limit: queryLimit === 0 ? undefined : queryLimit,
+      where: whereClause,
+      order: [['createdAt', orderQuery]],
+    });
   }
 
   async dismissLog(id: string) {
