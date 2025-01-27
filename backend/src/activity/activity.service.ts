@@ -65,16 +65,6 @@ export class ActivityService {
         }
       : undefined;
 
-    if (whereClause) {
-      return {
-        count: await this.activityRepository.count(),
-        rows: await this.activityRepository.findAll({
-          where: whereClause,
-          order: [['createdAt', orderQuery]],
-        }),
-      };
-    }
-
     return this.activityRepository.findAndCountAll({
       limit: queryLimit === 0 ? undefined : queryLimit,
       offset: Number(offset) || 0,

@@ -1,8 +1,9 @@
-import { Controller, Get, Res, Req, Param, UseGuards } from '@nestjs/common';
+import {Controller, Get, Res, Req, Param, UseGuards, Query} from '@nestjs/common';
 import { Request, Response } from 'express';
 import { LogsService } from './logs.service';
 import { SessionGuard } from '../session.guard';
 import { KEEP_ALIVE_MESSAGE, SSE_HEADER } from '../../../src/constants/sse';
+import {LogType} from "../../../src/types";
 
 @Controller('logs')
 @UseGuards(SessionGuard)
@@ -24,6 +25,21 @@ export class LogsController {
   @Get('metrics')
   getLogMetrics() {
     return this.logsService.readLogMetrics();
+  }
+
+  @Get('priority-logs')
+  getPriorityLogs(
+    @Query('type') type?: LogType,
+    @Query('limit') limit?: string,
+    @Query('order') order?: string,
+    @Query('since') since?: string,
+  ) {
+    return this.logsService.paginatedPriorityLogs(type, order, since, limit)
+  }
+
+  @Get('log-metrics')
+  getMetrics() {
+    return this.logsService.readMetrics();
   }
 
   @Get('priority-log-stream')
