@@ -9,13 +9,13 @@ import WalletActionBtn from '../../../../../../WalletActionBtn/WalletActionBtn'
 export interface DepositStepProps {
   isLoading: boolean
   onDeposit: () => void
-  depositAmount: string
+  depositAmount: BigInt
 }
 
 const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount }) => {
   const { t } = useTranslation()
 
-  const { isSufficient } = useHasSufficientBalance(BigInt(depositAmount))
+  const { isSufficient } = useHasSufficientBalance(depositAmount)
 
   return (
     <div className='py-4 space-y-2'>

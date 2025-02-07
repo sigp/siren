@@ -1,3 +1,4 @@
+import { parseUnits } from 'ethers'
 import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
@@ -32,8 +33,8 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
     mnemonic,
     beaconSpec,
   })
-
-  const { isSufficient } = useHasSufficientBalance(BigInt(MIN_ACTIVATION_BALANCE))
+  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
+  const { isSufficient } = useHasSufficientBalance(depositAmountWei)
 
   useEffect(() => {
     if (txHash && pubKey && !!keyStore) {
