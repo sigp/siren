@@ -47,6 +47,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const [sharedWithdrawalCredentials, setSharedCredentials] = useState<string | undefined>()
   const [sharedKeystorePassword, setSharedKeystorePassword] = useState('')
   const [isRisk, setIsRisk] = useState(false)
+  const [hasAcceptedRisk, setHasAcceptRisk] = useState(false)
 
   const { active_ongoing } = validatorNetworkData
   const totalCandidates = candidates.length
@@ -73,6 +74,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const dismissRiskMessage = () => setIsRisk(false)
   const viewManagement = () => onChangeView(ValidatorManagementView.MAIN)
   const acceptRisk = () => {
+    setHasAcceptRisk(true)
     dismissRiskMessage()
   }
 
@@ -129,6 +131,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
             >
               <WithdrawalCredentials
                 onShowRisk={showRiskMessage}
+                hasAcceptedRisk={hasAcceptedRisk}
                 isActive={step === 3}
                 candidates={candidates}
                 onValidatorChange={setNewValidators}
