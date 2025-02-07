@@ -1,5 +1,3 @@
-import { motion } from 'framer-motion'
-import Carousel from 'nuka-carousel'
 import { ChangeEvent, FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
@@ -11,8 +9,7 @@ import {
   ValidatorRewardEstimate,
 } from '../../../types'
 import { ValidatorCountResult } from '../../../types/validator'
-import ProgressBar from '../../ProgressBar/ProgressBar'
-import Typography from '../../Typography/Typography'
+import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
 import CreateValidatorStep from './CreateValidatorStep'
 import RiskModal from './RiskModal'
 import KeystoreAuthentication from './Steps/KeystoreAuthentication/KeystoreAuthentication'
@@ -32,7 +29,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   onChangeView,
 }) => {
   const { t } = useTranslation()
-  const [step, setStep] = useState(0)
   const beaconSpec = useRecoilValue(beaconNodeSpec)
 
   const { DEPOSIT_NETWORK_ID, BASE_REWARD_FACTOR } = beaconSpec || {}
@@ -54,7 +50,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
   const { active_ongoing } = validatorNetworkData
   const totalCandidates = candidates.length
-  const totalSteps = steps.length
 
   const calculatedRewards = useMemo<ValidatorRewardEstimate>(() => {
     const totalActiveBalance = active_ongoing * EFFECTIVE_BALANCE
@@ -69,8 +64,6 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
     }
   }, [active_ongoing, totalCandidates, BASE_REWARD_FACTOR])
 
-  const incrementStep = () => setStep((prevStep) => Math.min(prevStep + 1, totalSteps - 1))
-  const decrementStep = () => setStep((prevStep) => Math.max(prevStep - 1, 0))
   const setNewValidators = (vals: ValidatorCandidate[]) => setValidatorCandidates(vals)
   const setPhrase = (e: ChangeEvent<HTMLTextAreaElement>) => setKeyPhrase(e.target.value)
   const updateSharedCredentials = (credentials?: string) => setSharedCredentials(credentials)
@@ -78,39 +71,17 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
   const showRiskMessage = () => setIsRisk(true)
   const dismissRiskMessage = () => setIsRisk(false)
-  const acceptRisks = () => {
-    dismissRiskMessage()
-    incrementStep()
-  }
   const viewManagement = () => onChangeView(ValidatorManagementView.MAIN)
+  const acceptRisk = () => {
+    dismissRiskMessage()
+  }
 
   return (
     <>
-      <div className='flex-1'>
-        <div className='w-full'>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='w-full flex'>
-            {steps.map((step, index) => (
-              <div
-                key={index}
-                className='flex-1 h-11 bg-dark25 dark:bg-dark750 flex items-center justify-center border-r dark:border-r-dark600 last:border-r-0'
-              >
-                <div className='flex space-x-2 items-center'>
-                  <div className='w-6 h-6 lg:w-3 lg:h-3 flex items-center justify-center border dark:border-dark300 text-dark900 rounded-full'>
-                    <Typography type='text-caption' className='lg:text-xTiny'>
-                      {index + 1}
-                    </Typography>
-                  </div>
-                  <Typography className='hidden lg:block' type='text-caption1'>
-                    {step}
-                  </Typography>
-                </div>
-              </div>
-            ))}
-          </motion.div>
-          <ProgressBar total={totalSteps} position={step + 1} />
-        </div>
-        <div className='w-full h-full relative createSlide'>
-          <Carousel swiping={false} slideIndex={step} dragging={false} withoutControls>
+      <RiskModal isOpen={isRisk} onAccept={acceptRisk} onClose={dismissRiskMessage} />
+      <HorizontalStepper steps={steps}>
+        {({ incrementStep, decrementStep, step }) => (
+          <>
             <CreateValidatorStep
               rewardEstimate={calculatedRewards}
               candidateCount={totalCandidates}
@@ -193,10 +164,9 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
                 candidates={candidates}
               />
             )}
-          </Carousel>
-        </div>
-      </div>
-      <RiskModal isOpen={isRisk} onAccept={acceptRisks} onClose={dismissRiskMessage} />
+          </>
+        )}
+      </HorizontalStepper>
     </>
   )
 }
