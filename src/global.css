@@ -25,6 +25,10 @@
     @apply border-b border-borderLight dark:border-borderDark;
   }
 
+  .border-t-style {
+    @apply border-t border-borderLight dark:border-borderDark;
+  }
+
   .border-style500 {
     @apply border border-dark200 dark:border-dark500;
   }
@@ -188,6 +192,18 @@ input[type='checkbox']:not(:checked) {
   .text-title {
     @apply text-uTitle;
   }
+}
+
+.slider-container {
+  height: 100%;
+}
+
+.slider-frame {
+  height: 100% !important;
+}
+
+.slider-list {
+  height: 100% !important;
 }
 
 .createSlide .slide {

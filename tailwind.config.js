@@ -26,6 +26,7 @@ module.exports = {
         primary50: '#FFF5FF',
         primaryF2: '#CBC2DE',
         primary_05: 'rgba(94, 65, 213, 0.05)',
+        primary_10: 'rgba(94, 65, 213, 0.1)',
         primary80: 'rgba(255, 255, 255, 0.8)',
         primary100: 'rgba(204, 175, 255, 0.5)',
         primary200: '#7C5FEB',
