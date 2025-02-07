@@ -134,6 +134,10 @@
   "weekly": "weekly",
   "total": "Total",
   "validators": "Validators",
+  "selectAll": "Select All",
+  "primaryValidator": "Primary Validator",
+  "eligibleValidators": "Eligible Validators",
+  "consolidatingValidators": "Consolidating Validators",
   "validatorBalance": "Validator Balance",
   "validatorLegend": "Validator Balance Legend",
   "viewAll": "View All",
@@ -303,7 +307,8 @@
     "userName": {
       "maxLength": "Username cannot exceed 14 characters",
       "required": "User name is required"
-    }
+    },
+    "unexpectedConsolidationError": "Unexpected error while submitting consolidation request."
   },
   "settings": {
     "general": "General",
@@ -351,7 +356,7 @@
       "avgEffectiveness": "Avg Effectiveness"
     },
     "actions": {
-      "deposit": "Deposit",
+      "consolidate": "Consolidate",
       "add": "Add",
       "depositFunds": "Deposit Funds",
       "backupKeys": "Backup Keys",
@@ -499,6 +504,35 @@
       "title": "Acknowledging the risks.",
       "text": "Setting up a validator involves moving a large amount of personal assets. It’s very important to double-check that you are on the correct network and have set everything up properly before continuing. If the information is not correct, it could lead to a permanent loss of funds.",
       "pleaseReview": "Please review the details below carefully before making the deposit."
+    },
+    "consolidateView": {
+      "steps": {
+        "selectTarget": "Select Target",
+        "selectSources": "Select Sources",
+        "signAndSubmit": "Sign & Submit"
+      },
+      "selectTarget": {
+        "title": "Choose your target validator",
+        "text": "Select a primary validator to receive funds from consolidate validators."
+      },
+      "selectSources": {
+        "title": "Select validators to consolidate",
+        "text": "Choose the validators you want to merge into your target validator, streamlining your staking setup and maximizing efficiency.",
+        "selectedExplained": "Your selected validators will be merged into this primary validator for a streamlined staking structure"
+      },
+      "signAndSubmit": {
+        "title": "Sign and Submit Requests",
+        "transactionStatus": "Transaction Status",
+        "submitRequest": "Submit Request",
+        "consolidationRequest": "Consolidation Request",
+        "successTxText": "Your transaction was submitted successfully. Your consolidation request will remain in queue until processed. Once processed your consolidating validator will be exited and funds be sent to the new target validator.",
+        "errorTxText": "Your transaction could not be processed. Please use the tx-hash above to review the transaction in your preferred block explorer.",
+        "pendingTxText": "Your transaction is pending. You may use the tx-hash above to monitor its progress. When processed the transaction result will be reflected.",
+        "addExtraFee": "Add extra fee to all requests to avoid rejection due to high traffic.",
+        "highFees": "Due to very high consolidation request volume, it is not recommended submitting new requests at this time. Request fees will be very high and are not guaranteed to be successful.",
+        "mediumFees": "Due to an increase in the number of consolidation requests, the fee to submit a new request is moderately high. Please consider waiting to avoid high fees.",
+        "lowFees": "Low Fees and consolidation queue. Please ensure you are using the correct network when making requests."
+      }
     }
   },
   "alert": {
