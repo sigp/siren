@@ -135,6 +135,7 @@
   "total": "Total",
   "validators": "Validators",
   "selectAll": "Select All",
+  "incorrectWallet": "Incorrect Wallet Connected",
   "primaryValidator": "Primary Validator",
   "eligibleValidators": "Eligible Validators",
   "consolidatingValidators": "Consolidating Validators",

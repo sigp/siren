@@ -4,7 +4,7 @@ import useHasSufficientBalance from '../../../../../../../hooks/useHasSufficient
 import Button, { ButtonFace } from '../../../../../../Button/Button'
 import InfoBox, { InfoBoxType } from '../../../../../../InfoBox/InfoBox'
 import Typography from '../../../../../../Typography/Typography'
-import WalletActionBtn from '../../../../../../WalletActionBtn/WalletActionBtn'
+import WalletActionGuard from '../../../../../../WalletActionGuard/WalletActionGuard'
 
 export interface DepositStepProps {
   isLoading: boolean
@@ -24,7 +24,7 @@ const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount
           {t('validatorManagement.signAndDeposit.depositText')}
         </Typography>
       </InfoBox>
-      <WalletActionBtn isSufficientBalance={isSufficient}>
+      <WalletActionGuard isSufficientBalance={isSufficient}>
         <Button
           isLoading={isLoading}
           type={ButtonFace.SECONDARY}
@@ -33,7 +33,7 @@ const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount
         >
           {t('validatorManagement.makeDeposit')}
         </Button>
-      </WalletActionBtn>
+      </WalletActionGuard>
     </div>
   )
 }

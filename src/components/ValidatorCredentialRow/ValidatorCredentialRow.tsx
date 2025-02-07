@@ -7,7 +7,7 @@ import { ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import Typography from '../Typography/Typography'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
+import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ValidatorCredentialRowProps {
   validatorCandidate: ValidatorCandidate
@@ -121,7 +121,7 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
           </div>
           {!isVerifiedCredentials ? (
             <div className='full'>
-              <WalletActionBtn textSize='text-caption1'>
+              <WalletActionGuard textSize='text-caption1'>
                 <Button
                   padding='px-4 py-1'
                   className='py-1'
@@ -132,7 +132,7 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
                 >
                   {t('verify')}
                 </Button>
-              </WalletActionBtn>
+              </WalletActionGuard>
             </div>
           ) : null}
         </div>

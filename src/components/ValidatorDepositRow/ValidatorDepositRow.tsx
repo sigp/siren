@@ -10,7 +10,7 @@ import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import Spinner from '../Spinner/Spinner'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
+import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, 'validator'> {
   candidate: ValidatorCandidate
@@ -62,11 +62,11 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
             <i className={statusIconClass} />
           )
         ) : (
-          <WalletActionBtn isSufficientBalance={isSufficient}>
+          <WalletActionGuard isSufficientBalance={isSufficient}>
             <Button isLoading={isLoading} onClick={makeDeposit} type={ButtonFace.SECONDARY}>
               {t('validatorManagement.makeDeposit')}
             </Button>
-          </WalletActionBtn>
+          </WalletActionGuard>
         )}
       </div>
     </ValidatorCandidateRow>
