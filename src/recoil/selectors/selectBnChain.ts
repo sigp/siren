@@ -19,6 +19,8 @@ export const selectBnChain = selector({
         return Network.Holesky
       case '11155111':
         return Network.Sepolia
+      case '7078815900':
+        return Network.Mekong
       default:
         return Network.LocalTestnet
     }

@@ -131,6 +131,7 @@ export interface SetupProps {
 export enum ChainId {
   MAINNET = 'MAINNET',
   HOLESKY = 'HOLESKY',
+  MEKONG = 'MEKONG',
   LOCALTESTNET = 'LOCALTESTNET',
 }
 
