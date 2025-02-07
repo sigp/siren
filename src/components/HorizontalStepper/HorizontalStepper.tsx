@@ -42,7 +42,7 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
       decrementStep,
       step: currentStep,
     }),
-    [incrementStep, decrementStep, currentStep]
+    [incrementStep, decrementStep, currentStep],
   )
 
   const slides = useMemo(() => {
@@ -56,24 +56,20 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
 
   return (
     <>
-      <div className="w-full">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="w-full flex"
-        >
+      <div className='w-full'>
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='w-full flex'>
           {steps.map((label, index) => (
             <div
               key={index}
-              className="flex-1 h-11 bg-dark25 dark:bg-dark750 flex items-center justify-center border-r dark:border-r-dark600 last:border-r-0"
+              className='flex-1 h-11 bg-dark25 dark:bg-dark750 flex items-center justify-center border-r dark:border-r-dark600 last:border-r-0'
             >
-              <div className="flex space-x-2 items-center">
-                <div className="w-6 h-6 lg:w-3 lg:h-3 flex items-center justify-center border dark:border-dark300 text-dark900 rounded-full">
-                  <Typography type="text-caption" className="lg:text-xTiny">
+              <div className='flex space-x-2 items-center'>
+                <div className='w-6 h-6 lg:w-3 lg:h-3 flex items-center justify-center border dark:border-dark300 text-dark900 rounded-full'>
+                  <Typography type='text-caption' className='lg:text-xTiny'>
                     {index + 1}
                   </Typography>
                 </div>
-                <Typography className="hidden lg:block" type="text-caption1">
+                <Typography className='hidden lg:block' type='text-caption1'>
                   {label}
                 </Typography>
               </div>
@@ -82,15 +78,10 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
         </motion.div>
         <ProgressBar total={totalSteps} position={currentStep + 1} />
       </div>
-      <div className="w-full h-full relative createSlide">
-        <Carousel
-          swiping={false}
-          slideIndex={currentStep}
-          dragging={false}
-          withoutControls
-        >
+      <div className='w-full h-full relative createSlide'>
+        <Carousel swiping={false} slideIndex={currentStep} dragging={false} withoutControls>
           {slides.map((child, index) => (
-            <div key={index} className="h-full w-full">
+            <div key={index} className='h-full w-full'>
               {child}
             </div>
           ))}
