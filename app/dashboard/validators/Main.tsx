@@ -10,6 +10,7 @@ import DashboardWrapper from '../../../src/components/DashboardWrapper/Dashboard
 import EditValidatorModal from '../../../src/components/EditValidatorModal/EditValidatorModal'
 import Typography from '../../../src/components/Typography/Typography'
 import AddValidatorView from '../../../src/components/ValidatorManagement/AddValidatorView/AddValidatorView'
+import ConsolidateView from '../../../src/components/ValidatorManagement/ConsolidateView/ConsolidateView'
 import CreateValidatorView from '../../../src/components/ValidatorManagement/CreateValidatorView/CreateValidatorView'
 import MainView from '../../../src/components/ValidatorManagement/MainView'
 import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
@@ -67,7 +68,7 @@ const Main: FC<MainProps> = (props) => {
   })
 
   const router = useRouter()
-  const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH } = beaconSpec
+  const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH, DEPOSIT_CHAIN_ID } = beaconSpec
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const [search, setSearch] = useState('')
   const [activeValId, setValidatorId] = useRecoilState(activeValidatorId)
@@ -176,15 +177,14 @@ const Main: FC<MainProps> = (props) => {
   }
 
   const changeView = (view: ValidatorManagementView) => setView(view)
-  const viewAddValidator = () => changeView(ValidatorManagementView.ADD)
-  const viewMain = () => changeView(ValidatorManagementView.MAIN)
 
   const goBack = () => {
+    let backView = ValidatorManagementView.MAIN
     if (view === ValidatorManagementView.CREATE) {
-      viewAddValidator()
-    } else {
-      viewMain()
+      backView = ValidatorManagementView.ADD
     }
+
+    changeView(backView)
   }
   const getPageTitle = (view: string) => {
     switch (view) {
@@ -192,6 +192,8 @@ const Main: FC<MainProps> = (props) => {
         return t('validatorManagement.titles.create')
       case ValidatorManagementView.ADD:
         return t('validatorManagement.titles.add')
+      case ValidatorManagementView.CONSOLIDATE:
+        return 'Consolidate'
       default:
         return t('validatorManagement.titles.main')
     }
@@ -204,13 +206,15 @@ const Main: FC<MainProps> = (props) => {
         )
       case ValidatorManagementView.ADD:
         return <AddValidatorView onChangeView={changeView} />
+      case ValidatorManagementView.CONSOLIDATE:
+        return <ConsolidateView chainId={Number(DEPOSIT_CHAIN_ID)} validators={validatorStates} />
       default:
         return (
           <MainView
             validators={filteredValidators}
             search={search}
             onSetSearch={setSearch}
-            onChangeView={viewAddValidator}
+            onChangeView={changeView}
             scrollPercentage={scrollPercentage}
           />
         )
@@ -227,8 +231,9 @@ const Main: FC<MainProps> = (props) => {
         isBeaconError={isBeaconError}
         isValidatorError={isValidatorError}
         nodeHealth={nodeHealth}
+        className='w-full flex flex-1 flex-col p-4 max-w-[96vw]'
       >
-        <div className='w-full flex flex-col pb-12 p-4 max-w-[96vw]'>
+        <>
           <div className='w-full mb-6 flex flex-col lg:items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>
             <div className='space-x-4 flex items-center'>
               {view !== ValidatorManagementView.MAIN && (
@@ -253,7 +258,7 @@ const Main: FC<MainProps> = (props) => {
             />
           </div>
           {renderView(view)}
-        </div>
+        </>
       </DashboardWrapper>
       <BlsExecutionModal />
       {isValDetail && activeValidator && (
