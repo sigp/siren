@@ -23,7 +23,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
     >
       <div className='flex items-center space-x-2'>
         <div className='flex items-center space-x-3 border-r-style pr-3'>
-          <CheckBox id={pubKey} checked={isSelected} />
+          <CheckBox id={pubKey} readOnly checked={isSelected} />
           <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
           <Typography type='text-caption'>{name}</Typography>
         </div>
