@@ -1,5 +1,6 @@
-import React, { FC } from 'react'
+import React, {FC} from 'react'
 import { useTranslation } from 'react-i18next'
+import useElectraStatus from "../../hooks/useElectraStatus";
 import { ValidatorManagementView } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
@@ -13,6 +14,7 @@ export interface MainViewProps {
   onChangeView: (value: ValidatorManagementView) => void
   onSetSearch: (value: string) => void
   search: string
+  chainId: number
 }
 
 const MainView: FC<MainViewProps> = ({
@@ -21,11 +23,14 @@ const MainView: FC<MainViewProps> = ({
   onChangeView,
   onSetSearch,
   search,
+  chainId,
 }) => {
   const { t } = useTranslation()
 
   const viewAddVal = () => onChangeView(ValidatorManagementView.ADD)
   const viewConsolidateVal = () => onChangeView(ValidatorManagementView.CONSOLIDATE)
+
+  const { isEnabled } = useElectraStatus(chainId)
 
   return (
     <div className='w-full space-y-6 pb-6'>
@@ -42,7 +47,7 @@ const MainView: FC<MainViewProps> = ({
         <div className='flex flex-col lg:flex-row space-y-3 lg:space-y-0 lg:space-x-4'>
           <ValidatorSearchInput onChange={onSetSearch} value={search} />
           <div className='flex justify-center lg:justify-start space-x-4'>
-            <Button onClick={viewConsolidateVal} type={ButtonFace.TERTIARY}>
+            <Button isDisabled={!isEnabled} onClick={viewConsolidateVal} type={ButtonFace.TERTIARY}>
               {t('validatorManagement.actions.consolidate')}{' '}
               <i className='bi-arrows-angle-contract ml-3' />
             </Button>

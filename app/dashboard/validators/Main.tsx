@@ -213,6 +213,7 @@ const Main: FC<MainProps> = (props) => {
           <MainView
             validators={filteredValidators}
             search={search}
+            chainId={Number(DEPOSIT_CHAIN_ID)}
             onSetSearch={setSearch}
             onChangeView={changeView}
             scrollPercentage={scrollPercentage}
