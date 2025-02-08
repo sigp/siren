@@ -1,6 +1,6 @@
-import React, {FC} from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import useElectraStatus from "../../hooks/useElectraStatus";
+import useElectraStatus from '../../hooks/useElectraStatus'
 import { ValidatorManagementView } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
