@@ -6,11 +6,15 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import {AppService} from "./app.service";
 
 @Injectable()
 export class SessionGuard implements CanActivate {
   private apiToken = process.env.API_TOKEN;
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private appService: AppService
+  ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
@@ -18,6 +22,11 @@ export class SessionGuard implements CanActivate {
     if (!token) {
       throw new UnauthorizedException();
     }
+
+    if (await this.appService.isTokenBlacklisted(token)) {
+      throw new UnauthorizedException('Token has been invalidated');
+    }
+
     try {
       request['user'] = await this.jwtService.verifyAsync(token, {
         secret: this.apiToken,
