@@ -21,10 +21,22 @@ const createWagmiConfig = () => {
     } as any)
   }
 
-  const chains = [mainnet, holesky] as any
+  const mekongTestnet = defineChain({
+    id: 7078815900,
+    name: 'Mekong',
+    network: 'mekong',
+    rpcUrls: {
+      default: { http: ['https://rpc.mekong.ethpandaops.io/'] },
+    },
+    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    testnet: true,
+  } as any)
+
+  const chains = [mainnet, holesky, mekongTestnet] as any
   const transports = {
     [mainnet.id]: http(),
     [holesky.id]: http(),
+    [mekongTestnet.id]: http(),
   } as any
 
   if (customLocalhost !== undefined) {

@@ -4,18 +4,18 @@ import useHasSufficientBalance from '../../../../../../../hooks/useHasSufficient
 import Button, { ButtonFace } from '../../../../../../Button/Button'
 import InfoBox, { InfoBoxType } from '../../../../../../InfoBox/InfoBox'
 import Typography from '../../../../../../Typography/Typography'
-import WalletActionBtn from '../../../../../../WalletActionBtn/WalletActionBtn'
+import WalletActionGuard from '../../../../../../WalletActionGuard/WalletActionGuard'
 
 export interface DepositStepProps {
   isLoading: boolean
   onDeposit: () => void
-  depositAmount: string
+  depositAmount: BigInt
 }
 
 const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount }) => {
   const { t } = useTranslation()
 
-  const { isSufficient } = useHasSufficientBalance(BigInt(depositAmount))
+  const { isSufficient } = useHasSufficientBalance(depositAmount)
 
   return (
     <div className='py-4 space-y-2'>
@@ -24,7 +24,7 @@ const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount
           {t('validatorManagement.signAndDeposit.depositText')}
         </Typography>
       </InfoBox>
-      <WalletActionBtn isSufficientBalance={isSufficient}>
+      <WalletActionGuard isSufficientBalance={isSufficient}>
         <Button
           isLoading={isLoading}
           type={ButtonFace.SECONDARY}
@@ -33,7 +33,7 @@ const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount
         >
           {t('validatorManagement.makeDeposit')}
         </Button>
-      </WalletActionBtn>
+      </WalletActionGuard>
     </div>
   )
 }

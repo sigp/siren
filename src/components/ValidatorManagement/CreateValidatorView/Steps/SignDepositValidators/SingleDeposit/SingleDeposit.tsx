@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { parseUnits } from 'ethers'
 import { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
@@ -93,6 +94,8 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   const retryTransaction = () => setStep(0)
 
+  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
+
   return (
     <div className='relative w-full h-full'>
       <div className='flex pt-8 w-full h-full'>
@@ -136,7 +139,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
                   <div className='w-[500px] shadow'>
                     <VerticalStepper step={step} titles={stepTitles}>
                       <DepositStep
-                        depositAmount={MIN_ACTIVATION_BALANCE}
+                        depositAmount={depositAmountWei}
                         isLoading={isLoading}
                         onDeposit={makeDeposit}
                       />

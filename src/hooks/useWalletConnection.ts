@@ -1,15 +1,17 @@
 import { useRecoilValue } from 'recoil'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { beaconNodeSpec } from '../recoil/atoms'
+import { Address } from '../types'
 
 export type useWalletConnectionReturnType = {
   isConnected: boolean
   isValidNetwork: boolean
   switchNetwork: () => void
+  address: Address
 }
 
 const useWalletConnection = (): useWalletConnectionReturnType => {
-  const { isConnected, chainId } = useAccount()
+  const { isConnected, chainId, address } = useAccount()
   const { DEPOSIT_NETWORK_ID } = useRecoilValue(beaconNodeSpec)
   const { switchChain } = useSwitchChain()
 
@@ -18,6 +20,7 @@ const useWalletConnection = (): useWalletConnectionReturnType => {
   return {
     isConnected,
     switchNetwork,
+    address,
     isValidNetwork: Number(DEPOSIT_NETWORK_ID) === chainId,
   }
 }

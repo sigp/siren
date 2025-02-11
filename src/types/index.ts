@@ -131,6 +131,7 @@ export interface SetupProps {
 export enum ChainId {
   MAINNET = 'MAINNET',
   HOLESKY = 'HOLESKY',
+  MEKONG = 'MEKONG',
   LOCALTESTNET = 'LOCALTESTNET',
 }
 
@@ -140,6 +141,7 @@ export enum ValidatorManagementView {
   CREATE = 'CREATE',
   RECOVER = 'RECOVER',
   IMPORT = 'IMPORT',
+  CONSOLIDATE = 'CONSOLIDATE',
 }
 
 export type AddValidatorOption = {
@@ -192,6 +194,7 @@ export type Activity = {
 
 export type TxStatus = 'pending' | 'error' | 'success'
 export type TxHash = `0x${string}`
+export type Address = `0x${string}` | undefined
 
 export type DepositData = {
   txHash: TxHash
@@ -212,4 +215,11 @@ export enum TimeUnit {
 export enum NetworkId {
   HOLESKY = '17000',
   MAINNET = '1',
+}
+
+export type ConsolidationTx = {
+  index: number
+  pubKey: string
+  txHash: TxHash
+  status: TxStatus
 }

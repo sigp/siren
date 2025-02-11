@@ -1,3 +1,4 @@
+import { parseUnits } from 'ethers'
 import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
@@ -9,7 +10,7 @@ import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import Spinner from '../Spinner/Spinner'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
-import WalletActionBtn from '../WalletActionBtn/WalletActionBtn'
+import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, 'validator'> {
   candidate: ValidatorCandidate
@@ -32,8 +33,8 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
     mnemonic,
     beaconSpec,
   })
-
-  const { isSufficient } = useHasSufficientBalance(BigInt(MIN_ACTIVATION_BALANCE))
+  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
+  const { isSufficient } = useHasSufficientBalance(depositAmountWei)
 
   useEffect(() => {
     if (txHash && pubKey && !!keyStore) {
@@ -61,11 +62,11 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
             <i className={statusIconClass} />
           )
         ) : (
-          <WalletActionBtn isSufficientBalance={isSufficient}>
+          <WalletActionGuard isSufficientBalance={isSufficient}>
             <Button isLoading={isLoading} onClick={makeDeposit} type={ButtonFace.SECONDARY}>
               {t('validatorManagement.makeDeposit')}
             </Button>
-          </WalletActionBtn>
+          </WalletActionGuard>
         )}
       </div>
     </ValidatorCandidateRow>

@@ -1,34 +1,41 @@
-import { FC } from 'react'
+import React, { FC, InputHTMLAttributes } from 'react'
 import addClassString from '../../../utilities/addClassString'
 
-export interface CheckBoxProps {
-  className?: string
-  id: string
+export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string
-  value?: string
-  checked?: boolean
-  onChange?: () => void
+  containerClassName?: string
+  labelStyle?: string
+  inputClassName?: string
 }
 
-const CheckBox: FC<CheckBoxProps> = ({ id, className, label, value, checked, onChange }) => {
-  const classes = addClassString('flex items-center', [className])
+const CheckBox: FC<CheckBoxProps> = ({
+  id,
+  label,
+  containerClassName,
+  labelStyle,
+  inputClassName,
+  ...inputProps
+}) => {
+  const containerClasses = addClassString('flex items-center', [containerClassName])
+  const inputClasses = addClassString(
+    'w-5 h-5 border border-gray-300 accent-primary bg-transparent border-style500 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 dark:border-gray-600',
+    [inputClassName],
+  )
+  const labelClasses = addClassString('ml-2 text-gray-900 dark:text-gray-300', [
+    labelStyle || 'text-sm font-medium',
+  ])
+
   return (
-    <div className={classes}>
+    <div className={containerClasses}>
       <input
-        data-testid='checkbox'
-        onChange={onChange}
-        checked={checked}
         id={id}
+        data-testid='checkbox'
         type='checkbox'
-        value={value}
-        className='w-5 rounded h-5 border-gray-300 accent-primary bg-transparent border-style500 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 focus:ring-2 dark:border-gray-600'
+        {...inputProps}
+        className={inputClasses}
       />
       {label && (
-        <label
-          data-testid='checkbox-label'
-          htmlFor={id}
-          className='ml-2 text-sm font-medium text-gray-900 dark:text-gray-300'
-        >
+        <label data-testid='checkbox-label' htmlFor={id} className={labelClasses}>
           {label}
         </label>
       )}

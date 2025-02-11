@@ -14,6 +14,7 @@ export interface WithdrawalCredentialsProps {
   candidates: ValidatorCandidate[]
   onValidatorChange: (vals: ValidatorCandidate[]) => void
   isActive: boolean
+  hasAcceptedRisk: boolean
   onShowRisk: () => void
   sharedCredentials?: string | undefined
   onUpdateSharedCredentials: (credentials?: string) => void
@@ -26,6 +27,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   onValidatorChange,
   isActive,
   onShowRisk,
+  hasAcceptedRisk,
   sharedCredentials,
   onUpdateSharedCredentials,
 }) => {
@@ -37,6 +39,12 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   useEffect(() => {
     setIsAll(valCount > 1)
   }, [valCount])
+
+  useEffect(() => {
+    if (hasAcceptedRisk) {
+      onNextStep()
+    }
+  }, [hasAcceptedRisk])
 
   const isValidAddress = isAll
     ? Boolean(sharedCredentials)
