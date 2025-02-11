@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
+import {CacheModule} from "@nestjs/cache-manager";
 
 describe('AppController', () => {
   let appController: AppController;
@@ -11,6 +12,7 @@ describe('AppController', () => {
     jest.resetModules();
     const app: TestingModule = await Test.createTestingModule({
       imports: [
+        CacheModule.register(),
         JwtModule.register({
           global: true,
           secret: 'fake-value',

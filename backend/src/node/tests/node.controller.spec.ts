@@ -9,6 +9,7 @@ import { NodeService } from '../node.service';
 import { AxiosResponse } from 'axios/index';
 import { of } from 'rxjs';
 import { mockDiagnostics } from '../../../../src/mocks/beaconSpec';
+import {AuthModule} from "../../auth.module";
 
 describe('NodeController', () => {
   let controller: NodeController;
@@ -28,6 +29,7 @@ describe('NodeController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        AuthModule,
         UtilsModule,
         CacheModule.register(),
         JwtModule.register({

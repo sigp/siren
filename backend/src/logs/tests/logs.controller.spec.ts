@@ -14,6 +14,7 @@ import {
   mockErrorLog,
   mockWarningLog,
 } from '../../../../src/mocks/logs';
+import {AuthModule} from "../../auth.module";
 
 describe('LogsController', () => {
   let logsService: LogsService;
@@ -34,6 +35,7 @@ describe('LogsController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        AuthModule,
         UtilsModule,
         SequelizeModule.forFeature([Log]),
         SequelizeModule.forRoot({

@@ -13,6 +13,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { JwtModule } from '@nestjs/jwt';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { ActivityModule } from './activity/activity.module';
+import {CacheModule} from "@nestjs/cache-manager";
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ActivityModule } from './activity/activity.module';
       secret: process.env.API_TOKEN,
       signOptions: { expiresIn: '7200s' }, //set to  2 hours
     }),
+    CacheModule.register(),
     ScheduleModule.forRoot(),
     LogsModule,
     TasksModule,

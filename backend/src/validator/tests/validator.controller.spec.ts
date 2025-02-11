@@ -21,6 +21,7 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Metric } from '../entities/metric.entity';
 import { Sequelize } from 'sequelize-typescript';
 import { ActivityModule } from '../../activity/activity.module';
+import {AuthModule} from "../../auth.module";
 
 describe('ValidatorController', () => {
   let controller: ValidatorController;
@@ -46,6 +47,7 @@ describe('ValidatorController', () => {
         UtilsModule,
         ActivityModule,
         CacheModule.register(),
+        AuthModule,
         SequelizeModule.forFeature([Metric]),
         SequelizeModule.forRoot({
           dialect: 'sqlite',
