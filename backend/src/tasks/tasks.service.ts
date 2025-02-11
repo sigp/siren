@@ -60,6 +60,10 @@ export class TasksService implements OnApplicationBootstrap {
         throw new CustomError('No api token found...', 'NO_API_TOKEN');
       }
 
+      await this.logRepository.destroy({
+        truncate: true
+      });
+
       await this.syncBeaconSpecs();
       await this.initValidatorDataScheduler();
       await this.initMetricDataScheduler();

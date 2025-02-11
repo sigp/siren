@@ -162,4 +162,5 @@ export const ALERT_ID = {
 
 export const DEVICE_NAME_TRUNCATE = 10
 export const EFFECTIVE_BALANCE = 32
+export const FETCH_LOG_LIMIT = 15
 export const CONSOLIDATION_CONTRACT = '0x01aBEa29659e5e97C95107F20bb753cD3e09bBBb'

@@ -4,6 +4,7 @@ import { Activity } from './entities/activity.entity';
 import { ActivityType } from '../../../src/types';
 import { UpdateOptions, Op } from 'sequelize';
 import { Response } from 'express';
+import { ClientManager } from '../utils/client-manager';
 
 @Injectable()
 export class ActivityService {
@@ -12,19 +13,18 @@ export class ActivityService {
     private activityRepository: typeof Activity,
   ) {}
 
-  private clients: Response[] = [];
+  private clientManager = new ClientManager();
 
   public addClient(client: Response) {
-    this.clients.push(client);
+    this.clientManager.addClient(client);
   }
 
   public removeClient(client: Response) {
-    this.clients = this.clients.filter((c) => c !== client);
+    this.clientManager.removeClient(client);
   }
 
   public sendMessageToClients(data: any) {
-    const message = `data: ${JSON.stringify(data)}\n\n`;
-    this.clients.forEach((client) => client.write(message));
+    this.clientManager.sendMessageToClients(data);
   }
 
   public async storeActivity(data: string, pubKey: string, type: ActivityType) {
@@ -64,16 +64,6 @@ export class ActivityService {
           },
         }
       : undefined;
-
-    if (whereClause) {
-      return {
-        count: await this.activityRepository.count(),
-        rows: await this.activityRepository.findAll({
-          where: whereClause,
-          order: [['createdAt', orderQuery]],
-        }),
-      };
-    }
 
     return this.activityRepository.findAndCountAll({
       limit: queryLimit === 0 ? undefined : queryLimit,

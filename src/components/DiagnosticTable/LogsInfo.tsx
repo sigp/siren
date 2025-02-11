@@ -2,15 +2,15 @@ import Link from 'next/link'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { LogMetric } from '../../types'
+import { Metric} from '../../types'
 import LogStats from '../LogStats/LogStats'
 import Typography from '../Typography/Typography'
 
 export interface LogsInfoProps {
-  metrics: LogMetric
+  logMetrics: Metric
 }
 
-const LogsInfo: FC<LogsInfoProps> = ({ metrics }) => {
+const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery('(max-width: 425px)')
   const size = isMobile ? 'health' : 'md'
@@ -38,7 +38,7 @@ const LogsInfo: FC<LogsInfoProps> = ({ metrics }) => {
         errorToolTip={t('logs.tooltips.combinedError')}
         warnToolTip={t('logs.tooltips.combinedWarning')}
         size={size}
-        metrics={metrics}
+        logMetrics={logMetrics}
       />
     </div>
   )
