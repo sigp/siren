@@ -1,5 +1,6 @@
 'use client'
 
+import '../../src/i18n'
 import { useTranslation } from 'react-i18next'
 import Button, { ButtonFace } from '../../src/components/Button/Button'
 import Typography from '../../src/components/Typography/Typography'
