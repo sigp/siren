@@ -32,6 +32,7 @@
   "connect": "Connect",
   "connectWallet": "Connect Wallet",
   "insufficientFunds": "Insufficient Funds",
+  "endSession": "End Session",
   "year": "year",
   "month": "month",
   "week": "week",
@@ -649,6 +650,8 @@
     "invalidPassword": "Invalid password. Please try again.",
     "unableToReach": "Unable to reach backend.",
     "defaultErrorMessage": "Error reaching backend server...",
+    "unableToEndSession": "Unable to end session, please try again.",
+    "unexpectedErrorLogout": "Unexpected error while ending session.",
     "tooltip": {
       "displayName": "Display name for the Siren dashboard",
       "sessionPassword": "Required password set in the configuration file"

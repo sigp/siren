@@ -11,12 +11,17 @@ export async function POST(req: Request) {
       method: 'POST'
     })
 
-    return NextResponse.json(true, { status })
+    const response = NextResponse.json(true, { status })
+
+    response.cookies.delete('session-token')
+
+    return response
+
   } catch (error: any) {
     let message = error?.response?.data?.message
 
     if (!message) {
-      message = 'authPrompt.defaultErrorMessage'
+      message = 'authPrompt.unableToEndSession'
     }
 
     console.log(error)
