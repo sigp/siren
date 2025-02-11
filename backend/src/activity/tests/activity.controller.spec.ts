@@ -8,6 +8,7 @@ import { HttpService } from '@nestjs/axios';
 import { Sequelize } from 'sequelize-typescript';
 import { JwtModule } from '@nestjs/jwt';
 import { ActivityType } from '../../../../src/types';
+import {AuthModule} from "../../auth.module";
 
 describe('ActivityController', () => {
   const baseRowData = {
@@ -58,6 +59,7 @@ describe('ActivityController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        AuthModule,
         SequelizeModule.forFeature([Activity]),
         SequelizeModule.forRoot({
           dialect: 'sqlite',

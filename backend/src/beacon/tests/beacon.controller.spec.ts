@@ -15,6 +15,7 @@ import {
   mockValCacheValues,
 } from '../../../../src/mocks/beacon';
 import { StatusColor } from '../../../../src/types';
+import {AuthModule} from "../../auth.module";
 
 describe('BeaconController', () => {
   let controller: BeaconController;
@@ -33,6 +34,7 @@ describe('BeaconController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       imports: [
+        AuthModule,
         UtilsModule,
         CacheModule.register(),
         JwtModule.register({
