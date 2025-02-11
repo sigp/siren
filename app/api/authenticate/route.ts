@@ -20,6 +20,7 @@ export async function POST(req: Request) {
       httpOnly: true,
       secure: true,
       path: '/',
+      sameSite: 'strict'
     } as any)
 
     return response
