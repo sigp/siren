@@ -28,7 +28,6 @@ const Main = () => {
   const [isReady, setReady] = useState(false)
   const [isVersionError, setVersionError] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [, setUsername] = useLocalStorage<string>('username', 'Keeper')
   const [healthCheck] = useLocalStorage<boolean>('health-check', false)
 
   const [beaconNodeVersion, setBeaconVersion] = useState('')
@@ -77,10 +76,9 @@ const Main = () => {
     ? formatSemanticVersion(beaconNodeVersion as string)
     : undefined
 
-  const storeSessionCookie = async (password: string, username: string) => {
+  const storeSessionCookie = async (password: string) => {
     try {
       setLoading(true)
-      setUsername(username)
       const { status } = await axios.post('/api/authenticate', { password })
 
       if (status === 200) {
