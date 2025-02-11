@@ -13,7 +13,6 @@ import Typography from '../Typography/Typography'
 export interface AuthModalProps extends Omit<AuthFormProps, 'children'> {
   isVisible: boolean
   isLoading: boolean
-  isNamePrompt?: boolean
   onClose?: () => void
   mode: UiMode
 }
@@ -24,7 +23,6 @@ const AuthPrompt: FC<AuthModalProps> = ({
   isLoading,
   mode,
   onClose,
-  isNamePrompt,
 }) => {
   const { t } = useTranslation()
   const [isReady, setReady] = useState(false)
@@ -58,23 +56,6 @@ const AuthPrompt: FC<AuthModalProps> = ({
                 </Typography>
               </div>
               <div className='space-y-4'>
-                {isNamePrompt && (
-                  <Controller
-                    name='username'
-                    control={control as any}
-                    render={({ field: { ref: _ref, ...props }, fieldState }) => (
-                      <Input
-                        tooltip={t('authPrompt.tooltip.displayName')}
-                        toolTipId='displayName'
-                        toolTipMode={UiMode.LIGHT}
-                        label={t('authPrompt.label.name')}
-                        uiMode={mode}
-                        error={fieldState.error?.message}
-                        {...props}
-                      />
-                    )}
-                  />
-                )}
                 <Controller
                   name='password'
                   control={control as any}
@@ -83,7 +64,7 @@ const AuthPrompt: FC<AuthModalProps> = ({
                       isAutoFocus
                       tooltip={t('authPrompt.tooltip.sessionPassword')}
                       toolTipId='sessionPassword'
-                      label={isNamePrompt ? t('authPrompt.label.sessionPassword') : undefined}
+                      label={t('authPrompt.label.sessionPassword')}
                       autoComplete='new-password'
                       type='password'
                       uiMode={mode}
