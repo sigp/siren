@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
-import {fetchMetrics} from '../logs'
+import { fetchMetrics } from '../logs'
 
 export async function GET(req: Request) {
   try {

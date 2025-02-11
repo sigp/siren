@@ -6,12 +6,12 @@ import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 import useDivDimensions from '../../hooks/useDivDimensions'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { proposerDuties } from '../../recoil/atoms'
-import {LogData, StatusColor} from '../../types'
+import { LogData, StatusColor } from '../../types'
 import AlertCard from '../AlertCard/AlertCard'
 import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings'
 import ProposerAlerts, { ProposerAlertsProps } from '../ProposerAlerts/ProposerAlerts'
 import Typography from '../Typography/Typography'
-import PriorityLogAlerts from "./PriorityLogAlerts";
+import PriorityLogAlerts from './PriorityLogAlerts'
 
 export interface AlertInfoProps extends Omit<ProposerAlertsProps, 'duties'> {
   priorityLogs: LogData[]
@@ -40,8 +40,7 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
 
   const isSeverFilter = filter === 'all' || filter === StatusColor.ERROR
 
-  const isFiller =
-    formattedAlerts.length + (duties?.length || 0) + (priorityLogs.length || 0) < 6
+  const isFiller = formattedAlerts.length + (duties?.length || 0) + (priorityLogs.length || 0) < 6
   const isPriorityAlerts = priorityLogs.length > 0
   const isAlerts = formattedAlerts.length > 0 || duties?.length > 0 || isPriorityAlerts
   const isProposerAlerts =
@@ -79,9 +78,7 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
         >
           {isAlerts && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
-              {isPriorityAlerts && isSeverFilter && (
-                <PriorityLogAlerts alerts={priorityLogs} />
-              )}
+              {isPriorityAlerts && isSeverFilter && <PriorityLogAlerts alerts={priorityLogs} />}
               {formattedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
                 const count =

@@ -5,7 +5,13 @@ import LogsInfo, { LogsInfoProps } from './LogsInfo'
 
 export interface DiagnosticTableProps extends HardwareInfoProps, AlertInfoProps, LogsInfoProps {}
 
-const DiagnosticTable: FC<DiagnosticTableProps> = ({ syncData, beanHealth, logMetrics, bnSpec, priorityLogs }) => {
+const DiagnosticTable: FC<DiagnosticTableProps> = ({
+  syncData,
+  beanHealth,
+  logMetrics,
+  bnSpec,
+  priorityLogs,
+}) => {
   return (
     <div className='flex-1 flex flex-col space-y-4 md:space-y-0 md:flex-row mt-2 w-full'>
       <HardwareInfo syncData={syncData} beanHealth={beanHealth} />

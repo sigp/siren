@@ -1,15 +1,15 @@
-import {Inject, Injectable, UnauthorizedException} from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import {CACHE_MANAGER} from "@nestjs/cache-manager";
-import {Cache} from "cache-manager";
-import { v4 as uuidV4 } from 'uuid'
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { v4 as uuidV4 } from 'uuid';
 
 @Injectable()
 export class AppService {
   constructor(
     private jwtService: JwtService,
     @Inject(CACHE_MANAGER)
-    private cacheManager: Cache
+    private cacheManager: Cache,
   ) {}
   private sessionPassword = process.env.SESSION_PASSWORD;
 
@@ -25,7 +25,11 @@ export class AppService {
       return { message: 'Token is already expired' };
     }
 
-    await this.cacheManager.set(`blacklist:${decoded.jti}`, 'blacklisted', expiresIn);
+    await this.cacheManager.set(
+      `blacklist:${decoded.jti}`,
+      'blacklisted',
+      expiresIn,
+    );
 
     return { message: 'Token invalidated' };
   }

@@ -59,7 +59,7 @@ export class LogsService {
           { ignoreDuplicates: true },
         )) as any;
 
-        if(level === LogLevels.ERRO || level === LogLevels.CRIT) {
+        if (level === LogLevels.ERRO || level === LogLevels.CRIT) {
           this.sendMessageToClients(result.dataValues);
         }
 
@@ -186,8 +186,6 @@ export class LogsService {
       errorCount,
       criticalCount,
     };
-
-
   }
 
   public async paginatedPriorityLogs(
@@ -219,7 +217,7 @@ export class LogsService {
     }
 
     whereClause.level = { [Op.in]: [LogLevels.CRIT, LogLevels.ERRO] };
-    whereClause.isHidden = false
+    whereClause.isHidden = false;
 
     return this.logRepository.findAll({
       limit: queryLimit === 0 ? undefined : queryLimit,

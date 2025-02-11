@@ -14,7 +14,7 @@ import {
   mockErrorLog,
   mockWarningLog,
 } from '../../../../src/mocks/logs';
-import {AuthModule} from "../../auth.module";
+import { AuthModule } from '../../auth.module';
 
 describe('LogsController', () => {
   let logsService: LogsService;

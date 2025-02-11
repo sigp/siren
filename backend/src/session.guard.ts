@@ -6,14 +6,14 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import {AppService} from "./app.service";
+import { AppService } from './app.service';
 
 @Injectable()
 export class SessionGuard implements CanActivate {
   private apiToken = process.env.API_TOKEN;
   constructor(
     private jwtService: JwtService,
-    private appService: AppService
+    private appService: AppService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

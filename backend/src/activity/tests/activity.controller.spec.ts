@@ -8,7 +8,7 @@ import { HttpService } from '@nestjs/axios';
 import { Sequelize } from 'sequelize-typescript';
 import { JwtModule } from '@nestjs/jwt';
 import { ActivityType } from '../../../../src/types';
-import {AuthModule} from "../../auth.module";
+import { AuthModule } from '../../auth.module';
 
 describe('ActivityController', () => {
   const baseRowData = {

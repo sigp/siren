@@ -17,13 +17,7 @@ export interface AuthModalProps extends Omit<AuthFormProps, 'children'> {
   mode: UiMode
 }
 
-const AuthPrompt: FC<AuthModalProps> = ({
-  onSubmit,
-  isVisible,
-  isLoading,
-  mode,
-  onClose,
-}) => {
+const AuthPrompt: FC<AuthModalProps> = ({ onSubmit, isVisible, isLoading, mode, onClose }) => {
   const { t } = useTranslation()
   const [isReady, setReady] = useState(false)
 

@@ -15,7 +15,7 @@ import {
   mockValCacheValues,
 } from '../../../../src/mocks/beacon';
 import { StatusColor } from '../../../../src/types';
-import {AuthModule} from "../../auth.module";
+import { AuthModule } from '../../auth.module';
 
 describe('BeaconController', () => {
   let controller: BeaconController;

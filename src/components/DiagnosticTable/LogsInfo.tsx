@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import useMediaQuery from '../../hooks/useMediaQuery'
-import { Metric} from '../../types'
+import { Metric } from '../../types'
 import LogStats from '../LogStats/LogStats'
 import Typography from '../Typography/Typography'
 

@@ -1,6 +1,14 @@
-import {Body, Controller, HttpCode, HttpStatus, Post, UseGuards, Req} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Post,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { AppService } from './app.service';
-import {SessionGuard} from "./session.guard";
+import { SessionGuard } from './session.guard';
 
 @Controller()
 export class AppController {
