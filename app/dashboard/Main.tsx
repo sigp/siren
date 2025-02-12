@@ -17,13 +17,7 @@ import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
-import {
-  ActivityResponse,
-  LogData,
-  Metric,
-  ProposerDuty,
-  StatusColor
-} from '../../src/types'
+import { ActivityResponse, LogData, Metric, ProposerDuty, StatusColor } from '../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
 import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
@@ -61,7 +55,7 @@ const Main: FC<MainProps> = (props) => {
     initProposerDuties,
     initActivityData,
     initMetrics,
-    initPriorityLogs
+    initPriorityLogs,
   } = props
 
   const { t } = useTranslation()

@@ -17,7 +17,6 @@ export interface RenderProps {
 }
 
 const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }) => {
-
   const { control, watch, reset } = useForm<AuthForm>({
     defaultValues: {
       password: '',

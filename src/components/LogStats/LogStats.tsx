@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
-import { Metric, StatusColor} from '../../types'
+import { Metric, StatusColor } from '../../types'
 import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 
 export interface LogStatsProps {
@@ -21,7 +21,7 @@ const LogStats: FC<LogStatsProps> = ({
   critToolTip,
   warnToolTip,
   errorToolTip,
-  logMetrics
+  logMetrics,
 }) => {
   const { t } = useTranslation()
   const { errorCount, criticalCount, warningCount } = logMetrics

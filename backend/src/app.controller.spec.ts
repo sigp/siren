@@ -3,7 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { JwtModule } from '@nestjs/jwt';
 import { UnauthorizedException } from '@nestjs/common';
-import {CacheModule} from "@nestjs/cache-manager";
+import { CacheModule } from '@nestjs/cache-manager';
 
 describe('AppController', () => {
   let appController: AppController;

@@ -13,7 +13,7 @@ import { TasksModule } from './tasks/tasks.module';
 import { JwtModule } from '@nestjs/jwt';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { ActivityModule } from './activity/activity.module';
-import {CacheModule} from "@nestjs/cache-manager";
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [

@@ -11,7 +11,7 @@ import {
   fetchSyncData,
 } from '../api/beacon'
 import { fetchBeaconNodeVersion, fetchGenesisData, fetchValidatorVersion } from '../api/config'
-import {fetchMetrics, fetchPriorityLogs} from '../api/logs'
+import { fetchMetrics, fetchPriorityLogs } from '../api/logs'
 import { fetchValCaches, fetchValStates } from '../api/validator'
 import Wrapper from './Wrapper'
 
@@ -32,7 +32,7 @@ export default async function Page() {
     const proposerDuties = await fetchProposerDuties(token)
     const activities = await fetchActivities({ token })
     const metrics = await fetchMetrics(token)
-    const priorityLogs = await fetchPriorityLogs({token})
+    const priorityLogs = await fetchPriorityLogs({ token })
 
     return (
       <Wrapper

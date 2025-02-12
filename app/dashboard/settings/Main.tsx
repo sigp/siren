@@ -1,31 +1,37 @@
 'use client'
 
-import axios from "axios";
-import {useRouter} from "next/navigation";
-import React, {FC, useState} from 'react'
-import {useTranslation} from 'react-i18next'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import React, { FC, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import LighthouseSvg from '../../../src/assets/images/lighthouse-black.svg'
 import AppDescription from '../../../src/components/AppDescription/AppDescription'
 import AppVersion from '../../../src/components/AppVersion/AppVersion'
-import Button, {ButtonFace} from "../../../src/components/Button/Button";
+import Button, { ButtonFace } from '../../../src/components/Button/Button'
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import Input from '../../../src/components/Input/Input'
 import SocialIcon from '../../../src/components/SocialIcon/SocialIcon'
 import Toggle from '../../../src/components/Toggle/Toggle'
 import Typography from '../../../src/components/Typography/Typography'
 import UiModeIcon from '../../../src/components/UiModeIcon/UiModeIcon'
-import {DiscordUrl, LighthouseBookUrl, SigPGithubUrl, SigPIoUrl, SigPTwitter,} from '../../../src/constants/constants'
-import {UiMode} from '../../../src/constants/enums'
+import {
+  DiscordUrl,
+  LighthouseBookUrl,
+  SigPGithubUrl,
+  SigPIoUrl,
+  SigPTwitter,
+} from '../../../src/constants/constants'
+import { UiMode } from '../../../src/constants/enums'
 import useLocalStorage from '../../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import useUiMode from '../../../src/hooks/useUiMode'
-import {ActivityResponse, OptionalString, ToastType} from '../../../src/types'
-import {BeaconNodeSpecResults, SyncData} from '../../../src/types/beacon'
-import {Diagnostics} from '../../../src/types/diagnostic'
-import {UsernameStorage} from '../../../src/types/storage'
+import { ActivityResponse, OptionalString, ToastType } from '../../../src/types'
+import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
+import { Diagnostics } from '../../../src/types/diagnostic'
+import { UsernameStorage } from '../../../src/types/storage'
 import addClassString from '../../../utilities/addClassString'
-import displayToast from "../../../utilities/displayToast";
+import displayToast from '../../../utilities/displayToast'
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -68,15 +74,14 @@ const Main: FC<MainProps> = (props) => {
 
   const handleError = () => {
     displayToast(t('authPrompt.unexpectedErrorLogout'), ToastType.ERROR)
-
   }
 
   const logout = async () => {
     try {
       setIsLoading(true)
-      const { status } = await axios.post('/api/logout' )
+      const { status } = await axios.post('/api/logout')
 
-      if(status === 200) {
+      if (status === 200) {
         router.push('/')
         return
       }
@@ -215,8 +220,10 @@ const Main: FC<MainProps> = (props) => {
               />
             </div>
           </div>
-          <div className="pt-8">
-            <Button isLoading={isLoading} onClick={logout} type={ButtonFace.ERROR}>{t('endSession')}</Button>
+          <div className='pt-8'>
+            <Button isLoading={isLoading} onClick={logout} type={ButtonFace.ERROR}>
+              {t('endSession')}
+            </Button>
           </div>
         </div>
       </div>

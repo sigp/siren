@@ -27,7 +27,7 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
   })
 
   useEffect(() => {
-    if(!streamedData?.length) return
+    if (!streamedData?.length) return
 
     setData((prev) => {
       const combined = [...prev, ...streamedData]
@@ -52,27 +52,30 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
       }))
   }, [data])
 
-  const dismissAlert = useCallback(async (id: number) => {
-    try {
-      const { status } = await axios.put(`/api/dismiss-log/${id}`)
+  const dismissAlert = useCallback(
+    async (id: number) => {
+      try {
+        const { status } = await axios.put(`/api/dismiss-log/${id}`)
 
-      if(status !== 200) return
+        if (status !== 200) return
 
-      setData((prev) =>
-        prev.map((alert) => (alert.id === id ? { ...alert, isHidden: true } : alert))
-      )
-      displayToast(t('alertMessages.dismiss.success'), ToastType.SUCCESS)
-    } catch (error) {
-      console.error('Error updating log:', error)
-      displayToast(t('alertMessages.dismiss.error'), ToastType.ERROR)
-    }
-  }, [t])
+        setData((prev) =>
+          prev.map((alert) => (alert.id === id ? { ...alert, isHidden: true } : alert)),
+        )
+        displayToast(t('alertMessages.dismiss.success'), ToastType.SUCCESS)
+      } catch (error) {
+        console.error('Error updating log:', error)
+        displayToast(t('alertMessages.dismiss.error'), ToastType.ERROR)
+      }
+    },
+    [t],
+  )
 
   const fetchOlderLogs = useCallback(async () => {
     setIsLoading(true)
     try {
       const oldestLog = data.reduce((oldest, current) =>
-        new Date(current.createdAt) < new Date(oldest.createdAt) ? current : oldest
+        new Date(current.createdAt) < new Date(oldest.createdAt) ? current : oldest,
       )
       const oldestLogDate = oldestLog.createdAt
 
@@ -80,7 +83,7 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
 
       const count = fetchedData?.length
 
-      if(!count) return
+      if (!count) return
 
       if (count < FETCH_LOG_LIMIT) {
         setHasMoreLogs(false)
@@ -111,12 +114,12 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
       {hasMoreLogs && (
         <div
           onClick={fetchOlderLogs}
-          className="w-full flex items-center justify-center cursor-pointer bg-dark800 hover:bg-dark750 border-b-style500 p-2"
+          className='w-full flex items-center justify-center cursor-pointer bg-dark800 hover:bg-dark750 border-b-style500 p-2'
         >
           {isLoading ? (
-            <Spinner size="w-4 h-4" />
+            <Spinner size='w-4 h-4' />
           ) : (
-            <Typography className="center" type="text-caption2">
+            <Typography className='center' type='text-caption2'>
               {t('fetchMoreLogAlerts')}
             </Typography>
           )}

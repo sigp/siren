@@ -61,7 +61,7 @@ export class TasksService implements OnApplicationBootstrap {
       }
 
       await this.logRepository.destroy({
-        truncate: true
+        truncate: true,
       });
 
       await this.syncBeaconSpecs();
