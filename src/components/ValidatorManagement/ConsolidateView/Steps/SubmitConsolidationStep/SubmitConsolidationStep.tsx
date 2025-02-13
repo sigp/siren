@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
@@ -31,25 +31,23 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const [feeBuffer, setBuffer] = useState<number | undefined>(undefined)
   const [consolidationRequests, setRequests] = useState<ConsolidationTx[]>([])
 
-  const setConsolidations = (request: ConsolidationTx) => {
+  const setConsolidations = useCallback((request: ConsolidationTx) => {
     setRequests((prev) => [...prev, request])
-  }
+  }, [])
 
-  const updateConsolidationResults = (id: string | number, status: TxStatus) => {
-    const index = consolidationRequests.findIndex((request) => request.index === id)
-    if (index !== -1) {
-      const updatedRequests = [...consolidationRequests]
-      updatedRequests[index] = {
-        ...updatedRequests[index],
-        status,
-      }
-      setRequests(updatedRequests)
-    }
-  }
+  const updateConsolidationResults = useCallback((id: string | number, status: TxStatus) => {
+    setRequests((prev) => {
+      const index = prev.findIndex((request) => request.index === id)
+      if (index === -1) return prev
+      const updatedRequests = [...prev]
+      updatedRequests[index] = { ...updatedRequests[index], status }
+      return updatedRequests
+    })
+  }, [])
 
-  const retryTransaction = (txIndex: number | string) => {
+  const retryTransaction = useCallback((txIndex: number | string) => {
     setRequests((prev) => prev.filter(({ index }) => index !== txIndex))
-  }
+  }, [])
 
   const toggleIsExtraFee = () => {
     setIsExtraFee((prev) => !prev)
@@ -85,7 +83,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
         <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength as any} />
-        <div className='w-full mt-4 flex flex-1 flex-col'>
+        <div className='w-full mt-4 flex flex-col'>
           {targetValidator ? (
             <>
               <div className='w-full border-style'>
@@ -139,7 +137,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   )}
                 </div>
               </div>
-              <div className='h-full max-h-[348px] overflow-scroll'>
+              <div className='h-full max-h-[230px] border-b-style overflow-scroll'>
                 {!!targetValidator &&
                   sourceValidators.map((validator) => (
                     <ConsolidationRequest

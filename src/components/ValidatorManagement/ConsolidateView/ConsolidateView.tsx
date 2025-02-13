@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ValidatorInfo } from '../../../types/validator'
 import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
@@ -24,8 +24,14 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
     t('validatorManagement.consolidateView.steps.signAndSubmit'),
   ]
 
-  const updateTargetValidator = (validator: ValidatorInfo) => setTargetValidator(validator)
-  const updateSourceValidators = (validators: ValidatorInfo[]) => setSourceValidators(validators)
+  const updateTargetValidator = useCallback(
+    (validator: ValidatorInfo) => setTargetValidator(validator),
+    [],
+  )
+  const updateSourceValidators = useCallback(
+    (validators: ValidatorInfo[]) => setSourceValidators(validators),
+    [],
+  )
 
   return (
     <HorizontalStepper steps={steps}>
