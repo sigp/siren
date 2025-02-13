@@ -1,3 +1,4 @@
+import { LogType } from '../../src/types'
 import fetchFromApi from '../../utilities/fetchFromApi'
 
 const backendUrl = process.env.BACKEND_URL
@@ -5,8 +6,14 @@ export const fetchLogMetrics = async (token: string) =>
   fetchFromApi(`${backendUrl}/logs/metrics`, token)
 export const dismissLogAlert = async (token: string, index: string) =>
   fetchFromApi(`${backendUrl}/logs/dismiss/${index}`, token)
-export const fetchMetrics = async (token: string) =>
-  fetchFromApi(`${backendUrl}/logs/log-metrics`, token)
+export const fetchMetrics = async (token: string, type?: LogType) => {
+  const params = new URLSearchParams()
+
+  if (type) {
+    params.append('type', type)
+  }
+  return await fetchFromApi(`${backendUrl}/logs/log-metrics?${params.toString()}`, token)
+}
 
 export interface fetchPriorityProps {
   token: string

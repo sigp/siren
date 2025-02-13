@@ -20,7 +20,7 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
   const [hasMoreLogs, setHasMoreLogs] = useState(alerts.length >= FETCH_LOG_LIMIT)
   const [isLoading, setIsLoading] = useState(false)
 
-  const { data: streamedData } = useSSEData({
+  const { data: streamedData } = useSSEData<LogData[]>({
     url: '/priority-log-stream',
     isReady: true,
     isStateStore: true,
@@ -29,7 +29,7 @@ const PriorityLogAlerts: FC<LogAlertsProps> = ({ alerts }) => {
   useEffect(() => {
     if (!streamedData?.length) return
 
-    setData((prev) => {
+    setData((prev: LogData[]) => {
       const combined = [...prev, ...streamedData]
       return Array.from(new Map(combined.map((item) => [item.id, item])).values())
     })

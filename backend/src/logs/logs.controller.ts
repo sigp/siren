@@ -46,8 +46,8 @@ export class LogsController {
   }
 
   @Get('log-metrics')
-  getMetrics() {
-    return this.logsService.readMetrics();
+  getMetrics(@Query('type') type?: LogType) {
+    return this.logsService.readMetrics(type);
   }
 
   @Get('priority-log-stream')

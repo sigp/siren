@@ -1,11 +1,11 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import LogControls from '../../../src/components/LogControls/LogControls'
 import LogDisplay from '../../../src/components/LogDisplay/LogDisplay'
 import { OptionType } from '../../../src/components/SelectDropDown/SelectDropDown'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { ActivityResponse, LogMetric, LogType } from '../../../src/types'
+import { ActivityResponse, LogMetric, LogType, Metric } from '../../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 
@@ -14,22 +14,25 @@ export interface MainProps {
   beaconSpec: BeaconNodeSpecResults
   initSyncData: SyncData
   initLogMetrics: LogMetric
+  initMetrics: Metric
   initActivityData: ActivityResponse
+  defaultLogType: LogType
 }
 
 const Main: FC<MainProps> = ({
   initSyncData,
   beaconSpec,
   initNodeHealth,
-  initLogMetrics,
   initActivityData,
+  initMetrics,
+  defaultLogType,
 }) => {
   const { SECONDS_PER_SLOT } = beaconSpec
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
   const networkError = isValidatorError || isBeaconError
   const slotInterval = SECONDS_PER_SLOT * 1000
 
-  const [logType, selectType] = useState(LogType.VALIDATOR)
+  const [logType, selectType] = useState(defaultLogType)
   const [isLoading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -49,19 +52,11 @@ const Main: FC<MainProps> = ({
     networkError,
   })
 
-  const { data: logMetrics } = useSWRPolling<LogMetric>('/api/priority-logs', {
+  const { data: logMetrics } = useSWRPolling<Metric>(`/api/log-metrics?type=${logType}`, {
     refreshInterval: slotInterval / 2,
-    fallbackData: initLogMetrics,
+    fallbackData: initMetrics,
     networkError,
   })
-
-  const filteredLogs = useMemo(() => {
-    return {
-      warningLogs: logMetrics.warningLogs.filter(({ type }) => type === logType),
-      errorLogs: logMetrics.errorLogs.filter(({ type }) => type === logType),
-      criticalLogs: logMetrics.criticalLogs.filter(({ type }) => type === logType),
-    }
-  }, [logMetrics, logType])
 
   const toggleLogType = (selection: OptionType) => {
     if (selection === logType) return
@@ -87,7 +82,7 @@ const Main: FC<MainProps> = ({
     >
       <div className='w-full h-full pt-8 p-2 md:p-6 flex flex-col'>
         <LogControls logType={logType} onSetLoading={setLoading} onTypeSelect={toggleLogType} />
-        <LogDisplay priorityLogs={filteredLogs} isLoading={isLoading} type={logType} />
+        <LogDisplay metrics={logMetrics} isLoading={isLoading} type={logType} />
       </div>
     </DashboardWrapper>
   )
