@@ -15,10 +15,12 @@ export interface ProviderProps {
   children: ReactElement | ReactElement[]
 }
 
+export const wagmiConfig = createWagmiConfig()
+
 const Providers: FC<ProviderProps> = ({ children }) => {
   return (
     <RecoilRoot>
-      <WagmiProvider reconnectOnMount config={createWagmiConfig()}>
+      <WagmiProvider reconnectOnMount config={wagmiConfig}>
         <QueryClientProvider client={queryClient}>
           {children}
           <ToastContainer />

@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
 import { ValidatorCandidate } from '../../../../../types'
 import CheckBox from '../../../../CheckBox/CheckBox'
-import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 import Typography from '../../../../Typography/Typography'
 import StepOptions, { StepOptionsProps } from '../../StepOptions'
@@ -98,7 +97,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
             {t('validatorManagement.keystoreAuthentication.warningText')}
           </Typography>
         )}
-        <div className='w-full flex flex-col flex-1'>
+        <div className='w-full flex flex-col'>
           <div className='w-full border-style px-4 py-2 flex space-x-2'>
             <div className='w-[250px] border-r border-r-style pr-2'>
               <Typography type='text-caption1'>{t('validatorManagement.validators')}</Typography>
@@ -131,7 +130,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
               index={candidates[0].index}
             />
           ) : (
-            <FlexedOverflow>
+            <div className='overflow-scroll w-full border-b-style max-h-[250px]'>
               {candidates.map((candidate, index) => (
                 <KeystoreAuthRow
                   key={index}
@@ -140,7 +139,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
                   index={candidate.index}
                 />
               ))}
-            </FlexedOverflow>
+            </div>
           )}
         </div>
         <StepOptions

@@ -1,10 +1,11 @@
-import { FC, useEffect, useState } from 'react'
+import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
+import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
-import { ConsolidationTx } from '../../../../../types'
+import { ConsolidationTx, TxStatus } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
@@ -30,25 +31,23 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const [feeBuffer, setBuffer] = useState<number | undefined>(undefined)
   const [consolidationRequests, setRequests] = useState<ConsolidationTx[]>([])
 
-  const setConsolidations = (request: ConsolidationTx) => {
+  const setConsolidations = useCallback((request: ConsolidationTx) => {
     setRequests((prev) => [...prev, request])
-  }
+  }, [])
 
-  const updateConsolidationResults = (id: string | number, status) => {
-    const index = consolidationRequests.findIndex((request) => request.index === id)
-    if (index !== -1) {
-      const updatedRequests = [...consolidationRequests]
-      updatedRequests[index] = {
-        ...updatedRequests[index],
-        status,
-      }
-      setRequests(updatedRequests)
-    }
-  }
+  const updateConsolidationResults = useCallback((id: string | number, status: TxStatus) => {
+    setRequests((prev) => {
+      const index = prev.findIndex((request) => request.index === id)
+      if (index === -1) return prev
+      const updatedRequests = [...prev]
+      updatedRequests[index] = { ...updatedRequests[index], status }
+      return updatedRequests
+    })
+  }, [])
 
-  const retryTransaction = (txIndex: number) => {
+  const retryTransaction = useCallback((txIndex: number | string) => {
     setRequests((prev) => prev.filter(({ index }) => index !== txIndex))
-  }
+  }, [])
 
   const toggleIsExtraFee = () => {
     setIsExtraFee((prev) => !prev)
@@ -60,7 +59,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
     }
   }
 
-  const changeBuffer = (e) => setBuffer(Number(e.target.value))
+  const changeBuffer = (e: ChangeEvent<HTMLInputElement>) => setBuffer(Number(e.target.value))
 
   const { data: consolidationQueLength, refetch } = useStorageAt({
     address: CONSOLIDATION_CONTRACT,
@@ -78,21 +77,26 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   }, [])
 
   return (
-    <div className='w-full h-full flex justify-between py-4'>
+    <div className='w-full h-full flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 py-4'>
       <div className='flex-1 max-w-2xl flex flex-col'>
         <Typography type='text-subtitle2'>
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
-        <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength} />
-        <div className='w-full mt-4 flex flex-1 flex-col'>
+        <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength as any} />
+        <div className='w-full mt-4 flex flex-col'>
           {targetValidator ? (
             <>
               <div className='w-full border-style'>
                 <div className='w-full p-2 border-b-style'>
-                  <Typography>{t('primaryValidator')}</Typography>
+                  <div className='flex items-center space-x-2'>
+                    <div className='w-4 h-4'>
+                      <ValidatorLogo className='text-black dark:text-dark500' />
+                    </div>
+                    <Typography>{t('primaryValidator')}</Typography>
+                  </div>
                 </div>
-                <div className='w-full flex space-x-4 p-2 items-center'>
-                  <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
+                <div className='w-full flex flex-col md:flex-row space-x-4 space-y-2 lg:space-y-0 p-2 md:items-center'>
+                  <div className='h-8 w-8 hidden md:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
                   <div className='flex space-x-2 pr-4 items-center border-r-style'>
                     <Typography type='text-caption1'>{targetValidator.name}</Typography>
                     <Typography type='text-caption1'>{targetValidator.index}</Typography>
@@ -102,8 +106,11 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   </Typography>
                 </div>
               </div>
-              <div className='w-full flex justify-between p-2 border-style mt-4'>
-                <Typography>{t('consolidatingValidators')}</Typography>
+              <div className='w-full flex flex-col md:flex-row space-y-4 lg:space-y-0 justify-between p-2 border-style mt-4'>
+                <div className='flex items-center space-x-2'>
+                  <i className='bi bi-list-ul text-black dark:text-dark500 text-xl' />
+                  <Typography>{t('consolidatingValidators')}</Typography>
+                </div>
                 <div className='flex space-x-2 items-center'>
                   <CheckBox id='extraFee' checked={isExtraFee} onChange={toggleIsExtraFee} />
                   <label htmlFor='extraFee' className='w-44'>
@@ -115,7 +122,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                     </Typography>
                   </label>
                   {isExtraFee && (
-                    <div className='flex space-x-2 items-center'>
+                    <div className='flex space-x-2 justify-center items-center'>
                       <RangeSliderInput
                         className='w-16'
                         value={feeBuffer}
@@ -130,7 +137,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   )}
                 </div>
               </div>
-              <FlexedOverflow>
+              <div className='h-full max-h-[230px] border-b-style overflow-scroll'>
                 {!!targetValidator &&
                   sourceValidators.map((validator) => (
                     <ConsolidationRequest
@@ -143,18 +150,31 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                       chainId={chainId}
                       targetPubKey={targetValidator.pubKey}
                       validator={validator}
-                      consolidationQueLength={consolidationQueLength}
+                      consolidationQueLength={consolidationQueLength as any}
                     />
                   ))}
-              </FlexedOverflow>
+              </div>
             </>
           ) : null}
         </div>
       </div>
-      <div className='flex-1 max-w-xl flex space-y-4 flex-col px-4'>
-        <Typography>
-          {t('validatorManagement.consolidateView.signAndSubmit.transactionStatus')}
-        </Typography>
+      <div className='flex-1 max-w-2xl lg:max-w-xl flex space-y-4 flex-col lg:px-4'>
+        <div className='flex space-x-4'>
+          <Typography>
+            {t('validatorManagement.consolidateView.signAndSubmit.transactionStatus')}
+          </Typography>
+          <div className='flex space-x-1 items-center'>
+            <Typography color='text-dark400' darkMode='dark:text-dark600'>
+              {String(consolidationRequests.length).padStart(2, '0')}
+            </Typography>
+            <Typography color='text-dark400' darkMode='dark:text-dark600'>
+              /
+            </Typography>
+            <Typography color='text-dark400' darkMode='dark:text-dark600'>
+              {String(sourceValidators.length).padStart(2, '0')}
+            </Typography>
+          </div>
+        </div>
         {consolidationRequests.length ? (
           <FlexedOverflow className='w-full space-y-2'>
             {consolidationRequests.map(({ txHash, index }) => (

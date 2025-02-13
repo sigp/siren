@@ -16,12 +16,12 @@ const CheckBox: FC<CheckBoxProps> = ({
   inputClassName,
   ...inputProps
 }) => {
-  const containerClasses = addClassString('flex items-center', [containerClassName])
+  const containerClasses = addClassString('flex items-center cursor-pointer', [containerClassName])
   const inputClasses = addClassString(
-    'w-5 h-5 border border-gray-300 accent-primary bg-transparent border-style500 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 dark:border-gray-600',
+    'w-5 h-5 border border-gray-300 cursor-pointer accent-primary bg-transparent border-style500 rounded focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800 dark:border-gray-600',
     [inputClassName],
   )
-  const labelClasses = addClassString('ml-2 text-gray-900 dark:text-gray-300', [
+  const labelClasses = addClassString('ml-2 cursor-pointer text-gray-900 dark:text-gray-300', [
     labelStyle || 'text-sm font-medium',
   ])
 

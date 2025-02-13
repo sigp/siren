@@ -9,7 +9,7 @@ import WalletActionGuard from '../../../../../../WalletActionGuard/WalletActionG
 export interface DepositStepProps {
   isLoading: boolean
   onDeposit: () => void
-  depositAmount: BigInt
+  depositAmount: bigint
 }
 
 const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount }) => {

@@ -70,7 +70,10 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const updateSharedCredentials = (credentials?: string) => setSharedCredentials(credentials)
   const setKeystorePassword = (password: string) => setSharedKeystorePassword(password)
 
-  const showRiskMessage = () => setIsRisk(true)
+  const showRiskMessage = () => {
+    setIsRisk(true)
+    setHasAcceptRisk(false)
+  }
   const dismissRiskMessage = () => setIsRisk(false)
   const viewManagement = () => onChangeView(ValidatorManagementView.MAIN)
   const acceptRisk = () => {

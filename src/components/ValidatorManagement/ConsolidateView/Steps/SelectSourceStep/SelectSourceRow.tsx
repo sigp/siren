@@ -19,7 +19,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
   return (
     <div
       onClick={selectSource}
-      className='w-full p-4 cursor-pointer hover:bg-dark750 flex items-center justify-between'
+      className='w-full p-4 cursor-pointer dark:hover:bg-dark750 hover:bg-dark25 flex items-center justify-between'
     >
       <div className='flex items-center space-x-2'>
         <div className='flex items-center space-x-3 border-r-style pr-3'>
@@ -27,7 +27,9 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
           <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
           <Typography type='text-caption'>{name}</Typography>
         </div>
-        <Typography type='text-caption'>{formattedPubKey}</Typography>
+        <Typography className='hidden @425:block' type='text-caption'>
+          {formattedPubKey}
+        </Typography>
       </div>
       <div>
         <Typography type='text-caption'>{formattedBalance} ETH</Typography>

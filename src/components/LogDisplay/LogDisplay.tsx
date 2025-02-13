@@ -1,7 +1,7 @@
 import React, { FC, useContext, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { debounce } from '../../../utilities/debounce'
-import { LogMetric, LogType } from '../../types'
+import { LogType, Metric } from '../../types'
 import Input from '../Input/Input'
 import LogStats from '../LogStats/LogStats'
 import Spinner from '../Spinner/Spinner'
@@ -12,10 +12,10 @@ import LogRow from './LogRow'
 export interface LogDisplayProps {
   type: LogType
   isLoading?: boolean
-  priorityLogs: LogMetric
+  metrics: Metric
 }
 
-const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, priorityLogs }) {
+const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, metrics }) {
   const { t } = useTranslation()
   const [searchText, setText] = useState('')
   const scrollableRef = useRef<HTMLDivElement | null>(null)
@@ -127,7 +127,7 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
               size='lg'
               maxHeight='h-32 md:flex-1'
               maxWidth='w-full'
-              metrics={priorityLogs}
+              logMetrics={metrics}
             />
           </div>
         </>

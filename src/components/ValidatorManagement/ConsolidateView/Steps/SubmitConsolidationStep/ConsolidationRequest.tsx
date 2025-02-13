@@ -12,7 +12,7 @@ export interface ConsolidationRequestProps {
   validator: ValidatorInfo
   chainId: number
   targetPubKey: string
-  consolidationQueLength: BigInt
+  consolidationQueLength: bigint | undefined
   feeBuffer: bigint
   onSubmitRequest: (request: ConsolidationTx) => void
   requestData: ConsolidationTx | undefined
@@ -37,12 +37,14 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
   const withdrawalCredentials = getAddress(dataSlice(withdrawalAddress as string, 12))
 
   return (
-    <div className='flex justify-between items-center w-full border-t-0 border-style px-2 py-4'>
-      <div className='flex items-center space-x-4'>
-        <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
-        <div className='flex items-center space-x-2 border-r-style pr-4'>
+    <div className='flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:items-center w-full border-t-0 border-style px-2 py-4'>
+      <div className='flex items-center md:space-x-4'>
+        <div className='h-8 w-8 hidden @425:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
+        <div className='flex items-center mr-4 lg:mr-0 space-x-2 border-r-style pr-4'>
           <Typography type='text-caption1'>{name}</Typography>
-          <Typography type='text-caption1'>{index}</Typography>
+          <Typography className='hidden @425:block' type='text-caption1'>
+            {index}
+          </Typography>
         </div>
         <Typography type='text-caption1'>{formatEthAddress(withdrawalCredentials)}</Typography>
       </div>

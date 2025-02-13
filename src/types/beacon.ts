@@ -39,3 +39,13 @@ export type ValidatorMetricResult = {
   hitEffectiveness: number
   totalEffectiveness: number
 }
+
+export type ForkVersionData = {
+  execution_optimistic: boolean
+  finalized: boolean
+  data: {
+    previous_version: string
+    current_version: string
+    epoch: string
+  }
+}

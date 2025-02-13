@@ -48,7 +48,8 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
   const slides = useMemo(() => {
     return Children.toArray(children(stepperProps)).flatMap((child) => {
       if (isValidElement(child) && child.type === Fragment) {
-        return Children.toArray(child.props.children)
+        const fragmentChild = child as ReactElement<{ children?: React.ReactNode }>
+        return Children.toArray(fragmentChild.props.children)
       }
       return child
     })
@@ -78,10 +79,10 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
         </motion.div>
         <ProgressBar total={totalSteps} position={currentStep + 1} />
       </div>
-      <div className='w-full h-full relative createSlide'>
+      <div className='w-full lg:h-full relative createSlide'>
         <Carousel swiping={false} slideIndex={currentStep} dragging={false} withoutControls>
           {slides.map((child, index) => (
-            <div key={index} className='h-full w-full'>
+            <div key={index} className='sm:h-full w-full'>
               {child}
             </div>
           ))}

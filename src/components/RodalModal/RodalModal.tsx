@@ -6,7 +6,7 @@ import useUiMode from '../../hooks/useUiMode'
 
 export interface RodalModalProps {
   children: ReactElement | ReactElement[]
-  onAnimationEnd?: () => never
+  onAnimationEnd?: () => void
   isVisible: boolean
   onClose?: () => void
   uiMode?: { mode: UiMode } | undefined

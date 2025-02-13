@@ -61,7 +61,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   }
 
   return (
-    <div className='relative flex pt-8 w-full h-full'>
+    <div className='relative flex flex-col space-y-8 lg:space-y-0 lg:flex-row pt-8 w-full h-full'>
       <div className='flex-1 flex flex-col space-y-8'>
         <div>
           <Typography type='text-caption1'>
@@ -71,7 +71,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
             {t('validatorManagement.signAndDeposit.subTitle')}
           </Typography>
         </div>
-        <div className='max-w-[80%] flex-1 flex flex-col'>
+        <div className='w-full lg:max-w-[80%] flex-1 flex flex-col'>
           {isAcknowledgeRisk ? (
             <>
               <div className='w-full border-style flex items-center justify-between p-4 flex space-x-2'>
@@ -85,7 +85,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                   <Typography>{candidates.length}</Typography>
                 </div>
               </div>
-              <FlexedOverflow className='border-b-style'>
+              <div className='w-full max-h-[400px] border-b-style overflow-scroll'>
                 {candidates.map((validator, index) => (
                   <ValidatorDepositRow
                     key={index}
@@ -101,14 +101,14 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                     }}
                   />
                 ))}
-              </FlexedOverflow>
+              </div>
             </>
           ) : (
             <AcceptRisks onAccept={acknowledgeRisk} beaconSpec={beaconSpec} />
           )}
         </div>
       </div>
-      <div className='w-[500px] relative h-full flex flex-col'>
+      <div className='w-full lg:w-[500px] relative h-full flex flex-col'>
         <div className='w-full border-b-style pb-3'>
           <Typography>{t('validatorManagement.transactionStatus')}</Typography>
         </div>

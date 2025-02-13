@@ -1,7 +1,7 @@
 import { atom } from 'recoil'
 import { AppView, OnboardView, UiMode } from '../constants/enums'
 import { ActiveDevice, AlertMessage, EthExchangeRates, ProposerDuty, ValAliases } from '../types'
-import { BeaconNodeSpecResults } from '../types/beacon'
+import { BeaconNodeSpecResults, ForkVersionData } from '../types/beacon'
 import { HealthDiagnosticResult } from '../types/diagnostic'
 
 export const uiMode = atom<UiMode>({
@@ -107,4 +107,9 @@ export const isValidatorDetail = atom<boolean>({
 export const isWalletConnectModal = atom<boolean>({
   key: 'isWalletConnectModal',
   default: false,
+})
+
+export const forkVersion = atom<ForkVersionData>({
+  key: 'forkVersion',
+  default: undefined,
 })

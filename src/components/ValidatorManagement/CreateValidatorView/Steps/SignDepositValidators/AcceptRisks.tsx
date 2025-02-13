@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import getEtherscanLink from '../../../../../../utilities/getEtherscanLink'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -20,7 +21,7 @@ const AcceptRisks: FC<AcceptRisksProps> = ({ onAccept, beaconSpec }) => {
 
   return (
     <InfoBox type={InfoBoxType.NOTICE}>
-      <div className='space-y-4'>
+      <div className='space-y-4 w-full'>
         <Typography type='text-subtitle2' darkMode='text-dark900' color='text-dark900'>
           {t('validatorManagement.acceptRiskInfo.title')}
         </Typography>
@@ -60,7 +61,12 @@ const AcceptRisks: FC<AcceptRisksProps> = ({ onAccept, beaconSpec }) => {
                   type='text-caption1'
                 >
                   {t('address')}:{' '}
-                  <span className='font-normal ml-2'>{DEPOSIT_CONTRACT_ADDRESS}</span>
+                  <span className='font-normal ml-2 hidden md:block'>
+                    {DEPOSIT_CONTRACT_ADDRESS}
+                  </span>
+                  <span className='font-normal ml-2 md:hidden'>
+                    {formatEthAddress(DEPOSIT_CONTRACT_ADDRESS)}
+                  </span>
                 </Typography>
               </div>
               <i className='bi-box-arrow-up-right text-primary' />

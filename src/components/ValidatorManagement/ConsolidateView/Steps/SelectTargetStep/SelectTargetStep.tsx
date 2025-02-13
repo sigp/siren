@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
-import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../../CreateValidatorView/StepOptions'
 import SelectTargetRow from './SelectTargetRow'
@@ -22,8 +22,8 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   const { t } = useTranslation()
 
   return (
-    <div className='w-full h-full flex flex-col items-center pt-6'>
-      <div className='max-w-[520px] flex flex-col h-full space-y-6 w-full'>
+    <div className='w-full flex flex-col items-center pt-6'>
+      <div className='max-w-[520px] flex flex-col space-y-6 w-full'>
         <div className='space-y-1'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectTarget.title')}
@@ -32,12 +32,15 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
             {t('validatorManagement.consolidateView.selectTarget.text')}
           </Typography>
         </div>
-        <div className='flex-1 flex flex-col space-y-4'>
+        <div className='space-y-4'>
           <div className='w-full max-h-[45vh] flex-1 flex flex-col border-style rounded'>
-            <div className='w-full py-2 px-4 border-b-style'>
+            <div className='w-full py-2 flex items-center space-x-2 px-4 border-b-style'>
+              <div className='w-4 h-4'>
+                <ValidatorLogo className='text-black dark:text-dark500' />
+              </div>
               <Typography>{t('validators')}</Typography>
             </div>
-            <FlexedOverflow>
+            <div className='h-full max-h-[448px] overflow-scroll'>
               {validators.map((validator) => (
                 <SelectTargetRow
                   isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
@@ -46,7 +49,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
                   validator={validator}
                 />
               ))}
-            </FlexedOverflow>
+            </div>
           </div>
           <StepOptions onNextStep={onNext} isDisabledNext={!targetValidator} />
         </div>

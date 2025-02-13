@@ -14,7 +14,6 @@ export interface MainViewProps {
   onChangeView: (value: ValidatorManagementView) => void
   onSetSearch: (value: string) => void
   search: string
-  chainId: number
 }
 
 const MainView: FC<MainViewProps> = ({
@@ -23,14 +22,13 @@ const MainView: FC<MainViewProps> = ({
   onChangeView,
   onSetSearch,
   search,
-  chainId,
 }) => {
   const { t } = useTranslation()
 
   const viewAddVal = () => onChangeView(ValidatorManagementView.ADD)
   const viewConsolidateVal = () => onChangeView(ValidatorManagementView.CONSOLIDATE)
 
-  const { isEnabled } = useElectraStatus(chainId)
+  const { isEnabled } = useElectraStatus()
 
   return (
     <div className='w-full space-y-6 pb-6'>

@@ -64,4 +64,9 @@ export class BeaconController {
   async fetchValidatorStatus(@Param('pubKey') pubKey: string) {
     return this.beaconService.fetchValidatorStatus(pubKey);
   }
+
+  @Get('fork-version')
+  async fetchForkVersion() {
+    return this.beaconService.fetchForkVersion();
+  }
 }

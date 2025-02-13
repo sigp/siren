@@ -1,20 +1,31 @@
 import { useMemo } from 'react'
-import { useStorageAt } from 'wagmi'
-import { CONSOLIDATION_CONTRACT } from '../constants/constants'
+import { useRecoilValue } from 'recoil'
+import { HOLESKY_PECTRA_FORK_VERSION, MAINNET_PECTRA_FORK_VERSION } from '../constants/constants'
+import { Network } from '../constants/enums'
+import { beaconNodeSpec, forkVersion } from '../recoil/atoms'
 
-const DEFAULT_VALUE = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
-
-const useElectraStatus = (chainId: number) => {
-  const { data, isFetched } = useStorageAt({
-    address: CONSOLIDATION_CONTRACT,
-    slot: '0x00',
-    chainId,
-  })
+const useElectraStatus = () => {
+  const forkVersionData = useRecoilValue(forkVersion)
+  const beaconSpec = useRecoilValue(beaconNodeSpec)
 
   const isEnabled = useMemo(() => {
-    if (!isFetched || !data) return false
-    return data !== DEFAULT_VALUE
-  }, [isFetched, data])
+    if (!forkVersionData || !beaconSpec) return false
+    const { data } = forkVersionData
+    const { CONFIG_NAME } = beaconSpec
+
+    const currentVersion = data.current_version
+    const configName = CONFIG_NAME.toLowerCase()
+
+    if (configName === Network.Mekong.toLowerCase()) {
+      return true
+    }
+
+    if (configName === Network.Holesky.toLowerCase()) {
+      return currentVersion === HOLESKY_PECTRA_FORK_VERSION
+    }
+
+    return currentVersion === MAINNET_PECTRA_FORK_VERSION
+  }, [forkVersionData, beaconSpec])
 
   return { isEnabled }
 }

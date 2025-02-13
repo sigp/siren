@@ -4,7 +4,7 @@ import addClassString from '../../../../../../utilities/addClassString'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 
 export interface ConsolidationQueueStatusProps {
-  queueLength?: BigInt | undefined
+  queueLength?: bigint | undefined
   className?: string
 }
 
@@ -15,7 +15,7 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
   const { t } = useTranslation()
   const classes = addClassString('w-full', [className])
 
-  const getText = (queue: BigInt) => {
+  const getText = (queue: bigint) => {
     const baseLocale = 'validatorManagement.consolidateView.signAndSubmit'
     const length = Number(queue)
     switch (true) {
@@ -28,7 +28,7 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
     }
   }
 
-  const getStatus = (queue: BigInt) => {
+  const getStatus = (queue: bigint) => {
     const length = Number(queue)
     switch (true) {
       case length > 50:
