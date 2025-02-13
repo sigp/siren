@@ -98,7 +98,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   return (
     <div className='relative w-full h-full'>
-      <div className='flex pt-8 w-full h-full'>
+      <div className='flex flex-col space-y-8 lg:space-y-0 lg:flex-row pt-8 w-full h-full'>
         <div className='flex-1 space-y-8'>
           <div>
             <Typography type='text-caption1'>
@@ -108,7 +108,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
               {t('validatorManagement.signAndDeposit.subTitle')}
             </Typography>
           </div>
-          <div className='w-[80%] pt-6 flex'>
+          <div className='w-full lg:w-[80%] pt-6 space-y-8 lg:space-y-0 flex flex-col lg:flex-row'>
             {isAcknowledgeRisk && (
               <div className='flex-1 space-y-8'>
                 <div className='w-24 h-24 bg-gradient-to-r from-primary to-tertiary rounded-full' />
@@ -136,7 +136,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
                     onClick={onComplete}
                   />
                 ) : (
-                  <div className='w-[500px] shadow'>
+                  <div className='w-full lg:w-[500px] shadow'>
                     <VerticalStepper step={step} titles={stepTitles}>
                       <DepositStep
                         depositAmount={depositAmountWei}

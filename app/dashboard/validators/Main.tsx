@@ -232,7 +232,7 @@ const Main: FC<MainProps> = (props) => {
         isBeaconError={isBeaconError}
         isValidatorError={isValidatorError}
         nodeHealth={nodeHealth}
-        className='w-full flex flex-1 flex-col p-4 max-w-[96vw]'
+        className='w-full flex flex-1 flex-col p-4 max-w-[100vw] md:max-w-[93vw] lg:max-w-[95vw]'
       >
         <>
           <div className='w-full mb-6 flex flex-col lg:items-center lg:flex-row space-y-8 lg:space-y-0 justify-between'>

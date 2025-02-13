@@ -15,7 +15,11 @@ const SelectedChip: FC<SelectedChipProps> = ({ validator, onRemove }) => {
     <div className='bg-primary_10 mr-4 mb-4 flex items-center rounded p-1 space-x-2'>
       <div className='h-4 w-4 rounded-full bg-gradient-to-r from-primary to-tertiary' />
       <Typography type='text-caption2'>{name}</Typography>
-      <i onClick={removeSource} role='button' className='bi-x cursor-pointer text-white' />
+      <i
+        onClick={removeSource}
+        role='button'
+        className='bi-x cursor-pointer dark:text-white text-primary'
+      />
     </div>
   )
 }

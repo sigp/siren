@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Typography from '../../../../Typography/Typography'
 import SelectedChip from './SelectedChip'
@@ -29,20 +30,29 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
   return (
     <div className='w-full border-style'>
       <div className='w-full border-b-style p-2'>
-        <Typography>{t('primaryValidator')}</Typography>
+        <div className='flex items-center space-x-2'>
+          <div className='w-4 h-4'>
+            <ValidatorLogo className='text-black dark:text-dark500' />
+          </div>
+          <Typography>{t('primaryValidator')}</Typography>
+        </div>
       </div>
       <div className='p-6'>
         <div className='w-full flex justify-between items-center'>
-          <div className='flex space-x-4'>
-            <div className='h-16 w-16 rounded-full bg-gradient-to-r from-primary to-tertiary' />
+          <div className='flex sm:space-x-4'>
+            <div className='hidden sm:block h-16 w-16 rounded-full bg-gradient-to-r from-primary to-tertiary' />
             <div className='space-y-1'>
               <Typography>{name}</Typography>
-              <Typography type='text-caption'>{formattedPubKey}</Typography>
-              <Typography type='text-caption'>{index}</Typography>
+              <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
+                {formattedPubKey}
+              </Typography>
+              <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
+                {index}
+              </Typography>
             </div>
           </div>
           <Typography
-            className='break-keep'
+            className='break-keep text-right'
             isBold
             type='text-subtitle1'
             color='text-primary'

@@ -2,7 +2,6 @@ import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
-import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../../CreateValidatorView/StepOptions'
 import SelectionDisplay from './SelectionDisplay'
@@ -66,8 +65,8 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   }
 
   return (
-    <div className='w-full h-full flex pt-4'>
-      <div className='flex-1 flex flex-col space-y-8'>
+    <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row pt-4'>
+      <div className='flex-1 max-w-lg lg:max-w-none order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'>
         <div className='space-y-2'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectSources.title')}
@@ -76,20 +75,21 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             {t('validatorManagement.consolidateView.selectSources.text')}
           </Typography>
         </div>
-        <div className='flex-1 flex flex-col border-style'>
+        <div className='flex flex-col border-style'>
           <div className='px-4 py-3 border-b-style flex justify-between'>
-            <Typography type='text-caption'>{t('eligibleValidators')}</Typography>
-            <div className='flex space-x-2 items-center'>
-              <CheckBox
-                label={t('selectAll')}
-                labelStyle='text-caption1 font-light'
-                id='check_all'
-                checked={isAll}
-                onChange={toggleIsSelectAll}
-              />
+            <div className='flex items-center space-x-2'>
+              <i className='bi bi-list-ul text-black dark:text-dark500 text-xl' />
+              <Typography type='text-caption'>{t('eligibleValidators')}</Typography>
             </div>
+            <CheckBox
+              label={t('selectAll')}
+              labelStyle='text-caption1 font-light'
+              id='check_all'
+              checked={isAll}
+              onChange={toggleIsSelectAll}
+            />
           </div>
-          <FlexedOverflow>
+          <div className='h-full max-h-[348px] overflow-scroll'>
             {availableSourceValidators.map((source) => (
               <SelectSourceRow
                 key={source.pubKey}
@@ -100,16 +100,16 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
                 onSelect={toggleSource}
               />
             ))}
-          </FlexedOverflow>
+          </div>
         </div>
       </div>
-      <div className='w-48 h-full flex flex-col items-center justify-center'>
+      <div className='w-48 h-full hidden lg:flex order-2 flex-col items-center justify-center'>
         <div className='w-10 flex items-center justify-center rounded h-10 bg-primary_10'>
           <i className='bi-arrow-right font-bold text-primary' />
         </div>
       </div>
-      <div className='flex-1 max-w-2xl space-y-6'>
-        <div className='space-y-2'>
+      <div className='flex-1 max-w-lg lg:max-w-none order-1 lg:order-3 max-w-2xl space-y-6'>
+        <div className='space-y-2 max-w-lg'>
           <Typography type='text-subtitle2'>{t('primaryValidator')}</Typography>
           <Typography type='text-caption'>
             {t('validatorManagement.consolidateView.selectSources.selectedExplained')}
@@ -122,6 +122,15 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             targetValidator={targetValidator}
           />
         ) : null}
+        <div className='hidden lg:block'>
+          <StepOptions
+            onBackStep={stepBack}
+            onNextStep={confirmSources}
+            isDisabledNext={selectedSources.length < 1}
+          />
+        </div>
+      </div>
+      <div className='order-last lg:hidden'>
         <StepOptions
           onBackStep={stepBack}
           onNextStep={confirmSources}

@@ -3,13 +3,14 @@ import { FC, InputHTMLAttributes } from 'react'
 export interface RangeSliderInputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string
   className?: string | undefined
+  label?: string | undefined
 }
 
 const RangeSliderInput: FC<RangeSliderInputProps> = ({ id, className, label, ...props }) => {
   return (
     <div className={className}>
       {label && (
-        <label for='steps-range-slider-usage' class='sr-only'>
+        <label htmlFor={id} className='sr-only'>
           {label}
         </label>
       )}
@@ -41,13 +42,14 @@ const RangeSliderInput: FC<RangeSliderInputProps> = ({ id, className, label, ...
 
               [&::-webkit-slider-runnable-track]:w-full
               [&::-webkit-slider-runnable-track]:h-1
-              [&::-webkit-slider-runnable-track]:bg-dark500
+              [&::-webkit-slider-runnable-track]:dark:bg-dark500
+              [&::-webkit-slider-runnable-track]:bg-dark200
               [&::-webkit-slider-runnable-track]:rounded-full
               [&::-webkit-slider-runnable-track]:
 
               [&::-moz-range-track]:w-full
               [&::-moz-range-track]:h-1
-              [&::-moz-range-track]:bg-gray-100
+              [&::-moz-range-track]:bg-gray-500
               [&::-moz-range-track]:rounded-full'
         id={id}
         aria-orientation='horizontal'

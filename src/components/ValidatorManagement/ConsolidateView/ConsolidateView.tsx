@@ -29,7 +29,7 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
 
   return (
     <HorizontalStepper steps={steps}>
-      {({ incrementStep, decrementStep }) => (
+      {({ incrementStep, decrementStep, step }) => (
         <>
           <SelectTargetStep
             onNext={incrementStep}
@@ -37,13 +37,15 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
             onSelect={updateTargetValidator}
             validators={activeValidators}
           />
-          <SelectSourceStep
-            onNext={incrementStep}
-            onBack={decrementStep}
-            onSelectTargetValidators={updateSourceValidators}
-            validators={activeValidators}
-            targetValidator={targetValidator}
-          />
+          {step > 0 && (
+            <SelectSourceStep
+              onNext={incrementStep}
+              onBack={decrementStep}
+              onSelectTargetValidators={updateSourceValidators}
+              validators={activeValidators}
+              targetValidator={targetValidator}
+            />
+          )}
           <SubmitConsolidationStep
             chainId={chainId}
             targetValidator={targetValidator}

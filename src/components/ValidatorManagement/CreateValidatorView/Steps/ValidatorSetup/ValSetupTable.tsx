@@ -51,16 +51,16 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
 
   return (
     <div className='w-full lg:w-[75%]'>
-      <div className='w-full border-style flex'>
-        <div className='lg:flex-1 flex space-x-4 items-center px-4'>
+      <div className='w-full border-style flex justify-between'>
+        <div className='lg:flex-1 hidden lg:flex space-x-4 items-center px-4'>
           <div className='w-8 h-8 flex items-center justify-center'>
             <div className='w-4 h-4'>
               <ValidatorLogo className='text-dark900 dark:text-dark200' />
             </div>
           </div>
-          <Typography className='hidden lg:block'>{t('validatorManagement.validators')}</Typography>
+          <Typography>{t('validatorManagement.validators')}</Typography>
         </div>
-        <div className='group cursor-pointer flex border-l-style px-4 space-x-14 items-center'>
+        <div className='group cursor-pointer flex border-l-style px-4 space-x-8 md:space-x-14 items-center'>
           <Typography isUpperCase isBold type='text-caption2'>
             <Trans i18nKey='validatorManagement.validatorSetup.quickAdd'>
               <br />

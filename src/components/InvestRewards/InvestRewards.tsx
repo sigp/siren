@@ -63,7 +63,11 @@ const InvestRewards: FC<InvestRewardsProps> = ({ candidateCount, rewardEstimate 
       transition={{ delay: 0.2 }}
       className='w-full md:max-w-md border-style flex flex-col justify-around p-4'
     >
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='space-y-8'>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className='space-y-8 pb-8 md:pt-0'
+      >
         <div className='flex justify-between items-center'>
           <Typography color='text-dark400' darkMode='dark:text-dark400'>
             {t('validatorManagement.investmentRewards.investment')}
@@ -107,7 +111,11 @@ const InvestRewards: FC<InvestRewardsProps> = ({ candidateCount, rewardEstimate 
         transition={{ delay: 0.2 }}
         className='mx-auto h-px w-full border-style'
       />
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className='space-y-8'>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className='space-y-8 pt-8 md:pt-0'
+      >
         <div className='flex justify-between items-center'>
           <Typography color='text-dark400' darkMode='dark:text-dark400'>
             {t('validatorManagement.investmentRewards.rewards')}
