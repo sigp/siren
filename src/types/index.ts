@@ -219,8 +219,8 @@ export enum TimeUnit {
 }
 
 export enum NetworkId {
-  HOLESKY = '17000',
-  MAINNET = '1',
+  HOLESKY = 17000,
+  MAINNET = 1,
 }
 
 export type ConsolidationTx = {

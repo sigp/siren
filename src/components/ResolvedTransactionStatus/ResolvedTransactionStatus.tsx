@@ -7,7 +7,7 @@ import Typography from '../Typography/Typography'
 
 interface ResolvedTransactionStatusProps {
   title: string
-  networkId: NetworkId
+  networkId: number
   txHash: TxHash
   id?: string | number
   onStatusUpdate?: (id: string | number, status: TxStatus) => void
@@ -63,7 +63,7 @@ const ResolvedTransactionStatus: FC<ResolvedTransactionStatusProps> = ({
     return (
       <TransactionStatus
         id={id}
-        networkId={networkId}
+        networkId={networkId as NetworkId}
         title={title}
         status={txStatus}
         txHash={txHash}
@@ -84,7 +84,7 @@ const ResolvedTransactionStatus: FC<ResolvedTransactionStatusProps> = ({
   return (
     <TransactionStatus
       id={id}
-      networkId={networkId}
+      networkId={networkId as NetworkId}
       title={title}
       text={renderText(txStatus)}
       status={txStatus}
