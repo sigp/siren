@@ -5,7 +5,7 @@ import { useAccount, useSendTransaction, useEstimateGas, useGasPrice } from 'wag
 import displayToast from '../../../utilities/displayToast'
 import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
-import { Address, ConsolidationTx, ToastType } from '../../types'
+import { Address, ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
@@ -13,7 +13,7 @@ import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 export interface ConsolidateViewProps {
   targetPubKey: string
   sourceValidator: ValidatorInfo
-  queueLength?: BigInt | undefined
+  queueLength?: bigint | undefined
   chainId: number
   bufferPercentage: bigint
   onSubmitRequest: (request: ConsolidationTx) => void
@@ -29,7 +29,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
 }) => {
   const { t } = useTranslation()
   const { index, pubKey: sourcePubKey, withdrawalAddress } = sourceValidator
-  const txData = '0x' + sourcePubKey.substring(2) + targetPubKey.substring(2)
+  const txData = ('0x' + sourcePubKey.substring(2) + targetPubKey.substring(2)) as TxHash
   const { address } = useAccount()
   const [isLoading, setIsLoading] = useState(false)
   const submitRequest = useSendTransaction()
@@ -66,7 +66,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   const estimatedGasLimit = estimatedGasData
     ? (BigInt(estimatedGasData.toString()) * 110n) / 100n
     : null
-  const gasFee = estimatedGasLimit ? estimatedGasLimit * gasPrice : 0n
+  const gasFee = estimatedGasLimit && gasPrice ? estimatedGasLimit * gasPrice : 0n
   const totalRequiredFunds = requestFee + gasFee
   const { isSufficient } = useHasSufficientBalance(totalRequiredFunds)
 
@@ -113,7 +113,12 @@ const Consolidate: FC<ConsolidateViewProps> = ({
       isSufficientBalance={isSufficient}
       targetAddress={formattedWithdrawalAddress}
     >
-      <Button isLoading={isLoading} type={ButtonFace.SECONDARY} onClick={submitConsolidation}>
+      <Button
+        className='w-full md:w-auto'
+        isLoading={isLoading}
+        type={ButtonFace.SECONDARY}
+        onClick={submitConsolidation}
+      >
         {t('validatorManagement.consolidateView.signAndSubmit.submitRequest')}
       </Button>
     </WalletActionGuard>

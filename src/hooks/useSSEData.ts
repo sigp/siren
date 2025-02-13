@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MAX_PERSISTED_LOGS } from '../constants/constants'
 
-type AnyObject = { [key: string]: any }
-
-export type sseData = {
-  data: AnyObject[]
+export type sseData<T extends unknown[]> = {
+  data: T
 }
 
 export const defaultLogData = {
@@ -18,10 +16,10 @@ export type sseOptions = {
   isStateStore?: boolean
 }
 
-const useSSEData = (options: sseOptions): sseData => {
+const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
   const { url, onError, isReady, isStateStore } = options
-  const [dataState, setDataState] = useState<AnyObject[]>([])
-  const dataRef = useRef<AnyObject[]>([])
+  const [dataState, setDataState] = useState<T>([] as unknown as T)
+  const dataRef = useRef<T>([] as unknown as T)
 
   const updateData = useCallback(
     (event: MessageEvent) => {
@@ -40,12 +38,12 @@ const useSSEData = (options: sseOptions): sseData => {
 
       const newDataString = JSON.stringify(newData)
 
-      const updateDataArray = (dataArray: AnyObject[]): AnyObject[] => {
+      const updateDataArray = (dataArray: T): T => {
         if (dataArray.some((data) => JSON.stringify(data) === newDataString)) {
           return dataArray
         }
 
-        const updatedData = [...dataArray, newData]
+        const updatedData = [...dataArray, newData] as T
         if (updatedData.length > MAX_PERSISTED_LOGS) {
           updatedData.shift()
         }

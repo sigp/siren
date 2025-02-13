@@ -102,7 +102,6 @@ const Main = () => {
         <VersionModal currentVersion={vcVersion} isVisible={isReady && isVersionError} />
       )}
       <AuthPrompt
-        isNamePrompt
         mode={UiMode.LIGHT}
         isLoading={isLoading}
         isVisible={isReady && !isAuthenticated}
