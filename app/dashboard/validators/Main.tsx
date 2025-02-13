@@ -21,11 +21,17 @@ import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import {
   activeValidatorId,
   exchangeRates,
+  forkVersion,
   isEditValidator,
   isValidatorDetail,
 } from '../../../src/recoil/atoms'
 import { ActivityResponse, ValidatorManagementView } from '../../../src/types'
-import { BeaconNodeSpecResults, SyncData, ValidatorMetricResult } from '../../../src/types/beacon'
+import {
+  BeaconNodeSpecResults,
+  ForkVersionData,
+  SyncData,
+  ValidatorMetricResult,
+} from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 import { ValidatorCache, ValidatorCountResult, ValidatorInfo } from '../../../src/types/validator'
 
@@ -38,6 +44,7 @@ export interface MainProps {
   initValMetrics: ValidatorMetricResult
   beaconSpec: BeaconNodeSpecResults
   initActivityData: ActivityResponse
+  initForkVersionData: ForkVersionData
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -51,6 +58,7 @@ const Main: FC<MainProps> = (props) => {
     initValCaches,
     initValMetrics,
     initActivityData,
+    initForkVersionData,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -74,6 +82,7 @@ const Main: FC<MainProps> = (props) => {
   const [activeValId, setValidatorId] = useRecoilState(activeValidatorId)
   const [isEditVal, setIsEditValidator] = useRecoilState(isEditValidator)
   const setValDetail = useSetRecoilState(isValidatorDetail)
+  const setForkVersion = useSetRecoilState(forkVersion)
   const [isValDetail] = useRecoilState(isValidatorDetail)
   const [isRendered, setRender] = useState(false)
 
@@ -122,6 +131,16 @@ const Main: FC<MainProps> = (props) => {
     '/api/validator-metrics',
     { refreshInterval: epochInterval / 2, fallbackData: initValMetrics, networkError },
   )
+
+  const { data: forkVersionData } = useSWRPolling<ForkVersionData>('/api/fork-version', {
+    refreshInterval: epochInterval / 2,
+    fallbackData: initForkVersionData,
+    networkError,
+  })
+
+  useEffect(() => {
+    setForkVersion(forkVersionData)
+  }, [forkVersionData])
 
   const filteredValidators = useMemo(() => {
     return validatorStates.filter((validator) => {
@@ -213,7 +232,6 @@ const Main: FC<MainProps> = (props) => {
           <MainView
             validators={filteredValidators}
             search={search}
-            chainId={Number(DEPOSIT_CHAIN_ID)}
             onSetSearch={setSearch}
             onChangeView={changeView}
             scrollPercentage={scrollPercentage}

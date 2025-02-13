@@ -4,6 +4,7 @@ import getSessionCookie from '../../../utilities/getSessionCookie'
 import { fetchActivities } from '../../api/activities'
 import {
   fetchBeaconSpec,
+  fetchForkVersion,
   fetchNodeHealth,
   fetchSyncData,
   fetchValidatorCountData,
@@ -23,9 +24,11 @@ export default async function Page() {
     const caches = await fetchValCaches(token)
     const metrics = await fetchValMetrics(token)
     const activities = await fetchActivities({ token })
+    const forkVersion = await fetchForkVersion(token)
 
     return (
       <Wrapper
+        initForkVersionData={forkVersion}
         initActivityData={activities}
         initValMetrics={metrics}
         initNodeHealth={bnHealth}

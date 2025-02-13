@@ -316,4 +316,24 @@ export class BeaconService {
 
     return { data: null };
   }
+
+  async fetchForkVersion() {
+    try {
+      const slotInterval = await this.utilsService.getSlotInterval();
+      return this.utilsService.fetchFromCache(
+        'fork-version',
+        slotInterval * 16,
+        async () => {
+          const { data } = await this.utilsService.sendHttpRequest({
+            url: `${this.beaconUrl}/eth/v1/beacon/states/head/fork`,
+          });
+
+          return data;
+        },
+      );
+    } catch (e) {
+      console.log(e);
+      throwServerError('Unable to fetch fork version data');
+    }
+  }
 }

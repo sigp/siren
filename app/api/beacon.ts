@@ -29,3 +29,6 @@ export const submitSignedExit = async (data: any, token: string) =>
 
 export const fetchValidatorStatus = async (token: string, pubKey: string) =>
   await fetchFromApi(`${backendUrl}/beacon/validator-status/${pubKey}`, token)
+
+export const fetchForkVersion = async (token: string) =>
+  await fetchFromApi(`${backendUrl}/beacon/fork-version`, token)

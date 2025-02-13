@@ -110,9 +110,9 @@ export class LogsService {
       throw new Error('Invalid log type');
     }
 
-    let warnOptions = { where: { level: LogLevels.WARN } } as any;
-    let errorOptions = { where: { level: LogLevels.ERRO } } as any;
-    let critOptions = { where: { level: LogLevels.CRIT } } as any;
+    const warnOptions = { where: { level: LogLevels.WARN } } as any;
+    const errorOptions = { where: { level: LogLevels.ERRO } } as any;
+    const critOptions = { where: { level: LogLevels.CRIT } } as any;
 
     if (type) {
       warnOptions.where.type = { [Op.eq]: type };
