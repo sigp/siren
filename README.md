@@ -41,7 +41,44 @@ Advanced users can mount their own certificate (the config expects 3 files: `/ce
 
 ### Docker
 
-The docker image can be built with the following command:  
+#### Starting Siren with Docker Compose
+
+1. Copy the environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit `.env` with your configuration (at minimum set `BEACON_URL`, `VALIDATOR_URL`, and `API_TOKEN`)
+
+3. Start the services:
+   ```bash
+   docker compose up -d
+   ```
+   The `-d` flag runs the containers in the background. Remove it if you want to see the logs directly in your terminal.
+
+4. Access Siren at https://localhost:4443
+
+   Note: When you first visit the site, your browser will show a security warning because Siren uses a self-signed SSL certificate. This is expected and safe for local development. You can proceed by:
+   - In Chrome: Click "Advanced" and then "Proceed to localhost (unsafe)"
+   - In Firefox: Click "Advanced..." and then "Accept the Risk and Continue"
+   - In Safari: Click "Show Details" and then "visit this website"
+
+#### Stopping Siren
+
+To stop the services:
+```bash
+docker compose down
+```
+
+To stop and remove all data (including certificates):
+```bash
+docker compose down -v
+```
+
+#### Alternative Docker Run Method
+
+You can also run Siren using the docker run command:
+
 `docker build -f Dockerfile -t siren .`
 
 ### Building locally
