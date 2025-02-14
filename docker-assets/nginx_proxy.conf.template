@@ -1,0 +1,93 @@
+user  nginx;
+worker_processes  8;
+
+error_log  /dev/stdout warn;
+pid        /var/run/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+# HTTP configuration for Siren web interface
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                     '$status $body_bytes_sent "$http_referer" '
+                     '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+    access_log  /dev/stdout  main;
+
+    sendfile        on;
+    keepalive_timeout  65;
+
+    # Resolve DNS for upstreams
+    resolver 127.0.0.11 ipv6=off;
+    
+    # Siren web interface proxy
+    server {
+        listen 4080;
+        server_name localhost;
+
+        location / {
+            set $upstream_siren siren;
+            proxy_pass http://$upstream_siren:80;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_read_timeout 300;
+            proxy_connect_timeout 300;
+        }
+    }
+}
+
+# TCP proxy configuration for beacon/validator
+stream {
+    log_format  main  '$remote_addr - [$time_local] ';
+    access_log  /var/log/nginx/access.log  main;
+    access_log  /dev/stdout  main;
+
+    # Split BN_TARGET into host and port using shell parameter expansion
+    upstream beacon_node {
+        server ${BN_TARGET};
+    }
+
+    # Split VC_TARGET into host and port using shell parameter expansion
+    upstream validator_client {
+        server ${VC_TARGET};
+    }
+
+    # Beacon Node proxy
+    server {
+        listen     9001;
+        # Resolve DNS for upstreams
+        resolver 127.0.0.11;
+        
+        # Proxy pass to the beacon node
+        proxy_pass beacon_node;
+    }
+  
+    # Validator Client proxy
+    server {
+        listen     9002;
+        # Resolve DNS for upstreams
+        resolver 127.0.0.11;
+        
+        # Proxy pass to the validator client
+        proxy_pass validator_client;
+    }
+
+    # Block all other outbound connections
+    server {
+        listen     80;
+        return     444;  # Connection closed without response
+    }
+
+    server {
+        listen     443;
+        return     444;  # Connection closed without response
+    }
+}
