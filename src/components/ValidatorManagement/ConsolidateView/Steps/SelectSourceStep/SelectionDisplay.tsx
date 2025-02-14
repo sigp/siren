@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 import SelectedChip from './SelectedChip'
 
@@ -43,9 +44,16 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
             <div className='hidden sm:block h-16 w-16 rounded-full bg-gradient-to-r from-primary to-tertiary' />
             <div className='space-y-1'>
               <Typography>{name}</Typography>
-              <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
-                {formattedPubKey}
-              </Typography>
+              <Tooltip
+                place='top-start'
+                style={{ fontSize: '11px' }}
+                id={`tool-display-${pubKey}`}
+                text={pubKey}
+              >
+                <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
+                  {formattedPubKey}
+                </Typography>
+              </Tooltip>
               <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
                 {index}
               </Typography>

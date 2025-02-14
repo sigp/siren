@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { parseUnits } from 'ethers'
-import { FC, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
 import formatEthAddress from '../../../../../../../utilities/formatEthAddress'
@@ -10,6 +10,7 @@ import useValidatorDeposit from '../../../../../../hooks/useValidatorDeposit'
 import { ToastType, ValidatorCandidate } from '../../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../../types/beacon'
 import InvestRewards, { InvestRewardsProps } from '../../../../../InvestRewards/InvestRewards'
+import Tooltip from '../../../../../ToolTip/Tooltip'
 import Typography from '../../../../../Typography/Typography'
 import VerticalStepper from '../../../../../VerticalStepper/VerticalStepper'
 import AcceptRisks from '../AcceptRisks'
@@ -117,9 +118,16 @@ const SingleDeposit: FC<SingleDepositProps> = ({
                     {name || t('validatorManagement.customValidatorName')}
                   </Typography>
                   {withdrawalCredentials && (
-                    <Typography color='text-dark400' type='text-subtitle3'>
-                      {formatEthAddress(withdrawalCredentials)}
-                    </Typography>
+                    <Tooltip
+                      place='top-start'
+                      style={{ fontSize: '11px' }}
+                      id={`tool-sign-${pubKey}`}
+                      text={withdrawalCredentials}
+                    >
+                      <Typography color='text-dark400' type='text-subtitle3'>
+                        {formatEthAddress(withdrawalCredentials)}
+                      </Typography>
+                    </Tooltip>
                   )}
                   <Typography color='text-dark400' type='text-subtitle3'>
                     {index}

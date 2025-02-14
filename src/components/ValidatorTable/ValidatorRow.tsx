@@ -140,9 +140,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         </Typography>
       </th>
       <th className='px-2'>
-        <Typography color='text-dark500' type='text-caption1' className='text-left'>
-          {formatEthAddress(pubKey)}
-        </Typography>
+        <Tooltip id={pubKey} place='top-start' style={{ fontSize: '12px' }} text={pubKey}>
+          <Typography color='text-dark500' type='text-caption1' className='text-left w-fit'>
+            {formatEthAddress(pubKey)}
+          </Typography>
+        </Tooltip>
       </th>
       <th className='px-2'>
         <Typography type='text-caption1' className='text-left' darkMode='dark:text-white' isBold>

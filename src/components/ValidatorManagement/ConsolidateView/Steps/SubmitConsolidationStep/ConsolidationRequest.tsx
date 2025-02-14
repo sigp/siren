@@ -6,6 +6,7 @@ import { ConsolidationTx } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
 import Spinner from '../../../../Spinner/Spinner'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 
 export interface ConsolidationRequestProps {
@@ -46,7 +47,14 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
             {index}
           </Typography>
         </div>
-        <Typography type='text-caption1'>{formatEthAddress(withdrawalCredentials)}</Typography>
+        <Tooltip
+          place='top-start'
+          style={{ fontSize: '11px' }}
+          id={`tool-request-${index}`}
+          text={withdrawalCredentials}
+        >
+          <Typography type='text-caption1'>{formatEthAddress(withdrawalCredentials)}</Typography>
+        </Tooltip>
       </div>
       <div>
         {requestData ? (

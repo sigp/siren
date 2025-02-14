@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
@@ -11,6 +11,7 @@ import CheckBox from '../../../../CheckBox/CheckBox'
 import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import RangeSliderInput from '../../../../RangeSliderInput/RangeSliderInput'
 import ResolvedTransactionStatus from '../../../../ResolvedTransactionStatus/ResolvedTransactionStatus'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 import ConsolidationQueueStatus from './ConsolidationQueueStatus'
 import ConsolidationRequest from './ConsolidationRequest'
@@ -101,9 +102,16 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                     <Typography type='text-caption1'>{targetValidator.name}</Typography>
                     <Typography type='text-caption1'>{targetValidator.index}</Typography>
                   </div>
-                  <Typography type='text-caption1'>
-                    {formatEthAddress(targetValidator.pubKey, 12, 12)}
-                  </Typography>
+                  <Tooltip
+                    place='top-start'
+                    style={{ fontSize: '11px' }}
+                    id={`tool-target-${targetValidator.pubKey}`}
+                    text={targetValidator.pubKey}
+                  >
+                    <Typography type='text-caption1'>
+                      {formatEthAddress(targetValidator.pubKey, 12, 12)}
+                    </Typography>
+                  </Tooltip>
                 </div>
               </div>
               <div className='w-full flex flex-col md:flex-row space-y-4 lg:space-y-0 justify-between p-2 border-style mt-4'>

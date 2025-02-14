@@ -12,6 +12,7 @@ import { BalanceReturn } from '../../hooks/useAccountBalance'
 import useClickOutside from '../../hooks/useClickOutside'
 import { BeaconNodeSpecResults } from '../../types/beacon'
 import { ChainWithIcon } from '../../types/wallet'
+import CopyWrapper from '../CopyWrapper/CopyWrapper'
 import Typography from '../Typography/Typography'
 
 export interface WalletProps {
@@ -120,17 +121,16 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
           >
             <div className='cursor-pointer px-2 py-4 group border-b-style last:border-none flex items-center space-x-2'>
               <div className='w-2 h-2 bg-success rounded-full' />
-              <div className='flex group items-center space-x-2' onClick={copyAddress}>
+              <CopyWrapper
+                id='wallet-address-tooltip'
+                place='bottom'
+                positionStrategy='fixed'
+                copyText={address}
+              >
                 <Typography isBold type='text-caption1' color='text-dark500' family='font-roboto'>
                   {formattedAddress}
                 </Typography>
-                <i className='bi bi-subtract group-hover:scale-90 text-caption1 text-dark400' />
-                {isCopied && (
-                  <Typography isBold type='text-tiny' color='text-dark500' family='font-roboto'>
-                    {t('copied')}
-                  </Typography>
-                )}
-              </div>
+              </CopyWrapper>
             </div>
             <div className='cursor-pointer px-2 py-4 group border-b-style last:border-none flex items-center space-x-1'>
               {isValidNetwork ? (

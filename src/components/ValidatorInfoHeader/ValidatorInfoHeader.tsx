@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import formatEthAddress from '../../../utilities/formatEthAddress'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useValidatorName from '../../hooks/useValidatorName'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
@@ -8,6 +9,7 @@ import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import GradientHeader from '../GradientHeader/GradientHeader'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoHeaderProps {
@@ -22,6 +24,8 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
   const validatorName = useValidatorName(validator, aliases)
+
+  const formattedPubKey = formatEthAddress(pubKey, 12, 4)
 
   return (
     <div className='w-full relative'>
@@ -48,9 +52,18 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
           </div>
           <div className='text-right flex flex-col justify-between'>
             <div>
-              <Typography isBold type='text-caption1'>
-                {pubKey.substring(0, 12)}
-              </Typography>
+              <Tooltip
+                style={{ fontSize: '14px', fontStyle: 'font-openSauce' }}
+                positionStrategy='fixed'
+                place='top'
+                delayHide={1500}
+                id='val-pubKey'
+                text={pubKey}
+              >
+                <Typography isBold type='text-caption1'>
+                  {formattedPubKey}
+                </Typography>
+              </Tooltip>
               <Typography type='text-caption1'>{index}</Typography>
             </div>
             <div>
@@ -60,7 +73,9 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
                   <br />
                 </Trans>
               </Typography>
-              <Typography>{balance.toFixed(2)} ETH</Typography>
+              <Typography isBold color='text-primary' darkMode='dark:text-primary'>
+                {balance.toFixed(2)} ETH
+              </Typography>
             </div>
           </div>
         </div>
