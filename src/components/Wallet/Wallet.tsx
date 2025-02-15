@@ -3,7 +3,6 @@ import Image from 'next/image'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDisconnect, useSwitchChain } from 'wagmi'
-import copyToClipboard from '../../../utilities/copyToClipboard'
 import formatChainId from '../../../utilities/formatChainId'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
@@ -33,7 +32,6 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const { id, iconUrl, hasIcon, name } = chain
   const ethRate = Math.round(rate || 0) * (Number(formatted) || 0)
   const [isOpen, setOpen] = useState(false)
-  const [isCopied, setIsCopied] = useState(false)
   const { DEPOSIT_NETWORK_ID } = beaconSpec
   const { ref } = useClickOutside(() => setOpen(false))
   const { disconnect } = useDisconnect()
@@ -42,21 +40,6 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const formattedAddress = formatEthAddress(address, 4)
 
   const disconnectWallet = () => disconnect()
-
-  const copyAddress = async () => {
-    try {
-      const isCopied = await copyToClipboard(address)
-
-      if (isCopied) {
-        setIsCopied(true)
-        setTimeout(() => {
-          setIsCopied(false)
-        }, 2000)
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const chevron = {
     up: {
