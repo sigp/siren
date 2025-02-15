@@ -8,6 +8,18 @@
   z-index: 99;
 }
 
+.rodal-dialog {
+  @apply scrollbar-hide;
+}
+
+[class*='overflow-']::-webkit-scrollbar {
+  @apply scrollbar-hide;
+}
+
+[class*='overflow-'] {
+  @apply scrollbar-hide;
+}
+
 @layer components {
   .border-style {
     @apply border border-borderLight dark:border-borderDark;
