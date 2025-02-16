@@ -1,3 +1,3 @@
-const formatDefaultValName = (index: string) => `VAL-${index.slice(-3)}`
+const formatDefaultValName = (index: string) => `VAL-${index}`
 
 export default formatDefaultValName
