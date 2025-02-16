@@ -79,7 +79,7 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
         </motion.div>
         <ProgressBar total={totalSteps} position={currentStep + 1} />
       </div>
-      <div className='w-full lg:h-full relative createSlide'>
+      <div className='w-full relative createSlide'>
         <Carousel swiping={false} slideIndex={currentStep} dragging={false} withoutControls>
           {slides.map((child, index) => (
             <div key={index} className='sm:h-full w-full'>

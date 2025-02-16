@@ -33,7 +33,9 @@ const SideItem: FC<SideItemProps> = ({ children, isActive, className, href, isDi
     </Link>
   )
   return isDisabled ? (
-    <DisabledTooltip place='right'>{renderContent()}</DisabledTooltip>
+    <div className='w-full flex items-center justify-center'>
+      <DisabledTooltip place='right'>{renderContent()}</DisabledTooltip>
+    </div>
   ) : (
     renderContent()
   )
