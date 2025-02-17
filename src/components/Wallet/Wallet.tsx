@@ -3,7 +3,6 @@ import Image from 'next/image'
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDisconnect, useSwitchChain } from 'wagmi'
-import copyToClipboard from '../../../utilities/copyToClipboard'
 import formatChainId from '../../../utilities/formatChainId'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
@@ -12,6 +11,7 @@ import { BalanceReturn } from '../../hooks/useAccountBalance'
 import useClickOutside from '../../hooks/useClickOutside'
 import { BeaconNodeSpecResults } from '../../types/beacon'
 import { ChainWithIcon } from '../../types/wallet'
+import CopyWrapper from '../CopyWrapper/CopyWrapper'
 import Typography from '../Typography/Typography'
 
 export interface WalletProps {
@@ -32,7 +32,6 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const { id, iconUrl, hasIcon, name } = chain
   const ethRate = Math.round(rate || 0) * (Number(formatted) || 0)
   const [isOpen, setOpen] = useState(false)
-  const [isCopied, setIsCopied] = useState(false)
   const { DEPOSIT_NETWORK_ID } = beaconSpec
   const { ref } = useClickOutside(() => setOpen(false))
   const { disconnect } = useDisconnect()
@@ -41,21 +40,6 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
   const formattedAddress = formatEthAddress(address, 4)
 
   const disconnectWallet = () => disconnect()
-
-  const copyAddress = async () => {
-    try {
-      const isCopied = await copyToClipboard(address)
-
-      if (isCopied) {
-        setIsCopied(true)
-        setTimeout(() => {
-          setIsCopied(false)
-        }, 2000)
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  }
 
   const chevron = {
     up: {
@@ -120,17 +104,16 @@ const Wallet: FC<WalletProps> = ({ currency, beaconSpec, chain, address, balance
           >
             <div className='cursor-pointer px-2 py-4 group border-b-style last:border-none flex items-center space-x-2'>
               <div className='w-2 h-2 bg-success rounded-full' />
-              <div className='flex group items-center space-x-2' onClick={copyAddress}>
+              <CopyWrapper
+                id='wallet-address-tooltip'
+                place='bottom'
+                positionStrategy='fixed'
+                copyText={address}
+              >
                 <Typography isBold type='text-caption1' color='text-dark500' family='font-roboto'>
                   {formattedAddress}
                 </Typography>
-                <i className='bi bi-subtract group-hover:scale-90 text-caption1 text-dark400' />
-                {isCopied && (
-                  <Typography isBold type='text-tiny' color='text-dark500' family='font-roboto'>
-                    {t('copied')}
-                  </Typography>
-                )}
-              </div>
+              </CopyWrapper>
             </div>
             <div className='cursor-pointer px-2 py-4 group border-b-style last:border-none flex items-center space-x-1'>
               {isValidNetwork ? (

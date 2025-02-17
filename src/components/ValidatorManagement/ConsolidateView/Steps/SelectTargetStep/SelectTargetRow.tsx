@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ValidatorInfo } from '../../../../../types/validator'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 
 export interface SelectTargetRowProps {
@@ -35,9 +36,16 @@ const SelectTargetRow: FC<SelectTargetRowProps> = ({ validator, onSelect, isActi
           <div className={iconClasses} />
           <Typography type='text-caption'>{name}</Typography>
         </div>
-        <Typography className='hidden @425:block' type='text-caption'>
-          {formatEthAddress(pubKey)}
-        </Typography>
+        <Tooltip
+          place='top-start'
+          style={{ fontSize: '11px' }}
+          id={`tool-select-${pubKey}`}
+          text={pubKey}
+        >
+          <Typography className='hidden @425:block' type='text-caption'>
+            {formatEthAddress(pubKey)}
+          </Typography>
+        </Tooltip>
       </div>
       <div className='flex space-x-2 items-center'>
         {isActive && (

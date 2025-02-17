@@ -2,6 +2,7 @@ import { FC } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 
 export interface SelectSourceRowProps {
@@ -27,9 +28,16 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
           <div className='h-8 w-8 rounded-full bg-gradient-to-r from-primary to-tertiary' />
           <Typography type='text-caption'>{name}</Typography>
         </div>
-        <Typography className='hidden @425:block' type='text-caption'>
-          {formattedPubKey}
-        </Typography>
+        <Tooltip
+          place='top-start'
+          style={{ fontSize: '11px' }}
+          id={`tool-source-${pubKey}`}
+          text={pubKey}
+        >
+          <Typography className='hidden @425:block' type='text-caption'>
+            {formattedPubKey}
+          </Typography>
+        </Tooltip>
       </div>
       <div>
         <Typography type='text-caption'>{formattedBalance} ETH</Typography>

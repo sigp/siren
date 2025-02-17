@@ -2,11 +2,13 @@ import Link from 'next/link'
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
+import formatEthAddress from '../../../utilities/formatEthAddress'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useValidatorName from '../../hooks/useValidatorName'
 import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader'
+import CopyWrapper from '../CopyWrapper/CopyWrapper'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import Typography from '../Typography/Typography'
 
@@ -63,14 +65,22 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
             </div>
           </div>
           <div className='w-full flex'>
-            <div className='flex-1 space-y-2'>
+            <div className='flex-1 relative space-y-2'>
               <Typography type='text-caption2' color='text-dark300' isUpperCase>
                 Pubkey
               </Typography>
-              <Typography
-                type='text-caption1'
-                isBold
-              >{`${pubKey?.substring(0, 12)}...`}</Typography>
+              <CopyWrapper
+                isHoverCopy
+                place='top'
+                style={{ fontSize: '14px' }}
+                id='val-card-pubkey'
+                positionStrategy='fixed'
+                copyText={pubKey}
+              >
+                <Typography type='text-caption1' isBold>
+                  {formatEthAddress(pubKey)}
+                </Typography>
+              </CopyWrapper>
             </div>
             <div className='flex-1 space-y-2'>
               <Typography type='text-caption2' color='text-dark300' isUpperCase>

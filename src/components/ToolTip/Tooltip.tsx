@@ -1,18 +1,19 @@
 import React, { FC } from 'react'
-import { Tooltip as TooltipComponent, PlacesType } from 'react-tooltip'
+import { Tooltip as RTTooltip } from 'react-tooltip'
 import addClassString from '../../../utilities/addClassString'
 import { UiMode } from '../../constants/enums'
 import useUiMode from '../../hooks/useUiMode'
 import { OptionalString } from '../../types'
 
-export interface TooltipProps {
+export interface TooltipProps extends React.ComponentProps<typeof RTTooltip> {
   id: string
   text: string
   className?: OptionalString
-  maxWidth?: number | undefined
-  toolTipMode?: UiMode | undefined
-  place?: PlacesType
+  maxWidth?: number
+  toolTipMode?: UiMode
   children?: React.ReactNode
+  tooltipClassName?: OptionalString
+  cursor?: string
 }
 
 const Tooltip: FC<TooltipProps> = ({
@@ -22,27 +23,33 @@ const Tooltip: FC<TooltipProps> = ({
   className,
   maxWidth,
   toolTipMode,
-  place,
+  place = 'top',
+  cursor = 'cursor-help',
+  tooltipClassName,
+  style,
+  ...rest
 }) => {
   const { mode } = useUiMode()
+  const isDark = (toolTipMode || mode) === UiMode.DARK
 
-  const scheme = toolTipMode || mode
-
-  const isDarkMode = scheme === UiMode.DARK
-
-  const classes = addClassString('cursor-help', [className])
   return (
-    <div id={id} className={classes} data-tooltip-content={text}>
+    <div
+      data-tooltip-id={id}
+      className={`${className} w-fit ${cursor}`}
+      data-tooltip-content={text}
+    >
       {children}
-      <TooltipComponent
-        className='shadow-xl z-50'
-        place={place as PlacesType}
+      <RTTooltip
+        id={id}
+        place={place}
+        className={addClassString('shadow-xl z-50', [tooltipClassName])}
         style={{
           maxWidth,
-          backgroundColor: isDarkMode ? '#7C5FEB' : '#FFFFFF',
-          color: isDarkMode ? 'white' : 'black',
+          backgroundColor: isDark ? '#7C5FEB' : '#FFF',
+          color: isDark ? 'white' : 'black',
+          ...style,
         }}
-        anchorId={id}
+        {...rest}
       />
     </div>
   )
