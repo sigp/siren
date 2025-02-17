@@ -2,9 +2,11 @@ import { Connector } from '@wagmi/core'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
 import displayToast from '../../../utilities/displayToast'
 import useClickOutside from '../../hooks/useClickOutside'
 import useWalletConnectors from '../../hooks/useWalletConnectors'
+import { isWalletConnectModal } from '../../recoil/atoms'
 import { ToastType } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import WalletConnectorOption from '../WalletConnectorOption/WalletConnectorOption'
@@ -13,7 +15,15 @@ const WalletConnector = () => {
   const { t } = useTranslation()
   const [isOpen, setOpen] = useState(false)
   const { connectors, connect, error } = useWalletConnectors()
-  const openConnectorMenu = () => setOpen(true)
+  const openConnectModal = useSetRecoilState(isWalletConnectModal)
+  const openConnectorMenu = () => {
+    if (!connectors.length) {
+      openConnectModal(true)
+      return
+    }
+
+    setOpen(true)
+  }
   const connectWallet = (connector: Connector) => connect({ connector })
   const { ref } = useClickOutside(() => setOpen(false))
 

@@ -32,6 +32,10 @@
   "connect": "Connect",
   "connectWallet": "Connect Wallet",
   "insufficientFunds": "Insufficient Funds",
+  "noConnectors": {
+    "text": "To unlock all of Sirens cool features, you must install a browser wallet extension. Metamask, Brave Wallet, Keplar and etc. Once installed you can choose any one to connect to Siren.",
+    "title": "No Wallet Connections Found."
+  },
   "endSession": "End Session",
   "year": "year",
   "month": "month",

@@ -61,15 +61,25 @@ const ConnectWalletModal = () => {
           )}
         </div>
         <div className='w-[400px] p-4'>
-          {isOpen &&
-            connectors.map((connector, index) => (
-              <WalletConnectorOption
-                key={index}
-                index={index}
-                onConnect={connectWallet}
-                connector={connector}
-              />
-            ))}
+          {isOpen ? (
+            connectors.length ? (
+              connectors.map((connector, index) => (
+                <WalletConnectorOption
+                  key={index}
+                  index={index}
+                  onConnect={connectWallet}
+                  connector={connector}
+                />
+              ))
+            ) : (
+              <div className='p-2 space-y-4'>
+                <Typography>{t('noConnectors.title')}</Typography>
+                <Typography type='text-caption'>
+                  {t('noConnectors.text')}
+                </Typography>
+              </div>
+            )
+          ) : null}
         </div>
       </div>
     </RodalModal>
