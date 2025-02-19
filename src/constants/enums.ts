@@ -61,3 +61,8 @@ export enum ValidatorModalView {
   DETAILS = 'DETAILS',
   EXIT = 'EXIT',
 }
+
+export enum WalletPrefix {
+  ONE = 0x01,
+  TWO = 0x02,
+}

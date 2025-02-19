@@ -1,10 +1,10 @@
+import { formatEther } from 'ethers'
 import { motion } from 'framer-motion'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import formatTimeframe from '../../../utilities/formatTimeframe'
-import { EFFECTIVE_BALANCE } from '../../constants/constants'
 import { CURRENCY_PREFIX } from '../../constants/currencies'
 import { Storage } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
@@ -17,10 +17,15 @@ import Typography from '../Typography/Typography'
 
 export interface InvestRewardsProps {
   candidateCount: number
+  requiredStake: bigint
   rewardEstimate: ValidatorRewardEstimate
 }
 
-const InvestRewards: FC<InvestRewardsProps> = ({ candidateCount, rewardEstimate }) => {
+const InvestRewards: FC<InvestRewardsProps> = ({
+  candidateCount,
+  rewardEstimate,
+  requiredStake,
+}) => {
   const { t } = useTranslation()
   const { apr, totalAnnualRewards } = rewardEstimate
   const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, 'USD')
@@ -41,7 +46,7 @@ const InvestRewards: FC<InvestRewardsProps> = ({ candidateCount, rewardEstimate 
     }
   }, [currency])
 
-  const stakeEthAmount = candidateCount * EFFECTIVE_BALANCE
+  const stakeEthAmount = requiredStake ? Number(formatEther(requiredStake)) : 0
   const count = candidateCount > 0 ? candidateCount.toString().padStart(2, '0') : '0'
   const stakeEthRate = Number(activeRate) * stakeEthAmount
 

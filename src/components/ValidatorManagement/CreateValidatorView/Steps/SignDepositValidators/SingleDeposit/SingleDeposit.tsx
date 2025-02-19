@@ -95,7 +95,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   const retryTransaction = () => setStep(0)
 
-  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
+  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE.toString(), 'gwei')
 
   return (
     <div className='relative w-full h-full'>
@@ -172,7 +172,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
             )}
           </div>
         </div>
-        <InvestRewards candidateCount={1} {...props} />
+        <InvestRewards requiredStake={candidate.effectiveBalance} candidateCount={1} {...props} />
       </div>
     </div>
   )

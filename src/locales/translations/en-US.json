@@ -123,6 +123,7 @@
   "disconnect": "Disconnect",
   "balance": "Balance",
   "rewards": "Rewards",
+  "withdrawalAddress": "Withdrawal Address",
   "income": "Income",
   "proposed": "Proposed",
   "attested": "Attested",
@@ -540,7 +541,9 @@
         "mediumFees": "Due to an increase in the number of consolidation requests, the fee to submit a new request is moderately high. Please consider waiting to avoid high fees.",
         "lowFees": "Low Fees and consolidation queue. Please ensure you are using the correct network when making requests."
       }
-    }
+    },
+    "enableElectra": "Enable 0x02 Credentials",
+    "effectiveBalanceError": "Effective Balance cannot be lower than 32 or higher than 2048 ETH."
   },
   "alert": {
     "type": {

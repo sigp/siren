@@ -11,7 +11,7 @@ export type BeaconNodeSpecResults = {
   DEPOSIT_CHAIN_ID: string
   DEPOSIT_CONTRACT_ADDRESS: string
   DEPOSIT_NETWORK_ID: NetworkId
-  MIN_ACTIVATION_BALANCE: string
+  MIN_ACTIVATION_BALANCE: bigint
   SECONDS_PER_SLOT: number
   SLOTS_PER_EPOCH: number
   BASE_REWARD_FACTOR: number

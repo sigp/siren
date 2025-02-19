@@ -1,5 +1,5 @@
 import { FC, SVGProps } from 'react'
-import { Protocol } from '../constants/enums'
+import { Protocol, WalletPrefix } from '../constants/enums'
 import { KeyStoreData } from '../hooks/useLodestarDepositData'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
@@ -165,6 +165,8 @@ export type ValidatorCandidate = {
   index: number | undefined
   pubKey?: string
   name: string | undefined
+  withdrawalPrefix: WalletPrefix
+  effectiveBalance: bigint
   withdrawalCredentials: string | undefined
   keyStorePassword: string | undefined
   isValidIndex?: boolean

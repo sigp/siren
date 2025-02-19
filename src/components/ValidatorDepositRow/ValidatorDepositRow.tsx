@@ -33,7 +33,7 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
     mnemonic,
     beaconSpec,
   })
-  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
+  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE.toString(), 'gwei')
   const { isSufficient } = useHasSufficientBalance(depositAmountWei)
 
   useEffect(() => {

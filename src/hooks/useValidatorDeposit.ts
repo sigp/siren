@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { parseUnits } from 'ethers'
 import { useState } from 'react'
 import { useWriteContract } from 'wagmi'
 import { contractAbi } from '../../contracts/depositContractAbi'
@@ -27,8 +26,9 @@ const useValidatorDeposit = ({
   mnemonic,
   beaconSpec,
 }: ValidatorDepositConfig): ValidatorDepositReturnType => {
-  const { MIN_ACTIVATION_BALANCE, DEPOSIT_CONTRACT_ADDRESS, GENESIS_FORK_VERSION } = beaconSpec
-  const { index, withdrawalCredentials, keyStorePassword } = validator
+  const { DEPOSIT_CONTRACT_ADDRESS, GENESIS_FORK_VERSION } = beaconSpec
+  const { index, withdrawalCredentials, keyStorePassword, effectiveBalance, withdrawalPrefix } =
+    validator
   const [txHash, setTxHash] = useState<TxHash | undefined>()
   const [pubKey, setPubKey] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
@@ -60,13 +60,13 @@ const useValidatorDeposit = ({
         throw new Error('MISSING_KEYSTORE_PASSWORD')
       }
 
-      const ethAmount = parseUnits(MIN_ACTIVATION_BALANCE, 'gwei')
       const { pubkey, withdrawal_credentials, signature, deposit_data_root } =
         await generateDepositData(
           mnemonic,
           Number(index),
           String(withdrawalCredentials),
-          Number(MIN_ACTIVATION_BALANCE),
+          Number(effectiveBalance / 1000000000n),
+          withdrawalPrefix,
         )
       const keyStore = await generateKeystore(mnemonic, Number(index), keyStorePassword)
 
@@ -76,7 +76,7 @@ const useValidatorDeposit = ({
           abi: contractAbi,
           functionName: 'deposit',
           args: [pubkey, withdrawal_credentials, signature, deposit_data_root],
-          value: ethAmount,
+          value: effectiveBalance,
         },
         {
           onError: (e) => {
@@ -90,7 +90,7 @@ const useValidatorDeposit = ({
             try {
               await axios.post('/api/log-activity', {
                 data: JSON.stringify({
-                  amount: ethAmount.toString(),
+                  amount: effectiveBalance.toString(),
                   txHash: data,
                 }),
                 type: ActivityType.DEPOSIT,

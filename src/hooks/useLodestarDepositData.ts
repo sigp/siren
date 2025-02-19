@@ -4,6 +4,7 @@ import { DOMAIN_DEPOSIT } from '@lodestar/params'
 import { DomainType, Domain, Root, Version } from '@lodestar/types'
 import { ssz } from '@lodestar/types/phase0'
 import { getAddress, getBytes } from 'ethers'
+import { WalletPrefix } from '../constants/enums'
 import useChainSafeKeygen from './useChainSafeKeygen'
 
 interface DepositDataJson {
@@ -29,6 +30,7 @@ export type useLodestarDepositDataReturnType = {
     index: number,
     withdrawalAddress: string,
     amount: number,
+    prefix: WalletPrefix,
   ) => Promise<DepositData>
   generateKeystore: (
     mnemonic: string,
@@ -94,7 +96,10 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     }
   }
 
-  const generateWithdrawalCredentials = (withdrawalAddress: string): Uint8Array => {
+  const generateWithdrawalCredentials = (
+    withdrawalAddress: string,
+    prefix: WalletPrefix,
+  ): Uint8Array => {
     const checkSumAddress = getAddress(withdrawalAddress)
     const addressBytes = fromHexString(checkSumAddress.replace('0x', ''))
 
@@ -104,7 +109,7 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
 
     const withdrawalCredentials = new Uint8Array(32)
 
-    withdrawalCredentials[0] = 0x01
+    withdrawalCredentials[0] = prefix
 
     withdrawalCredentials.set(addressBytes, 12)
 
@@ -116,11 +121,12 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     index: number,
     withdrawalAddress: string,
     amount: number,
+    prefix = WalletPrefix.ONE,
   ): Promise<DepositData> => {
     try {
       const { secretKey, publicKey } = await deriveValidatorKeys(mnemonic, index)
 
-      const withdrawalCredentials = generateWithdrawalCredentials(withdrawalAddress)
+      const withdrawalCredentials = generateWithdrawalCredentials(withdrawalAddress, prefix)
 
       const depositMessage = { pubkey: publicKey.toBytes(), withdrawalCredentials, amount }
 
