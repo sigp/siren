@@ -1,6 +1,14 @@
 {
-  "plugins": ["@typescript-eslint", "import", "unused-imports"],
-  "extends": ["next/core-web-vitals"],
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "unused-imports",
+    "prettier"
+  ],
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:prettier/recommended"
+  ],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
     "import/order": [
@@ -24,6 +32,18 @@
         "argsIgnorePattern": "^_"
       }
     ],
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": [
+      "error",
+      {
+        "semi": false,
+        "tabWidth": 2,
+        "printWidth": 100,
+        "singleQuote": true,
+        "trailingComma": "all",
+        "jsxSingleQuote": true,
+        "bracketSpacing": true
+      }
+    ]
   }
 }
