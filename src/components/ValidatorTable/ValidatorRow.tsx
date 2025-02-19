@@ -1,6 +1,5 @@
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { FC, useCallback, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState, MouseEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
@@ -25,6 +24,7 @@ import StatusIcon from '../StatusIcon/StatusIcon'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
+import WithdrawalAddressText from "../WithdrawalAddress/WithdrawalAddressText";
 import { TableView } from './ValidatorTable'
 
 export interface ValidatorRowProps {
@@ -77,10 +77,19 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     router.push(editHref)
   }
 
-  const viewDetail = () => {
-    setActiveValidatorId(index)
-    setValDetail(true)
-    router.push(detailHref)
+  const viewDetail = (e: MouseEvent<HTMLTableRowElement>) => {
+    if (e.target instanceof Element && e.target.closest('button')) {
+      return
+    }
+
+    if (view === 'full') {
+      setActiveValidatorId(index)
+      setValDetail(true)
+      router.push(detailHref)
+      return
+    }
+
+    window.location.href = detailHref
   }
 
   const renderAvatar = useCallback(() => {
@@ -101,42 +110,18 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   }, [isConversionRequired, isValidatorProcessing, pubKey])
 
   return (
-    <tr className='w-full border-t-style500 h-12'>
+    <tr onClick={viewDetail} className='w-full cursor-pointer border-t-style500 h-12'>
       <th className={validatorIconClass}>
-        {!hasIndex ? (
-          <div className='w-full flex justify-center'>{renderAvatar()}</div>
-        ) : view === 'full' ? (
-          <div onClick={viewDetail} className='w-full flex justify-center'>
-            {renderAvatar()}
-          </div>
-        ) : (
-          <Link href={detailHref}>
-            <div className='w-full flex justify-center'>{renderAvatar()}</div>
-          </Link>
-        )}
+        <div className='w-full flex justify-center'>{renderAvatar()}</div>
       </th>
       <th className='w-28 cursor-pointer'>
-        {!hasIndex ? (
-          <Typography className='text-left' color='text-dark500' type='text-caption2'>
-            ---
-          </Typography>
-        ) : view === 'full' ? (
-          <div onClick={viewDetail}>
-            <Typography className='text-left' color='text-dark500' type='text-caption2'>
-              {validatorName}
-            </Typography>
-          </div>
-        ) : (
-          <Link href={detailHref}>
-            <Typography className='text-left' color='text-dark500' type='text-caption2'>
-              {validatorName}
-            </Typography>
-          </Link>
-        )}
+        <Typography className='text-left' color='text-dark500' type='text-caption2'>
+          {validatorName}
+        </Typography>
       </th>
       <th className='border-r-style500 px-2'>
         <Typography color='text-dark500' type='text-caption1'>
-          {hasIndex ? index : '---'}
+          {index}
         </Typography>
       </th>
       <th className='px-2'>
@@ -161,23 +146,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           {rewards?.toFixed(4)}
         </Typography>
       </th>
-      <th className='px-1 opacity-20'>
-        <Typography color='text-dark500' type='text-caption1' className='whitespace-nowrap'>
-          {/* {processed} / {missed} */}-
-        </Typography>
-      </th>
-      <th className='px-1 opacity-20'>
-        <Typography color='text-dark500' type='text-caption1'>
-          {/* {attested} */}-
-        </Typography>
-      </th>
-      <th className='px-1 opacity-20'>
-        <Typography color='text-dark500' type='text-caption1'>
-          {/* {aggregated} */}-
-        </Typography>
+      <th className='px-1'>
+        <WithdrawalAddressText tooltipClasses="mx-auto" color='text-dark500' type='text-caption1' className='whitespace-nowrap' withdrawalAddress={withdrawalAddress} id={pubKey}/>
       </th>
       <th className='border-r-style500 px-4'>
-        <div className='flex items-center justify-between flex-wrap w-full max-w-tiny'>
+        <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>
           <Typography color='text-dark500' type='text-tiny' className='uppercase'>
             {t(`validatorStatus.${status}`)}
           </Typography>
@@ -228,27 +201,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='px-2'>
         <div className='w-full flex justify-center'>
-          {view === 'full' ? (
-            <div onClick={hasIndex ? viewDetail : undefined} className={validatorDetailBtnClass}>
-              <div className='w-4 h-4'>
-                <ValidatorLogo className='text-primary' />
-              </div>
+          <div className={validatorDetailBtnClass}>
+            <div className='w-4 h-4'>
+              <ValidatorLogo className='text-primary' />
             </div>
-          ) : hasIndex ? (
-            <Link href={detailHref}>
-              <div className='cursor-pointer w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
-                <div className='w-4 h-4'>
-                  <ValidatorLogo className='text-primary' />
-                </div>
-              </div>
-            </Link>
-          ) : (
-            <div className='cursor-pointer opacity-30 pointer-events-none w-8 h-8 border border-primary100 dark:border-primary bg-dark25 dark:bg-dark750 rounded-full flex items-center justify-center'>
-              <div className='w-4 h-4'>
-                <ValidatorLogo className='text-primary' />
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </th>
     </tr>

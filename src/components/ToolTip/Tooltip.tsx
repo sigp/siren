@@ -35,7 +35,7 @@ const Tooltip: FC<TooltipProps> = ({
   return (
     <div
       data-tooltip-id={id}
-      className={`${className} w-fit ${cursor}`}
+      className={`${className} ${cursor}`}
       data-tooltip-content={text}
     >
       {children}

@@ -6,7 +6,6 @@ import SatelliteLogo from '../../assets/images/satellite.svg'
 import ValidatorLogo from '../../assets/images/validators.svg'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import { ValidatorInfo } from '../../types/validator'
-import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import Spinner from '../Spinner/Spinner'
 import Typography from '../Typography/Typography'
 import ValidatorInfoCard from '../ValidatorInfoCard/ValidatorInfoCard'
@@ -119,37 +118,14 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                     </Typography>
                   </th>
                   <th>
-                    <DisabledTooltip>
-                      <div className='w-full flex justify-center'>
-                        <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                          <Typography color='text-dark500' type='text-tiny'>
-                            PR
-                          </Typography>
-                        </div>
-                      </div>
-                    </DisabledTooltip>
-                  </th>
-                  <th>
-                    <DisabledTooltip>
-                      <div className='w-full flex justify-center'>
-                        <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                          <Typography color='text-dark500' type='text-tiny'>
-                            AT
-                          </Typography>
-                        </div>
-                      </div>
-                    </DisabledTooltip>
-                  </th>
-                  <th>
-                    <DisabledTooltip>
-                      <div className='w-full flex justify-center'>
-                        <div className='w-5 h-5 border-style500 rounded-full flex items-center justify-center'>
-                          <Typography color='text-dark500' type='text-tiny'>
-                            AG
-                          </Typography>
-                        </div>
-                      </div>
-                    </DisabledTooltip>
+                    <Typography
+                      color='text-dark500'
+                      type='text-tiny'
+                      isUpperCase
+                      className='text-center'
+                    >
+                      {t('withdrawalAddress')}
+                    </Typography>
                   </th>
                   <th className={`${view === 'partial' ? 'border-r-style500' : ''} pl-2`}>
                     <Typography

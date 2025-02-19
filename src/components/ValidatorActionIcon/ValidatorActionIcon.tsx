@@ -35,13 +35,13 @@ const ValidatorActionIcon: FC<ValidatorActionIconProps> = ({
   )
 
   return (
-    <div onClick={onClick} className={classes}>
+    <button onClick={onClick} className={classes}>
       {isLoading ? (
         <LoadingDots size={1} darkColor='dark:bg-primary200' />
       ) : (
         <i className={`${icon} ${color} ${size}`} />
       )}
-    </div>
+    </button>
   )
 }
 
