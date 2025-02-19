@@ -542,7 +542,8 @@
         "lowFees": "Low Fees and consolidation queue. Please ensure you are using the correct network when making requests."
       }
     },
-    "enableElectra": "Enable 0x02 Credentials",
+    "enableElectra": "Enable 0x02",
+    "0x02CredTooltip": "Enabling 0x02 withdrawal credentials allows your validator to hold up to 2048 ETH.",
     "effectiveBalanceError": "Effective Balance cannot be lower than 32 or higher than 2048 ETH."
   },
   "alert": {

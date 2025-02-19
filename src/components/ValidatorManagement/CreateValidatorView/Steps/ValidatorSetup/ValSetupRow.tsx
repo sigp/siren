@@ -8,6 +8,7 @@ import { ValidatorCandidate } from '../../../../../types'
 import IconButton, { IconButtonTypes } from '../../../../IconButton/IconButton'
 import Input from '../../../../Input/Input'
 import Toggle from '../../../../Toggle/Toggle'
+import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 import ValidatorCandidateRow from '../../../../ValidatorCandidateRow/ValidatorCandidateRow'
 
@@ -60,8 +61,20 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
       <div className={containerClasses}>
         {isEnabled ? (
           <div className='flex items-center pr-4 justify-between flex-1'>
-            <div className='flex space-x-2'>
-              <Typography type='text-tiny'>{t('validatorManagement.enableElectra')}</Typography>
+            <div className='flex items-center space-x-2'>
+              <Tooltip
+                style={{ fontSize: '12px' }}
+                place='top-start'
+                maxWidth={200}
+                positionStrategy='fixed'
+                id={`${index}-electraInfo`}
+                text={t('validatorManagement.0x02CredTooltip')}
+              >
+                <div className='flex items-center space-x-1'>
+                  <Typography type='text-tiny'>{t('validatorManagement.enableElectra')}</Typography>
+                  <i className='bi text-caption1 bi-info-circle dark:text-white text-dark900' />
+                </div>
+              </Tooltip>
               <Toggle
                 height={14}
                 width={34}
