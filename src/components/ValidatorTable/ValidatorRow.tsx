@@ -24,7 +24,7 @@ import StatusIcon from '../StatusIcon/StatusIcon'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 import ValidatorActionIcon from '../ValidatorActionIcon/ValidatorActionIcon'
-import WithdrawalAddressText from "../WithdrawalAddress/WithdrawalAddressText";
+import WithdrawalAddressText from '../WithdrawalAddress/WithdrawalAddressText'
 import { TableView } from './ValidatorTable'
 
 export interface ValidatorRowProps {
@@ -147,7 +147,14 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         </Typography>
       </th>
       <th className='px-1'>
-        <WithdrawalAddressText tooltipClasses="mx-auto" color='text-dark500' type='text-caption1' className='whitespace-nowrap' withdrawalAddress={withdrawalAddress} id={pubKey}/>
+        <WithdrawalAddressText
+          tooltipClasses='mx-auto'
+          color='text-dark500'
+          type='text-caption1'
+          className='whitespace-nowrap'
+          withdrawalAddress={withdrawalAddress}
+          id={pubKey}
+        />
       </th>
       <th className='border-r-style500 px-4'>
         <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>

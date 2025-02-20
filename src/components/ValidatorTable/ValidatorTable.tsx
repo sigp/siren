@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Lighthouse from '../../assets/images/lightHouse.svg'
 import SatelliteLogo from '../../assets/images/satellite.svg'
@@ -31,27 +31,33 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
   view = 'partial',
   validators,
   className,
-  scrollPercentage,
+  scrollPercentage = 0,
   isPaginated,
 }) => {
   const { t } = useTranslation()
   const initialViewCount = 15
+  const scrollThreshold = 90
   const totalPages = Math.ceil(validators.length / initialViewCount)
 
   const [pagination, setPage] = useState(1)
 
+  const prevScrollPercentage = useRef(0)
   const paginatedValidators = useMemo<ValidatorInfo[]>(() => {
     return isPaginated ? validators.slice(0, initialViewCount * pagination) : validators
   }, [validators, isPaginated, pagination])
 
   useEffect(() => {
-    if (scrollPercentage && isPaginated && scrollPercentage === 100) {
-      setPage((prev) => {
-        const nextPage = prev + 1
-        return nextPage > totalPages ? prev : nextPage
-      })
+    if (
+      isPaginated &&
+      scrollPercentage > scrollThreshold &&
+      prevScrollPercentage.current <= scrollThreshold &&
+      pagination < totalPages
+    ) {
+      setPage((prev) => prev + 1)
+      console.log('triggered')
     }
-  }, [scrollPercentage, isPaginated, totalPages])
+    prevScrollPercentage.current = scrollPercentage
+  }, [scrollPercentage, isPaginated, totalPages, pagination])
 
   const isTablet = useMediaQuery('(max-width: 768px)')
 
@@ -199,7 +205,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
             </table>
           )}
         </div>
-        {scrollPercentage && scrollPercentage >= 98 && totalPages !== pagination ? (
+        {scrollPercentage >= scrollThreshold && totalPages !== pagination ? (
           <div className='w-full mt-12 h-0 relative'>
             <motion.div
               className='opacity-20 w-fit absolute left-1/2 -translate-x-1/2'

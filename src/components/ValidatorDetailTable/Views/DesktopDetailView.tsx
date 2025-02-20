@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import Typography from '../../Typography/Typography'
-import WithdrawalAddressText from "../../WithdrawalAddress/WithdrawalAddressText";
+import WithdrawalAddressText from '../../WithdrawalAddress/WithdrawalAddressText'
 import { TableProps } from '../ValidatorDetailTable'
 
 const DesktopDetailView: FC<TableProps> = ({
@@ -70,7 +70,13 @@ const DesktopDetailView: FC<TableProps> = ({
           </div>
         ))}
         <div className='w-44 py-4 px-6'>
-          <WithdrawalAddressText color='text-darkFull' darkMode='dark:text-dark400' type='text-caption1' withdrawalAddress={withdrawalAddress} id="withdrawal-address"/>
+          <WithdrawalAddressText
+            color='text-darkFull'
+            darkMode='dark:text-dark400'
+            type='text-caption1'
+            withdrawalAddress={withdrawalAddress}
+            id='withdrawal-address'
+          />
         </div>
         <div className='p-4'>
           <Typography darkMode={`dark:${aprColor}`} color={aprColor} type='text-caption1'>
