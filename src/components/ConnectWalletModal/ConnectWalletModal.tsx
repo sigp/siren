@@ -74,9 +74,7 @@ const ConnectWalletModal = () => {
             ) : (
               <div className='p-2 space-y-4'>
                 <Typography>{t('noConnectors.title')}</Typography>
-                <Typography type='text-caption'>
-                  {t('noConnectors.text')}
-                </Typography>
+                <Typography type='text-caption'>{t('noConnectors.text')}</Typography>
               </div>
             )
           ) : null}

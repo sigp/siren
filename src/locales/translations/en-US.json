@@ -77,6 +77,7 @@
   "node": "Node",
   "viewDisclosures": "view important disclosures",
   "learnMore": "Learn More",
+  "withdrawalAddress": "Withdrawal Address",
   "tooManyValidatorWarning": "It is not recommended to add this many validators at once. You can more when finished with the ones below.",
   "fetchMoreLogAlerts": "Load Older Log Alerts",
   "disclosure": {
