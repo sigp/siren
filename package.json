@@ -28,6 +28,7 @@
     "autoprefixer": "^10.4.19",
     "axios": "^0.27.2",
     "chart.js": "^4.2.0",
+    "clsx": "^2.1.1",
     "crypto-js": "^4.1.1",
     "dotenv": "^16.4.5",
     "eslint-plugin-prettier": "^5.2.3",
