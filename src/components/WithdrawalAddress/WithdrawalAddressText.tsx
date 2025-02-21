@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import {CSSProperties, FC} from 'react'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography, { TypographyProps } from '../Typography/Typography'
@@ -7,12 +7,14 @@ export interface WithdrawalAddressTextProps extends Omit<TypographyProps, 'child
   withdrawalAddress: string | undefined
   id: string
   tooltipClasses?: string
+  style?: CSSProperties
 }
 
 const WithdrawalAddressText: FC<WithdrawalAddressTextProps> = ({
   withdrawalAddress,
   tooltipClasses,
   id,
+  style,
   ...props
 }) => {
   return withdrawalAddress ? (
@@ -21,6 +23,7 @@ const WithdrawalAddressText: FC<WithdrawalAddressTextProps> = ({
       positionStrategy='fixed'
       place='top-start'
       id={`${id}-withdrawalCreds`}
+      style={style}
       text={formatEthAddress(withdrawalAddress, 4, 40)}
     >
       <Typography {...props}>{formatEthAddress(withdrawalAddress, 4, 6)}</Typography>

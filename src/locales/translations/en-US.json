@@ -37,6 +37,7 @@
     "title": "No Wallet Connections Found."
   },
   "endSession": "End Session",
+  "credentials": "Credentials",
   "year": "year",
   "month": "month",
   "week": "week",
@@ -143,7 +144,7 @@
   "total": "Total",
   "validators": "Validators",
   "selectAll": "Select All",
-  "incorrectWallet": "Incorrect Wallet Connected",
+  "incorrectWallet": "Incorrect Wallet",
   "primaryValidator": "Primary Validator",
   "eligibleValidators": "Eligible Validators",
   "consolidatingValidators": "Consolidating Validators",
@@ -515,6 +516,8 @@
       "pleaseReview": "Please review the details below carefully before making the deposit."
     },
     "consolidateView": {
+      "selfConsolidate": "Self Consolidate",
+      "selfConsolidateHelperText": "Your target validator is eligible for self consolidation. This will change your target withdrawal credentials to 0x02 and allows you to have a single validator with a balance of up to 2048 ETH.",
       "steps": {
         "selectTarget": "Select Target",
         "selectSources": "Select Sources",
@@ -522,7 +525,7 @@
       },
       "selectTarget": {
         "title": "Choose your target validator",
-        "text": "Select a primary validator to receive funds from consolidate validators."
+        "text": "Below is a list of all validators eligible for consolidation. Select a primary validator to receive funds from consolidate validators."
       },
       "selectSources": {
         "title": "Select validators to consolidate",
