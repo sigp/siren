@@ -31,7 +31,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const { t } = useTranslation()
   const beaconSpec = useRecoilValue(beaconNodeSpec)
 
-  const { DEPOSIT_NETWORK_ID, BASE_REWARD_FACTOR } = beaconSpec || {}
+  const { DEPOSIT_NETWORK_ID, BASE_REWARD_FACTOR, MIN_ACTIVATION_BALANCE } = beaconSpec || {}
 
   const baseStepLocale = 'validatorManagement.createValidator.steps'
   const steps = [
@@ -51,6 +51,8 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
   const { active_ongoing } = validatorNetworkData
   const totalCandidates = candidates.length
+
+  const requiredStake = candidates.reduce((prev, current) => prev + current.effectiveBalance, 0n)
 
   const calculatedRewards = useMemo<ValidatorRewardEstimate>(() => {
     const totalActiveBalance = active_ongoing * EFFECTIVE_BALANCE
@@ -88,17 +90,22 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
         {({ incrementStep, decrementStep, step }) => (
           <>
             <CreateValidatorStep
+              requiredStake={requiredStake}
               rewardEstimate={calculatedRewards}
               candidateCount={totalCandidates}
             >
-              <ValidatorSetup
-                onNextStep={incrementStep}
-                onValidatorChange={setNewValidators}
-                candidates={candidates}
-              />
+              {MIN_ACTIVATION_BALANCE && (
+                <ValidatorSetup
+                  onNextStep={incrementStep}
+                  onValidatorChange={setNewValidators}
+                  minActivationBalance={MIN_ACTIVATION_BALANCE}
+                  candidates={candidates}
+                />
+              )}
             </CreateValidatorStep>
 
             <CreateValidatorStep
+              requiredStake={requiredStake}
               rewardEstimate={calculatedRewards}
               candidateCount={totalCandidates}
             >
@@ -113,6 +120,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
             {DEPOSIT_NETWORK_ID && (
               <CreateValidatorStep
+                requiredStake={requiredStake}
                 rewardEstimate={calculatedRewards}
                 candidateCount={totalCandidates}
               >
@@ -129,6 +137,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
             )}
 
             <CreateValidatorStep
+              requiredStake={requiredStake}
               rewardEstimate={calculatedRewards}
               candidateCount={totalCandidates}
             >
@@ -146,6 +155,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
             </CreateValidatorStep>
 
             <CreateValidatorStep
+              requiredStake={requiredStake}
               rewardEstimate={calculatedRewards}
               candidateCount={totalCandidates}
             >

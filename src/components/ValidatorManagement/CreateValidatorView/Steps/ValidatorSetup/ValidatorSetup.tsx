@@ -1,7 +1,10 @@
+import { parseEther, parseUnits } from 'ethers'
 import { ChangeEvent, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import displayToast from '../../../../../../utilities/displayToast'
+import { WalletPrefix } from '../../../../../constants/enums'
+import useElectraStatus from '../../../../../hooks/useElectraStatus'
 import { ToastType, ValidatorCandidate } from '../../../../../types'
 import Typography from '../../../../Typography/Typography'
 import StepOptions, { StepOptionsProps } from '../../StepOptions'
@@ -11,21 +14,39 @@ export interface ValidatorSetupProps
   extends Pick<ValSetupTableProps, 'candidates'>,
     Pick<StepOptionsProps, 'onNextStep'> {
   onValidatorChange: (vals: ValidatorCandidate[]) => void
+  minActivationBalance: bigint
 }
 
-const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange, onNextStep }) => {
+const ValidatorSetup: FC<ValidatorSetupProps> = ({
+  candidates,
+  onValidatorChange,
+  minActivationBalance,
+  onNextStep,
+}) => {
   const { t } = useTranslation()
   const getRandomId = () => uuidv4().toString()
+
+  const { isEnabled } = useElectraStatus()
+  const baseDefaultValidator = {
+    withdrawalPrefix: isEnabled ? WalletPrefix.TWO : WalletPrefix.ONE,
+    effectiveBalance: parseUnits(minActivationBalance.toString(), 'gwei'),
+    index: undefined,
+    keyStorePassword: undefined,
+    name: undefined,
+    withdrawalCredentials: undefined,
+  }
+
+  const isValidBalances = candidates.every(
+    ({ effectiveBalance }) =>
+      effectiveBalance >= parseEther('32') && effectiveBalance <= parseEther('2048'),
+  )
 
   const addNewValidator = () =>
     onValidatorChange([
       ...candidates,
       {
         id: getRandomId(),
-        index: undefined,
-        keyStorePassword: undefined,
-        name: undefined,
-        withdrawalCredentials: undefined,
+        ...baseDefaultValidator,
       },
     ])
 
@@ -55,10 +76,7 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange
     onValidatorChange(
       Array.from({ length: Number(e.target.value) }, () => ({
         id: getRandomId(),
-        index: undefined,
-        keyStorePassword: undefined,
-        name: undefined,
-        withdrawalCredentials: undefined,
+        ...baseDefaultValidator,
       })),
     )
   }
@@ -75,13 +93,16 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({ candidates, onValidatorChange
       </div>
       <ValSetupTable
         candidates={candidates}
+        minActivationBalance={minActivationBalance}
         onAddNewCandidate={addNewValidator}
         onRemoveCandidate={removeValidatorById}
         onUpdateCandidate={updateValidator}
         onQuickSetCandidates={quickSetValidators}
         onRemoveLastCandidate={removeLastValidator}
       />
-      {candidates.length > 0 ? <StepOptions onNextStep={onNextStep} /> : null}
+      {candidates.length > 0 ? (
+        <StepOptions isDisabledNext={!isValidBalances} onNextStep={onNextStep} />
+      ) : null}
     </div>
   )
 }

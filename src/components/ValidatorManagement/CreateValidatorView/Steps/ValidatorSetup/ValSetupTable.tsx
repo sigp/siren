@@ -13,6 +13,7 @@ export interface ValSetupTableProps
   candidates: ValidatorCandidate[]
   onAddNewCandidate: () => void
   onRemoveLastCandidate: () => void
+  minActivationBalance: bigint
   onQuickSetCandidates: (e: ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -24,6 +25,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
     onUpdateCandidate,
     onQuickSetCandidates,
     onRemoveCandidate,
+    minActivationBalance,
   } = props
   const { t } = useTranslation()
   const count = candidates.length
@@ -50,7 +52,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
   }, [count])
 
   return (
-    <div className='w-full lg:w-[75%]'>
+    <div className='w-full lg:w-[80%]'>
       <div className='w-full border-style flex justify-between'>
         <div className='lg:flex-1 hidden lg:flex space-x-4 items-center px-4'>
           <div className='w-8 h-8 flex items-center justify-center'>
@@ -108,6 +110,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
               <ValSetupRow
                 key={index}
                 index={index}
+                minActivationBalance={minActivationBalance}
                 candidate={candidate}
                 onRemoveCandidate={onRemoveCandidate}
                 onUpdateCandidate={onUpdateCandidate}

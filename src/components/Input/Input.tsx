@@ -25,7 +25,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   uiMode?: UiMode | undefined
   isDisableToggle?: boolean
   isDisablePaste?: boolean
-  inputStyle?: 'primary' | 'secondary' | 'noBorder'
+  inputStyle?: 'primary' | 'secondary' | 'noBorder' | 'basic'
   icon?: string
   isAutoFocus?: boolean
 }
@@ -70,6 +70,8 @@ const Input: FC<InputProps> = ({
         return 'text-dark500 p-2 bg-transparent'
       case 'secondary':
         return 'text-dark500 border-style p-2 bg-transparent'
+      case 'basic':
+        return `text-dark900 dark:text-dark300 disabled:opacity-25 font-openSauce text-caption1 px-2 py-1 outline-none bg-transparent ${error ? 'border border-error' : 'border-style'} dark:bg-dark600_20 rounded-lg`
       default:
         return `${
           uiMode === UiMode.LIGHT
