@@ -1,5 +1,6 @@
-import { FC, useMemo, useState } from 'react'
+import {FC, useCallback, useMemo, useState} from 'react'
 import { useTranslation } from 'react-i18next'
+import addClassString from "../../../../../../utilities/addClassString";
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Typography from '../../../../Typography/Typography'
@@ -24,11 +25,17 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
 }) => {
   const { t } = useTranslation()
   const [isSelectAll, setIsSelectAll] = useState(false)
+  const [isSelfConsolidate, setIsSelfConsolidate] = useState(false)
   const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>([])
+  const canSelfConsolidate = targetValidator?.withdrawalAddress?.includes('0x01')
 
   const availableSourceValidators = useMemo<ValidatorInfo[]>(() => {
     return validators.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
   }, [validators, targetValidator])
+
+  const availableSelectedValidators = useMemo<ValidatorInfo[]>(() => {
+    return selectedSources.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
+  }, [selectedSources, targetValidator])
 
   const isAll = useMemo(() => {
     return isSelectAll && selectedSources.length === availableSourceValidators.length
@@ -56,17 +63,27 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
     setIsSelectAll(!isAll)
   }
 
-  const removeSource = (pubKey: string) =>
-    setSelectedSources((prev) => prev.filter((item) => item.pubKey !== pubKey))
+  const removeSource = useCallback((pubKey: string) => setSelectedSources((prev) => prev.filter((item) => item.pubKey !== pubKey)), [])
 
   const stepBack = () => {
     setSelectedSources([])
     onBack()
   }
 
+  const toggleSelfConsolidation = () => {
+   setIsSelfConsolidate(prev => !prev)
+    if(targetValidator) {
+      setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
+    }
+  }
+
+  const eligibleValidatorListClasses = addClassString('flex flex-col border-style', [
+    isSelfConsolidate && 'opacity-20 pointer-events-none'
+  ])
+
   return (
     <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row pt-4'>
-      <div className='flex-1 max-w-lg lg:max-w-none order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'>
+      <div className='flex-1 @1600:max-w-2xl order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'>
         <div className='space-y-2'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectSources.title')}
@@ -75,7 +92,21 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             {t('validatorManagement.consolidateView.selectSources.text')}
           </Typography>
         </div>
-        <div className='flex flex-col border-style'>
+        {canSelfConsolidate && (
+          <div className="border-style bg-primary100 p-4 flex space-x-4">
+            <CheckBox
+              id='self-consolidate'
+              checked={isSelfConsolidate}
+              checkboxBorderClasses="border border-gray-900 border-style500 dark:border-gray-400"
+              onChange={toggleSelfConsolidation}
+            />
+            <div>
+              <Typography isBold type="text-caption1">{t('validatorManagement.consolidateView.selfConsolidate')}</Typography>
+              <Typography type="text-caption1">{t('validatorManagement.consolidateView.selfConsolidateHelperText')}</Typography>
+            </div>
+          </div>
+        )}
+        <div className={eligibleValidatorListClasses}>
           <div className='px-4 py-3 border-b-style flex justify-between'>
             <div className='flex items-center space-x-2'>
               <i className='bi bi-list-ul text-black dark:text-dark500 text-xl' />
@@ -89,7 +120,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
               onChange={toggleIsSelectAll}
             />
           </div>
-          <div className='h-full max-h-[348px] overflow-scroll'>
+          <div className={`h-full overflow-scroll ${canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]'}`}>
             {availableSourceValidators.map((source) => (
               <SelectSourceRow
                 key={source.pubKey}
@@ -103,12 +134,12 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
           </div>
         </div>
       </div>
-      <div className='w-48 h-full hidden lg:flex order-2 flex-col items-center justify-center'>
+      <div className='w-16 @1440:w-32 @1540:w-48 h-full hidden lg:flex order-2 flex-col items-center justify-center'>
         <div className='w-10 flex items-center justify-center rounded h-10 bg-primary_10'>
           <i className='bi-arrow-right font-bold text-primary' />
         </div>
       </div>
-      <div className='flex-1 max-w-lg lg:max-w-none order-1 lg:order-3 max-w-2xl space-y-6'>
+      <div className='flex-1 order-1 lg:order-3 lg:max-w-xl space-y-6'>
         <div className='space-y-2 max-w-lg'>
           <Typography type='text-subtitle2'>{t('primaryValidator')}</Typography>
           <Typography type='text-caption'>
@@ -117,7 +148,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
         </div>
         {targetValidator ? (
           <SelectionDisplay
-            selectedSources={selectedSources}
+            selectedSources={availableSelectedValidators}
             onRemoveSource={removeSource}
             targetValidator={targetValidator}
           />

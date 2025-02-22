@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import {FC, useMemo} from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -20,10 +20,20 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   onNext,
 }) => {
   const { t } = useTranslation()
+  const renderedRows = useMemo(() => {
+    return validators.map((validator) => (
+        <SelectTargetRow
+          isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
+          key={validator.pubKey}
+          onSelect={onSelect}
+          validator={validator}
+        />
+      ))
+  }, [validators, targetValidator, onSelect])
 
   return (
     <div className='w-full flex flex-col items-center pt-6'>
-      <div className='max-w-[520px] flex flex-col space-y-6 w-full'>
+      <div className='max-w-[620px] flex flex-col space-y-6 w-full'>
         <div className='space-y-1'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectTarget.title')}
@@ -41,14 +51,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
               <Typography>{t('validators')}</Typography>
             </div>
             <div className='h-full max-h-[448px] overflow-scroll'>
-              {validators.map((validator) => (
-                <SelectTargetRow
-                  isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
-                  key={validator.pubKey}
-                  onSelect={onSelect}
-                  validator={validator}
-                />
-              ))}
+              {renderedRows}
             </div>
           </div>
           <StepOptions onNextStep={onNext} isDisabledNext={!targetValidator} />

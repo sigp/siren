@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useState } from 'react'
+import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
@@ -8,7 +8,6 @@ import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
 import { ConsolidationTx, TxStatus } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
-import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
 import RangeSliderInput from '../../../../RangeSliderInput/RangeSliderInput'
 import ResolvedTransactionStatus from '../../../../ResolvedTransactionStatus/ResolvedTransactionStatus'
 import Tooltip from '../../../../ToolTip/Tooltip'
@@ -77,13 +76,57 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
     }
   }, [])
 
+  const renderedRequests = useMemo(() => !!targetValidator ? sourceValidators.map((validator) => {
+    const { pubKey: valPubKey, index } = validator
+    const { pubKey: targetPubKey } = targetValidator
+    const data = consolidationRequests.find((request) => request.index === index)
+    const buffer = feeBuffer ? BigInt(feeBuffer) : 0n
+    return (
+      <ConsolidationRequest
+        key={valPubKey}
+        requestData={data}
+        onSubmitRequest={setConsolidations}
+        feeBuffer={buffer}
+        chainId={chainId}
+        targetPubKey={targetPubKey}
+        validator={validator}
+        consolidationQueLength={consolidationQueLength || 0n}
+      />
+    )
+  }) : null, [targetValidator, chainId, sourceValidators, consolidationRequests, consolidationQueLength])
+
+  const renderedTxStatuses = useMemo(() => {
+    return consolidationRequests.map(({ txHash, index }) => (
+      <ResolvedTransactionStatus
+        key={txHash}
+        onRetryTx={retryTransaction}
+        onStatusUpdate={updateConsolidationResults}
+        id={index}
+        networkId={chainId}
+        successText={t('validatorManagement.consolidateView.signAndSubmit.successTxText')}
+        pendingText={t('validatorManagement.consolidateView.signAndSubmit.pendingTxText')}
+        errorText={t('validatorManagement.consolidateView.signAndSubmit.errorTxText')}
+        txHash={txHash}
+        title={t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest')}
+      />
+    ))
+  }, [consolidationRequests, retryTransaction, updateConsolidationResults, chainId])
+
   return (
     <div className='w-full h-full flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 py-4'>
-      <div className='flex-1 max-w-2xl flex flex-col'>
+      <div className="lg:hidden">
         <Typography type='text-subtitle2'>
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
-        <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength as any} />
+        <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength || 0n} />
+      </div>
+      <div className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'>
+        <div className="hidden lg:block">
+          <Typography type='text-subtitle2'>
+            {t('validatorManagement.consolidateView.signAndSubmit.title')}
+          </Typography>
+          <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength || 0n} />
+        </div>
         <div className='w-full mt-4 flex flex-col'>
           {targetValidator ? (
             <>
@@ -145,28 +188,14 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   )}
                 </div>
               </div>
-              <div className='h-full max-h-[230px] border-b-style overflow-scroll'>
-                {!!targetValidator &&
-                  sourceValidators.map((validator) => (
-                    <ConsolidationRequest
-                      key={validator.pubKey}
-                      requestData={consolidationRequests.find(
-                        (request) => request.index === validator.index,
-                      )}
-                      onSubmitRequest={setConsolidations}
-                      feeBuffer={feeBuffer ? BigInt(feeBuffer) : 0n}
-                      chainId={chainId}
-                      targetPubKey={targetValidator.pubKey}
-                      validator={validator}
-                      consolidationQueLength={consolidationQueLength as any}
-                    />
-                  ))}
+              <div className='h-full lg:max-h-[230px] border-b-style overflow-scroll'>
+                {renderedRequests}
               </div>
             </>
           ) : null}
         </div>
       </div>
-      <div className='flex-1 max-w-2xl lg:max-w-xl flex space-y-4 flex-col lg:px-4'>
+      <div className='flex-1 order-1 lg:order-2 lg:max-w-sm xl:max-w-xl flex space-y-4 flex-col lg:px-4'>
         <div className='flex space-x-4'>
           <Typography>
             {t('validatorManagement.consolidateView.signAndSubmit.transactionStatus')}
@@ -184,22 +213,9 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
           </div>
         </div>
         {consolidationRequests.length ? (
-          <FlexedOverflow className='w-full space-y-2'>
-            {consolidationRequests.map(({ txHash, index }) => (
-              <ResolvedTransactionStatus
-                key={txHash}
-                onRetryTx={retryTransaction}
-                onStatusUpdate={updateConsolidationResults}
-                id={index}
-                networkId={chainId}
-                successText={t('validatorManagement.consolidateView.signAndSubmit.successTxText')}
-                pendingText={t('validatorManagement.consolidateView.signAndSubmit.pendingTxText')}
-                errorText={t('validatorManagement.consolidateView.signAndSubmit.errorTxText')}
-                txHash={txHash}
-                title={t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest')}
-              />
-            ))}
-          </FlexedOverflow>
+          <div className='w-full lg:max-h-[504px] overflow-scroll space-y-2'>
+            {renderedTxStatuses}
+          </div>
         ) : (
           <div className='w-full h-full flex-1'>
             <div className='w-full h-full border-style flex items-center justify-center'>

@@ -1,10 +1,11 @@
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
+import {TxHash} from "../../../../../types";
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 
 export interface ConsolidationQueueStatusProps {
-  queueLength?: bigint | undefined
+  queueLength?: bigint | TxHash
   className?: string
 }
 
@@ -15,7 +16,7 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
   const { t } = useTranslation()
   const classes = addClassString('w-full', [className])
 
-  const getText = (queue: bigint) => {
+  const getText = (queue: bigint | TxHash) => {
     const baseLocale = 'validatorManagement.consolidateView.signAndSubmit'
     const length = Number(queue)
     switch (true) {
@@ -28,7 +29,7 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
     }
   }
 
-  const getStatus = (queue: bigint) => {
+  const getStatus = (queue: bigint | TxHash) => {
     const length = Number(queue)
     switch (true) {
       case length > 50:
