@@ -2,7 +2,7 @@ import { dataSlice, getAddress } from 'ethers'
 import React, { FC } from 'react'
 import addClassString from '../../../../../../utilities/addClassString'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
-import { ConsolidationTx } from '../../../../../types'
+import {ConsolidationTx, TxHash} from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
 import Spinner from '../../../../Spinner/Spinner'
@@ -13,7 +13,7 @@ export interface ConsolidationRequestProps {
   validator: ValidatorInfo
   chainId: number
   targetPubKey: string
-  consolidationQueLength: bigint | undefined
+  consolidationQueLength: bigint | TxHash
   feeBuffer: bigint
   onSubmitRequest: (request: ConsolidationTx) => void
   requestData: ConsolidationTx | undefined
@@ -39,7 +39,7 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
 
   return (
     <div className='flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:items-center w-full border-t-0 border-style px-2 py-4'>
-      <div className='flex items-center md:space-x-4'>
+      <div className='flex items-center @425:space-x-4'>
         <div className='h-8 w-8 hidden @425:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
         <div className='flex items-center mr-4 lg:mr-0 space-x-2 border-r-style pr-4'>
           <Typography type='text-caption1'>{name}</Typography>

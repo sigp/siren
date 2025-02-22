@@ -1,64 +1,78 @@
-import { FC } from 'react'
-import { useTranslation } from 'react-i18next'
-import addClassString from '../../../../../../utilities/addClassString'
-import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import clsx from 'clsx'
+import {FC, memo, useCallback, useMemo} from 'react'
+import formatEthAddress from "../../../../../../utilities/formatEthAddress";
 import { ValidatorInfo } from '../../../../../types/validator'
 import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
+import WithdrawalAddressPill from "../../../../WithdrawalAddress/WithdrawalAddressPill";
 
-export interface SelectTargetRowProps {
+interface SelectTargetRowProps {
   validator: ValidatorInfo
   onSelect: (validator: ValidatorInfo) => void
   isActive: boolean
 }
 
-const SelectTargetRow: FC<SelectTargetRowProps> = ({ validator, onSelect, isActive }) => {
-  const { t } = useTranslation()
-  const { pubKey, balance, name } = validator
-  const rowClasses = addClassString('flex cursor-pointer items-center justify-between p-4', [
-    isActive ? 'bg-primary100' : 'dark:hover:bg-dark750 hover:bg-dark25',
-  ])
-  const iconClasses = addClassString('h-6 w-6 rounded-full from-primary to-tertiary', [
-    isActive ? 'bg-gradient-to-l' : 'bg-gradient-to-r',
-  ])
+const SelectTargetRow: FC<SelectTargetRowProps> = memo(({ validator, onSelect, isActive }) => {
+  const { pubKey, balance, name, withdrawalAddress } = validator
+  const handleSelect = useCallback(() => onSelect(validator), [validator, onSelect])
 
-  const nameGroupClasses = addClassString('flex space-x-2 items-center pr-2', [
-    isActive ? 'border-r dark:border-r-dark300' : 'border-r-style',
-  ])
+  const rowClasses = clsx(
+    'flex items-center justify-between p-4 cursor-pointer transition-colors',
+    isActive ? 'bg-primary100' : 'hover:bg-dark25 dark:hover:bg-dark750'
+  )
 
-  const balanceFormatted = Math.round(balance)
+  const iconClasses = clsx(
+    'h-6 w-6 rounded-full hidden md:block',
+    'bg-gradient-to-r from-primary to-tertiary',
+    isActive && 'bg-gradient-to-l'
+  )
 
-  const selectTarget = () => onSelect(validator)
+  const nameGroupClasses = clsx(
+    'flex items-center space-x-2 pr-4',
+    'border-r',
+    isActive ? 'dark:border-dark300' : 'border-r-style'
+  )
+  const pubKeyGroupClasses = clsx('pl-2 w-[120px] hidden md:block border-r', isActive ? 'dark:border-dark300' : 'border-r-style')
+
+  const toolTipStyle = useMemo(() => ({ fontSize: '11px' }), [])
+
+  const formattedBalance = Math.round(balance)
+  const formattedPubKey = formatEthAddress(pubKey)
+
   return (
-    <div onClick={selectTarget} className={rowClasses}>
-      <div className='flex items-center space-x-2'>
+    <div onClick={handleSelect} className={rowClasses}>
+      <div className="flex items-center space-x-2">
         <div className={nameGroupClasses}>
           <div className={iconClasses} />
-          <Typography type='text-caption'>{name}</Typography>
+          <Typography type="text-caption">{name}</Typography>
         </div>
-        <Tooltip
-          place='top-start'
-          style={{ fontSize: '11px' }}
-          id={`tool-select-${pubKey}`}
-          text={pubKey}
-        >
-          <Typography className='hidden @425:block' type='text-caption'>
-            {formatEthAddress(pubKey)}
-          </Typography>
-        </Tooltip>
-      </div>
-      <div className='flex space-x-2 items-center'>
-        {isActive && (
-          <div className='p-1 hidden sm:block rounded bg-primary'>
-            <Typography color='text-white' type='text-tiny'>
-              {t('primaryValidator')}
+        <div className={pubKeyGroupClasses}>
+          <Tooltip
+            place="top-start"
+            style={toolTipStyle}
+            id={`tooltip-select-${pubKey}`}
+            text={pubKey}
+          >
+            <Typography className="hidden @425:block" type="text-caption">
+              {formattedPubKey}
             </Typography>
-          </div>
-        )}
-        <Typography type='text-caption'>{balanceFormatted} ETH</Typography>
+          </Tooltip>
+        </div>
+        <div className="pl-2 hidden @425:block">
+          {withdrawalAddress ? (
+            <WithdrawalAddressPill textColor={isActive ? 'text-white' : 'text-dark900'} isActive={isActive} id={`${pubKey}-pill-text`} address={withdrawalAddress}  />
+          ) : (
+            <Typography className="hidden @425:block" type="text-caption1.5">
+              --
+            </Typography>
+          )}
+        </div>
       </div>
+      <Typography color="text-primary" darkMode={isActive ? 'dark:text-dark300' : 'dark:text-primary'} type="text-caption">{formattedBalance} ETH</Typography>
     </div>
   )
-}
+})
+
+SelectTargetRow.displayName = 'SelectTargetRow'
 
 export default SelectTargetRow

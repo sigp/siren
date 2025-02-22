@@ -13,7 +13,7 @@ import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 export interface ConsolidateViewProps {
   targetPubKey: string
   sourceValidator: ValidatorInfo
-  queueLength?: bigint | undefined
+  queueLength: bigint | TxHash
   chainId: number
   bufferPercentage: bigint
   onSubmitRequest: (request: ConsolidationTx) => void

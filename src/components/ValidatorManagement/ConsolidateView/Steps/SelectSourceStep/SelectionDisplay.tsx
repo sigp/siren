@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useMemo, memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
@@ -20,13 +20,19 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
 }) => {
   const { t } = useTranslation()
   const { name, pubKey, index, balance } = targetValidator
-  const formattedPubKey = formatEthAddress(pubKey, 7, 7)
+  const formattedPubKey = useMemo(() => formatEthAddress(pubKey, 7, 7), [pubKey])
 
   const accumulatedSourceBalance = useMemo(() => {
     return selectedSources.reduce((acc, { balance }) => acc + balance, 0)
   }, [selectedSources])
 
+  const tooltipStyle = useMemo(() => ({ fontSize: '11px' }), [])
+
   const totalBalance = Math.round(balance + accumulatedSourceBalance)
+
+  const renderedChips = useMemo(() => selectedSources.map((source) => (
+    <SelectedChip key={source.pubKey} onRemove={onRemoveSource} validator={source} />
+  )), [selectedSources, onRemoveSource])
 
   return (
     <div className='w-full border-style'>
@@ -46,7 +52,7 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
               <Typography>{name}</Typography>
               <Tooltip
                 place='top-start'
-                style={{ fontSize: '11px' }}
+                style={tooltipStyle}
                 id={`tool-display-${pubKey}`}
                 text={pubKey}
               >
@@ -70,10 +76,8 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
           </Typography>
         </div>
         {selectedSources.length > 0 && (
-          <div className='py-4 flex flex-wrap border-t-style mt-6'>
-            {selectedSources.map((source) => (
-              <SelectedChip key={source.pubKey} onRemove={onRemoveSource} validator={source} />
-            ))}
+          <div className='py-4 flex lg:max-h-[150px] overflow-scroll flex-wrap border-t-style mt-6'>
+            {renderedChips}
           </div>
         )}
       </div>
@@ -81,4 +85,4 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
   )
 }
 
-export default SelectionDisplay
+export default memo(SelectionDisplay)

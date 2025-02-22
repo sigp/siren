@@ -15,8 +15,8 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
   const { t } = useTranslation()
   const [targetValidator, setTargetValidator] = useState<ValidatorInfo | undefined>(undefined)
   const [sourceValidators, setSourceValidators] = useState<ValidatorInfo[]>([])
-  const activeValidators = useMemo(() => {
-    return validators.filter(({ status }) => status.includes('active') && !status.includes('exit'))
+  const eligibleValidators = useMemo(() => {
+    return validators.filter(({ status, withdrawalAddress }) => status.includes('active') && !status.includes('exit') && withdrawalAddress && (withdrawalAddress.startsWith('0x01') || withdrawalAddress.startsWith('0x02')))
   }, [validators])
   const steps = [
     t('validatorManagement.consolidateView.steps.selectTarget'),
@@ -41,14 +41,14 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
             onNext={incrementStep}
             targetValidator={targetValidator}
             onSelect={updateTargetValidator}
-            validators={activeValidators}
+            validators={eligibleValidators}
           />
           {step > 0 && (
             <SelectSourceStep
               onNext={incrementStep}
               onBack={decrementStep}
               onSelectTargetValidators={updateSourceValidators}
-              validators={activeValidators}
+              validators={eligibleValidators}
               targetValidator={targetValidator}
             />
           )}
