@@ -221,3 +221,7 @@ input[type='checkbox']:not(:checked) {
 .createSlide .slide {
   max-width: 100vw;
 }
+
+.validator-modal .slide {
+  overflow: scroll;
+}

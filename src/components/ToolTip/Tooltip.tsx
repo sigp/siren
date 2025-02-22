@@ -33,11 +33,7 @@ const Tooltip: FC<TooltipProps> = ({
   const isDark = (toolTipMode || mode) === UiMode.DARK
 
   return (
-    <div
-      data-tooltip-id={id}
-      className={`${className} w-fit ${cursor}`}
-      data-tooltip-content={text}
-    >
+    <div data-tooltip-id={id} className={`${className} ${cursor}`} data-tooltip-content={text}>
       {children}
       <RTTooltip
         id={id}
