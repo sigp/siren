@@ -1,24 +1,24 @@
 import { useMemo } from 'react'
 import { useConnect } from 'wagmi'
-import { UseConnectReturnType } from 'wagmi/src/hooks/useConnect'
+import type { UseConnectReturnType } from 'wagmi'
 
 const useWalletConnectors = (): UseConnectReturnType => {
-  const { connectors, ...props } = useConnect()
+  const { connectors, ...connectProps } = useConnect()
 
-  return {
-    connectors: useMemo(() => {
-      return connectors
-        ? Array.from(
-            new Map(
-              connectors
-                .filter((item) => item?.name?.toLowerCase() !== 'walletconnect')
-                .map((item) => [item?.name, item]),
-            ).values(),
-          )
-        : []
-    }, [connectors]),
-    ...props,
-  }
+  const uniqueConnectors = useMemo(() => {
+    if (!connectors) return []
+
+    const connectorMap = new Map<string, (typeof connectors)[number]>()
+    connectors.forEach((connector) => {
+      if (connector?.name && !connectorMap.has(connector.name)) {
+        connectorMap.set(connector.name, connector)
+      }
+    })
+
+    return Array.from(connectorMap.values())
+  }, [connectors])
+
+  return { connectors: uniqueConnectors, ...connectProps }
 }
 
 export default useWalletConnectors
