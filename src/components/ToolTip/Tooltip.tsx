@@ -1,6 +1,6 @@
-import React, { FC } from 'react'
+import clsx from "clsx";
+import React, {FC, useMemo} from 'react'
 import { Tooltip as RTTooltip } from 'react-tooltip'
-import addClassString from '../../../utilities/addClassString'
 import { UiMode } from '../../constants/enums'
 import useUiMode from '../../hooks/useUiMode'
 import { OptionalString } from '../../types'
@@ -32,19 +32,24 @@ const Tooltip: FC<TooltipProps> = ({
   const { mode } = useUiMode()
   const isDark = (toolTipMode || mode) === UiMode.DARK
 
+  const containerClasses = clsx(className, cursor)
+  const toolTipClasses = clsx('shadow-xl z-50', tooltipClassName)
+
+  const toolTipStyles = useMemo(() => ({
+      maxWidth,
+      backgroundColor: isDark ? '#7C5FEB' : '#FFF',
+      color: isDark ? 'white' : 'black',
+      ...style}
+  ), [maxWidth, isDark, style])
+
   return (
-    <div data-tooltip-id={id} className={`${className} ${cursor}`} data-tooltip-content={text}>
+    <div data-tooltip-id={id} className={containerClasses} data-tooltip-content={text}>
       {children}
       <RTTooltip
         id={id}
         place={place}
-        className={addClassString('shadow-xl z-50', [tooltipClassName])}
-        style={{
-          maxWidth,
-          backgroundColor: isDark ? '#7C5FEB' : '#FFF',
-          color: isDark ? 'white' : 'black',
-          ...style,
-        }}
+        className={toolTipClasses}
+        style={toolTipStyles}
         {...rest}
       />
     </div>
