@@ -1,4 +1,4 @@
-import {FC, useMemo} from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -22,13 +22,13 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   const { t } = useTranslation()
   const renderedRows = useMemo(() => {
     return validators.map((validator) => (
-        <SelectTargetRow
-          isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
-          key={validator.pubKey}
-          onSelect={onSelect}
-          validator={validator}
-        />
-      ))
+      <SelectTargetRow
+        isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
+        key={validator.pubKey}
+        onSelect={onSelect}
+        validator={validator}
+      />
+    ))
   }, [validators, targetValidator, onSelect])
 
   return (
@@ -50,9 +50,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
               </div>
               <Typography>{t('validators')}</Typography>
             </div>
-            <div className='h-full max-h-[448px] overflow-scroll'>
-              {renderedRows}
-            </div>
+            <div className='h-full max-h-[448px] overflow-scroll'>{renderedRows}</div>
           </div>
           <StepOptions onNextStep={onNext} isDisabledNext={!targetValidator} />
         </div>

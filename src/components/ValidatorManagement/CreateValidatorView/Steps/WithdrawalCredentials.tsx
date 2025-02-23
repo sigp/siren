@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../utilities/addClassString'
 import { ValidatorCandidate } from '../../../../types'
@@ -53,23 +53,26 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
     ? isSharedCredentialVerified
     : candidates.every(({ isVerifiedCredentials }) => isVerifiedCredentials)
 
-  const updateSharedCandidateData = (_id: string, candidate: ValidatorCandidate) => {
+  const updateSharedCandidateData = useCallback((_id: string, candidate: ValidatorCandidate) => {
     const { withdrawalCredentials, isVerifiedCredentials } = candidate
 
     setIsSharedCredentialVerified(Boolean(isVerifiedCredentials))
     onUpdateSharedCredentials(withdrawalCredentials)
-  }
+  }, [])
 
-  const updateCandidate = (id: string, candidate: ValidatorCandidate) => {
-    const index = candidates.findIndex((item) => item.id === id)
-    if (index !== -1) {
-      const updatedCandidates = [...candidates]
-      updatedCandidates[index] = candidate
-      onValidatorChange(updatedCandidates)
-    }
-  }
+  const updateCandidate = useCallback(
+    (id: string, candidate: ValidatorCandidate) => {
+      const index = candidates.findIndex((item) => item.id === id)
+      if (index !== -1) {
+        const updatedCandidates = [...candidates]
+        updatedCandidates[index] = candidate
+        onValidatorChange(updatedCandidates)
+      }
+    },
+    [candidates, onValidatorChange],
+  )
 
-  const toggleAssignAllCredentials = (): void => {
+  const toggleAssignAllCredentials = useCallback((): void => {
     onUpdateSharedCredentials(undefined)
     const updatedCandidates = candidates.map((validator) => ({
       ...validator,
@@ -79,7 +82,13 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
     onValidatorChange(updatedCandidates)
     setIsAll((prev) => !prev)
     setIsSharedCredentialVerified(false)
-  }
+  }, [
+    onUpdateSharedCredentials,
+    candidates,
+    onValidatorChange,
+    setIsAll,
+    setIsSharedCredentialVerified,
+  ])
 
   const moveToNextStep = (): void => {
     if (!isVerifiedAddress) {
@@ -92,6 +101,29 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   const checkBoxClass = addClassString('flex space-x-4', [
     valCount < 2 && 'opacity-0 pointer-events-none',
   ])
+
+  const allValidatorPlaceholder = useMemo(
+    () =>
+      ({
+        id: 'all',
+        name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
+        withdrawalCredentials: sharedCredentials,
+        isVerifiedCredentials: isVerifiedAddress,
+      }) as ValidatorCandidate,
+    [sharedCredentials, isVerifiedAddress, t],
+  )
+
+  const renderedCredentialRows = useMemo(
+    () =>
+      candidates.map((validator, index) => (
+        <ValidatorCredentialRow
+          key={index}
+          validatorCandidate={validator}
+          onUpdateCandidate={updateCandidate}
+        />
+      )),
+    [candidates, updateCandidate],
+  )
 
   return (
     <div className='w-full h-full relative space-y-6'>
@@ -136,24 +168,11 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
           <div className='overflow-scroll w-full max-h-[200px]'>
             {isAll ? (
               <ValidatorCredentialRow
-                validatorCandidate={
-                  {
-                    id: 'all',
-                    name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
-                    withdrawalCredentials: sharedCredentials,
-                    isVerifiedCredentials: isVerifiedAddress,
-                  } as ValidatorCandidate
-                }
+                validatorCandidate={allValidatorPlaceholder}
                 onUpdateCandidate={updateSharedCandidateData}
               />
             ) : (
-              candidates.map((validator, index) => (
-                <ValidatorCredentialRow
-                  key={index}
-                  validatorCandidate={validator}
-                  onUpdateCandidate={updateCandidate}
-                />
-              ))
+              renderedCredentialRows
             )}
           </div>
         </div>

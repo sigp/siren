@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import clsx from 'clsx'
 import React, { FC, InputHTMLAttributes } from 'react'
 
 export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -21,10 +21,14 @@ const CheckBox: FC<CheckBoxProps> = ({
   const containerClasses = clsx('flex items-center cursor-pointer', containerClassName)
   const inputClasses = clsx(
     'w-5 h-5 cursor-pointer accent-primary bg-transparent rounded',
-    'focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800', inputClassName,
-    checkboxBorderClasses || 'border border-gray-300 border-style500 dark:border-gray-600'
+    'focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800',
+    inputClassName,
+    checkboxBorderClasses || 'border border-gray-300 border-style500 dark:border-gray-600',
   )
-  const labelClasses = clsx('ml-2 cursor-pointer text-gray-900 dark:text-gray-300', labelStyle || 'text-sm font-medium')
+  const labelClasses = clsx(
+    'ml-2 cursor-pointer text-gray-900 dark:text-gray-300',
+    labelStyle || 'text-sm font-medium',
+  )
 
   return (
     <div className={containerClasses}>

@@ -1,5 +1,5 @@
-import clsx from "clsx";
-import React, {FC, useMemo} from 'react'
+import clsx from 'clsx'
+import React, { FC, useMemo } from 'react'
 import { Tooltip as RTTooltip } from 'react-tooltip'
 import { UiMode } from '../../constants/enums'
 import useUiMode from '../../hooks/useUiMode'
@@ -35,23 +35,20 @@ const Tooltip: FC<TooltipProps> = ({
   const containerClasses = clsx(className, cursor)
   const toolTipClasses = clsx('shadow-xl z-50', tooltipClassName)
 
-  const toolTipStyles = useMemo(() => ({
+  const toolTipStyles = useMemo(
+    () => ({
       maxWidth,
       backgroundColor: isDark ? '#7C5FEB' : '#FFF',
       color: isDark ? 'white' : 'black',
-      ...style}
-  ), [maxWidth, isDark, style])
+      ...style,
+    }),
+    [maxWidth, isDark, style],
+  )
 
   return (
     <div data-tooltip-id={id} className={containerClasses} data-tooltip-content={text}>
       {children}
-      <RTTooltip
-        id={id}
-        place={place}
-        className={toolTipClasses}
-        style={toolTipStyles}
-        {...rest}
-      />
+      <RTTooltip id={id} place={place} className={toolTipClasses} style={toolTipStyles} {...rest} />
     </div>
   )
 }

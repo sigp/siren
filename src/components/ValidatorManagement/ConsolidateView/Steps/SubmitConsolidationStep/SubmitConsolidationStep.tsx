@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useEffect, useMemo, useState} from 'react'
+import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
@@ -76,24 +76,30 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
     }
   }, [])
 
-  const renderedRequests = useMemo(() => !!targetValidator ? sourceValidators.map((validator) => {
-    const { pubKey: valPubKey, index } = validator
-    const { pubKey: targetPubKey } = targetValidator
-    const data = consolidationRequests.find((request) => request.index === index)
-    const buffer = feeBuffer ? BigInt(feeBuffer) : 0n
-    return (
-      <ConsolidationRequest
-        key={valPubKey}
-        requestData={data}
-        onSubmitRequest={setConsolidations}
-        feeBuffer={buffer}
-        chainId={chainId}
-        targetPubKey={targetPubKey}
-        validator={validator}
-        consolidationQueLength={consolidationQueLength || 0n}
-      />
-    )
-  }) : null, [targetValidator, chainId, sourceValidators, consolidationRequests, consolidationQueLength])
+  const renderedRequests = useMemo(
+    () =>
+      !!targetValidator
+        ? sourceValidators.map((validator) => {
+            const { pubKey: valPubKey, index } = validator
+            const { pubKey: targetPubKey } = targetValidator
+            const data = consolidationRequests.find((request) => request.index === index)
+            const buffer = feeBuffer ? BigInt(feeBuffer) : 0n
+            return (
+              <ConsolidationRequest
+                key={valPubKey}
+                requestData={data}
+                onSubmitRequest={setConsolidations}
+                feeBuffer={buffer}
+                chainId={chainId}
+                targetPubKey={targetPubKey}
+                validator={validator}
+                consolidationQueLength={consolidationQueLength || 0n}
+              />
+            )
+          })
+        : null,
+    [targetValidator, chainId, sourceValidators, consolidationRequests, consolidationQueLength],
+  )
 
   const renderedTxStatuses = useMemo(() => {
     return consolidationRequests.map(({ txHash, index }) => (
@@ -114,14 +120,14 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
 
   return (
     <div className='w-full h-full flex flex-col lg:flex-row justify-between space-y-4 lg:space-y-0 py-4'>
-      <div className="lg:hidden">
+      <div className='lg:hidden'>
         <Typography type='text-subtitle2'>
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
         <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength || 0n} />
       </div>
       <div className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'>
-        <div className="hidden lg:block">
+        <div className='hidden lg:block'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.signAndSubmit.title')}
           </Typography>

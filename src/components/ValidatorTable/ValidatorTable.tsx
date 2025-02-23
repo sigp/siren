@@ -54,7 +54,6 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
       pagination < totalPages
     ) {
       setPage((prev) => prev + 1)
-      console.log('triggered')
     }
     prevScrollPercentage.current = scrollPercentage
   }, [scrollPercentage, isPaginated, totalPages, pagination])

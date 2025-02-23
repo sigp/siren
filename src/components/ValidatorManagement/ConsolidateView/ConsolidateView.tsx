@@ -16,7 +16,13 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
   const [targetValidator, setTargetValidator] = useState<ValidatorInfo | undefined>(undefined)
   const [sourceValidators, setSourceValidators] = useState<ValidatorInfo[]>([])
   const eligibleValidators = useMemo(() => {
-    return validators.filter(({ status, withdrawalAddress }) => status.includes('active') && !status.includes('exit') && withdrawalAddress && (withdrawalAddress.startsWith('0x01') || withdrawalAddress.startsWith('0x02')))
+    return validators.filter(
+      ({ status, withdrawalAddress }) =>
+        status.includes('active') &&
+        !status.includes('exit') &&
+        withdrawalAddress &&
+        (withdrawalAddress.startsWith('0x01') || withdrawalAddress.startsWith('0x02')),
+    )
   }, [validators])
   const steps = [
     t('validatorManagement.consolidateView.steps.selectTarget'),

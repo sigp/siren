@@ -30,9 +30,13 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
 
   const totalBalance = Math.round(balance + accumulatedSourceBalance)
 
-  const renderedChips = useMemo(() => selectedSources.map((source) => (
-    <SelectedChip key={source.pubKey} onRemove={onRemoveSource} validator={source} />
-  )), [selectedSources, onRemoveSource])
+  const renderedChips = useMemo(
+    () =>
+      selectedSources.map((source) => (
+        <SelectedChip key={source.pubKey} onRemove={onRemoveSource} validator={source} />
+      )),
+    [selectedSources, onRemoveSource],
+  )
 
   return (
     <div className='w-full border-style'>

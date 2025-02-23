@@ -1,10 +1,10 @@
-import {FC, useMemo} from 'react'
+import { FC, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
-import WithdrawalAddressPill from "../../../../WithdrawalAddress/WithdrawalAddressPill";
+import WithdrawalAddressPill from '../../../../WithdrawalAddress/WithdrawalAddressPill'
 
 export interface SelectSourceRowProps {
   source: ValidatorInfo
@@ -31,26 +31,26 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
           <div className='h-6 w-6 hidden xl:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
           <Typography type='text-caption'>{name}</Typography>
         </div>
-        <div className="border-r-style hidden md:block lg:hidden xl:block self-stretch flex items-center px-4">
+        <div className='border-r-style hidden md:block lg:hidden xl:block self-stretch flex items-center px-4'>
           <Tooltip
             place='top-start'
             style={tooltipStyles}
             id={`tool-source-${pubKey}`}
             text={pubKey}
           >
-            <Typography type='text-caption'>
-              {formattedPubKey}
-            </Typography>
+            <Typography type='text-caption'>{formattedPubKey}</Typography>
           </Tooltip>
         </div>
         {withdrawalAddress ? (
-          <div className="pl-4 hidden md:block">
-            <WithdrawalAddressPill id={`${pubKey}-pill-text`} address={withdrawalAddress}/>
+          <div className='pl-4 hidden md:block'>
+            <WithdrawalAddressPill id={`${pubKey}-pill-text`} address={withdrawalAddress} />
           </div>
         ) : null}
       </div>
       <div>
-        <Typography color="text-primary" darkMode="dark:text-primary" type='text-caption'>{formattedBalance} ETH</Typography>
+        <Typography color='text-primary' darkMode='dark:text-primary' type='text-caption'>
+          {formattedBalance} ETH
+        </Typography>
       </div>
     </div>
   )
