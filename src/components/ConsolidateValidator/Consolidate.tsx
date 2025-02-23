@@ -1,3 +1,4 @@
+import axios from 'axios'
 import { dataSlice, getAddress } from 'ethers'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -5,7 +6,7 @@ import { useAccount, useSendTransaction, useEstimateGas, useGasPrice } from 'wag
 import displayToast from '../../../utilities/displayToast'
 import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
-import { Address, ConsolidationTx, ToastType, TxHash } from '../../types'
+import { ActivityType, Address, ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
@@ -101,6 +102,20 @@ const Consolidate: FC<ConsolidateViewProps> = ({
         txHash,
         status: 'pending',
       })
+
+      try {
+        await axios.post('/api/log-activity', {
+          data: JSON.stringify({
+            targetPubKey,
+            sourcePubKey: sourceValidator.pubKey,
+            txHash,
+          }),
+          type: ActivityType.CONSOLIDATION,
+          pubKey: targetPubKey,
+        })
+      } catch (e) {
+        console.error('unable to store activity')
+      }
     } catch (error) {
       handleTxError(error)
     } finally {

@@ -28,7 +28,6 @@ const ActivityNote: FC<ActivityNoteProps> = ({
 }) => {
   const { t } = useTranslation()
   const { id, type, createdAt, data, pubKey, hasSeen } = activity
-  const hasLink = type === ActivityType.DEPOSIT || type === ActivityType.IMPORT
 
   const getTitle = (type: ActivityType) => {
     switch (type) {
@@ -38,21 +37,23 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         return t('activityHistory.activities.validatorImport.title')
       case ActivityType.GRAFFITI:
         return t('activityHistory.activities.updateGraffiti.title')
+      case ActivityType.CONSOLIDATION:
+        return t('activityHistory.activities.consolidation.title')
       default:
         return ''
     }
   }
 
   const getText = (type: ActivityType) => {
+    const activityData = data ? JSON.parse(data) : undefined
     switch (type) {
       case ActivityType.DEPOSIT:
-        const activityData = JSON.parse(data)
         return (
           <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
             <Trans
               i18nKey='activityHistory.activities.deposit.text'
               components={{ span: <span className='underline font-bold' /> }}
-              values={{ txHash: formatEthAddress(activityData.txHash) }}
+              values={{ txHash: formatEthAddress(activityData?.txHash) }}
             />
           </Typography>
         )
@@ -76,6 +77,27 @@ const ActivityNote: FC<ActivityNoteProps> = ({
             />
           </Typography>
         )
+      case ActivityType.CONSOLIDATION:
+        let transKey = 'targetConsolidationText'
+        const targetPubKey = activityData?.targetPubKey
+        const sourcePubKey = activityData?.sourcePubKey
+
+        if (activityData?.targetPubKey === activityData?.sourcePubKey) {
+          transKey = 'selfConsolidationText'
+        }
+
+        return (
+          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
+            <Trans
+              i18nKey={`activityHistory.activities.consolidation.${transKey}`}
+              components={{ span: <span className='underline font-bold' /> }}
+              values={{
+                pubKey: formatEthAddress(targetPubKey),
+                sourcePubKey: formatEthAddress(sourcePubKey),
+              }}
+            />
+          </Typography>
+        )
       default:
         return null
     }
@@ -89,6 +111,8 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         return 'bi-download'
       case ActivityType.GRAFFITI:
         return 'bi-palette'
+      case ActivityType.CONSOLIDATION:
+        return 'bi-intersect'
       default:
         return 'bi-clock-history'
     }
@@ -99,9 +123,10 @@ const ActivityNote: FC<ActivityNoteProps> = ({
       case ActivityType.IMPORT:
         return getBeaconChaLink(networkId, `/validator/${pubKey}`)
       case ActivityType.DEPOSIT:
+      case ActivityType.CONSOLIDATION:
         return data ? getEtherscanLink(networkId, `/tx/${JSON.parse(data).txHash}`) : ''
       default:
-        return ''
+        return undefined
     }
   }
 
@@ -120,13 +145,12 @@ const ActivityNote: FC<ActivityNoteProps> = ({
     }
   }
 
-  const { title, text, isLink, icon, href } = useMemo(() => {
+  const { title, text, icon, href } = useMemo(() => {
     return {
       title: getTitle(type),
       text: getText(type),
       icon: getIcon(type),
       href: getHref(type),
-      isLink: type === ActivityType.IMPORT || type === ActivityType.DEPOSIT,
     }
   }, [type])
 
@@ -157,7 +181,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         <div>
           {!hasSeen ? (
             <div className='h-4 w-4 bg-primary rounded-full' />
-          ) : isLink ? (
+          ) : href ? (
             <i className='text-dark400 text-subtitle3 bi-box-arrow-up-right' />
           ) : null}
         </div>
@@ -173,7 +197,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
       transition={{ duration: 0.2, delay: 0.1 * (index || 0) + (delayOffset || 0) }}
       className='p-4 border-style'
     >
-      {hasLink ? (
+      {href ? (
         <Link target='_blank' href={href}>
           {renderNote()}
         </Link>
