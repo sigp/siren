@@ -1,4 +1,4 @@
-import {CSSProperties, FC} from 'react'
+import { CSSProperties, FC } from 'react'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography, { TypographyProps } from '../Typography/Typography'

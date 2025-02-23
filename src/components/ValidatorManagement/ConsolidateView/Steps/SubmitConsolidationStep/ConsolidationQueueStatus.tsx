@@ -1,7 +1,7 @@
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
-import {TxHash} from "../../../../../types";
+import { TxHash } from '../../../../../types'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 
 export interface ConsolidationQueueStatusProps {

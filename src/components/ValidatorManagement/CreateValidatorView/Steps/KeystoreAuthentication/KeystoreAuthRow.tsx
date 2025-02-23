@@ -16,10 +16,6 @@ const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirm
   const [password, setPassword] = useState('')
   const [confirmationPassword, setConfirmationPassword] = useState('')
 
-  const isComplete = Boolean(password && confirmationPassword)
-  const isMatchingPassword = password === confirmationPassword
-  const isValid = isComplete && isMatchingPassword
-
   const errorMessages = useMemo(() => {
     const rules = [
       { test: /.{12,}/, error: t('error.length') },
@@ -34,15 +30,19 @@ const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirm
       : []
   }, [password])
 
+  const isComplete = Boolean(password && confirmationPassword)
+  const isMatchingPassword = password === confirmationPassword
+  const isValid = isComplete && isMatchingPassword && !errorMessages.length
+
   const storePassword = (e: ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)
   const storeConfirmationPassword = (e: ChangeEvent<HTMLInputElement>) =>
     setConfirmationPassword(e.target.value)
 
   useEffect(() => {
-    if (isComplete) {
-      onConfirmation(id, isMatchingPassword ? confirmationPassword : '')
+    if (isValid) {
+      onConfirmation(id, confirmationPassword)
     }
-  }, [isMatchingPassword, isComplete, confirmationPassword, id])
+  }, [confirmationPassword, id, isValid])
 
   return (
     <ValidatorCandidateRow

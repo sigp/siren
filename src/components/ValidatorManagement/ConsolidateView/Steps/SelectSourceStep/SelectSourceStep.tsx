@@ -1,6 +1,6 @@
-import {FC, useCallback, useMemo, useState} from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import addClassString from "../../../../../../utilities/addClassString";
+import addClassString from '../../../../../../utilities/addClassString'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Typography from '../../../../Typography/Typography'
@@ -63,7 +63,10 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
     setIsSelectAll(!isAll)
   }
 
-  const removeSource = useCallback((pubKey: string) => setSelectedSources((prev) => prev.filter((item) => item.pubKey !== pubKey)), [])
+  const removeSource = useCallback(
+    (pubKey: string) => setSelectedSources((prev) => prev.filter((item) => item.pubKey !== pubKey)),
+    [],
+  )
 
   const stepBack = () => {
     setSelectedSources([])
@@ -71,14 +74,14 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   }
 
   const toggleSelfConsolidation = () => {
-   setIsSelfConsolidate(prev => !prev)
-    if(targetValidator) {
+    setIsSelfConsolidate((prev) => !prev)
+    if (targetValidator) {
       setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
     }
   }
 
   const eligibleValidatorListClasses = addClassString('flex flex-col border-style', [
-    isSelfConsolidate && 'opacity-20 pointer-events-none'
+    isSelfConsolidate && 'opacity-20 pointer-events-none',
   ])
 
   return (
@@ -93,16 +96,20 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
           </Typography>
         </div>
         {canSelfConsolidate && (
-          <div className="border-style bg-primary100 p-4 flex space-x-4">
+          <div className='border-style bg-primary100 p-4 flex space-x-4'>
             <CheckBox
               id='self-consolidate'
               checked={isSelfConsolidate}
-              checkboxBorderClasses="border border-gray-900 border-style500 dark:border-gray-400"
+              checkboxBorderClasses='border border-gray-900 border-style500 dark:border-gray-400'
               onChange={toggleSelfConsolidation}
             />
             <div>
-              <Typography isBold type="text-caption1">{t('validatorManagement.consolidateView.selfConsolidate')}</Typography>
-              <Typography type="text-caption1">{t('validatorManagement.consolidateView.selfConsolidateHelperText')}</Typography>
+              <Typography isBold type='text-caption1'>
+                {t('validatorManagement.consolidateView.selfConsolidate')}
+              </Typography>
+              <Typography type='text-caption1'>
+                {t('validatorManagement.consolidateView.selfConsolidateHelperText')}
+              </Typography>
             </div>
           </div>
         )}
@@ -120,7 +127,9 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
               onChange={toggleIsSelectAll}
             />
           </div>
-          <div className={`h-full overflow-scroll ${canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]'}`}>
+          <div
+            className={`h-full overflow-scroll ${canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]'}`}
+          >
             {availableSourceValidators.map((source) => (
               <SelectSourceRow
                 key={source.pubKey}

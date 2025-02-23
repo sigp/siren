@@ -1,10 +1,10 @@
 import clsx from 'clsx'
-import {FC, memo, useCallback, useMemo} from 'react'
-import formatEthAddress from "../../../../../../utilities/formatEthAddress";
+import { FC, memo, useCallback, useMemo } from 'react'
+import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
-import WithdrawalAddressPill from "../../../../WithdrawalAddress/WithdrawalAddressPill";
+import WithdrawalAddressPill from '../../../../WithdrawalAddress/WithdrawalAddressPill'
 
 interface SelectTargetRowProps {
   validator: ValidatorInfo
@@ -18,21 +18,24 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(({ validator, onSelect, i
 
   const rowClasses = clsx(
     'flex items-center justify-between p-4 cursor-pointer transition-colors',
-    isActive ? 'bg-primary100' : 'hover:bg-dark25 dark:hover:bg-dark750'
+    isActive ? 'bg-primary100' : 'hover:bg-dark25 dark:hover:bg-dark750',
   )
 
   const iconClasses = clsx(
     'h-6 w-6 rounded-full hidden md:block',
     'bg-gradient-to-r from-primary to-tertiary',
-    isActive && 'bg-gradient-to-l'
+    isActive && 'bg-gradient-to-l',
   )
 
   const nameGroupClasses = clsx(
     'flex items-center space-x-2 pr-4',
     'border-r',
-    isActive ? 'dark:border-dark300' : 'border-r-style'
+    isActive ? 'dark:border-dark300' : 'border-r-style',
   )
-  const pubKeyGroupClasses = clsx('pl-2 w-[120px] hidden md:block border-r', isActive ? 'dark:border-dark300' : 'border-r-style')
+  const pubKeyGroupClasses = clsx(
+    'pl-2 w-[120px] hidden md:block border-r',
+    isActive ? 'dark:border-dark300' : 'border-r-style',
+  )
 
   const toolTipStyle = useMemo(() => ({ fontSize: '11px' }), [])
 
@@ -41,34 +44,45 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(({ validator, onSelect, i
 
   return (
     <div onClick={handleSelect} className={rowClasses}>
-      <div className="flex items-center space-x-2">
+      <div className='flex items-center space-x-2'>
         <div className={nameGroupClasses}>
           <div className={iconClasses} />
-          <Typography type="text-caption">{name}</Typography>
+          <Typography type='text-caption'>{name}</Typography>
         </div>
         <div className={pubKeyGroupClasses}>
           <Tooltip
-            place="top-start"
+            place='top-start'
             style={toolTipStyle}
             id={`tooltip-select-${pubKey}`}
             text={pubKey}
           >
-            <Typography className="hidden @425:block" type="text-caption">
+            <Typography className='hidden @425:block' type='text-caption'>
               {formattedPubKey}
             </Typography>
           </Tooltip>
         </div>
-        <div className="pl-2 hidden @425:block">
+        <div className='pl-2 hidden @425:block'>
           {withdrawalAddress ? (
-            <WithdrawalAddressPill textColor={isActive ? 'text-white' : 'text-dark900'} isActive={isActive} id={`${pubKey}-pill-text`} address={withdrawalAddress}  />
+            <WithdrawalAddressPill
+              textColor={isActive ? 'text-white' : 'text-dark900'}
+              isActive={isActive}
+              id={`${pubKey}-pill-text`}
+              address={withdrawalAddress}
+            />
           ) : (
-            <Typography className="hidden @425:block" type="text-caption1.5">
+            <Typography className='hidden @425:block' type='text-caption1.5'>
               --
             </Typography>
           )}
         </div>
       </div>
-      <Typography color="text-primary" darkMode={isActive ? 'dark:text-dark300' : 'dark:text-primary'} type="text-caption">{formattedBalance} ETH</Typography>
+      <Typography
+        color='text-primary'
+        darkMode={isActive ? 'dark:text-dark300' : 'dark:text-primary'}
+        type='text-caption'
+      >
+        {formattedBalance} ETH
+      </Typography>
     </div>
   )
 })

@@ -87,7 +87,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "22.13.4",
+    "@types/node": "22.13.5",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "cross-spawn": "^7.0.6",
     "eslint": "8.57.0",

@@ -47,7 +47,7 @@ const createWagmiConfig = () => {
     ...(walletConnectId && {
       connectors: [walletConnect({ projectId: walletConnectId })],
     }),
-  }
+  } as any
 
   return createConfig(configOptions)
 }

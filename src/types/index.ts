@@ -183,6 +183,7 @@ export enum ActivityType {
   IMPORT = 'IMPORT',
   GRAFFITI = 'GRAFFITI',
   WITHDRAWAL = 'WITHDRAWAL',
+  CONSOLIDATION = 'CONSOLIDATION',
 }
 
 export type ActivityResponse = {

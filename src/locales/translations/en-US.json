@@ -731,6 +731,11 @@
       "updateGraffiti": {
         "title": "Validator Graffiti Updated",
         "text": "Validator with pubkey: <span>{{pubKey}}</span> graffiti updated successfully. Review the changes in the Validator Management view."
+      },
+      "consolidation": {
+        "title": "Validator Consolidation Requested",
+        "targetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> as been sent. Click here to review the transaction details on Etherscan.",
+        "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan."
       }
     }
   }
