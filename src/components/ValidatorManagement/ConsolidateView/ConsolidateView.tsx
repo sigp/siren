@@ -45,12 +45,14 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
         <>
           <SelectTargetStep
             onNext={incrementStep}
+            isActive={step === 0}
             targetValidator={targetValidator}
             onSelect={updateTargetValidator}
             validators={eligibleValidators}
           />
           {step > 0 && (
             <SelectSourceStep
+              isActive={step === 1}
               onNext={incrementStep}
               onBack={decrementStep}
               onSelectTargetValidators={updateSourceValidators}
@@ -59,6 +61,7 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({ validators, chainId }) => {
             />
           )}
           <SubmitConsolidationStep
+            isActive={step === 2}
             chainId={chainId}
             targetValidator={targetValidator}
             sourceValidators={sourceValidators}

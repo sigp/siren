@@ -1,4 +1,4 @@
-import { ChangeEvent, FC, useMemo, useState } from 'react'
+import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { EFFECTIVE_BALANCE } from '../../../constants/constants'
@@ -34,18 +34,24 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   const { DEPOSIT_NETWORK_ID, BASE_REWARD_FACTOR, MIN_ACTIVATION_BALANCE } = beaconSpec || {}
 
   const baseStepLocale = 'validatorManagement.createValidator.steps'
-  const steps = [
-    t(`${baseStepLocale}.setup`),
-    t(`${baseStepLocale}.verification`),
-    t(`${baseStepLocale}.indexing`),
-    t(`${baseStepLocale}.credentials`),
-    'Keystore Authentication',
-    t(`${baseStepLocale}.deposit`),
-  ]
+  const steps = useMemo(
+    () => [
+      t(`${baseStepLocale}.setup`),
+      t(`${baseStepLocale}.verification`),
+      t(`${baseStepLocale}.indexing`),
+      t(`${baseStepLocale}.credentials`),
+      'Keystore Authentication',
+      t(`${baseStepLocale}.deposit`),
+    ],
+    [t],
+  )
+
   const [candidates, setValidatorCandidates] = useState<ValidatorCandidate[]>([])
   const [keyPhrase, setKeyPhrase] = useState('')
   const [sharedWithdrawalCredentials, setSharedCredentials] = useState<string | undefined>()
-  const [sharedKeystorePassword, setSharedKeystorePassword] = useState('')
+  const [sharedKeystorePassword, setSharedKeystorePassword] = useState<string | undefined>(
+    undefined,
+  )
   const [isRisk, setIsRisk] = useState(false)
   const [hasAcceptedRisk, setHasAcceptRisk] = useState(false)
 
@@ -67,21 +73,39 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
     }
   }, [active_ongoing, totalCandidates, BASE_REWARD_FACTOR])
 
-  const setNewValidators = (vals: ValidatorCandidate[]) => setValidatorCandidates(vals)
-  const setPhrase = (e: ChangeEvent<HTMLTextAreaElement>) => setKeyPhrase(e.target.value)
-  const updateSharedCredentials = (credentials?: string) => setSharedCredentials(credentials)
-  const setKeystorePassword = (password: string) => setSharedKeystorePassword(password)
+  const setNewValidators = useCallback((vals: ValidatorCandidate[]) => {
+    setValidatorCandidates(vals)
+  }, [])
 
-  const showRiskMessage = () => {
+  const setPhrase = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
+    setKeyPhrase(e.target.value)
+  }, [])
+
+  const updateSharedCredentials = useCallback((credentials?: string) => {
+    setSharedCredentials(credentials)
+  }, [])
+
+  const setKeystorePassword = useCallback((password: string | undefined) => {
+    setSharedKeystorePassword(password)
+  }, [])
+
+  const showRiskMessage = useCallback(() => {
     setIsRisk(true)
     setHasAcceptRisk(false)
-  }
-  const dismissRiskMessage = () => setIsRisk(false)
-  const viewManagement = () => onChangeView(ValidatorManagementView.MAIN)
-  const acceptRisk = () => {
+  }, [])
+
+  const dismissRiskMessage = useCallback(() => {
+    setIsRisk(false)
+  }, [])
+
+  const viewManagement = useCallback(() => {
+    onChangeView(ValidatorManagementView.MAIN)
+  }, [onChangeView])
+
+  const acceptRisk = useCallback(() => {
     setHasAcceptRisk(true)
     dismissRiskMessage()
-  }
+  }, [dismissRiskMessage])
 
   return (
     <>

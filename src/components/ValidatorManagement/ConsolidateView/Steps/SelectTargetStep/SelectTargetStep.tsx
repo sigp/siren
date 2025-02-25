@@ -1,4 +1,5 @@
-import { FC, useMemo } from 'react'
+import { useAnimationControls } from 'framer-motion'
+import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -11,6 +12,7 @@ export interface SelectTargetStepProps {
   targetValidator: ValidatorInfo | undefined
   onSelect: (validator: ValidatorInfo) => void
   onNext: () => void
+  isActive: boolean
 }
 
 const SelectTargetStep: FC<SelectTargetStepProps> = ({
@@ -18,18 +20,42 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   targetValidator,
   onSelect,
   onNext,
+  isActive,
 }) => {
   const { t } = useTranslation()
+  const controls = useAnimationControls()
+
+  useEffect(() => {
+    if (isActive) {
+      controls.stop()
+      const baseAnim = {
+        y: 0,
+        opacity: 100,
+        transition: { duration: 0 },
+      }
+      controls.start((i) =>
+        i < 10
+          ? {
+              ...baseAnim,
+              transition: { duration: 0.2, delay: i * 0.1 },
+            }
+          : baseAnim,
+      )
+    }
+  }, [isActive, controls])
+
   const renderedRows = useMemo(() => {
-    return validators.map((validator) => (
+    return validators.map((validator, index) => (
       <SelectTargetRow
+        animIndex={index}
+        animControls={controls}
         isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
         key={validator.pubKey}
         onSelect={onSelect}
         validator={validator}
       />
     ))
-  }, [validators, targetValidator, onSelect])
+  }, [validators, targetValidator, onSelect, controls])
 
   return (
     <div className='w-full flex flex-col items-center pt-6'>

@@ -1,6 +1,6 @@
+import clsx from 'clsx'
 import { motion, MotionProps } from 'framer-motion'
 import React, { FC, ReactNode } from 'react'
-import addClassString from '../../../utilities/addClassString'
 import { OptionalBoolean } from '../../types'
 import Spinner from '../Spinner/Spinner'
 import { TypographyFamily, TypographyType } from '../Typography/Typography'
@@ -25,7 +25,7 @@ export interface ButtonProps extends MotionProps {
   onClick?: (() => void) | undefined
   dataTestId?: string
   padding?: string
-  className?: string
+  className?: string | undefined
   renderAs?: 'submit' | 'reset' | 'button'
   href?: string
   target?: '_self' | '_blank' | undefined
@@ -50,12 +50,10 @@ const Button: FC<ButtonProps> = ({
   animate,
   transition,
 }) => {
-  const buttonContentClasses = addClassString('flex space-x-2', [isLoading && 'opacity-0'])
-  const spinnerContentClasses = addClassString('', [
-    !isLoading && 'hidden',
-    isLoading && 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2',
-  ])
-
+  const buttonContentClasses = clsx('flex space-x-2', isLoading && 'opacity-0')
+  const spinnerContentClasses = clsx(
+    isLoading ? 'absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : 'hidden',
+  )
   const formatFaceStyle = () => {
     switch (type) {
       case ButtonFace.LIGHT_ACTIVE:
@@ -77,6 +75,16 @@ const Button: FC<ButtonProps> = ({
     }
   }
 
+  const buttonContainerClasses = clsx(
+    'relative box-border active:scale-95 transition-all duration-100 ease-in w-fit cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-30 flex justify-center space-x-2',
+    formatFaceStyle(),
+    font,
+    fontType,
+    className,
+    padding,
+    isLoading && 'pointer-events-none',
+  )
+
   const renderButton = () => (
     <motion.button
       initial={initial}
@@ -86,9 +94,7 @@ const Button: FC<ButtonProps> = ({
       type={renderAs}
       onClick={onClick}
       disabled={isDisabled}
-      className={`${formatFaceStyle()} ${font} ${fontType} ${className} ${
-        isLoading && 'pointer-events-none'
-      } relative box-border ${padding} active:scale-95 transition-all duration-100 ease-in w-fit cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-30 flex justify-center space-x-2`}
+      className={buttonContainerClasses}
     >
       <div className={buttonContentClasses}>{children}</div>
       {isLoading && <Spinner className={spinnerContentClasses} size='h-6 w-6' />}

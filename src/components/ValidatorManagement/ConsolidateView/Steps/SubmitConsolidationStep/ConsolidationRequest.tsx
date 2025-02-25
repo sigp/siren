@@ -1,13 +1,12 @@
 import { dataSlice, getAddress } from 'ethers'
 import React, { FC } from 'react'
 import addClassString from '../../../../../../utilities/addClassString'
-import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ConsolidationTx, TxHash } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
 import Spinner from '../../../../Spinner/Spinner'
-import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
+import WithdrawalAddressPill from '../../../../WithdrawalAddress/WithdrawalAddressPill'
 
 export interface ConsolidationRequestProps {
   validator: ValidatorInfo
@@ -43,18 +42,13 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
         <div className='h-8 w-8 hidden @425:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
         <div className='flex items-center mr-4 lg:mr-0 space-x-2 border-r-style pr-4'>
           <Typography type='text-caption1'>{name}</Typography>
-          <Typography className='hidden @425:block' type='text-caption1'>
-            {index}
-          </Typography>
+          <Typography type='text-caption1'>{index}</Typography>
         </div>
-        <Tooltip
-          place='top-start'
-          style={{ fontSize: '11px' }}
+        <WithdrawalAddressPill
+          className='hidden @425:block'
+          address={withdrawalCredentials}
           id={`tool-request-${index}`}
-          text={withdrawalCredentials}
-        >
-          <Typography type='text-caption1'>{formatEthAddress(withdrawalCredentials)}</Typography>
-        </Tooltip>
+        />
       </div>
       <div>
         {requestData ? (

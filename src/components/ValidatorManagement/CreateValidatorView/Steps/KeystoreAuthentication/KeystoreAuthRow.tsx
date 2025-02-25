@@ -7,7 +7,7 @@ import { ValidatorCandidateRowProps } from '../../../../ValidatorCandidateRow/Va
 
 export interface KeystoreAuthRowProps extends Pick<ValidatorCandidateRowProps, 'index'> {
   candidate: ValidatorCandidate
-  onConfirmation: (id: string, password: string) => void
+  onConfirmation: (id: string, password: string | undefined) => void
 }
 
 const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirmation }) => {
@@ -41,7 +41,10 @@ const KeystoreAuthRow: FC<KeystoreAuthRowProps> = ({ candidate, index, onConfirm
   useEffect(() => {
     if (isValid) {
       onConfirmation(id, confirmationPassword)
+      return
     }
+
+    onConfirmation(id, undefined)
   }, [confirmationPassword, id, isValid])
 
   return (

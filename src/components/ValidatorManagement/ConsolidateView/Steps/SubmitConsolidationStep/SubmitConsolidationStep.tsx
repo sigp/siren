@@ -7,6 +7,7 @@ import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
 import { ConsolidationTx, TxStatus } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
+import Button, { ButtonFace } from '../../../../Button/Button'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import RangeSliderInput from '../../../../RangeSliderInput/RangeSliderInput'
 import ResolvedTransactionStatus from '../../../../ResolvedTransactionStatus/ResolvedTransactionStatus'
@@ -19,12 +20,14 @@ export interface SubmitConsolidationStepProps {
   targetValidator: ValidatorInfo | undefined
   sourceValidators: ValidatorInfo[]
   chainId: number
+  isActive: boolean
 }
 
 const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   targetValidator,
   sourceValidators,
   chainId,
+  isActive,
 }) => {
   const { t } = useTranslation()
   const [isExtraFee, setIsExtraFee] = useState(false)
@@ -124,14 +127,22 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
         <Typography type='text-subtitle2'>
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
-        <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength || 0n} />
+        <ConsolidationQueueStatus
+          isActive={isActive}
+          className='mt-4'
+          queueLength={consolidationQueLength || 0n}
+        />
       </div>
       <div className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'>
         <div className='hidden lg:block'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.signAndSubmit.title')}
           </Typography>
-          <ConsolidationQueueStatus className='mt-4' queueLength={consolidationQueLength || 0n} />
+          <ConsolidationQueueStatus
+            isActive={isActive}
+            className='mt-4'
+            queueLength={consolidationQueLength || 0n}
+          />
         </div>
         <div className='w-full mt-4 flex flex-col'>
           {targetValidator ? (
@@ -219,8 +230,17 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
           </div>
         </div>
         {consolidationRequests.length ? (
-          <div className='w-full lg:max-h-[504px] overflow-scroll space-y-2'>
-            {renderedTxStatuses}
+          <div>
+            <div className='w-full lg:max-h-[425px] overflow-scroll space-y-2'>
+              {renderedTxStatuses}
+            </div>
+            <Button
+              className='mt-8 w-full'
+              type={ButtonFace.SECONDARY}
+              href='/dashboard/validators'
+            >
+              {t('validatorManagement.manageValidators')}
+            </Button>
           </div>
         ) : (
           <div className='w-full h-full flex-1'>

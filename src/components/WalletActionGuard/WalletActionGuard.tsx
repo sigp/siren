@@ -12,6 +12,7 @@ export interface WalletActionGuardProps {
   textSize?: TypographyType | undefined
   isSufficientBalance?: boolean
   targetAddress?: Address
+  guardActionClass?: string
 }
 
 const WalletActionGuard: FC<WalletActionGuardProps> = ({
@@ -19,6 +20,7 @@ const WalletActionGuard: FC<WalletActionGuardProps> = ({
   textSize,
   isSufficientBalance = true,
   targetAddress,
+  guardActionClass,
 }) => {
   const { t } = useTranslation()
   const { isConnected, isValidNetwork, switchNetwork, address } = useWalletConnection()
@@ -28,7 +30,7 @@ const WalletActionGuard: FC<WalletActionGuardProps> = ({
   const renderStatusButton = useCallback(
     (translationKey: string, buttonType: ButtonFace, onClick?: () => void, isDisabled = false) => (
       <Button
-        className='w-full h-full'
+        className={guardActionClass}
         onClick={onClick}
         isDisabled={isDisabled}
         isLoading={translationKey === 'connect' && isWalletModalOpen}

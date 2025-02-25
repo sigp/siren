@@ -1,11 +1,11 @@
-import { FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { KeyStoreData } from '../../../../../hooks/useLodestarDepositData'
 import { DepositData, TxHash, TxStatus, ValidatorCandidate } from '../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
-import FlexedOverflow from '../../../../FlexedOverflow/FlexedOverflow'
+import Button, { ButtonFace } from '../../../../Button/Button'
 import Typography from '../../../../Typography/Typography'
 import ValidatorDepositImport from '../../../../ValidatorDepositImport/ValidatorDepositImport'
 import ValidatorDepositRow from '../../../../ValidatorDepositRow/ValidatorDepositRow'
@@ -113,17 +113,26 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
           <Typography>{t('validatorManagement.transactionStatus')}</Typography>
         </div>
         {depositData.length ? (
-          <FlexedOverflow isAutoScroll className='space-y-3 pt-3'>
-            {depositData.map((data, index) => (
-              <ValidatorDepositImport
-                key={index}
-                onUpdateStatus={updateDepositInfoStatus}
-                onRetryTx={removeTransaction}
-                depositData={data}
-                depositNetworkId={DEPOSIT_NETWORK_ID}
-              />
-            ))}
-          </FlexedOverflow>
+          <>
+            <div className='space-y-3 overflow-scroll lg:max-h-[400px] w-full pt-3'>
+              {depositData.map((data, index) => (
+                <ValidatorDepositImport
+                  key={index}
+                  onUpdateStatus={updateDepositInfoStatus}
+                  onRetryTx={removeTransaction}
+                  depositData={data}
+                  depositNetworkId={DEPOSIT_NETWORK_ID}
+                />
+              ))}
+            </div>
+            <Button
+              className='mt-8 w-full'
+              type={ButtonFace.SECONDARY}
+              href='/dashboard/validators'
+            >
+              {t('validatorManagement.manageValidators')}
+            </Button>
+          </>
         ) : (
           <div className='w-full flex-1'>
             <div className='w-full h-full border-style flex items-center justify-center'>

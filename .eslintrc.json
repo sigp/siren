@@ -1,14 +1,6 @@
 {
-  "plugins": [
-    "@typescript-eslint",
-    "import",
-    "unused-imports",
-    "prettier"
-  ],
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:prettier/recommended"
-  ],
+  "plugins": ["@typescript-eslint", "import", "unused-imports", "prettier"],
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
   "rules": {
     "@typescript-eslint/ban-ts-comment": "off",
     "import/order": [
