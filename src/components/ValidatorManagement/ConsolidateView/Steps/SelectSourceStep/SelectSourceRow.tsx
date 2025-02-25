@@ -1,3 +1,4 @@
+import { AnimationControls, motion } from 'framer-motion'
 import { FC, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -10,18 +11,30 @@ export interface SelectSourceRowProps {
   source: ValidatorInfo
   isSelected: boolean
   onSelect: (source: ValidatorInfo) => void
+  animControls: AnimationControls
+  animIndex: number
 }
 
-const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelect }) => {
+const SelectSourceRow: FC<SelectSourceRowProps> = ({
+  source,
+  isSelected,
+  onSelect,
+  animControls,
+  animIndex,
+}) => {
   const { pubKey, balance, name, withdrawalAddress } = source
   const selectSource = () => onSelect(source)
   const formattedBalance = Math.round(balance)
   const formattedPubKey = formatEthAddress(pubKey)
 
   const tooltipStyles = useMemo(() => ({ fontSize: '11px' }), [])
+  const initialAnim = useMemo(() => ({ y: -20, opacity: 0 }), [])
 
   return (
-    <div
+    <motion.div
+      initial={initialAnim}
+      animate={animControls}
+      custom={animIndex}
       onClick={selectSource}
       className='w-full p-4 cursor-pointer dark:hover:bg-dark750 hover:bg-dark25 flex items-center justify-between'
     >
@@ -52,7 +65,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({ source, isSelected, onSelec
           {formattedBalance} ETH
         </Typography>
       </div>
-    </div>
+    </motion.div>
   )
 }
 

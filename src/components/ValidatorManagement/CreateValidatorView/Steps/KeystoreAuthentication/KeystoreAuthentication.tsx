@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
 import { ValidatorCandidate } from '../../../../../types'
@@ -10,8 +10,8 @@ import KeystoreAuthRow from './KeystoreAuthRow'
 
 export interface KeystoreAuthenticationProps extends Omit<StepOptionsProps, 'isDisabledNext'> {
   candidates: ValidatorCandidate[]
-  sharedKeystorePassword: string
-  setSharedKeystorePassword: (password: string) => void
+  sharedKeystorePassword: string | undefined
+  setSharedKeystorePassword: (password: string | undefined) => void
   onUpdateCandidates: (candidates: ValidatorCandidate[]) => void
 }
 
@@ -35,13 +35,16 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
     candidateCount < 2 && 'opacity-0 pointer-events-none',
   ])
 
-  const groupCandidate = {
-    id: 'all',
-    name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
-    withdrawalCredentials: '',
-    isVerifiedCredentials: true,
-    keyStorePassword: sharedKeystorePassword,
-  } as ValidatorCandidate
+  const groupCandidate = useMemo(
+    () => ({
+      id: 'all',
+      name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
+      withdrawalCredentials: '',
+      isVerifiedCredentials: true,
+      keyStorePassword: sharedKeystorePassword,
+    }),
+    [t, sharedKeystorePassword],
+  ) as ValidatorCandidate
 
   const toggleAssignAllCredentials = (): void => {
     const updatedCandidates = candidates.map((validator) => ({
@@ -53,7 +56,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
     setSharedKeystorePassword('')
   }
 
-  const updateCandidatePassword = (id: string, password: string) => {
+  const updateCandidatePassword = (id: string, password: string | undefined) => {
     const index = candidates.findIndex((item) => item.id === id)
     if (index !== -1) {
       const updatedCandidates = [...candidates]
@@ -65,7 +68,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
     }
   }
 
-  const updateSharedCandidatePassword = (_id: string, password: string) =>
+  const updateSharedCandidatePassword = (_id: string, password: string | undefined) =>
     setSharedKeystorePassword(password)
 
   useEffect(() => {

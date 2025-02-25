@@ -1,6 +1,7 @@
-import { FC, useCallback, useMemo, useState } from 'react'
+import clsx from 'clsx'
+import { useAnimationControls } from 'framer-motion'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import addClassString from '../../../../../../utilities/addClassString'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Typography from '../../../../Typography/Typography'
@@ -14,6 +15,7 @@ export interface SelectSourceStepProps {
   onSelectTargetValidators: (validators: ValidatorInfo[]) => void
   onNext: () => void
   onBack: () => void
+  isActive: boolean
 }
 
 const SelectSourceStep: FC<SelectSourceStepProps> = ({
@@ -22,12 +24,33 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   onSelectTargetValidators,
   onNext,
   onBack,
+  isActive,
 }) => {
   const { t } = useTranslation()
+  const controls = useAnimationControls()
   const [isSelectAll, setIsSelectAll] = useState(false)
   const [isSelfConsolidate, setIsSelfConsolidate] = useState(false)
   const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>([])
   const canSelfConsolidate = targetValidator?.withdrawalAddress?.includes('0x01')
+
+  useEffect(() => {
+    if (isActive) {
+      controls.stop()
+      const baseAnim = {
+        y: 0,
+        opacity: 100,
+        transition: { duration: 0 },
+      }
+      controls.start((i) =>
+        i < 10
+          ? {
+              ...baseAnim,
+              transition: { duration: 0.2, delay: i * 0.1 },
+            }
+          : baseAnim,
+      )
+    }
+  }, [isActive, controls])
 
   const availableSourceValidators = useMemo<ValidatorInfo[]>(() => {
     return validators.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
@@ -37,11 +60,9 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
     return selectedSources.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
   }, [selectedSources, targetValidator])
 
-  const isAll = useMemo(() => {
-    return isSelectAll && selectedSources.length === availableSourceValidators.length
-  }, [isSelectAll, selectedSources, availableSourceValidators])
+  const isAll = isSelectAll && selectedSources.length === availableSourceValidators.length
 
-  const toggleSource = (source: ValidatorInfo) => {
+  const toggleSource = useCallback((source: ValidatorInfo) => {
     const { pubKey } = source
     setSelectedSources((prev) => {
       const values = prev.filter((prevVal) => prevVal.pubKey === pubKey)
@@ -51,38 +72,58 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
 
       return [...prev, source]
     })
-  }
+  }, [])
 
-  const confirmSources = () => {
+  const confirmSources = useCallback(() => {
     onSelectTargetValidators(selectedSources)
     onNext()
-  }
+  }, [onSelectTargetValidators, selectedSources, onNext])
 
-  const toggleIsSelectAll = () => {
+  const toggleIsSelectAll = useCallback(() => {
     setSelectedSources(isAll ? [] : availableSourceValidators)
     setIsSelectAll(!isAll)
-  }
+  }, [isAll, availableSourceValidators])
 
   const removeSource = useCallback(
     (pubKey: string) => setSelectedSources((prev) => prev.filter((item) => item.pubKey !== pubKey)),
     [],
   )
 
-  const stepBack = () => {
+  const stepBack = useCallback(() => {
     setSelectedSources([])
     onBack()
-  }
+  }, [onBack])
 
-  const toggleSelfConsolidation = () => {
+  const toggleSelfConsolidation = useCallback(() => {
     setIsSelfConsolidate((prev) => !prev)
     if (targetValidator) {
       setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
     }
-  }
+  }, [targetValidator, isSelfConsolidate])
 
-  const eligibleValidatorListClasses = addClassString('flex flex-col border-style', [
+  const eligibleValidatorListClasses = clsx(
+    'flex flex-col border-style',
     isSelfConsolidate && 'opacity-20 pointer-events-none',
-  ])
+  )
+  const sourceListContainerClasses = clsx(
+    'h-full overflow-scroll',
+    canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]',
+  )
+
+  const renderedSourceValidators = useMemo(
+    () =>
+      availableSourceValidators.map((source, index) => (
+        <SelectSourceRow
+          animControls={controls}
+          animIndex={index}
+          key={source.pubKey}
+          source={source}
+          isSelected={selectedSources.filter(({ pubKey }) => source.pubKey === pubKey).length > 0}
+          onSelect={toggleSource}
+        />
+      )),
+    [selectedSources, availableSourceValidators, toggleSource, controls],
+  )
 
   return (
     <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row pt-4'>
@@ -127,20 +168,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
               onChange={toggleIsSelectAll}
             />
           </div>
-          <div
-            className={`h-full overflow-scroll ${canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]'}`}
-          >
-            {availableSourceValidators.map((source) => (
-              <SelectSourceRow
-                key={source.pubKey}
-                source={source}
-                isSelected={
-                  selectedSources.filter(({ pubKey }) => source.pubKey === pubKey).length > 0
-                }
-                onSelect={toggleSource}
-              />
-            ))}
-          </div>
+          <div className={sourceListContainerClasses}>{renderedSourceValidators}</div>
         </div>
       </div>
       <div className='w-16 @1440:w-32 @1540:w-48 h-full hidden lg:flex order-2 flex-col items-center justify-center'>

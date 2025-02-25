@@ -7,11 +7,13 @@ import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 export interface ConsolidationQueueStatusProps {
   queueLength?: bigint | TxHash
   className?: string
+  isActive: boolean
 }
 
 const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
   queueLength,
   className,
+  isActive,
 }) => {
   const { t } = useTranslation()
   const classes = addClassString('w-full', [className])
@@ -52,7 +54,12 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
 
   return statusWarning ? (
     <div className={classes}>
-      <InfoBox type={statusWarning.type} text={statusWarning.text} />
+      <InfoBox
+        isActive={isActive}
+        animDelay={0.4}
+        type={statusWarning.type}
+        text={statusWarning.text}
+      />
     </div>
   ) : null
 }
