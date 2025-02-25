@@ -41,6 +41,7 @@
   "year": "year",
   "month": "month",
   "week": "week",
+  "required": "Required",
   "hour": "hour",
   "waiting": "waiting",
   "available": "available",
@@ -338,6 +339,7 @@
     "customValidatorName": "Custom Validator Name",
     "manageValidators": "Manage Validators",
     "makeDeposit": "Make Deposit",
+    "requiredEthHelper": "Required amount of ETH to successfully make a validator deposit.",
     "titles": {
       "main": "Validator Management",
       "add": "Add Validator",

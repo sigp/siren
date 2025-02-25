@@ -1,4 +1,4 @@
-import { parseUnits } from 'ethers'
+import { formatEther } from 'ethers'
 import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
@@ -8,6 +8,7 @@ import { KeyStoreData } from '../../hooks/useLodestarDepositData'
 import useValidatorDeposit, { ValidatorDepositConfig } from '../../hooks/useValidatorDeposit'
 import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
+import PillText from '../PillText/PillText'
 import Spinner from '../Spinner/Spinner'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
@@ -26,15 +27,13 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   data,
 }) => {
   const { t } = useTranslation()
-  const { MIN_ACTIVATION_BALANCE } = beaconSpec
-  const { index } = candidate
+  const { index, effectiveBalance, pubKey: candidatePubKey } = candidate
   const { isLoading, txHash, error, pubKey, keyStore, makeDeposit } = useValidatorDeposit({
     validator: candidate,
     mnemonic,
     beaconSpec,
   })
-  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE.toString(), 'gwei')
-  const { isSufficient } = useHasSufficientBalance(depositAmountWei)
+  const { isSufficient } = useHasSufficientBalance(effectiveBalance)
 
   useEffect(() => {
     if (txHash && pubKey && !!keyStore) {
@@ -54,7 +53,13 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
 
   return (
     <ValidatorCandidateRow data={candidate} index={index as number}>
-      <div className='flex items-center justify-center px-4'>
+      <div className='flex flex-1 items-center justify-between px-4'>
+        <PillText
+          id={`${candidatePubKey}-amount-text`}
+          toolTipText={t('validatorManagement.requiredEthHelper')}
+          textPrefix={t('required')}
+          displayText={`${formatEther(effectiveBalance)} ETH`}
+        />
         {!!data ? (
           data.status === 'pending' ? (
             <Spinner size='h-3 w-3' />

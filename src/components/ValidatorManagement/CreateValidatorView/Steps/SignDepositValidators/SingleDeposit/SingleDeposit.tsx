@@ -1,5 +1,4 @@
 import axios from 'axios'
-import { parseUnits } from 'ethers'
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
@@ -34,8 +33,8 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   ...props
 }) => {
   const { t } = useTranslation()
-  const { name, withdrawalCredentials, index } = candidate
-  const { DEPOSIT_NETWORK_ID, MIN_ACTIVATION_BALANCE } = beaconSpec
+  const { name, withdrawalCredentials, index, effectiveBalance } = candidate
+  const { DEPOSIT_NETWORK_ID } = beaconSpec
 
   const [step, setStep] = useState(0)
   const incrementStep = () => setStep((prev) => prev + 1)
@@ -95,8 +94,6 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   const retryTransaction = () => setStep(0)
 
-  const depositAmountWei = parseUnits(MIN_ACTIVATION_BALANCE.toString(), 'gwei')
-
   return (
     <div className='relative w-full h-full'>
       <div className='flex flex-col space-y-8 lg:space-y-0 lg:flex-row pt-8 w-full h-full'>
@@ -147,7 +144,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
                   <div className='w-full lg:w-[500px] shadow'>
                     <VerticalStepper step={step} titles={stepTitles}>
                       <DepositStep
-                        depositAmount={depositAmountWei}
+                        depositAmount={effectiveBalance}
                         isLoading={isLoading}
                         onDeposit={makeDeposit}
                       />
