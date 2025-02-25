@@ -24,7 +24,7 @@ const DepositStep: FC<DepositStepProps> = ({ isLoading, onDeposit, depositAmount
           {t('validatorManagement.signAndDeposit.depositText')}
         </Typography>
       </InfoBox>
-      <WalletActionGuard isSufficientBalance={isSufficient}>
+      <WalletActionGuard guardActionClass='w-full h-full' isSufficientBalance={isSufficient}>
         <Button
           isLoading={isLoading}
           type={ButtonFace.SECONDARY}
