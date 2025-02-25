@@ -164,9 +164,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
           <div className='flex-1'>
             <Typography color='text-dark700'>{title}</Typography>
             <div className='mt-1.5'>
-              <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-                {text}
-              </Typography>
+              {text}
               <Typography
                 color='text-dark400'
                 darkMode='dark:text-dark400'
