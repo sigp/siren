@@ -83,7 +83,7 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
     } finally {
       setLoading(false)
     }
-  }, [data, validatorCandidate, credentialInput])
+  }, [data, t, credentialInput])
 
   useEffect(() => {
     if (error) {
