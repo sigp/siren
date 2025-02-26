@@ -35,16 +35,40 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
   isPaginated,
 }) => {
   const { t } = useTranslation()
-  const initialViewCount = 15
+  const defaultViewCount = 15
+  const rowRef = useRef<HTMLTableRowElement>(null)
+  const [initialViewCount, setInitialViewCount] = useState(defaultViewCount)
+  const isTablet = useMediaQuery('(max-width: 768px)')
+
+  const calculateViewCount = () => {
+    const availableHeight = window.innerHeight - 200
+    let rowHeight = 40
+    if (rowRef.current) {
+      rowHeight = rowRef.current.getBoundingClientRect().height
+    }
+    return Math.floor(availableHeight / rowHeight) + 5
+  }
+
+  useEffect(() => {
+    if (isTablet || view === 'partial') return
+
+    const updateViewCount = () => {
+      const count = calculateViewCount()
+      setInitialViewCount(count > defaultViewCount ? count : defaultViewCount)
+    }
+    updateViewCount()
+    window.addEventListener('resize', updateViewCount)
+    return () => window.removeEventListener('resize', updateViewCount)
+  }, [isTablet, view])
+
   const scrollThreshold = 90
   const totalPages = Math.ceil(validators.length / initialViewCount)
-
   const [pagination, setPage] = useState(1)
 
   const prevScrollPercentage = useRef(0)
   const paginatedValidators = useMemo<ValidatorInfo[]>(() => {
     return isPaginated ? validators.slice(0, initialViewCount * pagination) : validators
-  }, [validators, isPaginated, pagination])
+  }, [validators, isPaginated, pagination, initialViewCount])
 
   useEffect(() => {
     if (
@@ -57,8 +81,6 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
     }
     prevScrollPercentage.current = scrollPercentage
   }, [scrollPercentage, isPaginated, totalPages, pagination])
-
-  const isTablet = useMediaQuery('(max-width: 768px)')
 
   return validators ? (
     validators?.length ? (
@@ -82,7 +104,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
           ) : (
             <table className='relative table-auto w-full'>
               <thead className='sticky z-30 top-0 left-0 bg-white dark:bg-darkPrimary'>
-                <tr className='w-full h-12'>
+                <tr className='w-full h-12' ref={rowRef}>
                   <th>
                     <div className='w-full flex justify-center'>
                       <div className='w-4 h-4'>

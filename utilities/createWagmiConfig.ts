@@ -8,6 +8,7 @@ const localChainId = process.env.NEXT_PUBLIC_TESTNET_CHAIN_ID
   : undefined
 const localRpc = process.env.NEXT_PUBLIC_TESTNET_RPC
 const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
+const nativeCurrency = { name: 'Ether', symbol: 'ETH', decimals: 18 }
 
 const createWagmiConfig = () => {
   const chains: Chain[] = [mainnet, holesky]
@@ -21,11 +22,21 @@ const createWagmiConfig = () => {
     name: 'Mekong',
     network: 'mekong',
     rpcUrls: { default: { http: ['https://rpc.mekong.ethpandaops.io/'] } },
-    nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+    nativeCurrency,
+    testnet: true,
+  })
+  const devnet5: Chain = defineChain({
+    id: 7088110746,
+    name: 'Devnet5',
+    network: 'devnet5',
+    rpcUrls: { default: { http: ['https://rpc.pectra-devnet-5.ethpandaops.io'] } },
+    nativeCurrency,
     testnet: true,
   })
   chains.push(mekongTestnet)
   transports[mekongTestnet.id] = http()
+  chains.push(devnet5)
+  transports[devnet5.id] = http()
 
   if (localChainId && localRpc) {
     const customLocalhost: Chain = defineChain({
@@ -33,7 +44,7 @@ const createWagmiConfig = () => {
       name: 'Localhost',
       network: 'localhost',
       rpcUrls: { default: { http: [localRpc] } },
-      nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
+      nativeCurrency,
       testnet: true,
     })
     chains.push(customLocalhost)

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation'
-import { FC, useCallback, useEffect, useState, MouseEvent } from 'react'
+import { FC, useEffect, useState, MouseEvent, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
@@ -92,7 +92,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     window.location.href = detailHref
   }
 
-  const renderAvatar = useCallback(() => {
+  const renderAvatar = useMemo(() => {
     if (isConversionRequired) {
       return (
         <Tooltip id={`blsTransfer-${pubKey}`} maxWidth={300} text={t('blsExecution.tooltip')}>
@@ -112,7 +112,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   return (
     <tr onClick={viewDetail} className='w-full cursor-pointer border-t-style500 h-12'>
       <th className={validatorIconClass}>
-        <div className='w-full flex justify-center'>{renderAvatar()}</div>
+        <div className='w-full flex justify-center'>{renderAvatar}</div>
       </th>
       <th className='w-28 cursor-pointer'>
         <Typography className='text-left' color='text-dark500' type='text-caption2'>
