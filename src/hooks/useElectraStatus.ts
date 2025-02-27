@@ -16,7 +16,10 @@ const useElectraStatus = () => {
     const currentVersion = data.current_version
     const configName = CONFIG_NAME.toLowerCase()
 
-    if (configName === Network.Mekong.toLowerCase()) {
+    if (
+      configName === Network.Mekong.toLowerCase() ||
+      configName === Network.Devnet7.toLowerCase()
+    ) {
       return true
     }
 
