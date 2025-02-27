@@ -25,18 +25,18 @@ const createWagmiConfig = () => {
     nativeCurrency,
     testnet: true,
   })
-  const devnet5: Chain = defineChain({
-    id: 7088110746,
-    name: 'Devnet5',
-    network: 'devnet5',
-    rpcUrls: { default: { http: ['https://rpc.pectra-devnet-5.ethpandaops.io'] } },
+  const devnet7: Chain = defineChain({
+    id: 7032118028,
+    name: 'Devnet7',
+    network: 'devnet7',
+    rpcUrls: { default: { http: ['https://rpc.pectra-devnet-7.ethpandaops.io/'] } },
     nativeCurrency,
     testnet: true,
   })
   chains.push(mekongTestnet)
   transports[mekongTestnet.id] = http()
-  chains.push(devnet5)
-  transports[devnet5.id] = http()
+  chains.push(devnet7)
+  transports[devnet7.id] = http()
 
   if (localChainId && localRpc) {
     const customLocalhost: Chain = defineChain({
