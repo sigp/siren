@@ -21,6 +21,8 @@ export const selectBnChain = selector({
         return Network.Sepolia
       case '7078815900':
         return Network.Mekong
+      case '7032118028':
+        return Network.Devnet7
       default:
         return Network.LocalTestnet
     }
