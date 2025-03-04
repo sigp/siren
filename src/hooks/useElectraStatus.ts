@@ -1,6 +1,10 @@
 import { useMemo } from 'react'
 import { useRecoilValue } from 'recoil'
-import { HOLESKY_PECTRA_FORK_VERSION, MAINNET_PECTRA_FORK_VERSION } from '../constants/constants'
+import {
+  DEVNET_7_PECTRA_FORK_VERSION,
+  HOLESKY_PECTRA_FORK_VERSION,
+  MAINNET_PECTRA_FORK_VERSION,
+} from '../constants/constants'
 import { Network } from '../constants/enums'
 import { beaconNodeSpec, forkVersion } from '../recoil/atoms'
 
@@ -16,11 +20,12 @@ const useElectraStatus = () => {
     const currentVersion = data.current_version
     const configName = CONFIG_NAME.toLowerCase()
 
-    if (
-      configName === Network.Mekong.toLowerCase() ||
-      configName === Network.Devnet7.toLowerCase()
-    ) {
+    if (configName === Network.Mekong.toLowerCase()) {
       return true
+    }
+
+    if (configName === Network.Devnet7.toLowerCase()) {
+      return currentVersion === DEVNET_7_PECTRA_FORK_VERSION
     }
 
     if (configName === Network.Holesky.toLowerCase()) {

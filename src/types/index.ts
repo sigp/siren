@@ -44,6 +44,11 @@ export type LogData = {
   updatedAt: string
 }
 
+export type FormattedLogData = Omit<LogData, 'data'> & {
+  data: Record<string, unknown>
+  fromNowStamp: string
+}
+
 export type LogMetric = {
   warningLogs: LogData[]
   errorLogs: LogData[]

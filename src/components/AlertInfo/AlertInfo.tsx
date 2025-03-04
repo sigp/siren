@@ -1,12 +1,17 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import axios from 'axios'
+import moment from 'moment/moment'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import displayToast from '../../../utilities/displayToast'
 import sortAlertMessagesBySeverity from '../../../utilities/sortAlerts'
+import { FETCH_LOG_LIMIT } from '../../constants/constants'
 import useDiagnosticAlerts from '../../hooks/useDiagnosticAlerts'
 import useDivDimensions from '../../hooks/useDivDimensions'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import useSSEData from '../../hooks/useSSEData'
 import { proposerDuties } from '../../recoil/atoms'
-import { LogData, StatusColor } from '../../types'
+import { LogData, StatusColor, ToastType } from '../../types'
 import AlertCard from '../AlertCard/AlertCard'
 import AlertFilterSettings, { FilterValue } from '../AlertFilterSettings/AlertFilterSettings'
 import ProposerAlerts, { ProposerAlertsProps } from '../ProposerAlerts/ProposerAlerts'
@@ -24,8 +29,84 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
   const headerDimensions = useDivDimensions()
   const [filter, setFilter] = useState('all')
   const duties = useRecoilValue(proposerDuties)
+  const [isLoadingLogs, setIsLoadingLogs] = useState(false)
+  const [priorityLogData, setData] = useState<LogData[]>(priorityLogs)
+  const [hasMoreLogs, setHasMoreLogs] = useState(priorityLogs.length >= FETCH_LOG_LIMIT)
 
-  const setFilterValue = (value: FilterValue) => setFilter(value)
+  const { data: streamedData } = useSSEData<LogData[]>({
+    url: '/priority-log-stream',
+    isReady: true,
+    isStateStore: true,
+  })
+
+  useEffect(() => {
+    if (!streamedData?.length) return
+
+    setData((prev: LogData[]) => {
+      const combined = [...prev, ...streamedData]
+      return Array.from(new Map(combined.map((item) => [item.id, item])).values())
+    })
+  }, [streamedData])
+
+  const dismissLog = useCallback(
+    async (id: number) => {
+      try {
+        const { status } = await axios.put(`/api/dismiss-log/${id}`)
+
+        if (status !== 200) return
+
+        setData((prev) =>
+          prev.map((alert) => (alert.id === id ? { ...alert, isHidden: true } : alert)),
+        )
+        displayToast(t('alertMessages.dismiss.success'), ToastType.SUCCESS)
+      } catch (error) {
+        console.error('Error updating log:', error)
+        displayToast(t('alertMessages.dismiss.error'), ToastType.ERROR)
+      }
+    },
+    [t],
+  )
+
+  const fetchOlderLogs = useCallback(async () => {
+    setIsLoadingLogs(true)
+    try {
+      const oldestLog = priorityLogData.reduce((oldest, current) =>
+        new Date(current.createdAt) < new Date(oldest.createdAt) ? current : oldest,
+      )
+      const oldestLogDate = oldestLog.createdAt
+
+      const { data: fetchedData } = await axios.get(`/api/priority-logs?since=${oldestLogDate}`)
+
+      const count = fetchedData?.length
+
+      if (!count) return
+
+      if (count < FETCH_LOG_LIMIT) {
+        setHasMoreLogs(false)
+      }
+      setData((prev) => {
+        const combined = [...prev, ...fetchedData]
+        return Array.from(new Map(combined.map((item) => [item.id, item])).values())
+      })
+    } catch (error) {
+      console.error('Error fetching older logs:', error)
+    } finally {
+      setIsLoadingLogs(false)
+    }
+  }, [priorityLogData])
+
+  const visibleOrderedAlerts = useMemo(() => {
+    return priorityLogData
+      .filter(({ isHidden }) => !isHidden)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .map((alert) => ({
+        ...alert,
+        data: JSON.parse(alert.data),
+        fromNowStamp: moment(alert.createdAt).fromNow(),
+      }))
+  }, [priorityLogData])
+
+  const setFilterValue = useCallback((value: FilterValue) => setFilter(value), [])
   const isMobile = useMediaQuery('(max-width: 425px)')
 
   const formattedAlerts = useMemo(() => {
@@ -40,8 +121,9 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
 
   const isSeverFilter = filter === 'all' || filter === StatusColor.ERROR
 
-  const isFiller = formattedAlerts.length + (duties?.length || 0) + (priorityLogs.length || 0) < 6
-  const isPriorityAlerts = priorityLogs.length > 0
+  const isFiller =
+    formattedAlerts.length + (duties?.length || 0) + (visibleOrderedAlerts.length || 0) < 6
+  const isPriorityAlerts = visibleOrderedAlerts.length > 0
   const isAlerts = formattedAlerts.length > 0 || duties?.length > 0 || isPriorityAlerts
   const isProposerAlerts =
     duties?.length > 0 && (filter === 'all' || filter === StatusColor.SUCCESS)
@@ -78,7 +160,15 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
         >
           {isAlerts && (
             <div className={`overflow-scroll scrollbar-hide ${!isFiller ? 'flex-1' : ''}`}>
-              {isPriorityAlerts && isSeverFilter && <PriorityLogAlerts alerts={priorityLogs} />}
+              {isSeverFilter && (
+                <PriorityLogAlerts
+                  hasMoreLogs={hasMoreLogs}
+                  onFetchLogs={fetchOlderLogs}
+                  onDismissAlert={dismissLog}
+                  isLoading={isLoadingLogs}
+                  alerts={visibleOrderedAlerts}
+                />
+              )}
               {formattedAlerts.map((alert) => {
                 const { severity, subText, message, id } = alert
                 const count =
