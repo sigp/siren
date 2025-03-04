@@ -53,7 +53,7 @@ export enum Network {
   Mainnet = 'Mainnet',
   LocalTestnet = 'Local TestNet',
   Holesky = 'Holesky',
-  Devnet7 = 'Devnet7',
+  Devnet7 = 'testnet',
   Sepolia = 'Sepolia',
   Mekong = 'Mekong',
 }
