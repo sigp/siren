@@ -16,6 +16,7 @@ export const mockedSyncResults = {
   beaconSync: {
     beaconPercentage: 50,
     beaconSyncTime: 12,
+    currentEpoch: 0,
     headSlot: 1,
     isSyncing: false,
     slotDistance: 2,
@@ -64,6 +65,8 @@ export const mockFormattedStates = [
     aggregated: 0,
     attested: 0,
     balance: 32,
+    activationEpoch: 1,
+    effectiveBalance: 32,
     index: 1,
     missed: 0,
     name: 'VAL-1',
