@@ -17,7 +17,7 @@ interface SelectTargetRowProps {
 
 const SelectTargetRow: FC<SelectTargetRowProps> = memo(
   ({ validator, onSelect, isActive, animControls, animIndex }) => {
-    const { pubKey, balance, name, withdrawalAddress } = validator
+    const { pubKey, name, withdrawalAddress, effectiveBalance } = validator
     const handleSelect = useCallback(() => onSelect(validator), [validator, onSelect])
     const initialAnim = useMemo(() => ({ y: -20, opacity: 0 }), [])
 
@@ -43,8 +43,6 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(
     )
 
     const toolTipStyle = useMemo(() => ({ fontSize: '11px' }), [])
-
-    const formattedBalance = Math.round(balance)
     const formattedPubKey = formatEthAddress(pubKey)
 
     return (
@@ -92,7 +90,7 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(
           darkMode={isActive ? 'dark:text-dark300' : 'dark:text-primary'}
           type='text-caption'
         >
-          {formattedBalance} ETH
+          {effectiveBalance} ETH
         </Typography>
       </motion.div>
     )

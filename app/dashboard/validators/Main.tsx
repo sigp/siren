@@ -76,7 +76,12 @@ const Main: FC<MainProps> = (props) => {
   })
 
   const router = useRouter()
-  const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH, DEPOSIT_CHAIN_ID } = beaconSpec
+  const {
+    SECONDS_PER_SLOT,
+    SLOTS_PER_EPOCH,
+    DEPOSIT_CHAIN_ID,
+    MIN_VALIDATOR_WITHDRAWABILITY_DELAY,
+  } = beaconSpec
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const [search, setSearch] = useState('')
   const [activeValId, setValidatorId] = useRecoilState(activeValidatorId)
@@ -137,6 +142,9 @@ const Main: FC<MainProps> = (props) => {
     fallbackData: initForkVersionData,
     networkError,
   })
+
+  const currentEpoch = syncData.beaconSync.currentEpoch
+  const minValidatorWithdrawalDelay = Number(MIN_VALIDATOR_WITHDRAWABILITY_DELAY)
 
   useEffect(() => {
     setForkVersion(forkVersionData)
@@ -226,7 +234,14 @@ const Main: FC<MainProps> = (props) => {
       case ValidatorManagementView.ADD:
         return <AddValidatorView onChangeView={changeView} />
       case ValidatorManagementView.CONSOLIDATE:
-        return <ConsolidateView chainId={Number(DEPOSIT_CHAIN_ID)} validators={validatorStates} />
+        return (
+          <ConsolidateView
+            currentEpoch={currentEpoch}
+            minValidatorWithdrawalDelay={minValidatorWithdrawalDelay}
+            chainId={Number(DEPOSIT_CHAIN_ID)}
+            validators={validatorStates}
+          />
+        )
       default:
         return (
           <MainView

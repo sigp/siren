@@ -519,7 +519,8 @@
     },
     "consolidateView": {
       "selfConsolidate": "Self Consolidate",
-      "selfConsolidateHelperText": "Your target validator is eligible for self consolidation. This will change your target withdrawal credentials to 0x02 and allows you to have a single validator with a balance of up to 2048 ETH.",
+      "overMaxEbErrorText": "Max effective balance will exceed limit with this request.",
+      "selfConsolidateHelperText": "Your validator requires self-consolidation to receive ETH from exited source validators through this request. This action does not affect your validator's status and will only update the withdrawal credentials to the appropriate 0x02 prefix.",
       "steps": {
         "selectTarget": "Select Target",
         "selectSources": "Select Sources",
