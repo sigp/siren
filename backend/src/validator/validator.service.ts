@@ -8,7 +8,7 @@ import {
   ValidatorInfo,
 } from '../../../src/types/validator';
 import formatDefaultValName from '../../../utilities/formatDefaultValName';
-import { formatUnits, formatEther } from 'ethers';
+import { formatUnits } from 'ethers';
 import { Metric } from './entities/metric.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
@@ -81,21 +81,24 @@ export class ValidatorService {
               effective_balance,
               slashed,
               withdrawal_credentials,
+              activation_epoch,
             } = validator;
-            let initialBalance = Number(formatUnits(effective_balance, 'gwei'));
+            let effectiveBalance = Number(formatUnits(effective_balance, 'gwei'));
 
             if (status === 'withdrawal_done') {
-              initialBalance = 0;
+              effectiveBalance = 0;
             }
 
             return {
               name: formatDefaultValName(index),
               pubKey: pubkey,
+              effectiveBalance,
               balance: Number(formatUnits(balance, 'gwei')),
-              rewards: Number(formatUnits(balance, 'gwei')) - initialBalance,
+              rewards: Number(formatUnits(balance, 'gwei')) - effectiveBalance,
               index: Number(index),
               slashed,
               withdrawalAddress: withdrawal_credentials,
+              activationEpoch: Number(activation_epoch),
               status: status,
               processed: 0,
               missed: 0,

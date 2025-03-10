@@ -121,6 +121,8 @@ describe('BeaconController', () => {
 
   describe('getSyncData', () => {
     it('should fetch data from cache', async () => {
+      mockCacheManager.get.mockResolvedValueOnce({ SLOTS_PER_EPOCH: '32' });
+      mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
       const mockCacheValue = { data: 'mock-sync' };
       mockCacheManager.get.mockResolvedValue(mockCacheValue);
 
@@ -140,6 +142,7 @@ describe('BeaconController', () => {
       } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpExecutionResponse));
 
+      mockCacheManager.get.mockResolvedValueOnce({ SLOTS_PER_EPOCH: '32' });
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
 
       const result = await controller.getSyncData();

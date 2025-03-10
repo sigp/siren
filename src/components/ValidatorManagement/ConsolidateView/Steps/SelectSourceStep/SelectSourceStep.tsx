@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useAnimationControls } from 'framer-motion'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { MAX_EFFECTIVE_BALANCE } from '../../../../../constants/constants'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Typography from '../../../../Typography/Typography'
@@ -11,7 +12,7 @@ import SelectSourceRow from './SelectSourceRow'
 
 export interface SelectSourceStepProps {
   validators: ValidatorInfo[]
-  targetValidator: ValidatorInfo | undefined
+  targetValidator: ValidatorInfo
   onSelectTargetValidators: (validators: ValidatorInfo[]) => void
   onNext: () => void
   onBack: () => void
@@ -28,10 +29,13 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
 }) => {
   const { t } = useTranslation()
   const controls = useAnimationControls()
+  const { withdrawalAddress, pubKey: targetPubKey, effectiveBalance } = targetValidator
+  const isSelfValidateRestriction = withdrawalAddress?.startsWith('0x01')
   const [isSelectAll, setIsSelectAll] = useState(false)
-  const [isSelfConsolidate, setIsSelfConsolidate] = useState(false)
-  const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>([])
-  const canSelfConsolidate = targetValidator?.withdrawalAddress?.includes('0x01')
+  const [isSelfConsolidate, setIsSelfConsolidate] = useState(isSelfValidateRestriction)
+  const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>(
+    isSelfValidateRestriction ? [targetValidator] : [],
+  )
 
   useEffect(() => {
     if (isActive) {
@@ -53,12 +57,12 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   }, [isActive, controls])
 
   const availableSourceValidators = useMemo<ValidatorInfo[]>(() => {
-    return validators.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
-  }, [validators, targetValidator])
+    return validators.filter(({ pubKey }) => pubKey !== targetPubKey)
+  }, [validators, targetPubKey])
 
   const availableSelectedValidators = useMemo<ValidatorInfo[]>(() => {
-    return selectedSources.filter(({ pubKey }) => pubKey !== targetValidator?.pubKey)
-  }, [selectedSources, targetValidator])
+    return selectedSources.filter(({ pubKey }) => pubKey !== targetPubKey)
+  }, [selectedSources, targetPubKey])
 
   const isAll = isSelectAll && selectedSources.length === availableSourceValidators.length
 
@@ -95,11 +99,10 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   }, [onBack])
 
   const toggleSelfConsolidation = useCallback(() => {
+    if (isSelfValidateRestriction) return
     setIsSelfConsolidate((prev) => !prev)
-    if (targetValidator) {
-      setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
-    }
-  }, [targetValidator, isSelfConsolidate])
+    setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
+  }, [targetValidator, isSelfConsolidate, isSelfValidateRestriction])
 
   const eligibleValidatorListClasses = clsx(
     'flex flex-col border-style',
@@ -107,7 +110,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   )
   const sourceListContainerClasses = clsx(
     'h-full overflow-scroll',
-    canSelfConsolidate ? 'max-h-[248px]' : 'max-h-[348px]',
+    isSelfValidateRestriction ? 'max-h-[248px]' : 'max-h-[348px]',
   )
 
   const renderedSourceValidators = useMemo(
@@ -125,6 +128,16 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
     [selectedSources, availableSourceValidators, toggleSource, controls],
   )
 
+  const totalEffectiveBalance = useMemo(() => {
+    return (
+      effectiveBalance +
+      selectedSources.reduce((acc, { effectiveBalance }) => acc + effectiveBalance, 0)
+    )
+  }, [selectedSources, effectiveBalance])
+
+  const isEmptySelection = selectedSources.length < 1
+  const isOverMaxEB = totalEffectiveBalance > MAX_EFFECTIVE_BALANCE
+
   return (
     <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row pt-4'>
       <div className='flex-1 @1600:max-w-2xl order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'>
@@ -136,7 +149,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             {t('validatorManagement.consolidateView.selectSources.text')}
           </Typography>
         </div>
-        {canSelfConsolidate && (
+        {isSelfValidateRestriction && (
           <div className='border-style bg-primary100 p-4 flex space-x-4'>
             <CheckBox
               id='self-consolidate'
@@ -183,18 +196,18 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             {t('validatorManagement.consolidateView.selectSources.selectedExplained')}
           </Typography>
         </div>
-        {targetValidator ? (
-          <SelectionDisplay
-            selectedSources={availableSelectedValidators}
-            onRemoveSource={removeSource}
-            targetValidator={targetValidator}
-          />
-        ) : null}
+        <SelectionDisplay
+          selectedSources={availableSelectedValidators}
+          onRemoveSource={removeSource}
+          totalEffectiveBalance={totalEffectiveBalance}
+          targetValidator={targetValidator}
+          isOverMaxEb={isOverMaxEB}
+        />
         <div className='hidden lg:block'>
           <StepOptions
             onBackStep={stepBack}
             onNextStep={confirmSources}
-            isDisabledNext={selectedSources.length < 1}
+            isDisabledNext={isEmptySelection || isOverMaxEB}
           />
         </div>
       </div>
@@ -202,7 +215,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
         <StepOptions
           onBackStep={stepBack}
           onNextStep={confirmSources}
-          isDisabledNext={selectedSources.length < 1}
+          isDisabledNext={isEmptySelection || isOverMaxEB}
         />
       </div>
     </div>
