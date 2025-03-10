@@ -3,7 +3,6 @@ import {
   BeaconChaValidatorUrl,
   HoleskyBeaconChaValidatorUrl,
   KubernetsValidatorUrl,
-  SepoliaBeaconChaValidatorUrl,
 } from '../../constants/constants'
 import { Network } from '../../constants/enums'
 import { selectBnChain } from './selectBnChain'
@@ -17,8 +16,6 @@ export const selectBeaconChaBaseUrl = selector({
         return BeaconChaValidatorUrl
       case Network.Holesky:
         return HoleskyBeaconChaValidatorUrl
-      case Network.Sepolia:
-        return SepoliaBeaconChaValidatorUrl
       default:
         return KubernetsValidatorUrl
     }

@@ -49,13 +49,10 @@ export enum Storage {
 }
 
 export enum Network {
-  Goerli = 'Goerli',
   Mainnet = 'Mainnet',
   LocalTestnet = 'Local TestNet',
   Holesky = 'Holesky',
-  Devnet7 = 'testnet',
   Sepolia = 'Sepolia',
-  Mekong = 'Mekong',
 }
 
 export enum ValidatorModalView {

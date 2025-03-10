@@ -98,7 +98,6 @@ export const EARNINGS_OPTIONS = [
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
 export const HoleskyBeaconChaValidatorUrl = 'https://holesky.beaconcha.in/validator'
-export const SepoliaBeaconChaValidatorUrl = 'https://sepolia.beaconcha.in/validator'
 export const KubernetsValidatorUrl = 'http://127.0.0.1:64498/validator'
 export const DiscordUrl = 'https://discord.gg/mB3VZQpYvN'
 export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'
@@ -163,9 +162,6 @@ export const ALERT_ID = {
 export const DEVICE_NAME_TRUNCATE = 10
 export const EFFECTIVE_BALANCE = 32
 export const FETCH_LOG_LIMIT = 15
-export const MEKONG_CONSOLIDATION_CONTRACT = '0x01aBEa29659e5e97C95107F20bb753cD3e09bBBb'
 export const CONSOLIDATION_CONTRACT = '0x0000BBdDc7CE488642fb579F8B00f3a590007251'
-export const MEKONG_CHAINID = 7078815900
 export const HOLESKY_PECTRA_FORK_VERSION = '0x06017000'
 export const MAINNET_PECTRA_FORK_VERSION = '0x05000000'
-export const DEVNET_7_PECTRA_FORK_VERSION = '0x60952561'
