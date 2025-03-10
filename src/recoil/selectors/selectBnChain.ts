@@ -11,18 +11,10 @@ export const selectBnChain = selector({
     const { DEPOSIT_CHAIN_ID } = specs
 
     switch (DEPOSIT_CHAIN_ID) {
-      case '5':
-        return Network.Goerli
       case '1':
         return Network.Mainnet
       case '17000':
         return Network.Holesky
-      case '11155111':
-        return Network.Sepolia
-      case '7078815900':
-        return Network.Mekong
-      case '7032118028':
-        return Network.Devnet7
       default:
         return Network.LocalTestnet
     }

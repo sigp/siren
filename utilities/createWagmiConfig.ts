@@ -17,27 +17,6 @@ const createWagmiConfig = () => {
     [holesky.id]: http(),
   }
 
-  const mekongTestnet: Chain = defineChain({
-    id: 7078815900,
-    name: 'Mekong',
-    network: 'mekong',
-    rpcUrls: { default: { http: ['https://rpc.mekong.ethpandaops.io/'] } },
-    nativeCurrency,
-    testnet: true,
-  })
-  const devnet7: Chain = defineChain({
-    id: 7032118028,
-    name: 'Devnet7',
-    network: 'devnet7',
-    rpcUrls: { default: { http: ['https://rpc.pectra-devnet-7.ethpandaops.io/'] } },
-    nativeCurrency,
-    testnet: true,
-  })
-  chains.push(mekongTestnet)
-  transports[mekongTestnet.id] = http()
-  chains.push(devnet7)
-  transports[devnet7.id] = http()
-
   if (localChainId && localRpc) {
     const customLocalhost: Chain = defineChain({
       id: localChainId,

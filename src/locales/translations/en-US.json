@@ -310,6 +310,7 @@
     "beaconDataRequired": "Beacon Node requires protocol, address and port",
     "validatorDataRequired": "Validator Node requires protocol, address and port",
     "unableToSignExit": "Unable to sign voluntary exit message",
+    "unableUpdateActivity": "Unexpected Error occurred while updating Activity",
     "invalidExit": "Invalid voluntary exit",
     "unexpectedAddressError": "Unexpected error occurred while verifying your wallet address",
     "unexpectedDepositError": "Unexpected error while trying to make deposit.",
