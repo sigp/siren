@@ -52,8 +52,9 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
     'h-12 w-12 rounded-full flex items-center justify-center border',
     [statusContainerClass],
   )
-  const isValidNetwork = networkId === NetworkId.HOLESKY || networkId === NetworkId.MAINNET
-  const etherscanLink = isValidNetwork ? getEtherscanLink(networkId, `/tx/${txHash}`) : ''
+  const isValidNetwork =
+    Number(networkId) === NetworkId.HOLESKY || Number(networkId) === NetworkId.MAINNET
+  const etherScanLink = isValidNetwork ? getEtherscanLink(networkId, `/tx/${txHash}`) : null
 
   const displayTitle = id ? `${id} • ${title}` : title
   const formattedTxHash = formatEthAddress(txHash as string)
@@ -65,8 +66,8 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
           <Typography isBold isCapitalize>
             {displayTitle}
           </Typography>
-          {isValidNetwork ? (
-            <Link href={etherscanLink} target='_blank'>
+          {etherScanLink ? (
+            <Link href={etherScanLink} target='_blank'>
               <div className='flex space-x-2 items-center'>
                 <Typography color='text-dark400' type='text-caption1' className='underline'>
                   {formattedTxHash}
