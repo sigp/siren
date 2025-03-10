@@ -2,9 +2,9 @@ import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } fro
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
-import getConsolidationAddress from '../../../../../../utilities/getConsolidationAddress'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
+import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
 import { ConsolidationTx, TxStatus } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -65,7 +65,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const changeBuffer = (e: ChangeEvent<HTMLInputElement>) => setBuffer(Number(e.target.value))
 
   const { data: consolidationQueLength, refetch } = useStorageAt({
-    address: getConsolidationAddress(chainId),
+    address: CONSOLIDATION_CONTRACT,
     slot: '0x00',
     chainId,
   })

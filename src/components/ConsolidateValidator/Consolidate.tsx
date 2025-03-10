@@ -4,7 +4,7 @@ import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount, useSendTransaction, useEstimateGas, useGasPrice } from 'wagmi'
 import displayToast from '../../../utilities/displayToast'
-import getConsolidationAddress from '../../../utilities/getConsolidationAddress'
+import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
 import { ActivityType, Address, ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
@@ -34,7 +34,6 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   const { address } = useAccount()
   const [isLoading, setIsLoading] = useState(false)
   const submitRequest = useSendTransaction()
-  const contractAddress = getConsolidationAddress(chainId)
   const getRequiredFee = (numerator: bigint, percentage = 0n): bigint => {
     // https://eips.ethereum.org/EIPS/eip-7251#fee-calculation
     let i = 1n
@@ -60,7 +59,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   const { data: gasPrice } = useGasPrice({ chainId })
 
   const { data: estimatedGasData } = useEstimateGas({
-    to: contractAddress,
+    to: CONSOLIDATION_CONTRACT,
     value: requestFee,
     data: txData,
   })
@@ -90,7 +89,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
     setIsLoading(true)
     try {
       const txHash = await submitRequest.sendTransactionAsync({
-        to: contractAddress,
+        to: CONSOLIDATION_CONTRACT,
         account: address,
         chainId,
         value: requestFee,
