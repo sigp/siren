@@ -30,11 +30,13 @@ export type ValidatorDetail = {
 export type ValidatorInfo = {
   name: string | undefined
   balance: number
+  effectiveBalance: number
   index: number
   pubKey: string
   rewards: number
   slashed: boolean
   withdrawalAddress: string | undefined
+  activationEpoch: number
   status: ValidatorStatus
   processed: number
   missed: number

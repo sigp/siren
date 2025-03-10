@@ -55,6 +55,7 @@ export type ValidatorSyncInfo = {
 export type BeaconSyncInfo = {
   headSlot: number
   slotDistance: number
+  currentEpoch: number
   beaconPercentage: number
   isSyncing: boolean
   syncDistance: number

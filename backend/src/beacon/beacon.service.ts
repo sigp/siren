@@ -63,6 +63,10 @@ export class BeaconService {
 
   async fetchSyncData(): Promise<SyncData> {
     try {
+      const { SLOTS_PER_EPOCH } = (await this.cacheManager.get(
+        'specs',
+      )) as BeaconNodeSpecResults;
+
       const slotInterval = await this.utilsService.getSlotInterval();
       return await this.utilsService.fetchFromCache(
         'syncData',
@@ -88,11 +92,15 @@ export class BeaconService {
             eth1_node_sync_status_percentage,
           } = executionResponse.data.data;
 
-          const distance = Number(head_slot) + Number(sync_distance);
+          const headSlot = Number(head_slot)
+          const currentEpoch = Math.floor(headSlot / Number(SLOTS_PER_EPOCH))
+
+          const distance = headSlot + Number(sync_distance);
 
           return {
             beaconSync: {
-              headSlot: Number(head_slot),
+              headSlot: headSlot,
+              currentEpoch,
               slotDistance: distance,
               beaconPercentage: getPercentage(head_slot, distance),
               beaconSyncTime: Number(sync_distance) * (slotInterval / 1000),
