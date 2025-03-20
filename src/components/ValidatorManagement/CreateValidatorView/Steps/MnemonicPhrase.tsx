@@ -1,9 +1,11 @@
 import { debounce } from 'lodash'
 import { FC, InputHTMLAttributes, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
 import addClassString from '../../../../../utilities/addClassString'
 import displayToast from '../../../../../utilities/displayToast'
 import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen'
+import { blsModuleAtom } from '../../../../recoil/atoms'
 import { ToastType } from '../../../../types'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
 import Spinner from '../../../Spinner/Spinner'
@@ -24,6 +26,7 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
   isActive,
 }) => {
   const { t } = useTranslation()
+  const blsModule = useRecoilValue(blsModuleAtom)
   const [isValidKeyPhrase, setIsValidPhrase] = useState(false)
   const [isValidated, setIsValidated] = useState(false)
   const isEmpty = !value || !isValidated
@@ -33,11 +36,12 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
     [isEmpty ? 'border-style' : isValidKeyPhrase ? 'border-success' : 'border-error'],
   )
 
-  const { generatePubKey } = useChainSafeKeygen()
+  const { generateSigningPubKey, deriveEIP2334SubKey } = useChainSafeKeygen(blsModule)
 
-  const validateKeyPhrase = async (phrase: string) => {
+  const validateKeyPhrase = (phrase: string) => {
     try {
-      await generatePubKey(phrase, 0)
+      const eip2334SubKey = deriveEIP2334SubKey(phrase)
+      generateSigningPubKey(eip2334SubKey, 0)
 
       setIsValidPhrase(true)
       setIsValidated(true)
