@@ -1,5 +1,6 @@
 'use client'
 
+import { IBls } from '@chainsafe/bls/types'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
@@ -20,6 +21,7 @@ import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import {
   activeValidatorId,
+  blsModuleAtom,
   exchangeRates,
   forkVersion,
   isEditValidator,
@@ -88,6 +90,7 @@ const Main: FC<MainProps> = (props) => {
   const [isEditVal, setIsEditValidator] = useRecoilState(isEditValidator)
   const setValDetail = useSetRecoilState(isValidatorDetail)
   const setForkVersion = useSetRecoilState(forkVersion)
+  const setBlsModule = useSetRecoilState(blsModuleAtom)
   const [isValDetail] = useRecoilState(isValidatorDetail)
   const [isRendered, setRender] = useState(false)
 
@@ -142,6 +145,18 @@ const Main: FC<MainProps> = (props) => {
     fallbackData: initForkVersionData,
     networkError,
   })
+
+  useEffect(() => {
+    const loadBls = async () => {
+      try {
+        const blsModule = (await import('@chainsafe/bls/herumi')) as unknown as IBls
+        setBlsModule(blsModule)
+      } catch (error) {
+        console.error('Failed to load BLS module:', error)
+      }
+    }
+    void loadBls()
+  }, [])
 
   const currentEpoch = syncData.beaconSync.currentEpoch
   const minValidatorWithdrawalDelay = Number(MIN_VALIDATOR_WITHDRAWABILITY_DELAY)
