@@ -4,7 +4,7 @@ import { useWriteContract } from 'wagmi'
 import { contractAbi } from '../../contracts/depositContractAbi'
 import { ActivityType, TxHash, ValidatorCandidate } from '../types'
 import { BeaconNodeSpecResults } from '../types/beacon'
-import useLodestarDepositData, { KeyStoreData } from './useLodestarDepositData'
+import useLodestarDepositData from './useLodestarDepositData'
 
 export type ValidatorDepositConfig = {
   validator: ValidatorCandidate
@@ -15,7 +15,6 @@ export type ValidatorDepositConfig = {
 export type ValidatorDepositReturnType = {
   isLoading: boolean
   error: string
-  keyStore: KeyStoreData | undefined
   pubKey: string
   txHash: TxHash | undefined
   makeDeposit: () => Promise<void>
@@ -27,15 +26,13 @@ const useValidatorDeposit = ({
   beaconSpec,
 }: ValidatorDepositConfig): ValidatorDepositReturnType => {
   const { DEPOSIT_CONTRACT_ADDRESS, GENESIS_FORK_VERSION } = beaconSpec
-  const { index, withdrawalCredentials, keyStorePassword, effectiveBalance, withdrawalPrefix } =
-    validator
+  const { index, withdrawalCredentials, effectiveBalance, withdrawalPrefix } = validator
   const [txHash, setTxHash] = useState<TxHash | undefined>()
   const [pubKey, setPubKey] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
   const { writeContract } = useWriteContract()
-  const [keyStore, setKeyStore] = useState<KeyStoreData>()
-  const { generateDepositData, generateKeystore } = useLodestarDepositData(GENESIS_FORK_VERSION)
+  const { generateDepositData } = useLodestarDepositData(GENESIS_FORK_VERSION)
 
   const handleDepositError = (e: any) => {
     const error = (e as Error).message
@@ -56,10 +53,6 @@ const useValidatorDeposit = ({
     setError('')
 
     try {
-      if (!keyStorePassword) {
-        throw new Error('MISSING_KEYSTORE_PASSWORD')
-      }
-
       const { pubkey, withdrawal_credentials, signature, deposit_data_root } =
         await generateDepositData(
           mnemonic,
@@ -68,7 +61,6 @@ const useValidatorDeposit = ({
           Number(effectiveBalance / 1000000000n),
           withdrawalPrefix,
         )
-      const keyStore = await generateKeystore(mnemonic, Number(index), keyStorePassword)
 
       writeContract(
         {
@@ -85,7 +77,6 @@ const useValidatorDeposit = ({
           },
           onSuccess: async (data) => {
             setTxHash(data as TxHash)
-            setKeyStore(keyStore)
             setPubKey(pubkey)
             try {
               await axios.post('/api/log-activity', {
@@ -113,7 +104,6 @@ const useValidatorDeposit = ({
   return {
     isLoading,
     error,
-    keyStore,
     pubKey,
     txHash,
     makeDeposit,
