@@ -1,9 +1,8 @@
-import axios from 'axios'
 import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
 import formatEthAddress from '../../../../../../../utilities/formatEthAddress'
-import { KeyStoreData } from '../../../../../../hooks/useLodestarDepositData'
+import useImportValidator from '../../../../../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../../../../../hooks/useResolveTransactionOnce'
 import useValidatorDeposit from '../../../../../../hooks/useValidatorDeposit'
 import { ToastType, ValidatorCandidate } from '../../../../../../types'
@@ -33,22 +32,21 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   ...props
 }) => {
   const { t } = useTranslation()
-  const { name, withdrawalCredentials, index, effectiveBalance } = candidate
+  const { name, withdrawalCredentials, index, effectiveBalance, keyStorePassword } = candidate
   const { DEPOSIT_NETWORK_ID } = beaconSpec
 
   const [step, setStep] = useState(0)
   const incrementStep = () => setStep((prev) => prev + 1)
-  const [isImportError, setIsImportError] = useState<boolean>(false)
   const [isSuccessScreen, setIsSuccessScreen] = useState(false)
   const [isAcknowledgeRisk, setIsAcknowledge] = useState(false)
+  const { isError: isImportError, importValidator } = useImportValidator()
 
   const stepTitles = [
     t('validatorManagement.signAndDeposit.stepTitles.makeDeposit'),
     t('validatorManagement.signAndDeposit.stepTitles.verifyTransaction'),
     t('validatorManagement.signAndDeposit.stepTitles.importValidator'),
   ]
-
-  const { isLoading, error, keyStore, txHash, pubKey, makeDeposit } = useValidatorDeposit({
+  const { isLoading, error, txHash, pubKey, makeDeposit } = useValidatorDeposit({
     validator: candidate,
     mnemonic,
     beaconSpec,
@@ -68,29 +66,21 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   }, [txHash])
 
   useEffect(() => {
-    if (txStatus === 'success' && keyStore) {
-      ;(async () => {
-        incrementStep()
-        await importValidator(keyStore)
-      })()
-    }
-  }, [txStatus, keyStore])
+    if (txStatus !== 'success' || !mnemonic || index === undefined || !keyStorePassword) return
+    ;(async () => {
+      incrementStep()
+      await importValidator({
+        mnemonic,
+        index,
+        keyStorePassword,
+        onSuccess: () => {
+          setIsSuccessScreen(true)
+        },
+      })
+    })()
+  }, [txStatus])
 
   const acknowledgeRisk = () => setIsAcknowledge(true)
-
-  const importValidator = async (keyStore: KeyStoreData) => {
-    try {
-      const response = await axios.post('/api/validator-import', { data: keyStore })
-
-      if (response.status) {
-        setIsSuccessScreen(true)
-      }
-    } catch (e) {
-      console.error(e)
-      setIsImportError(true)
-      displayToast(t('error.unexpectedValidatorImportError'), ToastType.ERROR)
-    }
-  }
 
   const retryTransaction = () => setStep(0)
 

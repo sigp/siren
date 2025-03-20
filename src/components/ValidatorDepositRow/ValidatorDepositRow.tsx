@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import displayToast from '../../../utilities/displayToast'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
-import { KeyStoreData } from '../../hooks/useLodestarDepositData'
 import useValidatorDeposit, { ValidatorDepositConfig } from '../../hooks/useValidatorDeposit'
 import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
@@ -15,7 +14,12 @@ import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, 'validator'> {
   candidate: ValidatorCandidate
-  onDeposit: (txHash: TxHash, keyStore: KeyStoreData, pubKey: string, mnemonicIndex: number) => void
+  onDeposit: (
+    txHash: TxHash,
+    keyStorePassword: string,
+    pubKey: string,
+    mnemonicIndex: number,
+  ) => void
   data: DepositData | undefined
 }
 
@@ -27,8 +31,8 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   data,
 }) => {
   const { t } = useTranslation()
-  const { index, effectiveBalance, pubKey: candidatePubKey } = candidate
-  const { isLoading, txHash, error, pubKey, keyStore, makeDeposit } = useValidatorDeposit({
+  const { index, effectiveBalance, pubKey: candidatePubKey, keyStorePassword } = candidate
+  const { isLoading, txHash, error, pubKey, makeDeposit } = useValidatorDeposit({
     validator: candidate,
     mnemonic,
     beaconSpec,
@@ -36,10 +40,10 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   const { isSufficient } = useHasSufficientBalance(effectiveBalance)
 
   useEffect(() => {
-    if (txHash && pubKey && !!keyStore) {
-      onDeposit(txHash, keyStore, pubKey, index as number)
+    if (txHash && pubKey && !!keyStorePassword) {
+      onDeposit(txHash, keyStorePassword, pubKey, index as number)
     }
-  }, [txHash, keyStore, pubKey, index])
+  }, [txHash, keyStorePassword, pubKey, index])
 
   useEffect(() => {
     if (error) {
