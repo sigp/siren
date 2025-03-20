@@ -1,5 +1,8 @@
 import { SecretKey, PublicKey } from '@chainsafe/bls/herumi'
-import { deriveEth2ValidatorKeys, deriveKeyFromMnemonic } from '@chainsafe/bls-keygen'
+import { IBls } from '@chainsafe/bls/types'
+import { deriveChildSK } from '@chainsafe/bls-hd-key'
+import { deriveKeyFromMnemonic } from '@chainsafe/bls-keygen'
+import { useCallback } from 'react'
 
 export type DeriveValidatorKeysReturnType = {
   secretKey: SecretKey
@@ -7,51 +10,68 @@ export type DeriveValidatorKeysReturnType = {
 }
 
 export type useChainSafeKeygenReturnType = {
-  deriveValidatorKeys: (mnemonic: string, index: number) => Promise<DeriveValidatorKeysReturnType>
-  generatePubKey: (mnemonic: string, index: number) => Promise<string>
+  deriveEIP2334SubKey: (mnemonic: string) => Uint8Array
+  deriveValidatorSigningKey: (masterSK: Uint8Array, index: number) => DeriveValidatorKeysReturnType
+  generateSigningPubKey: (eip2334SubKey: Uint8Array, index: number) => string
 }
 
-const useChainSafeKeygen = (): useChainSafeKeygenReturnType => {
-  const deriveValidatorKeys = async (
-    mnemonic: string,
-    index: number,
-  ): Promise<DeriveValidatorKeysReturnType> => {
-    if (index < 0) {
-      throw new Error('NON_NEGATIVE_NUMBER')
-    }
-
-    if (index > 4294967295) {
-      throw new Error('TOO_LARGE_INDEX')
-    }
-
+const useChainSafeKeygen = (bls: IBls | undefined): useChainSafeKeygenReturnType => {
+  const deriveEIP2334SubKey = useCallback((mnemonic: string): Uint8Array => {
     try {
-      const bls = await import('@chainsafe/bls/herumi')
       const masterSK = deriveKeyFromMnemonic(mnemonic)
-      const secretKey = bls.SecretKey.fromBytes(deriveEth2ValidatorKeys(masterSK, index).signing)
-
-      return {
-        secretKey,
-        publicKey: secretKey.toPublicKey(),
-      }
+      return deriveChildSK(deriveChildSK(masterSK, 12381), 3600)
     } catch (e) {
-      console.error(e)
       throw e
     }
-  }
+  }, [])
 
-  const generatePubKey = async (mnemonic: string, index: number): Promise<string> => {
+  const deriveValidatorSigningKey = useCallback(
+    (eip2334SubKey: Uint8Array, index: number): DeriveValidatorKeysReturnType => {
+      if (index < 0) {
+        throw new Error('NON_NEGATIVE_NUMBER')
+      }
+
+      if (index > 4294967295) {
+        throw new Error('TOO_LARGE_INDEX')
+      }
+
+      if (!bls) {
+        throw new Error('BLS_MODULE_NOT_FOUND')
+      }
+
+      try {
+        const signingKeyBytes = deriveChildSK(
+          deriveChildSK(deriveChildSK(eip2334SubKey, index), 0),
+          0,
+        )
+        const signingKey = bls.SecretKey.fromBytes(signingKeyBytes)
+
+        return {
+          secretKey: signingKey,
+          publicKey: signingKey.toPublicKey(),
+        } as DeriveValidatorKeysReturnType
+      } catch (e) {
+        console.error(e)
+        throw e
+      }
+    },
+    [bls],
+  )
+
+  const generateSigningPubKey = useCallback((eip2334SubKey: Uint8Array, index: number): string => {
     try {
-      const { publicKey } = await deriveValidatorKeys(mnemonic, index)
+      const { publicKey } = deriveValidatorSigningKey(eip2334SubKey, index)
       return publicKey.toHex()
     } catch (e) {
       console.error(e)
       throw e
     }
-  }
+  }, [])
 
   return {
-    deriveValidatorKeys,
-    generatePubKey,
+    deriveEIP2334SubKey,
+    deriveValidatorSigningKey,
+    generateSigningPubKey,
   }
 }
 
