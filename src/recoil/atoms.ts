@@ -1,3 +1,4 @@
+import { IBls } from '@chainsafe/bls/types'
 import { atom } from 'recoil'
 import { AppView, OnboardView, UiMode } from '../constants/enums'
 import { ActiveDevice, AlertMessage, EthExchangeRates, ProposerDuty, ValAliases } from '../types'
@@ -111,5 +112,10 @@ export const isWalletConnectModal = atom<boolean>({
 
 export const forkVersion = atom<ForkVersionData>({
   key: 'forkVersion',
+  default: undefined,
+})
+
+export const blsModuleAtom = atom<IBls | undefined>({
+  key: 'blsModuleAtom',
   default: undefined,
 })

@@ -2,7 +2,6 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
-import { KeyStoreData } from '../../../../../hooks/useLodestarDepositData'
 import { DepositData, TxHash, TxStatus, ValidatorCandidate } from '../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -34,13 +33,13 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   const acknowledgeRisk = () => setIsAcknowledgeRisk(true)
   const storeDepositInfo = (
     txHash: TxHash,
-    keyStore: KeyStoreData,
+    keyStorePassword: string,
     pubKey: string,
     mnemonicIndex: number,
   ) => {
     setDepositData((prev) => [
       ...prev,
-      { txHash, keyStore, pubKey, mnemonicIndex, status: 'pending' },
+      { txHash, pubKey, keyStorePassword, mnemonicIndex, status: 'pending' },
     ])
   }
 
@@ -118,6 +117,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
               {depositData.map((data, index) => (
                 <ValidatorDepositImport
                   key={index}
+                  mnemonic={mnemonic}
                   onUpdateStatus={updateDepositInfoStatus}
                   onRetryTx={removeTransaction}
                   depositData={data}

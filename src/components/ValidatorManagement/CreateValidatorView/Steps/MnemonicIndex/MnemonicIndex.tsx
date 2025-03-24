@@ -1,7 +1,9 @@
 import axios from 'axios'
 import { ChangeEvent, KeyboardEvent, FC, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRecoilValue } from 'recoil'
 import useChainSafeKeygen from '../../../../../hooks/useChainSafeKeygen'
+import { blsModuleAtom } from '../../../../../recoil/atoms'
 import { NetworkId, ValidatorCandidate } from '../../../../../types'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
@@ -31,7 +33,8 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
   const [startIndex, setIndex] = useState<number | undefined>(undefined)
-  const { generatePubKey } = useChainSafeKeygen()
+  const blsModule = useRecoilValue(blsModuleAtom)
+  const { deriveEIP2334SubKey, generateSigningPubKey } = useChainSafeKeygen(blsModule)
   const [indexedValidatorCandidates, setIndexedCandidates] = useState<ValidatorCandidate[]>([])
   const [isLoading, setLoading] = useState(false)
   const count = indexedValidatorCandidates.length
@@ -59,7 +62,8 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
       if (index === undefined) return candidate
 
       try {
-        const publicKey = await generatePubKey(keyPhrase, index)
+        const eip2334SubKey = deriveEIP2334SubKey(keyPhrase)
+        const publicKey = generateSigningPubKey(eip2334SubKey, index)
         const { data } = await axios.get(`/api/validator-status/${publicKey}`)
         return {
           ...candidate,

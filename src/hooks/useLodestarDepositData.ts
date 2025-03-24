@@ -1,10 +1,11 @@
-import { create, IKeystore } from '@chainsafe/bls-keystore'
 import { fromHexString, toHexString, Type } from '@chainsafe/ssz'
 import { DOMAIN_DEPOSIT } from '@lodestar/params'
 import { DomainType, Domain, Root, Version } from '@lodestar/types'
 import { ssz } from '@lodestar/types/phase0'
 import { getAddress, getBytes } from 'ethers'
+import { useRecoilValue } from 'recoil'
 import { WalletPrefix } from '../constants/enums'
+import { blsModuleAtom } from '../recoil/atoms'
 import useChainSafeKeygen from './useChainSafeKeygen'
 
 interface DepositDataJson {
@@ -18,12 +19,6 @@ interface DepositData extends DepositDataJson {
   deposit_data_root: string
 }
 
-export interface KeyStoreData {
-  enable: boolean
-  password: string
-  keystore: IKeystore
-}
-
 export type useLodestarDepositDataReturnType = {
   generateDepositData: (
     mnemonic: string,
@@ -32,16 +27,11 @@ export type useLodestarDepositDataReturnType = {
     amount: number,
     prefix: WalletPrefix,
   ) => Promise<DepositData>
-  generateKeystore: (
-    mnemonic: string,
-    index: number,
-    keyStorePassword: string,
-    keyDerivationPath?: string,
-  ) => Promise<KeyStoreData>
 }
 
 const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositDataReturnType => {
-  const { deriveValidatorKeys } = useChainSafeKeygen()
+  const blsModule = useRecoilValue(blsModuleAtom)
+  const { deriveValidatorSigningKey, deriveEIP2334SubKey } = useChainSafeKeygen(blsModule)
 
   const computeForkDataRoot = (currentVersion: Version, genesisValidatorsRoot: Root) => {
     const forkData = {
@@ -69,31 +59,6 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
       domain,
     }
     return ssz.SigningData.hashTreeRoot(domainWrappedObject)
-  }
-
-  const generateKeystore = async (
-    mnemonic: string,
-    index: number,
-    keyStorePassword: string,
-  ): Promise<KeyStoreData> => {
-    try {
-      const { secretKey, publicKey } = await deriveValidatorKeys(mnemonic, index)
-      const keystore = await create(
-        keyStorePassword,
-        secretKey.toBytes(),
-        publicKey.toBytes(),
-        'm/12381/3600/0/0/0',
-      )
-
-      return {
-        enable: true,
-        password: keyStorePassword,
-        keystore,
-      }
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
   }
 
   const generateWithdrawalCredentials = (
@@ -124,7 +89,8 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
     prefix = WalletPrefix.ONE,
   ): Promise<DepositData> => {
     try {
-      const { secretKey, publicKey } = await deriveValidatorKeys(mnemonic, index)
+      const eip2334SubKey = deriveEIP2334SubKey(mnemonic)
+      const { secretKey, publicKey } = deriveValidatorSigningKey(eip2334SubKey, index)
 
       const withdrawalCredentials = generateWithdrawalCredentials(withdrawalAddress, prefix)
 
@@ -152,7 +118,6 @@ const useLodestarDepositData = (genesisForkVersion: string): useLodestarDepositD
 
   return {
     generateDepositData,
-    generateKeystore,
   }
 }
 

@@ -1,6 +1,5 @@
 import { FC, SVGProps } from 'react'
 import { Protocol, WalletPrefix } from '../constants/enums'
-import { KeyStoreData } from '../hooks/useLodestarDepositData'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
 
@@ -211,8 +210,8 @@ export type Address = `0x${string}` | undefined
 
 export type DepositData = {
   txHash: TxHash
-  keyStore: KeyStoreData
   pubKey: string
+  keyStorePassword: string
   mnemonicIndex: number
   status: TxStatus
 }
