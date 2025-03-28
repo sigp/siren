@@ -11,6 +11,7 @@ import { ValidatorMetricResult } from '../../types/beacon'
 import { ValidatorBalanceInfo } from '../../types/validator'
 import RodalModal from '../RodalModal/RodalModal'
 import Spinner from '../Spinner/Spinner'
+import ValidatorDeposit from './views/ValidatorDeposit/ValidatorDeposit'
 import ValidatorDetails, { ValidatorDetailsProps } from './views/ValidatorDetails'
 import ValidatorExit from './views/ValidatorExit'
 
@@ -73,6 +74,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData
             validator={validator}
           />
         )
+      case ValidatorModalView.DEPOSIT:
+        return <ValidatorDeposit validatorEpochData={validatorEpochData} validator={validator} />
       default:
         return <div />
     }

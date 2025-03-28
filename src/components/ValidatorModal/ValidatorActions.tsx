@@ -1,5 +1,5 @@
 import { useRouter } from 'next/navigation'
-import { FC, useContext } from 'react'
+import { FC, useCallback, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import { WithdrawalInfoLink } from '../../constants/constants'
@@ -12,28 +12,29 @@ import ValidatorCardAction from './ValidatorCardAction'
 import { ValidatorModalContext } from './ValidatorModal'
 
 export interface ValidatorActionsProps {
-  isConversionRequired?: boolean
-  isProcessing?: boolean
-  isExitAction?: boolean
+  isConversionRequired: boolean
+  isProcessing: boolean
+  isDisabled: boolean
 }
 
 const ValidatorActions: FC<ValidatorActionsProps> = ({
   isConversionRequired,
   isProcessing,
-  isExitAction = true,
+  isDisabled,
 }) => {
   const { t } = useTranslation()
   const router = useRouter()
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
   const { closeModal, moveToView } = useContext(ValidatorModalContext)
-  const viewExitAction = () => moveToView(ValidatorModalView.EXIT)
-  const viewBlsModal = () => {
+  const viewExitAction = useCallback(() => moveToView(ValidatorModalView.EXIT), [])
+  const viewBlsModal = useCallback(() => {
     closeModal()
     setTimeout(() => {
       toggleBlsModal(true)
       router.push('/dashboard/validators?view=bls')
     }, 200)
-  }
+  }, [])
+  const viewDepositAction = useCallback(() => moveToView(ValidatorModalView.DEPOSIT), [])
 
   return (
     <div className='w-full border-t-style100 space-y-4 p-4'>
@@ -72,12 +73,6 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
         <div className='w-full flex flex-wrap lg:space-x-3'>
           <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
             <ValidatorCardAction
-              icon='bi-arrow-down-circle'
-              title={t('validatorManagement.actions.depositFunds')}
-            />
-          </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
               icon='bi-key-fill'
               title={t('validatorManagement.actions.backupKeys')}
             />
@@ -95,7 +90,14 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
             />
           </DisabledTooltip>
           <ValidatorCardAction
-            isDisabled={!isExitAction}
+            onClick={viewDepositAction}
+            isDisabled={isDisabled}
+            icon='bi-coin'
+            className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'
+            title={t('validatorManagement.actions.depositFunds')}
+          />
+          <ValidatorCardAction
+            isDisabled={isDisabled}
             className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'
             onClick={viewExitAction}
             icon='bi-arrow-right-square'
