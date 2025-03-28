@@ -24,15 +24,14 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({
   validator,
   validatorCacheData,
 }) => {
-  const { balance, index, withdrawalAddress } = validator
-  const income = balance ? balance - 32 : 0
-  const incomeColor = formatBalanceColor(income)
+  const { balance, index, withdrawalAddress, rewards } = validator
+  const incomeColor = formatBalanceColor(rewards)
   const { estimatedApr, textColor } = useEpochAprEstimate(validatorCacheData, [String(index)])
   return (
     <>
       <MobileDetailView
         balance={balance}
-        income={income}
+        income={rewards}
         incomeColor={incomeColor}
         withdrawalAddress={withdrawalAddress}
         estimatedApr={estimatedApr}
@@ -40,7 +39,7 @@ export const ValidatorDetailTable: FC<ValidatorDetailTableProps> = ({
       />
       <DesktopDetailView
         balance={balance}
-        income={income}
+        income={rewards}
         incomeColor={incomeColor}
         withdrawalAddress={withdrawalAddress}
         estimatedApr={estimatedApr}
