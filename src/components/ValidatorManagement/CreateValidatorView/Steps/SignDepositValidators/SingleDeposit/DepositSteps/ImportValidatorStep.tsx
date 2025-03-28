@@ -22,7 +22,8 @@ const ImportValidatorStep: FC<ImportValidatorStepProps> = ({
 }) => {
   const { t } = useTranslation()
   const shortHandPubKey = formatEthAddress(pubKey)
-  const beaconChaLink = getBeaconChaLink(networkId, `/validator/${pubKey}`)
+  const isValidNetwork = networkId === NetworkId.HOLESKY || networkId === NetworkId.MAINNET
+  const beaconChaLink = isValidNetwork ? getBeaconChaLink(networkId, `/validator/${pubKey}`) : null
 
   return txHash ? (
     <div className='py-4'>

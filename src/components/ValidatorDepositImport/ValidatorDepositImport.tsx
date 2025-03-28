@@ -65,17 +65,6 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     : null
 
   const renderTransactionStatus = useCallback(() => {
-    const reviewStatusText = beaconChaLink ? (
-      <ExternalLink
-        href={beaconChaLink}
-        text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
-      />
-    ) : (
-      <Typography type='text-caption1'>
-        {t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
-      </Typography>
-    )
-
     if (isImportError) {
       return (
         <TransactionStatus
@@ -91,7 +80,10 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
                 pubKey: shortHandPubKey,
               })}
             </Typography>
-            {reviewStatusText}
+            <ExternalLink
+              href={beaconChaLink}
+              text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
+            />
           </div>
         </TransactionStatus>
       )
@@ -110,7 +102,10 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
             <Typography type='text-caption1'>
               {t('validatorManagement.txStatuses.validatorComplete.text')}
             </Typography>
-            {reviewStatusText}
+            <ExternalLink
+              href={beaconChaLink}
+              text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
+            />
           </div>
         </TransactionStatus>
       )
