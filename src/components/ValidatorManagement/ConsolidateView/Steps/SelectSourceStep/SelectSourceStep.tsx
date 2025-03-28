@@ -32,7 +32,6 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   const { withdrawalAddress, pubKey: targetPubKey, effectiveBalance } = targetValidator
   const isSelfValidateRestriction = withdrawalAddress?.startsWith('0x01')
   const [isSelectAll, setIsSelectAll] = useState(false)
-  const [isSelfConsolidate, setIsSelfConsolidate] = useState(isSelfValidateRestriction)
   const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>(
     isSelfValidateRestriction ? [targetValidator] : [],
   )
@@ -98,15 +97,9 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
     onBack()
   }, [onBack])
 
-  const toggleSelfConsolidation = useCallback(() => {
-    if (isSelfValidateRestriction) return
-    setIsSelfConsolidate((prev) => !prev)
-    setSelectedSources(isSelfConsolidate ? [] : [targetValidator])
-  }, [targetValidator, isSelfConsolidate, isSelfValidateRestriction])
-
   const eligibleValidatorListClasses = clsx(
     'flex flex-col border-style',
-    isSelfConsolidate && 'opacity-20 pointer-events-none',
+    isSelfValidateRestriction && 'opacity-20 pointer-events-none',
   )
   const sourceListContainerClasses = clsx(
     'h-full overflow-scroll',
@@ -131,9 +124,9 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   const totalEffectiveBalance = useMemo(() => {
     return (
       effectiveBalance +
-      selectedSources.reduce((acc, { effectiveBalance }) => acc + effectiveBalance, 0)
+      availableSelectedValidators.reduce((acc, { effectiveBalance }) => acc + effectiveBalance, 0)
     )
-  }, [selectedSources, effectiveBalance])
+  }, [availableSelectedValidators, effectiveBalance])
 
   const isEmptySelection = selectedSources.length < 1
   const isOverMaxEB = totalEffectiveBalance > MAX_EFFECTIVE_BALANCE
@@ -153,9 +146,8 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
           <div className='border-style bg-primary100 p-4 flex space-x-4'>
             <CheckBox
               id='self-consolidate'
-              checked={isSelfConsolidate}
+              checked
               checkboxBorderClasses='border border-gray-900 border-style500 dark:border-gray-400'
-              onChange={toggleSelfConsolidation}
             />
             <div>
               <Typography isBold type='text-caption1'>
