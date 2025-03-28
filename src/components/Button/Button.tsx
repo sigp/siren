@@ -76,7 +76,7 @@ const Button: FC<ButtonProps> = ({
   }
 
   const buttonContainerClasses = clsx(
-    'relative box-border active:scale-95 transition-all duration-100 ease-in w-fit cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-30 flex justify-center space-x-2',
+    'relative box-border active:scale-95 transition-all duration-100 ease-in cursor-pointer disabled:cursor-default disabled:pointer-events-none disabled:opacity-30 flex justify-center space-x-2',
     formatFaceStyle(),
     font,
     fontType,

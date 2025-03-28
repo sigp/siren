@@ -49,7 +49,7 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
   }, [status])
 
   const iconContainerClass = addClassString(
-    'h-12 w-12 rounded-full flex items-center justify-center border',
+    'h-12 w-12 ml-4 rounded-full flex items-center justify-center border',
     [statusContainerClass],
   )
   const isValidNetwork =
