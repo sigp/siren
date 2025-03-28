@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ChangeEvent, KeyboardEvent, FC, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
+import { MAX_MNEMONIC_INDEX } from '../../../../../constants/constants'
 import useChainSafeKeygen from '../../../../../hooks/useChainSafeKeygen'
 import { blsModuleAtom } from '../../../../../recoil/atoms'
 import { NetworkId, ValidatorCandidate } from '../../../../../types'
@@ -108,7 +109,9 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   }
 
   const isDisabledVerify =
-    startIndex === undefined || startIndex < 0 || startIndex + candidates.length > 4294967295
+    startIndex === undefined ||
+    startIndex < 0 ||
+    startIndex + candidates.length > MAX_MNEMONIC_INDEX
   const invalidCount = isLoading
     ? 0
     : indexedValidatorCandidates.filter(({ isValidIndex }) => !isValidIndex).length
@@ -151,7 +154,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
             ref={inputRef}
             onChange={setStartIndex}
             min={0}
-            max={4294967295}
+            max={MAX_MNEMONIC_INDEX}
             onKeyDown={handleEnterKey}
             className='w-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none border-style'
             type='number'

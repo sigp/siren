@@ -3,6 +3,7 @@ import { IBls } from '@chainsafe/bls/types'
 import { deriveChildSK } from '@chainsafe/bls-hd-key'
 import { deriveKeyFromMnemonic } from '@chainsafe/bls-keygen'
 import { useCallback } from 'react'
+import { MAX_MNEMONIC_INDEX } from '../constants/constants'
 
 export type DeriveValidatorKeysReturnType = {
   secretKey: SecretKey
@@ -31,7 +32,7 @@ const useChainSafeKeygen = (bls: IBls | undefined): useChainSafeKeygenReturnType
         throw new Error('NON_NEGATIVE_NUMBER')
       }
 
-      if (index > 4294967295) {
+      if (index > MAX_MNEMONIC_INDEX) {
         throw new Error('TOO_LARGE_INDEX')
       }
 
