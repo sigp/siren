@@ -44,15 +44,16 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   }
 
   const updateDepositInfoStatus = (pubKey: string, status: TxStatus) => {
-    const index = depositData.findIndex((deposit) => deposit.pubKey === pubKey)
-    if (index !== -1) {
-      const updatedDeposits = [...depositData]
+    setDepositData((prev) => {
+      const index = prev.findIndex((deposit) => deposit.pubKey === pubKey)
+      if (index === -1) return prev
+      const updatedDeposits = [...prev]
       updatedDeposits[index] = {
         ...updatedDeposits[index],
         status,
       }
-      setDepositData(updatedDeposits)
-    }
+      return updatedDeposits
+    })
   }
 
   const removeTransaction = (txHash: TxHash) => {
