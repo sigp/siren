@@ -25,7 +25,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   depositNetworkId,
 }) => {
   const { t } = useTranslation()
-  const { txHash, pubKey, mnemonicIndex, keyStorePassword } = depositData
+  const { txHash, pubKey, mnemonicIndex, keyStorePassword, status } = depositData
   const shortHandPubKey = formatEthAddress(pubKey)
   const { txStatus } = useResolveTransactionOnce(txHash)
   const {
@@ -45,6 +45,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
       return
     }
 
+    if (status !== 'pending') return
     ;(async () => {
       await importValidator({
         mnemonic,
@@ -53,9 +54,12 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
         onSuccess: () => {
           onUpdateStatus(pubKey, 'success')
         },
+        onError: () => {
+          onUpdateStatus(pubKey, 'error')
+        },
       })
     })()
-  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey])
+  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey, status])
 
   const isValidNetwork =
     depositNetworkId === NetworkId.HOLESKY || depositNetworkId === NetworkId.MAINNET
@@ -89,7 +93,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
       )
     }
 
-    if (isImportSuccess) {
+    if (isImportSuccess || status === 'success') {
       return (
         <TransactionStatus
           id={mnemonicIndex}
@@ -153,6 +157,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     mnemonicIndex,
     depositNetworkId,
     isImportError,
+    status,
     txHash,
     txStatus,
     shortHandPubKey,
