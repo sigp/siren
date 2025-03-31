@@ -125,7 +125,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   }
 
   const handleEnterKey = async (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && startIndex !== undefined && startIndex > 0) {
+    if (event.key === 'Enter' && startIndex !== undefined && startIndex >= 0) {
       await validateIndices()
     }
   }
