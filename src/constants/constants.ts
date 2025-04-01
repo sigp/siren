@@ -98,6 +98,7 @@ export const EARNINGS_OPTIONS = [
 
 export const BeaconChaValidatorUrl = 'https://beaconcha.in/validator'
 export const HoleskyBeaconChaValidatorUrl = 'https://holesky.beaconcha.in/validator'
+export const HoodiBeaconChaValidatorUrl = 'https://hoodi.beaconcha.in/validator'
 export const KubernetsValidatorUrl = 'http://127.0.0.1:64498/validator'
 export const DiscordUrl = 'https://discord.gg/mB3VZQpYvN'
 export const LighthouseBookUrl = 'https://lighthouse-book.sigmaprime.io/'

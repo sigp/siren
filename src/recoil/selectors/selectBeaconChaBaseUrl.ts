@@ -2,9 +2,10 @@ import { selector } from 'recoil'
 import {
   BeaconChaValidatorUrl,
   HoleskyBeaconChaValidatorUrl,
+  HoodiBeaconChaValidatorUrl,
   KubernetsValidatorUrl,
 } from '../../constants/constants'
-import { Network } from '../../constants/enums'
+import { ChainId } from '../../types'
 import { selectBnChain } from './selectBnChain'
 
 export const selectBeaconChaBaseUrl = selector({
@@ -12,10 +13,12 @@ export const selectBeaconChaBaseUrl = selector({
   get: ({ get }) => {
     const chain = get(selectBnChain)
     switch (chain) {
-      case Network.Mainnet:
+      case ChainId.MAINNET:
         return BeaconChaValidatorUrl
-      case Network.Holesky:
+      case ChainId.HOLESKY:
         return HoleskyBeaconChaValidatorUrl
+      case ChainId.HOODI:
+        return HoodiBeaconChaValidatorUrl
       default:
         return KubernetsValidatorUrl
     }
