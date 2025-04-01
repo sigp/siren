@@ -51,6 +51,7 @@ export enum Storage {
 export enum Network {
   Mainnet = 'Mainnet',
   LocalTestnet = 'testnet',
+  Hoodi = 'hoodi',
   Holesky = 'Holesky',
   Sepolia = 'Sepolia',
 }

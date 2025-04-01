@@ -62,7 +62,9 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey, status])
 
   const isValidNetwork =
-    depositNetworkId === NetworkId.HOLESKY || depositNetworkId === NetworkId.MAINNET
+    depositNetworkId === NetworkId.HOLESKY ||
+    depositNetworkId === NetworkId.MAINNET ||
+    depositNetworkId === NetworkId.HOODI
 
   const beaconChaLink = isValidNetwork
     ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)
