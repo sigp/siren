@@ -218,6 +218,7 @@ describe('ValidatorDepositImport', () => {
         index: depositData.mnemonicIndex,
         keyStorePassword: depositData.keyStorePassword,
         onSuccess: expect.any(Function),
+        onError: expect.any(Function),
       })
     })
 

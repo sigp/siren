@@ -141,7 +141,7 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
       <ValidatorGraffiti validator={validator} />
       <ValidatorDetailTable validator={validator} validatorCacheData={validatorCacheData} />
       <ValidatorActions
-        isExitAction={!isExited}
+        isDisabled={isExited}
         isProcessing={isProcessing}
         isConversionRequired={isBls}
       />

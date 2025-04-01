@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import {
   FC,
   HTMLInputTypeAttribute,
@@ -18,6 +19,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   extraLabel?: string
   tooltip?: string
   error?: Message | undefined
+  isErrorBorder?: boolean
   toolTipId?: string
   toolTipMode?: UiMode
   toolTipMaxWidth?: number
@@ -25,7 +27,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   uiMode?: UiMode | undefined
   isDisableToggle?: boolean
   isDisablePaste?: boolean
-  inputStyle?: 'primary' | 'secondary' | 'noBorder' | 'basic'
+  inputStyle?: 'primary' | 'secondary' | 'noBorder' | 'basic' | 'basic_border'
   icon?: string
   isAutoFocus?: boolean
 }
@@ -47,6 +49,7 @@ const Input: FC<InputProps> = ({
   icon,
   onChange,
   isAutoFocus,
+  isErrorBorder,
   ...props
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -71,13 +74,22 @@ const Input: FC<InputProps> = ({
       case 'secondary':
         return 'text-dark500 border-style p-2 bg-transparent'
       case 'basic':
-        return `text-dark900 dark:text-dark300 disabled:opacity-25 font-openSauce text-caption1 px-2 py-1 outline-none bg-transparent ${error ? 'border border-error' : 'border-style'} dark:bg-dark600_20 rounded-lg`
+        return clsx(
+          'text-dark900 dark:text-dark300 disabled:opacity-25 font-openSauce text-caption1 px-2 py-1 outline-none bg-transparent dark:bg-dark600_20 rounded-lg',
+          !!error ? 'border border-error' : 'border-style',
+        )
+      case 'basic_border':
+        return clsx(
+          'w-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none border',
+          isErrorBorder ? 'border-error' : 'border-style',
+        )
       default:
-        return `${
+        return clsx(
+          'font-light border-b text-body md:text-subtitle1',
           uiMode === UiMode.LIGHT
             ? 'text-dark500 bg-dark10 border-dark500 px-2'
-            : 'bg-transparent text-white border-white placeholder:text-dark500'
-        } font-light border-b text-body md:text-subtitle1`
+            : 'bg-transparent text-white border-white placeholder:text-dark500',
+        )
     }
   }
 

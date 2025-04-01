@@ -50,17 +50,20 @@ export enum Storage {
 
 export enum Network {
   Mainnet = 'Mainnet',
-  LocalTestnet = 'Local TestNet',
+  LocalTestnet = 'testnet',
+  Hoodi = 'hoodi',
   Holesky = 'Holesky',
   Sepolia = 'Sepolia',
 }
 
 export enum ValidatorModalView {
   DETAILS = 'DETAILS',
+  DEPOSIT = 'DEPOSIT',
   EXIT = 'EXIT',
 }
 
 export enum WalletPrefix {
+  BLS = 0x00,
   ONE = 0x01,
   TWO = 0x02,
 }

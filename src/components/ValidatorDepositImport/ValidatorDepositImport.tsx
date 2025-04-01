@@ -25,7 +25,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   depositNetworkId,
 }) => {
   const { t } = useTranslation()
-  const { txHash, pubKey, mnemonicIndex, keyStorePassword } = depositData
+  const { txHash, pubKey, mnemonicIndex, keyStorePassword, status } = depositData
   const shortHandPubKey = formatEthAddress(pubKey)
   const { txStatus } = useResolveTransactionOnce(txHash)
   const {
@@ -45,6 +45,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
       return
     }
 
+    if (status !== 'pending') return
     ;(async () => {
       await importValidator({
         mnemonic,
@@ -53,29 +54,23 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
         onSuccess: () => {
           onUpdateStatus(pubKey, 'success')
         },
+        onError: () => {
+          onUpdateStatus(pubKey, 'error')
+        },
       })
     })()
-  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey])
+  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey, status])
 
   const isValidNetwork =
-    depositNetworkId === NetworkId.HOLESKY || depositNetworkId === NetworkId.MAINNET
+    depositNetworkId === NetworkId.HOLESKY ||
+    depositNetworkId === NetworkId.MAINNET ||
+    depositNetworkId === NetworkId.HOODI
 
   const beaconChaLink = isValidNetwork
     ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)
     : null
 
   const renderTransactionStatus = useCallback(() => {
-    const reviewStatusText = beaconChaLink ? (
-      <ExternalLink
-        href={beaconChaLink}
-        text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
-      />
-    ) : (
-      <Typography type='text-caption1'>
-        {t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
-      </Typography>
-    )
-
     if (isImportError) {
       return (
         <TransactionStatus
@@ -91,13 +86,16 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
                 pubKey: shortHandPubKey,
               })}
             </Typography>
-            {reviewStatusText}
+            <ExternalLink
+              href={beaconChaLink}
+              text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
+            />
           </div>
         </TransactionStatus>
       )
     }
 
-    if (isImportSuccess) {
+    if (isImportSuccess || status === 'success') {
       return (
         <TransactionStatus
           id={mnemonicIndex}
@@ -110,7 +108,10 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
             <Typography type='text-caption1'>
               {t('validatorManagement.txStatuses.validatorComplete.text')}
             </Typography>
-            {reviewStatusText}
+            <ExternalLink
+              href={beaconChaLink}
+              text={t('validatorManagement.reviewStatus', { pubKey: shortHandPubKey })}
+            />
           </div>
         </TransactionStatus>
       )
@@ -158,6 +159,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     mnemonicIndex,
     depositNetworkId,
     isImportError,
+    status,
     txHash,
     txStatus,
     shortHandPubKey,

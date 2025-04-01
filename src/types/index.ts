@@ -141,6 +141,7 @@ export interface SetupProps {
 export enum ChainId {
   MAINNET = 'MAINNET',
   HOLESKY = 'HOLESKY',
+  HOODI = 'HOODI',
   LOCALTESTNET = 'LOCALTESTNET',
 }
 
@@ -226,6 +227,7 @@ export enum TimeUnit {
 
 export enum NetworkId {
   HOLESKY = 17000,
+  HOODI = 560048,
   MAINNET = 1,
 }
 

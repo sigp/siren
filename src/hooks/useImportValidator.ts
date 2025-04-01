@@ -10,6 +10,7 @@ export interface ImportValidatorParams {
   index: number
   keyStorePassword: string
   onSuccess?: () => void
+  onError?: () => void
 }
 
 const useImportValidator = () => {
@@ -20,7 +21,7 @@ const useImportValidator = () => {
   const { generateKeystore } = useChainSafeKeyStore()
 
   const importValidator = useCallback(
-    async ({ mnemonic, index, keyStorePassword, onSuccess }: ImportValidatorParams) => {
+    async ({ mnemonic, index, keyStorePassword, onSuccess, onError }: ImportValidatorParams) => {
       setIsSuccess(false)
       setIsLoading(true)
       setIsError(false)
@@ -47,6 +48,7 @@ const useImportValidator = () => {
         }
       } catch (e) {
         console.error('Import Validator Error:', e)
+        onError?.()
         setIsError(true)
         displayToast(t('error.unexpectedValidatorImportError'), ToastType.ERROR)
       } finally {

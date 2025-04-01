@@ -24,6 +24,11 @@
       "saturday": "Sat"
     }
   },
+  "maxEffectiveBalance": "Max Effective Balance",
+  "effectiveBalanceDisplay": {
+    "remainderBalanceHelperText": "This remaining balance is partially deposited or retained in the validator based on the set withdrawal credentials. If retained this amount will not effect reward calculations.",
+    "remainderEth": "Remainder: {{amount}} ETH"
+  },
   "copied": "Copied!",
   "wrongNetwork": "You are connected to the wrong chain. Click to switch networks.",
   "switchNetwork": "Switch Network",
@@ -420,6 +425,19 @@
         "credentials": "Withdrawal Credentials",
         "deposit": "Sign and Deposit"
       }
+    },
+    "partialDeposit": {
+      "title": "Deposit Funds",
+      "subTitles": {
+        "enterMnemonic": "Enter Mnemonic",
+        "mnemonicIndex": "Mnemonic Index",
+        "signAndDeposit": "Sign & Deposit"
+      },
+      "isMaxedEffectiveBalanceText": "This validator has reached the maximum effective balance. Additional deposits will not increase the balance and will be returned to the withdrawal address or held in the validator if none is set.",
+      "depositHelperText": "Ensure you have access to the withdrawal address associated with this validator, are connected to the correct network and have sufficient funds.",
+      "mnemonicIndexHelperText": "Enter your validator mnemonic index. This is the same value used making your initial validator deposit.",
+      "deriveIndexHelperText": "Deriving mnemonic index. This may take a moment...",
+      "depositAmountHelperText": "Enter the amount you want add to your validators effective balance. Validators with 0x02 withdrawal credentials can hold up to 2048 ETH."
     },
     "credentialRiskModal": {
       "text": "You have not verified one or more of your designated withdrawal credentials. Please be aware if these credentials are set incorrectly they can not be changed and may result in a lose of funds."
