@@ -2,6 +2,7 @@ import { FC, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../utilities/isValidNetwork'
 import useImportValidator from '../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../hooks/useResolveTransactionOnce'
 import { DepositData, NetworkId, TxHash, TxStatus } from '../../types'
@@ -61,12 +62,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     })()
   }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey, status])
 
-  const isValidNetwork =
-    depositNetworkId === NetworkId.HOLESKY ||
-    depositNetworkId === NetworkId.MAINNET ||
-    depositNetworkId === NetworkId.HOODI
-
-  const beaconChaLink = isValidNetwork
+  const beaconChaLink = isValidNetwork(depositNetworkId)
     ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)
     : null
 

@@ -3,6 +3,7 @@ import { FC, ReactNode, useMemo } from 'react'
 import addClassString from '../../../utilities/addClassString'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
+import isValidNetwork from '../../../utilities/isValidNetwork'
 import { NetworkId, TxHash, TxStatus } from '../../types'
 import Typography from '../Typography/Typography'
 
@@ -12,7 +13,7 @@ export enum TransactionStatusStyle {
 }
 
 export interface TransactionStatusProps {
-  id?: string | number
+  id?: string | number | undefined
   txHash: TxHash
   status: TxStatus
   title: string
@@ -52,9 +53,9 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
     'h-12 w-12 ml-4 rounded-full flex items-center justify-center border',
     [statusContainerClass],
   )
-  const isValidNetwork =
-    Number(networkId) === NetworkId.HOLESKY || Number(networkId) === NetworkId.MAINNET
-  const etherScanLink = isValidNetwork ? getEtherscanLink(networkId, `/tx/${txHash}`) : null
+  const etherScanLink = isValidNetwork(networkId)
+    ? getEtherscanLink(networkId, `/tx/${txHash}`)
+    : null
 
   const displayTitle = id ? `${id} • ${title}` : title
   const formattedTxHash = formatEthAddress(txHash as string)

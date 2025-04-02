@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { FC, useCallback, useMemo } from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../../utilities/isValidNetwork'
 import { NetworkId } from '../../../../../types'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import Typography from '../../../../Typography/Typography'
@@ -23,22 +24,17 @@ const ValidatorSuccessScreen: FC<SuccessScreenProps> = ({
   const initialAnim = useMemo(() => ({ y: 50, opacity: 0 }), [])
   const animation = useMemo(() => ({ y: 0, opacity: 1 }), [])
   const shortHandPubKey = formatEthAddress(validatorPubKey)
-  const isValidNetwork =
-    Number(networkId) === NetworkId.HOLESKY || Number(networkId) === NetworkId.MAINNET
-  const beaconChaLink = isValidNetwork
+  const beaconChaLink = isValidNetwork(networkId)
     ? getBeaconChaLink(networkId, `/validator/${validatorPubKey}`)
     : null
 
-  const renderPubKeyText = useCallback(
-    () => (
-      <div className='flex w-fit space-x-2 items-center'>
-        <Typography color='text-dark400' type='text-caption1' className='underline'>
-          {shortHandPubKey}
-        </Typography>
-        <i className='text-dark400 text-caption1 bi-box-arrow-up-right' />
-      </div>
-    ),
-    [shortHandPubKey],
+  const pubKeyTextBlock = (
+    <div className='flex w-fit space-x-2 items-center'>
+      <Typography color='text-dark400' type='text-caption1' className='underline'>
+        {shortHandPubKey}
+      </Typography>
+      <i className='text-dark400 text-caption1 bi-box-arrow-up-right' />
+    </div>
   )
 
   return (
@@ -66,10 +62,10 @@ const ValidatorSuccessScreen: FC<SuccessScreenProps> = ({
         >
           {beaconChaLink ? (
             <Link href={beaconChaLink} target='_blank'>
-              {renderPubKeyText()}
+              {pubKeyTextBlock}
             </Link>
           ) : (
-            renderPubKeyText()
+            pubKeyTextBlock
           )}
         </motion.div>
         <motion.div

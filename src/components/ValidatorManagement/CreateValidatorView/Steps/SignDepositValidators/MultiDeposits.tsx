@@ -122,7 +122,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                   onUpdateStatus={updateDepositInfoStatus}
                   onRetryTx={removeTransaction}
                   depositData={data}
-                  depositNetworkId={DEPOSIT_NETWORK_ID}
+                  depositNetworkId={Number(DEPOSIT_NETWORK_ID)}
                 />
               ))}
             </div>

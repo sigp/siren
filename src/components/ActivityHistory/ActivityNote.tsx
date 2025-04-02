@@ -9,6 +9,7 @@ import displayToast from '../../../utilities/displayToast'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
+import isValidNetwork from '../../../utilities/isValidNetwork'
 import { Activity, ActivityType, NetworkId, ToastType } from '../../types'
 import Typography from '../Typography/Typography'
 
@@ -136,10 +137,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
   }, [type])
 
   const formattedHref = useMemo(() => {
-    const isValidNetwork =
-      Number(networkId) === NetworkId.HOLESKY || Number(networkId) === NetworkId.MAINNET
-
-    if (!isValidNetwork) return null
+    if (!isValidNetwork(networkId)) return null
 
     switch (type) {
       case ActivityType.IMPORT:

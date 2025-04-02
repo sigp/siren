@@ -142,11 +142,11 @@ const SingleDeposit: FC<SingleDepositProps> = ({
                         txHash={txHash}
                         txStatus={txStatus}
                         onRetry={retryTransaction}
-                        networkId={DEPOSIT_NETWORK_ID}
+                        networkId={Number(DEPOSIT_NETWORK_ID)}
                       />
                       <ImportValidatorStep
                         txHash={txHash}
-                        networkId={DEPOSIT_NETWORK_ID}
+                        networkId={Number(DEPOSIT_NETWORK_ID)}
                         pubKey={pubKey}
                         isImportError={isImportError}
                       />
