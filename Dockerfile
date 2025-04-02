@@ -1,4 +1,4 @@
-ARG node_version=18.18
+ARG node_version=23-slim
 ARG node_image=node:${node_version}
 
 FROM $node_image AS builder
