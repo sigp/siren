@@ -98,7 +98,7 @@ const ActivityHistory: FC<ActivityHistoryProps> = ({ initActivityData, depositNe
     <>
       <Button
         onClick={openHistory}
-        className='hidden md:block items-center border-l-style'
+        className='hidden md:block items-center border-l-style w-fit'
         type={ButtonFace.ICON}
       >
         <div className='relative'>

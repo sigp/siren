@@ -73,7 +73,7 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
             <div className='opacity-30'>
               <Button
                 isDisabled
-                className='hidden md:block items-center dark:border-borderDark'
+                className='hidden md:block items-center dark:border-borderDark w-fit'
                 type={ButtonFace.ICON}
               >
                 <i className='bi bi-bell-fill text-2xl text-dark300' />
