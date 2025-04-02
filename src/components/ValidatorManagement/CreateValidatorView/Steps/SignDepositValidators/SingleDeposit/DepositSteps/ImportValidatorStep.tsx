@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../../../../utilities/isValidNetwork'
 import { NetworkId, TxHash } from '../../../../../../../types'
 import ExternalLink from '../../../../../../ExternalLink/ExternalLink'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
@@ -22,8 +23,9 @@ const ImportValidatorStep: FC<ImportValidatorStepProps> = ({
 }) => {
   const { t } = useTranslation()
   const shortHandPubKey = formatEthAddress(pubKey)
-  const isValidNetwork = networkId === NetworkId.HOLESKY || networkId === NetworkId.MAINNET
-  const beaconChaLink = isValidNetwork ? getBeaconChaLink(networkId, `/validator/${pubKey}`) : null
+  const beaconChaLink = isValidNetwork(networkId)
+    ? getBeaconChaLink(networkId, `/validator/${pubKey}`)
+    : null
 
   return txHash ? (
     <div className='py-4'>

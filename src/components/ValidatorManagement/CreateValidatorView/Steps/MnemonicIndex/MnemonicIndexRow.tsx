@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../../utilities/isValidNetwork'
 import { NetworkId, ValidatorCandidate } from '../../../../../types'
 import ExternalLink from '../../../../ExternalLink/ExternalLink'
 import Typography from '../../../../Typography/Typography'
@@ -28,15 +29,14 @@ const MnemonicIndexRow: FC<MnemonicIndexRowProps> = ({ candidate, depositNetwork
     pubKey ? 'justify-between' : 'justify-end',
   ])
 
+  const beaconChaLink = isValidNetwork(depositNetworkId)
+    ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)
+    : null
+
   return (
     <ValidatorCandidateRow index={index} data={candidate}>
       <div className={containerClasses}>
-        {pubKey && (
-          <ExternalLink
-            text={formatEthAddress(pubKey)}
-            href={getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)}
-          />
-        )}
+        {pubKey && <ExternalLink text={formatEthAddress(pubKey)} href={beaconChaLink} />}
         <div className='px-4'>
           <div className={validClasses}>
             <Typography
