@@ -160,7 +160,7 @@ const Input: FC<InputProps> = ({
           type={inputType}
           className={`${isPasswordType || icon ? 'pr-5' : ''} ${
             className ? className : ''
-          } pb-2 w-full font-openSauce outline-none ${generateInputStyle()}`}
+          } pb-2 w-full font-openSauce outline-none disabled:opacity-40 ${generateInputStyle()}`}
         />
         {isPasswordType && !isDisableToggle ? (
           <i

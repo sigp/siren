@@ -20,7 +20,7 @@ export interface ButtonProps extends MotionProps {
   type?: ButtonFace | undefined
   isDisabled?: OptionalBoolean
   font?: TypographyFamily
-  fontType?: TypographyType
+  fontType?: TypographyType | undefined
   children: ReactNode | ReactNode[]
   onClick?: (() => void) | undefined
   dataTestId?: string
