@@ -17,6 +17,7 @@ import MainView from '../../../src/components/ValidatorManagement/MainView'
 import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
 import ValidatorSummary from '../../../src/components/ValidatorSummary/ValidatorSummary'
 import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
+import { ValidatorModalView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import {
@@ -101,8 +102,9 @@ const Main: FC<MainProps> = (props) => {
   const slotInterval = SECONDS_PER_SLOT * 1000
   const epochInterval = slotInterval * Number(SLOTS_PER_EPOCH)
   const searchParams = useSearchParams()
-  const validatorId = searchParams.get('id')
-  const modalView = searchParams.get('view')
+  const validatorIdSearchParam = searchParams.get('id')
+  const modalSearchParam = searchParams.get('modal')
+  const viewSearchParam = searchParams.get('view')
   const { data: exchangeData } = useSWRPolling(CoinbaseExchangeRateUrl, {
     refreshInterval: 60 * 1000,
     networkError,
@@ -185,23 +187,34 @@ const Main: FC<MainProps> = (props) => {
     return validatorStates.find(({ index }) => Number(activeValId) === index)
   }, [activeValId, validatorStates])
 
+  const eligibleToConsolidate = useMemo(() => {
+    return validatorStates.filter(
+      ({ withdrawalAddress }) =>
+        withdrawalAddress.includes('0x01') || withdrawalAddress.includes('0x02'),
+    )
+  }, [validatorStates])
+
   useEffect(() => {
     if (isRendered) return
 
-    if (validatorId) {
-      setValidatorId(Number(validatorId))
+    if (validatorIdSearchParam) {
+      setValidatorId(Number(validatorIdSearchParam))
     }
 
-    if (modalView === 'detail') {
+    if (modalSearchParam === ValidatorModalView.DETAILS.toLowerCase()) {
       setValDetail(true)
     }
 
-    if (modalView === 'edit') {
+    if (modalSearchParam === ValidatorModalView.EDIT.toLowerCase()) {
       setIsEditValidator(true)
     }
 
+    if (viewSearchParam) {
+      setView(viewSearchParam.toUpperCase() as ValidatorManagementView)
+    }
+
     setRender(true)
-  }, [validatorId, isRendered, modalView])
+  }, [validatorIdSearchParam, isRendered, modalSearchParam, viewSearchParam])
 
   useEffect(() => {
     if (rates) {
@@ -218,7 +231,17 @@ const Main: FC<MainProps> = (props) => {
     router.push('/dashboard/validators')
   }
 
-  const changeView = (view: ValidatorManagementView) => setView(view)
+  const changeView = (view: ValidatorManagementView) => {
+    const baseUrl = '/dashboard/validators'
+    setView(view)
+
+    if (view === ValidatorManagementView.MAIN) {
+      router.push(baseUrl)
+      return
+    }
+
+    router.push(baseUrl + `?view=${view.toLowerCase()}`)
+  }
 
   const goBack = () => {
     let backView = ValidatorManagementView.MAIN
@@ -264,6 +287,8 @@ const Main: FC<MainProps> = (props) => {
             search={search}
             onSetSearch={setSearch}
             onChangeView={changeView}
+            hasSearchAction={!!validatorStates.length}
+            hasConsolidationAction={!!eligibleToConsolidate.length}
             scrollPercentage={scrollPercentage}
           />
         )

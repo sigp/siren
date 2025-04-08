@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
+import { ValidatorModalView } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useValidatorName from '../../hooks/useValidatorName'
 import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms'
@@ -36,7 +37,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
 
   const validatorName = useValidatorName(validator, aliases)
   const valHrefBase = `/dashboard/validators?id=${index}`
-  const detailHref = `${valHrefBase}&view=detail`
+  const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS}`
 
   const viewDetail = () => {
     setActiveValidatorId(index)

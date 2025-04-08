@@ -7,6 +7,7 @@ import formatBalanceColor from '../../../utilities/formatBalanceColor'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import isBlsAddress from '../../../utilities/isBlsAddress'
 import ValidatorLogo from '../../assets/images/validators.svg'
+import { ValidatorModalView } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useValidatorName from '../../hooks/useValidatorName'
 import {
@@ -44,8 +45,8 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const rewardColor = formatBalanceColor(rewards)
   const baseBeaconChaUrl = useRecoilValue(selectBeaconChaBaseUrl)
   const valHrefBase = `/dashboard/validators?id=${index}`
-  const detailHref = `${valHrefBase}&view=detail`
-  const editHref = `${valHrefBase}&view=edit`
+  const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS.toLowerCase()}`
+  const editHref = `${valHrefBase}&modal=${ValidatorModalView.EDIT.toLowerCase()}`
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
   const hasIndex = index !== undefined
 
