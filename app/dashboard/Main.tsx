@@ -8,6 +8,8 @@ import AccountEarning from '../../src/components/AccountEarnings/AccountEarning'
 import AppGreeting from '../../src/components/AppGreeting/AppGreeting'
 import DashboardWrapper from '../../src/components/DashboardWrapper/DashboardWrapper'
 import DiagnosticTable from '../../src/components/DiagnosticTable/DiagnosticTable'
+import ValidatorBalanceEmptyState from '../../src/components/EmptyState/ValidatorBalanceEmptyState'
+import ValidatorTableEmptyState from '../../src/components/EmptyState/ValidatorTableEmptyState'
 import NetworkStats from '../../src/components/NetworkStats/NetworkStats'
 import ValidatorBalances from '../../src/components/ValidatorBalances/ValidatorBalances'
 import ValidatorTable from '../../src/components/ValidatorTable/ValidatorTable'
@@ -239,11 +241,15 @@ const Main: FC<MainProps> = (props) => {
             validatorCacheData={validatorCache}
             validatorStateInfo={validatorStates}
           />
-          <ValidatorBalances
-            validatorCacheData={validatorCache}
-            validatorStateInfo={validatorStates}
-            genesisTime={genesisTime}
-          />
+          {validatorStates.length ? (
+            <ValidatorBalances
+              validatorCacheData={validatorCache}
+              validatorStateInfo={validatorStates}
+              genesisTime={genesisTime}
+            />
+          ) : (
+            <ValidatorBalanceEmptyState />
+          )}
         </div>
         <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
           <NetworkStats
@@ -252,7 +258,16 @@ const Main: FC<MainProps> = (props) => {
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
+          {validatorStates.length ? (
+            <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
+          ) : (
+            <ValidatorTableEmptyState
+              href='/dashboard/validators?view=create'
+              btnFontType='text-caption1.5'
+              className='min-h-60'
+              ctaText='Create Validator'
+            />
+          )}
           <DiagnosticTable
             priorityLogs={initPriorityLogs}
             logMetrics={metrics}
