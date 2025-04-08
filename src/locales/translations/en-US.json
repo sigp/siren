@@ -760,5 +760,14 @@
         "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan."
       }
     }
+  },
+  "emptyState": {
+    "validatorTable": {
+      "noConnections": "No Validators Connected",
+      "importOrDeposit": "Import or deposit a new validator to monitor performance and earnings."
+    },
+    "validatorBalanceChart": {
+      "keepProgress": "Siren keeps track of your validator progression in rewards earnings. Import or deposit a new validator to begin monitoring."
+    }
   }
 }
