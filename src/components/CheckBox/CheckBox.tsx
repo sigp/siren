@@ -18,7 +18,11 @@ const CheckBox: FC<CheckBoxProps> = ({
   checkboxBorderClasses,
   ...inputProps
 }) => {
-  const containerClasses = clsx('flex items-center cursor-pointer', containerClassName)
+  const containerClasses = clsx(
+    'flex items-center cursor-pointer',
+    containerClassName,
+    inputProps.disabled && 'opacity-30 pointer-events-none',
+  )
   const inputClasses = clsx(
     'w-5 h-5 cursor-pointer accent-primary bg-transparent rounded',
     'focus:ring-purple-500 dark:focus:ring-purple-600 dark:ring-offset-gray-800',
