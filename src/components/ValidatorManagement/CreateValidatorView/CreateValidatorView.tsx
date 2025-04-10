@@ -11,6 +11,7 @@ import {
 import { ValidatorCountResult } from '../../../types/validator'
 import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
 import CreateValidatorStep from './CreateValidatorStep'
+import MaxEbModal from './MaxEbModal'
 import RiskModal from './RiskModal'
 import KeystoreAuthentication from './Steps/KeystoreAuthentication/KeystoreAuthentication'
 import MnemonicIndex from './Steps/MnemonicIndex/MnemonicIndex'
@@ -109,6 +110,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
   return (
     <>
+      <MaxEbModal />
       <RiskModal isOpen={isRisk} onAccept={acceptRisk} onClose={dismissRiskMessage} />
       <HorizontalStepper steps={steps}>
         {({ incrementStep, decrementStep, step }) => (

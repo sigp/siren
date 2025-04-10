@@ -11,7 +11,7 @@ const MaxEbModal = () => {
   const [isOpen, setIsOpen] = useRecoilState(isMaxEBModal)
   const onClose = () => {
     setIsOpen(false)
-    Cookies.set('MaxEBWarningSeen', 'true')
+    Cookies.set('max-eB-warning-seen', 'true')
   }
 
   return (

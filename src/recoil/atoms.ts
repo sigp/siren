@@ -119,3 +119,8 @@ export const blsModuleAtom = atom<IBls | undefined>({
   key: 'blsModuleAtom',
   default: undefined,
 })
+
+export const isMaxEBModal = atom<boolean>({
+  key: 'isMaxEBModal',
+  default: false,
+})
