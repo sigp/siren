@@ -356,6 +356,9 @@
     "overview": "Overview",
     "day": "Day",
     "invalidMnemonic": "Invalid mnemonic phrase. Please review and try again.",
+    "maxEBModal": {
+      "text": "Enabling Max EB 0x02 withdrawal credentials means your validator will have the ability to hold up to 2048 ETH in its max effective balance. It will also mean your validator will no longer automatically make partial withdrawals of any rewards accumulated, unless rewards exceed 2048 ETH. Additionally, 0x02 withdrawal credentials mean you will be required to send a request to the Beacon Node to withdraw any amount of ETH as long as the validator remains at or above 32 ETh."
+    },
     "effectiveness": {
       "targetVote": "Target Vote",
       "headVote": "Head Vote",
