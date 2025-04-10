@@ -241,7 +241,7 @@ const Main: FC<MainProps> = (props) => {
             validatorCacheData={validatorCache}
             validatorStateInfo={validatorStates}
           />
-          {validatorStates.length ? (
+          {validatorStates.length && Object.keys(validatorCache).length ? (
             <ValidatorBalances
               validatorCacheData={validatorCache}
               validatorStateInfo={validatorStates}
