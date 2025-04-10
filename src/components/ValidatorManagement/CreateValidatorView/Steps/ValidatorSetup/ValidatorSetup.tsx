@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import displayToast from '../../../../../../utilities/displayToast'
 import { WalletPrefix } from '../../../../../constants/enums'
-import useElectraStatus from '../../../../../hooks/useElectraStatus'
 import { ToastType, ValidatorCandidate } from '../../../../../types'
 import Typography from '../../../../Typography/Typography'
 import StepOptions, { StepOptionsProps } from '../../StepOptions'
@@ -26,9 +25,8 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({
   const { t } = useTranslation()
   const getRandomId = () => uuidv4().toString()
 
-  const { isEnabled } = useElectraStatus()
   const baseDefaultValidator = {
-    withdrawalPrefix: isEnabled ? WalletPrefix.TWO : WalletPrefix.ONE,
+    withdrawalPrefix: WalletPrefix.ONE,
     effectiveBalance: parseUnits(minActivationBalance.toString(), 'gwei'),
     index: undefined,
     keyStorePassword: undefined,
