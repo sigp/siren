@@ -1,7 +1,10 @@
 import clsx from 'clsx'
 import { FC, InputHTMLAttributes } from 'react'
 import { useTranslation } from 'react-i18next'
+import getMnemonicStats from '../../../../../../utilities/getMnemonicStats'
+import getWordLength from '../../../../../../utilities/getWordLength'
 import Spinner from '../../../../Spinner/Spinner'
+import WordCountDisplay from '../../../../WordCountDisplay/WordCountDisplay'
 
 export interface ValidateMnemonicProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   isValidKeyPhrase: boolean
@@ -16,6 +19,8 @@ const ValidateMnemonic: FC<ValidateMnemonicProps> = ({
   disabled,
 }) => {
   const { t } = useTranslation()
+  const wordCount = getWordLength(String(value))
+  const { limit, color, isValid } = getMnemonicStats(wordCount)
 
   const textAreaClasses = clsx(
     'w-full text-dark900 dark:bg-dark600_20 dark:text-dark300 font-openSauce text-caption1 p-4 outline-none bg-transparent rounded-sm border pr-12',
@@ -24,7 +29,9 @@ const ValidateMnemonic: FC<ValidateMnemonicProps> = ({
 
   return (
     <div className='relative'>
-      {value && !isValidated && <Spinner size='w-6 h-6' className='absolute top-2 right-0' />}
+      {value && !isValidated && isValid && (
+        <Spinner size='w-6 h-6' className='absolute top-2 right-0' />
+      )}
       <textarea
         onChange={onChange}
         disabled={disabled}
@@ -33,6 +40,7 @@ const ValidateMnemonic: FC<ValidateMnemonicProps> = ({
         cols={30}
         rows={10}
       />
+      <WordCountDisplay count={wordCount} limit={limit} color={color} />
     </div>
   )
 }
