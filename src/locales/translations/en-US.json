@@ -762,6 +762,10 @@
     }
   },
   "emptyState": {
+    "consolidationList": {
+      "noEligibleFound": "No Eligible Validators",
+      "reviewValidators": "Siren was unable to locate any validator that met the requirements for selected task. Please review your validator set and make appropriate adjustments."
+    },
     "validatorTable": {
       "noConnections": "No Validators Connected",
       "importOrDeposit": "Import or deposit a new validator to monitor performance and earnings."
