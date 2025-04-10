@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { MAX_EFFECTIVE_BALANCE } from '../../../../../constants/constants'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
+import NoEligibleValidatorsFound from '../../../../EmptyState/NoEligibleValidatorsFound'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../../CreateValidatorView/StepOptions'
 import SelectionDisplay from './SelectionDisplay'
@@ -108,16 +109,20 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
 
   const renderedSourceValidators = useMemo(
     () =>
-      availableSourceValidators.map((source, index) => (
-        <SelectSourceRow
-          animControls={controls}
-          animIndex={index}
-          key={source.pubKey}
-          source={source}
-          isSelected={selectedSources.filter(({ pubKey }) => source.pubKey === pubKey).length > 0}
-          onSelect={toggleSource}
-        />
-      )),
+      availableSourceValidators.length ? (
+        availableSourceValidators.map((source, index) => (
+          <SelectSourceRow
+            animControls={controls}
+            animIndex={index}
+            key={source.pubKey}
+            source={source}
+            isSelected={selectedSources.filter(({ pubKey }) => source.pubKey === pubKey).length > 0}
+            onSelect={toggleSource}
+          />
+        ))
+      ) : (
+        <NoEligibleValidatorsFound />
+      ),
     [selectedSources, availableSourceValidators, toggleSource, controls],
   )
 
@@ -170,6 +175,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
               labelStyle='text-caption1 font-light'
               id='check_all'
               checked={isAll}
+              disabled={!availableSourceValidators.length}
               onChange={toggleIsSelectAll}
             />
           </div>

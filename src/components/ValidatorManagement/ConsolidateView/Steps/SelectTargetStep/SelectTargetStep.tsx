@@ -3,6 +3,7 @@ import { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { ValidatorInfo } from '../../../../../types/validator'
+import NoEligibleValidatorsFound from '../../../../EmptyState/NoEligibleValidatorsFound'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../../CreateValidatorView/StepOptions'
 import SelectTargetRow from './SelectTargetRow'
@@ -45,16 +46,20 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   }, [isActive, controls])
 
   const renderedRows = useMemo(() => {
-    return validators.map((validator, index) => (
-      <SelectTargetRow
-        animIndex={index}
-        animControls={controls}
-        isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
-        key={validator.pubKey}
-        onSelect={onSelect}
-        validator={validator}
-      />
-    ))
+    return validators.length ? (
+      validators.map((validator, index) => (
+        <SelectTargetRow
+          animIndex={index}
+          animControls={controls}
+          isActive={!!targetValidator && targetValidator.pubKey === validator.pubKey}
+          key={validator.pubKey}
+          onSelect={onSelect}
+          validator={validator}
+        />
+      ))
+    ) : (
+      <NoEligibleValidatorsFound />
+    )
   }, [validators, targetValidator, onSelect, controls])
 
   return (
