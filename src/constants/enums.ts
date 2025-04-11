@@ -60,6 +60,7 @@ export enum ValidatorModalView {
   DETAILS = 'DETAILS',
   DEPOSIT = 'DEPOSIT',
   EXIT = 'EXIT',
+  EDIT = 'EDIT',
 }
 
 export enum WalletPrefix {

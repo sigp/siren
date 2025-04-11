@@ -1,11 +1,10 @@
+import { IBls } from '@chainsafe/bls/types'
 import { debounce } from 'lodash'
 import { FC, InputHTMLAttributes, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRecoilValue } from 'recoil'
 import addClassString from '../../../../../utilities/addClassString'
 import displayToast from '../../../../../utilities/displayToast'
 import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen'
-import { blsModuleAtom } from '../../../../recoil/atoms'
 import { ToastType } from '../../../../types'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
 import Spinner from '../../../Spinner/Spinner'
@@ -16,6 +15,7 @@ export interface MnemonicPhraseProps extends InputHTMLAttributes<HTMLTextAreaEle
   onNextStep: () => void
   onBackStep: () => void
   isActive: boolean
+  blsModule: IBls
 }
 
 const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
@@ -24,9 +24,9 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
   onChange,
   value,
   isActive,
+  blsModule,
 }) => {
   const { t } = useTranslation()
-  const blsModule = useRecoilValue(blsModuleAtom)
   const [isValidKeyPhrase, setIsValidPhrase] = useState(false)
   const [isValidated, setIsValidated] = useState(false)
   const isEmpty = !value || !isValidated
