@@ -1,9 +1,12 @@
 import { formatEther, parseEther, parseUnits } from 'ethers'
+import Cookies from 'js-cookie'
 import { ChangeEvent, FC } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useSetRecoilState } from 'recoil'
 import addClassString from '../../../../../../utilities/addClassString'
 import { WalletPrefix } from '../../../../../constants/enums'
 import useElectraStatus from '../../../../../hooks/useElectraStatus'
+import { isMaxEBModal } from '../../../../../recoil/atoms'
 import { ValidatorCandidate } from '../../../../../types'
 import IconButton, { IconButtonTypes } from '../../../../IconButton/IconButton'
 import Input from '../../../../Input/Input'
@@ -28,6 +31,7 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
   onRemoveCandidate,
 }) => {
   const { t } = useTranslation()
+  const setIsMaxEBModal = useSetRecoilState(isMaxEBModal)
   const { id, withdrawalPrefix, effectiveBalance } = candidate
   const removeCandidate = () => onRemoveCandidate(id)
   const { isEnabled } = useElectraStatus()
@@ -49,6 +53,11 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
     if (!value) {
       effectiveBalance = parseUnits(minActivationBalance.toString(), 'gwei')
     }
+
+    if (value && Cookies.get('max-eB-warning-seen') !== 'true') {
+      setIsMaxEBModal(true)
+    }
+
     onUpdateCandidate(id, {
       ...candidate,
       withdrawalPrefix: withdrawalPrefix === WalletPrefix.TWO ? WalletPrefix.ONE : WalletPrefix.TWO,
