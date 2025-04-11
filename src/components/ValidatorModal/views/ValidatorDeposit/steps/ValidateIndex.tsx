@@ -106,7 +106,7 @@ const ValidateIndex: FC<ValidateIndexProps> = ({ mnemonic, pubKey, onVerifyIndex
               max={MAX_MNEMONIC_INDEX}
               type='number'
             />
-            {!isValidated && !isValidIndex && mnemonicIndex && (
+            {!isValidated && !isValidIndex && !!mnemonicIndex && (
               <div className='absolute top-1/2 -translate-y-1/2 right-1'>
                 <Spinner size='h-4 w-4' />
               </div>

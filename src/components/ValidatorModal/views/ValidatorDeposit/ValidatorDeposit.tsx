@@ -13,6 +13,8 @@ import React, {
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import displayToast from '../../../../../utilities/displayToast'
+import getMnemonicStats from '../../../../../utilities/getMnemonicStats'
+import getWordLength from '../../../../../utilities/getWordLength'
 import {
   EFFECTIVE_BALANCE,
   MAX_BALANCE_INPUT,
@@ -85,6 +87,9 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({ validator, validatorEpoch
     }
   }, [])
 
+  const wordCount = getWordLength(String(mnemonic))
+  const { isValid } = getMnemonicStats(wordCount)
+
   const debouncedValidateKeyPhraseRef = useRef(
     debounce((mnemonic: string) => {
       void validateMnemonic(mnemonic)
@@ -93,10 +98,10 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({ validator, validatorEpoch
 
   useEffect(() => {
     setIsValidated(false)
-    if (!mnemonic) return
+    if (!mnemonic || !isValid) return
 
     debouncedValidateKeyPhraseRef.current(mnemonic)
-  }, [mnemonic])
+  }, [mnemonic, isValid])
 
   useEffect(() => {
     if (!mnemonic || mnemonicIndex === null || !isValidMnemonic) return

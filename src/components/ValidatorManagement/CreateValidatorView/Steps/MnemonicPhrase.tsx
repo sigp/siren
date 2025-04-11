@@ -4,11 +4,14 @@ import { FC, InputHTMLAttributes, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../utilities/addClassString'
 import displayToast from '../../../../../utilities/displayToast'
+import getMnemonicStats from '../../../../../utilities/getMnemonicStats'
+import getWordLength from '../../../../../utilities/getWordLength'
 import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen'
 import { ToastType } from '../../../../types'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
 import Spinner from '../../../Spinner/Spinner'
 import Typography from '../../../Typography/Typography'
+import WordCountDisplay from '../../../WordCountDisplay/WordCountDisplay'
 import StepOptions from '../StepOptions'
 
 export interface MnemonicPhraseProps extends InputHTMLAttributes<HTMLTextAreaElement> {
@@ -72,15 +75,17 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
       void validateKeyPhrase(phrase)
     }, 1000),
   )
+  const wordCount = getWordLength(String(value))
+  const { limit, color, isValid } = getMnemonicStats(wordCount)
 
   useEffect(() => {
     setIsValidated(false)
-    if (!value) {
+    if (!value || !isValid) {
       return
     }
 
     debouncedValidateKeyPhraseRef.current(value as string)
-  }, [value])
+  }, [value, isValid])
 
   return (
     <div className='w-full h-full space-y-6'>
@@ -101,7 +106,9 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
           </div>
         </InfoBox>
         <div className='relative'>
-          {value && !isValidated && <Spinner size='w-6 h-6' className='absolute top-2 right-0' />}
+          {value && !isValidated && isValid && (
+            <Spinner size='w-6 h-6' className='absolute top-2 right-0' />
+          )}
           <textarea
             onChange={onChange}
             placeholder={t('validatorManagement.mnemonicPhrase.placeholder')}
@@ -109,6 +116,7 @@ const MnemonicPhrase: FC<MnemonicPhraseProps> = ({
             cols={30}
             rows={10}
           />
+          <WordCountDisplay count={wordCount} limit={limit} color={color} />
         </div>
       </div>
       <StepOptions
