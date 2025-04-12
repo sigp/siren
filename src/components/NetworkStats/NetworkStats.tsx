@@ -30,7 +30,7 @@ const NetworkStats: FC<NetworkStatsProps> = ({
   } = syncData
 
   const { rate, status } = valInclusionData
-  const headSlotStatus = formatAtHeadSlotStatus(-syncDistance)
+  const headSlotStatus = formatAtHeadSlotStatus(syncDistance)
 
   const participationClasses = addClassString('border-none', [!rate && 'opacity-20'])
 
@@ -57,7 +57,7 @@ const NetworkStats: FC<NetworkStatsProps> = ({
         title={t('networkStats.blockBehind')}
         status={headSlotStatus}
         metricFontSize='text-subtitle3'
-        metric={String(-syncDistance)}
+        metric={String(syncDistance)}
       />
       <NetworkPeerSpeedometer peerData={peerData} />
       <NetworkStatBlock
