@@ -3,7 +3,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSignMessage } from 'wagmi'
 import addClassString from '../../../utilities/addClassString'
-import { ValidatorCandidate } from '../../types'
+import { Address, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import Typography from '../Typography/Typography'
 import ValidatorCandidateRow from '../ValidatorCandidateRow/ValidatorCandidateRow'
@@ -87,7 +87,6 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
 
   useEffect(() => {
     if (error) {
-      console.log(error)
       setLoading(false)
     }
   }, [error])
@@ -121,7 +120,10 @@ const ValidatorCredentialRow: FC<ValidatorCredentialRowProps> = ({
           </div>
           {!isVerifiedCredentials ? (
             <div className='full'>
-              <WalletActionGuard textSize='text-caption1'>
+              <WalletActionGuard
+                targetAddress={credentialInput as Address}
+                textSize='text-caption1'
+              >
                 <Button
                   padding='px-4 py-1'
                   className='py-1'

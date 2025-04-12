@@ -190,7 +190,8 @@ const Main: FC<MainProps> = (props) => {
   const eligibleToConsolidate = useMemo(() => {
     return validatorStates.filter(
       ({ withdrawalAddress }) =>
-        withdrawalAddress.includes('0x01') || withdrawalAddress.includes('0x02'),
+        !!withdrawalAddress &&
+        (withdrawalAddress.includes('0x01') || withdrawalAddress.includes('0x02')),
     )
   }, [validatorStates])
 
