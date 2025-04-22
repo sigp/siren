@@ -17,14 +17,12 @@ const useProcessEffectiveBalance = (
 
     const {
       EFFECTIVE_BALANCE_INCREMENT,
-      MAX_EFFECTIVE_BALANCE_ELECTRA,
       HYSTERESIS_QUOTIENT,
       HYSTERESIS_UPWARD_MULTIPLIER,
       HYSTERESIS_DOWNWARD_MULTIPLIER,
     } = beaconSpec
 
     const effectiveBalanceIncrement = Number(formatUnits(EFFECTIVE_BALANCE_INCREMENT, 9))
-    const maxEffectiveBalance = Number(formatUnits(MAX_EFFECTIVE_BALANCE_ELECTRA, 9))
 
     const UP_OFFSET =
       (Number(HYSTERESIS_UPWARD_MULTIPLIER) / Number(HYSTERESIS_QUOTIENT)) *
@@ -41,7 +39,7 @@ const useProcessEffectiveBalance = (
     if (aboveThreshold) {
       // step upward
       while (currentActualBalance > effective + UP_OFFSET) {
-        effective = Math.min(effective + effectiveBalanceIncrement, maxEffectiveBalance)
+        effective = effective + effectiveBalanceIncrement
       }
     } else if (belowThreshold) {
       // step downward
