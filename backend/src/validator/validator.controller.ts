@@ -67,4 +67,9 @@ export class ValidatorController {
   async importValKeystore(@Body() keystoreData) {
     return this.validatorService.importValidatorKeystore(keystoreData.data);
   }
+
+  @Get('partial-withdrawals')
+  async getPartialWithdrawals() {
+    return this.validatorService.fetchPartialWithdrawals();
+  }
 }

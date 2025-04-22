@@ -92,8 +92,8 @@ export class BeaconService {
             eth1_node_sync_status_percentage,
           } = executionResponse.data.data;
 
-          const headSlot = Number(head_slot)
-          const currentEpoch = Math.floor(headSlot / Number(SLOTS_PER_EPOCH))
+          const headSlot = Number(head_slot);
+          const currentEpoch = Math.floor(headSlot / Number(SLOTS_PER_EPOCH));
 
           const distance = headSlot + Number(sync_distance);
 

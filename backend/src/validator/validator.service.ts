@@ -3,6 +3,7 @@ import { throwServerError } from '../utilities';
 import { UtilsService } from '../utils/utils.service';
 import {
   BeaconValidatorResult,
+  PartialWithdrawal,
   ValidatorCache,
   ValidatorDetail,
   ValidatorInfo,
@@ -13,7 +14,10 @@ import { Metric } from './entities/metric.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { ValidatorMetricResult } from '../../../src/types/beacon';
+import {
+  BeaconNodeSpecResults,
+  ValidatorMetricResult,
+} from '../../../src/types/beacon';
 import { ActivityService } from '../activity/activity.service';
 import { ActivityType } from '../../../src/types';
 
@@ -83,7 +87,9 @@ export class ValidatorService {
               withdrawal_credentials,
               activation_epoch,
             } = validator;
-            let effectiveBalance = Number(formatUnits(effective_balance, 'gwei'));
+            let effectiveBalance = Number(
+              formatUnits(effective_balance, 'gwei'),
+            );
 
             if (status === 'withdrawal_done') {
               effectiveBalance = 0;
@@ -278,5 +284,9 @@ export class ValidatorService {
       console.error(e);
       throwServerError('Unable to import validator keystore');
     }
+  }
+
+  async fetchPartialWithdrawals(): Promise<PartialWithdrawal[]> {
+    return await this.cacheManager.get('partialWithdrawals');
   }
 }
