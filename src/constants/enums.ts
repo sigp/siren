@@ -59,6 +59,7 @@ export enum Network {
 export enum ValidatorModalView {
   DETAILS = 'DETAILS',
   DEPOSIT = 'DEPOSIT',
+  WITHDRAWAL = 'WITHDRAWAL',
   EXIT = 'EXIT',
   EDIT = 'EDIT',
 }
