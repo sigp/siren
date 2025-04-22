@@ -15,18 +15,24 @@ export interface ValidatorActionsProps {
   isConversionRequired: boolean
   isProcessing: boolean
   isDisabled: boolean
+  isCompounding: boolean
+  isActiveShardCommittee: boolean
 }
 
 const ValidatorActions: FC<ValidatorActionsProps> = ({
   isConversionRequired,
   isProcessing,
   isDisabled,
+  isCompounding,
+  isActiveShardCommittee,
 }) => {
   const { t } = useTranslation()
   const router = useRouter()
   const toggleBlsModal = useSetRecoilState(isBlsExecutionModal)
   const { closeModal, moveToView } = useContext(ValidatorModalContext)
   const viewExitAction = useCallback(() => moveToView(ValidatorModalView.EXIT), [])
+  const viewWithdrawalAction = useCallback(() => moveToView(ValidatorModalView.WITHDRAWAL), [])
+  const viewDepositAction = useCallback(() => moveToView(ValidatorModalView.DEPOSIT), [])
   const viewBlsModal = useCallback(() => {
     closeModal()
     setTimeout(() => {
@@ -34,7 +40,6 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
       router.push('/dashboard/validators?view=bls')
     }, 200)
   }, [])
-  const viewDepositAction = useCallback(() => moveToView(ValidatorModalView.DEPOSIT), [])
 
   return (
     <div className='w-full border-t-style100 space-y-4 p-4'>
@@ -83,12 +88,13 @@ const ValidatorActions: FC<ValidatorActionsProps> = ({
               title={t('validatorManagement.actions.stopValidator')}
             />
           </DisabledTooltip>
-          <DisabledTooltip className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'>
-            <ValidatorCardAction
-              icon='bi-arrow-right-square'
-              title={t('validatorManagement.actions.exportValidator')}
-            />
-          </DisabledTooltip>
+          <ValidatorCardAction
+            onClick={viewWithdrawalAction}
+            isDisabled={isDisabled || !isCompounding || !isActiveShardCommittee}
+            icon='bi-credit-card'
+            className='w-32 @425:w-36 sm:w-96 mb-2 lg:flex-1'
+            title={t('validatorManagement.actions.partialWithdrawal')}
+          />
           <ValidatorCardAction
             onClick={viewDepositAction}
             isDisabled={isDisabled}
