@@ -1,4 +1,4 @@
-import {ChainId} from '../src/types'
+import { ChainId } from '../src/types'
 
 const formatChainId = (id: string): ChainId => {
   switch (id) {

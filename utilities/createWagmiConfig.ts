@@ -22,7 +22,7 @@ const createWagmiConfig = () => {
   const transports: Record<number, ReturnType<typeof http>> = {
     [mainnet.id]: http(),
     [holesky.id]: http(),
-    [hoodi.id]: http()
+    [hoodi.id]: http(),
   }
 
   if (localChainId && localRpc) {
