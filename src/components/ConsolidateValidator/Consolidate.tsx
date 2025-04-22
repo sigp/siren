@@ -1,12 +1,13 @@
 import axios from 'axios'
-import { dataSlice, getAddress } from 'ethers'
 import { FC, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAccount, useSendTransaction, useEstimateGas, useGasPrice } from 'wagmi'
+import { useAccount, useSendTransaction, UseEstimateGasParameters } from 'wagmi'
 import displayToast from '../../../utilities/displayToast'
+import formatWithdrawalAddress from '../../../utilities/formatWithdrawalAddress'
 import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
+import useCalculateGas from '../../hooks/useCalculateGas'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
-import { ActivityType, Address, ConsolidationTx, ToastType, TxHash } from '../../types'
+import { ActivityType, ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
@@ -56,24 +57,19 @@ const Consolidate: FC<ConsolidateViewProps> = ({
     return getRequiredFee(BigInt(queueLength), bufferPercentage)
   }, [queueLength, bufferPercentage])
 
-  const { data: gasPrice } = useGasPrice({ chainId })
-
-  const { data: estimatedGasData } = useEstimateGas({
-    to: CONSOLIDATION_CONTRACT,
-    value: requestFee,
-    data: txData,
+  const { estimatedGasLimit, totalRequiredFunds } = useCalculateGas({
+    chainId,
+    config: {
+      to: CONSOLIDATION_CONTRACT,
+      value: requestFee,
+      data: txData,
+    } as UseEstimateGasParameters,
+    extraFee: requestFee,
   })
 
-  const estimatedGasLimit = estimatedGasData
-    ? (BigInt(estimatedGasData.toString()) * 110n) / 100n
-    : null
-  const gasFee = estimatedGasLimit && gasPrice ? estimatedGasLimit * gasPrice : 0n
-  const totalRequiredFunds = requestFee + gasFee
   const { isSufficient } = useHasSufficientBalance(totalRequiredFunds)
 
-  const formattedWithdrawalAddress = getAddress(
-    dataSlice(withdrawalAddress as string, 12),
-  ) as Address
+  const formattedWithdrawalAddress = formatWithdrawalAddress(withdrawalAddress as string)
 
   const handleTxError = (e: any) => {
     const error = (e as Error).message
