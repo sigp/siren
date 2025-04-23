@@ -1,58 +1,5 @@
-import { FunctionComponent, SVGProps } from 'react'
-
-import DashLogo from '../assets/images/dashboard.svg'
-import GrafanaLogo from '../assets/images/grafana.svg'
-import LogsLogo from '../assets/images/logs.svg'
-import SettingsLogo from '../assets/images/settings.svg'
-import ValidatorLogo from '../assets/images/validators.svg'
 import { LogType } from '../types'
 import { EarningOption } from '../types/validator'
-import { ContentView } from './enums'
-
-export type ViewType = {
-  title: string
-  isDisabled?: boolean
-  logoComponent: FunctionComponent<SVGProps<SVGSVGElement>>
-  key: ContentView
-  href: string
-}
-
-export const VIEW = {
-  DASH: {
-    href: '/dashboard',
-    title: 'sidebar.dashboard',
-    logoComponent: DashLogo,
-    key: ContentView.MAIN,
-  },
-  VALIDATORS: {
-    href: '/dashboard/validators',
-    title: 'sidebar.validatorManagement',
-    logoComponent: ValidatorLogo,
-    key: ContentView.VALIDATORS,
-  },
-  LOGS: {
-    href: '/dashboard/logs',
-    title: 'sidebar.logs',
-    logoComponent: LogsLogo,
-    key: ContentView.LOGS,
-  },
-  GRAFANA: {
-    href: '/dashboard/grafana',
-    title: 'sidebar.grafana',
-    logoComponent: GrafanaLogo,
-    key: ContentView.GRAFANA,
-    isDisabled: true,
-  },
-  SETTINGS: {
-    href: '/dashboard/settings',
-    title: 'sidebar.settings',
-    logoComponent: SettingsLogo,
-    key: ContentView.SETTINGS,
-  },
-}
-
-export const PRIMARY_VIEWS = [VIEW.DASH, VIEW.VALIDATORS, VIEW.LOGS, VIEW.GRAFANA] as ViewType[]
-export const SECONDARY_VIEWS = [VIEW.SETTINGS] as ViewType[]
 
 export const BALANCE_COLORS = [
   'rgba(94, 65, 213, 1)',
@@ -167,6 +114,7 @@ export const MAX_EFFECTIVE_BALANCE = 2048
 export const MAX_BALANCE_INPUT = 9999
 export const MAX_MNEMONIC_INDEX = 4294967295
 export const CONSOLIDATION_CONTRACT = '0x0000BBdDc7CE488642fb579F8B00f3a590007251'
+export const EXECUTION_WITHDRAWAL_CONTRACT = '0x00000961Ef480Eb55e80D19ad83579A64c007002'
 export const HOLESKY_PECTRA_FORK_VERSION = '0x06017000'
 export const HOODI_PECTRA_FORK_VERSION = '0x60000910'
 export const MAINNET_PECTRA_FORK_VERSION = '0x05000000'

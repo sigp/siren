@@ -113,3 +113,9 @@ export type ValidatorInclusionData = {
   rate: number
   status: StatusColor
 }
+
+export type PartialWithdrawal = {
+  validator_index: string
+  amount: string
+  withdrawable_epoch: string
+}

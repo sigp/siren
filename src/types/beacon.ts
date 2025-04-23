@@ -17,6 +17,13 @@ export type BeaconNodeSpecResults = {
   SLOTS_PER_EPOCH: number
   BASE_REWARD_FACTOR: number
   GENESIS_FORK_VERSION: string
+  SHARD_COMMITTEE_PERIOD: string
+  EFFECTIVE_BALANCE_INCREMENT: string
+  MAX_EFFECTIVE_BALANCE: string
+  MAX_EFFECTIVE_BALANCE_ELECTRA: string
+  HYSTERESIS_QUOTIENT: string
+  HYSTERESIS_UPWARD_MULTIPLIER: string
+  HYSTERESIS_DOWNWARD_MULTIPLIER: string
 }
 
 export type BeaconValidatorMetric = {

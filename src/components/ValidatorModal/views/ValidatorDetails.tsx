@@ -27,6 +27,8 @@ export interface ValidatorDetailsProps {
   validatorMetrics: ValidatorMetricResult | undefined
   validatorCacheData: ValidatorCache
   isAnimate: boolean
+  currentEpoch: number
+  shardCommitteePeriod: number
 }
 
 const ValidatorDetails: FC<ValidatorDetailsProps> = ({
@@ -34,10 +36,12 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
   validatorMetrics,
   validatorCacheData,
   isAnimate,
+  currentEpoch,
+  shardCommitteePeriod,
 }) => {
   const { t } = useTranslation()
   const processingValidators = useRecoilValue(processingBlsValidators)
-  const { index, balance, status, withdrawalAddress } = validator || {}
+  const { index, balance, status, withdrawalAddress, activationEpoch } = validator
   const data = useRecoilValue(exchangeRates)
   const { targetEffectiveness, hitEffectiveness, totalEffectiveness } = validatorMetrics || {}
   const validatorEpochData = useMemo<ValidatorBalanceInfo>(() => {
@@ -49,8 +53,12 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
   )
 
   const isBls = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false
-  const isExited = validator?.status.includes('exit') || validator?.status.includes('withdrawal')
+  const isExited = Boolean(
+    validator?.status.includes('exit') || validator?.status.includes('withdrawal'),
+  )
   const combinedStatus = getAvgEffectivenessStatus(totalEffectiveness)
+  const isCompoundingCredential = Boolean(withdrawalAddress?.includes('0x02'))
+  const isActiveShardCommittee = currentEpoch > activationEpoch + shardCommitteePeriod
 
   const usdBalance = (balance || 0) * (data?.rates['USD'] || 0)
 
@@ -142,6 +150,8 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
       <ValidatorDetailTable validator={validator} validatorCacheData={validatorCacheData} />
       <ValidatorActions
         isDisabled={isExited}
+        isActiveShardCommittee={isActiveShardCommittee}
+        isCompounding={isCompoundingCredential}
         isProcessing={isProcessing}
         isConversionRequired={isBls}
       />

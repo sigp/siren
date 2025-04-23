@@ -55,6 +55,7 @@ const Input: FC<InputProps> = ({
   const inputRef = useRef<HTMLInputElement | null>(null)
   const [inputType, setType] = useState<HTMLInputTypeAttribute>(type || 'text')
   const isPasswordType = type === 'password'
+
   const sanitizeInput = (e: ChangeEvent<HTMLInputElement>) => {
     return {
       ...e,
@@ -64,6 +65,16 @@ const Input: FC<InputProps> = ({
           .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
           .replace(/onerror\s*=\s*["'][^"']*["']/gi, ''),
       },
+    }
+  }
+
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (type === 'number') {
+      // For controlled number inputs, pass the raw value directly to onChange
+      onChange?.(e)
+    } else {
+      // For other cases, apply sanitization
+      onChange?.(sanitizeInput(e))
     }
   }
 
@@ -155,7 +166,7 @@ const Input: FC<InputProps> = ({
         <input
           {...props}
           ref={inputRef}
-          onChange={(value) => onChange?.(sanitizeInput(value))}
+          onChange={handleInputChange}
           onPaste={handlePaste}
           type={inputType}
           className={`${isPasswordType || icon ? 'pr-5' : ''} ${

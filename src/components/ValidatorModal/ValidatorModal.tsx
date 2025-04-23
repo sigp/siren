@@ -14,6 +14,9 @@ import Spinner from '../Spinner/Spinner'
 import ValidatorDeposit from './views/ValidatorDeposit/ValidatorDeposit'
 import ValidatorDetails, { ValidatorDetailsProps } from './views/ValidatorDetails'
 import ValidatorExit from './views/ValidatorExit'
+import ValidatorWithdrawal, {
+  ValidatorWithdrawalProps,
+} from './views/ValidatorWithdrawal/ValidatorWithdrawal'
 
 export interface ValidatorModalContextProps {
   moveToView: (view: ValidatorModalView) => void
@@ -26,9 +29,17 @@ export const ValidatorModalContext = createContext<ValidatorModalContextProps>({
 })
 
 export interface ValidatorModalProps
-  extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'> {}
+  extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'>,
+    Pick<ValidatorWithdrawalProps, 'chainId' | 'partialWithdrawals'> {}
 
-const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData }) => {
+const ValidatorModal: FC<ValidatorModalProps> = ({
+  validator,
+  validatorCacheData,
+  shardCommitteePeriod,
+  currentEpoch,
+  chainId,
+  partialWithdrawals,
+}) => {
   const [isReady, setReady] = useState(false)
   const router = useRouter()
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
@@ -66,6 +77,16 @@ const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData
     if (!validator) return null
 
     switch (view) {
+      case ValidatorModalView.WITHDRAWAL:
+        return (
+          <ValidatorWithdrawal
+            partialWithdrawals={partialWithdrawals}
+            currentEpoch={currentEpoch}
+            chainId={chainId}
+            validator={validator}
+            validatorEpochData={validatorEpochData}
+          />
+        )
       case ValidatorModalView.EXIT:
         return (
           <ValidatorExit
@@ -104,7 +125,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData
       styles={{
         width: 'fit-content',
         maxWidth: isTablet ? '99%' : isLargeScreen ? '1200px' : '900px',
-        height: isTablet ? '540px' : 'max-content',
+        height: isTablet ? '540px' : '653px',
+        zIndex: 998,
       }}
       onClose={closeModal}
     >
@@ -120,6 +142,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({ validator, validatorCacheData
             <ValidatorDetails
               isAnimate={isFinishAnim}
               validator={validator}
+              shardCommitteePeriod={shardCommitteePeriod}
+              currentEpoch={currentEpoch}
               validatorCacheData={validatorCacheData}
               validatorMetrics={validatorMetric}
             />

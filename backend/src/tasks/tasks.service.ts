@@ -15,6 +15,11 @@ import { Cache } from 'cache-manager';
 import { LogsService } from '../logs/logs.service';
 import { LogType } from '../../../src/types';
 import { Log } from '../logs/entities/log.entity';
+import { Network } from '../../../src/constants/enums';
+import {
+  HOODI_PECTRA_FORK_VERSION,
+  MAINNET_PECTRA_FORK_VERSION,
+} from '../../../src/constants/constants';
 
 class CustomError extends Error {
   public code: any;
@@ -63,6 +68,7 @@ export class TasksService implements OnApplicationBootstrap {
       await this.syncBeaconSpecs();
       await this.initValidatorDataScheduler();
       await this.initMetricDataScheduler();
+      await this.initPendingPartialWithdrawalsScheduler();
 
       await this.logsService.startSse(
         `${this.validatorUrl}/lighthouse/logs`,
@@ -134,6 +140,65 @@ export class TasksService implements OnApplicationBootstrap {
     this.setDynamicInterval('metricTask', interval, async () => {
       await this.syncMetricData();
     });
+  }
+
+  private async initPendingPartialWithdrawalsScheduler() {
+    const { CONFIG_NAME } = (await this.cacheManager.get(
+      'specs',
+    )) as BeaconNodeSpecResults;
+
+    const config = CONFIG_NAME.toLowerCase();
+
+    const pectraForkVersion =
+      config === Network.Mainnet.toLowerCase()
+        ? MAINNET_PECTRA_FORK_VERSION
+        : CONFIG_NAME === Network.Hoodi.toLowerCase()
+          ? HOODI_PECTRA_FORK_VERSION
+          : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
+
+    if (!pectraForkVersion) return;
+
+    const interval = await this.utilsService.getSlotInterval();
+
+    await this.syncPendingPartialWithdrawals(pectraForkVersion);
+
+    this.setDynamicInterval(
+      'pendingPartialWithdrawalTask',
+      interval,
+      async () => {
+        await this.syncPendingPartialWithdrawals(pectraForkVersion);
+      },
+    );
+  }
+
+  private async syncPendingPartialWithdrawals(version: string) {
+    const validatorData = (await this.cacheManager.get(
+      'validators',
+    )) as ValidatorDetail[];
+
+    const { data: fork } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/beacon/states/head/fork`,
+    });
+
+    if (fork.data.current_version !== version) {
+      if (this.isDebug) {
+        console.log('Awaiting Pectra fork...');
+      }
+
+      return;
+    }
+
+    const { data } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/beacon/states/head/pending_partial_withdrawals`,
+      method: 'GET',
+    });
+
+    const indices = validatorData.map((validator) => validator.index);
+    const withdrawals = data.data.filter((item) =>
+      indices.includes(item.validator_index),
+    );
+
+    await this.cacheManager.set('partialWithdrawals', withdrawals, 0);
   }
 
   private async syncMetricData() {

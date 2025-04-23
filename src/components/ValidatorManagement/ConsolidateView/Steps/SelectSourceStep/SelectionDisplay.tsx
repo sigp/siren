@@ -11,7 +11,6 @@ export interface SelectionDisplayProps {
   targetValidator: ValidatorInfo
   selectedSources: ValidatorInfo[]
   onRemoveSource: (pubKey: string) => void
-  totalEffectiveBalance: number
   isOverMaxEb: boolean
 }
 
@@ -19,11 +18,14 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
   targetValidator,
   selectedSources,
   onRemoveSource,
-  totalEffectiveBalance,
   isOverMaxEb,
 }) => {
   const { t } = useTranslation()
 
+  const totalSelectedBalance = useMemo(
+    () => selectedSources.reduce((acc, { balance }) => acc + balance, 0),
+    [selectedSources],
+  )
   const renderedChips = useMemo(
     () =>
       selectedSources.map((source) => (
@@ -35,8 +37,8 @@ const SelectionDisplay: FC<SelectionDisplayProps> = ({
   const containerStyles = clsx('w-full border', isOverMaxEb ? 'border-error' : 'border-r-style')
 
   const formattedTargetValidator = useMemo(() => {
-    return { ...targetValidator, effectiveBalance: totalEffectiveBalance }
-  }, [targetValidator, totalEffectiveBalance])
+    return { ...targetValidator, balance: targetValidator.balance + totalSelectedBalance }
+  }, [targetValidator, totalSelectedBalance])
 
   return (
     <div className={containerStyles}>
