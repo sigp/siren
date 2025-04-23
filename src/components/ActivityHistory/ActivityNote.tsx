@@ -58,6 +58,8 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         return t('activityHistory.activities.updateGraffiti.title')
       case ActivityType.CONSOLIDATION:
         return t('activityHistory.activities.consolidation.title')
+      case ActivityType.PARTIAL_WITHDRAWAL:
+        return t('activityHistory.activities.partialWithdrawal.title')
       default:
         return ''
     }
@@ -116,6 +118,20 @@ const ActivityNote: FC<ActivityNoteProps> = ({
             />
           </Typography>
         )
+      case ActivityType.PARTIAL_WITHDRAWAL:
+        return (
+          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
+            <Trans
+              i18nKey='activityHistory.activities.partialWithdrawal.text'
+              components={{ span: <span className='underline font-bold' /> }}
+              values={{
+                txHash: formatEthAddress(formattedData?.txHash),
+                amount: formattedData?.amount,
+                pubKey: formatEthAddress(pubKey),
+              }}
+            />
+          </Typography>
+        )
       default:
         return null
     }
@@ -131,6 +147,8 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         return 'bi-palette'
       case ActivityType.CONSOLIDATION:
         return 'bi-intersect'
+      case ActivityType.PARTIAL_WITHDRAWAL:
+        return 'bi-send'
       default:
         return 'bi-clock-history'
     }
@@ -144,6 +162,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
         return getBeaconChaLink(networkId, `/validator/${pubKey}`)
       case ActivityType.DEPOSIT:
       case ActivityType.CONSOLIDATION:
+      case ActivityType.PARTIAL_WITHDRAWAL:
         return formattedData ? getEtherscanLink(networkId, `/tx/${formattedData.txHash}`) : null
       default:
         return null
