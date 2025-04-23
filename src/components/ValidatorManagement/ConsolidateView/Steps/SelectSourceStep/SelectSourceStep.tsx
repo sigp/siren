@@ -197,7 +197,6 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
         <SelectionDisplay
           selectedSources={availableSelectedValidators}
           onRemoveSource={removeSource}
-          totalEffectiveBalance={totalEffectiveBalance}
           targetValidator={targetValidator}
           isOverMaxEb={isOverMaxEB}
         />
