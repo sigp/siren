@@ -24,6 +24,7 @@
       "saturday": "Sat"
     }
   },
+  "effectiveBalance": "Effective Balance",
   "maxEffectiveBalance": "Max Effective Balance",
   "effectiveBalanceDisplay": {
     "remainderBalanceHelperText": "This remaining balance is partially deposited or retained in the validator based on the set withdrawal credentials. If retained this amount will not effect reward calculations.",
@@ -82,6 +83,9 @@
   "good": "good",
   "great": "great",
   "node": "Node",
+  "index": "index",
+  "amount": "amount",
+  "withdrawableEpoch": "Withdrawable Epoch",
   "viewDisclosures": "view important disclosures",
   "learnMore": "Learn More",
   "withdrawalAddress": "Withdrawal Address",
@@ -325,7 +329,8 @@
       "maxLength": "Username cannot exceed 14 characters",
       "required": "User name is required"
     },
-    "unexpectedConsolidationError": "Unexpected error while submitting consolidation request."
+    "unexpectedConsolidationError": "Unexpected error while submitting consolidation request.",
+    "unexpectedPartialWithdrawalError": "An unexpected error occurred while submitting you partial withdrawal request."
   },
   "settings": {
     "general": "General",
@@ -379,6 +384,7 @@
     "actions": {
       "consolidate": "Consolidate",
       "add": "Add",
+      "partialWithdrawal": "Partial Withdrawal",
       "depositFunds": "Deposit Funds",
       "backupKeys": "Backup Keys",
       "stopValidator": "Stop Validator",
@@ -442,6 +448,14 @@
       "deriveIndexHelperText": "Deriving mnemonic index. This may take a moment...",
       "depositAmountHelperText": "Enter the amount you want add to your validators effective balance. Validators with 0x02 withdrawal credentials can hold up to 2048 ETH."
     },
+    "partialWithdrawal": {
+      "title": "Partial Withdrawal",
+      "setMaxAmount": "Set Max Amount",
+      "requestWithdrawal": "Request Withdrawal",
+      "pendingWithdrawals": "Pending Withdrawal Requests",
+      "noPendingWithdrawalRequests": "No Requests Found.",
+      "helperText": "Set the amount of ETH you want to withdraw from your validator. Remember the balance and effective balance must remain above 32 ETH."
+    },
     "credentialRiskModal": {
       "text": "You have not verified one or more of your designated withdrawal credentials. Please be aware if these credentials are set incorrectly they can not be changed and may result in a lose of funds."
     },
@@ -488,8 +502,10 @@
       "warningText": "A strong keystore password is essential to protect your validator's private key from unauthorized access and potential financial losses. Use a complex, unique password and store it securely to ensure your staking assets and network contributions remain safe."
     },
     "retryTransaction": "Retry Transaction",
+    "viewValidator": "View Validator",
     "reviewStatus": "Review validator status {{pubKey}}",
     "txStatuses": {
+      "processingRequest": "Processing Request",
       "validatorComplete": {
         "title": "Validator Complete",
         "text": "Validator has been successfully deposited and imported into Lighthouse. Please confirm deposit transaction with link above."
@@ -542,6 +558,7 @@
     "consolidateView": {
       "selfConsolidate": "Self Consolidate",
       "overMaxEbErrorText": "Max effective balance will exceed limit with this request.",
+      "underMinEbErrorText": "Validator will no longer have required min effective balance.",
       "selfConsolidateHelperText": "Your validator requires self-consolidation to receive ETH from exited source validators through this request. This action does not affect your validator's status and will only update the withdrawal credentials to the appropriate 0x02 prefix.",
       "steps": {
         "selectTarget": "Select Target",
@@ -571,6 +588,7 @@
         "lowFees": "Low Fees and consolidation queue. Please ensure you are using the correct network when making requests."
       }
     },
+
     "enableElectra": "Enable 0x02",
     "0x02CredTooltip": "Enabling 0x02 withdrawal credentials allows your validator to hold up to 2048 ETH.",
     "effectiveBalanceError": "Effective Balance cannot be lower than 32 or higher than 2048 ETH."
@@ -761,6 +779,10 @@
         "title": "Validator Consolidation Requested",
         "targetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> as been sent. Click here to review the transaction details on Etherscan.",
         "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan."
+      },
+      "partialWithdrawal": {
+        "title": "Partial Withdrawal Requested",
+        "text": "Request made to partial withdrawal <span>{{amount}}</span>ETH from validator: <span>{{pubKey}}</span> with transaction hash: of <span>{{txHash}}</span>. Click here to review the transaction details on Etherscan."
       }
     }
   },
