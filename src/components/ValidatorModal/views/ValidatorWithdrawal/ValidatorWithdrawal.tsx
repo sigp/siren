@@ -79,7 +79,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   const { txStatus } = useResolveTransactionOnce(txHash)
 
   useEffect(() => {
-    if (txStatus !== 'success' || isRecordedActivity) return
+    if (txStatus !== 'success' || isRecordedActivity || !withdrawalAmount) return
     ;(async () => {
       try {
         await axios.post('/api/log-activity', {
@@ -100,7 +100,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
 
   const txData = `0x${pubKey.substring(2)}${Math.floor(sanitizedWithdrawalAmount * 1000000000)
     .toString(16)
-    .padStart(16, '0')}`
+    .padStart(16, '0')}` as TxHash
   const maxWithdrawal = balance - formattedWithdrawalAmounts - EFFECTIVE_BALANCE
 
   const setAmount = (e: ChangeEvent<HTMLInputElement>) => {

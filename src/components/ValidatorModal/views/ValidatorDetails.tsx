@@ -53,9 +53,11 @@ const ValidatorDetails: FC<ValidatorDetailsProps> = ({
   )
 
   const isBls = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false
-  const isExited = validator?.status.includes('exit') || validator?.status.includes('withdrawal')
+  const isExited = Boolean(
+    validator?.status.includes('exit') || validator?.status.includes('withdrawal'),
+  )
   const combinedStatus = getAvgEffectivenessStatus(totalEffectiveness)
-  const isCompoundingCredential = withdrawalAddress?.includes('0x02')
+  const isCompoundingCredential = Boolean(withdrawalAddress?.includes('0x02'))
   const isActiveShardCommittee = currentEpoch > activationEpoch + shardCommitteePeriod
 
   const usdBalance = (balance || 0) * (data?.rates['USD'] || 0)

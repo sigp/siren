@@ -117,7 +117,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
         />
         <div className={effectiveBorderClasses}>{effectiveBalanceDisplay}</div>
         <DisplayTextBox
-          title={maxEffectiveBalance?.toString()}
+          title={(maxEffectiveBalance || 0).toString()}
           subTitle={t('maxEffectiveBalance')}
         />
       </div>
