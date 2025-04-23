@@ -23,6 +23,7 @@
     "@types/jest": "^29.5.12",
     "@types/js-cookie": "^3.0.6",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/moment-duration-format": "^2.2.6",
     "@types/react": "19.0.12",
     "@uiw/react-textarea-code-editor": "^2.1.1",
     "autoprefixer": "^10.4.19",
