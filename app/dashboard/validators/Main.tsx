@@ -36,7 +36,12 @@ import {
   ValidatorMetricResult,
 } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
-import { ValidatorCache, ValidatorCountResult, ValidatorInfo } from '../../../src/types/validator'
+import {
+  PartialWithdrawal,
+  ValidatorCache,
+  ValidatorCountResult,
+  ValidatorInfo,
+} from '../../../src/types/validator'
 
 export interface MainProps {
   initNodeHealth: Diagnostics
@@ -48,6 +53,7 @@ export interface MainProps {
   beaconSpec: BeaconNodeSpecResults
   initActivityData: ActivityResponse
   initForkVersionData: ForkVersionData
+  initPartialWithdrawals: PartialWithdrawal[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -62,6 +68,7 @@ const Main: FC<MainProps> = (props) => {
     initValMetrics,
     initActivityData,
     initForkVersionData,
+    initPartialWithdrawals,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -84,7 +91,9 @@ const Main: FC<MainProps> = (props) => {
     SLOTS_PER_EPOCH,
     DEPOSIT_CHAIN_ID,
     MIN_VALIDATOR_WITHDRAWABILITY_DELAY,
+    SHARD_COMMITTEE_PERIOD,
   } = beaconSpec
+
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const [search, setSearch] = useState('')
   const [activeValId, setValidatorId] = useRecoilState(activeValidatorId)
@@ -140,6 +149,15 @@ const Main: FC<MainProps> = (props) => {
   const { data: validatorMetrics } = useSWRPolling<ValidatorMetricResult>(
     '/api/validator-metrics',
     { refreshInterval: epochInterval / 2, fallbackData: initValMetrics, networkError },
+  )
+
+  const { data: partialWithdrawals } = useSWRPolling<PartialWithdrawal[]>(
+    '/api/partial-withdrawals',
+    {
+      refreshInterval: slotInterval,
+      fallbackData: initPartialWithdrawals,
+      networkError,
+    },
   )
 
   const { data: forkVersionData } = useSWRPolling<ForkVersionData>('/api/fork-version', {
@@ -333,19 +351,26 @@ const Main: FC<MainProps> = (props) => {
             />
           </div>
           {renderView(view)}
+          <BlsExecutionModal />
+          {isValDetail && activeValidator && (
+            <ValidatorModal
+              chainId={Number(DEPOSIT_CHAIN_ID)}
+              partialWithdrawals={partialWithdrawals}
+              shardCommitteePeriod={Number(SHARD_COMMITTEE_PERIOD)}
+              currentEpoch={currentEpoch}
+              validator={activeValidator}
+              validatorCacheData={validatorCache}
+            />
+          )}
+          {isEditVal && activeValidator && (
+            <EditValidatorModal
+              validator={activeValidator}
+              validatorCacheData={validatorCache}
+              onClose={closeEditValModal}
+            />
+          )}
         </>
       </DashboardWrapper>
-      <BlsExecutionModal />
-      {isValDetail && activeValidator && (
-        <ValidatorModal validator={activeValidator} validatorCacheData={validatorCache} />
-      )}
-      {isEditVal && activeValidator && (
-        <EditValidatorModal
-          validator={activeValidator}
-          validatorCacheData={validatorCache}
-          onClose={closeEditValModal}
-        />
-      )}
     </>
   )
 }

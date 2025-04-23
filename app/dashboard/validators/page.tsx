@@ -9,7 +9,12 @@ import {
   fetchSyncData,
   fetchValidatorCountData,
 } from '../../api/beacon'
-import { fetchValCaches, fetchValMetrics, fetchValStates } from '../../api/validator'
+import {
+  fetchPartialWithdrawals,
+  fetchValCaches,
+  fetchValMetrics,
+  fetchValStates,
+} from '../../api/validator'
 import Wrapper from './Wrapper'
 
 export default async function Page() {
@@ -25,6 +30,7 @@ export default async function Page() {
     const metrics = await fetchValMetrics(token)
     const activities = await fetchActivities({ token })
     const forkVersion = await fetchForkVersion(token)
+    const partialWithdrawals = await fetchPartialWithdrawals(token)
 
     return (
       <Wrapper
@@ -37,6 +43,7 @@ export default async function Page() {
         initValCaches={caches}
         initValidatorCountData={validatorCount}
         beaconSpec={beaconSpec}
+        initPartialWithdrawals={partialWithdrawals}
       />
     )
   } catch (e) {
