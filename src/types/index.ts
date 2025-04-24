@@ -172,9 +172,11 @@ export type ValidatorCandidate = {
   withdrawalPrefix: WalletPrefix
   effectiveBalance: bigint
   withdrawalCredentials: string | undefined
+  suggestedFeeRecipient: string | undefined
   keyStorePassword: string | undefined
   isValidIndex?: boolean
   isVerifiedCredentials?: boolean
+  isVerifiedSuggestedFee?: boolean
 }
 
 export type ValidatorRewardEstimate = {
@@ -215,6 +217,7 @@ export type DepositData = {
   keyStorePassword: string
   mnemonicIndex: number
   status: TxStatus
+  suggestedFeeRecipient: string
 }
 
 export enum TimeUnit {
