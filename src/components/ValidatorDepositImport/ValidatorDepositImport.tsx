@@ -26,7 +26,8 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   depositNetworkId,
 }) => {
   const { t } = useTranslation()
-  const { txHash, pubKey, mnemonicIndex, keyStorePassword, status } = depositData
+  const { txHash, pubKey, mnemonicIndex, keyStorePassword, suggestedFeeRecipient, status } =
+    depositData
   const shortHandPubKey = formatEthAddress(pubKey)
   const { txStatus } = useResolveTransactionOnce(txHash)
   const {
@@ -52,6 +53,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
         mnemonic,
         index: mnemonicIndex,
         keyStorePassword,
+        suggestedFeeRecipient,
         onSuccess: () => {
           onUpdateStatus(pubKey, 'success')
         },
@@ -60,7 +62,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
         },
       })
     })()
-  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, pubKey, status])
+  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, suggestedFeeRecipient, pubKey, status])
 
   const beaconChaLink = isValidNetwork(depositNetworkId)
     ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)

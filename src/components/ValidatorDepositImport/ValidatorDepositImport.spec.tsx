@@ -36,6 +36,7 @@ describe('ValidatorDepositImport', () => {
     txHash: '0x123' as `0x${string}`,
     pubKey: '0x456789abcdef123456789abcdef123456789abcdef' as `0x${string}`,
     mnemonicIndex: 0,
+    suggestedFeeRecipient: '0xsuggestedFeeRecipient',
     keyStorePassword: 'password',
     status: 'pending' as TxStatus,
   }
@@ -217,6 +218,7 @@ describe('ValidatorDepositImport', () => {
         mnemonic,
         index: depositData.mnemonicIndex,
         keyStorePassword: depositData.keyStorePassword,
+        suggestedFeeRecipient: '0xsuggestedFeeRecipient',
         onSuccess: expect.any(Function),
         onError: expect.any(Function),
       })

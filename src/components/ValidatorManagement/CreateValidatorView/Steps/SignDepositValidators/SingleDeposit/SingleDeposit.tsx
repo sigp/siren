@@ -32,7 +32,14 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   ...props
 }) => {
   const { t } = useTranslation()
-  const { name, withdrawalCredentials, index, effectiveBalance, keyStorePassword } = candidate
+  const {
+    name,
+    withdrawalCredentials,
+    suggestedFeeRecipient,
+    index,
+    effectiveBalance,
+    keyStorePassword,
+  } = candidate
   const { DEPOSIT_NETWORK_ID } = beaconSpec
 
   const [step, setStep] = useState(0)
@@ -66,13 +73,21 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   }, [txHash])
 
   useEffect(() => {
-    if (txStatus !== 'success' || !mnemonic || index === undefined || !keyStorePassword) return
+    if (
+      txStatus !== 'success' ||
+      !mnemonic ||
+      index === undefined ||
+      !keyStorePassword ||
+      !suggestedFeeRecipient
+    )
+      return
     ;(async () => {
       incrementStep()
       await importValidator({
         mnemonic,
         index,
         keyStorePassword,
+        suggestedFeeRecipient,
         onSuccess: () => {
           setIsSuccessScreen(true)
         },

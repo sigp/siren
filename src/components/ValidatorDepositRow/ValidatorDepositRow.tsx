@@ -19,6 +19,7 @@ export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, '
     keyStorePassword: string,
     pubKey: string,
     mnemonicIndex: number,
+    suggestedFeeRecipient: string,
   ) => void
   data: DepositData | undefined
 }
@@ -31,7 +32,13 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   data,
 }) => {
   const { t } = useTranslation()
-  const { index, effectiveBalance, pubKey: candidatePubKey, keyStorePassword } = candidate
+  const {
+    index,
+    effectiveBalance,
+    pubKey: candidatePubKey,
+    keyStorePassword,
+    suggestedFeeRecipient,
+  } = candidate
   const { isLoading, txHash, error, pubKey, makeDeposit } = useValidatorDeposit({
     validator: candidate,
     mnemonic,
@@ -41,9 +48,9 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
 
   useEffect(() => {
     if (txHash && pubKey && !!keyStorePassword) {
-      onDeposit(txHash, keyStorePassword, pubKey, index as number)
+      onDeposit(txHash, keyStorePassword, pubKey, index as number, suggestedFeeRecipient as string)
     }
-  }, [txHash, keyStorePassword, pubKey, index])
+  }, [txHash, keyStorePassword, pubKey, index, suggestedFeeRecipient])
 
   useEffect(() => {
     if (error) {
