@@ -69,3 +69,8 @@ export enum WalletPrefix {
   ONE = 0x01,
   TWO = 0x02,
 }
+
+export enum WithdrawalCredentialView {
+  BASIC = 'BASIC',
+  ADVANCED = 'ADVANCED',
+}

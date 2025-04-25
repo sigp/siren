@@ -51,7 +51,8 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
 
   const [candidates, setValidatorCandidates] = useState<ValidatorCandidate[]>([])
   const [keyPhrase, setKeyPhrase] = useState('')
-  const [sharedWithdrawalCredentials, setSharedCredentials] = useState<string | undefined>()
+  const [sharedWithdrawalCredentials, setSharedCredentials] = useState<string | undefined>('')
+  const [sharedSuggestedFee, setSharedSuggestedFee] = useState<string | undefined>('')
   const [sharedKeystorePassword, setSharedKeystorePassword] = useState<string | undefined>(
     undefined,
   )
@@ -84,8 +85,12 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
     setKeyPhrase(e.target.value)
   }, [])
 
-  const updateSharedCredentials = useCallback((credentials?: string) => {
+  const updateSharedCredentials = useCallback((credentials: string | undefined) => {
     setSharedCredentials(credentials)
+  }, [])
+
+  const updateSharedSuggestedFee = useCallback((suggestedFee: string | undefined) => {
+    setSharedSuggestedFee(suggestedFee)
   }, [])
 
   const setKeystorePassword = useCallback((password: string | undefined) => {
@@ -116,102 +121,107 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
       <RiskModal isOpen={isRisk} onAccept={acceptRisk} onClose={dismissRiskMessage} />
       {blsModule ? (
         <HorizontalStepper steps={steps}>
-          {({ incrementStep, decrementStep, step }) => (
-            <>
-              <CreateValidatorStep
-                requiredStake={requiredStake}
-                rewardEstimate={calculatedRewards}
-                candidateCount={totalCandidates}
-              >
-                {MIN_ACTIVATION_BALANCE && (
-                  <ValidatorSetup
-                    onNextStep={incrementStep}
-                    onValidatorChange={setNewValidators}
-                    minActivationBalance={MIN_ACTIVATION_BALANCE}
-                    candidates={candidates}
-                  />
-                )}
-              </CreateValidatorStep>
-
-              <CreateValidatorStep
-                requiredStake={requiredStake}
-                rewardEstimate={calculatedRewards}
-                candidateCount={totalCandidates}
-              >
-                <MnemonicPhrase
-                  isActive={step === 1}
-                  onNextStep={incrementStep}
-                  value={keyPhrase}
-                  onChange={setPhrase}
-                  onBackStep={decrementStep}
-                  blsModule={blsModule}
-                />
-              </CreateValidatorStep>
-
-              {DEPOSIT_NETWORK_ID && (
+          {({ incrementStep, decrementStep, step }) =>
+            (
+              <>
                 <CreateValidatorStep
                   requiredStake={requiredStake}
                   rewardEstimate={calculatedRewards}
                   candidateCount={totalCandidates}
                 >
-                  <MnemonicIndex
-                    depositNetworkId={DEPOSIT_NETWORK_ID}
-                    isActive={step === 2}
-                    onBackStep={decrementStep}
-                    onValidatorChange={setNewValidators}
+                  {MIN_ACTIVATION_BALANCE && (
+                    <ValidatorSetup
+                      onNextStep={incrementStep}
+                      onValidatorChange={setNewValidators}
+                      minActivationBalance={MIN_ACTIVATION_BALANCE}
+                      candidates={candidates}
+                    />
+                  )}
+                </CreateValidatorStep>
+
+                <CreateValidatorStep
+                  requiredStake={requiredStake}
+                  rewardEstimate={calculatedRewards}
+                  candidateCount={totalCandidates}
+                >
+                  <MnemonicPhrase
+                    isActive={step === 1}
                     onNextStep={incrementStep}
-                    keyPhrase={keyPhrase}
-                    candidates={candidates}
+                    value={keyPhrase}
+                    onChange={setPhrase}
+                    onBackStep={decrementStep}
+                    blsModule={blsModule}
                   />
                 </CreateValidatorStep>
-              )}
 
-              <CreateValidatorStep
-                requiredStake={requiredStake}
-                rewardEstimate={calculatedRewards}
-                candidateCount={totalCandidates}
-              >
-                <WithdrawalCredentials
-                  onShowRisk={showRiskMessage}
-                  hasAcceptedRisk={hasAcceptedRisk}
-                  isActive={step === 3}
-                  candidates={candidates}
-                  onValidatorChange={setNewValidators}
-                  onBackStep={decrementStep}
-                  onNextStep={incrementStep}
-                  onUpdateSharedCredentials={updateSharedCredentials}
-                  sharedCredentials={sharedWithdrawalCredentials}
-                />
-              </CreateValidatorStep>
+                {DEPOSIT_NETWORK_ID && (
+                  <CreateValidatorStep
+                    requiredStake={requiredStake}
+                    rewardEstimate={calculatedRewards}
+                    candidateCount={totalCandidates}
+                  >
+                    <MnemonicIndex
+                      depositNetworkId={DEPOSIT_NETWORK_ID}
+                      isActive={step === 2}
+                      onBackStep={decrementStep}
+                      onValidatorChange={setNewValidators}
+                      onNextStep={incrementStep}
+                      keyPhrase={keyPhrase}
+                      candidates={candidates}
+                    />
+                  </CreateValidatorStep>
+                )}
 
-              <CreateValidatorStep
-                requiredStake={requiredStake}
-                rewardEstimate={calculatedRewards}
-                candidateCount={totalCandidates}
-              >
-                <KeystoreAuthentication
-                  onUpdateCandidates={setNewValidators}
-                  sharedKeystorePassword={sharedKeystorePassword}
-                  setSharedKeystorePassword={setKeystorePassword}
-                  candidates={candidates}
-                  onBackStep={decrementStep}
-                  onNextStep={incrementStep}
-                />
-              </CreateValidatorStep>
-
-              {Boolean(candidates.length) && beaconSpec && (
-                <SignDeposit
-                  sharedKeystorePassword={sharedKeystorePassword}
-                  beaconSpec={beaconSpec}
-                  sharedWithdrawalCredentials={sharedWithdrawalCredentials}
-                  onComplete={viewManagement}
+                <CreateValidatorStep
+                  requiredStake={requiredStake}
                   rewardEstimate={calculatedRewards}
-                  mnemonic={keyPhrase}
-                  candidates={candidates}
-                />
-              )}
-            </>
-          )}
+                  candidateCount={totalCandidates}
+                >
+                  <WithdrawalCredentials
+                    onShowRisk={showRiskMessage}
+                    hasAcceptedRisk={hasAcceptedRisk}
+                    isActive={step === 3}
+                    candidates={candidates}
+                    onValidatorChange={setNewValidators}
+                    onBackStep={decrementStep}
+                    onNextStep={incrementStep}
+                    onUpdateSharedCredentials={updateSharedCredentials}
+                    onUpdateSharedSuggestedFee={updateSharedSuggestedFee}
+                    sharedCredentials={sharedWithdrawalCredentials}
+                    sharedSuggestedFeeRecipient={sharedSuggestedFee}
+                  />
+                </CreateValidatorStep>
+
+                <CreateValidatorStep
+                  requiredStake={requiredStake}
+                  rewardEstimate={calculatedRewards}
+                  candidateCount={totalCandidates}
+                >
+                  <KeystoreAuthentication
+                    onUpdateCandidates={setNewValidators}
+                    sharedKeystorePassword={sharedKeystorePassword}
+                    setSharedKeystorePassword={setKeystorePassword}
+                    candidates={candidates}
+                    onBackStep={decrementStep}
+                    onNextStep={incrementStep}
+                  />
+                </CreateValidatorStep>
+
+                {Boolean(candidates.length) && beaconSpec && (
+                  <SignDeposit
+                    sharedKeystorePassword={sharedKeystorePassword}
+                    beaconSpec={beaconSpec}
+                    sharedWithdrawalCredentials={sharedWithdrawalCredentials}
+                    sharedSuggestedFee={sharedSuggestedFee}
+                    onComplete={viewManagement}
+                    rewardEstimate={calculatedRewards}
+                    mnemonic={keyPhrase}
+                    candidates={candidates}
+                  />
+                )}
+              </>
+            ) as any
+          }
         </HorizontalStepper>
       ) : (
         <div className='w-full h-full flex items-center justify-center'>

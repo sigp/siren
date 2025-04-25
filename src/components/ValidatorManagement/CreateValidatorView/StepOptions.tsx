@@ -19,7 +19,12 @@ const StepOptions: FC<StepOptionsProps> = ({ onBackStep, onNextStep, isDisabledN
         </Button>
       )}
       {onNextStep && (
-        <Button isDisabled={isDisabledNext} type={ButtonFace.SECONDARY} onClick={onNextStep}>
+        <Button
+          dataTestId='next-btn'
+          isDisabled={isDisabledNext}
+          type={ButtonFace.SECONDARY}
+          onClick={onNextStep}
+        >
           {t('next')}
         </Button>
       )}
