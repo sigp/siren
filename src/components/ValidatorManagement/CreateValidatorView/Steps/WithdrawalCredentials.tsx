@@ -1,6 +1,7 @@
+import clsx from 'clsx'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import addClassString from '../../../../../utilities/addClassString'
+import { WithdrawalCredentialView } from '../../../../constants/enums'
 import { ValidatorCandidate } from '../../../../types'
 import CheckBox from '../../../CheckBox/CheckBox'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
@@ -16,8 +17,10 @@ export interface WithdrawalCredentialsProps {
   isActive: boolean
   hasAcceptedRisk: boolean
   onShowRisk: () => void
-  sharedCredentials?: string | undefined
+  sharedCredentials: string | undefined
+  sharedSuggestedFeeRecipient: string | undefined
   onUpdateSharedCredentials: (credentials?: string) => void
+  onUpdateSharedSuggestedFee: (suggestedFee?: string) => void
 }
 
 const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
@@ -29,12 +32,18 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   onShowRisk,
   hasAcceptedRisk,
   sharedCredentials,
+  sharedSuggestedFeeRecipient,
   onUpdateSharedCredentials,
+  onUpdateSharedSuggestedFee,
 }) => {
   const { t } = useTranslation()
   const valCount = candidates.length
   const [isAll, setIsAll] = useState(false)
+  const [view, setView] = useState<WithdrawalCredentialView>(WithdrawalCredentialView.BASIC)
   const [isSharedCredentialVerified, setIsSharedCredentialVerified] = useState(false)
+  const [isSharedSuggestedFeeVerified, setIsSharedSuggestedFeeVerified] = useState(false)
+  const isAdvanceView = view === WithdrawalCredentialView.ADVANCED
+  const isBasicView = view === WithdrawalCredentialView.BASIC
 
   useEffect(() => {
     setIsAll(valCount > 1)
@@ -48,17 +57,31 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
 
   const isValidAddress = isAll
     ? Boolean(sharedCredentials)
-    : candidates.every(({ withdrawalCredentials }) => Boolean(withdrawalCredentials))
+    : candidates.every(({ withdrawalCredentials, suggestedFeeRecipient }) =>
+        Boolean(withdrawalCredentials && suggestedFeeRecipient),
+      )
   const isVerifiedAddress = isAll
-    ? isSharedCredentialVerified
-    : candidates.every(({ isVerifiedCredentials }) => isVerifiedCredentials)
+    ? isSharedCredentialVerified && isSharedSuggestedFeeVerified
+    : candidates.every(({ isVerifiedCredentials, isVerifiedSuggestedFee }) =>
+        Boolean(isVerifiedCredentials && isVerifiedSuggestedFee),
+      )
 
-  const updateSharedCandidateData = useCallback((_id: string, candidate: ValidatorCandidate) => {
-    const { withdrawalCredentials, isVerifiedCredentials } = candidate
+  const updateSharedCandidateData = useCallback(
+    (_id: string, candidate: ValidatorCandidate) => {
+      const {
+        withdrawalCredentials,
+        isVerifiedCredentials,
+        suggestedFeeRecipient,
+        isVerifiedSuggestedFee,
+      } = candidate
 
-    setIsSharedCredentialVerified(Boolean(isVerifiedCredentials))
-    onUpdateSharedCredentials(withdrawalCredentials)
-  }, [])
+      setIsSharedCredentialVerified(Boolean(isVerifiedCredentials))
+      setIsSharedSuggestedFeeVerified(Boolean(isVerifiedSuggestedFee))
+      onUpdateSharedCredentials(withdrawalCredentials)
+      onUpdateSharedSuggestedFee(suggestedFeeRecipient)
+    },
+    [onUpdateSharedSuggestedFee, onUpdateSharedCredentials],
+  )
 
   const updateCandidate = useCallback(
     (id: string, candidate: ValidatorCandidate) => {
@@ -72,23 +95,25 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
     [candidates, onValidatorChange],
   )
 
-  const toggleAssignAllCredentials = useCallback((): void => {
-    onUpdateSharedCredentials(undefined)
+  const clearCredentials = () => {
+    onUpdateSharedCredentials('')
+    onUpdateSharedSuggestedFee('')
     const updatedCandidates = candidates.map((validator) => ({
       ...validator,
       withdrawalCredentials: '',
+      suggestedFeeRecipient: '',
       isVerifiedCredentials: false,
+      isVerifiedSuggestedFee: false,
     }))
     onValidatorChange(updatedCandidates)
-    setIsAll((prev) => !prev)
     setIsSharedCredentialVerified(false)
-  }, [
-    onUpdateSharedCredentials,
-    candidates,
-    onValidatorChange,
-    setIsAll,
-    setIsSharedCredentialVerified,
-  ])
+    setIsSharedSuggestedFeeVerified(false)
+  }
+
+  const toggleAssignAllCredentials = useCallback((): void => {
+    clearCredentials()
+    setIsAll((prev) => !prev)
+  }, [setIsAll, clearCredentials])
 
   const moveToNextStep = (): void => {
     if (!isVerifiedAddress) {
@@ -98,9 +123,16 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
     onNextStep()
   }
 
-  const checkBoxClass = addClassString('flex space-x-4', [
-    valCount < 2 && 'opacity-0 pointer-events-none',
-  ])
+  const checkBoxClass = clsx('flex space-x-4', valCount < 2 && 'opacity-0 pointer-events-none')
+
+  const advanceTabClass = clsx(
+    'p-4 border-style border-b-0 cursor-pointer',
+    isAdvanceView ? 'opacity-100' : 'opacity-40',
+  )
+  const basicTabClass = clsx(
+    'p-4 border-style border-b-0 cursor-pointer border-r-0',
+    isBasicView ? 'opacity-100' : 'opacity-40',
+  )
 
   const allValidatorPlaceholder = useMemo(
     () =>
@@ -108,9 +140,18 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
         id: 'all',
         name: t('validatorManagement.withdrawalCredentials.validatorGroup'),
         withdrawalCredentials: sharedCredentials,
-        isVerifiedCredentials: isVerifiedAddress,
+        suggestedFeeRecipient: sharedSuggestedFeeRecipient,
+        isVerifiedCredentials: isSharedCredentialVerified,
+        isVerifiedSuggestedFee: isSharedSuggestedFeeVerified,
       }) as ValidatorCandidate,
-    [sharedCredentials, isVerifiedAddress, t],
+    [
+      sharedCredentials,
+      sharedSuggestedFeeRecipient,
+      isSharedCredentialVerified,
+      isSharedSuggestedFeeVerified,
+      t,
+      isBasicView,
+    ],
   )
 
   const renderedCredentialRows = useMemo(
@@ -118,12 +159,38 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
       candidates.map((validator, index) => (
         <ValidatorCredentialRow
           key={index}
+          isAdvanceView={isAdvanceView}
           validatorCandidate={validator}
           onUpdateCandidate={updateCandidate}
         />
       )),
     [candidates, updateCandidate],
   )
+
+  const renderedAllValidatorRow = useMemo(
+    () => (
+      <ValidatorCredentialRow
+        isAdvanceView={isAdvanceView}
+        validatorCandidate={allValidatorPlaceholder}
+        onUpdateCandidate={updateSharedCandidateData}
+      />
+    ),
+    [isAdvanceView, allValidatorPlaceholder, updateSharedCandidateData],
+  )
+
+  const changeView = (view: WithdrawalCredentialView) => {
+    setView(view)
+    clearCredentials()
+  }
+
+  const setAdvancedView = () => {
+    if (view === WithdrawalCredentialView.ADVANCED) return
+    changeView(WithdrawalCredentialView.ADVANCED)
+  }
+  const setBasicView = () => {
+    if (view === WithdrawalCredentialView.BASIC) return
+    changeView(WithdrawalCredentialView.BASIC)
+  }
 
   return (
     <div className='w-full h-full relative space-y-6'>
@@ -145,6 +212,14 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
           />
         </div>
         <div className='w-full'>
+          <div className='w-full flex'>
+            <div onClick={setBasicView} className={basicTabClass}>
+              <Typography type='text-caption1.5'>Basic Settings</Typography>
+            </div>
+            <div onClick={setAdvancedView} className={advanceTabClass}>
+              <Typography type='text-caption1.5'>Advanced Settings</Typography>
+            </div>
+          </div>
           <div className='w-full border-style px-4 py-2 flex space-x-2'>
             <div className='w-[250px] border-r border-r-style pr-2'>
               <Typography type='text-caption1'>{t('validatorManagement.validators')}</Typography>
@@ -166,14 +241,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
             </div>
           </div>
           <div className='overflow-scroll w-full max-h-[200px]'>
-            {isAll ? (
-              <ValidatorCredentialRow
-                validatorCandidate={allValidatorPlaceholder}
-                onUpdateCandidate={updateSharedCandidateData}
-              />
-            ) : (
-              renderedCredentialRows
-            )}
+            {isAll ? renderedAllValidatorRow : renderedCredentialRows}
           </div>
         </div>
         <StepOptions

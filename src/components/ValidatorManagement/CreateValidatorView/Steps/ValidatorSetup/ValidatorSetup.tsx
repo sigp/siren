@@ -31,7 +31,8 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({
     index: undefined,
     keyStorePassword: undefined,
     name: undefined,
-    withdrawalCredentials: undefined,
+    withdrawalCredentials: '',
+    suggestedFeeRecipient: '',
   }
 
   const isValidBalances = candidates.every(

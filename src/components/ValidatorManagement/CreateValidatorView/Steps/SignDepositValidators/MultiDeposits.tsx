@@ -14,6 +14,7 @@ export interface MultiDepositsProps {
   candidates: ValidatorCandidate[]
   sharedKeystorePassword: string | undefined
   sharedWithdrawalCredentials: string | undefined
+  sharedSuggestedFee: string | undefined
   beaconSpec: BeaconNodeSpecResults
   mnemonic: string
 }
@@ -23,6 +24,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   mnemonic,
   sharedWithdrawalCredentials,
   sharedKeystorePassword,
+  sharedSuggestedFee,
   beaconSpec,
 }) => {
   const { t } = useTranslation()
@@ -36,10 +38,11 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
     keyStorePassword: string,
     pubKey: string,
     mnemonicIndex: number,
+    suggestedFeeRecipient: string,
   ) => {
     setDepositData((prev) => [
       ...prev,
-      { txHash, pubKey, keyStorePassword, mnemonicIndex, status: 'pending' },
+      { txHash, pubKey, keyStorePassword, mnemonicIndex, suggestedFeeRecipient, status: 'pending' },
     ])
   }
 
@@ -98,6 +101,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                       keyStorePassword: sharedKeystorePassword || validator.keyStorePassword,
                       withdrawalCredentials:
                         sharedWithdrawalCredentials || validator.withdrawalCredentials,
+                      suggestedFeeRecipient: sharedSuggestedFee || validator.suggestedFeeRecipient,
                     }}
                   />
                 ))}

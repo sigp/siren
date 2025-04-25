@@ -9,6 +9,7 @@ export interface ImportValidatorParams {
   mnemonic: string
   index: number
   keyStorePassword: string
+  suggestedFeeRecipient: string
   onSuccess?: () => void
   onError?: () => void
 }
@@ -21,13 +22,20 @@ const useImportValidator = () => {
   const { generateKeystore } = useChainSafeKeyStore()
 
   const importValidator = useCallback(
-    async ({ mnemonic, index, keyStorePassword, onSuccess, onError }: ImportValidatorParams) => {
+    async ({
+      mnemonic,
+      index,
+      keyStorePassword,
+      suggestedFeeRecipient,
+      onSuccess,
+      onError,
+    }: ImportValidatorParams) => {
       setIsSuccess(false)
       setIsLoading(true)
       setIsError(false)
 
       try {
-        if (index === undefined || index === null) {
+        if (index === undefined || index === null || !Number.isInteger(index)) {
           throw new Error('No validator index provided.')
         }
         if (!mnemonic) {
@@ -37,7 +45,16 @@ const useImportValidator = () => {
           throw new Error('No keystore password provided.')
         }
 
-        const keyStore = await generateKeystore(mnemonic, index, keyStorePassword)
+        if (!suggestedFeeRecipient) {
+          throw new Error('No Suggested Fee Recipient provided')
+        }
+
+        const keyStore = await generateKeystore(
+          mnemonic,
+          index,
+          keyStorePassword,
+          suggestedFeeRecipient,
+        )
         const response = await axios.post('/api/validator-import', { data: keyStore })
 
         if (response.status === 200) {

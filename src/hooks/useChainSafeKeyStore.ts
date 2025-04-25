@@ -7,6 +7,7 @@ export interface KeyStoreData {
   enable: boolean
   password: string
   keystore: IKeystore
+  suggested_fee_recipient: string
 }
 
 export type useChainSafeKeyStoreReturnType = {
@@ -14,6 +15,7 @@ export type useChainSafeKeyStoreReturnType = {
     mnemonic: string,
     index: number,
     keyStorePassword: string,
+    suggestedFeeRecipient: string,
     keyDerivationPath?: string,
   ) => Promise<KeyStoreData>
 }
@@ -26,6 +28,7 @@ const useChainSafeKeyStore = (): useChainSafeKeyStoreReturnType => {
     mnemonic: string,
     index: number,
     keyStorePassword: string,
+    suggestedFeeRecipient: string,
   ): Promise<KeyStoreData> => {
     try {
       const eip2334SubKey = deriveEIP2334SubKey(mnemonic)
@@ -41,6 +44,7 @@ const useChainSafeKeyStore = (): useChainSafeKeyStoreReturnType => {
         enable: true,
         password: keyStorePassword,
         keystore,
+        suggested_fee_recipient: suggestedFeeRecipient,
       }
     } catch (e) {
       console.error(e)
