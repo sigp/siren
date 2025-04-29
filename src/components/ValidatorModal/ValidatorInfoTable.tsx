@@ -34,7 +34,7 @@ const ValidatorInfoTable: FC<ValidatorInfoTableProps> = ({
       {children.length ? (
         <TableWrapper headers={headers}>{children}</TableWrapper>
       ) : (
-        <div className='w-full flex items-center bg-dark900 justify-center h-32'>
+        <div className='w-full flex items-center bg-dark25 dark:bg-dark900 justify-center h-32'>
           <Typography
             color='text-dark700'
             darkMode='dark:text-dark500'
