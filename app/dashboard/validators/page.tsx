@@ -11,6 +11,7 @@ import {
 } from '../../api/beacon'
 import {
   fetchPartialWithdrawals,
+  fetchPendingDeposits,
   fetchValCaches,
   fetchValMetrics,
   fetchValStates,
@@ -31,6 +32,7 @@ export default async function Page() {
     const activities = await fetchActivities({ token })
     const forkVersion = await fetchForkVersion(token)
     const partialWithdrawals = await fetchPartialWithdrawals(token)
+    const pendingDeposits = await fetchPendingDeposits(token)
 
     return (
       <Wrapper
@@ -44,6 +46,7 @@ export default async function Page() {
         initValidatorCountData={validatorCount}
         beaconSpec={beaconSpec}
         initPartialWithdrawals={partialWithdrawals}
+        initPendingDeposits={pendingDeposits}
       />
     )
   } catch (e) {

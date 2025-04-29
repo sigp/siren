@@ -27,3 +27,6 @@ export const importValidatorKeystore = async (data: any, token: string) =>
   })
 export const fetchPartialWithdrawals = async (token: string) =>
   await fetchFromApi(`${backendUrl}/validator/partial-withdrawals`, token)
+
+export const fetchPendingDeposits = async (token: string) =>
+  await fetchFromApi(`${backendUrl}/validator/pending-deposits`, token)

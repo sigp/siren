@@ -72,4 +72,9 @@ export class ValidatorController {
   async getPartialWithdrawals() {
     return this.validatorService.fetchPartialWithdrawals();
   }
+
+  @Get('pending-deposits')
+  async getPendingDeposits() {
+    return this.validatorService.fetchPendingDeposits();
+  }
 }

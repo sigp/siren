@@ -38,6 +38,7 @@ import {
 import { Diagnostics } from '../../../src/types/diagnostic'
 import {
   PartialWithdrawal,
+  PendingDeposit,
   ValidatorCache,
   ValidatorCountResult,
   ValidatorInfo,
@@ -54,6 +55,7 @@ export interface MainProps {
   initActivityData: ActivityResponse
   initForkVersionData: ForkVersionData
   initPartialWithdrawals: PartialWithdrawal[]
+  initPendingDeposits: PendingDeposit[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -69,6 +71,7 @@ const Main: FC<MainProps> = (props) => {
     initActivityData,
     initForkVersionData,
     initPartialWithdrawals,
+    initPendingDeposits,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -159,6 +162,12 @@ const Main: FC<MainProps> = (props) => {
       networkError,
     },
   )
+
+  const { data: pendingDeposits } = useSWRPolling<PendingDeposit[]>('/api/pending-deposits', {
+    refreshInterval: slotInterval,
+    fallbackData: initPendingDeposits,
+    networkError,
+  })
 
   const { data: forkVersionData } = useSWRPolling<ForkVersionData>('/api/fork-version', {
     refreshInterval: epochInterval / 2,

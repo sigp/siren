@@ -4,6 +4,7 @@ import { UtilsService } from '../utils/utils.service';
 import {
   BeaconValidatorResult,
   PartialWithdrawal,
+  PendingDeposit,
   ValidatorCache,
   ValidatorDetail,
   ValidatorInfo,
@@ -288,5 +289,9 @@ export class ValidatorService {
 
   async fetchPartialWithdrawals(): Promise<PartialWithdrawal[]> {
     return await this.cacheManager.get('partialWithdrawals');
+  }
+
+  async fetchPendingDeposits(): Promise<PendingDeposit[]> {
+    return await this.cacheManager.get('pendingDeposits');
   }
 }
