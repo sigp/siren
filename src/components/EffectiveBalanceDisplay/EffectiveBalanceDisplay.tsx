@@ -112,7 +112,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
       <div className='w-full flex space-x-4'>
         <DisplayTextBox
           isError={isUnderMinBalance}
-          title={formatLocalCurrency(newBalance, { min: 0, max: 4 })}
+          title={formatLocalCurrency(Math.max(newBalance, 0), { min: 0, max: 4 })}
           subTitle={t('balance')}
         />
         <div className={effectiveBorderClasses}>{effectiveBalanceDisplay}</div>
