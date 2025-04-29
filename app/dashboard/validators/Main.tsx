@@ -188,6 +188,7 @@ const Main: FC<MainProps> = (props) => {
   }, [])
 
   const currentEpoch = syncData.beaconSync.currentEpoch
+  const headSlot = syncData.beaconSync.headSlot
   const minValidatorWithdrawalDelay = Number(MIN_VALIDATOR_WITHDRAWABILITY_DELAY)
 
   useEffect(() => {
@@ -367,7 +368,9 @@ const Main: FC<MainProps> = (props) => {
               partialWithdrawals={partialWithdrawals}
               shardCommitteePeriod={Number(SHARD_COMMITTEE_PERIOD)}
               currentEpoch={currentEpoch}
+              headSlot={headSlot}
               validator={activeValidator}
+              pendingDeposits={pendingDeposits}
               validatorCacheData={validatorCache}
             />
           )}

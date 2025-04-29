@@ -11,7 +11,7 @@ import { ValidatorMetricResult } from '../../types/beacon'
 import { ValidatorBalanceInfo } from '../../types/validator'
 import RodalModal from '../RodalModal/RodalModal'
 import Spinner from '../Spinner/Spinner'
-import ValidatorDeposit from './views/ValidatorDeposit/ValidatorDeposit'
+import ValidatorDeposit, { ValidatorDepositProps } from './views/ValidatorDeposit/ValidatorDeposit'
 import ValidatorDetails, { ValidatorDetailsProps } from './views/ValidatorDetails'
 import ValidatorExit from './views/ValidatorExit'
 import ValidatorWithdrawal, {
@@ -30,7 +30,8 @@ export const ValidatorModalContext = createContext<ValidatorModalContextProps>({
 
 export interface ValidatorModalProps
   extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'>,
-    Pick<ValidatorWithdrawalProps, 'chainId' | 'partialWithdrawals'> {}
+    Pick<ValidatorWithdrawalProps, 'chainId' | 'partialWithdrawals'>,
+    Pick<ValidatorDepositProps, 'pendingDeposits'> {}
 
 const ValidatorModal: FC<ValidatorModalProps> = ({
   validator,
@@ -39,6 +40,8 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
   currentEpoch,
   chainId,
   partialWithdrawals,
+  pendingDeposits,
+  headSlot,
 }) => {
   const [isReady, setReady] = useState(false)
   const router = useRouter()
@@ -96,7 +99,16 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
           />
         )
       case ValidatorModalView.DEPOSIT:
-        return <ValidatorDeposit validatorEpochData={validatorEpochData} validator={validator} />
+        return (
+          <ValidatorDeposit
+            headSlot={headSlot}
+            currentEpoch={currentEpoch}
+            chainId={chainId}
+            pendingDeposits={pendingDeposits}
+            validatorEpochData={validatorEpochData}
+            validator={validator}
+          />
+        )
       default:
         return <div />
     }
