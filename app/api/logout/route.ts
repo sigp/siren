@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server'
+import { BACKEND_URL } from '../../../src/constants/envars'
 import fetchFromApi from '../../../utilities/fetchFromApi'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
-
-const backendUrl = process.env.BACKEND_URL
 
 export async function POST(req: Request) {
   try {
     const token = getReqAuthToken(req)
-    const { status } = await fetchFromApi(`${backendUrl}/logout`, token, {
+    const { status } = await fetchFromApi(`${BACKEND_URL}/logout`, token, {
       method: 'POST',
     })
 
