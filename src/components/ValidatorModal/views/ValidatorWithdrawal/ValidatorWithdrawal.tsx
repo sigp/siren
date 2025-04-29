@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { formatEther, parseUnits } from 'ethers'
-import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
+import Link from 'next/link'
+import React, { ChangeEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount, UseEstimateGasParameters, usePublicClient, useSendTransaction } from 'wagmi'
 import displayToast from '../../../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../../../utilities/formatWithdrawalAddress'
+import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../utilities/isValidNetwork'
 import {
   EFFECTIVE_BALANCE,
   EXECUTION_WITHDRAWAL_CONTRACT,
@@ -26,8 +29,9 @@ import Input from '../../../Input/Input'
 import TransactionStatusBlock from '../../../TransactionStatus/TransactionStatusBlock'
 import Typography from '../../../Typography/Typography'
 import WalletActionGuard from '../../../WalletActionGuard/WalletActionGuard'
+import ValidatorInfoTable from '../../ValidatorInfoTable'
 import { ValidatorModalContext } from '../../ValidatorModal'
-import PendingWithdrawalsTable from './PendingWithdrawalsTable'
+import PendingWithdrawalRow from './PendingWithdrawalRow'
 
 export interface ValidatorWithdrawalProps {
   validator: ValidatorInfo
@@ -46,6 +50,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
 }) => {
   const { t } = useTranslation()
   const { effectiveBalance, balance, withdrawalAddress, pubKey, index } = validator
+  const headers = [t('index'), t('amount'), t('withdrawableEpoch'), ' ']
   const [isLoading, setIsLoading] = useState(false)
   const [withdrawalAmount, setWithdrawalAmount] = useState<number | undefined>(undefined)
   const sanitizedWithdrawalAmount = withdrawalAmount || 0
@@ -77,6 +82,13 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   const submitRequest = useSendTransaction()
   const [requestFee, setRequestFee] = useState<bigint>(0n)
   const { txStatus } = useResolveTransactionOnce(txHash)
+
+  useEffect(() => {
+    const finalTxStatus = txStatus === 'success' || txStatus === 'error'
+    if (finalTxStatus && withdrawalAmount !== undefined) {
+      setWithdrawalAmount(undefined)
+    }
+  }, [txStatus, withdrawalAmount])
 
   useEffect(() => {
     if (txStatus !== 'success' || isRecordedActivity || !withdrawalAmount) return
@@ -182,6 +194,25 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
 
   const retryTransaction = () => setTxHash(undefined)
 
+  const beaconChaLink = isValidNetwork(chainId)
+    ? getBeaconChaLink(chainId, `/validator/${index}#withdrawals`)
+    : null
+
+  const withdrawalRequestTableRender = useMemo(() => {
+    return (
+      <ValidatorInfoTable
+        className='mt-10'
+        title={t('validatorManagement.partialWithdrawal.pendingWithdrawals')}
+        emptyText={t('validatorManagement.partialWithdrawal.noPendingWithdrawalRequests')}
+        headers={headers}
+      >
+        {pendingWithdrawals.map((withdrawal, index) => (
+          <PendingWithdrawalRow currentEpoch={currentEpoch} key={index} withdrawal={withdrawal} />
+        ))}
+      </ValidatorInfoTable>
+    )
+  }, [t, headers, pendingWithdrawals, currentEpoch])
+
   return (
     <div className='w-full h-full flex flex-col'>
       <div className='w-full bg-dark25 dark:bg-darkPrimary h-48 relative p-4'>
@@ -216,7 +247,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
               <div className='w-full relative space-y-1'>
                 <Input
                   isErrorBorder={isInvalidEffectiveBalance}
-                  value={withdrawalAmount}
+                  value={withdrawalAmount || ''}
                   disabled={isLoading}
                   className='flex-1'
                   min={0}
@@ -231,7 +262,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
                     className='text-right underline cursor-pointer'
                     type='text-tiny'
                   >
-                    {t('validatorManagement.partialWithdrawal.setMaxAmount')}
+                    {t('setMaxAmount')}
                   </Typography>
                 </div>
               </div>
@@ -268,33 +299,13 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
             />
           </div>
         </div>
-        <div className='w-full mt-10'>
-          <div className='w-full flex flex-col items-center space-y-1 p-4 border-b-style100 dark:border-b-style'>
-            <Typography
-              color='text-dark400'
-              darkMode='dark:text-dark500'
-              type='text-caption1.5'
-              className='text-center'
-            >
-              {t('validatorManagement.partialWithdrawal.pendingWithdrawals')}
-            </Typography>
-            <i className='bi bi-arrow-down-circle text-caption1 text-primary' />
-          </div>
-          {pendingWithdrawals.length ? (
-            <PendingWithdrawalsTable currentEpoch={currentEpoch} withdrawals={pendingWithdrawals} />
-          ) : (
-            <div className='w-full flex items-center bg-dark900 justify-center h-32'>
-              <Typography
-                color='text-dark700'
-                darkMode='dark:text-dark500'
-                type='text-caption1.5'
-                className='text-center'
-              >
-                {t('validatorManagement.partialWithdrawal.noPendingWithdrawalRequests')}
-              </Typography>
-            </div>
-          )}
-        </div>
+        {beaconChaLink ? (
+          <Link target='_blank' href={beaconChaLink}>
+            {withdrawalRequestTableRender}
+          </Link>
+        ) : (
+          withdrawalRequestTableRender
+        )}
       </div>
     </div>
   )
