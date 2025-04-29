@@ -88,7 +88,7 @@ export class TasksService implements OnApplicationBootstrap {
         this.utilsService.getErrorMessage(e?.response?.data.code || e.code),
       );
 
-      if(this.isDebug) {
+      if (this.isDebug) {
         console.log(e);
       }
 
@@ -171,7 +171,7 @@ export class TasksService implements OnApplicationBootstrap {
 
     await this.syncPendingDeposits(pectraForkVersion);
 
-    this.setDynamicInterval('pendingDepositsInterval', interval, async () => {
+    this.setDynamicInterval('pendingDepositsTask', interval, async () => {
       await this.syncPendingDeposits(pectraForkVersion);
     });
   }
