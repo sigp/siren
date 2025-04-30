@@ -18,7 +18,7 @@ const useWalletConnection = (): useWalletConnectionReturnType => {
   const switchNetwork = () => switchChain({ chainId: Number(DEPOSIT_NETWORK_ID) })
 
   return {
-    isConnected,
+    isConnected: isConnected || !!address,
     switchNetwork,
     address,
     isValidNetwork: Number(DEPOSIT_NETWORK_ID) === chainId,
