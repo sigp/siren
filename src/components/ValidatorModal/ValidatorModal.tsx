@@ -31,7 +31,7 @@ export const ValidatorModalContext = createContext<ValidatorModalContextProps>({
 export interface ValidatorModalProps
   extends Omit<ValidatorDetailsProps, 'validatorMetrics' | 'isAnimate'>,
     Pick<ValidatorWithdrawalProps, 'chainId' | 'partialWithdrawals'>,
-    Pick<ValidatorDepositProps, 'pendingDeposits'> {}
+    Pick<ValidatorDepositProps, 'pendingDeposits' | 'headSlot'> {}
 
 const ValidatorModal: FC<ValidatorModalProps> = ({
   validator,
@@ -102,7 +102,6 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
         return (
           <ValidatorDeposit
             headSlot={headSlot}
-            currentEpoch={currentEpoch}
             chainId={chainId}
             pendingDeposits={pendingDeposits}
             validatorEpochData={validatorEpochData}

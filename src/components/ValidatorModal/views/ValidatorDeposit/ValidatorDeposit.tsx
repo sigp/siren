@@ -1,3 +1,4 @@
+import clsx from 'clsx'
 import { formatUnits, parseEther } from 'ethers'
 import Link from 'next/link'
 import React, {
@@ -104,7 +105,11 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
     (e: ChangeEvent<HTMLInputElement>) => {
       const amount = e.target.value
       setDepositAmount(
-        amount ? (amount > maxEffectiveAmount ? maxEffectiveAmount : Number(amount)) : undefined,
+        amount
+          ? Number(amount) > maxEffectiveAmount
+            ? maxEffectiveAmount
+            : Number(amount)
+          : undefined,
       )
     },
     [maxEffectiveAmount],
@@ -144,6 +149,8 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
       </ValidatorInfoTable>
     )
   }, [t, headers, filteredDeposits, headSlot])
+
+  const maxAmountClasses = clsx(isMaxedEffectiveBalance && 'opacity-40 pointer-events-none')
 
   return (
     <div className='w-full'>
@@ -188,14 +195,14 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
                   <Input
                     isErrorBorder={depositAmount !== undefined && isInvalidDepositInput}
                     value={depositAmount || ''}
-                    disabled={isLoading}
+                    disabled={isLoading || isMaxedEffectiveBalance}
                     className='flex-1'
                     min={0}
                     inputStyle='basic_border'
                     type='number'
                     onChange={setDepositInput}
                   />
-                  <div onClick={setMaxAmount}>
+                  <div className={maxAmountClasses} onClick={setMaxAmount}>
                     <Typography
                       color='text-primary'
                       darkMode='dark:text-primary'

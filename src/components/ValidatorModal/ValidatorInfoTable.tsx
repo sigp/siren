@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { FC } from 'react'
+import React, { FC, Children } from 'react'
 import TableWrapper, { TableWrapperProps } from '../TableWrapper/TableWrapper'
 import Typography from '../Typography/Typography'
 
@@ -31,7 +31,7 @@ const ValidatorInfoTable: FC<ValidatorInfoTableProps> = ({
         </Typography>
         <i className='bi bi-arrow-down-circle text-caption1 text-primary' />
       </div>
-      {children.length ? (
+      {Children.count(children) > 0 ? (
         <TableWrapper headers={headers}>{children}</TableWrapper>
       ) : (
         <div className='w-full flex items-center bg-dark25 dark:bg-dark900 justify-center h-32'>

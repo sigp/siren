@@ -13,10 +13,11 @@ export interface ValidatorPendingDepositRowProps {
 
 const ValidatorPendingDepositRow: FC<ValidatorPendingDepositRowProps> = ({ deposit, headSlot }) => {
   const { pubkey, amount, slot } = deposit
-  const differenceInSlots = headSlot - slot
+  const formattedSlot = Number(slot)
+  const differenceInSlots = headSlot - formattedSlot
   const slotsInSeconds = differenceInSlots * 12
   const formattedTime = formatMoment(slotsInSeconds, true)
-  const isZeroSlot = Number(slot) === 0
+  const isZeroSlot = formattedSlot === 0
 
   return (
     <tr className='border-t-style'>
