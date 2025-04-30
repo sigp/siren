@@ -53,7 +53,7 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
         : 'border-warning bg-warning100',
   )
   const txHashContainerClasses = clsx(
-    'flex space-x-4 border p-2',
+    'flex flex-col md:flex-row space-y-2 md:space-y-0 text-center md:space-x-4 border py-2 px-4 md:px-2',
     isSuccess ? 'border-success100' : isError ? 'border-error100' : 'border-style',
   )
 
@@ -65,7 +65,7 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
   )
 
   return (
-    <div className='w-1/2 bg-dark750 p-8 flex flex-col items-center justify-center space-y-6'>
+    <div className='w-full bg-dark750 p-8 flex flex-col items-center justify-center space-y-6'>
       <div className={txIconBackground}>
         <i className={txIcon} />
       </div>

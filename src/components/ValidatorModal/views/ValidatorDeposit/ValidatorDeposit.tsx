@@ -159,66 +159,68 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
         </div>
       </div>
       <div className='w-full flex flex-col overflow-auto'>
-        <div className='w-full flex p-4 space-x-4'>
-          {txHash ? (
-            <TransactionStatusBlock
-              chainId={chainId}
-              onErrorText={t('validatorManagement.retryTransaction')}
-              onError={retryTransaction}
-              onSuccess={viewDetails}
-              onSuccessText={t('validatorManagement.viewValidator')}
-              txStatus={txStatus}
-              txHash={txHash}
-            />
-          ) : (
-            <div className='w-1/2 border border-style p-4 pb-8 space-y-8'>
-              {isMaxedEffectiveBalance ? (
-                <InfoBox
-                  type={InfoBoxType.WARNING}
-                  text={t('validatorManagement.partialDeposit.isMaxedEffectiveBalanceText')}
-                />
-              ) : (
-                <InfoBox
-                  type={InfoBoxType.NOTICE}
-                  text={t('validatorManagement.partialDeposit.depositHelperText')}
-                />
-              )}
-              <div className='w-full relative space-y-1'>
-                <Input
-                  isErrorBorder={depositAmount !== undefined && isInvalidDepositInput}
-                  value={depositAmount || ''}
-                  disabled={isLoading}
-                  className='flex-1'
-                  min={0}
-                  inputStyle='basic_border'
-                  type='number'
-                  onChange={setDepositInput}
-                />
-                <div onClick={setMaxAmount}>
-                  <Typography
-                    color='text-primary'
-                    darkMode='dark:text-primary'
-                    className='text-right underline cursor-pointer'
-                    type='text-tiny'
-                  >
-                    {t('setMaxAmount')}
-                  </Typography>
+        <div className='w-full flex flex-col lg:flex-row p-4 space-y-4 lg:space-y-0 lg:space-x-4'>
+          <div className='w-full lg:w-1/2 order-2 lg:order-1 mt-4 lg:mt-0'>
+            {txHash ? (
+              <TransactionStatusBlock
+                chainId={chainId}
+                onErrorText={t('validatorManagement.retryTransaction')}
+                onError={retryTransaction}
+                onSuccess={viewDetails}
+                onSuccessText={t('validatorManagement.viewValidator')}
+                txStatus={txStatus}
+                txHash={txHash}
+              />
+            ) : (
+              <div className='w-full border border-style p-4 pb-8 space-y-8'>
+                {isMaxedEffectiveBalance ? (
+                  <InfoBox
+                    type={InfoBoxType.WARNING}
+                    text={t('validatorManagement.partialDeposit.isMaxedEffectiveBalanceText')}
+                  />
+                ) : (
+                  <InfoBox
+                    type={InfoBoxType.NOTICE}
+                    text={t('validatorManagement.partialDeposit.depositHelperText')}
+                  />
+                )}
+                <div className='w-full relative space-y-1'>
+                  <Input
+                    isErrorBorder={depositAmount !== undefined && isInvalidDepositInput}
+                    value={depositAmount || ''}
+                    disabled={isLoading}
+                    className='flex-1'
+                    min={0}
+                    inputStyle='basic_border'
+                    type='number'
+                    onChange={setDepositInput}
+                  />
+                  <div onClick={setMaxAmount}>
+                    <Typography
+                      color='text-primary'
+                      darkMode='dark:text-primary'
+                      className='text-right underline cursor-pointer'
+                      type='text-tiny'
+                    >
+                      {t('setMaxAmount')}
+                    </Typography>
+                  </div>
                 </div>
+                <WalletActionGuard isSufficientBalance={isSufficient} guardActionClass='w-full'>
+                  <Button
+                    onClick={submitDeposit}
+                    isLoading={isLoading}
+                    isDisabled={isInvalidDepositInput || isMaxedEffectiveBalance || isLoading}
+                    className='w-full'
+                    type={ButtonFace.SECONDARY}
+                  >
+                    {t('validatorManagement.partialDeposit.addFunds')}
+                  </Button>
+                </WalletActionGuard>
               </div>
-              <WalletActionGuard isSufficientBalance={isSufficient} guardActionClass='w-full'>
-                <Button
-                  onClick={submitDeposit}
-                  isLoading={isLoading}
-                  isDisabled={isInvalidDepositInput || isMaxedEffectiveBalance || isLoading}
-                  className='w-full'
-                  type={ButtonFace.SECONDARY}
-                >
-                  {t('validatorManagement.partialDeposit.addFunds')}
-                </Button>
-              </WalletActionGuard>
-            </div>
-          )}
-          <div className='flex-1 space-y-4'>
+            )}
+          </div>
+          <div className='flex-1 order-1 lg:order-2 mt-4 lg:mt-0 space-y-4'>
             <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
             <EffectiveBalanceDisplay
               isFullDisplay

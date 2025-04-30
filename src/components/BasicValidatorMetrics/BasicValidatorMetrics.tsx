@@ -49,7 +49,10 @@ const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({
           </Typography>
         </div>
       </div>
-      <ValidatorIncomeSummary validatorData={validatorEpochData} className='p-3 space-y-1.5 w-42' />
+      <ValidatorIncomeSummary
+        validatorData={validatorEpochData}
+        className='p-3 space-y-1.5 w-full lg:w-42'
+      />
     </div>
   )
 }

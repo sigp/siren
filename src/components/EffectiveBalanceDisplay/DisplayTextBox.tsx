@@ -27,7 +27,7 @@ const DisplayTextBox: FC<DisplayTextBoxProps> = ({ isError, title, subTitle }) =
       </Typography>
       <Typography
         type='text-tiny'
-        className='max-w-[150px] text-center'
+        className='lg:max-w-[150px] text-center'
         color={isError ? 'text-error' : 'text-primary'}
         darkMode={isError ? 'dark:text-error' : 'dark:text-primary'}
       >
