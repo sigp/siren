@@ -18,7 +18,7 @@ export const depositDataContainer = new ContainerType({
 
 const useValidatorTopUp = () => {
   const beaconSpec = useRecoilValue(beaconNodeSpec)
-  const [txHash, setTxHash] = useState<TxHash | undefined>()
+  const [txHash, setTxHash] = useState<TxHash | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
   const { writeContract } = useWriteContract()
