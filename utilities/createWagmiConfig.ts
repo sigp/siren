@@ -9,13 +9,14 @@ const localChainId = process.env.NEXT_PUBLIC_TESTNET_CHAIN_ID
 const localRpc = process.env.NEXT_PUBLIC_TESTNET_RPC
 const walletConnectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_ID
 const nativeCurrency = { name: 'Ether', symbol: 'ETH', decimals: 18 }
+const altHoodiTestnetRpc = process.env.NEXT_PUBLIC_HOODI_TESTNET_RPC
 
 const createWagmiConfig = () => {
   const hoodi = defineChain({
     id: 560048,
     name: 'Hoodi testnet',
     network: 'Hoodi testnet',
-    rpcUrls: { default: { http: ['https://0xrpc.io/hoodi'] } },
+    rpcUrls: { default: { http: [altHoodiTestnetRpc || 'https://0xrpc.io/hoodi'] } },
     nativeCurrency,
   })
   const chains: Chain[] = [mainnet, holesky, hoodi]

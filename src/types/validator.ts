@@ -119,3 +119,11 @@ export type PartialWithdrawal = {
   amount: string
   withdrawable_epoch: string
 }
+
+export type PendingDeposit = {
+  pubkey: string
+  withdrawal_credentials: string
+  amount: string
+  signature: string
+  slot: string
+}

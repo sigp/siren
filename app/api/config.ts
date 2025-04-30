@@ -1,12 +1,11 @@
+import { BACKEND_URL } from '../../src/constants/envars'
 import fetchFromApi from '../../utilities/fetchFromApi'
 
-const backendUrl = process.env.BACKEND_URL
-
 export const fetchBeaconNodeVersion = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/beacon/version`, token)
+  await fetchFromApi(`${BACKEND_URL}/beacon/version`, token)
 export const fetchValidatorAuthKey = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/auth-key`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/auth-key`, token)
 export const fetchValidatorVersion = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/version`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/version`, token)
 export const fetchGenesisData = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/beacon/genesis`, token)
+  await fetchFromApi(`${BACKEND_URL}/beacon/genesis`, token)

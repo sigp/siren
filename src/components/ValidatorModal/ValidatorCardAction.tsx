@@ -21,7 +21,7 @@ const ValidatorCardAction: FC<ValidatorCardActionProps> = ({
   return (
     <div
       onClick={onClick}
-      className={addClassString('border p-4 space-y-2 cursor-pointer', [
+      className={addClassString('border dark:border-dark500 p-4 space-y-2 cursor-pointer', [
         className,
         isDisabled && 'opacity-20 pointer-events-none',
       ])}

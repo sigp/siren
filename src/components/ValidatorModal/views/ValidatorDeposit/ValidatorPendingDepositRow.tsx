@@ -1,21 +1,23 @@
 import { formatEther, parseUnits } from 'ethers'
 import React, { FC } from 'react'
+import formatEthAddress from '../../../../../utilities/formatEthAddress'
 import formatMoment from '../../../../../utilities/formatMoment'
-import { PartialWithdrawal } from '../../../../types/validator'
+import { PendingDeposit } from '../../../../types/validator'
 import Typography from '../../../Typography/Typography'
 import 'moment-duration-format'
 
-export interface PendingWithdrawalRowProps {
-  withdrawal: PartialWithdrawal
-  currentEpoch: number
+export interface ValidatorPendingDepositRowProps {
+  deposit: PendingDeposit
+  headSlot: number
 }
 
-const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, currentEpoch }) => {
-  const { validator_index, amount, withdrawable_epoch } = withdrawal
-  const formattedAmount = Number(formatEther(parseUnits(amount, 'gwei')))
-  const timeInEpochs = Number(withdrawable_epoch) - currentEpoch
-  const timeInSeconds = 32 * 12 * timeInEpochs
-  const formattedTime = formatMoment(timeInSeconds)
+const ValidatorPendingDepositRow: FC<ValidatorPendingDepositRowProps> = ({ deposit, headSlot }) => {
+  const { pubkey, amount, slot } = deposit
+  const formattedSlot = Number(slot)
+  const differenceInSlots = headSlot - formattedSlot
+  const slotsInSeconds = differenceInSlots * 12
+  const formattedTime = formatMoment(slotsInSeconds, true)
+  const isZeroSlot = formattedSlot === 0
 
   return (
     <tr className='border-t-style'>
@@ -26,7 +28,7 @@ const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, curre
           darkMode='dark:text-dark500'
           type='text-caption1'
         >
-          {validator_index}
+          {formatEthAddress(pubkey)}
         </Typography>
       </td>
       <td className='p-4'>
@@ -36,7 +38,7 @@ const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, curre
           darkMode='dark:text-dark500'
           type='text-caption1'
         >
-          {formattedAmount} ETH
+          {Number(formatEther(parseUnits(amount, 'gwei')))} ETH
         </Typography>
       </td>
       <td className='p-4'>
@@ -46,7 +48,7 @@ const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, curre
           darkMode='dark:text-dark500'
           type='text-caption1'
         >
-          {withdrawable_epoch}
+          {isZeroSlot ? '-' : slot}
         </Typography>
       </td>
       <td className='p-4'>
@@ -56,11 +58,11 @@ const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, curre
           darkMode='dark:text-dark500'
           type='text-caption1.5'
         >
-          {formattedTime}...
+          {isZeroSlot ? ' ' : `${formattedTime}...`}
         </Typography>
       </td>
     </tr>
   )
 }
 
-export default PendingWithdrawalRow
+export default ValidatorPendingDepositRow

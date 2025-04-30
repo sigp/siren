@@ -38,6 +38,7 @@ import {
 import { Diagnostics } from '../../../src/types/diagnostic'
 import {
   PartialWithdrawal,
+  PendingDeposit,
   ValidatorCache,
   ValidatorCountResult,
   ValidatorInfo,
@@ -54,6 +55,7 @@ export interface MainProps {
   initActivityData: ActivityResponse
   initForkVersionData: ForkVersionData
   initPartialWithdrawals: PartialWithdrawal[]
+  initPendingDeposits: PendingDeposit[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -69,6 +71,7 @@ const Main: FC<MainProps> = (props) => {
     initActivityData,
     initForkVersionData,
     initPartialWithdrawals,
+    initPendingDeposits,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -160,6 +163,12 @@ const Main: FC<MainProps> = (props) => {
     },
   )
 
+  const { data: pendingDeposits } = useSWRPolling<PendingDeposit[]>('/api/pending-deposits', {
+    refreshInterval: slotInterval,
+    fallbackData: initPendingDeposits,
+    networkError,
+  })
+
   const { data: forkVersionData } = useSWRPolling<ForkVersionData>('/api/fork-version', {
     refreshInterval: epochInterval / 2,
     fallbackData: initForkVersionData,
@@ -179,6 +188,7 @@ const Main: FC<MainProps> = (props) => {
   }, [])
 
   const currentEpoch = syncData.beaconSync.currentEpoch
+  const headSlot = syncData.beaconSync.headSlot
   const minValidatorWithdrawalDelay = Number(MIN_VALIDATOR_WITHDRAWABILITY_DELAY)
 
   useEffect(() => {
@@ -358,7 +368,9 @@ const Main: FC<MainProps> = (props) => {
               partialWithdrawals={partialWithdrawals}
               shardCommitteePeriod={Number(SHARD_COMMITTEE_PERIOD)}
               currentEpoch={currentEpoch}
+              headSlot={headSlot}
               validator={activeValidator}
+              pendingDeposits={pendingDeposits}
               validatorCacheData={validatorCache}
             />
           )}

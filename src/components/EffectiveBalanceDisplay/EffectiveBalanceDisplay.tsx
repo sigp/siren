@@ -6,6 +6,7 @@ import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../constants/constants'
 import useProcessEffectiveBalance from '../../hooks/useProcessEffectiveBalance'
 import { ValidatorInfo } from '../../types/validator'
+import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 import WithdrawalAddressPill from '../WithdrawalAddress/WithdrawalAddressPill'
@@ -40,7 +41,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
   const containerClasses = clsx(className, 'flex justify-between items-center')
   const textAlignment = isFullDisplay ? 'text-center' : 'text-right'
   const effectiveTextClasses = clsx('break-keep', textAlignment)
-  const descriptiveTextClasses = clsx('max-w-[150px]', textAlignment)
+  const descriptiveTextClasses = clsx('lg:max-w-[150px]', textAlignment)
   const isInvalidEffectiveBalance = isOverMaxEB || isUnderMinEB
   const effectiveBorderClasses = clsx(
     'border flex-1 p-4 text-center',
@@ -91,7 +92,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
 
   const validatorInfoDisplay = (
     <div className='flex sm:space-x-4'>
-      <div className='hidden sm:block h-16 w-16 rounded-full bg-gradient-to-r from-primary to-tertiary' />
+      <IdenticonIcon size={70} type='CIRCULAR' hash={pubKey} />
       <div className='space-y-1'>
         <Typography>{name}</Typography>
         <Tooltip place='top-start' style={tooltipStyle} id={`tool-display-${pubKey}`} text={pubKey}>
@@ -109,10 +110,10 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
   return isFullDisplay ? (
     <div className='flex flex-col space-y-4'>
       <div className='p-4 border-style'>{validatorInfoDisplay}</div>
-      <div className='w-full flex space-x-4'>
+      <div className='w-full flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4'>
         <DisplayTextBox
           isError={isUnderMinBalance}
-          title={formatLocalCurrency(newBalance, { min: 0, max: 4 })}
+          title={formatLocalCurrency(Math.max(newBalance, 0), { min: 0, max: 4 })}
           subTitle={t('balance')}
         />
         <div className={effectiveBorderClasses}>{effectiveBalanceDisplay}</div>

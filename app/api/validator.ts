@@ -1,29 +1,31 @@
+import { BACKEND_URL } from '../../src/constants/envars'
 import fetchFromApi from '../../utilities/fetchFromApi'
 
-const backendUrl = process.env.BACKEND_URL
-
 export const fetchValStates = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/states`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/states`, token)
 export const fetchValCaches = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/caches`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/caches`, token)
 export const fetchValMetrics = async (token: string, index?: string | null) =>
-  await fetchFromApi(`${backendUrl}/validator/metrics${index ? `/${index}` : ''}`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/metrics${index ? `/${index}` : ''}`, token)
 export const signVoluntaryExit = async (data: any, token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/sign-exit`, token, {
+  await fetchFromApi(`${BACKEND_URL}/validator/sign-exit`, token, {
     method: 'POST',
     body: JSON.stringify(data),
   })
 export const fetchValGraffiti = async (token: string, index: string) =>
-  await fetchFromApi(`${backendUrl}/validator/graffiti/${index}`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/graffiti/${index}`, token)
 export const updateValGraffiti = async (token: string, data: any) =>
-  await fetchFromApi(`${backendUrl}/validator/graffiti`, token, {
+  await fetchFromApi(`${BACKEND_URL}/validator/graffiti`, token, {
     method: 'PUT',
     body: JSON.stringify(data),
   })
 export const importValidatorKeystore = async (data: any, token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/import-keystore`, token, {
+  await fetchFromApi(`${BACKEND_URL}/validator/import-keystore`, token, {
     method: 'POST',
     body: JSON.stringify(data),
   })
 export const fetchPartialWithdrawals = async (token: string) =>
-  await fetchFromApi(`${backendUrl}/validator/partial-withdrawals`, token)
+  await fetchFromApi(`${BACKEND_URL}/validator/partial-withdrawals`, token)
+
+export const fetchPendingDeposits = async (token: string) =>
+  await fetchFromApi(`${BACKEND_URL}/validator/pending-deposits`, token)

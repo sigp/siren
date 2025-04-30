@@ -30,6 +30,7 @@
     "remainderBalanceHelperText": "This remaining balance is partially deposited or retained in the validator based on the set withdrawal credentials. If retained this amount will not effect reward calculations.",
     "remainderEth": "Remainder: {{amount}} ETH"
   },
+  "setMaxAmount": "Set Max Amount",
   "copied": "Copied!",
   "wrongNetwork": "You are connected to the wrong chain. Click to switch networks.",
   "switchNetwork": "Switch Network",
@@ -85,6 +86,7 @@
   "node": "Node",
   "index": "index",
   "amount": "amount",
+  "slot": "slot",
   "withdrawableEpoch": "Withdrawable Epoch",
   "viewDisclosures": "view important disclosures",
   "learnMore": "Learn More",
@@ -437,12 +439,15 @@
     },
     "partialDeposit": {
       "title": "Deposit Funds",
+      "addFunds": "Add More Funds",
+      "pendingDeposits": "Pending Deposits",
+      "noPendingDeposits": "No Pending Deposits Found.",
       "subTitles": {
         "enterMnemonic": "Enter Mnemonic",
         "mnemonicIndex": "Mnemonic Index",
         "signAndDeposit": "Sign & Deposit"
       },
-      "isMaxedEffectiveBalanceText": "This validator has reached the maximum effective balance. Additional deposits will not increase the balance and will be returned to the withdrawal address or held in the validator if none is set.",
+      "isMaxedEffectiveBalanceText": "The validator has reached the maximum effective balance; additional deposits won’t increase it and will be refunded or retained if no withdrawal address is set.",
       "depositHelperText": "Ensure you have access to the withdrawal address associated with this validator, are connected to the correct network and have sufficient funds.",
       "mnemonicIndexHelperText": "Enter your validator mnemonic index. This is the same value used making your initial validator deposit.",
       "deriveIndexHelperText": "Deriving mnemonic index. This may take a moment...",
@@ -450,7 +455,6 @@
     },
     "partialWithdrawal": {
       "title": "Partial Withdrawal",
-      "setMaxAmount": "Set Max Amount",
       "requestWithdrawal": "Request Withdrawal",
       "pendingWithdrawals": "Pending Withdrawal Requests",
       "noPendingWithdrawalRequests": "No Requests Found.",
@@ -765,7 +769,7 @@
     "activities": {
       "deposit": {
         "title": "Deposit Transaction",
-        "text": "Funds sent to the Deposit Contract with transaction hash: <span>{{txHash}}</span>. Click here to review the transaction details on Etherscan."
+        "text": "Funds sent to the Deposit Contract with transaction hash: <span>{{txHash}}</span> and amount of <span>{{amount}} ETH</span>. Click here to review the transaction details on Etherscan."
       },
       "validatorImport": {
         "title": "Validator Imported",

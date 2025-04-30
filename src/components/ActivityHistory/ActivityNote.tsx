@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { formatEther } from 'ethers'
 import { motion } from 'framer-motion'
 import { debounce } from 'lodash'
 import moment from 'moment'
@@ -68,12 +69,13 @@ const ActivityNote: FC<ActivityNoteProps> = ({
   const getText = useCallback(() => {
     switch (type) {
       case ActivityType.DEPOSIT:
+        const amount = formattedData?.amount ? Number(formatEther(formattedData?.amount)) : '-'
         return (
           <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
             <Trans
               i18nKey='activityHistory.activities.deposit.text'
               components={{ span: <span className='underline font-bold' /> }}
-              values={{ txHash: formatEthAddress(formattedData?.txHash) }}
+              values={{ txHash: formatEthAddress(formattedData?.txHash), amount }}
             />
           </Typography>
         )

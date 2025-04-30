@@ -1,5 +1,6 @@
 import clsx from 'clsx'
-import { debounce } from 'lodash'
+import { formatUnits, parseEther } from 'ethers'
+import Link from 'next/link'
 import React, {
   ChangeEvent,
   FC,
@@ -7,120 +8,149 @@ import React, {
   useContext,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import displayToast from '../../../../../utilities/displayToast'
-import getMnemonicStats from '../../../../../utilities/getMnemonicStats'
-import getWordLength from '../../../../../utilities/getWordLength'
-import {
-  EFFECTIVE_BALANCE,
-  MAX_BALANCE_INPUT,
-  MAX_EFFECTIVE_BALANCE,
-} from '../../../../constants/constants'
+import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../utilities/isValidNetwork'
+import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../../../constants/constants'
 import { ValidatorModalView, WalletPrefix } from '../../../../constants/enums'
-import useChainSafeKeygen from '../../../../hooks/useChainSafeKeygen'
-import { blsModuleAtom } from '../../../../recoil/atoms'
+import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
+import useProcessEffectiveBalance from '../../../../hooks/useProcessEffectiveBalance'
+import useResolveTransactionOnce from '../../../../hooks/useResolveTransactionOnce'
+import useValidatorTopUp from '../../../../hooks/useValidatorTopUp'
+import { selectUpOffset } from '../../../../recoil/selectors/selectUpOffset'
 import { ToastType } from '../../../../types'
-import { ValidatorBalanceInfo, ValidatorInfo } from '../../../../types/validator'
+import { PendingDeposit, ValidatorBalanceInfo, ValidatorInfo } from '../../../../types/validator'
 import BasicValidatorMetrics from '../../../BasicValidatorMetrics/BasicValidatorMetrics'
+import Button, { ButtonFace } from '../../../Button/Button'
 import EffectiveBalanceDisplay from '../../../EffectiveBalanceDisplay/EffectiveBalanceDisplay'
 import GradientHeader from '../../../GradientHeader/GradientHeader'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
+import Input from '../../../Input/Input'
+import TransactionStatusBlock from '../../../TransactionStatus/TransactionStatusBlock'
 import Typography from '../../../Typography/Typography'
-import VerticalStepper from '../../../VerticalStepper/VerticalStepper'
+import WalletActionGuard from '../../../WalletActionGuard/WalletActionGuard'
+import ValidatorInfoTable from '../../ValidatorInfoTable'
 import { ValidatorModalContext } from '../../ValidatorModal'
-import SignAndDepositFunds from './steps/SignAndDepositFunds'
-import ValidateIndex from './steps/ValidateIndex'
-import ValidateMnemonic from './steps/ValidateMnemonic'
+import ValidatorPendingDepositRow from './ValidatorPendingDepositRow'
 
 export interface ValidatorDepositProps {
   validator: ValidatorInfo
+  chainId: number
+  pendingDeposits: PendingDeposit[]
+  headSlot: number
   validatorEpochData: ValidatorBalanceInfo
 }
 
-const ValidatorDeposit: FC<ValidatorDepositProps> = ({ validator, validatorEpochData }) => {
+const ValidatorDeposit: FC<ValidatorDepositProps> = ({
+  validator,
+  validatorEpochData,
+  pendingDeposits,
+  headSlot,
+  chainId,
+}) => {
   const { t } = useTranslation()
-  const blsModule = useRecoilValue(blsModuleAtom)
-  const { pubKey, effectiveBalance, withdrawalAddress } = validator
+  const upOffsetAmount = useRecoilValue(selectUpOffset)
+  const headers = ['pubkey', t('amount'), t('slot'), ' ']
+  const { pubKey, effectiveBalance, withdrawalAddress, balance, index } = validator
+  const maxEffectiveBalance = withdrawalAddress?.includes('0x02')
+    ? MAX_EFFECTIVE_BALANCE
+    : EFFECTIVE_BALANCE
+
+  const filteredDeposits = useMemo(() => {
+    return pendingDeposits.filter((deposit) => deposit.pubkey === pubKey)
+  }, [pendingDeposits, pubKey])
+
+  const pendingDepositAmount = Number(
+    formatUnits(
+      filteredDeposits.reduce((acc, deposit) => Number(acc) + Number(deposit.amount), 0),
+      'gwei',
+    ),
+  )
+
+  const [depositAmount, setDepositAmount] = useState<number | undefined>(undefined)
 
   const { moveToView } = useContext(ValidatorModalContext)
   const viewDetails = () => moveToView(ValidatorModalView.DETAILS)
-  const [step, setStep] = useState(0)
-  const [mnemonic, setMnemonic] = useState<string | null>(null)
-  const [mnemonicIndex, setMnemonicIndex] = useState<number | null>(null)
-  const [inputBalance, setInputBalance] = useState<number>(0)
-  const [isValidMnemonic, setIsValidMnemonic] = useState(false)
-  const [isValidated, setIsValidated] = useState(false)
-  const { generateSigningPubKey, deriveEIP2334SubKey } = useChainSafeKeygen(blsModule)
   const credentialPrefix = Number(withdrawalAddress?.slice(0, 4))
-  const validMnemonic = isValidMnemonic ? mnemonic : null
+  const sanitizedDepositAmount = depositAmount || 0
+  const newBalance = balance + sanitizedDepositAmount + pendingDepositAmount
+
+  const { effective } = useProcessEffectiveBalance(newBalance, effectiveBalance)
+  const { isLoading, txHash, error, makeDeposit, retryTransaction } = useValidatorTopUp()
+  const { txStatus } = useResolveTransactionOnce(txHash)
+
+  useEffect(() => {
+    const finalTxStatus = txStatus === 'success' || txStatus === 'error'
+    if (finalTxStatus && depositAmount !== undefined) {
+      setDepositAmount(undefined)
+    }
+  }, [txStatus, depositAmount])
+
+  useEffect(() => {
+    if (error) {
+      displayToast(t(error), ToastType.ERROR)
+    }
+  }, [error])
 
   const maxBalanceLimit =
     credentialPrefix === WalletPrefix.TWO ? MAX_EFFECTIVE_BALANCE : EFFECTIVE_BALANCE
-  const isMaxEffectiveBalance = effectiveBalance >= maxBalanceLimit
-
-  const setPhrase = useCallback(
-    (e: ChangeEvent<HTMLTextAreaElement>) => setMnemonic(e.target.value),
-    [],
+  const isMaxedEffectiveBalance = effective > maxBalanceLimit || effectiveBalance >= maxBalanceLimit
+  const isInvalidDepositInput = sanitizedDepositAmount < 1
+  const maxEffectiveAmount = maxBalanceLimit + upOffsetAmount - balance - pendingDepositAmount
+  const setDepositInput = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const amount = e.target.value
+      setDepositAmount(
+        amount
+          ? Number(amount) > maxEffectiveAmount
+            ? maxEffectiveAmount
+            : Number(amount)
+          : undefined,
+      )
+    },
+    [maxEffectiveAmount],
   )
 
-  const setDepositAmount = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const amount = Number(e.target.value || 0)
-    setInputBalance(amount > MAX_BALANCE_INPUT ? MAX_BALANCE_INPUT : amount)
-  }, [])
+  const { isSufficient } = useHasSufficientBalance(
+    depositAmount ? parseEther(depositAmount.toString()) : 0n,
+  )
 
-  const validateMnemonic = useCallback(async (keyPhrase: string) => {
+  const setMaxAmount = () => setDepositAmount(maxEffectiveAmount)
+
+  const submitDeposit = async () => {
+    if (!depositAmount) return
+
     try {
-      const eip2334SubKey = deriveEIP2334SubKey(keyPhrase)
-      generateSigningPubKey(eip2334SubKey, 0)
-      setIsValidMnemonic(true)
-      setStep(1)
+      await makeDeposit(pubKey, parseEther(depositAmount.toString()))
     } catch (e) {
       console.error(e)
-      displayToast(t('validatorManagement.invalidMnemonic'), ToastType.ERROR)
-      setIsValidMnemonic(false)
-    } finally {
-      setIsValidated(true)
     }
-  }, [])
+  }
 
-  const wordCount = getWordLength(String(mnemonic))
-  const { isValid } = getMnemonicStats(wordCount)
+  const beaconChaLink = isValidNetwork(chainId)
+    ? getBeaconChaLink(chainId, `/validator/${index}#deposits`)
+    : null
 
-  const debouncedValidateKeyPhraseRef = useRef(
-    debounce((mnemonic: string) => {
-      void validateMnemonic(mnemonic)
-    }, 1000),
-  )
+  const pendingDepositTableRender = useMemo(() => {
+    return (
+      <ValidatorInfoTable
+        className='mt-10'
+        title={t('validatorManagement.partialDeposit.pendingDeposits')}
+        emptyText={t('validatorManagement.partialDeposit.noPendingDeposits')}
+        headers={headers}
+      >
+        {filteredDeposits.map((deposit, index) => (
+          <ValidatorPendingDepositRow key={index} headSlot={headSlot} deposit={deposit} />
+        ))}
+      </ValidatorInfoTable>
+    )
+  }, [t, headers, filteredDeposits, headSlot])
 
-  useEffect(() => {
-    setIsValidated(false)
-    if (!mnemonic || !isValid) return
-
-    debouncedValidateKeyPhraseRef.current(mnemonic)
-  }, [mnemonic, isValid])
-
-  useEffect(() => {
-    if (!mnemonic || mnemonicIndex === null || !isValidMnemonic) return
-
-    setStep(2)
-  }, [mnemonic, mnemonicIndex, isValidMnemonic])
-
-  const setValidIndex = useCallback((index: number) => setMnemonicIndex(index), [])
-
-  const stepTitles = useMemo(
-    () => [
-      t('validatorManagement.partialDeposit.subTitles.enterMnemonic'),
-      t('validatorManagement.partialDeposit.subTitles.mnemonicIndex'),
-      t('validatorManagement.partialDeposit.subTitles.signAndDeposit'),
-    ],
-    [],
-  )
-
-  const stepperClasses = clsx('w-1/2', isMaxEffectiveBalance && 'opacity-40 pointer-events-none')
+  const maxAmountClasses = clsx(isMaxedEffectiveBalance && 'opacity-40 pointer-events-none')
 
   return (
     <div className='w-full'>
@@ -135,47 +165,86 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({ validator, validatorEpoch
           <GradientHeader speed={0.15} name='deposit-gradient-header' className='h-full' isReady />
         </div>
       </div>
-      <div className='w-full flex p-4 space-x-4'>
-        <div className={stepperClasses}>
-          <VerticalStepper step={step} titles={stepTitles}>
-            <ValidateMnemonic
-              disabled={isMaxEffectiveBalance}
-              isValidated={isValidated}
-              isValidKeyPhrase={isValidMnemonic}
-              onChange={setPhrase}
-              value={mnemonic || ''}
+      <div className='w-full flex flex-col overflow-auto'>
+        <div className='w-full flex flex-col lg:flex-row p-4 space-y-4 lg:space-y-0 lg:space-x-4'>
+          <div className='w-full lg:w-1/2 order-2 lg:order-1 mt-4 lg:mt-0'>
+            {txHash ? (
+              <TransactionStatusBlock
+                chainId={chainId}
+                onErrorText={t('validatorManagement.retryTransaction')}
+                onError={retryTransaction}
+                onSuccess={viewDetails}
+                onSuccessText={t('validatorManagement.viewValidator')}
+                txStatus={txStatus}
+                txHash={txHash}
+              />
+            ) : (
+              <div className='w-full border border-style p-4 pb-8 space-y-8'>
+                {isMaxedEffectiveBalance ? (
+                  <InfoBox
+                    type={InfoBoxType.WARNING}
+                    text={t('validatorManagement.partialDeposit.isMaxedEffectiveBalanceText')}
+                  />
+                ) : (
+                  <InfoBox
+                    type={InfoBoxType.NOTICE}
+                    text={t('validatorManagement.partialDeposit.depositHelperText')}
+                  />
+                )}
+                <div className='w-full relative space-y-1'>
+                  <Input
+                    isErrorBorder={depositAmount !== undefined && isInvalidDepositInput}
+                    value={depositAmount || ''}
+                    disabled={isLoading || isMaxedEffectiveBalance}
+                    className='flex-1'
+                    min={0}
+                    inputStyle='basic_border'
+                    type='number'
+                    onChange={setDepositInput}
+                  />
+                  <div className={maxAmountClasses} onClick={setMaxAmount}>
+                    <Typography
+                      color='text-primary'
+                      darkMode='dark:text-primary'
+                      className='text-right underline cursor-pointer'
+                      type='text-tiny'
+                    >
+                      {t('setMaxAmount')}
+                    </Typography>
+                  </div>
+                </div>
+                <WalletActionGuard isSufficientBalance={isSufficient} guardActionClass='w-full'>
+                  <Button
+                    onClick={submitDeposit}
+                    isLoading={isLoading}
+                    isDisabled={isInvalidDepositInput || isMaxedEffectiveBalance || isLoading}
+                    className='w-full'
+                    type={ButtonFace.SECONDARY}
+                  >
+                    {t('validatorManagement.partialDeposit.addFunds')}
+                  </Button>
+                </WalletActionGuard>
+              </div>
+            )}
+          </div>
+          <div className='flex-1 order-1 lg:order-2 mt-4 lg:mt-0 space-y-4'>
+            <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
+            <EffectiveBalanceDisplay
+              isFullDisplay
+              maxEffectiveBalance={maxEffectiveBalance}
+              supplementAmount={sanitizedDepositAmount + pendingDepositAmount}
+              className='p-4 border-style'
+              validator={validator}
             />
-            <ValidateIndex onVerifyIndex={setValidIndex} mnemonic={validMnemonic} pubKey={pubKey} />
-            <SignAndDepositFunds
-              balance={inputBalance}
-              credentialPrefix={credentialPrefix}
-              withdrawalAddress={withdrawalAddress as string}
-              effectiveBalance={effectiveBalance}
-              onChange={setDepositAmount}
-              mnemonic={mnemonic}
-              mnemonicIndex={mnemonicIndex}
-            />
-          </VerticalStepper>
+          </div>
         </div>
-        <div className='flex-1 space-y-4'>
-          <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
-          <EffectiveBalanceDisplay
-            supplementAmount={inputBalance}
-            className='p-4 border-style'
-            validator={validator}
-          />
-          {isMaxEffectiveBalance ? (
-            <InfoBox
-              type={InfoBoxType.WARNING}
-              text={t('validatorManagement.partialDeposit.isMaxedEffectiveBalanceText')}
-            />
-          ) : (
-            <InfoBox
-              type={InfoBoxType.NOTICE}
-              text={t('validatorManagement.partialDeposit.depositHelperText')}
-            />
-          )}
-        </div>
+        {beaconChaLink ? (
+          <Link target='_blank' href={beaconChaLink}>
+            {pendingDepositTableRender}
+          </Link>
+        ) : (
+          pendingDepositTableRender
+        )}
       </div>
     </div>
   )

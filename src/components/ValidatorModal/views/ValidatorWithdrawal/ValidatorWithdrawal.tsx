@@ -1,10 +1,13 @@
 import axios from 'axios'
 import { formatEther, parseUnits } from 'ethers'
-import React, { ChangeEvent, FC, useContext, useEffect, useState } from 'react'
+import Link from 'next/link'
+import React, { ChangeEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount, UseEstimateGasParameters, usePublicClient, useSendTransaction } from 'wagmi'
 import displayToast from '../../../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../../../utilities/formatWithdrawalAddress'
+import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
+import isValidNetwork from '../../../../../utilities/isValidNetwork'
 import {
   EFFECTIVE_BALANCE,
   EXECUTION_WITHDRAWAL_CONTRACT,
@@ -26,8 +29,9 @@ import Input from '../../../Input/Input'
 import TransactionStatusBlock from '../../../TransactionStatus/TransactionStatusBlock'
 import Typography from '../../../Typography/Typography'
 import WalletActionGuard from '../../../WalletActionGuard/WalletActionGuard'
+import ValidatorInfoTable from '../../ValidatorInfoTable'
 import { ValidatorModalContext } from '../../ValidatorModal'
-import PendingWithdrawalsTable from './PendingWithdrawalsTable'
+import PendingWithdrawalRow from './PendingWithdrawalRow'
 
 export interface ValidatorWithdrawalProps {
   validator: ValidatorInfo
@@ -46,6 +50,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
 }) => {
   const { t } = useTranslation()
   const { effectiveBalance, balance, withdrawalAddress, pubKey, index } = validator
+  const headers = [t('index'), t('amount'), t('withdrawableEpoch'), ' ']
   const [isLoading, setIsLoading] = useState(false)
   const [withdrawalAmount, setWithdrawalAmount] = useState<number | undefined>(undefined)
   const sanitizedWithdrawalAmount = withdrawalAmount || 0
@@ -77,6 +82,13 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   const submitRequest = useSendTransaction()
   const [requestFee, setRequestFee] = useState<bigint>(0n)
   const { txStatus } = useResolveTransactionOnce(txHash)
+
+  useEffect(() => {
+    const finalTxStatus = txStatus === 'success' || txStatus === 'error'
+    if (finalTxStatus && withdrawalAmount !== undefined) {
+      setWithdrawalAmount(undefined)
+    }
+  }, [txStatus, withdrawalAmount])
 
   useEffect(() => {
     if (txStatus !== 'success' || isRecordedActivity || !withdrawalAmount) return
@@ -182,6 +194,25 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
 
   const retryTransaction = () => setTxHash(undefined)
 
+  const beaconChaLink = isValidNetwork(chainId)
+    ? getBeaconChaLink(chainId, `/validator/${index}#withdrawals`)
+    : null
+
+  const withdrawalRequestTableRender = useMemo(() => {
+    return (
+      <ValidatorInfoTable
+        className='mt-10'
+        title={t('validatorManagement.partialWithdrawal.pendingWithdrawals')}
+        emptyText={t('validatorManagement.partialWithdrawal.noPendingWithdrawalRequests')}
+        headers={headers}
+      >
+        {pendingWithdrawals.map((withdrawal, index) => (
+          <PendingWithdrawalRow currentEpoch={currentEpoch} key={index} withdrawal={withdrawal} />
+        ))}
+      </ValidatorInfoTable>
+    )
+  }, [t, headers, pendingWithdrawals, currentEpoch])
+
   return (
     <div className='w-full h-full flex flex-col'>
       <div className='w-full bg-dark25 dark:bg-darkPrimary h-48 relative p-4'>
@@ -196,68 +227,70 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
         </div>
       </div>
       <div className='w-full flex-1 flex flex-col overflow-auto'>
-        <div className='w-full flex p-4 space-x-4'>
-          {txHash ? (
-            <TransactionStatusBlock
-              chainId={chainId}
-              onErrorText={t('validatorManagement.retryTransaction')}
-              onError={retryTransaction}
-              onSuccess={viewDetails}
-              onSuccessText={t('validatorManagement.viewValidator')}
-              txStatus={txStatus}
-              txHash={txHash}
-            />
-          ) : (
-            <div className='w-1/2 border border-style p-4 pb-8 space-y-8'>
-              <InfoBox
-                type={InfoBoxType.NOTICE}
-                text={t('validatorManagement.partialWithdrawal.helperText')}
+        <div className='w-full flex flex-col lg:flex-row p-4 space-y-4 lg:space-y-0 lg:space-x-4'>
+          <div className='w-full lg:w-1/2 order-2 lg:order-1 mt-4 lg:mt-0'>
+            {txHash ? (
+              <TransactionStatusBlock
+                chainId={chainId}
+                onErrorText={t('validatorManagement.retryTransaction')}
+                onError={retryTransaction}
+                onSuccess={viewDetails}
+                onSuccessText={t('validatorManagement.viewValidator')}
+                txStatus={txStatus}
+                txHash={txHash}
               />
-              <div className='w-full relative space-y-1'>
-                <Input
-                  isErrorBorder={isInvalidEffectiveBalance}
-                  value={withdrawalAmount}
-                  disabled={isLoading}
-                  className='flex-1'
-                  min={0}
-                  inputStyle='basic_border'
-                  type='number'
-                  onChange={setAmount}
+            ) : (
+              <div className='w-full border border-style p-4 pb-8 space-y-8'>
+                <InfoBox
+                  type={InfoBoxType.NOTICE}
+                  text={t('validatorManagement.partialWithdrawal.helperText')}
                 />
-                <div onClick={setMaxAmount}>
-                  <Typography
-                    color='text-primary'
-                    darkMode='dark:text-primary'
-                    className='text-right underline cursor-pointer'
-                    type='text-tiny'
-                  >
-                    {t('validatorManagement.partialWithdrawal.setMaxAmount')}
-                  </Typography>
+                <div className='w-full relative space-y-1'>
+                  <Input
+                    isErrorBorder={isInvalidEffectiveBalance}
+                    value={withdrawalAmount || ''}
+                    disabled={isLoading}
+                    className='flex-1'
+                    min={0}
+                    inputStyle='basic_border'
+                    type='number'
+                    onChange={setAmount}
+                  />
+                  <div onClick={setMaxAmount}>
+                    <Typography
+                      color='text-primary'
+                      darkMode='dark:text-primary'
+                      className='text-right underline cursor-pointer'
+                      type='text-tiny'
+                    >
+                      {t('setMaxAmount')}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
-              <WalletActionGuard
-                isSufficientBalance={isSufficient}
-                guardActionClass='w-full'
-                targetAddress={formattedWithdrawalAddress}
-              >
-                <Button
-                  onClick={submitWithdrawal}
-                  isLoading={isLoading}
-                  isDisabled={
-                    isInvalidWithdrawalInput ||
-                    isInvalidEffectiveBalance ||
-                    isInvalidWithdrawalBalance ||
-                    isLoading
-                  }
-                  className='w-full'
-                  type={ButtonFace.SECONDARY}
+                <WalletActionGuard
+                  isSufficientBalance={isSufficient}
+                  guardActionClass='w-full'
+                  targetAddress={formattedWithdrawalAddress}
                 >
-                  {t('validatorManagement.partialWithdrawal.requestWithdrawal')}
-                </Button>
-              </WalletActionGuard>
-            </div>
-          )}
-          <div className='flex-1 space-y-4'>
+                  <Button
+                    onClick={submitWithdrawal}
+                    isLoading={isLoading}
+                    isDisabled={
+                      isInvalidWithdrawalInput ||
+                      isInvalidEffectiveBalance ||
+                      isInvalidWithdrawalBalance ||
+                      isLoading
+                    }
+                    className='w-full'
+                    type={ButtonFace.SECONDARY}
+                  >
+                    {t('validatorManagement.partialWithdrawal.requestWithdrawal')}
+                  </Button>
+                </WalletActionGuard>
+              </div>
+            )}
+          </div>
+          <div className='flex-1 order-1 lg:order-2 space-y-4'>
             <BasicValidatorMetrics validatorEpochData={validatorEpochData} validator={validator} />
             <EffectiveBalanceDisplay
               isFullDisplay
@@ -268,33 +301,13 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
             />
           </div>
         </div>
-        <div className='w-full mt-10'>
-          <div className='w-full flex flex-col items-center space-y-1 p-4 border-b-style100 dark:border-b-style'>
-            <Typography
-              color='text-dark400'
-              darkMode='dark:text-dark500'
-              type='text-caption1.5'
-              className='text-center'
-            >
-              {t('validatorManagement.partialWithdrawal.pendingWithdrawals')}
-            </Typography>
-            <i className='bi bi-arrow-down-circle text-caption1 text-primary' />
-          </div>
-          {pendingWithdrawals.length ? (
-            <PendingWithdrawalsTable currentEpoch={currentEpoch} withdrawals={pendingWithdrawals} />
-          ) : (
-            <div className='w-full flex items-center bg-dark900 justify-center h-32'>
-              <Typography
-                color='text-dark700'
-                darkMode='dark:text-dark500'
-                type='text-caption1.5'
-                className='text-center'
-              >
-                {t('validatorManagement.partialWithdrawal.noPendingWithdrawalRequests')}
-              </Typography>
-            </div>
-          )}
-        </div>
+        {beaconChaLink ? (
+          <Link target='_blank' href={beaconChaLink}>
+            {withdrawalRequestTableRender}
+          </Link>
+        ) : (
+          withdrawalRequestTableRender
+        )}
       </div>
     </div>
   )

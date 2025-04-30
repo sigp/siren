@@ -68,6 +68,7 @@ export class TasksService implements OnApplicationBootstrap {
       await this.syncBeaconSpecs();
       await this.initValidatorDataScheduler();
       await this.initMetricDataScheduler();
+      await this.initPendingDepositsScheduler();
       await this.initPendingPartialWithdrawalsScheduler();
 
       await this.logsService.startSse(
@@ -86,6 +87,11 @@ export class TasksService implements OnApplicationBootstrap {
       console.error(
         this.utilsService.getErrorMessage(e?.response?.data.code || e.code),
       );
+
+      if (this.isDebug) {
+        console.log(e);
+      }
+
       process.kill(process.pid, 'SIGINT');
       process.exit(0);
     }
@@ -142,19 +148,68 @@ export class TasksService implements OnApplicationBootstrap {
     });
   }
 
-  private async initPendingPartialWithdrawalsScheduler() {
+  private async getPectraForkVersion() {
     const { CONFIG_NAME } = (await this.cacheManager.get(
       'specs',
     )) as BeaconNodeSpecResults;
 
     const config = CONFIG_NAME.toLowerCase();
 
-    const pectraForkVersion =
-      config === Network.Mainnet.toLowerCase()
-        ? MAINNET_PECTRA_FORK_VERSION
-        : CONFIG_NAME === Network.Hoodi.toLowerCase()
-          ? HOODI_PECTRA_FORK_VERSION
-          : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
+    return config === Network.Mainnet.toLowerCase()
+      ? MAINNET_PECTRA_FORK_VERSION
+      : CONFIG_NAME === Network.Hoodi.toLowerCase()
+        ? HOODI_PECTRA_FORK_VERSION
+        : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
+  }
+
+  private async initPendingDepositsScheduler() {
+    const pectraForkVersion = await this.getPectraForkVersion();
+
+    if (!pectraForkVersion) return;
+
+    const interval = await this.utilsService.getSlotInterval();
+
+    await this.syncPendingDeposits(pectraForkVersion);
+
+    this.setDynamicInterval('pendingDepositsTask', interval, async () => {
+      await this.syncPendingDeposits(pectraForkVersion);
+    });
+  }
+
+  private async syncPendingDeposits(version: string) {
+    const validatorData = (await this.cacheManager.get(
+      'validators',
+    )) as ValidatorDetail[];
+
+    const { data: fork } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/beacon/states/head/fork`,
+    });
+
+    if (fork.data.current_version !== version) {
+      if (this.isDebug) {
+        console.log('Awaiting Pectra fork...');
+      }
+
+      return;
+    }
+
+    const { data } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/beacon/states/head/pending_deposits`,
+      method: 'GET',
+    });
+
+    const pubKeys = validatorData.map((validator) => validator.pubkey);
+    const pubKeySet = new Set(pubKeys);
+
+    const matchingDeposits = data.data.filter((deposit) =>
+      pubKeySet.has(deposit.pubkey),
+    );
+
+    await this.cacheManager.set('pendingDeposits', matchingDeposits, 0);
+  }
+
+  private async initPendingPartialWithdrawalsScheduler() {
+    const pectraForkVersion = await this.getPectraForkVersion();
 
     if (!pectraForkVersion) return;
 

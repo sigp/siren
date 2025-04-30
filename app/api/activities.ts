@@ -1,6 +1,5 @@
+import { BACKEND_URL } from '../../src/constants/envars'
 import fetchFromApi from '../../utilities/fetchFromApi'
-
-const backendUrl = process.env.BACKEND_URL
 
 export interface fetchActivitiesProps {
   token: string
@@ -19,16 +18,16 @@ export const fetchActivities = async (props: fetchActivitiesProps) => {
   if (order) params.append('order', order)
   if (since) params.append('since', since)
 
-  return await fetchFromApi(`${backendUrl}/activity?${params.toString()}`, token)
+  return await fetchFromApi(`${BACKEND_URL}/activity?${params.toString()}`, token)
 }
 
 export const logActivity = async (data: any, token: string) =>
-  await fetchFromApi(`${backendUrl}/activity`, token, {
+  await fetchFromApi(`${BACKEND_URL}/activity`, token, {
     method: 'POST',
     body: JSON.stringify(data),
   })
 
 export const readActivity = async (id: string, token: string) =>
-  await fetchFromApi(`${backendUrl}/activity/${id}/read`, token, {
+  await fetchFromApi(`${BACKEND_URL}/activity/${id}/read`, token, {
     method: 'PUT',
   })
