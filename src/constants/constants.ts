@@ -70,9 +70,9 @@ export const CURRENCIES = [
 ]
 
 export const REQUIRED_VALIDATOR_VERSION = {
-  major: 4,
-  minor: 3,
-  patch: 0,
+  major: 7,
+  minor: 0,
+  patch: 1,
 }
 
 export const MAX_PERSISTED_LOGS = 1000
