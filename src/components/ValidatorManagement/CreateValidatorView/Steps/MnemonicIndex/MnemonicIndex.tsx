@@ -1,15 +1,18 @@
 import axios from 'axios'
-import { ChangeEvent, KeyboardEvent, FC, useRef, useState } from 'react'
+import { ChangeEvent, KeyboardEvent, FC, useRef, useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { MAX_MNEMONIC_INDEX } from '../../../../../constants/constants'
 import useChainSafeKeygen from '../../../../../hooks/useChainSafeKeygen'
+import useClickOutside from '../../../../../hooks/useClickOutside'
 import { blsModuleAtom } from '../../../../../recoil/atoms'
-import { NetworkId, ValidatorCandidate } from '../../../../../types'
+import { IndexSuggestion, NetworkId, ValidatorCandidate } from '../../../../../types'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
+import LoadingDots from '../../../../LoadingDots/LoadingDots'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../StepOptions'
+import IndexSuggestionRow from './IndexSuggestionRow'
 import MnemonicIndexRow from './MnemonicIndexRow'
 
 export interface MnemonicIndexProps {
@@ -32,21 +35,35 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   isActive,
 }) => {
   const { t } = useTranslation()
+  const BATCH_SIZE = 10
   const inputRef = useRef<HTMLInputElement>(null)
   const [startIndex, setIndex] = useState<number | undefined>(undefined)
   const blsModule = useRecoilValue(blsModuleAtom)
   const { deriveEIP2334SubKey, generateSigningPubKey } = useChainSafeKeygen(blsModule)
   const [indexedValidatorCandidates, setIndexedCandidates] = useState<ValidatorCandidate[]>([])
+  const [indexSuggestion, setIndexSuggestion] = useState<IndexSuggestion | undefined>(undefined)
   const [isLoading, setLoading] = useState(false)
+  const [isViewSuggestion, setIsViewSuggestion] = useState(false)
   const count = indexedValidatorCandidates.length
+  const candidateCount = candidates.length
+  const eip2334SubKey = useMemo(() => {
+    return keyPhrase ? deriveEIP2334SubKey(keyPhrase) : undefined
+  }, [keyPhrase])
+
+  const { ref } = useClickOutside<HTMLDivElement>(() => {
+    setIsViewSuggestion(false)
+  })
 
   const setStartIndex = (e: ChangeEvent<HTMLInputElement>) => {
     const index = e.target.value
     setIndex(index ? Number(index) : undefined)
   }
 
-  const validateIndices = async () => {
+  const validateIndices = async (startIndex: number) => {
+    if (!eip2334SubKey) return
+
     setLoading(true)
+    setIsViewSuggestion(false)
 
     const potentialIndices = candidates.map((validator, index) => ({
       ...validator,
@@ -55,15 +72,11 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
     }))
 
     setIndexedCandidates(potentialIndices)
-
-    const batchSize = 10
-
     const processCandidate = async (candidate: ValidatorCandidate) => {
       const { index } = candidate
       if (index === undefined) return candidate
 
       try {
-        const eip2334SubKey = deriveEIP2334SubKey(keyPhrase)
         const publicKey = generateSigningPubKey(eip2334SubKey, index)
         const { data } = await axios.get(`/api/validator-status/${publicKey}`)
         return {
@@ -103,12 +116,77 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
       return results
     }
 
-    await limitConcurrency(potentialIndices, batchSize)
+    await limitConcurrency(potentialIndices, BATCH_SIZE)
 
     setLoading(false)
   }
 
+  useEffect(() => {
+    if (!isActive || !eip2334SubKey || !candidateCount) return
+    let isMounted = true
+
+    const findInactiveKey = async () => {
+      setIndexSuggestion(undefined)
+
+      const pubKeyList: { pubKey: string; isActive: boolean; index: number }[] = []
+      let index = 0
+      let consecutiveFalse = 0
+
+      while (isMounted && consecutiveFalse < candidateCount) {
+        const batchIndices = Array.from({ length: BATCH_SIZE }, (_, i) => index + i)
+
+        const batchResults = await Promise.all(
+          batchIndices.map((i) => {
+            const pubKey = generateSigningPubKey(eip2334SubKey as Uint8Array, i)
+            return axios.get<{ data: unknown }>(`/api/validator-status/${pubKey}`).then((res) => ({
+              index: i,
+              pubKey,
+              isActive: Boolean(res.data.data),
+            }))
+          }),
+        )
+
+        for (const entry of batchResults) {
+          pubKeyList.push(entry)
+
+          if (!entry.isActive) {
+            consecutiveFalse++
+          } else {
+            consecutiveFalse = 0
+          }
+
+          if (consecutiveFalse >= candidateCount) {
+            break
+          }
+        }
+
+        index += BATCH_SIZE
+      }
+
+      if (!isMounted) return
+
+      const falseGroupStart = pubKeyList.length - candidateCount
+      const falseGroup = pubKeyList.slice(falseGroupStart)
+
+      const suggestedIndex = falseGroup[0]
+
+      const lastKnownActive =
+        falseGroupStart > 0
+          ? pubKeyList.slice(Math.max(0, falseGroupStart - 3), falseGroupStart)
+          : []
+
+      setIndexSuggestion({ lastKnownActive, suggestedIndex })
+    }
+
+    void findInactiveKey()
+
+    return () => {
+      isMounted = false
+    }
+  }, [keyPhrase, isActive, eip2334SubKey, candidateCount])
+
   const isDisabledVerify =
+    !eip2334SubKey ||
     startIndex === undefined ||
     startIndex < 0 ||
     startIndex + candidates.length > MAX_MNEMONIC_INDEX
@@ -126,13 +204,28 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
 
   const handleEnterKey = async (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && startIndex !== undefined && startIndex >= 0) {
-      await validateIndices()
+      await validateIndices(startIndex)
+    }
+  }
+
+  const handleManualValidation = async () => {
+    if (startIndex !== undefined && startIndex >= 0) {
+      await validateIndices(startIndex)
     }
   }
 
   const stepForward = () => {
     onValidatorChange(indexedValidatorCandidates)
     onNextStep()
+  }
+
+  const handleInputFocus = () => {
+    setIsViewSuggestion(true)
+  }
+
+  const useSuggestion = async (index: number) => {
+    setIndex(index)
+    await validateIndices(index)
   }
 
   return (
@@ -149,24 +242,56 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
         <Typography type='text-caption1'>
           {t('validatorManagement.mnemonicIndexing.caption')}
         </Typography>
-        <div className='flex w-full'>
-          <input
-            ref={inputRef}
-            onChange={setStartIndex}
-            min={0}
-            max={MAX_MNEMONIC_INDEX}
-            onKeyDown={handleEnterKey}
-            className='w-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none border-style'
-            type='number'
-          />
-          <Button
-            isLoading={isLoading}
-            isDisabled={isDisabledVerify}
-            onClick={validateIndices}
-            type={ButtonFace.SECONDARY}
-          >
-            {t('verify')}
-          </Button>
+        <div ref={ref} className='w-full relative'>
+          <div className='flex w-full'>
+            <input
+              ref={inputRef}
+              onChange={setStartIndex}
+              min={0}
+              value={startIndex || ''}
+              onFocus={handleInputFocus}
+              max={MAX_MNEMONIC_INDEX}
+              onKeyDown={handleEnterKey}
+              className='w-full text-dark900 dark:text-dark300 dark:bg-dark600_20 font-openSauce text-caption1 p-2 outline-none border-style'
+              type='number'
+            />
+            <Button
+              isLoading={isLoading}
+              isDisabled={isDisabledVerify}
+              onClick={handleManualValidation}
+              type={ButtonFace.SECONDARY}
+            >
+              {t('verify')}
+            </Button>
+          </div>
+          {isViewSuggestion && (
+            <div className='absolute z-20 animate-fadeSlideIn shadow-xl left-0 top-100 w-full bg-darkPrimaryOffset1'>
+              {indexSuggestion ? (
+                <>
+                  {indexSuggestion.lastKnownActive.length
+                    ? indexSuggestion.lastKnownActive.map((pubKeyIndex, index) => (
+                        <IndexSuggestionRow
+                          key={index}
+                          networkId={depositNetworkId}
+                          onClick={useSuggestion}
+                          data={pubKeyIndex}
+                        />
+                      ))
+                    : null}
+                  <IndexSuggestionRow
+                    networkId={depositNetworkId}
+                    onClick={useSuggestion}
+                    data={indexSuggestion.suggestedIndex}
+                  />
+                </>
+              ) : (
+                <div className='flex flex-col items-center space-y-2 p-3'>
+                  <Typography type='text-caption1.5'>{t('searchIndex')}</Typography>
+                  <LoadingDots size={1} />
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className='w-full'>
           {count > 0 ? (
