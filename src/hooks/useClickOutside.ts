@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useRef } from 'react'
 
-const useClickOutside = <T extends HTMLElement>(
+const useClickOutside = <T extends HTMLElement | HTMLDivElement>(
   handler: (event: MouseEvent) => void,
   excludeRef?: RefObject<HTMLElement>,
 ) => {

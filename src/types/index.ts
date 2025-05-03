@@ -179,6 +179,17 @@ export type ValidatorCandidate = {
   isVerifiedSuggestedFee?: boolean
 }
 
+export type IndexData = {
+  pubKey: string
+  isActive: boolean
+  index: number
+}
+
+export type IndexSuggestion = {
+  lastKnownActive: IndexData[]
+  suggestedIndex: IndexData
+}
+
 export type ValidatorRewardEstimate = {
   apr: number
   totalAnnualRewards: number

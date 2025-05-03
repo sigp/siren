@@ -74,3 +74,9 @@ export enum WithdrawalCredentialView {
   BASIC = 'BASIC',
   ADVANCED = 'ADVANCED',
 }
+
+export enum Status {
+  PENDING = 'PENDING',
+  SUCCESS = 'SUCCESS',
+  ERROR = 'ERROR',
+}
