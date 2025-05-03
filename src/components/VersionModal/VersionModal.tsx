@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { FC } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import { REQUIRED_VALIDATOR_VERSION } from '../../constants/constants'
@@ -42,14 +43,22 @@ const VersionModal: FC<VersionModalProps> = ({ isVisible, currentVersion }) => {
           </Typography>
         </div>
         <div className='w-full flex justify-end pt-8'>
-          <Button type={ButtonFace.SECONDARY}>
-            <div className='flex items-center'>
-              <Typography color='text-white' isUpperCase type='text-caption1' family='font-roboto'>
-                {t('versionModal.update')}
-              </Typography>
-              <i className='bi-box-arrow-up-right text-caption1 ml-2' />
-            </div>
-          </Button>
+          <Link target='_blank' href='https://github.com/sigp/lighthouse/releases'>
+            <Button type={ButtonFace.SECONDARY}>
+              <div className='flex items-center'>
+                <Typography
+                  color='text-white'
+                  darkMode='dark:text-white'
+                  isUpperCase
+                  type='text-caption1'
+                  family='font-roboto'
+                >
+                  {t('versionModal.update')}
+                </Typography>
+                <i className='bi-box-arrow-up-right text-caption1 ml-2' />
+              </div>
+            </Button>
+          </Link>
         </div>
       </div>
     </RodalModal>
