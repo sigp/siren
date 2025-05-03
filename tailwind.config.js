@@ -35,6 +35,7 @@ module.exports = {
         primaryOverride: '#5E41D5',
         primaryBright: '#5200FF',
         darkPrimary: '#1E1E1E',
+        darkPrimaryOffset1: '#191919',
         borderLight: '#EFEFEF',
         borderDark: '#303030',
         secondary: '#A841D5',
