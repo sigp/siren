@@ -4,7 +4,7 @@
   "author": "Sigma Prime",
   "homepage": "./",
   "name": "Siren",
-  "version": "3.0.0-rc2",
+  "version": "3.0.0",
   "private": true,
   "dependencies": {
     "@chainsafe/bls": "^8.1.0",
