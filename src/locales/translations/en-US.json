@@ -451,7 +451,7 @@
         "signAndDeposit": "Sign & Deposit"
       },
       "isMaxedEffectiveBalanceText": "The validator has reached the maximum effective balance; additional deposits won’t increase it and will be refunded or retained if no withdrawal address is set.",
-      "depositHelperText": "Ensure you have access to the withdrawal address associated with this validator, are connected to the correct network and have sufficient funds.",
+      "depositHelperText": "Connect any wallet with sufficient funds on the correct network to top up your validator.",
       "mnemonicIndexHelperText": "Enter your validator mnemonic index. This is the same value used making your initial validator deposit.",
       "deriveIndexHelperText": "Deriving mnemonic index. This may take a moment...",
       "depositAmountHelperText": "Enter the amount you want add to your validators effective balance. Validators with 0x02 withdrawal credentials can hold up to 2048 ETH."
