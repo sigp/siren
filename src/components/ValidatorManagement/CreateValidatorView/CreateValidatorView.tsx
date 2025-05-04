@@ -154,7 +154,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
                   />
                 </CreateValidatorStep>
 
-                {DEPOSIT_NETWORK_ID && (
+                {DEPOSIT_NETWORK_ID && step >= 2 && (
                   <CreateValidatorStep
                     requiredStake={requiredStake}
                     rewardEstimate={calculatedRewards}
