@@ -1,11 +1,81 @@
 services:
-  siren:
-    image: sigp/siren
+  cert-init:
+    container_name: cert-init
+    image: alpine/openssl:3.3.2
+    command: /usr/local/bin/generate-certs.sh
+    volumes:
+      - ./docker-assets/generate-certs.sh:/usr/local/bin/generate-certs.sh
+      - nginx-certs:/etc/nginx/certs
+    entrypoint: >
+      /bin/sh -c "
+        # Make script executable
+        chmod +x /usr/local/bin/generate-certs.sh &&
+        # Run script
+        /usr/local/bin/generate-certs.sh
+      "
+
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: nginx:alpine
+    networks:
+      - internet
+      - no_internet
     ports:
-      - '4443:443' # comment this line when using `SSL_ENABLED=false`
-    #      - "4080:80"  # uncomment this line when using `SSL_ENABLED=false`
+      - "4080:4080"  # For Siren web interface HTTP
+      - "4443:4443"  # For Siren web interface HTTPS (fixed port mapping)
+    volumes:
+      - ./docker-assets/nginx_proxy.conf.template:/etc/nginx/nginx.conf.template:ro
+      - nginx-certs:/etc/nginx/certs:ro
+    command: /bin/sh -c "export BN_TARGET=$(echo $BEACON_URL | awk -F'[/:]' '{print $4 \":\" $5}') && export VC_TARGET=$(echo $VALIDATOR_URL | awk -F'[/:]' '{print $4 \":\" $5}') && envsubst '$$BN_TARGET $$VC_TARGET $$SIREN_HOST' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     env_file:
       - .env
-#    uncomment these 2 lines if you use docker on linux and want to use the special host `host.docker.internal` as your BN/VC address
-#    extra_hosts:
-#      - "host.docker.internal:host-gateway"
+    depends_on:
+      cert-init:
+        condition: service_completed_successfully
+    restart: unless-stopped     # Don't restart if manually stopped
+
+  siren:
+    container_name: siren
+    image: sigp/siren
+    networks:
+      - no_internet           # Only on internal network
+    env_file:
+      - .env
+    tmpfs:
+      - /tmp:noexec,nosuid    # Mount tmp with restricted permissions
+      - /run:noexec,nosuid    # Required for nginx pid file
+    environment:
+      - NODE_ENV=production
+      - BEACON_URL=http://nginx-proxy:9001
+      - VALIDATOR_URL=http://nginx-proxy:9002
+      - SSL_ENABLED=true
+      - PORT=3000
+      - BACKEND_URL=http://127.0.0.1:3001
+    # Security enhancements
+    security_opt:
+      - no-new-privileges:true  # Prevent privilege escalation
+    depends_on:
+      - nginx-proxy
+    healthcheck:             # Add health monitoring
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped  # Don't restart if manually stopped
+
+networks:
+  internet:
+    name: internet
+    driver: bridge
+  no_internet:
+    name: no_internet
+    driver: bridge
+    internal: true          # Prevents direct internet access
+    # Enable network encryption
+    driver_opts:
+      encrypted: "true"
+
+volumes:
+  nginx-certs:
+    driver: local
