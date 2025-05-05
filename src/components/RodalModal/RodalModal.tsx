@@ -19,6 +19,7 @@ export interface RodalModalProps {
     maxHeight?: string
     overflow?: string
     zIndex?: number
+    display?: string
   }
 }
 
@@ -34,15 +35,21 @@ const RodalModal: FC<RodalModalProps> = ({
 
   const uiStyle = uiMode || mode
   const isTablet = useMediaQuery('(max-width: 1024px)')
-  const {
-    backgroundColor = uiStyle === UiMode.DARK ? '#1E1E1E' : 'white',
-    width = '100%',
-    maxWidth = isTablet ? '448px' : '649px',
-    height = 'max-content',
-    overflow = 'scroll',
-    zIndex = 999,
-    maxHeight,
-  } = styles || {}
+
+  const baseStyles = {
+    backgroundColor: uiStyle === UiMode.DARK ? '#1E1E1E' : 'white',
+    width: '100%',
+    maxWidth: isTablet ? '448px' : '649px',
+    height: 'max-content',
+    overflow: 'scroll',
+    zIndex: 999,
+    display: 'inline-table', // fix max-content height on safari browsers
+  }
+
+  const customStyles = {
+    ...baseStyles,
+    ...(styles || {}),
+  }
 
   const closeModal = () => onClose?.()
 
@@ -52,15 +59,7 @@ const RodalModal: FC<RodalModalProps> = ({
       visible={isVisible}
       showCloseButton={!!onClose}
       onClose={closeModal}
-      customStyles={{
-        backgroundColor,
-        width,
-        maxWidth,
-        height,
-        maxHeight,
-        overflow,
-        zIndex,
-      }}
+      customStyles={customStyles}
     >
       {children}
     </Rodal>
