@@ -138,6 +138,7 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
         maxWidth: isTablet ? '99%' : isLargeScreen ? '1200px' : '900px',
         height: isTablet ? '540px' : '653px',
         zIndex: 998,
+        display: 'inline-block',
       }}
       onClose={closeModal}
     >
