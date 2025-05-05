@@ -65,7 +65,7 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
   )
 
   return (
-    <div className='w-full bg-dark750 p-8 flex flex-col items-center justify-center space-y-6'>
+    <div className='w-full dark:bg-dark750 bg-dark25 p-8 flex flex-col items-center justify-center space-y-6'>
       <div className={txIconBackground}>
         <i className={txIcon} />
       </div>
