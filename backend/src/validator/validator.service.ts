@@ -288,10 +288,14 @@ export class ValidatorService {
   }
 
   async fetchPartialWithdrawals(): Promise<PartialWithdrawal[]> {
-    return await this.cacheManager.get('partialWithdrawals');
+    const withdrawals =
+      await this.cacheManager.get<PartialWithdrawal[]>('partialWithdrawals');
+    return withdrawals ?? [];
   }
 
   async fetchPendingDeposits(): Promise<PendingDeposit[]> {
-    return await this.cacheManager.get('pendingDeposits');
+    const deposits =
+      await this.cacheManager.get<PendingDeposit[]>('pendingDeposits');
+    return deposits ?? [];
   }
 }

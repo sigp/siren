@@ -157,7 +157,7 @@ export class TasksService implements OnApplicationBootstrap {
 
     return config === Network.Mainnet.toLowerCase()
       ? MAINNET_PECTRA_FORK_VERSION
-      : CONFIG_NAME === Network.Hoodi.toLowerCase()
+      : config === Network.Hoodi.toLowerCase()
         ? HOODI_PECTRA_FORK_VERSION
         : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
   }
