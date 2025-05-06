@@ -7,8 +7,8 @@ on:
 
 env:
   REPO_NAME: ${{ github.repository_owner }}/siren
-  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DH_KEY }}
+  DOCKER_USERNAME: ${{ secrets.DH_ORG }}
   IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/siren
 
 jobs:
@@ -66,15 +66,15 @@ jobs:
           - [ ] Prepare Discord post.
 
           Someone with appropriate access rights should run these commands:
-          0. sanity check: did the `docker` workflow complete correctly, are the images published under the `sigmaprime` namespace? 
+          0. sanity check: did the `docker` workflow complete correctly, are the images published under the `${{ env.DOCKER_USERNAME }}` namespace? 
              see: https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=${{ env.VERSION }} and https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=latest
           1. publish `latest`: 
-             `docker manifest create sigp/siren:latest --amend sigmaprime/siren:latest-amd64 --amend sigmaprime/siren:latest-arm64`
-             `docker manifest push sigp/siren:latest`
+             `docker manifest create ${{ env.DOCKER_USERNAME }}/siren:latest --amend ${{ env.DOCKER_USERNAME }}/siren:latest-amd64 --amend ${{ env.DOCKER_USERNAME }}/siren:latest-arm64`
+             `docker manifest push ${{ env.DOCKER_USERNAME }}/siren:latest`
           2. publish `${{ env.VERSION }}`:
-             `docker manifest create sigp/siren:${{ env.VERSION }} --amend sigmaprime/siren:${{ env.VERSION }}-amd64 --amend sigmaprime/siren:${{ env.VERSION }}-arm64`
-             `docker manifest push sigp/siren:${{ env.VERSION }}`
-          3. verify: https://hub.docker.com/r/siren/siren/tags?name=${{ env.VERSION }} and https://hub.docker.com/r/sigp/siren/tags?name=latest
+             `docker manifest create ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }} --amend ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}-amd64 --amend ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}-arm64`
+             `docker manifest push ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}`
+          3. verify: https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=${{ env.VERSION }} and https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=latest
 
           ## Summary
 
