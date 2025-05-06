@@ -62,7 +62,7 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
   }
 
   return (
-    <form className='w-full h-full' onSubmit={onSubmit}>
+    <form className='w-full' onSubmit={onSubmit}>
       {children &&
         children({
           control,

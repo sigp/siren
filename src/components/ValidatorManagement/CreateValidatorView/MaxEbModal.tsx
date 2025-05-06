@@ -16,7 +16,7 @@ const MaxEbModal = () => {
 
   return (
     <RodalModal onClose={onClose} styles={{ maxWidth: '650px' }} isVisible={isOpen}>
-      <div className='w-full h-full flex flex-col p-6 space-y-6 items-center justify-center'>
+      <div className='w-full flex flex-col p-6 space-y-6 items-center justify-center'>
         <i className='bi-exclamation-circle text-6xl text-warning' />
         <Typography type='text-caption1' className='text-center'>
           {t('validatorManagement.maxEBModal.text')}

@@ -40,7 +40,7 @@ const AuthenticationForm: FC<AuthFormProps> = ({ children, onSubmit, isVisible }
   }
 
   return (
-    <form className='w-full h-full' onSubmit={submitForm}>
+    <form className='w-full' onSubmit={submitForm}>
       {children &&
         children({
           control,

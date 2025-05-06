@@ -36,7 +36,7 @@ const DisclosureModal: FC<DisclosureModalProps> = ({
         maxWidth: isTablet ? '448px' : '949px',
       }}
     >
-      <div className='w-full h-full flex'>
+      <div className='w-full flex'>
         <div
           className='hidden lg:block flex-shrink-0 w-80 bg-dark100'
           style={{
