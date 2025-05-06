@@ -65,17 +65,6 @@ jobs:
           - [ ] Ensure docker images are published to `sigp` namespace (instructions below)
           - [ ] Prepare Discord post.
 
-          Someone with appropriate access rights should run these commands:
-          0. sanity check: did the `docker` workflow complete correctly, are the images published under the `${{ env.DOCKER_USERNAME }}` namespace? 
-             see: https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=${{ env.VERSION }} and https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=latest
-          1. publish `latest`: 
-             `docker manifest create ${{ env.DOCKER_USERNAME }}/siren:latest --amend ${{ env.DOCKER_USERNAME }}/siren:latest-amd64 --amend ${{ env.DOCKER_USERNAME }}/siren:latest-arm64`
-             `docker manifest push ${{ env.DOCKER_USERNAME }}/siren:latest`
-          2. publish `${{ env.VERSION }}`:
-             `docker manifest create ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }} --amend ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}-amd64 --amend ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}-arm64`
-             `docker manifest push ${{ env.DOCKER_USERNAME }}/siren:${{ env.VERSION }}`
-          3. verify: https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=${{ env.VERSION }} and https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=latest
-
           ## Summary
 
           Add a summary.
