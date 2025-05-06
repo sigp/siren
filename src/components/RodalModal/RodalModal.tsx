@@ -43,7 +43,6 @@ const RodalModal: FC<RodalModalProps> = ({
     height: 'max-content',
     overflow: 'scroll',
     zIndex: 999,
-    display: 'inline-table', // fix max-content height on safari browsers
   }
 
   const customStyles = {
