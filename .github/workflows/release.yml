@@ -62,7 +62,7 @@ jobs:
           ## Release Checklist (DELETE ME)
 
           - [ ] Merge `unstable` -> `stable`.
-          - [ ] Ensure docker images are published to `sigp` namespace (instructions below)
+          - [ ] Ensure docker images are published to `sigp` namespace (happens with succesful docker workflow)
           - [ ] Prepare Discord post.
 
           ## Summary
@@ -83,7 +83,7 @@ jobs:
           ${{ steps.changelog.outputs.CHANGELOG }}
 
           ## Docker Hub
-          https://hub.docker.com/r/sigp/siren/tags?name=${{ env.VERSION }}
+          https://hub.docker.com/r/${{ env.DOCKER_USERNAME }}/siren/tags?name=${{ env.VERSION }}
 
           ENDBODY
           )
