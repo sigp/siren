@@ -5,7 +5,7 @@ import { TxHash } from '../../../../../types'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 
 export interface ConsolidationQueueStatusProps {
-  queueLength?: bigint | TxHash
+  queueLength?: bigint
   className?: string
   isActive: boolean
 }

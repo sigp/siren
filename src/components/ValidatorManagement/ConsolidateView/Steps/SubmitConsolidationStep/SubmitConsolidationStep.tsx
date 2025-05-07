@@ -70,6 +70,8 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
     chainId,
   })
 
+  const queueLength: bigint = BigInt(consolidationQueLength ?? '0')
+
   useEffect(() => {
     const interval = setInterval(() => {
       refetch()
@@ -126,11 +128,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
         <Typography type='text-subtitle2'>
           {t('validatorManagement.consolidateView.signAndSubmit.title')}
         </Typography>
-        <ConsolidationQueueStatus
-          isActive={isActive}
-          className='mt-4'
-          queueLength={consolidationQueLength || 0n}
-        />
+        <ConsolidationQueueStatus isActive={isActive} className='mt-4' queueLength={queueLength} />
       </div>
       <div className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'>
         <div className='hidden lg:block'>
@@ -140,7 +138,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
           <ConsolidationQueueStatus
             isActive={isActive}
             className='mt-4'
-            queueLength={consolidationQueLength || 0n}
+            queueLength={queueLength}
           />
         </div>
         <div className='w-full mt-4 flex flex-col'>
