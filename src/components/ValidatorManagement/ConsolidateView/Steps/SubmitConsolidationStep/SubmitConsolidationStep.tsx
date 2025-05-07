@@ -96,12 +96,10 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                 chainId={chainId}
                 targetPubKey={targetPubKey}
                 validator={validator}
-                consolidationQueLength={consolidationQueLength || 0n}
               />
             )
           })
         : null,
-    [targetValidator, chainId, sourceValidators, consolidationRequests, consolidationQueLength],
   )
 
   const renderedTxStatuses = useMemo(() => {

@@ -1,7 +1,7 @@
 import { dataSlice, getAddress } from 'ethers'
 import React, { FC } from 'react'
 import addClassString from '../../../../../../utilities/addClassString'
-import { ConsolidationTx, TxHash } from '../../../../../types'
+import { ConsolidationTx } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
 import Spinner from '../../../../Spinner/Spinner'
@@ -12,7 +12,6 @@ export interface ConsolidationRequestProps {
   validator: ValidatorInfo
   chainId: number
   targetPubKey: string
-  consolidationQueLength: bigint | TxHash
   feeBuffer: bigint
   onSubmitRequest: (request: ConsolidationTx) => void
   requestData: ConsolidationTx | undefined
@@ -22,7 +21,6 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
   validator,
   targetPubKey,
   chainId,
-  consolidationQueLength,
   feeBuffer,
   onSubmitRequest,
   requestData,
@@ -61,7 +59,6 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
           <Consolidate
             bufferPercentage={feeBuffer}
             sourceValidator={validator}
-            queueLength={consolidationQueLength}
             onSubmitRequest={onSubmitRequest}
             chainId={chainId}
             targetPubKey={targetPubKey}
