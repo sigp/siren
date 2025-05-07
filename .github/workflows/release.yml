@@ -9,7 +9,6 @@ env:
   REPO_NAME: ${{ github.repository_owner }}/siren
   DOCKER_PASSWORD: ${{ secrets.DH_KEY }}
   DOCKER_USERNAME: ${{ secrets.DH_ORG }}
-  IMAGE_NAME: ${{ secrets.DOCKER_USERNAME }}/siren
 
 jobs:
   extract-version:
