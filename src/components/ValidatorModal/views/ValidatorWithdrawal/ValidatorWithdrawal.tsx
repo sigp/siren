@@ -3,7 +3,7 @@ import { formatEther, parseUnits } from 'ethers'
 import Link from 'next/link'
 import React, { ChangeEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAccount, UseEstimateGasParameters, usePublicClient, useSendTransaction } from 'wagmi'
+import { useAccount, UseEstimateGasParameters, useSendTransaction } from 'wagmi'
 import displayToast from '../../../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../../../utilities/formatWithdrawalAddress'
 import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
@@ -15,6 +15,7 @@ import {
 } from '../../../../constants/constants'
 import { ValidatorModalView } from '../../../../constants/enums'
 import useCalculateGas from '../../../../hooks/useCalculateGas'
+import useFeeGetter from '../../../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
 import useProcessEffectiveBalance from '../../../../hooks/useProcessEffectiveBalance'
 import useResolveTransactionOnce from '../../../../hooks/useResolveTransactionOnce'
@@ -78,9 +79,8 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
     ? MAX_EFFECTIVE_BALANCE
     : EFFECTIVE_BALANCE
   const { address } = useAccount()
-  const publicClient = usePublicClient()
+  const { requestFee } = useFeeGetter(EXECUTION_WITHDRAWAL_CONTRACT, Boolean(address))
   const submitRequest = useSendTransaction()
-  const [requestFee, setRequestFee] = useState<bigint>(0n)
   const { txStatus } = useResolveTransactionOnce(txHash)
 
   useEffect(() => {
@@ -142,23 +142,6 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   const { isSufficient } = useHasSufficientBalance(totalRequiredFunds)
 
   const setMaxAmount = () => setWithdrawalAmount(maxWithdrawal > 0.000000001 ? maxWithdrawal : 0)
-
-  useEffect(() => {
-    async function fetchFee() {
-      try {
-        if (!publicClient) return
-        const feeHex = await publicClient.request({
-          method: 'eth_call',
-          params: [{ to: EXECUTION_WITHDRAWAL_CONTRACT, data: '0x' }, 'latest'],
-        })
-
-        setRequestFee(BigInt(feeHex))
-      } catch (error) {
-        console.error('Error fetching fee:', error)
-      }
-    }
-    void fetchFee()
-  }, [publicClient])
 
   const handleTxError = (e: any) => {
     const error = (e as Error).message

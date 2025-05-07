@@ -1,11 +1,12 @@
 import axios from 'axios'
-import { FC, useMemo, useState } from 'react'
+import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount, useSendTransaction, UseEstimateGasParameters } from 'wagmi'
 import displayToast from '../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../utilities/formatWithdrawalAddress'
 import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
 import useCalculateGas from '../../hooks/useCalculateGas'
+import useFeeGetter from '../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
 import { ActivityType, ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
@@ -15,7 +16,6 @@ import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 export interface ConsolidateViewProps {
   targetPubKey: string
   sourceValidator: ValidatorInfo
-  queueLength: bigint | TxHash
   chainId: number
   bufferPercentage: bigint
   onSubmitRequest: (request: ConsolidationTx) => void
@@ -25,7 +25,6 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   targetPubKey,
   sourceValidator,
   chainId,
-  queueLength,
   bufferPercentage,
   onSubmitRequest,
 }) => {
@@ -35,27 +34,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   const { address } = useAccount()
   const [isLoading, setIsLoading] = useState(false)
   const submitRequest = useSendTransaction()
-  const getRequiredFee = (numerator: bigint, percentage = 0n): bigint => {
-    // https://eips.ethereum.org/EIPS/eip-7251#fee-calculation
-    let i = 1n
-    let output = 0n
-    let numeratorAccum = 1n * 17n
-
-    while (numeratorAccum > 0n) {
-      output += numeratorAccum
-      numeratorAccum = (numeratorAccum * numerator) / (17n * i)
-      i += 1n
-    }
-
-    const baseFee = output / 17n
-
-    return (baseFee * (100n + BigInt(percentage)) + (100n - 1n)) / 100n
-  }
-  const requestFee = useMemo(() => {
-    if (!queueLength) return 0n
-
-    return getRequiredFee(BigInt(queueLength), bufferPercentage)
-  }, [queueLength, bufferPercentage])
+  const { requestFee } = useFeeGetter(CONSOLIDATION_CONTRACT, Boolean(address), bufferPercentage)
 
   const { estimatedGasLimit, totalRequiredFunds } = useCalculateGas({
     chainId,
