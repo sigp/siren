@@ -304,6 +304,7 @@ const Main: FC<MainProps> = (props) => {
         return (
           <ConsolidateView
             currentEpoch={currentEpoch}
+            partialWithdrawals={partialWithdrawals}
             minValidatorWithdrawalDelay={minValidatorWithdrawalDelay}
             chainId={Number(DEPOSIT_CHAIN_ID)}
             validators={validatorStates}
