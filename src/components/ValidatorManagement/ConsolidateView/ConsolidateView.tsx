@@ -1,7 +1,7 @@
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MAX_EFFECTIVE_BALANCE } from '../../../constants/constants'
-import { ValidatorInfo } from '../../../types/validator'
+import { PartialWithdrawal, ValidatorInfo } from '../../../types/validator'
 import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
 import SelectSourceStep from './Steps/SelectSourceStep/SelectSourceStep'
 import SelectTargetStep from './Steps/SelectTargetStep/SelectTargetStep'
@@ -11,6 +11,7 @@ export interface ConsolidateViewProps {
   validators: ValidatorInfo[]
   currentEpoch: number
   minValidatorWithdrawalDelay: number
+  partialWithdrawals: PartialWithdrawal[]
   chainId: number
 }
 
@@ -19,6 +20,7 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({
   chainId,
   currentEpoch,
   minValidatorWithdrawalDelay,
+  partialWithdrawals,
 }) => {
   const { t } = useTranslation()
   const [targetValidator, setTargetValidator] = useState<ValidatorInfo | undefined>(undefined)
@@ -44,9 +46,11 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({
   const eligibleSourceValidators = useMemo(
     () =>
       eligibleValidators.filter(
-        ({ activationEpoch }) => currentEpoch - activationEpoch > minValidatorWithdrawalDelay,
+        ({ activationEpoch, index }) =>
+          currentEpoch - activationEpoch > minValidatorWithdrawalDelay &&
+          !partialWithdrawals?.some((withdrawal) => Number(withdrawal.validator_index) === index),
       ),
-    [eligibleValidators],
+    [eligibleValidators, partialWithdrawals, currentEpoch, minValidatorWithdrawalDelay],
   )
 
   const steps = [
