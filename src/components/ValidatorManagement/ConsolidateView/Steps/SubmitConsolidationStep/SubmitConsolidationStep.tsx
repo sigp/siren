@@ -100,6 +100,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
             )
           })
         : null,
+    [targetValidator, chainId, sourceValidators, consolidationRequests, feeBuffer],
   )
 
   const renderedTxStatuses = useMemo(() => {
