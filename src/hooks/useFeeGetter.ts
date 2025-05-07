@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { usePublicClient } from 'wagmi'
+import { TxHash } from '../types'
 
-const useFeeGetter = (contractAddress: string, isReady: boolean, bufferAmount: bigint = 0n) => {
+const useFeeGetter = (contractAddress: TxHash, isReady: boolean, bufferAmount: bigint = 0n) => {
   const publicClient = usePublicClient()
   const [requestFee, setRequestFee] = useState<bigint>(0n)
 
