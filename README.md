@@ -15,7 +15,7 @@ and Validator Client.
 ## Documentation
 
 The [Lighthouse Book](https://lighthouse-book.sigmaprime.io) contains information for users and
-developers. Specifically the [Lighthouse UI](https://lighthouse-book.sigmaprime.io/lighthouse-ui.html) section of the book.
+developers. Specifically the [Lighthouse UI](https://lighthouse-book.sigmaprime.io/ui.html) section of the book.
 
 ## Building From Source
 
