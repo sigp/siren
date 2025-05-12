@@ -8,7 +8,7 @@ const app = next({ dev })
 const handle = app.getRequestHandler()
 const PORT = process.env.PORT || 3000
 
-const backendUrl = process.env.BACKEND_URL || 3001
+const backendUrl = process.env.BACKEND_URL || 'http://127.0.0.1:3001'
 
 const handleSSe = (res, req, url) => {
   const cookies = req.headers.cookie
