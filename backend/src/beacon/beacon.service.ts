@@ -27,7 +27,7 @@ export class BeaconService {
     try {
       return await this.utilsService.fetchFromCache(
         'bnVersion',
-        0,
+        60000,
         async () => {
           const { data } = await this.utilsService.sendHttpRequest({
             url: `${this.beaconUrl}/eth/v1/node/version`,
