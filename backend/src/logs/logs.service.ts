@@ -54,7 +54,7 @@ export class LogsService {
 
       const { level } = newData;
 
-      if (level !== LogLevels.INFO) {
+      if (level !== LogLevels.DEBUG) {
         const result = (await this.logRepository.create(
           { type, level, data: JSON.stringify(newData), isHidden: false },
           { ignoreDuplicates: true },

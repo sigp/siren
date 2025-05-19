@@ -44,8 +44,8 @@ export type LogData = {
 }
 
 export type FormattedLogData = Omit<LogData, 'data'> & {
-  data: Record<string, unknown>
-  fromNowStamp: string
+  data: SSELog
+  fromNowStamp?: string
 }
 
 export type LogMetric = {
@@ -70,6 +70,7 @@ export enum LogLevels {
   ERRO = 'ERRO',
   WARN = 'WARN',
   INFO = 'INFO',
+  DEBUG = 'DEBUG',
 }
 
 export type SSELog = {
