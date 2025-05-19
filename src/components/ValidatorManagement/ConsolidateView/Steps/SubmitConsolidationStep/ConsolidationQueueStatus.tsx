@@ -5,7 +5,7 @@ import { TxHash } from '../../../../../types'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
 
 export interface ConsolidationQueueStatusProps {
-  queueLength?: bigint
+  queueLength: bigint
   className?: string
   isActive: boolean
 }
@@ -18,7 +18,7 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
   const { t } = useTranslation()
   const classes = addClassString('w-full', [className])
 
-  const getText = (queue: bigint | TxHash) => {
+  const getText = (queue: bigint) => {
     const baseLocale = 'validatorManagement.consolidateView.signAndSubmit'
     const length = Number(queue)
     switch (true) {
@@ -44,8 +44,6 @@ const ConsolidationQueueStatus: FC<ConsolidationQueueStatusProps> = ({
   }
 
   const statusWarning = useMemo<{ text: string; type: InfoBoxType } | undefined>(() => {
-    if (!queueLength) return
-
     return {
       text: getText(queueLength),
       type: getStatus(queueLength),
