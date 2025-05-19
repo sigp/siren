@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './entities/log.entity';
 import { Op } from 'sequelize';
 import { ClientManager } from '../utils/client-manager';
+import { LOG_FETCH_LIMIT } from '../../../src/constants/constants';
 
 @Injectable()
 export class LogsService {
@@ -53,7 +54,7 @@ export class LogsService {
 
       const { level } = newData;
 
-      if (level !== LogLevels.INFO) {
+      if (level !== LogLevels.DEBUG) {
         const result = (await this.logRepository.create(
           { type, level, data: JSON.stringify(newData), isHidden: false },
           { ignoreDuplicates: true },
@@ -231,5 +232,51 @@ export class LogsService {
       { isHidden: true },
       { where: { id } },
     );
+  }
+
+  async readLogData(
+    type?: LogType | undefined,
+    limit?: string | undefined,
+    offset?: string | undefined,
+    level?: LogLevels | undefined,
+  ): Promise<Log[]> {
+    if (type && !this.logTypes.includes(type)) {
+      throw new Error('Invalid log type');
+    }
+
+    const queryLimit = limit ? Number(limit) : LOG_FETCH_LIMIT;
+
+    const options: any = {
+      where: { type },
+      offset: Number(offset) || 0,
+      limit: queryLimit === 0 ? undefined : queryLimit,
+      order: [['createdAt', 'DESC']],
+    };
+
+    if (level) {
+      options.where.level = level;
+    }
+
+    const logs = await this.logRepository.findAll(options);
+
+    return logs.reverse();
+  }
+
+  async searchLogs(type: LogType, search?: string): Promise<Log[]> {
+    if (!this.logTypes.includes(type)) {
+      throw new Error('Invalid log type');
+    }
+
+    if (!search) {
+      throw new Error('No search text provided');
+    }
+
+    return await this.logRepository.findAll({
+      where: {
+        type,
+        data: { [Op.like]: `%${search}%` },
+      },
+      order: [['createdAt', 'ASC']],
+    });
   }
 }

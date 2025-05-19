@@ -24,6 +24,8 @@
       "saturday": "Sat"
     }
   },
+  "logLevel": "Log Level",
+  "loadOlderLogs": "Load older logs",
   "effectiveBalance": "Effective Balance",
   "maxEffectiveBalance": "Max Effective Balance",
   "effectiveBalanceDisplay": {

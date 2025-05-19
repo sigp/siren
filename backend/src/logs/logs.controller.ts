@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 import { LogsService } from './logs.service';
 import { SessionGuard } from '../session.guard';
 import { KEEP_ALIVE_MESSAGE, SSE_HEADER } from '../../../src/constants/sse';
-import { LogType } from '../../../src/types';
+import { LogLevels, LogType } from '../../../src/types';
 
 @Controller('logs')
 @UseGuards(SessionGuard)
@@ -72,5 +72,23 @@ export class LogsController {
   @Get('dismiss/:index')
   dismissLogAlert(@Param('index') index: string) {
     return this.logsService.dismissLog(index);
+  }
+
+  @Get('history')
+  getLogData(
+    @Query('type') type?: LogType,
+    @Query('limit') limit?: string,
+    @Query('offset') offset?: string,
+    @Query('level') level?: LogLevels,
+  ) {
+    return this.logsService.readLogData(type, limit, offset, level);
+  }
+
+  @Get('search')
+  searchLogData(
+    @Query('type') type?: LogType,
+    @Query('search') search?: string,
+  ) {
+    return this.logsService.searchLogs(type, search);
   }
 }
