@@ -34,7 +34,7 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
     <>
       <div
         onClick={toggleExpanded}
-        className={`table-row hover:bg-dark50 dark:hover:bg-dark750 ${
+        className={`w-full hover:bg-dark50 dark:hover:bg-dark750 ${
           isLargeData ? (isExpanded ? 'cursor-row-resize' : 'cursor-nesw-resize') : 'cursor-default'
         }`}
       >
