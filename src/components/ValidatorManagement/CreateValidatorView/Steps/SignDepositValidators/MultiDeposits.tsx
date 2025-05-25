@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { DepositData, TxHash, TxStatus, ValidatorCandidate } from '../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -31,6 +32,8 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   const { DEPOSIT_NETWORK_ID } = beaconSpec
   const [isAcknowledgeRisk, setIsAcknowledgeRisk] = useState(false)
   const [depositData, setDepositData] = useState<DepositData[]>([])
+
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const acknowledgeRisk = () => setIsAcknowledgeRisk(true)
   const storeDepositInfo = (
@@ -65,7 +68,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
 
   return (
     <div className='relative flex flex-col space-y-8 lg:space-y-0 lg:flex-row pt-8 w-full h-full'>
-      <div className='flex-1 flex flex-col space-y-8'>
+      <div ref={parentRef} className='flex-1 flex flex-col space-y-8'>
         <div>
           <Typography type='text-caption1'>
             {t('validatorManagement.signAndDeposit.title')} --
@@ -74,7 +77,11 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
             {t('validatorManagement.signAndDeposit.subTitle')}
           </Typography>
         </div>
-        <div className='w-full lg:max-w-[80%] flex-1 flex flex-col'>
+        <div
+          ref={targetChildRef}
+          style={{ maxHeight: maxHeight }}
+          className='w-full lg:max-w-[80%] flex-1 flex flex-col'
+        >
           {isAcknowledgeRisk ? (
             <>
               <div className='w-full border-style flex items-center justify-between p-4 flex space-x-2'>
@@ -88,7 +95,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                   <Typography>{candidates.length}</Typography>
                 </div>
               </div>
-              <div className='w-full max-h-[400px] border-b-style overflow-scroll'>
+              <div className='w-full h-full overflow-auto border-b-style'>
                 {candidates.map((validator, index) => (
                   <ValidatorDepositRow
                     key={index}

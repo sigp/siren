@@ -12,7 +12,7 @@ const StepOptions: FC<StepOptionsProps> = ({ onBackStep, onNextStep, isDisabledN
   const { t } = useTranslation()
 
   return (
-    <div className='flex space-x-4'>
+    <div className='flex space-x-4 flex-shrink-0'>
       {onBackStep && (
         <Button type={ButtonFace.TERTIARY} onClick={onBackStep}>
           {t('back')}

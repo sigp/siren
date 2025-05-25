@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WithdrawalCredentialView } from '../../../../constants/enums'
+import { useMaxHeight } from '../../../../hooks/useMaxHeight'
 import { ValidatorCandidate } from '../../../../types'
 import CheckBox from '../../../CheckBox/CheckBox'
 import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
@@ -44,6 +45,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   const [isSharedSuggestedFeeVerified, setIsSharedSuggestedFeeVerified] = useState(false)
   const isAdvanceView = view === WithdrawalCredentialView.ADVANCED
   const isBasicView = view === WithdrawalCredentialView.BASIC
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   useEffect(() => {
     setIsAll(valCount > 1)
@@ -193,7 +195,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
   }
 
   return (
-    <div className='w-full h-full relative space-y-6'>
+    <div className='w-full flex-1 flex flex-col relative space-y-6'>
       <div>
         <Typography type='text-caption1'>
           {t('validatorManagement.withdrawalCredentials.title')} --
@@ -202,7 +204,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
           {t('validatorManagement.withdrawalCredentials.subTitle')}
         </Typography>
       </div>
-      <div className='mt-4 w-full max-w-[800px] space-y-8'>
+      <div ref={parentRef} className='mt-4 w-full flex-1 max-w-[800px] space-y-8'>
         <div className='w-full'>
           <InfoBox
             isActive={isActive}
@@ -211,7 +213,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
             type={InfoBoxType.NOTICE}
           />
         </div>
-        <div className='w-full'>
+        <div ref={targetChildRef} style={{ maxHeight: maxHeight }} className='w-full flex flex-col'>
           <div className='w-full flex'>
             <div onClick={setBasicView} className={basicTabClass}>
               <Typography type='text-caption1.5'>Basic Settings</Typography>
@@ -240,7 +242,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
               </div>
             </div>
           </div>
-          <div className='overflow-scroll w-full max-h-[200px]'>
+          <div className='w-full h-full overflow-auto'>
             {isAll ? renderedAllValidatorRow : renderedCredentialRows}
           </div>
         </div>

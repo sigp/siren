@@ -35,7 +35,7 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
   const withdrawalCredentials = getAddress(dataSlice(withdrawalAddress as string, 12))
 
   return (
-    <div className='flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:items-center w-full border-t-0 border-style px-2 py-4'>
+    <div className='flex flex-col md:flex-row justify-between space-y-4 md:space-y-0 md:items-center w-full last:border-b-0 border-b-style px-2 py-4'>
       <div className='flex items-center @425:space-x-4'>
         <div className='h-8 w-8 hidden @425:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
         <div className='flex items-center mr-4 lg:mr-0 space-x-2 border-r-style pr-4'>

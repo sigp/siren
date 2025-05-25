@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { v4 as uuidv4 } from 'uuid'
 import displayToast from '../../../../../../utilities/displayToast'
 import { WalletPrefix } from '../../../../../constants/enums'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { ToastType, ValidatorCandidate } from '../../../../../types'
 import Typography from '../../../../Typography/Typography'
 import StepOptions, { StepOptionsProps } from '../../StepOptions'
@@ -24,6 +25,8 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({
 }) => {
   const { t } = useTranslation()
   const getRandomId = () => uuidv4().toString()
+
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const baseDefaultValidator = {
     withdrawalPrefix: WalletPrefix.ONE,
@@ -81,7 +84,7 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({
   }
 
   return (
-    <div className='w-full lg:h-full space-y-6'>
+    <div ref={parentRef} className='w-full flex-1 lg:max-h-full space-y-6'>
       <Typography type='text-caption1'>
         {t('validatorManagement.validatorSetup.title')} --
       </Typography>
@@ -90,15 +93,21 @@ const ValidatorSetup: FC<ValidatorSetupProps> = ({
           {t('validatorManagement.validatorSetup.subTitle')}
         </Typography>
       </div>
-      <ValSetupTable
-        candidates={candidates}
-        minActivationBalance={minActivationBalance}
-        onAddNewCandidate={addNewValidator}
-        onRemoveCandidate={removeValidatorById}
-        onUpdateCandidate={updateValidator}
-        onQuickSetCandidates={quickSetValidators}
-        onRemoveLastCandidate={removeLastValidator}
-      />
+      <div
+        className='relative w-full flex flex-col lg:w-[80%]'
+        style={{ maxHeight: maxHeight }}
+        ref={targetChildRef}
+      >
+        <ValSetupTable
+          candidates={candidates}
+          minActivationBalance={minActivationBalance}
+          onAddNewCandidate={addNewValidator}
+          onRemoveCandidate={removeValidatorById}
+          onUpdateCandidate={updateValidator}
+          onQuickSetCandidates={quickSetValidators}
+          onRemoveLastCandidate={removeLastValidator}
+        />
+      </div>
       {candidates.length > 0 ? (
         <StepOptions isDisabledNext={!isValidBalances} onNextStep={onNextStep} />
       ) : null}
