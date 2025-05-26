@@ -5,6 +5,7 @@ import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { ConsolidationTx, TxStatus } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -33,6 +34,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const [isExtraFee, setIsExtraFee] = useState(false)
   const [feeBuffer, setBuffer] = useState<number | undefined>(undefined)
   const [consolidationRequests, setRequests] = useState<ConsolidationTx[]>([])
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const setConsolidations = useCallback((request: ConsolidationTx) => {
     setRequests((prev) => [...prev, request])
@@ -130,7 +132,10 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
         </Typography>
         <ConsolidationQueueStatus isActive={isActive} className='mt-4' queueLength={queueLength} />
       </div>
-      <div className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'>
+      <div
+        ref={parentRef}
+        className='flex-1 order-2 lg:order-1 lg:max-w-2xl mr-0 lg:mr-8 xl:mr-0 flex flex-col'
+      >
         <div className='hidden lg:block'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.signAndSubmit.title')}
@@ -141,7 +146,11 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
             queueLength={queueLength}
           />
         </div>
-        <div className='w-full mt-4 flex flex-col'>
+        <div
+          ref={targetChildRef}
+          style={{ maxHeight: maxHeight }}
+          className='w-full mt-4 flex flex-col'
+        >
           {targetValidator ? (
             <>
               <div className='w-full border-style'>
@@ -171,7 +180,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   </Tooltip>
                 </div>
               </div>
-              <div className='w-full flex flex-col md:flex-row space-y-4 lg:space-y-0 justify-between p-2 border-style mt-4'>
+              <div className='w-full flex flex-col md:flex-row space-y-4 lg:space-y-0 justify-between p-2 border-style border-b-0 mt-4'>
                 <div className='flex items-center space-x-2'>
                   <i className='bi bi-list-ul text-black dark:text-dark500 text-xl' />
                   <Typography>{t('consolidatingValidators')}</Typography>
@@ -202,9 +211,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
                   )}
                 </div>
               </div>
-              <div className='h-full lg:max-h-[230px] border-b-style overflow-scroll'>
-                {renderedRequests}
-              </div>
+              <div className='h-full overflow-auto border-style'>{renderedRequests}</div>
             </>
           ) : null}
         </div>

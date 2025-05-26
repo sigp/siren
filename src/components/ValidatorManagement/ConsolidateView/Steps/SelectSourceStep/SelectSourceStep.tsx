@@ -1,8 +1,9 @@
 import clsx from 'clsx'
-import { useAnimationControls } from 'framer-motion'
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MAX_EFFECTIVE_BALANCE } from '../../../../../constants/constants'
+import useAnimatedListControls from '../../../../../hooks/useAnimatedListControls'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import NoEligibleValidatorsFound from '../../../../EmptyState/NoEligibleValidatorsFound'
@@ -29,32 +30,14 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   isActive,
 }) => {
   const { t } = useTranslation()
-  const controls = useAnimationControls()
   const { withdrawalAddress, pubKey: targetPubKey, effectiveBalance } = targetValidator
   const isSelfValidateRestriction = withdrawalAddress?.startsWith('0x01')
   const [isSelectAll, setIsSelectAll] = useState(false)
   const [selectedSources, setSelectedSources] = useState<ValidatorInfo[]>(
     isSelfValidateRestriction ? [targetValidator] : [],
   )
-
-  useEffect(() => {
-    if (isActive) {
-      controls.stop()
-      const baseAnim = {
-        y: 0,
-        opacity: 100,
-        transition: { duration: 0 },
-      }
-      controls.start((i) =>
-        i < 10
-          ? {
-              ...baseAnim,
-              transition: { duration: 0.2, delay: i * 0.1 },
-            }
-          : baseAnim,
-      )
-    }
-  }, [isActive, controls])
+  const { controls } = useAnimatedListControls(isActive)
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const availableSourceValidators = useMemo<ValidatorInfo[]>(() => {
     return validators.filter(({ pubKey }) => pubKey !== targetPubKey)
@@ -99,12 +82,8 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   }, [onBack])
 
   const eligibleValidatorListClasses = clsx(
-    'flex flex-col border-style',
+    'flex flex-col',
     isSelfValidateRestriction && 'opacity-20 pointer-events-none',
-  )
-  const sourceListContainerClasses = clsx(
-    'h-full overflow-scroll',
-    isSelfValidateRestriction ? 'max-h-[248px]' : 'max-h-[348px]',
   )
 
   const renderedSourceValidators = useMemo(
@@ -137,8 +116,11 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
   const isOverMaxEB = totalEffectiveBalance > MAX_EFFECTIVE_BALANCE
 
   return (
-    <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row pt-4'>
-      <div className='flex-1 @1600:max-w-2xl order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'>
+    <div className='w-full lg:h-full space-y-8 lg:space-y-0 flex flex-col lg:flex-row 2xl:justify-center pt-4'>
+      <div
+        ref={parentRef}
+        className='flex-1 @1600:max-w-2xl order-2 lg:order-1 pt-8 lg:pt-0 flex flex-col space-y-8'
+      >
         <div className='space-y-2'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectSources.title')}
@@ -164,8 +146,12 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
             </div>
           </div>
         )}
-        <div className={eligibleValidatorListClasses}>
-          <div className='px-4 py-3 border-b-style flex justify-between'>
+        <div
+          ref={targetChildRef}
+          style={{ maxHeight: maxHeight }}
+          className={eligibleValidatorListClasses}
+        >
+          <div className='px-4 py-3 border-style border-b-0 flex justify-between'>
             <div className='flex items-center space-x-2'>
               <i className='bi bi-list-ul text-black dark:text-dark500 text-xl' />
               <Typography type='text-caption'>{t('eligibleValidators')}</Typography>
@@ -179,7 +165,7 @@ const SelectSourceStep: FC<SelectSourceStepProps> = ({
               onChange={toggleIsSelectAll}
             />
           </div>
-          <div className={sourceListContainerClasses}>{renderedSourceValidators}</div>
+          <div className='h-full border-style overflow-auto'>{renderedSourceValidators}</div>
         </div>
       </div>
       <div className='w-16 @1440:w-32 @1540:w-48 h-full hidden lg:flex order-2 flex-col items-center justify-center'>

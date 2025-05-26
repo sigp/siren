@@ -1,6 +1,7 @@
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../../../../utilities/addClassString'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { ValidatorCandidate } from '../../../../../types'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import InfoBox, { InfoBoxType } from '../../../../InfoBox/InfoBox'
@@ -34,6 +35,8 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
   const checkBoxClass = addClassString('flex space-x-4', [
     candidateCount < 2 && 'opacity-0 pointer-events-none',
   ])
+
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const groupCandidate = useMemo(
     () => ({
@@ -87,7 +90,10 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
           {t('validatorManagement.keystoreAuthentication.subTitle')}
         </Typography>
       </div>
-      <div className='w-full flex flex-col flex-1 max-w-[750px] 2xl:max-w-[900px] space-y-6'>
+      <div
+        ref={parentRef}
+        className='w-full flex-1 flex flex-col flex-1 max-w-[750px] 2xl:max-w-[900px] space-y-6'
+      >
         {candidateCount < 2 || isAll ? (
           <InfoBox
             isActive
@@ -100,7 +106,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
             {t('validatorManagement.keystoreAuthentication.warningText')}
           </Typography>
         )}
-        <div className='w-full flex flex-col'>
+        <div ref={targetChildRef} style={{ maxHeight: maxHeight }} className='w-full flex flex-col'>
           <div className='w-full border-style px-4 py-2 flex space-x-2'>
             <div className='w-[250px] border-r border-r-style pr-2'>
               <Typography type='text-caption1'>{t('validatorManagement.validators')}</Typography>
@@ -133,7 +139,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
               index={candidates[0].index}
             />
           ) : (
-            <div className='overflow-scroll w-full border-b-style max-h-[250px]'>
+            <div className='w-full h-full overflow-auto'>
               {candidates.map((candidate, index) => (
                 <KeystoreAuthRow
                   key={index}

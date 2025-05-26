@@ -52,7 +52,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
   }, [count])
 
   return (
-    <div className='w-full lg:w-[80%]'>
+    <>
       <div className='w-full border-style flex justify-between'>
         <div className='lg:flex-1 hidden lg:flex space-x-4 items-center px-4'>
           <div className='w-8 h-8 flex items-center justify-center'>
@@ -105,7 +105,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
       </div>
       <>
         {count > 0 ? (
-          <div ref={divRef} className='max-h-[260px] overflow-scroll'>
+          <div ref={divRef} className='h-full overflow-auto'>
             {candidates.map((candidate, index) => (
               <ValSetupRow
                 key={index}
@@ -137,7 +137,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
           </InfoBox>
         )}
       </>
-    </div>
+    </>
   )
 }
 

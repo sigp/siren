@@ -1,7 +1,8 @@
-import { useAnimationControls } from 'framer-motion'
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
+import useAnimatedListControls from '../../../../../hooks/useAnimatedListControls'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { ValidatorInfo } from '../../../../../types/validator'
 import NoEligibleValidatorsFound from '../../../../EmptyState/NoEligibleValidatorsFound'
 import Typography from '../../../../Typography/Typography'
@@ -24,26 +25,8 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   isActive,
 }) => {
   const { t } = useTranslation()
-  const controls = useAnimationControls()
-
-  useEffect(() => {
-    if (isActive) {
-      controls.stop()
-      const baseAnim = {
-        y: 0,
-        opacity: 100,
-        transition: { duration: 0 },
-      }
-      controls.start((i) =>
-        i < 10
-          ? {
-              ...baseAnim,
-              transition: { duration: 0.2, delay: i * 0.1 },
-            }
-          : baseAnim,
-      )
-    }
-  }, [isActive, controls])
+  const { controls } = useAnimatedListControls(isActive)
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const renderedRows = useMemo(() => {
     return validators.length ? (
@@ -63,8 +46,8 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   }, [validators, targetValidator, onSelect, controls])
 
   return (
-    <div className='w-full flex flex-col items-center pt-6'>
-      <div className='max-w-[620px] flex flex-col space-y-6 w-full'>
+    <div className='w-full flex-1 flex flex-col items-center pt-6'>
+      <div className='max-w-[620px] flex-1 flex flex-col space-y-6 w-full'>
         <div className='space-y-1'>
           <Typography type='text-subtitle2'>
             {t('validatorManagement.consolidateView.selectTarget.title')}
@@ -73,15 +56,19 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
             {t('validatorManagement.consolidateView.selectTarget.text')}
           </Typography>
         </div>
-        <div className='space-y-4'>
-          <div className='w-full max-h-[45vh] flex-1 flex flex-col border-style rounded'>
+        <div ref={parentRef} className='space-y-4 flex-1'>
+          <div
+            ref={targetChildRef}
+            style={{ maxHeight: maxHeight }}
+            className='w-full flex-1 flex flex-col border-style rounded'
+          >
             <div className='w-full py-2 flex items-center space-x-2 px-4 border-b-style'>
               <div className='w-4 h-4'>
                 <ValidatorLogo className='text-black dark:text-dark500' />
               </div>
               <Typography>{t('validators')}</Typography>
             </div>
-            <div className='h-full max-h-[448px] overflow-scroll'>{renderedRows}</div>
+            <div className='h-full overflow-auto'>{renderedRows}</div>
           </div>
           <StepOptions onNextStep={onNext} isDisabledNext={!targetValidator} />
         </div>

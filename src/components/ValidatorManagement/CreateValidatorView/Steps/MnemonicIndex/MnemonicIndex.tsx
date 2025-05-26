@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil'
 import { MAX_MNEMONIC_INDEX } from '../../../../../constants/constants'
 import useChainSafeKeygen from '../../../../../hooks/useChainSafeKeygen'
 import useClickOutside from '../../../../../hooks/useClickOutside'
+import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
 import { blsModuleAtom } from '../../../../../recoil/atoms'
 import { IndexSuggestion, NetworkId, ValidatorCandidate } from '../../../../../types'
 import Button, { ButtonFace } from '../../../../Button/Button'
@@ -53,6 +54,8 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   const { ref } = useClickOutside<HTMLDivElement>(() => {
     setIsViewSuggestion(false)
   })
+
+  const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const setStartIndex = (e: ChangeEvent<HTMLInputElement>) => {
     const index = e.target.value
@@ -229,7 +232,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
   }
 
   return (
-    <div className='w-full h-full relative space-y-4'>
+    <div className='w-full h-full relative flex flex-col space-y-4'>
       <div>
         <Typography type='text-caption1'>
           {t('validatorManagement.mnemonicIndexing.title')} --
@@ -238,7 +241,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
           {t('validatorManagement.mnemonicIndexing.subTitle')}
         </Typography>
       </div>
-      <div className='w-full max-w-[650px] space-y-8'>
+      <div ref={parentRef} className='w-full flex-1 max-w-[650px] space-y-8'>
         <Typography type='text-caption1'>
           {t('validatorManagement.mnemonicIndexing.caption')}
         </Typography>
@@ -293,10 +296,10 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
             </div>
           )}
         </div>
-        <div className='w-full'>
+        <div ref={targetChildRef} style={{ maxHeight: maxHeight }} className='w-full flex flex-col'>
           {count > 0 ? (
             <>
-              <div className='w-full flex justify-end border border-style px-2 py-3'>
+              <div className='w-full flex justify-end border-style px-2 py-3'>
                 <div className='flex space-x-2 border-r dark:border-primary px-2'>
                   <Typography type='text-caption1'>{t('total')}: </Typography>
                   <Typography type='text-caption1'>{count}</Typography>
@@ -308,7 +311,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
                   <Typography type='text-caption1'>{invalidCount}</Typography>
                 </div>
               </div>
-              <div className='overflow-scroll w-full border-b-style max-h-[190px]'>
+              <div className='w-full h-full overflow-auto'>
                 {indexedValidatorCandidates.map((candidate, index) => (
                   <MnemonicIndexRow
                     depositNetworkId={depositNetworkId}
