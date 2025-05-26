@@ -62,13 +62,11 @@ const Main: FC<MainProps> = ({
     if (selection === logType) return
 
     setLoading(true)
+    selectType(selection as LogType)
 
     setTimeout(() => {
       setLoading(false)
-      setTimeout(() => {
-        selectType(selection as LogType)
-      }, 500)
-    }, 500)
+    }, 250)
   }
 
   return (
