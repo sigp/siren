@@ -27,7 +27,7 @@ const ValidatorCandidateRow: FC<ValidatorCandidateRowProps> = ({
   const updateCandidate = (e: ChangeEvent<HTMLInputElement>) =>
     onUpdateCandidate?.(id, { ...data, name: e.target.value })
   const containerClasses = addClassString(
-    'transition-all duration-50 group items-center w-full min-h-16 flex justify-between border-style border-t-0 relative',
+    'transition-all duration-50 group items-center w-full min-h-16 flex hover:bg-dark25 dark:hover:bg-dark750 justify-between relative',
     [isError && 'bg-lightError100'],
   )
 
