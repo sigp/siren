@@ -80,11 +80,11 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
         <div
           ref={targetChildRef}
           style={{ maxHeight: maxHeight }}
-          className='w-full lg:max-w-[80%] flex-1 flex flex-col'
+          className='w-full lg:max-w-[80%] flex flex-col'
         >
           {isAcknowledgeRisk ? (
             <>
-              <div className='w-full border-style flex items-center justify-between p-4 flex space-x-2'>
+              <div className='w-full border-style border-b-0 flex items-center justify-between p-4 flex space-x-2'>
                 <div className='w-[250px] border-r border-r-style pr-2 flex items-center space-x-2'>
                   <div className='w-4 h-4'>
                     <ValidatorLogo className='text-dark900 dark:text-dark200' />
@@ -95,7 +95,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                   <Typography>{candidates.length}</Typography>
                 </div>
               </div>
-              <div className='w-full h-full overflow-auto border-b-style'>
+              <div className='w-full h-full overflow-auto border-style'>
                 {candidates.map((validator, index) => (
                   <ValidatorDepositRow
                     key={index}

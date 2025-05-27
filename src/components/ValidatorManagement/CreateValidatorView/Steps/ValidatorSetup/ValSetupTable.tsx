@@ -53,7 +53,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
 
   return (
     <>
-      <div className='w-full border-style flex justify-between'>
+      <div className='w-full border-style border-b-0 flex justify-between'>
         <div className='lg:flex-1 hidden lg:flex space-x-4 items-center px-4'>
           <div className='w-8 h-8 flex items-center justify-center'>
             <div className='w-4 h-4'>
@@ -105,7 +105,7 @@ const ValSetupTable: FC<ValSetupTableProps> = (props) => {
       </div>
       <>
         {count > 0 ? (
-          <div ref={divRef} className='h-full overflow-auto'>
+          <div ref={divRef} className='h-full border-style overflow-auto'>
             {candidates.map((candidate, index) => (
               <ValSetupRow
                 key={index}

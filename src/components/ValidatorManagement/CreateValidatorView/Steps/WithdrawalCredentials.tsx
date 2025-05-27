@@ -222,7 +222,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
               <Typography type='text-caption1.5'>Advanced Settings</Typography>
             </div>
           </div>
-          <div className='w-full border-style px-4 py-2 flex space-x-2'>
+          <div className='w-full border-style border-b-0 px-4 py-2 flex space-x-2'>
             <div className='w-[250px] border-r border-r-style pr-2'>
               <Typography type='text-caption1'>{t('validatorManagement.validators')}</Typography>
             </div>
@@ -242,7 +242,7 @@ const WithdrawalCredentials: FC<WithdrawalCredentialsProps> = ({
               </div>
             </div>
           </div>
-          <div className='w-full h-full overflow-auto'>
+          <div className='w-full h-full border-style overflow-auto'>
             {isAll ? renderedAllValidatorRow : renderedCredentialRows}
           </div>
         </div>

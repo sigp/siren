@@ -107,7 +107,7 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
           </Typography>
         )}
         <div ref={targetChildRef} style={{ maxHeight: maxHeight }} className='w-full flex flex-col'>
-          <div className='w-full border-style px-4 py-2 flex space-x-2'>
+          <div className='w-full border-style border-b-0 px-4 py-2 flex space-x-2'>
             <div className='w-[250px] border-r border-r-style pr-2'>
               <Typography type='text-caption1'>{t('validatorManagement.validators')}</Typography>
             </div>
@@ -128,18 +128,22 @@ const KeystoreAuthentication: FC<KeystoreAuthenticationProps> = ({
             </div>
           </div>
           {isAll ? (
-            <KeystoreAuthRow
-              onConfirmation={updateSharedCandidatePassword}
-              candidate={groupCandidate}
-            />
+            <div className='w-full h-full border-style'>
+              <KeystoreAuthRow
+                onConfirmation={updateSharedCandidatePassword}
+                candidate={groupCandidate}
+              />
+            </div>
           ) : candidateCount === 1 ? (
-            <KeystoreAuthRow
-              onConfirmation={updateCandidatePassword}
-              candidate={candidates[0]}
-              index={candidates[0].index}
-            />
+            <div className='w-full h-full border-style'>
+              <KeystoreAuthRow
+                onConfirmation={updateCandidatePassword}
+                candidate={candidates[0]}
+                index={candidates[0].index}
+              />
+            </div>
           ) : (
-            <div className='w-full h-full overflow-auto'>
+            <div className='w-full h-full border-style overflow-auto'>
               {candidates.map((candidate, index) => (
                 <KeystoreAuthRow
                   key={index}

@@ -299,7 +299,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
         <div ref={targetChildRef} style={{ maxHeight: maxHeight }} className='w-full flex flex-col'>
           {count > 0 ? (
             <>
-              <div className='w-full flex justify-end border-style px-2 py-3'>
+              <div className='w-full flex justify-end border-style border-b-0 px-2 py-3'>
                 <div className='flex space-x-2 border-r dark:border-primary px-2'>
                   <Typography type='text-caption1'>{t('total')}: </Typography>
                   <Typography type='text-caption1'>{count}</Typography>
@@ -311,7 +311,7 @@ const MnemonicIndex: FC<MnemonicIndexProps> = ({
                   <Typography type='text-caption1'>{invalidCount}</Typography>
                 </div>
               </div>
-              <div className='w-full h-full overflow-auto'>
+              <div className='w-full h-full border-style overflow-auto'>
                 {indexedValidatorCandidates.map((candidate, index) => (
                   <MnemonicIndexRow
                     depositNetworkId={depositNetworkId}

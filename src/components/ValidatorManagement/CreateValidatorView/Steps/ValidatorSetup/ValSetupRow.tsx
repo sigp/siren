@@ -3,7 +3,6 @@ import Cookies from 'js-cookie'
 import { ChangeEvent, FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
-import addClassString from '../../../../../../utilities/addClassString'
 import { WalletPrefix } from '../../../../../constants/enums'
 import useElectraStatus from '../../../../../hooks/useElectraStatus'
 import { isMaxEBModal } from '../../../../../recoil/atoms'
@@ -38,10 +37,6 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
 
   const isError = effectiveBalance < parseEther('32') || effectiveBalance > parseEther('2048')
 
-  const containerClasses = addClassString('flex relative items-center justify-end flex-1 pl-4', [
-    isEnabled && 'border-l-style',
-  ])
-
   const convertBalance = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     const ether = value ? parseEther(value) : 0n
@@ -67,7 +62,7 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
 
   return (
     <ValidatorCandidateRow index={index + 1} data={candidate} onUpdateCandidate={onUpdateCandidate}>
-      <div className={containerClasses}>
+      <div className='flex relative items-center justify-end flex-1 pl-4'>
         {isEnabled ? (
           <div className='flex items-center pr-4 justify-between flex-1'>
             <div className='flex items-center space-x-2'>
@@ -120,7 +115,7 @@ const ValSetupRow: FC<ValSetupRowProps> = ({
             <i className='bi-check-circle text-primary' />
           </div>
         )}
-        <div className='cursor-pointer p-4 border-l-style'>
+        <div className='cursor-pointer p-4'>
           <IconButton
             buttonType={IconButtonTypes.TERTIARY}
             onClick={removeCandidate}
