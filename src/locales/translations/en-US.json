@@ -774,24 +774,35 @@
     "activities": {
       "deposit": {
         "title": "Deposit Transaction",
-        "text": "Funds sent to the Deposit Contract with transaction hash: <span>{{txHash}}</span> and amount of <span>{{amount}} ETH</span>. Click here to review the transaction details on Etherscan."
+        "errorTitle": "Failed Deposit Transaction",
+        "text": "Funds sent to the Deposit Contract with transaction hash: <span>{{txHash}}</span> and amount of <span>{{amount}} ETH</span>. Click here to review the transaction details on Etherscan.",
+        "errorText": "Deposit attempt failed with transaction hash: <span>{{txHash}}</span> and amount of <span>{{amount}} ETH</span>. Click here to review the transaction details on Etherscan."
       },
       "validatorImport": {
         "title": "Validator Imported",
-        "text": "Validator with pubkey: <span>{{pubKey}}</span> imported successfully. Click here to review your validator's status with Beaconcha.in."
+        "errorTitle": "Failed Validator Import",
+        "text": "Validator with pubkey: <span>{{pubKey}}</span> imported successfully. Click here to review your validator's status with Beaconcha.in.",
+        "errorText": "Siren was unable to import validator with pubkey: <span>{{pubKey}}</span>. Click here to review your validator's status with Beaconcha.in."
       },
       "updateGraffiti": {
         "title": "Validator Graffiti Updated",
-        "text": "Validator with pubkey: <span>{{pubKey}}</span> graffiti updated successfully. Review the changes in the Validator Management view."
+        "errorTitle": "Failed Graffiti Update",
+        "text": "Validator with pubkey: <span>{{pubKey}}</span> graffiti updated successfully. Review the changes in the Validator Management view.",
+        "errorText": "Siren was unable to update the graffiti for validator with pubkey: <span>{{pubKey}}</span>. Please review your configuration and try again."
       },
       "consolidation": {
         "title": "Validator Consolidation Requested",
+        "errorTitle": "Failed to Consolidate",
+        "errorTargetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan.",
         "targetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> as been sent. Click here to review the transaction details on Etherscan.",
-        "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan."
+        "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan.",
+        "errorSelfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan."
       },
       "partialWithdrawal": {
         "title": "Partial Withdrawal Requested",
-        "text": "Request made to partial withdrawal <span>{{amount}}</span>ETH from validator: <span>{{pubKey}}</span> with transaction hash: of <span>{{txHash}}</span>. Click here to review the transaction details on Etherscan."
+        "errorTitle": "Failed Partial Withdrawal Request",
+        "text": "Request made to partial withdrawal <span>{{amount}}</span>ETH from validator: <span>{{pubKey}}</span> with transaction hash: of <span>{{txHash}}</span>. Click here to review the transaction details on Etherscan.",
+        "errorText": "Request made to partial withdrawal <span>{{amount}}</span>ETH from validator: <span>{{pubKey}}</span> with transaction hash: of <span>{{txHash}}</span> was unsuccessful. Click here to review the transaction details on Etherscan."
       }
     }
   },

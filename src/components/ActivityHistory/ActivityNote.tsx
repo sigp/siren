@@ -1,18 +1,20 @@
 import axios from 'axios'
-import { formatEther } from 'ethers'
 import { motion } from 'framer-motion'
 import { debounce } from 'lodash'
 import moment from 'moment'
 import Link from 'next/link'
 import React, { FC, useCallback, useEffect, useMemo } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import displayToast from '../../../utilities/displayToast'
-import formatEthAddress from '../../../utilities/formatEthAddress'
+import getActivityTitleKey from '../../../utilities/getActivityTitleKey'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
 import isValidNetwork from '../../../utilities/isValidNetwork'
+import { Status } from '../../constants/enums'
 import { Activity, ActivityType, NetworkId, ToastType } from '../../types'
 import Typography from '../Typography/Typography'
+import ActivityIcon from './ActivityIcon'
+import ActivityText from './ActivityText'
 
 export interface ActivityNoteProps {
   activity: Activity
@@ -30,7 +32,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
   onHasSeen,
 }) => {
   const { t } = useTranslation()
-  const { id, type, createdAt, data, pubKey, hasSeen } = activity
+  const { id, type, createdAt, data, pubKey, hasSeen, status } = activity
   const initialAnim = useMemo(() => ({ x: 100, opacity: 0 }), [])
   const animateAnim = useMemo(() => ({ x: 0, opacity: 1 }), [])
   const transAnim = useMemo(
@@ -49,127 +51,24 @@ const ActivityNote: FC<ActivityNoteProps> = ({
     }
   }, [data])
 
-  const formattedTitle = useMemo(() => {
-    switch (type) {
-      case ActivityType.DEPOSIT:
-        return t('activityHistory.activities.deposit.title')
-      case ActivityType.IMPORT:
-        return t('activityHistory.activities.validatorImport.title')
-      case ActivityType.GRAFFITI:
-        return t('activityHistory.activities.updateGraffiti.title')
-      case ActivityType.CONSOLIDATION:
-        return t('activityHistory.activities.consolidation.title')
-      case ActivityType.PARTIAL_WITHDRAWAL:
-        return t('activityHistory.activities.partialWithdrawal.title')
-      default:
-        return ''
+  const isError = status.toUpperCase() === Status.ERROR
+  const formattedTitle = t(getActivityTitleKey(type, isError))
+  const fromNow = moment(createdAt).fromNow()
+
+  let formattedHref: string | null = null
+  if (isValidNetwork(networkId)) {
+    if (type === ActivityType.IMPORT) {
+      formattedHref = getBeaconChaLink(networkId, `/validator/${pubKey}`)
+    } else if (
+      [ActivityType.DEPOSIT, ActivityType.CONSOLIDATION, ActivityType.PARTIAL_WITHDRAWAL].includes(
+        type,
+      )
+    ) {
+      formattedHref = formattedData?.txHash
+        ? getEtherscanLink(networkId, `/tx/${formattedData.txHash}`)
+        : null
     }
-  }, [type, t])
-
-  const getText = useCallback(() => {
-    switch (type) {
-      case ActivityType.DEPOSIT:
-        const amount = formattedData?.amount ? Number(formatEther(formattedData?.amount)) : '-'
-        return (
-          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans
-              i18nKey='activityHistory.activities.deposit.text'
-              components={{ span: <span className='underline font-bold' /> }}
-              values={{ txHash: formatEthAddress(formattedData?.txHash), amount }}
-            />
-          </Typography>
-        )
-      case ActivityType.IMPORT:
-        return (
-          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans
-              i18nKey='activityHistory.activities.validatorImport.text'
-              components={{ span: <span className='underline font-bold' /> }}
-              values={{ pubKey: formatEthAddress(pubKey) }}
-            />
-          </Typography>
-        )
-      case ActivityType.GRAFFITI:
-        return (
-          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans
-              i18nKey='activityHistory.activities.updateGraffiti.text'
-              components={{ span: <span className='underline font-bold' /> }}
-              values={{ pubKey: formatEthAddress(pubKey) }}
-            />
-          </Typography>
-        )
-      case ActivityType.CONSOLIDATION:
-        let transKey = 'targetConsolidationText'
-        const targetPubKey = formattedData?.targetPubKey
-        const sourcePubKey = formattedData?.sourcePubKey
-
-        if (targetPubKey === sourcePubKey) {
-          transKey = 'selfConsolidationText'
-        }
-
-        return (
-          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans
-              i18nKey={`activityHistory.activities.consolidation.${transKey}`}
-              components={{ span: <span className='underline font-bold' /> }}
-              values={{
-                pubKey: formatEthAddress(targetPubKey),
-                sourcePubKey: formatEthAddress(sourcePubKey),
-              }}
-            />
-          </Typography>
-        )
-      case ActivityType.PARTIAL_WITHDRAWAL:
-        return (
-          <Typography color='text-dark400' darkMode='dark:text-dark400' type='text-caption1'>
-            <Trans
-              i18nKey='activityHistory.activities.partialWithdrawal.text'
-              components={{ span: <span className='underline font-bold' /> }}
-              values={{
-                txHash: formatEthAddress(formattedData?.txHash),
-                amount: formattedData?.amount,
-                pubKey: formatEthAddress(pubKey),
-              }}
-            />
-          </Typography>
-        )
-      default:
-        return null
-    }
-  }, [type, pubKey, formattedData])
-
-  const formattedIcon = useMemo(() => {
-    switch (type) {
-      case ActivityType.DEPOSIT:
-        return 'bi-currency-exchange'
-      case ActivityType.IMPORT:
-        return 'bi-download'
-      case ActivityType.GRAFFITI:
-        return 'bi-palette'
-      case ActivityType.CONSOLIDATION:
-        return 'bi-intersect'
-      case ActivityType.PARTIAL_WITHDRAWAL:
-        return 'bi-send'
-      default:
-        return 'bi-clock-history'
-    }
-  }, [type])
-
-  const formattedHref = useMemo(() => {
-    if (!isValidNetwork(networkId)) return null
-
-    switch (type) {
-      case ActivityType.IMPORT:
-        return getBeaconChaLink(networkId, `/validator/${pubKey}`)
-      case ActivityType.DEPOSIT:
-      case ActivityType.CONSOLIDATION:
-      case ActivityType.PARTIAL_WITHDRAWAL:
-        return formattedData ? getEtherscanLink(networkId, `/tx/${formattedData.txHash}`) : null
-      default:
-        return null
-    }
-  }, [type, networkId, pubKey, formattedData])
+  }
 
   const markAsSeen = useCallback(
     debounce(async () => {
@@ -193,39 +92,39 @@ const ActivityNote: FC<ActivityNoteProps> = ({
     }
   }, [markAsSeen])
 
-  const renderNote = useCallback(() => {
-    const fromNow = moment(createdAt).fromNow()
-    return (
-      <div className='w-full flex items-center justify-between'>
-        <div className='flex flex-1 max-w-[500px] items-center space-x-6'>
-          <div className='h-12 w-12 bg-gradient-to-r from-primary to-tertiary rounded-full flex items-center justify-center'>
-            <i className={`${formattedIcon} text-white text-subtitle2`} />
+  const renderNote = () => (
+    <div className='w-full flex items-center justify-between'>
+      <div className='flex flex-1 max-w-[500px] items-center space-x-6'>
+        <ActivityIcon isError={isError} type={type} />
+        <div className='flex-1'>
+          <Typography color='text-dark700'>{formattedTitle}</Typography>
+          <div className='mt-1.5'>
+            <ActivityText
+              type={type}
+              status={status}
+              pubKey={pubKey}
+              formattedData={formattedData}
+            />
+            <Typography
+              color='text-dark400'
+              darkMode='dark:text-dark400'
+              isBold
+              type='text-caption1'
+            >
+              {fromNow}
+            </Typography>
           </div>
-          <div className='flex-1'>
-            <Typography color='text-dark700'>{formattedTitle}</Typography>
-            <div className='mt-1.5'>
-              {getText()}
-              <Typography
-                color='text-dark400'
-                darkMode='dark:text-dark400'
-                isBold
-                type='text-caption1'
-              >
-                {fromNow}
-              </Typography>
-            </div>
-          </div>
-        </div>
-        <div>
-          {!hasSeen ? (
-            <div className='h-4 w-4 bg-primary rounded-full' />
-          ) : formattedHref ? (
-            <i className='text-dark400 text-subtitle3 bi-box-arrow-up-right' />
-          ) : null}
         </div>
       </div>
-    )
-  }, [formattedHref, getText, hasSeen, formattedTitle, formattedIcon, createdAt])
+      <div>
+        {!hasSeen ? (
+          <div className='h-4 w-4 bg-primary rounded-full' />
+        ) : formattedHref ? (
+          <i className='text-dark400 text-subtitle3 bi-box-arrow-up-right' />
+        ) : null}
+      </div>
+    </div>
+  )
 
   return (
     <motion.div
