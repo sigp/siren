@@ -23,6 +23,7 @@ describe('ActivityController', () => {
       type: ActivityType.IMPORT,
       pubKey: 'mock-pub-key',
       data: 'mock-data',
+      status: null,
       hasSeen: false,
     },
     {
@@ -31,6 +32,7 @@ describe('ActivityController', () => {
       type: ActivityType.DEPOSIT,
       pubKey: 'mock-pub-key',
       data: 'mock-data',
+      status: null,
       hasSeen: false,
     },
     {
@@ -39,6 +41,7 @@ describe('ActivityController', () => {
       type: ActivityType.GRAFFITI,
       pubKey: 'mock-pub-key',
       data: 'mock-data',
+      status: null,
       hasSeen: false,
       createdAt: new Date('2024-11-05T18:56:47.679Z'),
     },

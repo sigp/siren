@@ -5,6 +5,7 @@ import { ActivityType } from '../../../src/types';
 import { UpdateOptions, Op } from 'sequelize';
 import { Response } from 'express';
 import { ClientManager } from '../utils/client-manager';
+import { Status } from '../../../src/constants/enums';
 
 @Injectable()
 export class ActivityService {
@@ -27,12 +28,18 @@ export class ActivityService {
     this.clientManager.sendMessageToClients(data);
   }
 
-  public async storeActivity(data: string, pubKey: string, type: ActivityType) {
+  public async storeActivity(
+    data: string,
+    pubKey: string,
+    type: ActivityType,
+    status: Status,
+  ) {
     try {
       const result = await this.activityRepository.create({
         data,
         pubKey,
         type,
+        status,
         hasSeen: false,
       });
 
