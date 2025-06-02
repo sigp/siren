@@ -1,12 +1,14 @@
 import { ByteVectorType, ContainerType, UintNumberType } from '@chainsafe/ssz'
-import axios from 'axios'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRecoilValue } from 'recoil'
 import { bytesToHex } from 'viem'
 import { useWriteContract } from 'wagmi'
 import { contractAbi } from '../../contracts/depositContractAbi'
+import postActivity from '../../utilities/postActivity'
+import { Status } from '../constants/enums'
 import { beaconNodeSpec } from '../recoil/atoms'
 import { ActivityType, TxHash } from '../types'
+import useResolveTransactionOnce from './useResolveTransactionOnce'
 
 // DepositData SSZ type
 export const depositDataContainer = new ContainerType({
@@ -21,7 +23,30 @@ const useValidatorTopUp = () => {
   const [txHash, setTxHash] = useState<TxHash | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
+  const [depositAmount, setDepositAmount] = useState('')
+  const [pubKey, setPubKey] = useState('')
   const { writeContract } = useWriteContract()
+  const { txStatus } = useResolveTransactionOnce(txHash)
+
+  useEffect(() => {
+    if (!txStatus || txStatus === Status.PENDING) return
+    ;(async () => {
+      try {
+        await postActivity({
+          data: {
+            amount: depositAmount,
+            txHash,
+          },
+          type: ActivityType.DEPOSIT,
+          pubKey,
+          status: txStatus,
+        })
+        setIsLoading(false)
+      } catch (e) {
+        console.error(e, 'error storing activity')
+      }
+    })()
+  }, [txStatus, txHash])
 
   const handleDepositError = (e: any) => {
     const error = (e as Error).message
@@ -83,19 +108,8 @@ const useValidatorTopUp = () => {
           },
           onSuccess: async (data) => {
             setTxHash(data as TxHash)
-            try {
-              await axios.post('/api/log-activity', {
-                data: JSON.stringify({
-                  amount: amount.toString(),
-                  txHash: data,
-                }),
-                type: ActivityType.DEPOSIT,
-                pubKey,
-              })
-              setIsLoading(false)
-            } catch (e) {
-              console.error(e, 'error storing activity')
-            }
+            setDepositAmount(amount.toString())
+            setPubKey(pubKey)
           },
         },
       )
@@ -113,6 +127,7 @@ const useValidatorTopUp = () => {
 
   return {
     txHash,
+    txStatus,
     isLoading,
     error,
     makeDeposit,
