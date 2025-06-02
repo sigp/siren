@@ -1,5 +1,4 @@
 import { FC, SVGProps } from 'react'
-import { Protocol, WalletPrefix } from '../constants/enums'
 import { Protocol, Status, WalletPrefix } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
@@ -215,12 +214,12 @@ export type Activity = {
   pubKey: string
   id: number
   data: string
+  status: Status
   hasSeen: boolean
   createdAt: string
   updatedAt: string
 }
 
-export type TxStatus = 'pending' | 'error' | 'success'
 export type TxHash = `0x${string}`
 export type Address = `0x${string}` | undefined
 

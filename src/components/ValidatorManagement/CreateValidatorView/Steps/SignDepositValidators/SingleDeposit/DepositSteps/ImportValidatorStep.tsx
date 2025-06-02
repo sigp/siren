@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../../../../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../../../../../../utilities/getBeaconChaLink'
 import isValidNetwork from '../../../../../../../../utilities/isValidNetwork'
+import { Status } from '../../../../../../../constants/enums'
 import { NetworkId, TxHash } from '../../../../../../../types'
 import ExternalLink from '../../../../../../ExternalLink/ExternalLink'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
@@ -34,8 +35,8 @@ const ImportValidatorStep: FC<ImportValidatorStepProps> = ({
         title={t(
           `validatorManagement.txStatuses.${isImportError ? 'importError' : 'importPending'}.title`,
         )}
-        text={!isImportError ? t('validatorManagement.txStatuses.importPending.text') : undefined}
-        status={isImportError ? 'error' : 'pending'}
+        text={!isImportError ? t('validatorManagement.txStatuses.importPending.text') : ''}
+        status={isImportError ? Status.ERROR : Status.PENDING}
         txHash={txHash}
       >
         {isImportError && (

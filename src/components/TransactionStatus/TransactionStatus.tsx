@@ -4,7 +4,8 @@ import addClassString from '../../../utilities/addClassString'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
 import isValidNetwork from '../../../utilities/isValidNetwork'
-import { NetworkId, TxHash, TxStatus } from '../../types'
+import { Status } from '../../constants/enums'
+import { NetworkId, TxHash } from '../../types'
 import Typography from '../Typography/Typography'
 
 export enum TransactionStatusStyle {
@@ -15,7 +16,7 @@ export enum TransactionStatusStyle {
 export interface TransactionStatusProps {
   id?: string | number | undefined
   txHash: TxHash
-  status: TxStatus
+  status: Status
   title: string
   text?: string
   children?: ReactNode
@@ -38,14 +39,14 @@ const TransactionStatus: FC<TransactionStatusProps> = ({
   ])
 
   const statusContainerClass = useMemo(() => {
-    if (status === 'pending') return 'border-warning bg-warning100'
-    if (status === 'success') return 'border-success bg-success100'
+    if (status === Status.PENDING) return 'border-warning bg-warning100'
+    if (status === Status.SUCCESS) return 'border-success bg-success100'
     return 'border-error bg-error100'
   }, [status])
 
   const iconClass = useMemo(() => {
-    if (status === 'pending') return 'text-warning bi-exclamation text-4xl'
-    if (status === 'success') return 'text-success bi-check-lg text-2xl'
+    if (status === Status.PENDING) return 'text-warning bi-exclamation text-4xl'
+    if (status === Status.SUCCESS) return 'text-success bi-check-lg text-2xl'
     return 'text-error bi-x text-3xl'
   }, [status])
 

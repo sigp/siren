@@ -5,12 +5,13 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getEtherscanLink from '../../../utilities/getEtherscanLink'
 import isValidNetwork from '../../../utilities/isValidNetwork'
+import { Status } from '../../constants/enums'
 import Button, { ButtonFace } from '../Button/Button'
 import Typography from '../Typography/Typography'
 
 export interface TransactionStatusBlockProps {
   txHash: string
-  txStatus: string | undefined
+  txStatus: Status | undefined
   onError?: () => void
   onErrorText?: string
   onSuccessText?: string
@@ -28,8 +29,8 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
   chainId,
 }) => {
   const { t } = useTranslation()
-  const isSuccess = txStatus === 'success'
-  const isError = txStatus === 'error'
+  const isSuccess = txStatus === Status.SUCCESS
+  const isError = txStatus === Status.ERROR
   const etherScanLink = isValidNetwork(chainId) ? getEtherscanLink(chainId, `/tx/${txHash}`) : null
 
   const hasErrorCallback = !!onError && !!onErrorText

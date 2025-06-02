@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
 import formatEthAddress from '../../../../../../../utilities/formatEthAddress'
+import { Status } from '../../../../../../constants/enums'
 import useImportValidator from '../../../../../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../../../../../hooks/useResolveTransactionOnce'
 import useValidatorDeposit from '../../../../../../hooks/useValidatorDeposit'
@@ -74,7 +75,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   useEffect(() => {
     if (
-      txStatus !== 'success' ||
+      txStatus !== Status.SUCCESS ||
       !mnemonic ||
       index === undefined ||
       !keyStorePassword ||
