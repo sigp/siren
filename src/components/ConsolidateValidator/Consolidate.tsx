@@ -1,14 +1,14 @@
-import axios from 'axios'
 import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAccount, useSendTransaction, UseEstimateGasParameters } from 'wagmi'
+import { useAccount, UseEstimateGasParameters, useSendTransaction } from 'wagmi'
 import displayToast from '../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../utilities/formatWithdrawalAddress'
 import { CONSOLIDATION_CONTRACT } from '../../constants/constants'
+import { Status } from '../../constants/enums'
 import useCalculateGas from '../../hooks/useCalculateGas'
 import useFeeGetter from '../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
-import { ActivityType, ConsolidationTx, ToastType, TxHash } from '../../types'
+import { ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
@@ -73,24 +73,11 @@ const Consolidate: FC<ConsolidateViewProps> = ({
       })
       onSubmitRequest({
         index,
+        targetPubKey,
         pubKey: sourcePubKey,
         txHash,
-        status: 'pending',
+        status: Status.PENDING,
       })
-
-      try {
-        await axios.post('/api/log-activity', {
-          data: JSON.stringify({
-            targetPubKey,
-            sourcePubKey: sourceValidator.pubKey,
-            txHash,
-          }),
-          type: ActivityType.CONSOLIDATION,
-          pubKey: targetPubKey,
-        })
-      } catch (e) {
-        console.error('unable to store activity')
-      }
     } catch (error) {
       handleTxError(error)
     } finally {

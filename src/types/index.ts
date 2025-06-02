@@ -1,5 +1,6 @@
 import { FC, SVGProps } from 'react'
 import { Protocol, WalletPrefix } from '../constants/enums'
+import { Protocol, Status, WalletPrefix } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
 
@@ -248,7 +249,8 @@ export enum NetworkId {
 
 export type ConsolidationTx = {
   index: number
+  targetPubKey: string
   pubKey: string
   txHash: TxHash
-  status: TxStatus
+  status: Status
 }
