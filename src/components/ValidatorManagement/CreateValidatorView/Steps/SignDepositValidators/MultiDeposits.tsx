@@ -2,8 +2,9 @@ import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
+import { Status } from '../../../../../constants/enums'
 import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
-import { DepositData, TxHash, TxStatus, ValidatorCandidate } from '../../../../../types'
+import { DepositData, TxHash, ValidatorCandidate } from '../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../types/beacon'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import Typography from '../../../../Typography/Typography'
@@ -34,22 +35,18 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
   const [depositData, setDepositData] = useState<DepositData[]>([])
 
   const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
+  const {
+    parentRef: parentStatusRef,
+    targetChildRef: childStatusRef,
+    maxHeight: statusMaxHeight,
+  } = useMaxHeight()
 
   const acknowledgeRisk = () => setIsAcknowledgeRisk(true)
-  const storeDepositInfo = (
-    txHash: TxHash,
-    keyStorePassword: string,
-    pubKey: string,
-    mnemonicIndex: number,
-    suggestedFeeRecipient: string,
-  ) => {
-    setDepositData((prev) => [
-      ...prev,
-      { txHash, pubKey, keyStorePassword, mnemonicIndex, suggestedFeeRecipient, status: 'pending' },
-    ])
+  const storeDepositInfo = (data: DepositData) => {
+    setDepositData((prev) => [data, ...prev])
   }
 
-  const updateDepositInfoStatus = (pubKey: string, status: TxStatus) => {
+  const updateDepositInfoStatus = (pubKey: string, status: Status) => {
     setDepositData((prev) => {
       const index = prev.findIndex((deposit) => deposit.pubKey === pubKey)
       if (index === -1) return prev
@@ -98,7 +95,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
               <div className='w-full h-full overflow-auto border-style'>
                 {candidates.map((validator, index) => (
                   <ValidatorDepositRow
-                    key={index}
+                    key={validator.pubKey}
                     data={depositData.find((data) => data.mnemonicIndex === validator.index)}
                     beaconSpec={beaconSpec}
                     onDeposit={storeDepositInfo}
@@ -119,39 +116,45 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
           )}
         </div>
       </div>
-      <div className='w-full lg:w-[500px] relative h-full flex flex-col'>
+      <div ref={parentStatusRef} className='w-full max-w-[500px] relative flex-1 flex flex-col'>
         <div className='w-full border-b-style pb-3'>
           <Typography>{t('validatorManagement.transactionStatus')}</Typography>
         </div>
-        {depositData.length ? (
-          <>
-            <div className='space-y-3 overflow-scroll lg:max-h-[400px] w-full pt-3'>
-              {depositData.map((data, index) => (
-                <ValidatorDepositImport
-                  key={index}
-                  mnemonic={mnemonic}
-                  onUpdateStatus={updateDepositInfoStatus}
-                  onRetryTx={removeTransaction}
-                  depositData={data}
-                  depositNetworkId={Number(DEPOSIT_NETWORK_ID)}
-                />
-              ))}
+        <div
+          ref={childStatusRef}
+          style={{ maxHeight: statusMaxHeight }}
+          className='w-full flex flex-col'
+        >
+          {depositData.length ? (
+            <>
+              <div className='space-y-3 overflow-auto h-full w-full pt-3'>
+                {depositData.map((data, index) => (
+                  <ValidatorDepositImport
+                    key={data.pubKey}
+                    mnemonic={mnemonic}
+                    onUpdateStatus={updateDepositInfoStatus}
+                    onRetryTx={removeTransaction}
+                    depositData={data}
+                    depositNetworkId={Number(DEPOSIT_NETWORK_ID)}
+                  />
+                ))}
+              </div>
+              <Button
+                className='mt-8 w-full'
+                type={ButtonFace.SECONDARY}
+                href='/dashboard/validators'
+              >
+                {t('validatorManagement.manageValidators')}
+              </Button>
+            </>
+          ) : (
+            <div className='w-full flex-1'>
+              <div className='w-full h-full border-style flex items-center justify-center'>
+                <MiningSvg className='ease-in duration-500 transition-colors w-[300px] h-[300px]' />
+              </div>
             </div>
-            <Button
-              className='mt-8 w-full'
-              type={ButtonFace.SECONDARY}
-              href='/dashboard/validators'
-            >
-              {t('validatorManagement.manageValidators')}
-            </Button>
-          </>
-        ) : (
-          <div className='w-full flex-1'>
-            <div className='w-full h-full border-style flex items-center justify-center'>
-              <MiningSvg className='ease-in duration-500 transition-colors w-[300px] h-[300px]' />
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
