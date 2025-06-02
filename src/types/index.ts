@@ -227,9 +227,10 @@ export type Address = `0x${string}` | undefined
 export type DepositData = {
   txHash: TxHash
   pubKey: string
+  amount: bigint
   keyStorePassword: string
   mnemonicIndex: number
-  status: TxStatus
+  status: Status
   suggestedFeeRecipient: string
 }
 

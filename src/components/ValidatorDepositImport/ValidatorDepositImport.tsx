@@ -3,9 +3,11 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
 import isValidNetwork from '../../../utilities/isValidNetwork'
+import postActivity from '../../../utilities/postActivity'
+import { Status } from '../../constants/enums'
 import useImportValidator from '../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../hooks/useResolveTransactionOnce'
-import { DepositData, NetworkId, TxHash, TxStatus } from '../../types'
+import { ActivityType, DepositData, NetworkId, TxHash } from '../../types'
 import ExternalLink from '../ExternalLink/ExternalLink'
 import TransactionStatus from '../TransactionStatus/TransactionStatus'
 import Typography from '../Typography/Typography'
@@ -14,7 +16,7 @@ export interface ValidatorDepositImportProps {
   depositData: DepositData
   mnemonic: string
   onRetryTx: (txHash: TxHash) => void
-  onUpdateStatus: (pubKey: string, status: TxStatus) => void
+  onUpdateStatus: (pubKey: string, status: Status) => void
   depositNetworkId: NetworkId
 }
 
@@ -26,7 +28,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   depositNetworkId,
 }) => {
   const { t } = useTranslation()
-  const { txHash, pubKey, mnemonicIndex, keyStorePassword, suggestedFeeRecipient, status } =
+  const { txHash, pubKey, mnemonicIndex, amount, keyStorePassword, suggestedFeeRecipient, status } =
     depositData
   const shortHandPubKey = formatEthAddress(pubKey)
   const { txStatus } = useResolveTransactionOnce(txHash)
@@ -40,14 +42,33 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
   const retryTransaction = useCallback(() => onRetryTx(txHash), [onRetryTx, txHash])
 
   useEffect(() => {
-    if (txStatus === 'pending') return
+    if (!txStatus || txStatus === Status.PENDING) return
+    ;(async () => {
+      try {
+        await postActivity({
+          data: {
+            amount: amount.toString(),
+            txHash,
+          },
+          type: ActivityType.DEPOSIT,
+          pubKey,
+          status: txStatus,
+        })
+      } catch (e) {
+        console.error(e, 'error storing activity')
+      }
+    })()
+  }, [txStatus, txHash, pubKey])
 
-    if (txStatus === 'error') {
-      onUpdateStatus(pubKey, 'error')
+  useEffect(() => {
+    if (txStatus === Status.PENDING) return
+
+    if (txStatus === Status.ERROR) {
+      onUpdateStatus(pubKey, Status.ERROR)
       return
     }
 
-    if (status !== 'pending') return
+    if (isImportSuccess) return
     ;(async () => {
       await importValidator({
         mnemonic,
@@ -55,14 +76,22 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
         keyStorePassword,
         suggestedFeeRecipient,
         onSuccess: () => {
-          onUpdateStatus(pubKey, 'success')
+          onUpdateStatus(pubKey, Status.SUCCESS)
         },
         onError: () => {
-          onUpdateStatus(pubKey, 'error')
+          onUpdateStatus(pubKey, Status.ERROR)
         },
       })
     })()
-  }, [txStatus, mnemonic, mnemonicIndex, keyStorePassword, suggestedFeeRecipient, pubKey, status])
+  }, [
+    txStatus,
+    mnemonic,
+    mnemonicIndex,
+    keyStorePassword,
+    suggestedFeeRecipient,
+    pubKey,
+    isImportSuccess,
+  ])
 
   const beaconChaLink = isValidNetwork(depositNetworkId)
     ? getBeaconChaLink(depositNetworkId, `/validator/${pubKey}`)
@@ -75,7 +104,7 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
           id={mnemonicIndex}
           networkId={depositNetworkId}
           title={t(`validatorManagement.txStatuses.importError.title`)}
-          status='error'
+          status={Status.ERROR}
           txHash={txHash}
         >
           <div className='space-y-2'>
@@ -93,13 +122,13 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
       )
     }
 
-    if (isImportSuccess || status === 'success') {
+    if (isImportSuccess || status === Status.SUCCESS) {
       return (
         <TransactionStatus
           id={mnemonicIndex}
           networkId={depositNetworkId}
           title={t('validatorManagement.txStatuses.validatorComplete.title')}
-          status='success'
+          status={Status.SUCCESS}
           txHash={txHash}
         >
           <div className='space-y-2'>
@@ -122,22 +151,24 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
           networkId={depositNetworkId}
           title={t(`validatorManagement.txStatuses.importPending.title`)}
           text={t(`validatorManagement.txStatuses.importPending.text`)}
-          status='pending'
+          status={Status.PENDING}
           txHash={txHash}
         />
       )
     }
 
+    const txStatusKey = txStatus.toLowerCase()
+
     return (
       <TransactionStatus
         id={mnemonicIndex}
         networkId={depositNetworkId}
-        title={t(`validatorManagement.txStatuses.${txStatus}.title`)}
-        text={t(`validatorManagement.txStatuses.${txStatus}.text`)}
-        status={txStatus || 'pending'}
+        title={t(`validatorManagement.txStatuses.${txStatusKey}.title`)}
+        text={t(`validatorManagement.txStatuses.${txStatusKey}.text`)}
+        status={txStatus}
         txHash={txHash}
       >
-        {txStatus === 'error' && (
+        {txStatus === Status.ERROR && (
           <div className='space-y-2'>
             <Typography type='text-caption1'>
               {t('validatorManagement.txStatuses.error.text')}
