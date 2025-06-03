@@ -2,11 +2,12 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../../../../utilities/displayToast'
 import formatEthAddress from '../../../../../../../utilities/formatEthAddress'
+import postActivity from '../../../../../../../utilities/postActivity'
 import { Status } from '../../../../../../constants/enums'
 import useImportValidator from '../../../../../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../../../../../hooks/useResolveTransactionOnce'
 import useValidatorDeposit from '../../../../../../hooks/useValidatorDeposit'
-import { ToastType, ValidatorCandidate } from '../../../../../../types'
+import { ActivityType, ToastType, ValidatorCandidate } from '../../../../../../types'
 import { BeaconNodeSpecResults } from '../../../../../../types/beacon'
 import InvestRewards, { InvestRewardsProps } from '../../../../../InvestRewards/InvestRewards'
 import Tooltip from '../../../../../ToolTip/Tooltip'
@@ -74,14 +75,26 @@ const SingleDeposit: FC<SingleDepositProps> = ({
   }, [txHash])
 
   useEffect(() => {
-    if (
-      txStatus !== Status.SUCCESS ||
-      !mnemonic ||
-      index === undefined ||
-      !keyStorePassword ||
-      !suggestedFeeRecipient
-    )
-      return
+    if (txStatus === Status.PENDING) return
+    ;(async () => {
+      try {
+        await postActivity({
+          data: {
+            amount: effectiveBalance.toString(),
+            txHash,
+          },
+          type: ActivityType.DEPOSIT,
+          pubKey,
+          status: txStatus,
+        })
+      } catch (e) {
+        console.error(e, 'error storing activity')
+      }
+    })()
+  }, [txStatus, txHash, pubKey, effectiveBalance])
+
+  useEffect(() => {
+    if (txStatus !== Status.SUCCESS) return
     ;(async () => {
       incrementStep()
       await importValidator({
@@ -94,7 +107,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
         },
       })
     })()
-  }, [txStatus])
+  }, [txStatus, mnemonic, index, keyStorePassword, suggestedFeeRecipient])
 
   const acknowledgeRisk = () => setIsAcknowledge(true)
 
