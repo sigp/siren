@@ -95,6 +95,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   useEffect(() => {
     if (txStatus !== Status.SUCCESS) return
+    if (!index || !mnemonic || !keyStorePassword || !suggestedFeeRecipient) return
     ;(async () => {
       incrementStep()
       await importValidator({

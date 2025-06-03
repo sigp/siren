@@ -93,7 +93,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
                 </div>
               </div>
               <div className='w-full h-full overflow-auto border-style'>
-                {candidates.map((validator, index) => (
+                {candidates.map((validator) => (
                   <ValidatorDepositRow
                     key={validator.pubKey}
                     data={depositData.find((data) => data.mnemonicIndex === validator.index)}
@@ -128,7 +128,7 @@ const MultiDeposits: FC<MultiDepositsProps> = ({
           {depositData.length ? (
             <>
               <div className='space-y-3 overflow-auto h-full w-full pt-3'>
-                {depositData.map((data, index) => (
+                {depositData.map((data) => (
                   <ValidatorDepositImport
                     key={data.pubKey}
                     mnemonic={mnemonic}
