@@ -101,7 +101,11 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
           </Typography>
         </Tooltip>
         {withdrawalAddress ? (
-          <WithdrawalAddressPill id={`${pubKey}-pill-text`} address={withdrawalAddress} />
+          <WithdrawalAddressPill
+            hasPadding
+            id={`${pubKey}-pill-text`}
+            address={withdrawalAddress}
+          />
         ) : null}
       </div>
     </div>
