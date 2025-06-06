@@ -80,3 +80,8 @@ export enum Status {
   SUCCESS = 'SUCCESS',
   ERROR = 'ERROR',
 }
+
+export enum SettingsView {
+  GENERAL = 'GENERAL',
+  ABOUT = 'ABOUT',
+}
