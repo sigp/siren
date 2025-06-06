@@ -32,8 +32,8 @@ export class ActivityController {
 
   @Post('/')
   async logActivity(@Body() activity) {
-    const { data, pubKey, type } = activity;
-    return this.activityService.storeActivity(data, pubKey, type);
+    const { data, pubKey, type, status } = activity;
+    return this.activityService.storeActivity(data, pubKey, type, status);
   }
 
   @Put(':id/read')

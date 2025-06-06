@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { formatEther, parseUnits } from 'ethers'
 import Link from 'next/link'
 import React, { ChangeEvent, FC, useContext, useEffect, useMemo, useState } from 'react'
@@ -8,12 +7,13 @@ import displayToast from '../../../../../utilities/displayToast'
 import formatWithdrawalAddress from '../../../../../utilities/formatWithdrawalAddress'
 import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
 import isValidNetwork from '../../../../../utilities/isValidNetwork'
+import postActivity from '../../../../../utilities/postActivity'
 import {
   EFFECTIVE_BALANCE,
   EXECUTION_WITHDRAWAL_CONTRACT,
   MAX_EFFECTIVE_BALANCE,
 } from '../../../../constants/constants'
-import { ValidatorModalView } from '../../../../constants/enums'
+import { Status, ValidatorModalView } from '../../../../constants/enums'
 import useCalculateGas from '../../../../hooks/useCalculateGas'
 import useFeeGetter from '../../../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
@@ -84,23 +84,23 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   const { txStatus } = useResolveTransactionOnce(txHash)
 
   useEffect(() => {
-    const finalTxStatus = txStatus === 'success' || txStatus === 'error'
-    if (finalTxStatus && withdrawalAmount !== undefined) {
+    if (txStatus !== Status.PENDING && withdrawalAmount !== undefined) {
       setWithdrawalAmount(undefined)
     }
   }, [txStatus, withdrawalAmount])
 
   useEffect(() => {
-    if (txStatus !== 'success' || isRecordedActivity || !withdrawalAmount) return
+    if (!txStatus || txStatus === Status.PENDING || isRecordedActivity || !withdrawalAmount) return
     ;(async () => {
       try {
-        await axios.post('/api/log-activity', {
-          data: JSON.stringify({
+        await postActivity({
+          data: {
             amount: withdrawalAmount.toString(),
             txHash,
-          }),
+          },
           type: ActivityType.PARTIAL_WITHDRAWAL,
           pubKey,
+          status: txStatus,
         })
       } catch (e) {
         console.error('unable to store withdrawal activity...')

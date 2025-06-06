@@ -3,9 +3,10 @@ import React, { FC, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import addClassString from '../../../utilities/addClassString'
 import displayToast from '../../../utilities/displayToast'
+import { Status } from '../../constants/enums'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
 import useValidatorDeposit, { ValidatorDepositConfig } from '../../hooks/useValidatorDeposit'
-import { DepositData, ToastType, TxHash, ValidatorCandidate } from '../../types'
+import { DepositData, ToastType, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
 import PillText from '../PillText/PillText'
 import Spinner from '../Spinner/Spinner'
@@ -14,13 +15,7 @@ import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ValidatorDepositRowProps extends Omit<ValidatorDepositConfig, 'validator'> {
   candidate: ValidatorCandidate
-  onDeposit: (
-    txHash: TxHash,
-    keyStorePassword: string,
-    pubKey: string,
-    mnemonicIndex: number,
-    suggestedFeeRecipient: string,
-  ) => void
+  onDeposit: (data: DepositData) => void
   data: DepositData | undefined
 }
 
@@ -48,7 +43,15 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
 
   useEffect(() => {
     if (txHash && pubKey && !!keyStorePassword) {
-      onDeposit(txHash, keyStorePassword, pubKey, index as number, suggestedFeeRecipient as string)
+      onDeposit({
+        txHash,
+        keyStorePassword,
+        pubKey,
+        mnemonicIndex: Number(index),
+        suggestedFeeRecipient: String(suggestedFeeRecipient),
+        amount: effectiveBalance,
+        status: Status.PENDING,
+      })
     }
   }, [txHash, keyStorePassword, pubKey, index, suggestedFeeRecipient])
 
@@ -59,7 +62,7 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   }, [error])
 
   const statusIconClass = addClassString('', [
-    data?.status === 'success' ? 'bi-check-lg text-success' : 'bi-x text-error',
+    data?.status === Status.SUCCESS ? 'bi-check-lg text-success' : 'bi-x text-error',
   ])
 
   return (
@@ -72,7 +75,7 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
           displayText={`${formatEther(effectiveBalance)} ETH`}
         />
         {!!data ? (
-          data.status === 'pending' ? (
+          data.status === Status.PENDING ? (
             <Spinner size='h-3 w-3' />
           ) : (
             <i className={statusIconClass} />

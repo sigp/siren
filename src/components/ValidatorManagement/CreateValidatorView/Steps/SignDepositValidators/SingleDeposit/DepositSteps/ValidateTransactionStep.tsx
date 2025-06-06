@@ -1,11 +1,12 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import { NetworkId, TxHash, TxStatus } from '../../../../../../../types'
+import { Status } from '../../../../../../../constants/enums'
+import { NetworkId, TxHash } from '../../../../../../../types'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
 import Typography from '../../../../../../Typography/Typography'
 
 export interface ValidateTransactionStepProps {
-  txStatus: TxStatus | undefined
+  txStatus: Status
   txHash: TxHash | undefined
   networkId: NetworkId
   onRetry: () => void
@@ -18,15 +19,16 @@ const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
   onRetry,
 }) => {
   const { t } = useTranslation()
-  const isError = txStatus === 'error'
+  const isError = txStatus === Status.ERROR
+  const transKeyStatus = txStatus.toLowerCase()
 
   return txHash ? (
     <div className='p-4 space-y-2'>
       <TransactionStatus
-        title={t(`validatorManagement.txStatuses.${txStatus}.title`)}
-        text={!isError ? t(`validatorManagement.txStatuses.${txStatus}.text`) : undefined}
+        title={t(`validatorManagement.txStatuses.${transKeyStatus}.title`)}
+        text={!isError ? t(`validatorManagement.txStatuses.${transKeyStatus}.text`) : ''}
         networkId={networkId}
-        status={txStatus || 'pending'}
+        status={txStatus}
         txHash={txHash}
       >
         {isError && (

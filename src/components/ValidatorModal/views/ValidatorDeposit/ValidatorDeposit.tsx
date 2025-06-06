@@ -16,10 +16,9 @@ import displayToast from '../../../../../utilities/displayToast'
 import getBeaconChaLink from '../../../../../utilities/getBeaconChaLink'
 import isValidNetwork from '../../../../../utilities/isValidNetwork'
 import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../../../constants/constants'
-import { ValidatorModalView, WalletPrefix } from '../../../../constants/enums'
+import { Status, ValidatorModalView, WalletPrefix } from '../../../../constants/enums'
 import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
 import useProcessEffectiveBalance from '../../../../hooks/useProcessEffectiveBalance'
-import useResolveTransactionOnce from '../../../../hooks/useResolveTransactionOnce'
 import useValidatorTopUp from '../../../../hooks/useValidatorTopUp'
 import { selectUpOffset } from '../../../../recoil/selectors/selectUpOffset'
 import { ToastType } from '../../../../types'
@@ -80,11 +79,10 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
   const newBalance = balance + sanitizedDepositAmount + pendingDepositAmount
 
   const { effective } = useProcessEffectiveBalance(newBalance, effectiveBalance)
-  const { isLoading, txHash, error, makeDeposit, retryTransaction } = useValidatorTopUp()
-  const { txStatus } = useResolveTransactionOnce(txHash)
+  const { isLoading, txHash, txStatus, error, makeDeposit, retryTransaction } = useValidatorTopUp()
 
   useEffect(() => {
-    const finalTxStatus = txStatus === 'success' || txStatus === 'error'
+    const finalTxStatus = txStatus === Status.SUCCESS || txStatus === Status.ERROR
     if (finalTxStatus && depositAmount !== undefined) {
       setDepositAmount(undefined)
     }

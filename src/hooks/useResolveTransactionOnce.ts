@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
-import { TxHash, TxStatus } from '../types'
+import { Status } from '../constants/enums'
+import { TxHash } from '../types'
 
 export type useResolveTransactionOnceReturnType = {
-  txStatus: TxStatus | undefined
+  txStatus: Status
 }
 
 const useResolveTransactionOnce = (
   txHash: TxHash | undefined,
 ): useResolveTransactionOnceReturnType => {
   const [isEnabledFetch, setIsEnabledFetch] = useState<boolean>(true)
-  const {
-    isFetched,
-    status: txStatus,
-    ...rest
-  } = useWaitForTransactionReceipt({ hash: txHash, query: { enabled: isEnabledFetch } })
+  const { isFetched, status, ...rest } = useWaitForTransactionReceipt({
+    hash: txHash,
+    query: { enabled: isEnabledFetch },
+  })
 
   useEffect(() => {
     if (isFetched) {
@@ -24,7 +24,7 @@ const useResolveTransactionOnce = (
 
   return {
     ...rest,
-    txStatus,
+    txStatus: status.toUpperCase() as Status,
   }
 }
 
