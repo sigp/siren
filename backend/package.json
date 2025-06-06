@@ -89,5 +89,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "resolutions": {
+    "tar-fs": "^2.1.3",
+    "multer": "^2.0.1"
   }
 }
