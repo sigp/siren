@@ -80,7 +80,6 @@
   "search": "Search...",
   "noResultsFound": "No Results Found",
   "diagnostic": "Diagnostic",
-  "documentation": "Documentation",
   "device": "Device",
   "network": "Network",
   "networkId": "Network ID",
@@ -339,18 +338,23 @@
     "unexpectedConsolidationError": "Unexpected error while submitting consolidation request.",
     "unexpectedPartialWithdrawalError": "An unexpected error occurred while submitting you partial withdrawal request."
   },
-  "settings": {
-    "general": "General",
-    "currentVersion": "Current Version",
-    "developedBy": "Developed & Maintained By",
-    "updates": {
-      "nonAvailable": "No Updates Available"
-    },
-    "links": {
-      "website": "Website",
-      "documentation": "Documentation"
-    }
+  "general": "General",
+  "about": "About",
+  "theme": {
+    "title": "Dashboard Theme",
+    "helperText": "Late night monitoring your validators? Turn down the brightness a night with dark mode or switch bright mode for extra clarity."
   },
+  "display": {
+    "title": "Display Name",
+    "helperText": "We need a name for the guardian of Lighthouse Consensus. What should we call you?"
+  },
+  "session": {
+    "title": "Session",
+    "helperText": "Keep your validators safe and terminate your current session. This will close the siren dashboard and require authenticaiton for access."
+  },
+  "currentVersion": "Current Version",
+  "website": "Website",
+  "documentation": "Documentation",
   "validatorManagement": {
     "validators": "Validators",
     "search": "search",
