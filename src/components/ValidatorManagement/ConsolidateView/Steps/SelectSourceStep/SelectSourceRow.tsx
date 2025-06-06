@@ -56,7 +56,11 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({
         </div>
         {withdrawalAddress ? (
           <div className='pl-4 hidden md:block'>
-            <WithdrawalAddressPill id={`${pubKey}-pill-text`} address={withdrawalAddress} />
+            <WithdrawalAddressPill
+              id={`${pubKey}-pill-text`}
+              hasPadding
+              address={withdrawalAddress}
+            />
           </div>
         ) : null}
       </div>

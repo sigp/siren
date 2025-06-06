@@ -73,6 +73,7 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(
           <div className='pl-2 hidden @425:block'>
             {withdrawalAddress ? (
               <WithdrawalAddressPill
+                hasPadding
                 textColor={isActive ? 'text-white' : 'text-dark900'}
                 isActive={isActive}
                 id={`${pubKey}-pill-text`}

@@ -7,11 +7,17 @@ export interface WithdrawalAddressPillProps
   extends Omit<PillTextProps, 'textPrefix' | 'toolTipText' | 'displayText'> {
   id: string
   address: string
+  hasPadding?: boolean
 }
 
-const WithdrawalAddressPill: FC<WithdrawalAddressPillProps> = ({ id, address, ...props }) => {
+const WithdrawalAddressPill: FC<WithdrawalAddressPillProps> = ({
+  id,
+  address,
+  hasPadding,
+  ...props
+}) => {
   const { t } = useTranslation()
-  const formattedFullCredentialAddress = formatEthAddress(address, 4, 40)
+  const formattedFullCredentialAddress = hasPadding ? formatEthAddress(address, 4, 40) : address
   const formattedShortCredentialAddress = formatEthAddress(address, 4, 8)
 
   return (
