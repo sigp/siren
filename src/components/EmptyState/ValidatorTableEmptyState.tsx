@@ -2,27 +2,29 @@ import clsx from 'clsx'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { FC } from 'react'
-import { useTranslation } from 'react-i18next'
 import LighthousePng from '../../assets/images/lighthouse-dark.png'
 import Button, { ButtonFace } from '../Button/Button'
 import Typography, { TypographyType } from '../Typography/Typography'
 
 export interface ValidatorTableEmptyStateProps {
-  href?: string
+  href?: string | undefined
   onClick?: () => void
   className?: string
-  ctaText: string
+  title: string
+  text: string
+  ctaText?: string
   btnFontType?: TypographyType
 }
 
 const ValidatorTableEmptyState: FC<ValidatorTableEmptyStateProps> = ({
+  title,
+  text,
   href,
   onClick,
   className,
   ctaText,
   btnFontType,
 }) => {
-  const { t } = useTranslation()
   const containerClasses = clsx(
     'w-full p-8 flex items-center justify-center bg-dark10 dark:bg-dark700',
     className,
@@ -36,7 +38,7 @@ const ValidatorTableEmptyState: FC<ValidatorTableEmptyStateProps> = ({
   return (
     <div className={containerClasses}>
       <div className='flex flex-col items-center space-y-2'>
-        <Typography type='text-caption'>{t('emptyState.validatorTable.noConnections')}</Typography>
+        <Typography type='text-caption'>{title}</Typography>
         <div className='h-[64px] w-[64px] flex items-center justify-center rounded-full dark:bg-dark600 opacity-60'>
           <Image
             alt='lighthouse'
@@ -48,9 +50,9 @@ const ValidatorTableEmptyState: FC<ValidatorTableEmptyStateProps> = ({
         </div>
         <div className='flex flex-col items-center space-y-2 max-w-[250px]'>
           <Typography type='text-caption1.5' className='text-center'>
-            {t('emptyState.validatorTable.importOrDeposit')}
+            {text}
           </Typography>
-          {href ? <Link href={href}>{btnContent}</Link> : btnContent}
+          {ctaText ? href ? <Link href={href}>{btnContent}</Link> : btnContent : null}
         </div>
       </div>
     </div>

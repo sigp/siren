@@ -76,9 +76,18 @@ const MainView: FC<MainViewProps> = ({
           validators={validators}
           view='full'
         />
+      ) : hasSearchAction ? (
+        <ValidatorTableEmptyState
+          title={t('filteredValidatorTable.nonFound')}
+          text={t('filteredValidatorTable.adjustFilter')}
+          className='min-h-60'
+        />
       ) : (
         <ValidatorTableEmptyState
           onClick={viewCreateVal}
+          title={t('emptyState.validatorTable.noConnections')}
+          text={t('emptyState.validatorTable.importOrDeposit')}
+          href='/dashboard/validators?view=create'
           btnFontType='text-caption'
           className='min-h-96'
           ctaText='Create New Validator'

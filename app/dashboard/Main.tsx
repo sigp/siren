@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -18,8 +18,16 @@ import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
 import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
+import useValidatorExclusionList from '../../src/hooks/useValidatorExclusionList'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
-import { ActivityResponse, LogData, Metric, ProposerDuty, StatusColor } from '../../src/types'
+import {
+  ActivityResponse,
+  ExcludedStatus,
+  LogData,
+  Metric,
+  ProposerDuty,
+  StatusColor,
+} from '../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
 import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
@@ -40,6 +48,7 @@ export interface MainProps {
   initActivityData: ActivityResponse
   initMetrics: Metric
   initPriorityLogs: LogData[]
+  initExclusionData: ExcludedStatus[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -58,6 +67,7 @@ const Main: FC<MainProps> = (props) => {
     initActivityData,
     initMetrics,
     initPriorityLogs,
+    initExclusionData,
   } = props
 
   const { t } = useTranslation()
@@ -78,6 +88,8 @@ const Main: FC<MainProps> = (props) => {
     refreshInterval: 60 * 1000,
     networkError,
   })
+
+  const { formattedExclusions } = useValidatorExclusionList(initExclusionData)
 
   const { data: peerData } = useSWRPolling<PeerDataResults>('/api/peer-data', {
     refreshInterval: slotInterval,
@@ -220,6 +232,10 @@ const Main: FC<MainProps> = (props) => {
     removeAlert(ALERT_ID.WARNING_LOG)
   }, [warningCount, storeAlert, removeAlert])
 
+  const filteredValidatorStates = useMemo(() => {
+    return validatorStates.filter(({ status }) => !formattedExclusions.includes(status))
+  }, [validatorStates, formattedExclusions])
+
   return (
     <DashboardWrapper
       initActivityData={initActivityData}
@@ -258,10 +274,18 @@ const Main: FC<MainProps> = (props) => {
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          {validatorStates.length ? (
-            <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
+          {filteredValidatorStates.length ? (
+            <ValidatorTable validators={filteredValidatorStates} className='mt-8 lg:mt-2' />
+          ) : validatorStates.length ? (
+            <ValidatorTableEmptyState
+              title={t('emptyState.filteredValidatorTable.nonFound')}
+              text={t('emptyState.filteredValidatorTable.adjustFilter')}
+              className='min-h-60'
+            />
           ) : (
             <ValidatorTableEmptyState
+              title={t('emptyState.validatorTable.noConnections')}
+              text={t('emptyState.validatorTable.importOrDeposit')}
               href='/dashboard/validators?view=create'
               btnFontType='text-caption1.5'
               className='min-h-60'

@@ -20,6 +20,7 @@ import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
 import { ValidatorModalView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
+import useValidatorExclusionList from '../../../src/hooks/useValidatorExclusionList'
 import {
   activeValidatorId,
   blsModuleAtom,
@@ -28,7 +29,7 @@ import {
   isEditValidator,
   isValidatorDetail,
 } from '../../../src/recoil/atoms'
-import { ActivityResponse, ValidatorManagementView } from '../../../src/types'
+import { ActivityResponse, ExcludedStatus, ValidatorManagementView } from '../../../src/types'
 import {
   BeaconNodeSpecResults,
   ForkVersionData,
@@ -56,6 +57,7 @@ export interface MainProps {
   initForkVersionData: ForkVersionData
   initPartialWithdrawals: PartialWithdrawal[]
   initPendingDeposits: PendingDeposit[]
+  initExclusionData: ExcludedStatus[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -72,6 +74,7 @@ const Main: FC<MainProps> = (props) => {
     initForkVersionData,
     initPartialWithdrawals,
     initPendingDeposits,
+    initExclusionData,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -121,6 +124,8 @@ const Main: FC<MainProps> = (props) => {
     refreshInterval: 60 * 1000,
     networkError,
   })
+
+  const { formattedExclusions } = useValidatorExclusionList(initExclusionData)
 
   const [view, setView] = useState<ValidatorManagementView>(ValidatorManagementView.MAIN)
 
@@ -195,8 +200,12 @@ const Main: FC<MainProps> = (props) => {
     setForkVersion(forkVersionData)
   }, [forkVersionData])
 
+  const filteredValidatorStates = useMemo(() => {
+    return validatorStates.filter(({ status }) => !formattedExclusions.includes(status))
+  }, [validatorStates, formattedExclusions])
+
   const filteredValidators = useMemo(() => {
-    return validatorStates.filter((validator) => {
+    return filteredValidatorStates.filter((validator) => {
       const query = search.toLowerCase()
 
       return (
@@ -205,7 +214,7 @@ const Main: FC<MainProps> = (props) => {
         validator?.index?.toString().includes(query)
       )
     })
-  }, [search, validatorStates])
+  }, [search, filteredValidatorStates])
 
   const rates = exchangeData?.data.rates
 
