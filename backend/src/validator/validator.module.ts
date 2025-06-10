@@ -5,9 +5,16 @@ import { UtilsModule } from '../utils/utils.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ActivityModule } from '../activity/activity.module';
 import { AuthModule } from '../auth.module';
+import { ExcludeStatusModule } from '../exclude-status/exclude-status.module';
 
 @Module({
-  imports: [UtilsModule, ActivityModule, CacheModule.register(), AuthModule],
+  imports: [
+    UtilsModule,
+    ActivityModule,
+    CacheModule.register(),
+    AuthModule,
+    ExcludeStatusModule,
+  ],
   controllers: [ValidatorController],
   providers: [ValidatorService],
 })
