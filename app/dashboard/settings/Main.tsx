@@ -9,7 +9,7 @@ import Typography from '../../../src/components/Typography/Typography'
 import { SettingsView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { ActivityResponse } from '../../../src/types'
+import { ActivityResponse, ExcludedStatus } from '../../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
 import { Diagnostics } from '../../../src/types/diagnostic'
 
@@ -20,6 +20,7 @@ export interface MainProps {
   bnVersion: string
   lighthouseVersion: string
   initActivityData: ActivityResponse
+  initExclusionList: ExcludedStatus[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -31,6 +32,7 @@ const Main: FC<MainProps> = (props) => {
     lighthouseVersion,
     bnVersion,
     initActivityData,
+    initExclusionList,
   } = props
 
   const { SECONDS_PER_SLOT } = beaconSpec
@@ -53,6 +55,7 @@ const Main: FC<MainProps> = (props) => {
 
   const viewGeneralSettings = () => setView(SettingsView.GENERAL)
   const viewAboutSettings = () => setView(SettingsView.ABOUT)
+  const viewDataManagement = () => setView(SettingsView.DATA)
 
   return (
     <DashboardWrapper
@@ -76,6 +79,12 @@ const Main: FC<MainProps> = (props) => {
               icon='bi-house'
             />
             <SettingsMenuItem
+              isActive={view === SettingsView.DATA}
+              text={t('dataManagement')}
+              onClick={viewDataManagement}
+              icon='bi-clipboard-data'
+            />
+            <SettingsMenuItem
               isActive={view === SettingsView.ABOUT}
               text={t('about')}
               onClick={viewAboutSettings}
@@ -83,7 +92,12 @@ const Main: FC<MainProps> = (props) => {
             />
           </div>
         </div>
-        <ViewController bnVersion={bnVersion} vcVersion={lighthouseVersion} view={view} />
+        <ViewController
+          initExclusions={initExclusionList}
+          bnVersion={bnVersion}
+          vcVersion={lighthouseVersion}
+          view={view}
+        />
       </div>
     </DashboardWrapper>
   )

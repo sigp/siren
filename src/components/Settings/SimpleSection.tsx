@@ -14,7 +14,7 @@ const SimpleSection: FC<SimpleSectionProps> = ({ children, title, text, style = 
 
   return (
     <div className={classes}>
-      <div>
+      <div className='space-y-2'>
         <Typography
           type='text-subtitle3'
           color='text-transparent'

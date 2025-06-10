@@ -83,5 +83,6 @@ export enum Status {
 
 export enum SettingsView {
   GENERAL = 'GENERAL',
+  DATA = 'DATA',
   ABOUT = 'ABOUT',
 }

@@ -24,6 +24,11 @@
       "saturday": "Sat"
     }
   },
+  "dataManagement": "Data Management",
+  "validatorDisplay": {
+    "title": "Validator Display",
+    "helperText": "Use the checkboxes below to show or hide validators by their current status. Unchecking a status will remove all validators with that status from the validator table."
+  },
   "logLevel": "Log Level",
   "loadOlderLogs": "Load older logs",
   "effectiveBalance": "Effective Balance",
@@ -814,6 +819,10 @@
     "consolidationList": {
       "noEligibleFound": "No Eligible Validators",
       "reviewValidators": "Siren was unable to locate any validator that met the requirements for selected task. Please review your validator set and make appropriate adjustments."
+    },
+    "filteredValidatorTable": {
+      "nonFound": "No Validators Found",
+      "adjustFilter": "No validators rendered. Adjust your filter settings to show more validators."
     },
     "validatorTable": {
       "noConnections": "No Validators Connected",
