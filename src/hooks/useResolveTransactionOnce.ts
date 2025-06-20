@@ -13,7 +13,15 @@ const useResolveTransactionOnce = (
   const [isEnabledFetch, setIsEnabledFetch] = useState<boolean>(true)
   const { isFetched, status, ...rest } = useWaitForTransactionReceipt({
     hash: txHash,
-    query: { enabled: isEnabledFetch },
+    query: {
+      enabled: isEnabledFetch,
+      refetchOnMount: false,
+      refetchOnReconnect: false,
+      refetchOnWindowFocus: false,
+      retry: false,
+      retryOnMount: false,
+      staleTime: Infinity,
+    },
   })
 
   useEffect(() => {
@@ -21,6 +29,10 @@ const useResolveTransactionOnce = (
       setIsEnabledFetch(false)
     }
   }, [isFetched])
+
+  useEffect(() => {
+    setIsEnabledFetch(true)
+  }, [txHash])
 
   return {
     ...rest,
