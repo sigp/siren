@@ -216,6 +216,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
               <TransactionStatusBlock
                 chainId={chainId}
                 onErrorText={t('validatorManagement.retryTransaction')}
+                onReset={retryTransaction}
                 onError={retryTransaction}
                 onSuccess={viewDetails}
                 onSuccessText={t('validatorManagement.viewValidator')}
