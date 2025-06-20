@@ -1,7 +1,9 @@
-import { FC } from 'react'
+import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Status } from '../../../../../../../constants/enums'
 import { NetworkId, TxHash } from '../../../../../../../types'
+import Button, { ButtonFace } from '../../../../../../Button/Button'
+import Tooltip from '../../../../../../ToolTip/Tooltip'
 import TransactionStatus from '../../../../../../TransactionStatus/TransactionStatus'
 import Typography from '../../../../../../Typography/Typography'
 
@@ -19,6 +21,7 @@ const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
   onRetry,
 }) => {
   const { t } = useTranslation()
+  const isPending = txStatus === Status.PENDING
   const isError = txStatus === Status.ERROR
   const transKeyStatus = txStatus.toLowerCase()
 
@@ -41,6 +44,18 @@ const ValidateTransactionStep: FC<ValidateTransactionStepProps> = ({
                 {t('validatorManagement.retryTransaction')}
               </Typography>
             </div>
+          </div>
+        )}
+        {isPending && (
+          <div className='space-y-8'>
+            <Typography type='text-caption1'>
+              {t('validatorManagement.txStatuses.pending.text')}
+            </Typography>
+            <Tooltip id='retryTx-validate' maxWidth={350} text={t('txStatuses.cancelTxToolTip')}>
+              <Button fontType='text-caption1' onClick={onRetry} type={ButtonFace.TERTIARY}>
+                {t('cancelTransaction')}
+              </Button>
+            </Tooltip>
           </div>
         )}
       </TransactionStatus>
