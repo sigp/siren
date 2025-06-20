@@ -32,7 +32,7 @@ const Tooltip: FC<TooltipProps> = ({
   const { mode } = useUiMode()
   const isDark = (toolTipMode || mode) === UiMode.DARK
 
-  const containerClasses = clsx(className, cursor)
+  const containerClasses = clsx(className, cursor, 'w-fit')
   const toolTipClasses = clsx('shadow-xl z-50', tooltipClassName)
 
   const toolTipStyles = useMemo(

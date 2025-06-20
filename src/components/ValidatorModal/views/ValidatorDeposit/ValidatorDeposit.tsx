@@ -171,6 +171,7 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
                 chainId={chainId}
                 onErrorText={t('validatorManagement.retryTransaction')}
                 onError={retryTransaction}
+                onReset={retryTransaction}
                 onSuccess={viewDetails}
                 onSuccessText={t('validatorManagement.viewValidator')}
                 txStatus={txStatus}
