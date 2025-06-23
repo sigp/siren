@@ -125,7 +125,8 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
 
       {/* Chart fills remaining space at bottom */}
       {metric && size !== 'sm' && isBackground && chartData && chartColor && chartLabel && (
-        <div className='w-full flex-1 min-h-0 mt-2'>
+        <div className='w-full flex-1 min-h-0 mt-2 relative overflow-hidden rounded-md'>
+          <div className='absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent opacity-50'></div>
           <MetricLineChart
             data={chartData}
             color={chartColor}

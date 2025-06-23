@@ -98,6 +98,20 @@ const MetricLineChart: FC<MetricLineChartProps> = ({
 
     const yAxisConfig = getYAxisConfig()
 
+    // Create gradient fill for the chart
+    const createGradient = () => {
+      if (!chartEl.current) return color + '20'
+
+      const ctx = chartEl.current.getContext('2d')
+      if (!ctx) return color + '20'
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, chartEl.current.height)
+      gradient.addColorStop(0, color + '60') // More opaque at top
+      gradient.addColorStop(0.5, color + '30') // Medium opacity in middle
+      gradient.addColorStop(1, color + '10') // Very transparent at bottom
+      return gradient
+    }
+
     const createChart = () => {
       Chart.getChart(chartId)?.destroy()
 
@@ -110,38 +124,68 @@ const MetricLineChart: FC<MetricLineChartProps> = ({
               label,
               data: displayData,
               borderColor: color,
-              backgroundColor: `${color}30`, // Add transparency for fill
-              borderWidth: 1.5,
+              backgroundColor: createGradient(),
+              borderWidth: 2,
               fill: true,
               pointRadius: 0,
               pointHoverRadius: 0,
-              tension: 0.4, // Smooth curves
+              pointBackgroundColor: color,
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 2,
+              tension: 0.4,
+              shadowOffsetX: 0,
+              shadowOffsetY: 2,
+              shadowBlur: 4,
+              shadowColor: `${color}40`,
             },
           ],
         },
         options: {
           responsive: true,
           maintainAspectRatio: false,
-          animation: animate ? undefined : { duration: 0 },
+          animation: animate
+            ? {
+                duration: 1000,
+                easing: 'easeInOutQuart',
+              }
+            : { duration: 0 },
+          layout: {
+            padding: {
+              top: 5,
+              right: 5,
+              bottom: 5,
+              left: showYAxis ? 10 : 5,
+            },
+          },
           scales: {
             x: {
               display: false,
+              grid: {
+                display: false,
+              },
             },
             y: {
               display: showYAxis,
               min: yAxisConfig.min,
               max: yAxisConfig.max,
+              border: {
+                display: false,
+              },
               grid: {
                 display: showYAxis || showGrid,
-                color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                lineWidth: 1,
+                drawBorder: false,
               },
               ticks: {
                 display: showYAxis,
-                color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                color: mode === UiMode.DARK ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
                 font: {
-                  size: 10,
+                  size: 9,
+                  family: 'system-ui, -apple-system, sans-serif',
                 },
                 maxTicksLimit: 3,
+                padding: 8,
                 callback: function (value: any) {
                   if (isPercentage) {
                     return value.toFixed(1) + '%'
@@ -156,16 +200,50 @@ const MetricLineChart: FC<MetricLineChartProps> = ({
               display: false,
             },
             tooltip: {
-              enabled: false,
+              enabled: true,
+              mode: 'index',
+              intersect: false,
+              backgroundColor:
+                mode === UiMode.DARK ? 'rgba(0, 0, 0, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+              titleColor: mode === UiMode.DARK ? '#ffffff' : '#000000',
+              bodyColor: mode === UiMode.DARK ? '#ffffff' : '#000000',
+              borderColor: color,
+              borderWidth: 1,
+              cornerRadius: 6,
+              displayColors: false,
+              titleFont: {
+                size: 11,
+              },
+              bodyFont: {
+                size: 11,
+              },
+              padding: 8,
+              callbacks: {
+                title: () => label,
+                label: function (context: any) {
+                  const value = context.parsed.y
+                  if (isPercentage) {
+                    return `${value.toFixed(1)}%`
+                  }
+                  return `${value < 1 ? value.toFixed(2) : value.toFixed(1)}`
+                },
+              },
             },
           },
           elements: {
             point: {
               radius: 0,
+              hoverRadius: 4,
+              hoverBorderWidth: 2,
+            },
+            line: {
+              borderCapStyle: 'round',
+              borderJoinStyle: 'round',
             },
           },
           interaction: {
             intersect: false,
+            mode: 'index',
           },
         },
       }
