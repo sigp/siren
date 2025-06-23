@@ -78,6 +78,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               chartData={diskHistory}
               chartColor='#5E41D5'
               chartLabel='Disk Usage'
+              iconType='disk'
             />
             <DiagnosticCard
               title={t('cpu')}
@@ -90,6 +91,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               chartData={cpuHistory}
               chartColor='#7C5FEB'
               chartLabel='CPU Usage'
+              iconType='cpu'
             />
             <DiagnosticCard
               title={t('ram')}
@@ -102,6 +104,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               chartData={ramHistory}
               chartColor='#A841D5'
               chartLabel='RAM Usage'
+              iconType='ram'
             />
           </>
         )
@@ -153,14 +156,10 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
 
   return (
     <div className='h-full w-full flex flex-col xl:min-w-316'>
-      <div className='w-full h-12 border flex border-style500'>
-        <div
-          onClick={viewDeviceInfo}
-          className='flex-1 p-2 flex items-center justify-center cursor-pointer'
-        >
+      <div className='w-full h-12 flex items-center justify-between px-4 border-style500'>
+        <div onClick={viewDeviceInfo} className='cursor-pointer'>
           <Typography
-            type='text-caption2'
-            className='xl:text-caption1'
+            type='text-caption1'
             color={isDeviceView ? 'text-primary' : 'text-dark500'}
             darkMode={isDeviceView ? 'dark:text-white' : undefined}
             isBold={isDeviceView}
@@ -168,15 +167,11 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
             {t('hardwareInfo.usage')}
           </Typography>
         </div>
-        <div
-          onClick={viewNetworkInfo}
-          className='flex-1 p-2 flex items-center justify-center cursor-pointer'
-        >
+        <div onClick={viewNetworkInfo} className='cursor-pointer'>
           <Typography
-            isBold={isNetworkView}
-            type='text-caption2'
-            className='xl:text-caption1'
-            color={isNetworkView ? 'text-primary' : 'text-dark500'}
+            type='text-tiny'
+            className='uppercase @1600:text-caption1'
+            color={isNetworkView ? 'text-primary' : 'text-dark400'}
             darkMode={isNetworkView ? 'dark:text-white' : undefined}
           >
             {t('hardwareInfo.diagnostics')}

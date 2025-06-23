@@ -67,6 +67,7 @@ const LogStats: FC<LogStatsProps> = ({
         chartColor='#D541B8'
         chartLabel='Critical Logs'
         isChartPercentage={false}
+        iconType='critical'
       />
       <DiagnosticCard
         title={t('errors')}
@@ -82,6 +83,7 @@ const LogStats: FC<LogStatsProps> = ({
         chartColor='#836FFF'
         chartLabel='Error Logs'
         isChartPercentage={false}
+        iconType='error'
       />
       <DiagnosticCard
         title={t('logInfo.warnings')}
@@ -97,6 +99,7 @@ const LogStats: FC<LogStatsProps> = ({
         chartColor='#5200FF'
         chartLabel='Warning Logs'
         isChartPercentage={false}
+        iconType='warning'
       />
     </>
   )
