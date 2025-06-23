@@ -6,6 +6,7 @@ import DarkNetwork from '../../assets/images/darkNetwork.svg'
 import Network from '../../assets/images/network.svg'
 import NotAvailable from '../../assets/images/notAvalilable.svg'
 import { OptionalString, StatusColor } from '../../types'
+import MetricLineChart from '../MetricLineChart/MetricLineChart'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
 import Status from '../Status/Status'
 import Tooltip from '../ToolTip/Tooltip'
@@ -29,6 +30,10 @@ export interface DiagnosticCardProps {
   toolTipText?: OptionalString
   toolTipPosition?: PlacesType
   isDisabled?: boolean
+  chartData?: number[]
+  chartColor?: string
+  chartLabel?: string
+  isChartPercentage?: boolean
 }
 
 const DiagnosticCard: FC<DiagnosticCardProps> = ({
@@ -47,6 +52,10 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   toolTipText,
   toolTipPosition,
   isDisabled,
+  chartData,
+  chartColor,
+  chartLabel,
+  isChartPercentage = true,
 }) => {
   const [isReady, setReady] = useState(false)
   const toolTipId = Math.random().toString()
@@ -72,23 +81,15 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
     setReady(true)
   }, [])
 
-  const contentClass = addClassString('flex flex-col justify-between h-full', [
-    isDisabled && 'opacity-20',
-  ])
+  const contentClass = addClassString('flex flex-col h-full', [isDisabled && 'opacity-20'])
   const renderContent = () => (
     <div className={contentClass}>
-      {!metric ? (
+      {!metric && (
         <NotAvailable className='absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2' />
-      ) : (
-        size !== 'sm' &&
-        isBackground && (
-          <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
-            <Network className='w-full dark:hidden' />
-            <DarkNetwork className='w-full hidden dark:block' />
-          </div>
-        )
       )}
-      <div className='w-full z-10 space-x-8 flex justify-between'>
+
+      {/* Header with title and metric */}
+      <div className='w-full z-10 space-x-8 flex justify-between flex-shrink-0'>
         <Typography
           type={isSmall ? 'text-tiny' : 'text-caption1'}
           className={!isSmall ? 'xl:text-body' : ''}
@@ -104,7 +105,9 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           </Typography>
         )}
       </div>
-      <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between'>
+
+      {/* Status and subtitle above chart */}
+      <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between flex-shrink-0 mt-1'>
         <Typography
           type={isSmall ? 'text-tiny' : 'text-caption1'}
           color={subTitleHighlightColor ? 'text-dark900' : undefined}
@@ -119,6 +122,28 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
           status && <Status status={status} />
         )}
       </div>
+
+      {/* Chart fills remaining space at bottom */}
+      {metric && size !== 'sm' && isBackground && chartData && chartColor && chartLabel && (
+        <div className='w-full flex-1 min-h-0 mt-2'>
+          <MetricLineChart
+            data={chartData}
+            color={chartColor}
+            label={chartLabel}
+            animate={false}
+            isPercentage={isChartPercentage}
+            showYAxis={true}
+          />
+        </div>
+      )}
+
+      {/* Fallback background for non-chart cards */}
+      {metric && size !== 'sm' && isBackground && (!chartData || !chartColor || !chartLabel) && (
+        <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden opacity-30'>
+          <Network className='w-full dark:hidden' />
+          <DarkNetwork className='w-full hidden dark:block' />
+        </div>
+      )}
     </div>
   )
 

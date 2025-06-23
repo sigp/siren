@@ -4,6 +4,7 @@ import addSuffixString from '../../../utilities/addSuffixString'
 import secondsToShortHand from '../../../utilities/secondsToShortHand'
 import { DiagnosticType } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import useMetricHistory from '../../hooks/useMetricHistory'
 import { StatusColor } from '../../types'
 import { SyncData } from '../../types/beacon'
 import { Diagnostics } from '../../types/diagnostic'
@@ -36,6 +37,16 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
     natOpen,
   } = beanHealth
 
+  // Get historical data for charts
+  const { cpuHistory, ramHistory, diskHistory } = useMetricHistory(
+    cpuUtilization,
+    memoryUtilization,
+    diskUtilization,
+    0,
+    0,
+    0,
+  )
+
   const diskData = isSyncing ? diskStatus.syncing : diskStatus.synced
   const remainingBeaconTime = secondsToShortHand(Number(beaconSyncTime) || 0)
 
@@ -64,6 +75,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskData}
+              chartData={diskHistory}
+              chartColor='#5E41D5'
+              chartLabel='Disk Usage'
             />
             <DiagnosticCard
               title={t('cpu')}
@@ -73,6 +87,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
+              chartData={cpuHistory}
+              chartColor='#7C5FEB'
+              chartLabel='CPU Usage'
             />
             <DiagnosticCard
               title={t('ram')}
@@ -82,6 +99,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
+              chartData={ramHistory}
+              chartColor='#A841D5'
+              chartLabel='RAM Usage'
             />
           </>
         )
