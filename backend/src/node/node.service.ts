@@ -50,7 +50,7 @@ export class NodeService {
             disk_bytes_total,
             used_memory,
             total_memory,
-            sys_loadavg_5,
+            sys_loadavg_1,
             app_uptime: bnUptime,
             network_name,
             nat_open,
@@ -94,12 +94,12 @@ export class NodeService {
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 
-          const cpuUtilization = sys_loadavg_5.toFixed(1);
+          const cpuUtilization = sys_loadavg_1.toFixed(1);
 
           const cpuStatus =
-            sys_loadavg_5 <= 80
+            sys_loadavg_1 <= 80
               ? StatusColor.SUCCESS
-              : sys_loadavg_5 > 80 && sys_loadavg_5 < 90
+              : sys_loadavg_1 > 80 && sys_loadavg_1 < 90
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 

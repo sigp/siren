@@ -79,7 +79,7 @@ describe('NodeController', () => {
             disk_bytes_total: '132070244352',
             used_memory: '16',
             total_memory: '132070244352',
-            sys_loadavg_5: 5.95,
+            sys_loadavg_1: 5.95,
             app_uptime: 600,
             network_name: 'example',
             nat_open: false,
