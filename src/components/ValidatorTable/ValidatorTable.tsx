@@ -86,10 +86,10 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
     validators?.length ? (
       <>
         <div
-          className={`${className || ''} w-full ${view === 'partial' ? 'lg:max-h-60.5' : ''} ${
+          className={`${className || ''} w-full ${
             isTablet
               ? 'flex flex-wrap space-y-4 justify-center'
-              : 'overflow-scroll mt-2 border-style500'
+              : 'overflow-y-auto overflow-x-hidden border-style500'
           }`}
         >
           {isTablet ? (

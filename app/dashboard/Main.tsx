@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC, useEffect } from 'react'
+import React, { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -65,6 +65,10 @@ const Main: FC<MainProps> = (props) => {
   const { version } = pckJson
   const { updateAlert, storeAlert, removeAlert } = useDiagnosticAlerts()
   const [username] = useLocalStorage<string>('username', 'Keeper')
+  const [validatorHeightRatio, setValidatorHeightRatio] = useLocalStorage<number>(
+    'validatorHeightRatio',
+    0.6,
+  )
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const setDuties = useSetRecoilState(proposerDuties)
 
@@ -128,6 +132,32 @@ const Main: FC<MainProps> = (props) => {
   const { connected } = peerData
   const { natOpen } = nodeHealth
   const warningCount = metrics.warningCount || 0
+
+  // Calculate optimal height ratio based on validator count
+  // Metrics must get minimum 10%, so validators can get maximum 90%
+  const optimalHeightRatio = useMemo(() => {
+    const validatorCount = validatorStates.length
+    if (validatorCount <= 4) {
+      return 0.4 // Show less validator space when few validators
+    } else if (validatorCount <= 10) {
+      return 0.6 // Default ratio for moderate validator count
+    } else {
+      return 0.85 // Show more validator space when many validators (but leave 15% for metrics)
+    }
+  }, [validatorStates.length])
+
+  // Use stored ratio or optimal ratio, but enforce 20% minimum for metrics and 80% maximum for validators
+  const currentHeightRatio = Math.max(
+    0.2,
+    Math.min(0.8, validatorHeightRatio || optimalHeightRatio),
+  )
+
+  // Update stored ratio when optimal changes (but allow user overrides)
+  useEffect(() => {
+    if (Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1) {
+      setValidatorHeightRatio(optimalHeightRatio)
+    }
+  }, [optimalHeightRatio, validatorHeightRatio, setValidatorHeightRatio])
 
   useEffect(() => {
     setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
@@ -229,7 +259,7 @@ const Main: FC<MainProps> = (props) => {
       isBeaconError={isBeaconError}
       isValidatorError={isValidatorError}
     >
-      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full items-center justify-center'>
+      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full items-stretch overflow-hidden'>
         <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
           <AppGreeting
             userName={username}
@@ -251,30 +281,114 @@ const Main: FC<MainProps> = (props) => {
             <ValidatorBalanceEmptyState />
           )}
         </div>
-        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
+        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4 min-h-0'>
           <NetworkStats
             peerData={peerData}
             syncData={syncData}
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          {validatorStates.length ? (
-            <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
-          ) : (
-            <ValidatorTableEmptyState
-              href='/dashboard/validators?view=create'
-              btnFontType='text-caption1.5'
-              className='min-h-60'
-              ctaText='Create Validator'
-            />
-          )}
-          <DiagnosticTable
-            priorityLogs={initPriorityLogs}
-            logMetrics={metrics}
-            bnSpec={beaconSpec}
-            syncData={syncData}
-            beanHealth={nodeHealth}
-          />
+          <div
+            className='flex flex-col mt-8 lg:mt-2 min-h-0'
+            style={{ height: 'calc(100% - 120px)' }}
+          >
+            <div
+              className='flex flex-col relative min-h-0 overflow-hidden'
+              style={{ height: `${currentHeightRatio * 100}%` }}
+            >
+              <div className='flex items-center justify-between mb-2 flex-shrink-0'>
+                <span className='text-sm text-gray-600 dark:text-gray-400'>
+                  Validators ({validatorStates.length})
+                </span>
+              </div>
+              <div className='flex-1 min-h-0'>
+                {validatorStates.length ? (
+                  <ValidatorTable validators={validatorStates} className='h-full overflow-hidden' />
+                ) : (
+                  <ValidatorTableEmptyState
+                    href='/dashboard/validators?view=create'
+                    btnFontType='text-caption1.5'
+                    className='h-full min-h-60'
+                    ctaText='Create Validator'
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              className='flex items-center justify-center py-1 cursor-row-resize bg-transparent hover:bg-dark100 dark:hover:bg-dark700 border-t border-b border-style500 flex-shrink-0 transition-colors duration-200'
+              onMouseDown={(e) => {
+                const startY = e.clientY
+                const startHeight = currentHeightRatio
+                let isDragging = false
+
+                const handleMouseMove = (e: MouseEvent) => {
+                  if (!isDragging) {
+                    // Only start dragging after a small movement threshold
+                    const deltaY = Math.abs(e.clientY - startY)
+                    if (deltaY < 3) return
+                    isDragging = true
+                    document.body.style.cursor = 'row-resize'
+                    document.body.style.userSelect = 'none'
+                  }
+
+                  const container = document.querySelector(
+                    '[style*="calc(100% - 120px)"]',
+                  ) as HTMLElement
+                  if (!container) return
+
+                  const deltaY = e.clientY - startY
+                  const containerRect = container.getBoundingClientRect()
+                  const containerHeight = containerRect.height
+
+                  // Calculate proportional height change
+                  const heightChange = deltaY / containerHeight
+                  let newHeight = startHeight + heightChange
+
+                  // Enforce boundaries with some buffer to prevent flickering
+                  const minHeight = 0.2 // 20% minimum for metrics
+                  const maxHeight = 0.8 // 80% maximum for validators
+
+                  newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight))
+
+                  setValidatorHeightRatio(newHeight)
+                }
+
+                const handleMouseUp = () => {
+                  document.removeEventListener('mousemove', handleMouseMove)
+                  document.removeEventListener('mouseup', handleMouseUp)
+                  document.body.style.cursor = 'default'
+                  document.body.style.userSelect = 'auto'
+                }
+
+                document.addEventListener('mousemove', handleMouseMove)
+                document.addEventListener('mouseup', handleMouseUp)
+              }}
+              style={{ height: '8px' }}
+            >
+              <div className='flex items-center gap-0.5 text-dark300 dark:text-dark600'>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+              </div>
+            </div>
+            <div
+              className='flex flex-col min-h-0 overflow-hidden'
+              style={{
+                height: `${(1 - currentHeightRatio) * 100}%`,
+                minHeight: '20%',
+              }}
+            >
+              <div className='flex-1 min-h-0 overflow-hidden'>
+                <DiagnosticTable
+                  priorityLogs={initPriorityLogs}
+                  logMetrics={metrics}
+                  bnSpec={beaconSpec}
+                  syncData={syncData}
+                  beanHealth={nodeHealth}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </DashboardWrapper>

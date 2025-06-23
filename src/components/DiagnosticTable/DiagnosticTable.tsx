@@ -13,7 +13,7 @@ const DiagnosticTable: FC<DiagnosticTableProps> = ({
   priorityLogs,
 }) => {
   return (
-    <div className='flex-1 flex flex-col space-y-4 md:space-y-0 md:flex-row mt-2 w-full'>
+    <div className='h-full flex flex-col space-y-2 md:space-y-0 md:flex-row w-full min-h-0 overflow-hidden'>
       <HardwareInfo syncData={syncData} beanHealth={beanHealth} />
       <LogsInfo logMetrics={logMetrics} />
       <AlertInfo bnSpec={bnSpec} priorityLogs={priorityLogs} syncData={syncData} />
