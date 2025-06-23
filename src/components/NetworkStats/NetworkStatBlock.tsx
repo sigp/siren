@@ -36,7 +36,13 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
   const renderContent = () => (
     <>
       <div className='flex space-x-2 items-center'>
-        <Typography isUpperCase type='text-tiny' isBold darkMode='dark:text-white'>
+        <Typography
+          isUpperCase
+          type='text-tiny'
+          isBold
+          darkMode='dark:text-white'
+          className='@1600:text-caption1'
+        >
           {title}
         </Typography>
         {isToolTip && (
@@ -51,11 +57,16 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
         {status ? (
           <Status size='h-4 w-4' status={status} />
         ) : (
-          <Typography color='text-dark300' type='text-caption2'>
+          <Typography color='text-dark300' type='text-caption2' className='@1600:text-caption1'>
             {subTitle}
           </Typography>
         )}
-        <Typography isBold darkMode='dark:text-white' type={metricFontSize}>
+        <Typography
+          isBold
+          darkMode='dark:text-white'
+          type={metricFontSize}
+          className='@1600:text-body'
+        >
           {metric}
         </Typography>
       </div>

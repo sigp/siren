@@ -116,24 +116,41 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         <div className='w-full flex justify-center'>{renderAvatar}</div>
       </th>
       <th className='w-28 cursor-pointer'>
-        <Typography className='text-left' color='text-dark500' type='text-caption2'>
+        <Typography
+          className='text-left lg:text-caption1 xl:text-body'
+          color='text-dark500'
+          type='text-caption2'
+        >
           {validatorName}
         </Typography>
       </th>
       <th className='border-r-style500 px-2'>
-        <Typography color='text-dark500' type='text-caption1'>
+        <Typography
+          color='text-dark500'
+          type='text-caption1'
+          className='lg:text-body xl:text-subtitle3'
+        >
           {index}
         </Typography>
       </th>
       <th className='px-2'>
         <Tooltip id={pubKey} place='top-start' style={{ fontSize: '12px' }} text={pubKey}>
-          <Typography color='text-dark500' type='text-caption1' className='text-left w-fit'>
+          <Typography
+            color='text-dark500'
+            type='text-caption1'
+            className='text-left w-fit lg:text-body xl:text-subtitle3'
+          >
             {formatEthAddress(pubKey)}
           </Typography>
         </Tooltip>
       </th>
       <th className='px-2'>
-        <Typography type='text-caption1' className='text-left' darkMode='dark:text-white' isBold>
+        <Typography
+          type='text-caption1'
+          className='text-left lg:text-body xl:text-subtitle3'
+          darkMode='dark:text-white'
+          isBold
+        >
           {balance?.toFixed(4)}
         </Typography>
       </th>
@@ -142,7 +159,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           color={rewardColor}
           darkMode={rewardColor}
           type='text-caption1'
-          className='uppercase'
+          className='uppercase lg:text-body xl:text-subtitle3'
         >
           {rewards?.toFixed(4)}
         </Typography>
@@ -152,14 +169,18 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           tooltipClasses='mx-auto'
           color='text-dark500'
           type='text-caption1'
-          className='whitespace-nowrap'
+          className='whitespace-nowrap lg:text-body xl:text-subtitle3'
           withdrawalAddress={withdrawalAddress}
           id={pubKey}
         />
       </th>
       <th className='border-r-style500 px-4'>
-        <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>
-          <Typography color='text-dark500' type='text-tiny' className='uppercase'>
+        <div className='flex items-center mx-auto justify-center flex-col space-y-1 w-full max-w-[120px]'>
+          <Typography
+            color='text-dark500'
+            type='text-tiny'
+            className='uppercase lg:text-caption1 @1600:text-body text-center'
+          >
             {t(`validatorStatus.${status}`)}
           </Typography>
           <StatusIcon status={status} />

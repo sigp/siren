@@ -28,7 +28,7 @@ const SideItem: FC<SideItemProps> = ({ children, isActive, className, href, isDi
             [!isActive && 'group-hover:block hidden'],
           )}
         />
-        <div className='w-4 h-4 @1600:w-5 @1600:h-5'>{children}</div>
+        <div className='w-4 h-4 lg:w-5 lg:h-5 @1600:w-6 @1600:h-6'>{children}</div>
       </li>
     </Link>
   )

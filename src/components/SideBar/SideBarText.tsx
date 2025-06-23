@@ -19,7 +19,7 @@ const SideBarText: FC<SideBarTextProps> = ({ text, isActive, href, isDisabled, c
         color={isActive ? 'text-dark900' : 'text-dark500'}
         darkMode={isActive ? 'dark:text-dark300' : 'dark:text-dark500'}
         isBold
-        className='uppercase'
+        className='uppercase @1600:text-caption1'
         type='text-tiny'
       >
         {text}

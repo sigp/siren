@@ -44,7 +44,7 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
           <BeaconMetric data={beaconSync} />
           <div className='hidden w-24 border-r border-borderLight dark:border-dark800 p-2'>
             <div className='flex-1 space-y-2'>
-              <Typography family='font-roboto' type='text-tiny'>
+              <Typography family='font-roboto' type='text-tiny' className='@1600:text-caption1'>
                 {t('slasher')}
               </Typography>
               <Typography
@@ -53,6 +53,7 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
                 isBold
                 type='text-caption1'
                 family='font-roboto'
+                className='@1600:text-body'
               >
                 {t('live')}
               </Typography>

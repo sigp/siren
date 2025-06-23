@@ -140,7 +140,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
         >
           <Typography
             type='text-caption2'
-            className='xl:text-caption1'
+            className='lg:text-caption1 xl:text-body'
             color={isDeviceView ? 'text-primary' : 'text-dark500'}
             darkMode={isDeviceView ? 'dark:text-white' : undefined}
             isBold={isDeviceView}
@@ -155,7 +155,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
           <Typography
             isBold={isNetworkView}
             type='text-caption2'
-            className='xl:text-caption1'
+            className='lg:text-caption1 xl:text-body'
             color={isNetworkView ? 'text-primary' : 'text-dark500'}
             darkMode={isNetworkView ? 'dark:text-white' : undefined}
           >

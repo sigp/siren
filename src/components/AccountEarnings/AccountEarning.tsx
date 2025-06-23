@@ -77,7 +77,11 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
           maxWidth={350}
           text={t('accountEarnings.balanceTooltip')}
         >
-          <Typography color='text-white' type='text-caption1'>
+          <Typography
+            color='text-white'
+            type='text-caption1'
+            className='lg:text-body xl:text-subtitle3'
+          >
             {t('balance')}
           </Typography>
           <i className='bi bi-info-circle text-caption1 text-dark400' />
@@ -96,7 +100,13 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
             {t('account')}
           </Typography>
           <div className='w-full flex justify-end pr-6 pt-4'>
-            <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
+            <Typography
+              color='text-white'
+              isBold
+              darkMode='dark:text-white'
+              type='text-h2'
+              className='xl:text-h1'
+            >
               {formatLocalCurrency(totalEarnings, { max: 3 })} ETH
             </Typography>
           </div>
@@ -106,27 +116,37 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
               <CurrencySelect rates={exchangeData} selection={currency} onSelect={selectCurrency} />
               <div className='flex items-center flex-wrap justify-end md:justify-start md:text-left text-right space-y-4 md:space-y-0 md:space-x-4'>
                 <div>
-                  <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
+                  <Typography
+                    type='text-tiny'
+                    color='text-dark300'
+                    className='uppercase lg:text-caption1 xl:text-body'
+                    isBold
+                  >
                     {t('accountEarnings.currentRate')}
                   </Typography>
                   <Typography
                     color='text-white'
                     darkMode='dark:text-white'
                     type='text-caption1'
-                    className='xl:text-body'
+                    className='lg:text-body xl:text-subtitle3'
                   >
                     {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/ETH`}
                   </Typography>
                 </div>
                 <div>
-                  <Typography type='text-tiny' color='text-dark300' className='uppercase' isBold>
+                  <Typography
+                    type='text-tiny'
+                    color='text-dark300'
+                    className='uppercase lg:text-caption1 xl:text-body'
+                    isBold
+                  >
                     {t('accountEarnings.totalBalance')}
                   </Typography>
                   <Typography
                     color='text-white'
                     darkMode='dark:text-white'
                     type='text-caption1'
-                    className='xl:text-body'
+                    className='lg:text-body xl:text-subtitle3'
                   >
                     {`${formattedPrefix}${formatLocalCurrency(totalBalance)} ${currency}`}
                   </Typography>
@@ -138,7 +158,10 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
         </div>
         <div className='bg-gradient-to-t via-transWhite from-white dark:from-darkPrimary'>
           <div className='md:px-4 flex justify-between'>
-            <Typography className='hidden md:block' color='text-white'>
+            <Typography
+              className='hidden md:block lg:text-body xl:text-subtitle3'
+              color='text-white'
+            >
               {t('accountEarnings.earnings')}
             </Typography>
             <div className='flex ml-8 mr-2 sm:mr-0 flex-wrap justify-end sm:justify-start sm:flex-nowrap'>
@@ -167,7 +190,11 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                 }
               >
                 <div className='flex space-x-2'>
-                  <Typography type='text-caption1' className='uppercase' color='text-dark400'>
+                  <Typography
+                    type='text-caption1'
+                    className='uppercase lg:text-body xl:text-subtitle3'
+                    color='text-dark400'
+                  >
                     ETH
                   </Typography>
                   <i
@@ -178,7 +205,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                 </div>
                 <Typography
                   type='text-caption1'
-                  className='md:text-subtitle3'
+                  className='md:text-subtitle3 lg:text-subtitle2 xl:text-subtitle1'
                   darkMode='dark:text-white'
                   family='font-roboto'
                 >
@@ -199,14 +226,19 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                 }
               >
                 <div className='flex space-x-2'>
-                  <Typography type='text-caption1' isUpperCase color='text-dark400'>
+                  <Typography
+                    type='text-caption1'
+                    isUpperCase
+                    color='text-dark400'
+                    className='lg:text-body xl:text-subtitle3'
+                  >
                     USD
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
                 </div>
                 <Typography
                   type='text-caption1'
-                  className='md:text-subtitle3'
+                  className='md:text-subtitle3 lg:text-subtitle2 xl:text-subtitle1'
                   darkMode='dark:text-white'
                   family='font-roboto'
                 >
@@ -218,7 +250,12 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
             <div>
               <Tooltip id='overallApr' maxWidth={200} text={t('tooltip.annualApr')}>
                 <div className='flex space-x-2'>
-                  <Typography type='text-caption1' isCapitalize color='text-dark400'>
+                  <Typography
+                    type='text-caption1'
+                    isCapitalize
+                    color='text-dark400'
+                    className='lg:text-body xl:text-subtitle3'
+                  >
                     {t('annualized')}
                   </Typography>
                   <i className='bi bi-info-circle text-caption1 text-dark400' />
@@ -228,6 +265,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                   color={textColor}
                   darkMode={textColor}
                   family='font-roboto'
+                  className='lg:text-subtitle2 xl:text-subtitle1'
                 >
                   {estimatedApr ? estimatedApr.toFixed(2) : '---'}%
                 </Typography>

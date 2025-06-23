@@ -18,7 +18,13 @@ const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
   return (
     <div className='h-full w-full flex flex-col'>
       <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>
-        <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
+        <Typography
+          type='text-caption1'
+          className='lg:text-body xl:text-subtitle3'
+          color='text-primary'
+          darkMode='dark:text-white'
+          isBold
+        >
           {t('logInfo.logs')}
         </Typography>
         <Link href='/dashboard/logs'>

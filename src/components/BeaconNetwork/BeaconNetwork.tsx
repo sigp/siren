@@ -12,7 +12,13 @@ const BeaconNetwork = () => {
       data-testid='beaconNetwork'
       className='flex flex-col h-full py-1.5 pl-2 pr-4 justify-between border-l border-r border-borderLight dark:border-borderDark'
     >
-      <Typography type='text-tiny' darkMode='dark:text-white' isUpperCase isBold>
+      <Typography
+        type='text-tiny'
+        darkMode='dark:text-white'
+        isUpperCase
+        isBold
+        className='@1600:text-caption1'
+      >
         {t('network')}
       </Typography>
       <Typography
@@ -22,6 +28,7 @@ const BeaconNetwork = () => {
         darkMode='dark:text-primary'
         isUpperCase
         isBold
+        className='@1600:text-caption1'
       >
         {bnNetwork || '-'}
       </Typography>

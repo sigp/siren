@@ -113,10 +113,14 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                     </div>
                   </th>
                   <th>
-                    <Typography className='text-left capitalize'>{t('validators')}</Typography>
+                    <Typography className='text-left capitalize text-caption1 lg:text-body xl:text-subtitle3'>
+                      {t('validators')}
+                    </Typography>
                   </th>
                   <th className='relative border-r-style500 pr-2'>
-                    <Typography>{validators.length}</Typography>
+                    <Typography className='text-caption1 lg:text-body xl:text-subtitle3'>
+                      {validators.length}
+                    </Typography>
                     <div className='absolute right-0 top-1/2 -translate-y-1/2 h-5 w-0.5 bg-primary' />
                   </th>
                   <th className='pl-2'>
@@ -124,7 +128,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                       color='text-dark500'
                       type='text-tiny'
                       isUpperCase
-                      className='text-left'
+                      className='text-left lg:text-caption1 xl:text-body'
                     >
                       PUBKEY
                     </Typography>
@@ -134,13 +138,18 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                       color='text-dark500'
                       type='text-tiny'
                       isUpperCase
-                      className='text-left'
+                      className='text-left lg:text-caption1 xl:text-body'
                     >
                       {t('balance')}
                     </Typography>
                   </th>
                   <th>
-                    <Typography color='text-dark500' type='text-tiny' isUpperCase>
+                    <Typography
+                      color='text-dark500'
+                      type='text-tiny'
+                      isUpperCase
+                      className='lg:text-caption1 xl:text-body'
+                    >
                       {t('rewards')}
                     </Typography>
                   </th>
@@ -149,7 +158,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                       color='text-dark500'
                       type='text-tiny'
                       isUpperCase
-                      className='text-center'
+                      className='text-center lg:text-caption1 xl:text-body'
                     >
                       {t('withdrawalAddress')}
                     </Typography>
@@ -159,7 +168,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                       color='text-dark500'
                       type='text-tiny'
                       isUpperCase
-                      className='text-center'
+                      className='text-center lg:text-caption1 xl:text-body'
                     >
                       {t('status')}
                     </Typography>
@@ -171,7 +180,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                           color='text-dark500'
                           type='text-tiny'
                           isUpperCase
-                          className='text-center'
+                          className='text-center lg:text-caption1 xl:text-body'
                         >
                           {t('run')}
                         </Typography>
@@ -181,7 +190,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                           color='text-dark500'
                           type='text-tiny'
                           isUpperCase
-                          className='text-center'
+                          className='text-center lg:text-caption1 xl:text-body'
                         >
                           {t('keys')}
                         </Typography>
@@ -191,7 +200,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                           color='text-dark500'
                           type='text-tiny'
                           isUpperCase
-                          className='text-center'
+                          className='text-center lg:text-caption1 xl:text-body'
                         >
                           {t('edit')}
                         </Typography>
