@@ -77,7 +77,7 @@ export class BeaconService {
               url: `${this.beaconUrl}/eth/v1/node/syncing`,
             }),
             this.utilsService.sendHttpRequest({
-              url: `${this.beaconUrl}/lighthouse/eth1/syncing`,
+              url: `${this.beaconUrl}/lighthouse/syncing`,
             }),
           ]);
 
