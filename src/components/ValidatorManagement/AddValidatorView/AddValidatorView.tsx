@@ -26,7 +26,6 @@ const AddValidatorView: FC<AddValidatorViewProps> = ({ onChangeView }) => {
       title: t('validatorManagement.addValidator.options.import.title'),
       subTitle: t('validatorManagement.addValidator.options.import.subTitle'),
       caption: t('validatorManagement.addValidator.options.import.caption'),
-      isDisabled: true,
       isRecommended: false,
       SVG: BlockChainSvg,
       view: ValidatorManagementView.IMPORT,

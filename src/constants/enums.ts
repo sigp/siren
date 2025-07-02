@@ -85,3 +85,9 @@ export enum SettingsView {
   GENERAL = 'GENERAL',
   ABOUT = 'ABOUT',
 }
+
+export enum ImportView {
+  SELECT = 'SELECT',
+  CREATE = 'CREATE',
+  UPLOAD = 'UPLOAD',
+}

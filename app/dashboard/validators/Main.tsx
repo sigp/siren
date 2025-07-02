@@ -13,6 +13,7 @@ import Typography from '../../../src/components/Typography/Typography'
 import AddValidatorView from '../../../src/components/ValidatorManagement/AddValidatorView/AddValidatorView'
 import ConsolidateView from '../../../src/components/ValidatorManagement/ConsolidateView/ConsolidateView'
 import CreateValidatorView from '../../../src/components/ValidatorManagement/CreateValidatorView/CreateValidatorView'
+import ImportValidatorView from '../../../src/components/ValidatorManagement/ImportValidatorView/ImportValidatorView'
 import MainView from '../../../src/components/ValidatorManagement/MainView'
 import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
 import ValidatorSummary from '../../../src/components/ValidatorSummary/ValidatorSummary'
@@ -288,6 +289,8 @@ const Main: FC<MainProps> = (props) => {
         return t('validatorManagement.titles.add')
       case ValidatorManagementView.CONSOLIDATE:
         return 'Consolidate'
+      case ValidatorManagementView.IMPORT:
+        return 'Import Validator'
       default:
         return t('validatorManagement.titles.main')
     }
@@ -310,6 +313,8 @@ const Main: FC<MainProps> = (props) => {
             validators={validatorStates}
           />
         )
+      case ValidatorManagementView.IMPORT:
+        return <ImportValidatorView />
       default:
         return (
           <MainView

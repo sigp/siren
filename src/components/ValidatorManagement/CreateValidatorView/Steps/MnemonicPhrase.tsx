@@ -16,7 +16,7 @@ import StepOptions from '../StepOptions'
 
 export interface MnemonicPhraseProps extends InputHTMLAttributes<HTMLTextAreaElement> {
   onNextStep: () => void
-  onBackStep: () => void
+  onBackStep?: () => void
   isActive: boolean
   blsModule: IBls
 }
