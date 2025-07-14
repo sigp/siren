@@ -16,7 +16,6 @@ export interface NetworkHealthProps {
 const NetworkHealth: FC<NetworkHealthProps> = ({ syncData, nodeHealth }) => {
   const {
     beaconSync: { beaconPercentage, beaconSyncTime },
-    executionSync: { isReady, syncPercentage },
   } = syncData
 
   const { t } = useTranslation()
@@ -46,14 +45,6 @@ const NetworkHealth: FC<NetworkHealthProps> = ({ syncData, nodeHealth }) => {
             : t('networkUnavailable')
         }
         status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
-      />
-      <DiagnosticCard
-        size='health'
-        title='Ethereum Geth'
-        metric=' '
-        percent={syncPercentage}
-        isBackground={false}
-        subTitle={t('connectedStatus', { status: isReady ? t('inSync') : t('outOfSync') })}
       />
       <DiagnosticCard
         size='health'

@@ -37,3 +37,5 @@ build-storybook.log
 .next
 next-env.d.ts
 dist
+
+CLAUDE.md

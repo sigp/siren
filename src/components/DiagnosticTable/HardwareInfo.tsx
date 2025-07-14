@@ -19,7 +19,6 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
   const { t } = useTranslation()
   const {
     beaconSync: { beaconSyncTime, beaconPercentage, isSyncing },
-    executionSync: { syncPercentage, isReady },
   } = syncData
   const [view, setView] = useState<DiagnosticType>(DiagnosticType.DEVICE)
   const {
@@ -102,15 +101,6 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
                   : t('networkUnavailable')
               }
               status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
-            />
-            <DiagnosticCard
-              size={size}
-              maxHeight='flex-1'
-              title='Ethereum Mainnet'
-              metric=' '
-              percent={syncPercentage}
-              isBackground={false}
-              subTitle={t('connectedStatus', { status: isReady ? t('inSync') : t('outOfSync') })}
             />
             <DiagnosticCard
               size={size}

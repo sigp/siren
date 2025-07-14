@@ -122,9 +122,8 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { beaconSync, executionSync } = syncData
+  const { beaconSync } = syncData
   const { isSyncing } = beaconSync
-  const { isReady } = executionSync
   const { connected } = peerData
   const { natOpen } = nodeHealth
   const warningCount = metrics.warningCount || 0
@@ -156,20 +155,6 @@ const Main: FC<MainProps> = (props) => {
       message: t('alertMessages.beaconNotSync'),
     })
   }, [t, isSyncing, storeAlert, removeAlert])
-
-  useEffect(() => {
-    if (isReady) {
-      removeAlert(ALERT_ID.VALIDATOR_SYNC)
-      return
-    }
-
-    storeAlert({
-      id: ALERT_ID.VALIDATOR_SYNC,
-      severity: StatusColor.WARNING,
-      subText: t('fair'),
-      message: t('alertMessages.ethClientNotSync'),
-    })
-  }, [t, isReady, storeAlert, removeAlert])
 
   useEffect(() => {
     if (connected <= 50) {

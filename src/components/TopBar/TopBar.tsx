@@ -12,7 +12,6 @@ import Button, { ButtonFace } from '../Button/Button'
 import Typography from '../Typography/Typography'
 import WalletProvider from '../Wallet/WalletProvider'
 import BeaconMetric from './BeaconMetric'
-import ValidatorMetric from './ValidatorMetric'
 
 export interface TopBarProps {
   syncData: SyncData
@@ -24,7 +23,7 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
   const { t } = useTranslation()
   const { DEPOSIT_NETWORK_ID } = beaconSpec
   const toggleSideBar = useSetRecoilState(isSideBarOpen)
-  const { beaconSync, executionSync } = syncData
+  const { beaconSync } = syncData
   const openSideBar = () => toggleSideBar(true)
 
   return (
@@ -40,7 +39,6 @@ const TopBar: FC<TopBarProps> = ({ syncData, beaconSpec, initActivityData }) => 
           <LightHouseFullLogo className='hidden w-full lg:flex text-black dark:text-white' />
         </div>
         <div className='hidden lg:flex h-full'>
-          <ValidatorMetric data={executionSync} />
           <BeaconMetric data={beaconSync} />
           <div className='hidden w-24 border-r border-borderLight dark:border-dark800 p-2'>
             <div className='flex-1 space-y-2'>
