@@ -5,13 +5,14 @@ import formatEthAddress from '../../../../../../utilities/formatEthAddress'
 import MiningSvg from '../../../../../assets/images/smart-contract-full.svg'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
+import { Status } from '../../../../../constants/enums'
 import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
-import { ConsolidationTx, TxStatus } from '../../../../../types'
+import { ConsolidationTx } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import CheckBox from '../../../../CheckBox/CheckBox'
+import ConsolidationRequestStatus from '../../../../ConsolidationRequestStatus/ConsolidationRequestStatus'
 import RangeSliderInput from '../../../../RangeSliderInput/RangeSliderInput'
-import ResolvedTransactionStatus from '../../../../ResolvedTransactionStatus/ResolvedTransactionStatus'
 import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
 import ConsolidationQueueStatus from './ConsolidationQueueStatus'
@@ -37,10 +38,10 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
 
   const setConsolidations = useCallback((request: ConsolidationTx) => {
-    setRequests((prev) => [...prev, request])
+    setRequests((prev) => [request, ...prev])
   }, [])
 
-  const updateConsolidationResults = useCallback((id: string | number, status: TxStatus) => {
+  const updateConsolidationResults = useCallback((id: string | number, status: Status) => {
     setRequests((prev) => {
       const index = prev.findIndex((request) => request.index === id)
       if (index === -1) return prev
@@ -108,18 +109,16 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   )
 
   const renderedTxStatuses = useMemo(() => {
-    return consolidationRequests.map(({ txHash, index }) => (
-      <ResolvedTransactionStatus
+    return consolidationRequests.map(({ txHash, index, pubKey, targetPubKey }) => (
+      <ConsolidationRequestStatus
         key={txHash}
+        targetPubKey={targetPubKey}
+        sourcePubKey={pubKey}
         onRetryTx={retryTransaction}
         onStatusUpdate={updateConsolidationResults}
         id={index}
         networkId={chainId}
-        successText={t('validatorManagement.consolidateView.signAndSubmit.successTxText')}
-        pendingText={t('validatorManagement.consolidateView.signAndSubmit.pendingTxText')}
-        errorText={t('validatorManagement.consolidateView.signAndSubmit.errorTxText')}
         txHash={txHash}
-        title={t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest')}
       />
     ))
   }, [consolidationRequests, retryTransaction, updateConsolidationResults, chainId])

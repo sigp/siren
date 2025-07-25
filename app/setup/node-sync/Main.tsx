@@ -4,7 +4,6 @@ import BeaconSyncCard from '../../../src/components/BeaconSyncCard/BeaconSyncCar
 import SyncDisclosure from '../../../src/components/Disclosures/SyncDisclosure'
 import Typography from '../../../src/components/Typography/Typography'
 import ValidatorSetupLayout from '../../../src/components/ValidatorSetupLayout/ValidatorSetupLayout'
-import ValidatorSyncCard from '../../../src/components/ValidatorSyncCard/ValidatorSyncCard'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import { SetupProps } from '../../../src/types'
@@ -26,7 +25,7 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec }) => {
     networkError,
   })
 
-  const { beaconSync, executionSync } = syncData
+  const { beaconSync } = syncData
 
   useEffect(() => {
     document.documentElement.classList.remove('dark')
@@ -45,7 +44,6 @@ const Main: FC<MainProps> = ({ initSyncData, beaconSpec }) => {
         mediaQuery='@1200:overflow-hidden @1200:py-0 @1200:px-0 @1024:flex items-center @1024:justify-center'
       >
         <div className='w-full flex flex-col space-y-2 lg:space-y-0 lg:flex-row lg:space-x-2'>
-          <ValidatorSyncCard data={executionSync} />
           <BeaconSyncCard data={beaconSync} />
         </div>
         <div className='w-full border border-dark100 mt-4 space-y-4 p-4'>

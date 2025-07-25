@@ -1,6 +1,7 @@
 import { dataSlice, getAddress } from 'ethers'
 import React, { FC } from 'react'
 import addClassString from '../../../../../../utilities/addClassString'
+import { Status } from '../../../../../constants/enums'
 import { ConsolidationTx } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
@@ -29,7 +30,7 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
   const { status } = requestData || {}
 
   const statusIconClass = addClassString('', [
-    status === 'success' ? 'bi-check-lg text-success' : 'bi-x text-error',
+    status === Status.SUCCESS ? 'bi-check-lg text-success' : 'bi-x text-error',
   ])
 
   const withdrawalCredentials = getAddress(dataSlice(withdrawalAddress as string, 12))
@@ -50,7 +51,7 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
       </div>
       <div>
         {requestData ? (
-          status === 'pending' ? (
+          status === Status.PENDING ? (
             <Spinner size='h-3 w-3' />
           ) : (
             <i className={statusIconClass} />

@@ -1,8 +1,7 @@
-import axios from 'axios'
 import { useState } from 'react'
 import { useWriteContract } from 'wagmi'
 import { contractAbi } from '../../contracts/depositContractAbi'
-import { ActivityType, TxHash, ValidatorCandidate } from '../types'
+import { TxHash, ValidatorCandidate } from '../types'
 import { BeaconNodeSpecResults } from '../types/beacon'
 import useLodestarDepositData from './useLodestarDepositData'
 
@@ -78,19 +77,7 @@ const useValidatorDeposit = ({
           onSuccess: async (data) => {
             setTxHash(data as TxHash)
             setPubKey(pubkey)
-            try {
-              await axios.post('/api/log-activity', {
-                data: JSON.stringify({
-                  amount: effectiveBalance.toString(),
-                  txHash: data,
-                }),
-                type: ActivityType.DEPOSIT,
-                pubKey: pubkey,
-              })
-              setLoading(false)
-            } catch (e) {
-              console.error(e, 'error storing activity')
-            }
+            setLoading(false)
           },
         },
       )

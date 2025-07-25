@@ -5,7 +5,9 @@ import {
   PrimaryKey,
   AutoIncrement,
 } from 'sequelize-typescript';
+
 import { ActivityType } from '../../../../src/types';
+import { Status } from '../../../../src/constants/enums';
 
 @Table({
   tableName: 'activities',
@@ -27,4 +29,7 @@ export class Activity extends Model {
 
   @Column
   hasSeen: boolean;
+
+  @Column
+  status: Status;
 }

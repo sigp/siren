@@ -15,12 +15,10 @@ import { Metric } from './entities/metric.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import {
-  BeaconNodeSpecResults,
-  ValidatorMetricResult,
-} from '../../../src/types/beacon';
+import { ValidatorMetricResult } from '../../../src/types/beacon';
 import { ActivityService } from '../activity/activity.service';
 import { ActivityType } from '../../../src/types';
+import { Status } from '../../../src/constants/enums';
 
 @Injectable()
 export class ValidatorService {
@@ -230,12 +228,19 @@ export class ValidatorService {
           '',
           data.pubKey,
           ActivityType.GRAFFITI,
+          Status.SUCCESS,
         );
       }
 
       return status;
     } catch (e) {
       console.error(e);
+      await this.activityService.storeActivity(
+        '',
+        data.pubKey,
+        ActivityType.GRAFFITI,
+        Status.ERROR,
+      );
       throwServerError('Unable to update validator graffiti');
     }
   }
@@ -278,11 +283,17 @@ export class ValidatorService {
           '',
           data.data.voting_pubkey,
           ActivityType.IMPORT,
+          Status.SUCCESS,
         );
         return data;
       }
     } catch (e) {
-      console.error(e);
+      await this.activityService.storeActivity(
+        JSON.stringify({ status: Status.ERROR }),
+        'fake',
+        ActivityType.IMPORT,
+        Status.ERROR,
+      );
       throwServerError('Unable to import validator keystore');
     }
   }
