@@ -1,9 +1,8 @@
-import { BeaconSyncInfo, ValidatorSyncInfo } from './diagnostic'
+import { BeaconSyncInfo } from './diagnostic'
 import { NetworkId } from './index'
 
 export type SyncData = {
   beaconSync: BeaconSyncInfo
-  executionSync: ValidatorSyncInfo
 }
 
 export type BeaconNodeSpecResults = {

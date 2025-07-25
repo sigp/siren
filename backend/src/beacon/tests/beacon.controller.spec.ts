@@ -137,11 +137,6 @@ describe('BeaconController', () => {
       } as AxiosResponse;
       mockHttpService.request.mockReturnValueOnce(of(httpBeaconResponse));
 
-      const httpExecutionResponse: AxiosResponse = {
-        data: { data: mockedSyncNodeResults.execution },
-      } as AxiosResponse;
-      mockHttpService.request.mockReturnValueOnce(of(httpExecutionResponse));
-
       mockCacheManager.get.mockResolvedValueOnce({ SLOTS_PER_EPOCH: '32' });
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
 

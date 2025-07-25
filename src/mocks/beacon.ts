@@ -22,15 +22,6 @@ export const mockedSyncResults = {
     slotDistance: 2,
     syncDistance: 1,
   },
-  executionSync: {
-    cachedHeadSlot: 1,
-    cachedHeadTimestamp: '1',
-    headSlot: 1,
-    headTimestamp: '1',
-    isReady: false,
-    syncPercentage: 1,
-    votingTimestamp: '1',
-  },
 }
 
 export const mockValCacheValues = [
