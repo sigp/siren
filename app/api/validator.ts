@@ -1,8 +1,8 @@
 import { BACKEND_URL } from '../../src/constants/envars'
 import fetchFromApi from '../../utilities/fetchFromApi'
 
-export const fetchValStates = async (token: string) =>
-  await fetchFromApi(`${BACKEND_URL}/validator/states`, token)
+export const fetchValStates = async (token: string, isFilter = false) =>
+  await fetchFromApi(`${BACKEND_URL}/validator/states?isFilter=${isFilter}`, token)
 export const fetchValCaches = async (token: string) =>
   await fetchFromApi(`${BACKEND_URL}/validator/caches`, token)
 export const fetchValMetrics = async (token: string, index?: string | null) =>

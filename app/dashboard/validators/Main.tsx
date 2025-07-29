@@ -1,6 +1,7 @@
 'use client'
 
 import { IBls } from '@chainsafe/bls/types'
+import axios from 'axios'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
@@ -20,6 +21,7 @@ import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
 import { ValidatorModalView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
+import useValidatorExclusionList from '../../../src/hooks/useValidatorExclusionList'
 import {
   activeValidatorId,
   blsModuleAtom,
@@ -28,7 +30,7 @@ import {
   isEditValidator,
   isValidatorDetail,
 } from '../../../src/recoil/atoms'
-import { ActivityResponse, ValidatorManagementView } from '../../../src/types'
+import { ActivityResponse, ExcludedStatus, ValidatorManagementView } from '../../../src/types'
 import {
   BeaconNodeSpecResults,
   ForkVersionData,
@@ -42,6 +44,7 @@ import {
   ValidatorCache,
   ValidatorCountResult,
   ValidatorInfo,
+  ValidatorStatus,
 } from '../../../src/types/validator'
 
 export interface MainProps {
@@ -56,6 +59,7 @@ export interface MainProps {
   initForkVersionData: ForkVersionData
   initPartialWithdrawals: PartialWithdrawal[]
   initPendingDeposits: PendingDeposit[]
+  initExclusionData: ExcludedStatus[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -72,6 +76,7 @@ const Main: FC<MainProps> = (props) => {
     initForkVersionData,
     initPartialWithdrawals,
     initPendingDeposits,
+    initExclusionData,
   } = props
 
   const [scrollPercentage, setPercentage] = useState(0)
@@ -121,6 +126,74 @@ const Main: FC<MainProps> = (props) => {
     refreshInterval: 60 * 1000,
     networkError,
   })
+
+  const { formattedExclusions, exclusions, setExclusions } =
+    useValidatorExclusionList(initExclusionData)
+
+  const activeStatuses: ValidatorStatus[] = [
+    'active',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+  ]
+  const allPossibleStatuses: ValidatorStatus[] = [
+    'pending_initialized',
+    'pending_queued',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+    'exited_unslashed',
+    'exited_slashed',
+    'withdrawal_possible',
+    'withdrawal_done',
+    'active',
+    'pending',
+    'exited',
+    'withdrawal',
+    'deposit',
+  ]
+  const nonActiveStatuses = allPossibleStatuses.filter((status) => !activeStatuses.includes(status))
+
+  const isActiveOnlyMode = useMemo(() => {
+    return (
+      nonActiveStatuses.every((status) => formattedExclusions.includes(status)) &&
+      activeStatuses.some((status) => !formattedExclusions.includes(status))
+    )
+  }, [formattedExclusions])
+
+  const toggleActiveOnlyMode = async () => {
+    try {
+      if (isActiveOnlyMode) {
+        // Switch to show all validators by removing all exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      } else {
+        // Switch to active only: first clear all exclusions, then add non-active exclusions
+        // This ensures we start from a clean state regardless of current exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+
+        // Now add exclusions for all non-active statuses
+        const addPromises = nonActiveStatuses.map((status) =>
+          axios.post('/api/add-exclusion', { status }),
+        )
+        await Promise.all(addPromises)
+
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      }
+    } catch (error) {
+      console.error('Failed to toggle active only mode:', error)
+    }
+  }
 
   const [view, setView] = useState<ValidatorManagementView>(ValidatorManagementView.MAIN)
 
@@ -195,8 +268,12 @@ const Main: FC<MainProps> = (props) => {
     setForkVersion(forkVersionData)
   }, [forkVersionData])
 
+  const filteredValidatorStates = useMemo(() => {
+    return validatorStates.filter(({ status }) => !formattedExclusions.includes(status))
+  }, [validatorStates, formattedExclusions])
+
   const filteredValidators = useMemo(() => {
-    return validatorStates.filter((validator) => {
+    return filteredValidatorStates.filter((validator) => {
       const query = search.toLowerCase()
 
       return (
@@ -205,7 +282,7 @@ const Main: FC<MainProps> = (props) => {
         validator?.index?.toString().includes(query)
       )
     })
-  }, [search, validatorStates])
+  }, [search, filteredValidatorStates])
 
   const rates = exchangeData?.data.rates
 
@@ -320,6 +397,9 @@ const Main: FC<MainProps> = (props) => {
             hasSearchAction={!!validatorStates.length}
             hasConsolidationAction={!!eligibleToConsolidate.length}
             scrollPercentage={scrollPercentage}
+            isActiveOnlyMode={isActiveOnlyMode}
+            onToggleActiveOnly={toggleActiveOnlyMode}
+            totalValidatorCount={validatorStates.length}
           />
         )
     }

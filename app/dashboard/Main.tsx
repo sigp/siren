@@ -1,6 +1,7 @@
 'use client'
 
-import React, { FC, useEffect } from 'react'
+import axios from 'axios'
+import React, { FC, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -11,6 +12,7 @@ import DiagnosticTable from '../../src/components/DiagnosticTable/DiagnosticTabl
 import ValidatorBalanceEmptyState from '../../src/components/EmptyState/ValidatorBalanceEmptyState'
 import ValidatorTableEmptyState from '../../src/components/EmptyState/ValidatorTableEmptyState'
 import NetworkStats from '../../src/components/NetworkStats/NetworkStats'
+import Toggle from '../../src/components/Toggle/Toggle'
 import ValidatorBalances from '../../src/components/ValidatorBalances/ValidatorBalances'
 import ValidatorTable from '../../src/components/ValidatorTable/ValidatorTable'
 import { ALERT_ID, CoinbaseExchangeRateUrl } from '../../src/constants/constants'
@@ -18,11 +20,24 @@ import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
 import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
+import useValidatorExclusionList from '../../src/hooks/useValidatorExclusionList'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
-import { ActivityResponse, LogData, Metric, ProposerDuty, StatusColor } from '../../src/types'
+import {
+  ActivityResponse,
+  ExcludedStatus,
+  LogData,
+  Metric,
+  ProposerDuty,
+  StatusColor,
+} from '../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../src/types/beacon'
 import { Diagnostics, PeerDataResults } from '../../src/types/diagnostic'
-import { ValidatorCache, ValidatorInclusionData, ValidatorInfo } from '../../src/types/validator'
+import {
+  ValidatorCache,
+  ValidatorInclusionData,
+  ValidatorInfo,
+  ValidatorStatus,
+} from '../../src/types/validator'
 import formatUniqueObjectArray from '../../utilities/formatUniqueObjectArray'
 
 export interface MainProps {
@@ -40,6 +55,7 @@ export interface MainProps {
   initActivityData: ActivityResponse
   initMetrics: Metric
   initPriorityLogs: LogData[]
+  initExclusionData: ExcludedStatus[]
 }
 
 const Main: FC<MainProps> = (props) => {
@@ -58,6 +74,7 @@ const Main: FC<MainProps> = (props) => {
     initActivityData,
     initMetrics,
     initPriorityLogs,
+    initExclusionData,
   } = props
 
   const { t } = useTranslation()
@@ -78,6 +95,74 @@ const Main: FC<MainProps> = (props) => {
     refreshInterval: 60 * 1000,
     networkError,
   })
+
+  const { formattedExclusions, exclusions, setExclusions } =
+    useValidatorExclusionList(initExclusionData)
+
+  const activeStatuses: ValidatorStatus[] = [
+    'active',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+  ]
+  const allPossibleStatuses: ValidatorStatus[] = [
+    'pending_initialized',
+    'pending_queued',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+    'exited_unslashed',
+    'exited_slashed',
+    'withdrawal_possible',
+    'withdrawal_done',
+    'active',
+    'pending',
+    'exited',
+    'withdrawal',
+    'deposit',
+  ]
+  const nonActiveStatuses = allPossibleStatuses.filter((status) => !activeStatuses.includes(status))
+
+  const isActiveOnlyMode = useMemo(() => {
+    return (
+      nonActiveStatuses.every((status) => formattedExclusions.includes(status)) &&
+      activeStatuses.some((status) => !formattedExclusions.includes(status))
+    )
+  }, [formattedExclusions])
+
+  const toggleActiveOnlyMode = async () => {
+    try {
+      if (isActiveOnlyMode) {
+        // Switch to show all validators by removing all exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      } else {
+        // Switch to active only: first clear all exclusions, then add non-active exclusions
+        // This ensures we start from a clean state regardless of current exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+
+        // Now add exclusions for all non-active statuses
+        const addPromises = nonActiveStatuses.map((status) =>
+          axios.post('/api/add-exclusion', { status }),
+        )
+        await Promise.all(addPromises)
+
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      }
+    } catch (error) {
+      console.error('Failed to toggle active only mode:', error)
+    }
+  }
 
   const { data: peerData } = useSWRPolling<PeerDataResults>('/api/peer-data', {
     refreshInterval: slotInterval,
@@ -205,6 +290,10 @@ const Main: FC<MainProps> = (props) => {
     removeAlert(ALERT_ID.WARNING_LOG)
   }, [warningCount, storeAlert, removeAlert])
 
+  const filteredValidatorStates = useMemo(() => {
+    return validatorStates.filter(({ status }) => !formattedExclusions.includes(status))
+  }, [validatorStates, formattedExclusions])
+
   return (
     <DashboardWrapper
       initActivityData={initActivityData}
@@ -243,16 +332,44 @@ const Main: FC<MainProps> = (props) => {
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          {validatorStates.length ? (
-            <ValidatorTable validators={validatorStates} className='mt-8 lg:mt-2' />
-          ) : (
-            <ValidatorTableEmptyState
-              href='/dashboard/validators?view=create'
-              btnFontType='text-caption1.5'
-              className='min-h-60'
-              ctaText='Create Validator'
-            />
-          )}
+          <div className='mt-8 lg:mt-2 space-y-4'>
+            <div className='flex items-center justify-between'>
+              <div className='flex items-center space-x-3'>
+                <span className='text-sm font-medium text-dark900 dark:text-dark300'>
+                  Show Active Only
+                </span>
+                <Toggle
+                  id='active-only-toggle'
+                  value={isActiveOnlyMode}
+                  onChange={() => toggleActiveOnlyMode()}
+                />
+              </div>
+              {filteredValidatorStates.length && (
+                <span className='text-sm text-dark500 dark:text-dark400'>
+                  {filteredValidatorStates.length} validator
+                  {filteredValidatorStates.length !== 1 ? 's' : ''} shown
+                </span>
+              )}
+            </div>
+            {filteredValidatorStates.length ? (
+              <ValidatorTable validators={filteredValidatorStates} />
+            ) : validatorStates.length ? (
+              <ValidatorTableEmptyState
+                title={t('emptyState.filteredValidatorTable.nonFound')}
+                text={t('emptyState.filteredValidatorTable.adjustFilter')}
+                className='min-h-60'
+              />
+            ) : (
+              <ValidatorTableEmptyState
+                title={t('emptyState.validatorTable.noConnections')}
+                text={t('emptyState.validatorTable.importOrDeposit')}
+                href='/dashboard/validators?view=create'
+                btnFontType='text-caption1.5'
+                className='min-h-60'
+                ctaText='Create Validator'
+              />
+            )}
+          </div>
           <DiagnosticTable
             priorityLogs={initPriorityLogs}
             logMetrics={metrics}

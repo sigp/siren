@@ -9,6 +9,7 @@ import {
   fetchSyncData,
   fetchValidatorCountData,
 } from '../../api/beacon'
+import { fetchValidatorStatusExclusionList } from '../../api/config'
 import {
   fetchPartialWithdrawals,
   fetchPendingDeposits,
@@ -33,12 +34,14 @@ export default async function Page() {
     const forkVersion = await fetchForkVersion(token)
     const partialWithdrawals = await fetchPartialWithdrawals(token)
     const pendingDeposits = await fetchPendingDeposits(token)
+    const exclusions = await fetchValidatorStatusExclusionList(token)
 
     return (
       <Wrapper
         initForkVersionData={forkVersion}
         initActivityData={activities}
         initValMetrics={metrics}
+        initExclusionData={exclusions}
         initNodeHealth={bnHealth}
         initSyncData={syncData}
         initValStates={states}

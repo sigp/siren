@@ -10,7 +10,12 @@ import {
   fetchProposerDuties,
   fetchSyncData,
 } from '../api/beacon'
-import { fetchBeaconNodeVersion, fetchGenesisData, fetchValidatorVersion } from '../api/config'
+import {
+  fetchBeaconNodeVersion,
+  fetchGenesisData,
+  fetchValidatorStatusExclusionList,
+  fetchValidatorVersion,
+} from '../api/config'
 import { fetchMetrics, fetchPriorityLogs } from '../api/logs'
 import { fetchValCaches, fetchValStates } from '../api/validator'
 import Wrapper from './Wrapper'
@@ -25,6 +30,7 @@ export default async function Page() {
     const syncData = await fetchSyncData(token)
     const nodeHealth = await fetchNodeHealth(token)
     const states = await fetchValStates(token)
+    const exclusions = await fetchValidatorStatusExclusionList(token)
     const caches = await fetchValCaches(token)
     const inclusion = await fetchInclusionRate(token)
     const bnVersion = await fetchBeaconNodeVersion(token)
@@ -37,6 +43,7 @@ export default async function Page() {
     return (
       <Wrapper
         initActivityData={activities}
+        initExclusionData={exclusions}
         initProposerDuties={proposerDuties}
         initValCaches={caches}
         initValStates={states}
