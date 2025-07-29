@@ -1,6 +1,7 @@
 'use client'
 
 import { IBls } from '@chainsafe/bls/types'
+import axios from 'axios'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
@@ -43,6 +44,7 @@ import {
   ValidatorCache,
   ValidatorCountResult,
   ValidatorInfo,
+  ValidatorStatus,
 } from '../../../src/types/validator'
 
 export interface MainProps {
@@ -125,7 +127,73 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { formattedExclusions } = useValidatorExclusionList(initExclusionData)
+  const { formattedExclusions, exclusions, setExclusions } =
+    useValidatorExclusionList(initExclusionData)
+
+  const activeStatuses: ValidatorStatus[] = [
+    'active',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+  ]
+  const allPossibleStatuses: ValidatorStatus[] = [
+    'pending_initialized',
+    'pending_queued',
+    'active_ongoing',
+    'active_exiting',
+    'active_slashed',
+    'exited_unslashed',
+    'exited_slashed',
+    'withdrawal_possible',
+    'withdrawal_done',
+    'active',
+    'pending',
+    'exited',
+    'withdrawal',
+    'deposit',
+  ]
+  const nonActiveStatuses = allPossibleStatuses.filter((status) => !activeStatuses.includes(status))
+
+  const isActiveOnlyMode = useMemo(() => {
+    return (
+      nonActiveStatuses.every((status) => formattedExclusions.includes(status)) &&
+      activeStatuses.some((status) => !formattedExclusions.includes(status))
+    )
+  }, [formattedExclusions])
+
+  const toggleActiveOnlyMode = async () => {
+    try {
+      if (isActiveOnlyMode) {
+        // Switch to show all validators by removing all exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      } else {
+        // Switch to active only: first clear all exclusions, then add non-active exclusions
+        // This ensures we start from a clean state regardless of current exclusions
+        const deletePromises = exclusions.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
+        await Promise.all(deletePromises)
+
+        // Now add exclusions for all non-active statuses
+        const addPromises = nonActiveStatuses.map((status) =>
+          axios.post('/api/add-exclusion', { status }),
+        )
+        await Promise.all(addPromises)
+
+        // Refresh exclusions
+        const { data } = await axios.get('/api/exclusions')
+        setExclusions(data)
+      }
+    } catch (error) {
+      console.error('Failed to toggle active only mode:', error)
+    }
+  }
 
   const [view, setView] = useState<ValidatorManagementView>(ValidatorManagementView.MAIN)
 
@@ -329,6 +397,9 @@ const Main: FC<MainProps> = (props) => {
             hasSearchAction={!!validatorStates.length}
             hasConsolidationAction={!!eligibleToConsolidate.length}
             scrollPercentage={scrollPercentage}
+            isActiveOnlyMode={isActiveOnlyMode}
+            onToggleActiveOnly={toggleActiveOnlyMode}
+            totalValidatorCount={validatorStates.length}
           />
         )
     }
