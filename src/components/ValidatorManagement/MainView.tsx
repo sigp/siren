@@ -5,6 +5,7 @@ import { ValidatorManagementView } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import ValidatorTableEmptyState from '../EmptyState/ValidatorTableEmptyState'
+import Toggle from '../Toggle/Toggle'
 import Typography from '../Typography/Typography'
 import ValidatorSearchInput from '../ValidatorSearchInput/ValidatorSearchInput'
 import ValidatorTable from '../ValidatorTable/ValidatorTable'
@@ -17,6 +18,9 @@ export interface MainViewProps {
   search: string
   hasSearchAction: boolean
   hasConsolidationAction: boolean
+  isActiveOnlyMode?: boolean
+  onToggleActiveOnly?: () => void
+  totalValidatorCount?: number
 }
 
 const MainView: FC<MainViewProps> = ({
@@ -27,6 +31,9 @@ const MainView: FC<MainViewProps> = ({
   search,
   hasSearchAction,
   hasConsolidationAction,
+  isActiveOnlyMode = false,
+  onToggleActiveOnly,
+  totalValidatorCount = 0,
 }) => {
   const { t } = useTranslation()
 
@@ -69,21 +76,52 @@ const MainView: FC<MainViewProps> = ({
           </div>
         </div>
       </div>
-      {validators.length ? (
-        <ValidatorTable
-          scrollPercentage={scrollPercentage}
-          isPaginated
-          validators={validators}
-          view='full'
-        />
-      ) : (
-        <ValidatorTableEmptyState
-          onClick={viewCreateVal}
-          btnFontType='text-caption'
-          className='min-h-96'
-          ctaText='Create New Validator'
-        />
-      )}
+      <div className='space-y-4'>
+        {onToggleActiveOnly && (
+          <div className='flex items-center justify-between'>
+            <div className='flex items-center space-x-3'>
+              <span className='text-sm font-medium text-dark900 dark:text-dark300'>
+                Show Active Only
+              </span>
+              <Toggle
+                id='active-only-toggle-management'
+                value={isActiveOnlyMode}
+                onChange={onToggleActiveOnly}
+              />
+            </div>
+            {validators.length > 0 && (
+              <span className='text-sm text-dark500 dark:text-dark400'>
+                {validators.length} of {totalValidatorCount} validator
+                {totalValidatorCount !== 1 ? 's' : ''} shown
+              </span>
+            )}
+          </div>
+        )}
+        {validators.length ? (
+          <ValidatorTable
+            scrollPercentage={scrollPercentage}
+            isPaginated
+            validators={validators}
+            view='full'
+          />
+        ) : hasSearchAction ? (
+          <ValidatorTableEmptyState
+            title={t('filteredValidatorTable.nonFound')}
+            text={t('filteredValidatorTable.adjustFilter')}
+            className='min-h-60'
+          />
+        ) : (
+          <ValidatorTableEmptyState
+            onClick={viewCreateVal}
+            title={t('emptyState.validatorTable.noConnections')}
+            text={t('emptyState.validatorTable.importOrDeposit')}
+            href='/dashboard/validators?view=create'
+            btnFontType='text-caption'
+            className='min-h-96'
+            ctaText='Create New Validator'
+          />
+        )}
+      </div>
     </div>
   )
 }
