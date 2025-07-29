@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import useValidatorExclusionList from '../../../hooks/useValidatorExclusionList'
 import { ExcludedStatus } from '../../../types'
@@ -14,9 +14,15 @@ export interface DataSettingsProps {
 
 const DataSettings: FC<DataSettingsProps> = ({ initExclusions }) => {
   const { t } = useTranslation()
-  const [isUpdating, setIsUpdating] = useState(false)
+  const [loadingStates, setLoadingStates] = useState<Record<string, boolean>>({})
+  const [optimisticExclusions, setOptimisticExclusions] = useState<ValidatorStatus[]>([])
   const { exclusions, formattedExclusions, setExclusions } =
     useValidatorExclusionList(initExclusions)
+
+  // Combine server state with optimistic updates
+  const effectiveExclusions = useMemo(() => {
+    return optimisticExclusions.length > 0 ? optimisticExclusions : formattedExclusions
+  }, [optimisticExclusions, formattedExclusions])
 
   const statusGroups = [
     {
@@ -51,74 +57,112 @@ const DataSettings: FC<DataSettingsProps> = ({ initExclusions }) => {
     },
   ]
 
-  const deleteExclusion = async (id: number) => {
+  const setItemLoading = (status: ValidatorStatus, loading: boolean) => {
+    setLoadingStates((prev) => ({ ...prev, [status]: loading }))
+  }
+
+  const deleteExclusion = async (id: number, status: ValidatorStatus) => {
     try {
-      setIsUpdating(true)
+      setItemLoading(status, true)
       const { data } = await axios.delete(`/api/remove-exclusion/${id}`)
       setExclusions(data)
+      // Clear optimistic state once server responds
+      setOptimisticExclusions([])
     } catch (e) {
       console.error(e)
+      // Revert optimistic update on error
+      setOptimisticExclusions([])
     } finally {
-      setIsUpdating(false)
+      setItemLoading(status, false)
     }
   }
 
   const addExclusion = async (status: ValidatorStatus) => {
     try {
-      setIsUpdating(true)
+      setItemLoading(status, true)
       const { data } = await axios.post('/api/add-exclusion', { status })
       setExclusions(data)
+      // Clear optimistic state once server responds
+      setOptimisticExclusions([])
     } catch (e) {
+      console.error(e)
+      // Revert optimistic update on error
+      setOptimisticExclusions([])
     } finally {
-      setIsUpdating(false)
+      setItemLoading(status, false)
     }
   }
 
   const submitExclusion = async (selectedStatus: ValidatorStatus) => {
     const excludedStatus = exclusions.find(({ status }) => status === selectedStatus)
 
+    // Apply optimistic update immediately
     if (excludedStatus) {
-      await deleteExclusion(excludedStatus.id)
-      return
+      // Currently excluded, so we're showing it (removing from exclusions)
+      setOptimisticExclusions(effectiveExclusions.filter((status) => status !== selectedStatus))
+      await deleteExclusion(excludedStatus.id, selectedStatus)
+    } else {
+      // Currently shown, so we're hiding it (adding to exclusions)
+      setOptimisticExclusions([...effectiveExclusions, selectedStatus])
+      void (await addExclusion(selectedStatus))
     }
-
-    void (await addExclusion(selectedStatus))
   }
 
   const toggleGroup = async (groupStatuses: ValidatorStatus[]) => {
     try {
-      setIsUpdating(true)
+      // Set loading for entire group
+      groupStatuses.forEach((status) => setItemLoading(status, true))
 
       // Check if all statuses in the group are currently shown (not excluded)
       const allGroupStatusesShown = groupStatuses.every(
-        (status) => !formattedExclusions.includes(status),
+        (status) => !effectiveExclusions.includes(status),
       )
 
       if (allGroupStatusesShown) {
-        // Hide all statuses in the group by adding exclusions
-        const addPromises = groupStatuses.map((status) => addExclusion(status))
+        // Hide all statuses in the group by adding exclusions (optimistic update)
+        setOptimisticExclusions([...effectiveExclusions, ...groupStatuses])
+
+        // Execute API calls
+        const addPromises = groupStatuses.map((status) =>
+          axios.post('/api/add-exclusion', { status }),
+        )
         await Promise.all(addPromises)
       } else {
-        // Show all statuses in the group by removing exclusions
+        // Show all statuses in the group by removing exclusions (optimistic update)
+        setOptimisticExclusions(
+          effectiveExclusions.filter((status) => !groupStatuses.includes(status)),
+        )
+
+        // Execute API calls
         const statusesToRemove = exclusions.filter((exclusion) =>
           groupStatuses.includes(exclusion.status),
         )
-        const removePromises = statusesToRemove.map((exclusion) => deleteExclusion(exclusion.id))
+        const removePromises = statusesToRemove.map((exclusion) =>
+          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
+        )
         await Promise.all(removePromises)
       }
+
+      // Refresh the complete state from server
+      const { data } = await axios.get('/api/exclusions')
+      setExclusions(data)
+      setOptimisticExclusions([])
     } catch (error) {
       console.error('Failed to toggle group:', error)
+      // Revert optimistic update on error
+      setOptimisticExclusions([])
     } finally {
-      setIsUpdating(false)
+      // Clear loading for entire group
+      groupStatuses.forEach((status) => setItemLoading(status, false))
     }
   }
 
   const isGroupFullyShown = (groupStatuses: ValidatorStatus[]) => {
-    return groupStatuses.every((status) => !formattedExclusions.includes(status))
+    return groupStatuses.every((status) => !effectiveExclusions.includes(status))
   }
 
   const isGroupPartiallyShown = (groupStatuses: ValidatorStatus[]) => {
-    const shownStatuses = groupStatuses.filter((status) => !formattedExclusions.includes(status))
+    const shownStatuses = groupStatuses.filter((status) => !effectiveExclusions.includes(status))
     return shownStatuses.length > 0 && shownStatuses.length < groupStatuses.length
   }
 
@@ -144,7 +188,7 @@ const DataSettings: FC<DataSettingsProps> = ({ initExclusions }) => {
                         {group.title}
                       </h4>
                       <CheckBox
-                        disabled={isUpdating}
+                        disabled={group.statuses.some((status) => loadingStates[status])}
                         id={`group-${groupIndex}`}
                         readOnly={true}
                         onClick={() => toggleGroup(group.statuses)}
@@ -159,13 +203,13 @@ const DataSettings: FC<DataSettingsProps> = ({ initExclusions }) => {
                   <div className='grid grid-cols-1 sm:grid-cols-2 gap-3'>
                     {group.statuses.map((status, statusIndex) => (
                       <CheckBox
-                        disabled={isUpdating}
+                        disabled={loadingStates[status] || false}
                         key={statusIndex}
                         id={status}
                         readOnly={true}
                         onClick={() => submitExclusion(status)}
                         containerClassName='w-full'
-                        checked={!formattedExclusions.includes(status)}
+                        checked={!effectiveExclusions.includes(status)}
                         label={t(`validatorStatus.${status}`)}
                       />
                     ))}
