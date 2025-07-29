@@ -7,7 +7,7 @@ import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import { CONSOLIDATION_CONTRACT } from '../../../../../constants/constants'
 import { Status } from '../../../../../constants/enums'
 import { useMaxHeight } from '../../../../../hooks/useMaxHeight'
-import { ConsolidationTx } from '../../../../../types'
+import { ConsolidationTx, NetworkId } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Button, { ButtonFace } from '../../../../Button/Button'
 import CheckBox from '../../../../CheckBox/CheckBox'
@@ -117,7 +117,7 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
         onRetryTx={retryTransaction}
         onStatusUpdate={updateConsolidationResults}
         id={index}
-        networkId={chainId}
+        networkId={chainId as NetworkId}
         txHash={txHash}
       />
     ))

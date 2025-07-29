@@ -45,11 +45,7 @@ const ActivityText: React.FC<ActivityTextProps> = ({
       values: () => ({ pubKey: formatEthAddress(pubKey) }),
     },
     [ActivityType.CONSOLIDATION]: {
-      key: `consolidation.${isError ? 'error' : ''}${
-        formattedData?.targetPubKey === formattedData?.sourcePubKey
-          ? 'SelfConsolidationText'
-          : 'TargetConsolidationText'
-      }`,
+      key: `consolidation.${formattedData?.targetPubKey === formattedData?.sourcePubKey ? 'self' : 'target'}.${isError ? 'errorText' : 'text'}`,
       values: () => ({
         pubKey: formatEthAddress(formattedData?.targetPubKey),
         sourcePubKey: formatEthAddress(formattedData?.sourcePubKey),

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect } from 'react'
+import React, { FC, useCallback, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import getBeaconChaLink from '../../../utilities/getBeaconChaLink'
@@ -9,6 +9,7 @@ import useImportValidator from '../../hooks/useImportValidator'
 import useResolveTransactionOnce from '../../hooks/useResolveTransactionOnce'
 import { ActivityType, DepositData, NetworkId, TxHash } from '../../types'
 import ExternalLink from '../ExternalLink/ExternalLink'
+import Tooltip from '../ToolTip/Tooltip'
 import TransactionStatus from '../TransactionStatus/TransactionStatus'
 import Typography from '../Typography/Typography'
 
@@ -98,14 +99,18 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     : null
 
   const renderTransactionStatus = useCallback(() => {
+    const commonProps = {
+      id: mnemonicIndex,
+      networkId: depositNetworkId,
+      txHash,
+    }
+
     if (isImportError) {
       return (
         <TransactionStatus
-          id={mnemonicIndex}
-          networkId={depositNetworkId}
+          {...commonProps}
           title={t(`validatorManagement.txStatuses.importError.title`)}
           status={Status.ERROR}
-          txHash={txHash}
         >
           <div className='space-y-2'>
             <Typography type='text-caption1'>
@@ -125,11 +130,9 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
     if (isImportSuccess || status === Status.SUCCESS) {
       return (
         <TransactionStatus
-          id={mnemonicIndex}
-          networkId={depositNetworkId}
+          {...commonProps}
           title={t('validatorManagement.txStatuses.validatorComplete.title')}
           status={Status.SUCCESS}
-          txHash={txHash}
         >
           <div className='space-y-2'>
             <Typography type='text-caption1'>
@@ -157,18 +160,13 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
       )
     }
 
-    const txStatusKey = txStatus.toLowerCase()
-
-    return (
-      <TransactionStatus
-        id={mnemonicIndex}
-        networkId={depositNetworkId}
-        title={t(`validatorManagement.txStatuses.${txStatusKey}.title`)}
-        text={t(`validatorManagement.txStatuses.${txStatusKey}.text`)}
-        status={txStatus}
-        txHash={txHash}
-      >
-        {txStatus === Status.ERROR && (
+    if (txStatus === Status.ERROR) {
+      return (
+        <TransactionStatus
+          {...commonProps}
+          title={t('validatorManagement.txStatuses.error.title')}
+          status={txStatus}
+        >
           <div className='space-y-2'>
             <Typography type='text-caption1'>
               {t('validatorManagement.txStatuses.error.text')}
@@ -179,8 +177,40 @@ const ValidatorDepositImport: FC<ValidatorDepositImportProps> = ({
               </Typography>
             </div>
           </div>
-        )}
-      </TransactionStatus>
+        </TransactionStatus>
+      )
+    }
+
+    if (txStatus === Status.PENDING) {
+      return (
+        <TransactionStatus
+          {...commonProps}
+          title={t('validatorManagement.txStatuses.pending.title')}
+          status={txStatus}
+        >
+          <div className='space-y-2'>
+            <Typography type='text-caption1'>
+              {t('validatorManagement.txStatuses.pending.text')}
+            </Typography>
+            <Tooltip id='retryTx' maxWidth={350} text={t('txStatuses.cancelTxToolTip')}>
+              <div className='cursor-pointer' onClick={retryTransaction}>
+                <Typography type='text-caption1' className='underline'>
+                  {t('cancelTransaction')}
+                </Typography>
+              </div>
+            </Tooltip>
+          </div>
+        </TransactionStatus>
+      )
+    }
+
+    return (
+      <TransactionStatus
+        {...commonProps}
+        title={t(`validatorManagement.txStatuses.success.title`)}
+        text={t(`validatorManagement.txStatuses.success.text`)}
+        status={txStatus}
+      />
     )
   }, [
     isImportSuccess,

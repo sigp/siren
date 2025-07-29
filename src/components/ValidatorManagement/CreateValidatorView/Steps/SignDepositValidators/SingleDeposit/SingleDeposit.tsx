@@ -55,7 +55,7 @@ const SingleDeposit: FC<SingleDepositProps> = ({
     t('validatorManagement.signAndDeposit.stepTitles.verifyTransaction'),
     t('validatorManagement.signAndDeposit.stepTitles.importValidator'),
   ]
-  const { isLoading, error, txHash, pubKey, makeDeposit } = useValidatorDeposit({
+  const { isLoading, error, txHash, pubKey, makeDeposit, reset } = useValidatorDeposit({
     validator: candidate,
     mnemonic,
     beaconSpec,
@@ -112,7 +112,10 @@ const SingleDeposit: FC<SingleDepositProps> = ({
 
   const acknowledgeRisk = () => setIsAcknowledge(true)
 
-  const retryTransaction = () => setStep(0)
+  const retryTransaction = () => {
+    setStep(0)
+    reset()
+  }
 
   return (
     <div className='relative w-full h-full'>

@@ -24,6 +24,7 @@
       "saturday": "Sat"
     }
   },
+  "cancelTransaction": "Cancel Transaction",
   "logLevel": "Log Level",
   "loadOlderLogs": "Load older logs",
   "effectiveBalance": "Effective Balance",
@@ -518,6 +519,7 @@
     "viewValidator": "View Validator",
     "reviewStatus": "Review validator status {{pubKey}}",
     "txStatuses": {
+      "cancelTxToolTip": "Note: the app may lose track of an in-flight tx. It could still be pending in your wallet or on-chain. Please verify in your wallet or on a block explorer before retrying.",
       "processingRequest": "Processing Request",
       "validatorComplete": {
         "title": "Validator Complete",
@@ -797,10 +799,14 @@
       "consolidation": {
         "title": "Validator Consolidation Requested",
         "errorTitle": "Failed to Consolidate",
-        "errorTargetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan.",
-        "targetConsolidationText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> as been sent. Click here to review the transaction details on Etherscan.",
-        "selfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan.",
-        "errorSelfConsolidationText": "Request for self consolidation of validator: <span>{{pubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan."
+        "target": {
+          "errorText": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan.",
+          "text": "Request to consolidate target validator: <span>{{pubKey}}</span> with source validator: <span>{{sourcePubKey}}</span> as been sent. Click here to review the transaction details on Etherscan."
+        },
+        "self": {
+          "text": "Request for self consolidation of validator: <span>{{pubKey}}</span> has been sent. Click here to review the transaction details on Etherscan.",
+          "errorText": "Request for self consolidation of validator: <span>{{pubKey}}</span> was unsuccessful. Click here to review the transaction details on Etherscan."
+        }
       },
       "partialWithdrawal": {
         "title": "Partial Withdrawal Requested",

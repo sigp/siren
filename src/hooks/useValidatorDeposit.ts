@@ -17,6 +17,7 @@ export type ValidatorDepositReturnType = {
   pubKey: string
   txHash: TxHash | undefined
   makeDeposit: () => Promise<void>
+  reset: () => void
 }
 
 const useValidatorDeposit = ({
@@ -26,7 +27,7 @@ const useValidatorDeposit = ({
 }: ValidatorDepositConfig): ValidatorDepositReturnType => {
   const { DEPOSIT_CONTRACT_ADDRESS, GENESIS_FORK_VERSION } = beaconSpec
   const { index, withdrawalCredentials, effectiveBalance, withdrawalPrefix } = validator
-  const [txHash, setTxHash] = useState<TxHash | undefined>()
+  const [txHash, setTxHash] = useState<TxHash | undefined>(undefined)
   const [pubKey, setPubKey] = useState<string>('')
   const [isLoading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
@@ -88,12 +89,19 @@ const useValidatorDeposit = ({
     }
   }
 
+  const reset = () => {
+    setTxHash(undefined)
+    setLoading(false)
+    setError('')
+  }
+
   return {
     isLoading,
     error,
     pubKey,
     txHash,
     makeDeposit,
+    reset,
   }
 }
 

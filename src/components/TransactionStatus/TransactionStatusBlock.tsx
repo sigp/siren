@@ -7,6 +7,7 @@ import getEtherscanLink from '../../../utilities/getEtherscanLink'
 import isValidNetwork from '../../../utilities/isValidNetwork'
 import { Status } from '../../constants/enums'
 import Button, { ButtonFace } from '../Button/Button'
+import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 
 export interface TransactionStatusBlockProps {
@@ -16,6 +17,7 @@ export interface TransactionStatusBlockProps {
   onErrorText?: string
   onSuccessText?: string
   onSuccess?: () => void
+  onReset?: () => void
   chainId: number
 }
 
@@ -26,18 +28,21 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
   onErrorText,
   onSuccessText,
   onSuccess,
+  onReset,
   chainId,
 }) => {
   const { t } = useTranslation()
+  const isPending = txStatus === Status.PENDING
   const isSuccess = txStatus === Status.SUCCESS
   const isError = txStatus === Status.ERROR
   const etherScanLink = isValidNetwork(chainId) ? getEtherscanLink(chainId, `/tx/${txHash}`) : null
 
   const hasErrorCallback = !!onError && !!onErrorText
   const hasSuccessCallback = !!onSuccess && onSuccessText
+  const status = isSuccess ? 'success' : isError ? 'error' : 'pending'
 
-  const statusTitle = `validatorManagement.txStatuses.${isSuccess ? 'success' : isError ? 'error' : 'pending'}.title`
-  const statusText = `validatorManagement.txStatuses.${isSuccess ? 'success' : isError ? 'error' : 'pending'}.text`
+  const statusTitle = `validatorManagement.txStatuses.${status}.title`
+  const statusText = `validatorManagement.txStatuses.${status}.text`
   const txIcon = clsx(
     isSuccess
       ? 'bi-check text-subtitle1 text-success '
@@ -80,6 +85,13 @@ const TransactionStatusBlock: FC<TransactionStatusBlockProps> = ({
       <Typography className='text-center' type='text-caption'>
         {t(statusText)}
       </Typography>
+      {onReset && isPending && (
+        <Tooltip id='retryTx' maxWidth={350} text={t('txStatuses.cancelTxToolTip')}>
+          <Button fontType='text-caption1' onClick={onError} type={ButtonFace.TERTIARY}>
+            {t('cancelTransaction')}
+          </Button>
+        </Tooltip>
+      )}
       {isError && hasErrorCallback ? (
         <Button fontType='text-caption1' onClick={onError} type={ButtonFace.SECONDARY}>
           {onErrorText}

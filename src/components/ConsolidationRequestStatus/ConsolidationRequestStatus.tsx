@@ -4,6 +4,7 @@ import postActivity from '../../../utilities/postActivity'
 import { Status } from '../../constants/enums'
 import useResolveTransactionOnce from '../../hooks/useResolveTransactionOnce'
 import { ActivityType, NetworkId, TxHash } from '../../types'
+import Tooltip from '../ToolTip/Tooltip'
 import TransactionStatus, { TransactionStatusStyle } from '../TransactionStatus/TransactionStatus'
 import Typography from '../Typography/Typography'
 
@@ -11,10 +12,10 @@ export interface ConsolidationRequestStatusProps {
   targetPubKey: string
   sourcePubKey: string
   txHash: TxHash
-  networkId: number
-  id?: string | number
-  onRetryTx: (id: string | number) => void
-  onStatusUpdate?: (id: string | number, status: Status) => void
+  networkId: NetworkId
+  id: number
+  onRetryTx: (id: number) => void
+  onStatusUpdate?: (id: number, status: Status) => void
 }
 
 const ConsolidationRequestStatus: FC<ConsolidationRequestStatusProps> = ({
@@ -29,14 +30,8 @@ const ConsolidationRequestStatus: FC<ConsolidationRequestStatusProps> = ({
   const { t } = useTranslation()
   const { txStatus } = useResolveTransactionOnce(txHash)
 
-  const renderText = {
-    [Status.SUCCESS]: 'successTxText',
-    [Status.ERROR]: 'errorTxText',
-    [Status.PENDING]: 'pendingTxText',
-  }[txStatus]
-
   useEffect(() => {
-    if (txStatus && id != null) {
+    if (txStatus) {
       onStatusUpdate?.(id, txStatus)
     }
   }, [txStatus, id, onStatusUpdate])
@@ -61,25 +56,23 @@ const ConsolidationRequestStatus: FC<ConsolidationRequestStatusProps> = ({
     })()
   }, [txStatus, targetPubKey, sourcePubKey, txHash])
 
-  const handleRetry = useCallback(() => {
-    if (id != null) {
-      onRetryTx(id)
-    }
-  }, [id, onRetryTx])
+  const handleRetry = useCallback(() => onRetryTx(id), [id, onRetryTx])
+
+  const commonProps = {
+    id,
+    networkId,
+    title: t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest'),
+    status: txStatus,
+    txHash,
+    style: TransactionStatusStyle.Secondary,
+  }
 
   if (txStatus === Status.ERROR) {
     return (
-      <TransactionStatus
-        id={id}
-        networkId={networkId as NetworkId}
-        title={t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest')}
-        status={txStatus}
-        txHash={txHash}
-        style={TransactionStatusStyle.Secondary}
-      >
+      <TransactionStatus {...commonProps}>
         <div className='space-y-2'>
           <Typography type='text-caption1'>
-            {t(`validatorManagement.consolidateView.signAndSubmit.${renderText}`)}
+            {t('validatorManagement.consolidateView.signAndSubmit.errorTxText')}
           </Typography>
           <div className='cursor-pointer' onClick={handleRetry}>
             <Typography className='underline' type='text-caption1'>
@@ -91,15 +84,33 @@ const ConsolidationRequestStatus: FC<ConsolidationRequestStatusProps> = ({
     )
   }
 
+  if (txStatus === Status.PENDING) {
+    return (
+      <TransactionStatus {...commonProps}>
+        <div className='space-y-2'>
+          <Typography type='text-caption1'>
+            {t('validatorManagement.consolidateView.signAndSubmit.pendingTxText')}
+          </Typography>
+          <Tooltip
+            id='retryTx-consolidation'
+            maxWidth={350}
+            text={t('validatorManagement.txStatuses.cancelTxToolTip')}
+          >
+            <div className='cursor-pointer' onClick={handleRetry}>
+              <Typography className='underline' type='text-caption1'>
+                {t('cancelTransaction')}
+              </Typography>
+            </div>
+          </Tooltip>
+        </div>
+      </TransactionStatus>
+    )
+  }
+
   return (
     <TransactionStatus
-      id={id}
-      networkId={networkId as NetworkId}
-      title={t('validatorManagement.consolidateView.signAndSubmit.consolidationRequest')}
-      text={t(`validatorManagement.consolidateView.signAndSubmit.${renderText}`)}
-      status={txStatus}
-      txHash={txHash}
-      style={TransactionStatusStyle.Secondary}
+      {...commonProps}
+      text={t('validatorManagement.consolidateView.signAndSubmit.successTxText')}
     />
   )
 }
