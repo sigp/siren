@@ -40,7 +40,7 @@ const MetricLineChart: FC<MetricLineChartProps> = ({
 }) => {
   const chartEl = useRef<HTMLCanvasElement>(null)
   const mode = useRecoilValue(uiMode)
-  const chartId = `metric-chart-${Math.random().toString(36).substr(2, 9)}`
+  const chartId = `metric-chart-${label.replace(/[^a-zA-Z0-9]/g, '').toLowerCase()}`
 
   useEffect(() => {
     if (!chartEl.current) return

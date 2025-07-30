@@ -7,6 +7,12 @@ const nextConfig = {
       use: ['@svgr/webpack'],
     })
 
+    // Enable top-level await support
+    config.experiments = {
+      ...config.experiments,
+      topLevelAwait: true,
+    }
+
     return config
   },
 }

@@ -2,6 +2,7 @@ import { FC, SVGProps } from 'react'
 import { Protocol, Status, WalletPrefix } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
+import { ValidatorStatus } from './validator'
 
 export interface NextFetchRequestInit extends RequestInit {
   next?: {
@@ -253,4 +254,9 @@ export type ConsolidationTx = {
   pubKey: string
   txHash: TxHash
   status: Status
+}
+
+export type ExcludedStatus = {
+  id: number
+  status: ValidatorStatus
 }

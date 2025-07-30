@@ -13,10 +13,16 @@ const DiagnosticTable: FC<DiagnosticTableProps> = ({
   priorityLogs,
 }) => {
   return (
-    <div className='flex-1 flex flex-col space-y-4 md:space-y-0 md:flex-row mt-2 w-full'>
-      <HardwareInfo syncData={syncData} beanHealth={beanHealth} />
-      <LogsInfo logMetrics={logMetrics} />
-      <AlertInfo bnSpec={bnSpec} priorityLogs={priorityLogs} syncData={syncData} />
+    <div className='h-full flex flex-col space-y-2 md:space-y-0 md:flex-row w-full min-h-0 pb-1'>
+      <div className='flex-1 min-h-0'>
+        <HardwareInfo syncData={syncData} beanHealth={beanHealth} bnSpec={bnSpec} />
+      </div>
+      <div className='flex-1 min-h-0'>
+        <LogsInfo logMetrics={logMetrics} />
+      </div>
+      <div className='flex-1 min-h-0'>
+        <AlertInfo bnSpec={bnSpec} priorityLogs={priorityLogs} syncData={syncData} />
+      </div>
     </div>
   )
 }

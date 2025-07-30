@@ -14,6 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { GracefulShutdownModule } from 'nestjs-graceful-shutdown';
 import { ActivityModule } from './activity/activity.module';
 import { CacheModule } from '@nestjs/cache-manager';
+import { ExcludeStatusModule } from './exclude-status/exclude-status.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     ValidatorModule,
     NodeModule,
     ActivityModule,
+    ExcludeStatusModule,
   ],
   controllers: [AppController],
   providers: [AppService],

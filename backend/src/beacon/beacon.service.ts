@@ -72,25 +72,12 @@ export class BeaconService {
         'syncData',
         slotInterval,
         async () => {
-          const [beaconResponse, executionResponse] = await Promise.all([
-            this.utilsService.sendHttpRequest({
-              url: `${this.beaconUrl}/eth/v1/node/syncing`,
-            }),
-            this.utilsService.sendHttpRequest({
-              url: `${this.beaconUrl}/lighthouse/eth1/syncing`,
-            }),
-          ]);
+          const beaconResponse = await this.utilsService.sendHttpRequest({
+            url: `${this.beaconUrl}/eth/v1/node/syncing`,
+          });
 
           const { head_slot, sync_distance, is_syncing } =
             beaconResponse.data.data;
-          const {
-            head_block_number,
-            head_block_timestamp,
-            latest_cached_block_number,
-            latest_cached_block_timestamp,
-            voting_target_timestamp,
-            eth1_node_sync_status_percentage,
-          } = executionResponse.data.data;
 
           const headSlot = Number(head_slot);
           const currentEpoch = Math.floor(headSlot / Number(SLOTS_PER_EPOCH));
@@ -106,15 +93,6 @@ export class BeaconService {
               beaconSyncTime: Number(sync_distance) * (slotInterval / 1000),
               syncDistance: Number(sync_distance),
               isSyncing: is_syncing,
-            },
-            executionSync: {
-              headSlot: Number(head_block_number || 0),
-              headTimestamp: head_block_timestamp,
-              cachedHeadSlot: Number(latest_cached_block_number || 0),
-              cachedHeadTimestamp: latest_cached_block_timestamp,
-              votingTimestamp: voting_target_timestamp,
-              syncPercentage: Number(eth1_node_sync_status_percentage || 0),
-              isReady: eth1_node_sync_status_percentage === 100,
             },
           };
         },

@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, ReactNode, useEffect, useState } from 'react'
 import { PlacesType } from 'react-tooltip'
 import addClassString from '../../../utilities/addClassString'
 import generateId from '../../../utilities/generateId'
@@ -20,7 +20,7 @@ export interface DiagnosticCardProps {
   title: string
   metric?: string
   metricTextSize?: TypographyType
-  subTitle: string
+  subTitle: string | ReactNode
   border?: string
   subTitleHighlightColor?: string
   maxHeight?: OptionalString
@@ -71,11 +71,11 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       case 'health':
         return `h-24 md:h-full ${
           maxWidth || 'max-w-full md:max-w-xs'
-        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
+        } py-1 px-2 xl:py-2 xl:px-3 dark:border-dark500`
       default:
         return `${maxWidth || 'md:max-w-xs @1600:max-w-full'} ${
-          maxHeight || 'max-h-30'
-        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
+          maxHeight || 'h-full'
+        } py-1 px-2 xl:py-2 xl:px-3 dark:border-dark500`
     }
   }
 
@@ -152,7 +152,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       )}
 
       {/* Header with icon, title and metric */}
-      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-2'>
+      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-1'>
         <div className='flex items-center gap-2'>
           {renderIcon()}
           <Typography
@@ -173,17 +173,31 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       </div>
 
       {/* Utilization percentage and status */}
-      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-2'>
-        <Typography
-          type={isSmall ? 'text-tiny' : 'text-caption2'}
-          className={`${
-            subTitleHighlightColor
-              ? `${subTitleHighlightColor} px-1.5 py-0.5 rounded text-xs font-medium`
-              : 'text-dark500 dark:text-dark300 font-normal'
-          } ${!subTitleHighlightColor ? '' : 'uppercase tracking-wide'}`}
-        >
-          {subTitle}
-        </Typography>
+      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-1'>
+        {typeof subTitle === 'string' ? (
+          <Typography
+            type={isSmall ? 'text-tiny' : 'text-caption2'}
+            className={`${
+              subTitleHighlightColor
+                ? `${subTitleHighlightColor} px-1.5 py-0.5 rounded text-xs font-medium`
+                : 'text-dark500 dark:text-dark300 font-normal'
+            } ${!subTitleHighlightColor ? '' : 'uppercase tracking-wide'}`}
+          >
+            {subTitle}
+          </Typography>
+        ) : (
+          <div
+            className={`${
+              subTitleHighlightColor
+                ? `${subTitleHighlightColor} px-1.5 py-0.5 rounded text-xs font-medium`
+                : 'text-dark500 dark:text-dark300 font-normal'
+            } ${!subTitleHighlightColor ? '' : 'uppercase tracking-wide'} ${
+              isSmall ? 'text-tiny' : 'text-caption2'
+            }`}
+          >
+            {subTitle}
+          </div>
+        )}
         <div className='flex items-center gap-1'>
           {percent ? (
             <ProgressCircle size='sm' id={generateId(12)} percent={percent} />
@@ -195,7 +209,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
 
       {/* Chart fills remaining space at bottom */}
       {metric && size !== 'sm' && isBackground && chartData && chartColor && chartLabel && (
-        <div className='w-full flex-1 min-h-0 mt-2 relative overflow-hidden rounded-md'>
+        <div className='w-full flex-1 min-h-0 mt-1 relative overflow-hidden rounded-md max-h-16'>
           <div className='absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent opacity-50'></div>
           <MetricLineChart
             data={chartData}

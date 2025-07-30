@@ -17,7 +17,7 @@ const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
 
   return (
     <div className='h-full w-full flex flex-col'>
-      <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500'>
+      <div className='w-full h-12 flex items-center justify-between px-4 md:border-l-0 border-style500 border-t border-b flex-shrink-0'>
         <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
           {t('logInfo.logs')}
         </Typography>
@@ -33,13 +33,15 @@ const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
           </div>
         </Link>
       </div>
-      <LogStats
-        critToolTip={t('logs.tooltips.combinedCritical')}
-        errorToolTip={t('logs.tooltips.combinedError')}
-        warnToolTip={t('logs.tooltips.combinedWarning')}
-        size={size}
-        logMetrics={logMetrics}
-      />
+      <div className='flex-1 min-h-0 flex flex-col'>
+        <LogStats
+          critToolTip={t('logs.tooltips.combinedCritical')}
+          errorToolTip={t('logs.tooltips.combinedError')}
+          warnToolTip={t('logs.tooltips.combinedWarning')}
+          size={size}
+          logMetrics={logMetrics}
+        />
+      </div>
     </div>
   )
 }
