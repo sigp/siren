@@ -36,17 +36,17 @@ const EpochProgressBar: FC<EpochProgressBarProps> = ({ syncData, beaconSpec }) =
           </motion.div>
         </div>
         <div className='flex items-center space-x-2 whitespace-nowrap'>
-          <Typography 
-            type='text-caption2' 
-            color='text-dark500' 
+          <Typography
+            type='text-caption2'
+            color='text-dark500'
             darkMode='dark:text-dark400'
             className='text-xs'
           >
             {currentSlotInEpoch}/{SLOTS_PER_EPOCH}
           </Typography>
-          <Typography 
-            type='text-caption2' 
-            color='text-primary' 
+          <Typography
+            type='text-caption2'
+            color='text-primary'
             darkMode='dark:text-primary'
             className='text-xs font-medium'
           >
