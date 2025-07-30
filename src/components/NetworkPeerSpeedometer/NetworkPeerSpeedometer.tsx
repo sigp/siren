@@ -17,6 +17,9 @@ const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) =
   const mode = useRecoilValue(uiMode)
   const { connected } = peerData
 
+  // Ensure connected value is a valid number to prevent NaN in transform attributes
+  const safeConnectedValue = typeof connected === 'number' && !isNaN(connected) ? connected : 0
+
   return (
     <Tooltip
       id='peerCount'
@@ -40,7 +43,7 @@ const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) =
             darkMode='dark:text-white'
             type='text-caption2'
           >
-            {connected}
+            {safeConnectedValue}
           </Typography>
           <ReactSpeedometer
             width={90}
@@ -63,7 +66,7 @@ const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) =
             labelFontSize='6px'
             valueTextFontSize='9px'
             segmentColors={['tomato', 'gold', 'limegreen']}
-            value={connected}
+            value={safeConnectedValue}
             maxValue={100}
             textColor={'transparent'}
           />
