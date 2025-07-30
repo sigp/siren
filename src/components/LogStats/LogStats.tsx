@@ -1,6 +1,7 @@
 import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import toFixedIfNecessary from '../../../utilities/toFixedIfNecessary'
+import useMetricHistory from '../../hooks/useMetricHistory'
 import { Metric, StatusColor } from '../../types'
 import DiagnosticCard, { CardSize } from '../DiagnosticCard/DiagnosticCard'
 
@@ -25,6 +26,16 @@ const LogStats: FC<LogStatsProps> = ({
 }) => {
   const { t } = useTranslation()
   const { errorCount, criticalCount, warningCount } = logMetrics
+
+  // Get historical data for log charts - we don't need hardware metrics so pass zeros
+  const { criticalLogsHistory, errorLogsHistory, warningLogsHistory } = useMetricHistory(
+    '0',
+    0,
+    0,
+    criticalCount,
+    errorCount,
+    warningCount,
+  )
 
   const critStatus = criticalCount > 0 ? StatusColor.ERROR : StatusColor.SUCCESS
   const errorStatus =
@@ -52,9 +63,13 @@ const LogStats: FC<LogStatsProps> = ({
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('critical')}
         metric={`${toFixedIfNecessary(criticalCount, 2)} / HR`}
+        chartData={criticalLogsHistory}
+        chartColor='#D541B8'
+        chartLabel='Critical Logs'
+        isChartPercentage={false}
+        iconType='critical'
       />
       <DiagnosticCard
-        isBackground={false}
         title={t('errors')}
         toolTipText={errorToolTip}
         maxHeight={maxHeight}
@@ -64,9 +79,13 @@ const LogStats: FC<LogStatsProps> = ({
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(errorCount, 2)} / HR`}
+        chartData={errorLogsHistory}
+        chartColor='#836FFF'
+        chartLabel='Error Logs'
+        isChartPercentage={false}
+        iconType='error'
       />
       <DiagnosticCard
-        isBackground={false}
         title={t('logInfo.warnings')}
         toolTipText={warnToolTip}
         maxHeight={maxHeight}
@@ -76,6 +95,11 @@ const LogStats: FC<LogStatsProps> = ({
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(warningCount, 2)} / HR`}
+        chartData={warningLogsHistory}
+        chartColor='#5200FF'
+        chartLabel='Warning Logs'
+        isChartPercentage={false}
+        iconType='warning'
       />
     </>
   )

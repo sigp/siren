@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, ReactNode, useEffect, useState } from 'react'
 import { PlacesType } from 'react-tooltip'
 import addClassString from '../../../utilities/addClassString'
 import generateId from '../../../utilities/generateId'
@@ -6,6 +6,7 @@ import DarkNetwork from '../../assets/images/darkNetwork.svg'
 import Network from '../../assets/images/network.svg'
 import NotAvailable from '../../assets/images/notAvalilable.svg'
 import { OptionalString, StatusColor } from '../../types'
+import MetricLineChart from '../MetricLineChart/MetricLineChart'
 import ProgressCircle from '../ProgressCircle/ProgressCircle'
 import Status from '../Status/Status'
 import Tooltip from '../ToolTip/Tooltip'
@@ -19,7 +20,7 @@ export interface DiagnosticCardProps {
   title: string
   metric?: string
   metricTextSize?: TypographyType
-  subTitle: string
+  subTitle: string | ReactNode
   border?: string
   subTitleHighlightColor?: string
   maxHeight?: OptionalString
@@ -29,6 +30,11 @@ export interface DiagnosticCardProps {
   toolTipText?: OptionalString
   toolTipPosition?: PlacesType
   isDisabled?: boolean
+  chartData?: number[]
+  chartColor?: string
+  chartLabel?: string
+  isChartPercentage?: boolean
+  iconType?: 'cpu' | 'ram' | 'disk' | 'critical' | 'error' | 'warning' | 'network' | 'beacon'
 }
 
 const DiagnosticCard: FC<DiagnosticCardProps> = ({
@@ -47,6 +53,11 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
   toolTipText,
   toolTipPosition,
   isDisabled,
+  chartData,
+  chartColor,
+  chartLabel,
+  isChartPercentage = true,
+  iconType,
 }) => {
   const [isReady, setReady] = useState(false)
   const toolTipId = Math.random().toString()
@@ -60,11 +71,11 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       case 'health':
         return `h-24 md:h-full ${
           maxWidth || 'max-w-full md:max-w-xs'
-        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
+        } py-1 px-2 xl:py-2 xl:px-3 dark:border-dark500`
       default:
         return `${maxWidth || 'md:max-w-xs @1600:max-w-full'} ${
-          maxHeight || 'max-h-30'
-        } py-2 px-3 xl:py-3 xl:px-4 dark:border-dark500`
+          maxHeight || 'h-full'
+        } py-1 px-2 xl:py-2 xl:px-3 dark:border-dark500`
     }
   }
 
@@ -72,53 +83,152 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
     setReady(true)
   }, [])
 
-  const contentClass = addClassString('flex flex-col justify-between h-full', [
-    isDisabled && 'opacity-20',
-  ])
-  const renderContent = () => (
-    <div className={contentClass}>
-      {!metric ? (
-        <NotAvailable className='absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2' />
-      ) : (
-        size !== 'sm' &&
-        isBackground && (
-          <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden'>
-            <Network className='w-full dark:hidden' />
-            <DarkNetwork className='w-full hidden dark:block' />
+  const contentClass = addClassString('flex flex-col h-full', [isDisabled && 'opacity-20'])
+
+  // Icon component for different metric types
+  const renderIcon = () => {
+    if (!iconType || isSmall) return null
+
+    const iconClasses = 'w-4 h-4 flex-shrink-0 flex items-center justify-center'
+    const iconColor = chartColor || 'currentColor'
+
+    switch (iconType) {
+      case 'cpu':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-cpu text-current leading-none' />
           </div>
         )
+      case 'ram':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-memory text-current leading-none' />
+          </div>
+        )
+      case 'disk':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-hdd text-current leading-none' />
+          </div>
+        )
+      case 'critical':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-exclamation-triangle-fill text-current leading-none' />
+          </div>
+        )
+      case 'error':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-x-circle-fill text-current leading-none' />
+          </div>
+        )
+      case 'warning':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-exclamation-circle-fill text-current leading-none' />
+          </div>
+        )
+      case 'network':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-wifi text-current leading-none' />
+          </div>
+        )
+      case 'beacon':
+        return (
+          <div className={iconClasses} style={{ color: iconColor }}>
+            <i className='bi bi-broadcast text-current leading-none' />
+          </div>
+        )
+      default:
+        return null
+    }
+  }
+  const renderContent = () => (
+    <div className={contentClass}>
+      {!metric && (
+        <NotAvailable className='absolute opacity-60 w-20 text-dark100 dark:hidden right-0 top-1/2 transform -translate-y-1/2' />
       )}
-      <div className='w-full z-10 space-x-8 flex justify-between'>
-        <Typography
-          type={isSmall ? 'text-tiny' : 'text-caption1'}
-          className={!isSmall ? 'xl:text-body' : ''}
-        >
-          {title}
-        </Typography>
+
+      {/* Header with icon, title and metric */}
+      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-1'>
+        <div className='flex items-center gap-2'>
+          {renderIcon()}
+          <Typography
+            type={isSmall ? 'text-tiny' : 'text-caption1'}
+            className={`${!isSmall ? 'xl:text-body' : ''} font-medium text-dark900 dark:text-white uppercase tracking-wide`}
+          >
+            {title}
+          </Typography>
+        </div>
         {metric && (
           <Typography
             type={isSmall ? 'text-tiny' : metricTextSize ? metricTextSize : 'text-caption1'}
-            className={!isSmall && !metricTextSize ? 'xl:text-subtitle2' : ''}
+            className={`${!isSmall && !metricTextSize ? 'xl:text-body' : ''} font-normal text-dark600 dark:text-dark400`}
           >
             {metric}
           </Typography>
         )}
       </div>
-      <div className='w-full capitalize z-10 space-x-8 flex items-center justify-between'>
-        <Typography
-          type={isSmall ? 'text-tiny' : 'text-caption1'}
-          color={subTitleHighlightColor ? 'text-dark900' : undefined}
-          darkMode={subTitleHighlightColor ? 'dark:text-dark900' : undefined}
-          className={subTitleHighlightColor ? `${subTitleHighlightColor} px-1` : undefined}
-        >
-          {subTitle}
-        </Typography>
-        {percent ? (
-          <ProgressCircle size='sm' id={generateId(12)} percent={percent} />
+
+      {/* Utilization percentage and status */}
+      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-1'>
+        {typeof subTitle === 'string' ? (
+          <Typography
+            type={isSmall ? 'text-tiny' : 'text-caption2'}
+            className={`${
+              subTitleHighlightColor
+                ? `${subTitleHighlightColor} px-1.5 py-0.5 rounded text-xs font-medium`
+                : 'text-dark500 dark:text-dark300 font-normal'
+            } ${!subTitleHighlightColor ? '' : 'uppercase tracking-wide'}`}
+          >
+            {subTitle}
+          </Typography>
         ) : (
-          status && <Status status={status} />
+          <div
+            className={`${
+              subTitleHighlightColor
+                ? `${subTitleHighlightColor} px-1.5 py-0.5 rounded text-xs font-medium`
+                : 'text-dark500 dark:text-dark300 font-normal'
+            } ${!subTitleHighlightColor ? '' : 'uppercase tracking-wide'} ${
+              isSmall ? 'text-tiny' : 'text-caption2'
+            }`}
+          >
+            {subTitle}
+          </div>
         )}
+        <div className='flex items-center gap-1'>
+          {percent ? (
+            <ProgressCircle size='sm' id={generateId(12)} percent={percent} />
+          ) : (
+            status && <Status status={status} />
+          )}
+        </div>
       </div>
+
+      {/* Chart fills remaining space at bottom */}
+      {metric && size !== 'sm' && isBackground && chartData && chartColor && chartLabel && (
+        <div className='w-full flex-1 min-h-0 mt-1 relative overflow-hidden rounded-md max-h-16'>
+          <div className='absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-transparent opacity-50'></div>
+          <MetricLineChart
+            data={chartData}
+            color={chartColor}
+            label={chartLabel}
+            animate={false}
+            isPercentage={isChartPercentage}
+            showYAxis={true}
+          />
+        </div>
+      )}
+
+      {/* Fallback background for non-chart cards */}
+      {metric && size !== 'sm' && isBackground && (!chartData || !chartColor || !chartLabel) && (
+        <div className='w-full max-h-full absolute left-0 top-1/2 transform -translate-y-1/2 overflow-hidden opacity-30'>
+          <Network className='w-full dark:hidden' />
+          <DarkNetwork className='w-full hidden dark:block' />
+        </div>
+      )}
     </div>
   )
 
