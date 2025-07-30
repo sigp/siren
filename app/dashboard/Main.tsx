@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios'
-import React, { FC, useEffect, useMemo } from 'react'
+import React, { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import pckJson from '../../package.json'
@@ -82,6 +82,11 @@ const Main: FC<MainProps> = (props) => {
   const { version } = pckJson
   const { updateAlert, storeAlert, removeAlert } = useDiagnosticAlerts()
   const [username] = useLocalStorage<string>('username', 'Keeper')
+  const [validatorHeightRatio, setValidatorHeightRatio] = useLocalStorage<number>(
+    'validatorHeightRatio',
+    0.5,
+  )
+
   const setExchangeRate = useSetRecoilState(exchangeRates)
   const setDuties = useSetRecoilState(proposerDuties)
 
@@ -213,6 +218,40 @@ const Main: FC<MainProps> = (props) => {
   const { natOpen } = nodeHealth
   const warningCount = metrics.warningCount || 0
 
+  // Calculate optimal height ratio based on validator count
+  // Metrics must get minimum 35%, so validators can get maximum 65%
+  const optimalHeightRatio = useMemo(() => {
+    const validatorCount = validatorStates.length
+    if (validatorCount <= 4) {
+      return 0.4 // Show less validator space when few validators
+    } else if (validatorCount <= 10) {
+      return 0.5 // Default ratio for moderate validator count
+    } else {
+      return 0.65 // Show more validator space when many validators (but leave 35% for metrics)
+    }
+  }, [validatorStates.length])
+
+  // Use a stable height ratio to prevent hydration mismatches
+  const [currentHeightRatio, setCurrentHeightRatio] = useState(0.5)
+  const [isDragging, setIsDragging] = useState(false)
+
+  // Update height ratio after hydration to prevent server-client mismatches
+  // Don't update during dragging to prevent flickering
+  useEffect(() => {
+    if (!isDragging) {
+      const storedRatio = validatorHeightRatio || optimalHeightRatio
+      const clampedRatio = Math.max(0.35, Math.min(0.65, storedRatio))
+      setCurrentHeightRatio(clampedRatio)
+    }
+  }, [validatorHeightRatio, optimalHeightRatio, isDragging])
+
+  // Update stored ratio when optimal changes (but allow user overrides)
+  useEffect(() => {
+    if (validatorHeightRatio != null && Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1) {
+      setValidatorHeightRatio(optimalHeightRatio)
+    }
+  }, [optimalHeightRatio, validatorHeightRatio, setValidatorHeightRatio])
+
   useEffect(() => {
     setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
   }, [valDuties])
@@ -303,7 +342,7 @@ const Main: FC<MainProps> = (props) => {
       isBeaconError={isBeaconError}
       isValidatorError={isValidatorError}
     >
-      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full items-center justify-center'>
+      <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full items-stretch overflow-hidden'>
         <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
           <AppGreeting
             userName={username}
@@ -325,58 +364,149 @@ const Main: FC<MainProps> = (props) => {
             <ValidatorBalanceEmptyState />
           )}
         </div>
-        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4'>
+        <div className='flex flex-col col-span-6 xl:col-span-7 h-full py-2 px-4 min-h-0'>
           <NetworkStats
             peerData={peerData}
             syncData={syncData}
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
-          <div className='mt-8 lg:mt-2 space-y-4'>
-            <div className='flex items-center justify-between'>
-              <div className='flex items-center space-x-3'>
-                <span className='text-sm font-medium text-dark900 dark:text-dark300'>
-                  Show Active Only
-                </span>
-                <Toggle
-                  id='active-only-toggle'
-                  value={isActiveOnlyMode}
-                  onChange={() => toggleActiveOnlyMode()}
+          <div
+            className='flex flex-col mt-6 lg:mt-1 min-h-0'
+            style={{ height: 'calc(100% - 50px)' }}
+          >
+            <div
+              className='flex flex-col relative min-h-0 overflow-hidden'
+              style={{ height: `${currentHeightRatio * 100}%` }}
+            >
+              <div className='flex items-center mb-2 flex-shrink-0'>
+                <div className='flex items-center space-x-3'>
+                  <span className='text-sm font-medium text-dark900 dark:text-dark300'>
+                    Show Active Only
+                  </span>
+                  <Toggle
+                    id='active-only-toggle'
+                    value={isActiveOnlyMode}
+                    onChange={() => toggleActiveOnlyMode()}
+                  />
+                </div>
+              </div>
+              <div className='flex-1 min-h-0'>
+                {filteredValidatorStates.length ? (
+                  <ValidatorTable
+                    validators={filteredValidatorStates}
+                    className='h-full overflow-hidden'
+                  />
+                ) : validatorStates.length ? (
+                  <ValidatorTableEmptyState
+                    title={t('emptyState.filteredValidatorTable.nonFound')}
+                    text={t('emptyState.filteredValidatorTable.adjustFilter')}
+                    className='h-full min-h-60'
+                  />
+                ) : (
+                  <ValidatorTableEmptyState
+                    title={t('emptyState.validatorTable.noConnections')}
+                    text={t('emptyState.validatorTable.importOrDeposit')}
+                    href='/dashboard/validators?view=create'
+                    btnFontType='text-caption1.5'
+                    className='h-full min-h-60'
+                    ctaText='Create Validator'
+                  />
+                )}
+              </div>
+            </div>
+            <div
+              className='flex items-center justify-center py-1 cursor-row-resize bg-transparent hover:bg-dark100 dark:hover:bg-dark700 border-t border-b border-style500 flex-shrink-0 transition-all duration-200 group'
+              onMouseDown={(e) => {
+                const startY = e.clientY
+                const startHeight = currentHeightRatio
+                let hasDragStarted = false
+                let finalHeight = startHeight
+
+                // Ensure the stored ratio matches the current visual ratio to prevent jumping
+                setValidatorHeightRatio(currentHeightRatio)
+
+                // Get container dimensions once at the start
+                const container = document.querySelector(
+                  '[style*="calc(100% - 50px)"]',
+                ) as HTMLElement
+                if (!container) return
+
+                const containerRect = container.getBoundingClientRect()
+                const containerHeight = containerRect.height
+
+                const handleMouseMove = (e: MouseEvent) => {
+                  if (!hasDragStarted) {
+                    // Only start dragging after a small movement threshold
+                    const deltaY = Math.abs(e.clientY - startY)
+                    if (deltaY < 2) return
+                    hasDragStarted = true
+                    setIsDragging(true)
+                    document.body.style.cursor = 'row-resize'
+                    document.body.style.userSelect = 'none'
+                  }
+
+                  const deltaY = e.clientY - startY
+
+                  // Calculate proportional height change
+                  const heightChange = deltaY / containerHeight
+                  let newHeight = startHeight + heightChange
+
+                  // Enforce boundaries with some buffer to prevent flickering
+                  const minHeight = 0.35 // 35% minimum for metrics
+                  const maxHeight = 0.65 // 65% maximum for validators
+
+                  // Clamp to boundaries
+                  newHeight = Math.max(minHeight, Math.min(maxHeight, newHeight))
+                  finalHeight = newHeight
+
+                  // Only update the current height ratio during dragging
+                  // Don't update localStorage until mouse up to prevent flickering
+                  setCurrentHeightRatio(newHeight)
+                }
+
+                const handleMouseUp = () => {
+                  document.removeEventListener('mousemove', handleMouseMove)
+                  document.removeEventListener('mouseup', handleMouseUp)
+                  document.body.style.cursor = 'default'
+                  document.body.style.userSelect = 'auto'
+                  setIsDragging(false)
+                  
+                  // Update localStorage with final position
+                  if (hasDragStarted) {
+                    setValidatorHeightRatio(finalHeight)
+                  }
+                }
+
+                document.addEventListener('mousemove', handleMouseMove)
+                document.addEventListener('mouseup', handleMouseUp)
+              }}
+              style={{ height: '8px' }}
+            >
+              <div className='flex items-center gap-0.5 text-dark300 dark:text-dark600 group-hover:text-dark600 dark:group-hover:text-dark400 transition-colors duration-200'>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+                <div className='w-3 h-0.5 bg-current rounded-full'></div>
+              </div>
+            </div>
+            <div
+              className='flex flex-col min-h-0 overflow-hidden'
+              style={{
+                height: `${(1 - currentHeightRatio) * 100}%`,
+                minHeight: '35%',
+              }}
+            >
+              <div className='flex-1 min-h-0 overflow-hidden'>
+                <DiagnosticTable
+                  priorityLogs={initPriorityLogs}
+                  logMetrics={metrics}
+                  bnSpec={beaconSpec}
+                  syncData={syncData}
+                  beanHealth={nodeHealth}
                 />
               </div>
-              {filteredValidatorStates.length && (
-                <span className='text-sm text-dark500 dark:text-dark400'>
-                  {filteredValidatorStates.length} validator
-                  {filteredValidatorStates.length !== 1 ? 's' : ''} shown
-                </span>
-              )}
             </div>
-            {filteredValidatorStates.length ? (
-              <ValidatorTable validators={filteredValidatorStates} />
-            ) : validatorStates.length ? (
-              <ValidatorTableEmptyState
-                title={t('emptyState.filteredValidatorTable.nonFound')}
-                text={t('emptyState.filteredValidatorTable.adjustFilter')}
-                className='min-h-60'
-              />
-            ) : (
-              <ValidatorTableEmptyState
-                title={t('emptyState.validatorTable.noConnections')}
-                text={t('emptyState.validatorTable.importOrDeposit')}
-                href='/dashboard/validators?view=create'
-                btnFontType='text-caption1.5'
-                className='min-h-60'
-                ctaText='Create Validator'
-              />
-            )}
           </div>
-          <DiagnosticTable
-            priorityLogs={initPriorityLogs}
-            logMetrics={metrics}
-            bnSpec={beaconSpec}
-            syncData={syncData}
-            beanHealth={nodeHealth}
-          />
         </div>
       </div>
     </DashboardWrapper>

@@ -137,10 +137,13 @@ const AlertInfo: FC<AlertInfoProps> = ({ priorityLogs, ...props }) => {
   }, [resetDismissed])
 
   return (
-    <div ref={ref} className='h-full w-full flex flex-col md:border-l-0 border-t-0 border-style500'>
+    <div
+      ref={ref}
+      className='h-full w-full flex flex-col md:border-l-0 border-t-0 border-style500 border-b border-b-style500'
+    >
       <div
         ref={headerDimensions.ref}
-        className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-r-0 border-style500'
+        className='w-full h-12 flex items-center justify-between px-4 border-l-0 border-r-0 border-style500 border-t border-b flex-shrink-0'
       >
         <Typography type='text-caption1' color='text-primary' darkMode='dark:text-white' isBold>
           {t('alertInfo.alerts')}
