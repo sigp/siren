@@ -58,6 +58,7 @@ const openSauce = localFont({
     },
   ],
   variable: '--openSauce',
+  preload: false,
 })
 
 const roboto = localFont({
@@ -74,6 +75,7 @@ const roboto = localFont({
     },
   ],
   variable: '--roboto',
+  preload: false,
 })
 
 const archivo = localFont({
@@ -90,11 +92,12 @@ const archivo = localFont({
     },
   ],
   variable: '--archivo',
+  preload: false,
 })
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang='en'>
+    <html lang='en' suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -102,11 +105,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               (function() {
                 try {
                   const theme = JSON.parse(localStorage.getItem('UI')?.trim() || 'null');
-                  if (theme === "DARK") {
+                  if (theme === "DARK" || theme === null) {
                     document.documentElement.classList.add('dark');
                   }
                 } catch (e) {
                   console.error('Failed to parse theme from localStorage:', e);
+                  document.documentElement.classList.add('dark');
                 }
               })();
             `,
