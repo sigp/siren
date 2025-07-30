@@ -471,7 +471,7 @@ const Main: FC<MainProps> = (props) => {
                   document.body.style.cursor = 'default'
                   document.body.style.userSelect = 'auto'
                   setIsDragging(false)
-                  
+
                   // Update localStorage with final position
                   if (hasDragStarted) {
                     setValidatorHeightRatio(finalHeight)

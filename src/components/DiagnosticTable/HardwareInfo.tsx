@@ -21,7 +21,14 @@ export interface HardwareInfoProps {
 const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) => {
   const { t } = useTranslation()
   const {
-    beaconSync: { beaconSyncTime, beaconPercentage, isSyncing, headSlot, currentEpoch, syncDistance },
+    beaconSync: {
+      beaconSyncTime,
+      beaconPercentage,
+      isSyncing,
+      headSlot,
+      currentEpoch,
+      syncDistance,
+    },
   } = syncData
   const [view, setView] = useState<DiagnosticType>(DiagnosticType.DEVICE)
   const {
@@ -50,12 +57,12 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
 
   const diskData = isSyncing ? diskStatus.syncing : diskStatus.synced
   const remainingBeaconTime = secondsToShortHand(Number(beaconSyncTime) || 0)
-  
+
   // Calculate slot information
   const { SLOTS_PER_EPOCH } = bnSpec
   const currentSlotInEpoch = headSlot % SLOTS_PER_EPOCH
   const slotInfo = `Slot ${currentSlotInEpoch}/${SLOTS_PER_EPOCH} • Epoch ${currentEpoch}`
-  
+
   // Calculate sync status using the same logic as the header
   const headSlotStatus = formatAtHeadSlotStatus(syncDistance)
   const getSyncStatusText = () => {
@@ -178,10 +185,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
           Hardware
         </Typography>
         <div className='flex items-center gap-1'>
-          <div
-            onClick={viewDeviceInfo}
-            className='cursor-pointer'
-          >
+          <div onClick={viewDeviceInfo} className='cursor-pointer'>
             <Typography
               type='text-tiny'
               className='uppercase @1600:text-caption1'
@@ -191,16 +195,10 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               Usage
             </Typography>
           </div>
-          <Typography
-            type='text-tiny'
-            className='text-dark400'
-          >
+          <Typography type='text-tiny' className='text-dark400'>
             |
           </Typography>
-          <div
-            onClick={viewNetworkInfo}
-            className='cursor-pointer'
-          >
+          <div onClick={viewNetworkInfo} className='cursor-pointer'>
             <Typography
               type='text-tiny'
               className='uppercase @1600:text-caption1'
