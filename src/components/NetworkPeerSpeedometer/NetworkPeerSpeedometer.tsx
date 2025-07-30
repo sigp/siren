@@ -16,7 +16,7 @@ const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) =
   const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
   const { connected } = peerData
-  
+
   // Ensure connected value is a valid number to prevent NaN in transform attributes
   const safeConnectedValue = typeof connected === 'number' && !isNaN(connected) ? connected : 0
 
