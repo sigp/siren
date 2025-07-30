@@ -54,12 +54,12 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
     switch (view) {
       case DiagnosticType.DEVICE:
         return (
-          <>
+          <div className='flex flex-col h-full'>
             <DiagnosticCard
               title={t('disk')}
               maxHeight='flex-1'
               size={size}
-              border='border-t-0 border-style500'
+              border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskData}
@@ -68,7 +68,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               title={t('cpu')}
               maxHeight='flex-1'
               size={size}
-              border='border-t-0 border-style500'
+              border='border-t-0 border-style500 border-b border-b-style500'
               metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
@@ -77,16 +77,16 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               title={t('ram')}
               maxHeight='flex-1'
               size={size}
-              border='border-t-0 border-style500'
+              border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
             />
-          </>
+          </div>
         )
       case DiagnosticType.NETWORK:
         return (
-          <>
+          <div className='flex flex-col h-full'>
             <DiagnosticCard
               size={size}
               maxHeight='flex-1'
@@ -95,6 +95,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               metricTextSize='text-caption2'
               metric={metric?.toUpperCase()}
               subTitleHighlightColor='bg-warning'
+              border='border-t-0 border-style500 border-b border-b-style500'
               subTitle={
                 networkName
                   ? t('vcHealthCheck.networkName', { network: networkName })
@@ -109,11 +110,12 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
               metric={Number(beaconSyncTime) === 0 ? ' ' : remainingBeaconTime}
               percent={Number(beaconPercentage)}
               isBackground={false}
+              border='border-t-0 border-style500 border-b border-b-style500'
               subTitle={t('connectedStatus', {
                 status: Number(beaconPercentage) < 100 ? t('outOfSync') : t('inSync'),
               })}
             />
-          </>
+          </div>
         )
     }
   }
@@ -123,7 +125,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
 
   return (
     <div className='h-full w-full flex flex-col xl:min-w-316'>
-      <div className='w-full h-12 border flex border-style500'>
+      <div className='w-full h-12 border flex border-style500 flex-shrink-0'>
         <div
           onClick={viewDeviceInfo}
           className='flex-1 p-2 flex items-center justify-center cursor-pointer'
@@ -153,7 +155,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth }) => {
           </Typography>
         </div>
       </div>
-      {renderView()}
+      <div className='flex-1 min-h-0'>{renderView()}</div>
     </div>
   )
 }

@@ -49,7 +49,7 @@ const LogStats: FC<LogStatsProps> = ({
         maxWidth={maxWidth}
         status={critStatus}
         size={size}
-        border='border-t-0 md:border-l-0 border-style500'
+        border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('critical')}
         metric={`${toFixedIfNecessary(criticalCount, 2)} / HR`}
       />
@@ -61,7 +61,7 @@ const LogStats: FC<LogStatsProps> = ({
         maxWidth={maxWidth}
         status={errorStatus}
         size={size}
-        border='border-t-0 md:border-l-0 border-style500'
+        border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(errorCount, 2)} / HR`}
       />
@@ -73,7 +73,7 @@ const LogStats: FC<LogStatsProps> = ({
         maxWidth={maxWidth}
         status={warnStatus}
         size={size}
-        border='border-t-0 md:border-l-0 border-style500'
+        border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(warningCount, 2)} / HR`}
       />
