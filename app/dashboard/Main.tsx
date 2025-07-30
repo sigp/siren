@@ -9,6 +9,7 @@ import AccountEarning from '../../src/components/AccountEarnings/AccountEarning'
 import AppGreeting from '../../src/components/AppGreeting/AppGreeting'
 import DashboardWrapper from '../../src/components/DashboardWrapper/DashboardWrapper'
 import DiagnosticTable from '../../src/components/DiagnosticTable/DiagnosticTable'
+import EpochProgressBar from '../../src/components/EpochProgressBar/EpochProgressBar'
 import ValidatorBalanceEmptyState from '../../src/components/EmptyState/ValidatorBalanceEmptyState'
 import ValidatorTableEmptyState from '../../src/components/EmptyState/ValidatorTableEmptyState'
 import NetworkStats from '../../src/components/NetworkStats/NetworkStats'
@@ -371,6 +372,7 @@ const Main: FC<MainProps> = (props) => {
             nodeHealth={nodeHealth}
             valInclusionData={valInclusion}
           />
+          <EpochProgressBar syncData={syncData} beaconSpec={beaconSpec} />
           <div
             className='flex flex-col mt-6 lg:mt-1 min-h-0'
             style={{ height: 'calc(100% - 50px)' }}
