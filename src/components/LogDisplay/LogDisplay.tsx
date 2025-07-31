@@ -249,7 +249,7 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
                 />
               </div>
             </div>
-            
+
             {/* Static Column Headers */}
             <div className='hidden lg:flex border-b border-style500 bg-gray-50 dark:bg-dark800 sticky top-0 z-10'>
               <div className='px-3 py-2 w-[90px] text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
@@ -268,14 +268,17 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
                 Details
               </div>
             </div>
-            
+
             {/* Mobile Header */}
             <div className='lg:hidden border-b border-style500 bg-gray-50 dark:bg-dark800 px-4 py-2'>
-              <Typography type='text-caption1' className='text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+              <Typography
+                type='text-caption1'
+                className='text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'
+              >
                 Log Entries
               </Typography>
             </div>
-            
+
             {renderLogContent}
           </div>
           <div className='flex order-first lg:order-2 lg:max-w-xs w-full flex-col border-t-style500 border-l-style500 mt-4 lg:ml-4'>

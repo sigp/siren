@@ -67,7 +67,7 @@ const VirtualLogList = forwardRef<VirtuosoHandle, VirtualLogListProps>(function 
     }
   }
 
-  const LoadMoreHeader = () => 
+  const LoadMoreHeader = () =>
     onLoadMore ? (
       <button
         onClick={onLoadMore}

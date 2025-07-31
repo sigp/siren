@@ -1,6 +1,5 @@
 import { FC, useState } from 'react'
 import { LogLevels, SSELog } from '../../types'
-import Typography from '../Typography/Typography'
 
 export interface LogRowProps {
   log: SSELog
@@ -42,17 +41,17 @@ const formatTimestamp = (timeString: string): string => {
     // Handle different time formats from Lighthouse logs
     const cleanTime = timeString.replace(/\.\d{3}$/, '') // Remove milliseconds
     const date = new Date(cleanTime)
-    
+
     if (isNaN(date.getTime())) {
       // Fallback for non-standard formats like "Jul 31 12:34:05"
       return timeString.replace(/\.\d{3}$/, '')
     }
-    
+
     return date.toLocaleTimeString('en-US', {
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
-      second: '2-digit'
+      second: '2-digit',
     })
   } catch (error) {
     return timeString.replace(/\.\d{3}$/, '')
@@ -62,7 +61,7 @@ const formatTimestamp = (timeString: string): string => {
 const LogRow: FC<LogRowProps> = ({ log }) => {
   const [isExpanded, setExpanded] = useState(false)
   const { level, time, msg, service } = log
-  
+
   const levelColor =
     level === LogLevels.CRIT || level === LogLevels.ERRO
       ? 'text-error'
@@ -85,11 +84,12 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
       return { key, value: formattedValue }
     })
 
-  const formatFieldsForDisplay = (fields: Array<{ key: string; value: string }>, isExpanded: boolean): string => {
+  const formatFieldsForDisplay = (
+    fields: Array<{ key: string; value: string }>,
+    isExpanded: boolean,
+  ): string => {
     const displayFields = isExpanded ? fields : fields.slice(0, Math.min(fields.length, 5))
-    return displayFields
-      .map(({ key, value }) => `<strong>${key}:</strong> ${value}`)
-      .join(' • ')
+    return displayFields.map(({ key, value }) => `<strong>${key}:</strong> ${value}`).join(' • ')
   }
 
   const formattedFields = formatFieldsForDisplay(remainingDataElements, isExpanded)
@@ -110,8 +110,12 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
       >
         <div className='lg:hidden table-cell px-3 py-1.5 space-y-0.5'>
           <div className='flex items-center gap-2 text-xs font-mono'>
-            <span className='text-gray-500 dark:text-gray-400 min-w-[58px] text-xs'>{formattedTime}</span>
-            <span className={`${levelColor} font-medium min-w-[40px] text-center text-xs`}>{level}</span>
+            <span className='text-gray-500 dark:text-gray-400 min-w-[58px] text-xs'>
+              {formattedTime}
+            </span>
+            <span className={`${levelColor} font-medium min-w-[40px] text-center text-xs`}>
+              {level}
+            </span>
             <span className={`${serviceColor} px-1.5 py-0.5 rounded text-xs font-medium truncate`}>
               {serviceName}
             </span>
@@ -120,26 +124,20 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
             {msg}
           </div>
           {hasFields && (
-            <div 
+            <div
               className='text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
-              dangerouslySetInnerHTML={{ 
-                __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}` 
+              dangerouslySetInnerHTML={{
+                __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
               }}
             />
           )}
         </div>
 
         <div className='hidden lg:table-cell px-3 py-1.5 w-[90px]'>
-          <div className='text-xs font-mono text-gray-500 dark:text-gray-400'>
-            {formattedTime}
-          </div>
+          <div className='text-xs font-mono text-gray-500 dark:text-gray-400'>{formattedTime}</div>
         </div>
         <div className='hidden lg:table-cell px-2 py-1.5 w-[50px] text-center'>
-          <div
-            className={`${levelColor} font-medium text-xs`}
-          >
-            {level}
-          </div>
+          <div className={`${levelColor} font-medium text-xs`}>{level}</div>
         </div>
         <div className='hidden lg:table-cell px-3 py-1.5 w-[180px] text-center'>
           <span
@@ -156,10 +154,10 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
         </div>
         <div className='hidden lg:table-cell px-3 py-1.5 w-auto'>
           {hasFields && (
-            <div 
+            <div
               className='text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
-              dangerouslySetInnerHTML={{ 
-                __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}` 
+              dangerouslySetInnerHTML={{
+                __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
               }}
             />
           )}
