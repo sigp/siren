@@ -1,4 +1,4 @@
-ARG node_version=23-slim
+ARG node_version=24-slim
 ARG node_image=node:${node_version}
 
 FROM $node_image AS builder
@@ -14,7 +14,7 @@ WORKDIR /app/backend
 RUN yarn --network-timeout 300000; \
     NODE_ENV=production yarn build
 
-FROM alpine AS intermediate
+FROM alpine:3.21 AS intermediate
 
 COPY ./docker-assets /app/docker-assets/
 
@@ -30,9 +30,10 @@ COPY --from=builder /app/.next /app/.next
 FROM $node_image AS production
 
 ENV NODE_ENV=production
-RUN npm install --global pm2; \
-    apt update; \
-    apt install -y nginx openssl curl ncat
+RUN npm install --global pm2@latest; \
+    apt update && apt upgrade -y; \
+    apt install -y nginx openssl curl ncat; \
+    apt clean && rm -rf /var/lib/apt/lists/*
 
 RUN rm /etc/nginx/sites-enabled/default; \
     ln -s /app/docker-assets/siren-http.conf /etc/nginx/conf.d/siren-http.conf

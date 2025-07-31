@@ -87,7 +87,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
                   disabled={index === undefined}
                   showEditIcon={true}
                   color='text-dark900'
-                  type='text-base'
+                  type='text-body'
                 />
               </div>
             </div>
