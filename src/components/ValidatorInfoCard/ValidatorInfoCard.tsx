@@ -36,7 +36,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
   const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
   useAliasMigration()
   const classes = addClassString(
-    'w-full cursor-pointer lg:w-80 h-60 lg:border-r-style100 px-8 lg:px-6 py-4 relative overflow-hidden',
+    'w-full cursor-pointer lg:w-80 lg:border-r-style100 p-3 relative overflow-hidden',
     [className],
   )
 
@@ -72,9 +72,9 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
         isReady={isReady}
         className='z-10 w-full h-full absolute left-0 top-0'
       />
-      <div className='w-full flex flex-col justify-between space-y-3 lg:space-y-0 h-full z-20 relative'>
+      <div className='w-full flex flex-col justify-between space-y-2 lg:space-y-1 h-full z-20 relative'>
         <div className='w-full flex justify-between'>
-          <IdenticonIcon size={144} type='CIRCULAR' hash={pubKey} />
+          <IdenticonIcon size={120} type='CIRCULAR' hash={pubKey} />
           <div className='text-right flex-1 flex flex-col justify-between'>
             <div>
               <Typography type='text-caption1' color='text-dark300'>

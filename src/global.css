@@ -223,5 +223,25 @@ input[type='checkbox']:not(:checked) {
 }
 
 .validator-modal .slide {
-  overflow: scroll;
+  overflow: auto;
+}
+
+/* Fix close button positioning */
+.validator-modal .rodal-close {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  z-index: 1000 !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(4px) !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.validator-modal .rodal-close:hover {
+  background: rgba(0, 0, 0, 0.2) !important;
 }
