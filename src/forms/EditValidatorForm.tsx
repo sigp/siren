@@ -4,7 +4,9 @@ import { Control, useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import displayToast from '../../utilities/displayToast'
+import { useAliasMigration } from '../hooks/useAliasMigration'
 import useLocalStorage from '../hooks/useLocalStorage'
+import { useValidatorAliases } from '../hooks/useValidatorAliases'
 import useValidatorName from '../hooks/useValidatorName'
 import { validatorAliases } from '../recoil/atoms'
 import { ToastType, ValAliases } from '../types'
@@ -31,9 +33,13 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
   const { index } = validator
   const [isLoading, setLoading] = useState(false)
   const setAlias = useSetRecoilState(validatorAliases)
-  const [aliases, storeValAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const { aliases, updateAlias } = useValidatorAliases()
+  const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  useAliasMigration()
 
-  const validatorName = useValidatorName(validator, aliases)
+  // Use API aliases if available, fallback to localStorage for migration
+  const currentAliases = aliases || localAliases
+  const validatorName = useValidatorName(validator, currentAliases)
 
   const {
     control,
@@ -47,17 +53,23 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
     resolver: yupResolver(editValidatorValidation),
   })
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault()
     setLoading(true)
     const { nameString } = getValues()
 
-    if (!nameString) return
+    if (!nameString) {
+      setLoading(false)
+      return
+    }
 
-    setAlias((prev) => ({ ...prev, [index]: nameString }))
-    storeValAliases({ ...aliases, [index]: nameString })
-
-    displayToast(t('validatorEdit.successUpdate'), ToastType.SUCCESS)
+    try {
+      await updateAlias(index, nameString)
+      setAlias((prev) => ({ ...prev, [index]: nameString }))
+      displayToast(t('validatorEdit.successUpdate'), ToastType.SUCCESS)
+    } catch (error) {
+      displayToast('Failed to update validator name', ToastType.ERROR)
+    }
     setLoading(false)
   }
 

@@ -4,13 +4,16 @@ import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
 import { ValidatorModalView } from '../../constants/enums'
+import { useAliasMigration } from '../../hooks/useAliasMigration'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useValidatorAliases } from '../../hooks/useValidatorAliases'
 import useValidatorName from '../../hooks/useValidatorName'
 import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms'
 import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import InlineEditableText from '../InlineEditableText/InlineEditableText'
 import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoCardProps extends Omit<AnimatedHeaderProps, 'className' | 'name'> {
@@ -29,17 +32,32 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
   const { index, balance, pubKey } = validator
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setValDetail = useSetRecoilState(isValidatorDetail)
-  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const { aliases, updateAlias } = useValidatorAliases()
+  const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  useAliasMigration()
   const classes = addClassString(
     'w-full cursor-pointer lg:w-80 h-60 lg:border-r-style100 px-8 lg:px-6 py-4 relative overflow-hidden',
     [className],
   )
 
-  const validatorName = useValidatorName(validator, aliases)
+  // Use API aliases if available, fallback to localStorage for migration
+  const currentAliases = aliases || localAliases
+  const validatorName = useValidatorName(validator, currentAliases)
   const valHrefBase = `/dashboard/validators?id=${index}`
   const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS}`
 
-  const viewDetail = () => {
+  const handleNameSave = async (newName: string) => {
+    if (index !== undefined) {
+      await updateAlias(index, newName)
+    }
+  }
+
+  const viewDetail = (e: any) => {
+    // Prevent opening modal when interacting with the editable text
+    if (e.target.closest('.inline-editable-text')) {
+      return
+    }
+
     setActiveValidatorId(index)
     setValDetail(true)
     router.push(detailHref)
@@ -62,7 +80,16 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
               <Typography type='text-caption1' color='text-dark300'>
                 {index}
               </Typography>
-              <Typography>{validatorName}</Typography>
+              <div className='inline-editable-text'>
+                <InlineEditableText
+                  value={validatorName || ''}
+                  onSave={handleNameSave}
+                  disabled={index === undefined}
+                  showEditIcon={true}
+                  color='text-dark900'
+                  type='text-base'
+                />
+              </div>
             </div>
             <div className='space-y-2'>
               <div>

@@ -8,7 +8,9 @@ import formatEthAddress from '../../../utilities/formatEthAddress'
 import isBlsAddress from '../../../utilities/isBlsAddress'
 import ValidatorLogo from '../../assets/images/validators.svg'
 import { ValidatorModalView } from '../../constants/enums'
+import { useAliasMigration } from '../../hooks/useAliasMigration'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useValidatorAliases } from '../../hooks/useValidatorAliases'
 import useValidatorName from '../../hooks/useValidatorName'
 import {
   activeValidatorId,
@@ -47,7 +49,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const valHrefBase = `/dashboard/validators?id=${index}`
   const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS.toLowerCase()}`
   const editHref = `${valHrefBase}&modal=${ValidatorModalView.EDIT.toLowerCase()}`
-  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const { aliases } = useValidatorAliases()
+  const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  useAliasMigration()
   const hasIndex = index !== undefined
 
   const validatorDetailBtnClass = addClassString(
@@ -65,7 +69,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     setReady(true)
   }, [])
 
-  const valName = useValidatorName(validator, aliases)
+  // Use API aliases if available, fallback to localStorage for migration
+  const currentAliases = aliases || localAliases
+  const valName = useValidatorName(validator, currentAliases)
   const validatorName = isReady ? valName : name
 
   const isConversionRequired = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false

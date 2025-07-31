@@ -45,7 +45,9 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
   const { toggleUiMode } = useUiMode()
   const setBeaconSpec = useSetRecoilState(beaconNodeSpec)
   const [uiThemeStorage] = useLocalStorage<UiThemeStorage>(Storage.UI, undefined)
-  const containerClasses = addClassString('flex-1 w-full overflow-hidden', [className])
+  const containerClasses = addClassString('flex-1 w-full overflow-y-auto overflow-x-hidden', [
+    className,
+  ])
 
   useEffect(() => {
     if (isReady) {

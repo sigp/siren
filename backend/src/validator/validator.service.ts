@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { throwServerError } from '../utilities';
 import { UtilsService } from '../utils/utils.service';
 import {
@@ -12,6 +13,7 @@ import {
 import formatDefaultValName from '../../../utilities/formatDefaultValName';
 import { formatUnits } from 'ethers';
 import { Metric } from './entities/metric.entity';
+import { ValidatorAlias } from './entities/validator-alias.entity';
 import getAverageKeyValue from '../../../utilities/getAverageKeyValue';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -24,6 +26,8 @@ import { Status } from '../../../src/constants/enums';
 export class ValidatorService {
   constructor(
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    @InjectModel(ValidatorAlias)
+    private validatorAliasRepository: typeof ValidatorAlias,
     private utilsService: UtilsService,
     private activityService: ActivityService,
   ) {}
@@ -308,5 +312,66 @@ export class ValidatorService {
     const deposits =
       await this.cacheManager.get<PendingDeposit[]>('pendingDeposits');
     return deposits ?? [];
+  }
+
+  async fetchValidatorAliases(): Promise<Record<string, string>> {
+    try {
+      const aliases = await this.validatorAliasRepository.findAll();
+      return Object.fromEntries(
+        aliases.map((alias) => [alias.validatorIndex.toString(), alias.alias])
+      );
+    } catch (e) {
+      console.error(e);
+      throwServerError('Unable to fetch validator aliases');
+    }
+  }
+
+  async createOrUpdateValidatorAlias(
+    validatorIndex: number,
+    alias: string,
+  ): Promise<ValidatorAlias> {
+    try {
+      const existingAlias = await this.validatorAliasRepository.findOne({
+        where: { validatorIndex },
+      });
+
+      if (existingAlias) {
+        existingAlias.alias = alias;
+        return await existingAlias.save();
+      } else {
+        return await this.validatorAliasRepository.create({
+          validatorIndex,
+          alias,
+        });
+      }
+    } catch (e) {
+      console.error(e);
+      throwServerError('Unable to save validator alias');
+    }
+  }
+
+  async deleteValidatorAlias(validatorIndex: number): Promise<void> {
+    try {
+      await this.validatorAliasRepository.destroy({
+        where: { validatorIndex },
+      });
+    } catch (e) {
+      console.error(e);
+      throwServerError('Unable to delete validator alias');
+    }
+  }
+
+  async importValidatorAliases(aliases: Record<string, string>): Promise<void> {
+    try {
+      for (const [indexStr, alias] of Object.entries(aliases)) {
+        const validatorIndex = parseInt(indexStr, 10);
+        if (!isNaN(validatorIndex) && alias.trim()) {
+          await this.createOrUpdateValidatorAlias(validatorIndex, alias.trim());
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      throwServerError('Unable to import validator aliases');
+    }
   }
 }
