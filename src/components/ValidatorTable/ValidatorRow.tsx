@@ -8,7 +8,9 @@ import formatEthAddress from '../../../utilities/formatEthAddress'
 import isBlsAddress from '../../../utilities/isBlsAddress'
 import ValidatorLogo from '../../assets/images/validators.svg'
 import { ValidatorModalView } from '../../constants/enums'
+import { useAliasMigration } from '../../hooks/useAliasMigration'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useValidatorAliases } from '../../hooks/useValidatorAliases'
 import useValidatorName from '../../hooks/useValidatorName'
 import {
   activeValidatorId,
@@ -21,6 +23,7 @@ import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import InlineEditableText from '../InlineEditableText/InlineEditableText'
 import StatusIcon from '../StatusIcon/StatusIcon'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
@@ -47,7 +50,9 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const valHrefBase = `/dashboard/validators?id=${index}`
   const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS.toLowerCase()}`
   const editHref = `${valHrefBase}&modal=${ValidatorModalView.EDIT.toLowerCase()}`
-  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const { aliases, updateAlias } = useValidatorAliases()
+  const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  useAliasMigration()
   const hasIndex = index !== undefined
 
   const validatorDetailBtnClass = addClassString(
@@ -65,8 +70,16 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     setReady(true)
   }, [])
 
-  const valName = useValidatorName(validator, aliases)
+  // Use API aliases if available, fallback to localStorage for migration
+  const currentAliases = aliases || localAliases
+  const valName = useValidatorName(validator, currentAliases)
   const validatorName = isReady ? valName : name
+
+  const handleNameSave = async (newName: string) => {
+    if (index !== undefined) {
+      await updateAlias(index, newName)
+    }
+  }
 
   const isConversionRequired = withdrawalAddress ? isBlsAddress(withdrawalAddress) : false
   const isValidatorProcessing =
@@ -79,7 +92,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   }
 
   const viewDetail = (e: MouseEvent<HTMLTableRowElement>) => {
-    if (e.target instanceof Element && e.target.closest('button')) {
+    if (e.target instanceof Element && (e.target.closest('button') || e.target.closest('input'))) {
       return
     }
 
@@ -115,10 +128,15 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       <th className={validatorIconClass}>
         <div className='w-full flex justify-center'>{renderAvatar}</div>
       </th>
-      <th className='w-28 cursor-pointer'>
-        <Typography className='text-left' color='text-dark500' type='text-caption2'>
-          {validatorName}
-        </Typography>
+      <th className='w-28'>
+        <InlineEditableText
+          value={validatorName || ''}
+          onSave={handleNameSave}
+          className='text-left'
+          color='text-dark500'
+          type='text-caption2'
+          disabled={!hasIndex}
+        />
       </th>
       <th className='border-r-style500 px-2'>
         <Typography color='text-dark500' type='text-caption1'>

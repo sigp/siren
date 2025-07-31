@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -76,5 +77,41 @@ export class ValidatorController {
   @Get('pending-deposits')
   async getPendingDeposits() {
     return this.validatorService.fetchPendingDeposits();
+  }
+
+  @Get('aliases')
+  async getValidatorAliases() {
+    return this.validatorService.fetchValidatorAliases();
+  }
+
+  @Put('aliases/:index')
+  async updateValidatorAlias(
+    @Param('index') index: string,
+    @Body('alias') alias: string,
+  ) {
+    const validatorIndex = parseInt(index, 10);
+    if (isNaN(validatorIndex)) {
+      throw new Error('Invalid validator index');
+    }
+    return this.validatorService.createOrUpdateValidatorAlias(
+      validatorIndex,
+      alias,
+    );
+  }
+
+  @Delete('aliases/:index')
+  async deleteValidatorAlias(@Param('index') index: string) {
+    const validatorIndex = parseInt(index, 10);
+    if (isNaN(validatorIndex)) {
+      throw new Error('Invalid validator index');
+    }
+    await this.validatorService.deleteValidatorAlias(validatorIndex);
+    return { success: true };
+  }
+
+  @Post('aliases/import')
+  async importValidatorAliases(@Body('aliases') aliases: Record<string, string>) {
+    await this.validatorService.importValidatorAliases(aliases);
+    return { success: true };
   }
 }

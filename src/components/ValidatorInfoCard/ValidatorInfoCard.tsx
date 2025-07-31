@@ -4,7 +4,9 @@ import { useTranslation } from 'react-i18next'
 import { useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
 import { ValidatorModalView } from '../../constants/enums'
+import { useAliasMigration } from '../../hooks/useAliasMigration'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useValidatorAliases } from '../../hooks/useValidatorAliases'
 import useValidatorName from '../../hooks/useValidatorName'
 import { activeValidatorId, isValidatorDetail } from '../../recoil/atoms'
 import { ValAliases } from '../../types'
@@ -29,13 +31,17 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
   const { index, balance, pubKey } = validator
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setValDetail = useSetRecoilState(isValidatorDetail)
-  const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  const { aliases } = useValidatorAliases()
+  const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
+  useAliasMigration()
   const classes = addClassString(
     'w-full cursor-pointer lg:w-80 h-60 lg:border-r-style100 px-8 lg:px-6 py-4 relative overflow-hidden',
     [className],
   )
 
-  const validatorName = useValidatorName(validator, aliases)
+  // Use API aliases if available, fallback to localStorage for migration
+  const currentAliases = aliases || localAliases
+  const validatorName = useValidatorName(validator, currentAliases)
   const valHrefBase = `/dashboard/validators?id=${index}`
   const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS}`
 
