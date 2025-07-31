@@ -30,7 +30,7 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
 }) => {
   const isToolTip = toolTipId && toolTipText
   const classes = addClassString(
-    'py-4 px-4 md:py-2 md:px-2 xl:px-4 flex flex-col justify-between h-full w-full space-y-6 md:space-y-0 border-b-style500 md:border-b-0 md:w-40 @1600:w-auto @1600:flex-1 md:border-r-style500',
+    'py-4 px-4 md:py-2 md:px-2 lg:px-3 xl:px-4 @1600:px-5 flex flex-col justify-between h-full w-full space-y-6 md:space-y-0 border-b-style500 md:border-b-0 md:w-40 lg:w-44 xl:w-48 @1600:w-auto @1600:flex-1 md:border-r-style500',
     [className],
   )
   const renderContent = () => (
@@ -44,7 +44,7 @@ const NetworkStatBlock: FC<NetworkStatBlockProps> = ({
         )}
       </div>
       <div
-        className={`flex items-center justify-between md:justify-start md:space-x-4 ${
+        className={`flex items-center justify-between md:justify-start lg:justify-between xl:justify-start md:space-x-4 xl:space-x-3 @1600:space-x-4 ${
           status ? 'justify-between' : ''
         }`}
       >

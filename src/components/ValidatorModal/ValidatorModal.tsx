@@ -136,7 +136,9 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
       styles={{
         width: 'fit-content',
         maxWidth: isTablet ? '99%' : isLargeScreen ? '1200px' : '900px',
-        height: isTablet ? '540px' : '653px',
+        height: 'auto',
+        maxHeight: isTablet ? '85vh' : '80vh',
+        overflow: 'auto',
         zIndex: 998,
       }}
       onClose={closeModal}

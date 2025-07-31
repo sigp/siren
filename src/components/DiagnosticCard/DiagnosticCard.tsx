@@ -67,7 +67,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       case 'lg':
         return `${maxWidth || 'max-w-xs'} ${maxHeight || 'max-h-60'} py-3 px-4 dark:border-dark500`
       case 'sm':
-        return `${maxWidth || 'max-w-tiny'} ${maxHeight || 'max-h-11'} p-1 dark:border-none px-1.5`
+        return `${maxWidth || 'w-fit min-w-32 max-w-40'} ${maxHeight || 'max-h-11'} p-1 dark:border-none px-1.5`
       case 'health':
         return `h-24 md:h-full ${
           maxWidth || 'max-w-full md:max-w-xs'
@@ -152,12 +152,14 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       )}
 
       {/* Header with icon, title and metric */}
-      <div className='w-full z-10 flex items-center justify-between flex-shrink-0 mb-1'>
-        <div className='flex items-center gap-2'>
+      <div
+        className={`w-full z-10 flex items-center flex-shrink-0 mb-1 ${isSmall ? 'justify-between gap-2 min-w-0' : 'justify-between'}`}
+      >
+        <div className={`flex items-center gap-2 ${isSmall ? 'min-w-0 flex-shrink' : ''}`}>
           {renderIcon()}
           <Typography
             type={isSmall ? 'text-tiny' : 'text-caption1'}
-            className={`${!isSmall ? 'xl:text-body' : ''} font-medium text-dark900 dark:text-white uppercase tracking-wide`}
+            className={`${!isSmall ? 'xl:text-body' : ''} ${isSmall ? 'truncate' : ''} font-medium text-dark900 dark:text-white uppercase tracking-wide`}
           >
             {title}
           </Typography>
@@ -165,7 +167,7 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
         {metric && (
           <Typography
             type={isSmall ? 'text-tiny' : metricTextSize ? metricTextSize : 'text-caption1'}
-            className={`${!isSmall && !metricTextSize ? 'xl:text-body' : ''} font-normal text-dark600 dark:text-dark400`}
+            className={`${!isSmall && !metricTextSize ? 'xl:text-body' : ''} ${isSmall ? 'flex-shrink-0' : ''} font-normal text-dark600 dark:text-dark400`}
           >
             {metric}
           </Typography>

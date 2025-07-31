@@ -41,7 +41,7 @@ const RodalModal: FC<RodalModalProps> = ({
     width: '100%',
     maxWidth: isTablet ? '448px' : '649px',
     height: 'max-content',
-    overflow: 'scroll',
+    overflow: 'auto',
     zIndex: 999,
   }
 
