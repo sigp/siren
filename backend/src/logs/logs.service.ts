@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Subject } from 'rxjs';
 import { Request, Response } from 'express';
 import * as EventSource from 'eventsource';
-import { LogLevels, LogType, SSELog } from '../../../src/types';
+import { LogLevels, LogType, SSELog, LighthouseLog } from '../../../src/types';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './entities/log.entity';
 import { Op } from 'sequelize';
@@ -24,6 +24,38 @@ export class LogsService {
 
   private clientManager = new ClientManager();
 
+  /**
+   * Transforms the new Lighthouse log format to the expected SSELog format
+   */
+  private transformLighthouseLog(rawLog: LighthouseLog): SSELog {
+    const { fields, level, target, time } = rawLog;
+    const { message, ...otherFields } = fields;
+
+    return {
+      level,
+      msg: message,
+      service: target,
+      time,
+      ...otherFields,
+    };
+  }
+
+  /**
+   * Determines if log data is in the new Lighthouse format
+   */
+  private isLighthouseFormat(data: any): data is LighthouseLog {
+    return (
+      typeof data === 'object' &&
+      data !== null &&
+      'fields' in data &&
+      'level' in data &&
+      'target' in data &&
+      'time' in data &&
+      typeof data.fields === 'object' &&
+      'message' in data.fields
+    );
+  }
+
   public addClient(client: Response) {
     this.clientManager.addClient(client);
   }
@@ -44,12 +76,21 @@ export class LogsService {
     this.sseStreams.set(url, sseStream);
 
     eventSource.onmessage = async (event) => {
-      let newData;
+      let rawData;
+      let newData: SSELog;
 
       try {
-        newData = JSON.parse(JSON.parse(event.data));
+        rawData = JSON.parse(JSON.parse(event.data));
       } catch (e) {
-        newData = JSON.parse(event.data) as SSELog;
+        rawData = JSON.parse(event.data);
+      }
+
+      // Transform new Lighthouse format to expected SSELog format
+      if (this.isLighthouseFormat(rawData)) {
+        newData = this.transformLighthouseLog(rawData);
+      } else {
+        // Handle legacy format
+        newData = rawData as SSELog;
       }
 
       const { level } = newData;

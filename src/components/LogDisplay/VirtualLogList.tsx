@@ -67,6 +67,24 @@ const VirtualLogList = forwardRef<VirtuosoHandle, VirtualLogListProps>(function 
     }
   }
 
+  const LoadMoreHeader = () => 
+    onLoadMore ? (
+      <button
+        onClick={onLoadMore}
+        className='w-full cursor-pointer bg-dark50 hover:bg-dark25 dark:bg-dark800 dark:hover:bg-dark700 p-4 flex flex-col items-center justify-center space-y-1'
+        aria-label='Load older logs'
+      >
+        {isLoadingMore ? (
+          <LoadingDots />
+        ) : (
+          <>
+            <Typography type='text-caption1.5'>{t('loadOlderLogs')}</Typography>
+            <i className='bi bi-arrow-up-circle text-caption1 text-primary' />
+          </>
+        )}
+      </button>
+    ) : null
+
   return (
     <div
       className='flex-1 min-h-0'
@@ -79,23 +97,7 @@ const VirtualLogList = forwardRef<VirtuosoHandle, VirtualLogListProps>(function 
         data={logs}
         ref={ref}
         components={{
-          Header: () =>
-            onLoadMore ? (
-              <button
-                onClick={onLoadMore}
-                className='w-full cursor-pointer bg-dark50 hover:bg-dark25 dark:bg-dark800 dark:hover:bg-dark700 p-4 flex flex-col items-center justify-center space-y-1'
-                aria-label='Load older logs'
-              >
-                {isLoadingMore ? (
-                  <LoadingDots />
-                ) : (
-                  <>
-                    <Typography type='text-caption1.5'>{t('loadOlderLogs')}</Typography>
-                    <i className='bi bi-arrow-up-circle text-caption1 text-primary' />
-                  </>
-                )}
-              </button>
-            ) : null,
+          Header: LoadMoreHeader,
         }}
         initialTopMostItemIndex={logListLength > 0 ? logListLength - 1 : 0}
         followOutput={(isAtBottom) =>

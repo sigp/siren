@@ -7,6 +7,7 @@ import { LOG_FETCH_LIMIT } from '../../constants/constants'
 import { useLogBucket } from '../../hooks/useLogBucket'
 import useStateDebounce from '../../hooks/useStateDebounce'
 import { LogData, LogLevels, LogType, Metric } from '../../types'
+import { normalizeLogData } from '../../utilities/transformLighthouseLog'
 import Input from '../Input/Input'
 import LoadingDots from '../LoadingDots/LoadingDots'
 import LogStats from '../LogStats/LogStats'
@@ -107,7 +108,9 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
       }
       return axios
         .get<LogData[]>(`/api/log-history?${params.toString()}`)
-        .then((res) => res.data.map((raw) => ({ ...raw, data: JSON.parse(raw.data) })))
+        .then((res) =>
+          res.data.map((raw) => ({ ...raw, data: normalizeLogData(JSON.parse(raw.data)) })),
+        )
     },
     initialPageParam: 0,
     refetchOnWindowFocus: false,
@@ -139,7 +142,9 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
     queryFn: ({ signal }) =>
       axios
         .get<LogData[]>(`/api/search-logs?type=${type}&search=${debouncedSearchText}`, { signal })
-        .then((r) => r.data.map((raw) => ({ ...raw, data: JSON.parse(raw.data) }))),
+        .then((r) =>
+          r.data.map((raw) => ({ ...raw, data: normalizeLogData(JSON.parse(raw.data)) })),
+        ),
     enabled: isSearchView,
     refetchOnWindowFocus: false,
   })
@@ -244,6 +249,33 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
                 />
               </div>
             </div>
+            
+            {/* Static Column Headers */}
+            <div className='hidden lg:flex border-b border-style500 bg-gray-50 dark:bg-dark800 sticky top-0 z-10'>
+              <div className='px-3 py-2 w-[90px] text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Time
+              </div>
+              <div className='px-2 py-2 w-[50px] text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Level
+              </div>
+              <div className='px-3 py-2 w-[180px] text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Service
+              </div>
+              <div className='px-3 py-2 w-auto min-w-[300px] text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Message
+              </div>
+              <div className='px-3 py-2 w-auto text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Details
+              </div>
+            </div>
+            
+            {/* Mobile Header */}
+            <div className='lg:hidden border-b border-style500 bg-gray-50 dark:bg-dark800 px-4 py-2'>
+              <Typography type='text-caption1' className='text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+                Log Entries
+              </Typography>
+            </div>
+            
             {renderLogContent}
           </div>
           <div className='flex order-first lg:order-2 lg:max-w-xs w-full flex-col border-t-style500 border-l-style500 mt-4 lg:ml-4'>

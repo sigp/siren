@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MAX_PERSISTED_LOGS } from '../constants/constants'
+import { normalizeLogData } from '../utilities/transformLighthouseLog'
 
 export type sseData<T extends unknown[]> = {
   data: T
@@ -23,18 +24,22 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
 
   const updateData = useCallback(
     (event: MessageEvent) => {
+      let rawData
       let newData
 
       try {
-        newData = JSON.parse(JSON.parse(event.data))
+        rawData = JSON.parse(JSON.parse(event.data))
       } catch {
         try {
-          newData = JSON.parse(event.data)
+          rawData = JSON.parse(event.data)
         } catch {
           console.log('error parsing data....')
-          newData = {}
+          rawData = {}
         }
       }
+
+      // Normalize log data to handle both old and new Lighthouse formats
+      newData = normalizeLogData(rawData)
 
       const newDataString = JSON.stringify(newData)
 
