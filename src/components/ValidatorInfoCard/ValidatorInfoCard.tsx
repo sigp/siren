@@ -13,6 +13,7 @@ import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import AnimatedHeader, { AnimatedHeaderProps } from '../AnimatedHeader/AnimatedHeader'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
+import InlineEditableText from '../InlineEditableText/InlineEditableText'
 import Typography from '../Typography/Typography'
 
 export interface ValidatorInfoCardProps extends Omit<AnimatedHeaderProps, 'className' | 'name'> {
@@ -31,7 +32,7 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
   const { index, balance, pubKey } = validator
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setValDetail = useSetRecoilState(isValidatorDetail)
-  const { aliases } = useValidatorAliases()
+  const { aliases, updateAlias } = useValidatorAliases()
   const [localAliases] = useLocalStorage<ValAliases>('val-aliases', {})
   useAliasMigration()
   const classes = addClassString(
@@ -45,7 +46,18 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
   const valHrefBase = `/dashboard/validators?id=${index}`
   const detailHref = `${valHrefBase}&modal=${ValidatorModalView.DETAILS}`
 
-  const viewDetail = () => {
+  const handleNameSave = async (newName: string) => {
+    if (index !== undefined) {
+      await updateAlias(index, newName)
+    }
+  }
+
+  const viewDetail = (e: any) => {
+    // Prevent opening modal when interacting with the editable text
+    if (e.target.closest('.inline-editable-text')) {
+      return
+    }
+
     setActiveValidatorId(index)
     setValDetail(true)
     router.push(detailHref)
@@ -68,7 +80,16 @@ const ValidatorInfoCard: FC<ValidatorInfoCardProps> = ({
               <Typography type='text-caption1' color='text-dark300'>
                 {index}
               </Typography>
-              <Typography>{validatorName}</Typography>
+              <div className='inline-editable-text'>
+                <InlineEditableText
+                  value={validatorName || ''}
+                  onSave={handleNameSave}
+                  disabled={index === undefined}
+                  showEditIcon={true}
+                  color='text-dark900'
+                  type='text-base'
+                />
+              </div>
             </div>
             <div className='space-y-2'>
               <div>

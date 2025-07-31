@@ -89,7 +89,7 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
           className={`${className || ''} w-full ${
             isTablet
               ? 'flex flex-wrap space-y-4 justify-center'
-              : 'overflow-y-auto overflow-x-hidden border-style500'
+              : 'overflow-x-hidden border-style500'
           }`}
         >
           {isTablet ? (
