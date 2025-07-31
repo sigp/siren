@@ -1,10 +1,10 @@
 import { FC, memo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import formatEthAddress from '../../../utilities/formatEthAddress'
 import copyToClipboard from '../../../utilities/copyToClipboard'
+import formatEthAddress from '../../../utilities/formatEthAddress'
+import { PillTextProps } from '../PillText/PillText'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
-import { PillTextProps } from '../PillText/PillText'
 
 export interface WithdrawalAddressPillProps
   extends Omit<PillTextProps, 'textPrefix' | 'toolTipText' | 'displayText'> {
@@ -40,17 +40,15 @@ const WithdrawalAddressPill: FC<WithdrawalAddressPillProps> = ({
   }
 
   const content = (
-    <div className={`py-1 px-2 rounded flex items-center space-x-2 bg-dark100 dark:bg-dark700 ${containerClassName || ''}`}>
-      <Typography type='text-caption1.5'>
-        {t('credentials')}:
-      </Typography>
-      <Typography type='text-caption1.5'>
-        {formattedShortCredentialAddress}
-      </Typography>
-      <i 
-        className="bi bi-subtract text-caption1 text-dark400 hover:scale-90 cursor-pointer ml-1" 
+    <div
+      className={`py-1 px-2 rounded flex items-center space-x-2 bg-dark100 dark:bg-dark700 ${containerClassName || ''}`}
+    >
+      <Typography type='text-caption1.5'>{t('credentials')}:</Typography>
+      <Typography type='text-caption1.5'>{formattedShortCredentialAddress}</Typography>
+      <i
+        className='bi bi-subtract text-caption1 text-dark400 hover:scale-90 cursor-pointer ml-1'
         onClick={handleCopy}
-        title="Copy to clipboard"
+        title='Copy to clipboard'
       />
     </div>
   )

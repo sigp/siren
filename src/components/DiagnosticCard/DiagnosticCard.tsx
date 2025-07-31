@@ -152,7 +152,9 @@ const DiagnosticCard: FC<DiagnosticCardProps> = ({
       )}
 
       {/* Header with icon, title and metric */}
-      <div className={`w-full z-10 flex items-center flex-shrink-0 mb-1 ${isSmall ? 'justify-between gap-2 min-w-0' : 'justify-between'}`}>
+      <div
+        className={`w-full z-10 flex items-center flex-shrink-0 mb-1 ${isSmall ? 'justify-between gap-2 min-w-0' : 'justify-between'}`}
+      >
         <div className={`flex items-center gap-2 ${isSmall ? 'min-w-0 flex-shrink' : ''}`}>
           {renderIcon()}
           <Typography
