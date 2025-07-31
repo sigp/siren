@@ -110,7 +110,9 @@ export class ValidatorController {
   }
 
   @Post('aliases/import')
-  async importValidatorAliases(@Body('aliases') aliases: Record<string, string>) {
+  async importValidatorAliases(
+    @Body('aliases') aliases: Record<string, string>,
+  ) {
     await this.validatorService.importValidatorAliases(aliases);
     return { success: true };
   }

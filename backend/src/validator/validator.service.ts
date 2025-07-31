@@ -318,7 +318,7 @@ export class ValidatorService {
     try {
       const aliases = await this.validatorAliasRepository.findAll();
       return Object.fromEntries(
-        aliases.map((alias) => [alias.validatorIndex.toString(), alias.alias])
+        aliases.map((alias) => [alias.validatorIndex.toString(), alias.alias]),
       );
     } catch (e) {
       console.error(e);
