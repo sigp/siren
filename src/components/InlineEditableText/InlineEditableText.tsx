@@ -46,7 +46,7 @@ const InlineEditableText: FC<InlineEditableTextProps> = ({
 
   const handleSave = async () => {
     const trimmedValue = editValue.trim()
-    
+
     if (trimmedValue !== value) {
       setIsLoading(true)
       try {

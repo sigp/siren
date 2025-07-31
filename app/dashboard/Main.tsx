@@ -395,9 +395,7 @@ const Main: FC<MainProps> = (props) => {
               </div>
               <div className='flex-1 min-h-0 overflow-y-auto overflow-x-hidden'>
                 {filteredValidatorStates.length ? (
-                  <ValidatorTable
-                    validators={filteredValidatorStates}
-                  />
+                  <ValidatorTable validators={filteredValidatorStates} />
                 ) : validatorStates.length ? (
                   <ValidatorTableEmptyState
                     title={t('emptyState.filteredValidatorTable.nonFound')}
