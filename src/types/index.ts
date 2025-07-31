@@ -75,12 +75,23 @@ export enum LogLevels {
 }
 
 export type SSELog = {
-  error: string
+  error?: string
   level: LogLevels
   msg: string
   service: string
   time: string
   [key: string]: any
+}
+
+// New log format from Lighthouse
+export type LighthouseLog = {
+  fields: {
+    message: string
+    [key: string]: any
+  }
+  level: LogLevels
+  target: string
+  time: string
 }
 
 export interface DeviceList {
