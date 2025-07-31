@@ -1,7 +1,6 @@
 'use client'
 
 import { IBls } from '@chainsafe/bls/types'
-import axios from 'axios'
 import { useMotionValueEvent, useScroll } from 'framer-motion'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react'
@@ -111,6 +110,7 @@ const Main: FC<MainProps> = (props) => {
   const setBlsModule = useSetRecoilState(blsModuleAtom)
   const [isValDetail] = useRecoilState(isValidatorDetail)
   const [isRendered, setRender] = useState(false)
+  const [isActiveOnlyMode, setIsActiveOnlyMode] = useState(false)
 
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
 
@@ -127,8 +127,7 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { formattedExclusions, exclusions, setExclusions } =
-    useValidatorExclusionList(initExclusionData)
+  const { formattedExclusions } = useValidatorExclusionList(initExclusionData)
 
   const activeStatuses: ValidatorStatus[] = [
     'active',
@@ -154,45 +153,16 @@ const Main: FC<MainProps> = (props) => {
   ]
   const nonActiveStatuses = allPossibleStatuses.filter((status) => !activeStatuses.includes(status))
 
-  const isActiveOnlyMode = useMemo(() => {
+  // Keep the old logic for determining if exclusions match active-only mode
+  const exclusionsMatchActiveOnly = useMemo(() => {
     return (
       nonActiveStatuses.every((status) => formattedExclusions.includes(status)) &&
       activeStatuses.some((status) => !formattedExclusions.includes(status))
     )
   }, [formattedExclusions])
 
-  const toggleActiveOnlyMode = async () => {
-    try {
-      if (isActiveOnlyMode) {
-        // Switch to show all validators by removing all exclusions
-        const deletePromises = exclusions.map((exclusion) =>
-          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
-        )
-        await Promise.all(deletePromises)
-        // Refresh exclusions
-        const { data } = await axios.get('/api/exclusions')
-        setExclusions(data)
-      } else {
-        // Switch to active only: first clear all exclusions, then add non-active exclusions
-        // This ensures we start from a clean state regardless of current exclusions
-        const deletePromises = exclusions.map((exclusion) =>
-          axios.delete(`/api/remove-exclusion/${exclusion.id}`),
-        )
-        await Promise.all(deletePromises)
-
-        // Now add exclusions for all non-active statuses
-        const addPromises = nonActiveStatuses.map((status) =>
-          axios.post('/api/add-exclusion', { status }),
-        )
-        await Promise.all(addPromises)
-
-        // Refresh exclusions
-        const { data } = await axios.get('/api/exclusions')
-        setExclusions(data)
-      }
-    } catch (error) {
-      console.error('Failed to toggle active only mode:', error)
-    }
+  const toggleActiveOnlyMode = () => {
+    setIsActiveOnlyMode(!isActiveOnlyMode)
   }
 
   const [view, setView] = useState<ValidatorManagementView>(ValidatorManagementView.MAIN)
@@ -268,9 +238,26 @@ const Main: FC<MainProps> = (props) => {
     setForkVersion(forkVersionData)
   }, [forkVersionData])
 
+  // Initialize local active-only state based on existing exclusions
+  useEffect(() => {
+    setIsActiveOnlyMode(exclusionsMatchActiveOnly)
+  }, [exclusionsMatchActiveOnly])
+
   const filteredValidatorStates = useMemo(() => {
-    return validatorStates.filter(({ status }) => !formattedExclusions.includes(status))
-  }, [validatorStates, formattedExclusions])
+    let filtered = validatorStates
+
+    // Apply exclusions filter (for other exclusions that aren't active-only)
+    if (!isActiveOnlyMode) {
+      filtered = filtered.filter(({ status }) => !formattedExclusions.includes(status))
+    }
+
+    // Apply active-only filter using local state
+    if (isActiveOnlyMode) {
+      filtered = filtered.filter(({ status }) => activeStatuses.includes(status))
+    }
+
+    return filtered
+  }, [validatorStates, formattedExclusions, isActiveOnlyMode, activeStatuses])
 
   const filteredValidators = useMemo(() => {
     return filteredValidatorStates.filter((validator) => {

@@ -13,10 +13,8 @@ const nextConfig = {
       topLevelAwait: true,
     }
 
-    // Suppress source map warnings for third-party modules in development
-    if (dev) {
-      config.devtool = 'cheap-module-source-map'
-    }
+    // Let Next.js handle devtool configuration for optimal performance
+    // Overriding devtool can cause performance regressions
 
     return config
   },
