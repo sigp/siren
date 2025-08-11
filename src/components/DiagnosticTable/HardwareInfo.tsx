@@ -94,40 +94,40 @@ const HardwareInfo: FC<HardwareInfoProps> = ({
           <div className='flex flex-col h-full'>
             <DiagnosticCard
               title={t('disk')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskData}
               chartData={isCompact ? undefined : diskHistory}
-              chartColor={isCompact ? undefined : '#5E41D5'}
+              chartColor='#5E41D5'
               chartLabel={isCompact ? undefined : 'Disk Usage'}
               iconType='disk'
             />
             <DiagnosticCard
               title={t('cpu')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
               chartData={isCompact ? undefined : cpuHistory}
-              chartColor={isCompact ? undefined : '#7C5FEB'}
+              chartColor='#7C5FEB'
               chartLabel={isCompact ? undefined : 'CPU Usage'}
               iconType='cpu'
             />
             <DiagnosticCard
               title={t('ram')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
               chartData={isCompact ? undefined : ramHistory}
-              chartColor={isCompact ? undefined : '#A841D5'}
+              chartColor='#A841D5'
               chartLabel={isCompact ? undefined : 'RAM Usage'}
               iconType='ram'
             />
@@ -138,7 +138,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({
           <div className='flex flex-col h-full'>
             <DiagnosticCard
               size={size}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               title={t('network')}
               isBackground={false}
               metricTextSize='text-caption2'
@@ -152,11 +152,11 @@ const HardwareInfo: FC<HardwareInfoProps> = ({
               }
               status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
               iconType='network'
-              chartColor={isCompact ? undefined : '#3B82F6'}
+              chartColor='#3B82F6'
             />
             <DiagnosticCard
               size={size}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               title='Beacon Node'
               metric={getSyncStatusText()}
               percent={Number(beaconPercentage)}
@@ -165,7 +165,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({
               subTitle={slotInfo}
               status={headSlotStatus}
               iconType='beacon'
-              chartColor={isCompact ? undefined : '#10B981'}
+              chartColor='#10B981'
             />
           </div>
         )

@@ -58,7 +58,7 @@ const LogStats: FC<LogStatsProps> = ({
       <DiagnosticCard
         title={t('logInfo.criticalLogs')}
         toolTipText={critToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={critStatus}
         size={size}
@@ -66,7 +66,7 @@ const LogStats: FC<LogStatsProps> = ({
         subTitle={t('critical')}
         metric={`${toFixedIfNecessary(criticalCount, 2)} / HR`}
         chartData={isCompact ? undefined : criticalLogsHistory}
-        chartColor={isCompact ? undefined : '#D541B8'}
+        chartColor='#D541B8'
         chartLabel={isCompact ? undefined : 'Critical Logs'}
         isChartPercentage={false}
         iconType='critical'
@@ -74,7 +74,7 @@ const LogStats: FC<LogStatsProps> = ({
       <DiagnosticCard
         title={t('errors')}
         toolTipText={errorToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={errorStatus}
         size={size}
@@ -82,7 +82,7 @@ const LogStats: FC<LogStatsProps> = ({
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(errorCount, 2)} / HR`}
         chartData={isCompact ? undefined : errorLogsHistory}
-        chartColor={isCompact ? undefined : '#836FFF'}
+        chartColor='#836FFF'
         chartLabel={isCompact ? undefined : 'Error Logs'}
         isChartPercentage={false}
         iconType='error'
@@ -90,7 +90,7 @@ const LogStats: FC<LogStatsProps> = ({
       <DiagnosticCard
         title={t('logInfo.warnings')}
         toolTipText={warnToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={warnStatus}
         size={size}
@@ -98,7 +98,7 @@ const LogStats: FC<LogStatsProps> = ({
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(warningCount, 2)} / HR`}
         chartData={isCompact ? undefined : warningLogsHistory}
-        chartColor={isCompact ? undefined : '#5200FF'}
+        chartColor='#5200FF'
         chartLabel={isCompact ? undefined : 'Warning Logs'}
         isChartPercentage={false}
         iconType='warning'
