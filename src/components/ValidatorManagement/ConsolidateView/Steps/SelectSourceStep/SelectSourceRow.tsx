@@ -1,6 +1,8 @@
 import { AnimationControls, motion } from 'framer-motion'
 import { FC, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import { useValidatorAliases } from '../../../../../hooks/useValidatorAliases'
+import useValidatorName from '../../../../../hooks/useValidatorName'
 import { ValidatorInfo } from '../../../../../types/validator'
 import CheckBox from '../../../../CheckBox/CheckBox'
 import Tooltip from '../../../../ToolTip/Tooltip'
@@ -22,7 +24,9 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({
   animControls,
   animIndex,
 }) => {
-  const { pubKey, balance, name, withdrawalAddress } = source
+  const { pubKey, balance, withdrawalAddress } = source
+  const { aliases } = useValidatorAliases()
+  const validatorName = useValidatorName(source, aliases || {})
   const selectSource = () => onSelect(source)
   const formattedBalance = Math.round(balance)
   const formattedPubKey = formatEthAddress(pubKey)
@@ -42,7 +46,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({
         <div className='flex items-center space-x-3 border-r-style pr-4'>
           <CheckBox id={pubKey} readOnly checked={isSelected} />
           <div className='h-6 w-6 hidden xl:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
-          <Typography type='text-caption'>{name}</Typography>
+          <Typography type='text-caption'>{validatorName}</Typography>
         </div>
         <div className='border-r-style hidden md:block lg:hidden xl:block self-stretch flex items-center px-4'>
           <Tooltip

@@ -2,6 +2,8 @@ import { dataSlice, getAddress } from 'ethers'
 import React, { FC } from 'react'
 import addClassString from '../../../../../../utilities/addClassString'
 import { Status } from '../../../../../constants/enums'
+import { useValidatorAliases } from '../../../../../hooks/useValidatorAliases'
+import useValidatorName from '../../../../../hooks/useValidatorName'
 import { ConsolidationTx } from '../../../../../types'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Consolidate from '../../../../ConsolidateValidator/Consolidate'
@@ -26,7 +28,9 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
   onSubmitRequest,
   requestData,
 }) => {
-  const { name, index, withdrawalAddress } = validator
+  const { index, withdrawalAddress } = validator
+  const { aliases } = useValidatorAliases()
+  const validatorName = useValidatorName(validator, aliases || {})
   const { status } = requestData || {}
 
   const statusIconClass = addClassString('', [
@@ -40,7 +44,7 @@ const ConsolidationRequest: FC<ConsolidationRequestProps> = ({
       <div className='flex items-center @425:space-x-4'>
         <div className='h-8 w-8 hidden @425:block rounded-full bg-gradient-to-r from-primary to-tertiary' />
         <div className='flex items-center mr-4 lg:mr-0 space-x-2 border-r-style pr-4'>
-          <Typography type='text-caption1'>{name}</Typography>
+          <Typography type='text-caption1'>{validatorName}</Typography>
           <Typography type='text-caption1'>{index}</Typography>
         </div>
         <WithdrawalAddressPill

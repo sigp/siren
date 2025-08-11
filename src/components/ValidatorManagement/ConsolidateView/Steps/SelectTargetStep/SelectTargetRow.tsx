@@ -2,6 +2,8 @@ import clsx from 'clsx'
 import { AnimationControls, motion } from 'framer-motion'
 import { FC, memo, useCallback, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import { useValidatorAliases } from '../../../../../hooks/useValidatorAliases'
+import useValidatorName from '../../../../../hooks/useValidatorName'
 import { ValidatorInfo } from '../../../../../types/validator'
 import Tooltip from '../../../../ToolTip/Tooltip'
 import Typography from '../../../../Typography/Typography'
@@ -17,7 +19,9 @@ interface SelectTargetRowProps {
 
 const SelectTargetRow: FC<SelectTargetRowProps> = memo(
   ({ validator, onSelect, isActive, animControls, animIndex }) => {
-    const { pubKey, name, withdrawalAddress, effectiveBalance } = validator
+    const { pubKey, withdrawalAddress, effectiveBalance } = validator
+    const { aliases } = useValidatorAliases()
+    const validatorName = useValidatorName(validator, aliases || {})
     const handleSelect = useCallback(() => onSelect(validator), [validator, onSelect])
     const initialAnim = useMemo(() => ({ y: -20, opacity: 0 }), [])
 
@@ -56,7 +60,7 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(
         <div className='flex items-center space-x-2'>
           <div className={nameGroupClasses}>
             <div className={iconClasses} />
-            <Typography type='text-caption'>{name}</Typography>
+            <Typography type='text-caption'>{validatorName}</Typography>
           </div>
           <div className={pubKeyGroupClasses}>
             <Tooltip
