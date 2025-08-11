@@ -5,6 +5,8 @@ import formatEthAddress from '../../../utilities/formatEthAddress'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../constants/constants'
 import useProcessEffectiveBalance from '../../hooks/useProcessEffectiveBalance'
+import { useValidatorAliases } from '../../hooks/useValidatorAliases'
+import useValidatorName from '../../hooks/useValidatorName'
 import { ValidatorInfo } from '../../types/validator'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import Tooltip from '../ToolTip/Tooltip'
@@ -28,7 +30,9 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
   maxEffectiveBalance,
 }) => {
   const { t } = useTranslation()
-  const { pubKey, withdrawalAddress, name, effectiveBalance, balance } = validator
+  const { pubKey, withdrawalAddress, effectiveBalance, balance } = validator
+  const { aliases } = useValidatorAliases()
+  const validatorName = useValidatorName(validator, aliases || {})
   const tooltipStyle = useMemo(() => ({ fontSize: '11px' }), [])
   const formattedPubKey = formatEthAddress(pubKey, 7, 7)
   const newBalance = balance + supplementAmount
@@ -94,7 +98,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
     <div className='flex sm:space-x-4'>
       <IdenticonIcon size={70} type='CIRCULAR' hash={pubKey} />
       <div className='space-y-1'>
-        <Typography>{name}</Typography>
+        <Typography>{validatorName}</Typography>
         <Tooltip place='top-start' style={tooltipStyle} id={`tool-display-${pubKey}`} text={pubKey}>
           <Typography type='text-caption' color='text-dark400' darkMode='dark:text-dark500'>
             {formattedPubKey}
