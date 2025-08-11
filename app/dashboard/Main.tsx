@@ -247,11 +247,16 @@ const Main: FC<MainProps> = (props) => {
   }, [validatorHeightRatio, optimalHeightRatio, isDragging])
 
   // Update stored ratio when optimal changes (but allow user overrides)
+  // Only auto-adjust if user hasn't manually set a specific ratio
   useEffect(() => {
-    if (validatorHeightRatio != null && Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1) {
-      setValidatorHeightRatio(optimalHeightRatio)
+    if (validatorHeightRatio != null && Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1 && !isDragging) {
+      // Only auto-adjust if the current ratio is very close to the default (0.5)
+      // This prevents overriding manual user adjustments to min/max positions
+      if (Math.abs(validatorHeightRatio - 0.5) < 0.05) {
+        setValidatorHeightRatio(optimalHeightRatio)
+      }
     }
-  }, [optimalHeightRatio, validatorHeightRatio, setValidatorHeightRatio])
+  }, [optimalHeightRatio, validatorHeightRatio, setValidatorHeightRatio, isDragging])
 
   useEffect(() => {
     setDuties((prev) => formatUniqueObjectArray([...prev, ...valDuties]))
