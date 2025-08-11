@@ -8,9 +8,10 @@ import Typography from '../Typography/Typography'
 
 export interface LogsInfoProps {
   logMetrics: Metric
+  isCompact?: boolean
 }
 
-const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
+const LogsInfo: FC<LogsInfoProps> = ({ logMetrics, isCompact = false }) => {
   const { t } = useTranslation()
   const isMobile = useMediaQuery('(max-width: 425px)')
   const size = isMobile ? 'health' : 'md'
@@ -40,6 +41,7 @@ const LogsInfo: FC<LogsInfoProps> = ({ logMetrics }) => {
           warnToolTip={t('logs.tooltips.combinedWarning')}
           size={size}
           logMetrics={logMetrics}
+          isCompact={isCompact}
         />
       </div>
     </div>

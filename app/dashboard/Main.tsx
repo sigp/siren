@@ -249,7 +249,11 @@ const Main: FC<MainProps> = (props) => {
   // Update stored ratio when optimal changes (but allow user overrides)
   // Only auto-adjust if user hasn't manually set a specific ratio
   useEffect(() => {
-    if (validatorHeightRatio != null && Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1 && !isDragging) {
+    if (
+      validatorHeightRatio != null &&
+      Math.abs(validatorHeightRatio - optimalHeightRatio) < 0.1 &&
+      !isDragging
+    ) {
       // Only auto-adjust if the current ratio is very close to the default (0.5)
       // This prevents overriding manual user adjustments to min/max positions
       if (Math.abs(validatorHeightRatio - 0.5) < 0.05) {
@@ -507,6 +511,7 @@ const Main: FC<MainProps> = (props) => {
                   bnSpec={beaconSpec}
                   syncData={syncData}
                   beanHealth={nodeHealth}
+                  isCompact={currentHeightRatio >= 0.55}
                 />
               </div>
             </div>

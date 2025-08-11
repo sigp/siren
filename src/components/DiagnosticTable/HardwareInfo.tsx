@@ -2,7 +2,6 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addSuffixString from '../../../utilities/addSuffixString'
 import formatAtHeadSlotStatus from '../../../utilities/formatAtHeadSlotStatus'
-import secondsToShortHand from '../../../utilities/secondsToShortHand'
 import { DiagnosticType } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import useMetricHistory from '../../hooks/useMetricHistory'
@@ -16,19 +15,18 @@ export interface HardwareInfoProps {
   syncData: SyncData
   beanHealth: Diagnostics
   bnSpec: BeaconNodeSpecResults
+  isCompact?: boolean
 }
 
-const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) => {
+const HardwareInfo: FC<HardwareInfoProps> = ({
+  syncData,
+  beanHealth,
+  bnSpec,
+  isCompact = false,
+}) => {
   const { t } = useTranslation()
   const {
-    beaconSync: {
-      beaconSyncTime,
-      beaconPercentage,
-      isSyncing,
-      headSlot,
-      currentEpoch,
-      syncDistance,
-    },
+    beaconSync: { beaconPercentage, isSyncing, headSlot, currentEpoch, syncDistance },
   } = syncData
   const [view, setView] = useState<DiagnosticType>(DiagnosticType.DEVICE)
   const {
@@ -56,7 +54,6 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
   )
 
   const diskData = isSyncing ? diskStatus.syncing : diskStatus.synced
-  const remainingBeaconTime = secondsToShortHand(Number(beaconSyncTime) || 0)
 
   // Calculate slot information
   const { SLOTS_PER_EPOCH } = bnSpec
@@ -103,9 +100,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskData}
-              chartData={diskHistory}
-              chartColor='#5E41D5'
-              chartLabel='Disk Usage'
+              chartData={isCompact ? undefined : diskHistory}
+              chartColor={isCompact ? undefined : '#5E41D5'}
+              chartLabel={isCompact ? undefined : 'Disk Usage'}
               iconType='disk'
             />
             <DiagnosticCard
@@ -116,9 +113,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
-              chartData={cpuHistory}
-              chartColor='#7C5FEB'
-              chartLabel='CPU Usage'
+              chartData={isCompact ? undefined : cpuHistory}
+              chartColor={isCompact ? undefined : '#7C5FEB'}
+              chartLabel={isCompact ? undefined : 'CPU Usage'}
               iconType='cpu'
             />
             <DiagnosticCard
@@ -129,9 +126,9 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
-              chartData={ramHistory}
-              chartColor='#A841D5'
-              chartLabel='RAM Usage'
+              chartData={isCompact ? undefined : ramHistory}
+              chartColor={isCompact ? undefined : '#A841D5'}
+              chartLabel={isCompact ? undefined : 'RAM Usage'}
               iconType='ram'
             />
           </div>
@@ -155,7 +152,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               }
               status={natOpen ? StatusColor.SUCCESS : StatusColor.DARK}
               iconType='network'
-              chartColor='#3B82F6'
+              chartColor={isCompact ? undefined : '#3B82F6'}
             />
             <DiagnosticCard
               size={size}
@@ -168,7 +165,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
               subTitle={slotInfo}
               status={headSlotStatus}
               iconType='beacon'
-              chartColor='#10B981'
+              chartColor={isCompact ? undefined : '#10B981'}
             />
           </div>
         )
