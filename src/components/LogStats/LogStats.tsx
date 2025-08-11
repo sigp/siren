@@ -13,6 +13,7 @@ export interface LogStatsProps {
   size?: CardSize
   maxHeight?: string
   maxWidth?: string
+  isCompact?: boolean
 }
 
 const LogStats: FC<LogStatsProps> = ({
@@ -23,6 +24,7 @@ const LogStats: FC<LogStatsProps> = ({
   warnToolTip,
   errorToolTip,
   logMetrics,
+  isCompact = false,
 }) => {
   const { t } = useTranslation()
   const { errorCount, criticalCount, warningCount } = logMetrics
@@ -56,48 +58,48 @@ const LogStats: FC<LogStatsProps> = ({
       <DiagnosticCard
         title={t('logInfo.criticalLogs')}
         toolTipText={critToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={critStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('critical')}
         metric={`${toFixedIfNecessary(criticalCount, 2)} / HR`}
-        chartData={criticalLogsHistory}
+        chartData={isCompact ? undefined : criticalLogsHistory}
         chartColor='#D541B8'
-        chartLabel='Critical Logs'
+        chartLabel={isCompact ? undefined : 'Critical Logs'}
         isChartPercentage={false}
         iconType='critical'
       />
       <DiagnosticCard
         title={t('errors')}
         toolTipText={errorToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={errorStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(errorCount, 2)} / HR`}
-        chartData={errorLogsHistory}
+        chartData={isCompact ? undefined : errorLogsHistory}
         chartColor='#836FFF'
-        chartLabel='Error Logs'
+        chartLabel={isCompact ? undefined : 'Error Logs'}
         isChartPercentage={false}
         iconType='error'
       />
       <DiagnosticCard
         title={t('logInfo.warnings')}
         toolTipText={warnToolTip}
-        maxHeight={maxHeight}
+        maxHeight={maxHeight === 'flex-1' ? 'max-h-full min-h-0 flex-1' : maxHeight}
         maxWidth={maxWidth}
         status={warnStatus}
         size={size}
         border='border-t-0 md:border-l-0 border-style500 border-b border-b-style500'
         subTitle={t('logInfo.validatorLogs')}
         metric={`${toFixedIfNecessary(warningCount, 2)} / HR`}
-        chartData={warningLogsHistory}
+        chartData={isCompact ? undefined : warningLogsHistory}
         chartColor='#5200FF'
-        chartLabel='Warning Logs'
+        chartLabel={isCompact ? undefined : 'Warning Logs'}
         isChartPercentage={false}
         iconType='warning'
       />

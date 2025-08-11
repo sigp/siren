@@ -2,7 +2,6 @@ import { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import addSuffixString from '../../../utilities/addSuffixString'
 import formatAtHeadSlotStatus from '../../../utilities/formatAtHeadSlotStatus'
-import secondsToShortHand from '../../../utilities/secondsToShortHand'
 import { DiagnosticType } from '../../constants/enums'
 import useMediaQuery from '../../hooks/useMediaQuery'
 import useMetricHistory from '../../hooks/useMetricHistory'
@@ -16,19 +15,18 @@ export interface HardwareInfoProps {
   syncData: SyncData
   beanHealth: Diagnostics
   bnSpec: BeaconNodeSpecResults
+  isCompact?: boolean
 }
 
-const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) => {
+const HardwareInfo: FC<HardwareInfoProps> = ({
+  syncData,
+  beanHealth,
+  bnSpec,
+  isCompact = false,
+}) => {
   const { t } = useTranslation()
   const {
-    beaconSync: {
-      beaconSyncTime,
-      beaconPercentage,
-      isSyncing,
-      headSlot,
-      currentEpoch,
-      syncDistance,
-    },
+    beaconSync: { beaconPercentage, isSyncing, headSlot, currentEpoch, syncDistance },
   } = syncData
   const [view, setView] = useState<DiagnosticType>(DiagnosticType.DEVICE)
   const {
@@ -56,7 +54,6 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
   )
 
   const diskData = isSyncing ? diskStatus.syncing : diskStatus.synced
-  const remainingBeaconTime = secondsToShortHand(Number(beaconSyncTime) || 0)
 
   // Calculate slot information
   const { SLOTS_PER_EPOCH } = bnSpec
@@ -97,41 +94,41 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
           <div className='flex flex-col h-full'>
             <DiagnosticCard
               title={t('disk')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalDiskSpace), 'GB')}
               subTitle={t('utilization', { percent: diskUtilization })}
               status={diskData}
-              chartData={diskHistory}
+              chartData={isCompact ? undefined : diskHistory}
               chartColor='#5E41D5'
-              chartLabel='Disk Usage'
+              chartLabel={isCompact ? undefined : 'Disk Usage'}
               iconType='disk'
             />
             <DiagnosticCard
               title={t('cpu')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={frequency ? addSuffixString(frequency, 'GHz') : ' '}
               subTitle={t('utilization', { percent: cpuUtilization })}
               status={cpuStatus}
-              chartData={cpuHistory}
+              chartData={isCompact ? undefined : cpuHistory}
               chartColor='#7C5FEB'
-              chartLabel='CPU Usage'
+              chartLabel={isCompact ? undefined : 'CPU Usage'}
               iconType='cpu'
             />
             <DiagnosticCard
               title={t('ram')}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               size={size}
               border='border-t-0 border-style500 border-b border-b-style500'
               metric={addSuffixString(Math.round(totalMemory), 'GB')}
               subTitle={t('utilization', { percent: memoryUtilization })}
               status={ramStatus}
-              chartData={ramHistory}
+              chartData={isCompact ? undefined : ramHistory}
               chartColor='#A841D5'
-              chartLabel='RAM Usage'
+              chartLabel={isCompact ? undefined : 'RAM Usage'}
               iconType='ram'
             />
           </div>
@@ -141,7 +138,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
           <div className='flex flex-col h-full'>
             <DiagnosticCard
               size={size}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               title={t('network')}
               isBackground={false}
               metricTextSize='text-caption2'
@@ -159,7 +156,7 @@ const HardwareInfo: FC<HardwareInfoProps> = ({ syncData, beanHealth, bnSpec }) =
             />
             <DiagnosticCard
               size={size}
-              maxHeight='flex-1'
+              maxHeight='max-h-full min-h-0 flex-1'
               title='Beacon Node'
               metric={getSyncStatusText()}
               percent={Number(beaconPercentage)}
