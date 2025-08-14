@@ -21,16 +21,6 @@ import {
   MAINNET_PECTRA_FORK_VERSION,
 } from '../../../src/constants/constants';
 
-class CustomError extends Error {
-  public code: any;
-
-  constructor(message, code) {
-    super(message);
-    this.code = code;
-    this.name = this.constructor.name;
-  }
-}
-
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
   constructor(
@@ -52,49 +42,72 @@ export class TasksService implements OnApplicationBootstrap {
   private isDebug = process.env.DEBUG === 'true';
 
   async onApplicationBootstrap(): Promise<void> {
-    try {
-      console.log('Application Bootstrapping....');
-      if (!this.sessionPassword) {
-        throw new CustomError(
-          'No session password found...',
-          'NO_SESSION_PASSWORD',
-        );
-      }
+    console.log('Application Bootstrapping....');
 
-      if (!this.apiToken) {
-        throw new CustomError('No api token found...', 'NO_API_TOKEN');
-      }
-
-      await this.syncBeaconSpecs();
-      await this.initValidatorDataScheduler();
-      await this.initMetricDataScheduler();
-      await this.initPendingDepositsScheduler();
-      await this.initPendingPartialWithdrawalsScheduler();
-
-      await this.logsService.startSse(
-        `${this.validatorUrl}/lighthouse/logs`,
-        LogType.VALIDATOR,
-      );
-      await this.logsService.startSse(
-        `${this.beaconUrl}/lighthouse/logs`,
-        LogType.BEACON,
-      );
-
-      await this.initMetricsCleaningScheduler();
-      this.initLogCleaningScheduler();
-    } catch (e) {
-      console.error('Unable to bootstrap application repositories...');
-      console.error(
-        this.utilsService.getErrorMessage(e?.response?.data.code || e.code),
-      );
-
-      if (this.isDebug) {
-        console.log(e);
-      }
-
-      process.kill(process.pid, 'SIGINT');
-      process.exit(0);
+    // Check required configuration first (these should fail immediately)
+    if (!this.sessionPassword) {
+      console.error('No session password found...');
+      console.error(this.utilsService.getErrorMessage('NO_SESSION_PASSWORD'));
+      process.exit(1);
     }
+
+    if (!this.apiToken) {
+      console.error('No api token found...');
+      console.error(this.utilsService.getErrorMessage('NO_API_TOKEN'));
+      process.exit(1);
+    }
+
+    // Start the connection retry loop
+    this.initConnectionRetryLoop();
+  }
+
+  private async initConnectionRetryLoop(): Promise<void> {
+    while (true) {
+      try {
+        console.log(
+          'Attempting to connect to beacon node and validator client...',
+        );
+
+        await this.syncBeaconSpecs();
+        await this.initValidatorDataScheduler();
+        await this.initMetricDataScheduler();
+        await this.initPendingDepositsScheduler();
+        await this.initPendingPartialWithdrawalsScheduler();
+
+        await this.logsService.startSse(
+          `${this.validatorUrl}/lighthouse/logs`,
+          LogType.VALIDATOR,
+        );
+        await this.logsService.startSse(
+          `${this.beaconUrl}/lighthouse/logs`,
+          LogType.BEACON,
+        );
+
+        await this.initMetricsCleaningScheduler();
+        this.initLogCleaningScheduler();
+
+        console.log(
+          'Successfully connected to beacon node and validator client',
+        );
+        break; // Exit the retry loop on success
+      } catch (e) {
+        console.error('Connection failed to beacon node or validator client:');
+        console.error(
+          this.utilsService.getErrorMessage(e?.response?.data?.code || e?.code),
+        );
+
+        if (this.isDebug) {
+          console.error('Detailed error:', e);
+        }
+
+        console.log('Retrying connection in 30 seconds...');
+        await this.wait(30000); // Wait 30 seconds before retry
+      }
+    }
+  }
+
+  private wait(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private initLogCleaningScheduler() {

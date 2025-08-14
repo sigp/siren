@@ -33,18 +33,31 @@ const Main = () => {
   const [beaconNodeVersion, setBeaconVersion] = useState('')
   const [lighthouseVersion, setLighthouseVersion] = useState('')
 
-  const fetchNodeVersion = async () => {
+  const fetchNodeVersion = async (retryCount = 0) => {
     try {
       const [beaconResults, lightResults] = await Promise.all([
-        axios.get('/api/beacon-version'),
-        axios.get('/api/lighthouse-version'),
+        axios.get('/api/beacon-version', { timeout: 10000 }),
+        axios.get('/api/lighthouse-version', { timeout: 10000 }),
       ])
 
       setBeaconVersion(beaconResults.data.version)
       setLighthouseVersion(lightResults.data.version)
       setIsAuthenticated(true)
     } catch (e) {
-      console.error(e)
+      console.error('Failed to fetch node versions:', e)
+
+      // Retry connection up to 10 times with exponential backoff
+      if (retryCount < 10) {
+        const delay = Math.min(1000 * Math.pow(2, retryCount), 30000) // Max 30 seconds
+        console.log(
+          `Retrying connection in ${delay / 1000} seconds... (attempt ${retryCount + 1}/10)`,
+        )
+
+        setTimeout(() => {
+          fetchNodeVersion(retryCount + 1)
+        }, delay)
+        return
+      }
     } finally {
       setReady(true)
     }

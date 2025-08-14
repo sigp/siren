@@ -633,6 +633,8 @@
     "beaconNode": "Beacon Node",
     "validatorClient": "Validator Client",
     "affectedNetworks": "Siren failed to maintain connection to the designated <span>{{network}}</span>. ",
+    "retryingConnection": "Retrying connection...",
+    "automaticRecovery": "Siren will automatically reconnect when services become available.",
     "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
   },
   "sessionConfiguration": {
