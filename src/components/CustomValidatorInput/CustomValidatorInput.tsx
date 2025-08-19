@@ -184,7 +184,12 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
       ) : (
         <div className='border-style rounded p-4 space-y-3'>
           <div className='flex items-center justify-between'>
-            <Typography type='text-caption1' isBold color='text-success' darkMode='dark:text-success'>
+            <Typography
+              type='text-caption1'
+              isBold
+              color='text-success'
+              darkMode='dark:text-success'
+            >
               {t('validatorManagement.consolidateView.customTarget.validated')}
             </Typography>
             <Button type={ButtonFace.TERTIARY} onClick={clearValidator} className='text-xs'>
