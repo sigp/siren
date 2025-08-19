@@ -98,7 +98,7 @@ const Input: FC<InputProps> = ({
         return clsx(
           'font-light border-b text-body md:text-subtitle1',
           uiMode === UiMode.LIGHT
-            ? 'text-dark500 bg-dark10 border-dark500 px-2'
+            ? 'text-dark900 bg-dark10 border-dark500 px-2'
             : 'bg-transparent text-white border-white placeholder:text-dark500',
         )
     }
@@ -128,7 +128,7 @@ const Input: FC<InputProps> = ({
   }, [isAutoFocus, inputRef])
 
   return (
-    <div className='space-y-4 w-full'>
+    <div className={`space-y-4 w-full ${error ? 'mb-6' : ''}`}>
       {label && (
         <div className='flex items-center space-x-2'>
           <Typography

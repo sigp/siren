@@ -6,7 +6,6 @@ import { BeaconValidatorResult } from '../../types/validator'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
 import Input from '../Input/Input'
-import LoadingSpinner from '../LoadingSpinner/LoadingSpinner'
 import Typography from '../Typography/Typography'
 
 export interface CustomValidatorInputProps {
@@ -161,6 +160,7 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
             onChange={handleInputChange}
             error={validationError}
             className='w-full'
+            inputStyle='basic'
           />
 
           <div className='flex space-x-2'>
@@ -171,11 +171,7 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
               isDisabled={!inputValue || inputType === 'invalid'}
               className='flex-1'
             >
-              {isValidating ? (
-                <LoadingSpinner />
-              ) : (
-                t('validatorManagement.consolidateView.customTarget.validate')
-              )}
+              {t('validatorManagement.consolidateView.customTarget.validate')}
             </Button>
           </div>
 
@@ -188,7 +184,7 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
       ) : (
         <div className='border-style rounded p-4 space-y-3'>
           <div className='flex items-center justify-between'>
-            <Typography type='text-caption1' isBold color='text-success'>
+            <Typography type='text-caption1' isBold color='text-success' darkMode='dark:text-success'>
               {t('validatorManagement.consolidateView.customTarget.validated')}
             </Typography>
             <Button type={ButtonFace.TERTIARY} onClick={clearValidator} className='text-xs'>

@@ -31,6 +31,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
   const [useCustomValidator, setUseCustomValidator] = useState(false)
   const [customValidator, setCustomValidator] = useState<ValidatorInfo | null>(null)
+  const [previousListSelection, setPreviousListSelection] = useState<ValidatorInfo | null>(null)
 
   const handleCustomValidatorFound = (validator: ValidatorInfo) => {
     setCustomValidator(validator)
@@ -48,15 +49,27 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
 
   const handleToggleCustomValidator = (enabled: boolean) => {
     setUseCustomValidator(enabled)
-    if (!enabled) {
+    if (enabled) {
+      // Store the current selection from list before switching to custom
+      if (targetValidator && !customValidator) {
+        setPreviousListSelection(targetValidator)
+      }
+    } else {
+      // Switching back to list view
       setCustomValidator(null)
       handleCustomValidatorClear()
+      // Restore previous list selection if it exists
+      if (previousListSelection) {
+        onSelect(previousListSelection)
+      }
     }
   }
 
   const handleSelectFromList = (validator: ValidatorInfo) => {
     if (!useCustomValidator) {
       onSelect(validator)
+      // Update the previous selection tracker when selecting from list
+      setPreviousListSelection(validator)
     }
   }
 
