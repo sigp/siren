@@ -75,6 +75,7 @@
   "continue": "Continue",
   "next": "Next",
   "back": "Back",
+  "cancel": "Cancel",
   "comingSoon": "Coming Soon",
   "viewBeaconCha": "view beacon.cha",
   "suggestedIndex": "Suggested Index",
@@ -619,6 +620,12 @@
         "validatorNotFound": "Validator not found. Please check the index/public key and try again.",
         "notConsolidationCapable": "This validator does not have 0x02 withdrawal credentials and cannot accept consolidations.",
         "alreadyAtMaxBalance": "This validator already has the maximum effective balance (2048 ETH) and cannot accept consolidations."
+      },
+      "customValidatorWarning": {
+        "title": "Custom Validator Risk Warning",
+        "description": "You are about to consolidate funds to a custom validator that is not managed by this client.",
+        "warning": "⚠️ WARNING: Funds will be transferred to this validator. If you do not own or control this validator, these funds will be permanently lost to the current owner.",
+        "accept": "I Understand & Continue"
       }
     },
 

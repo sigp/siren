@@ -1,4 +1,4 @@
-import { FC, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ValidatorLogo from '../../../../../assets/images/validators.svg'
 import useAnimatedListControls from '../../../../../hooks/useAnimatedListControls'
@@ -9,6 +9,7 @@ import NoEligibleValidatorsFound from '../../../../EmptyState/NoEligibleValidato
 import Toggle from '../../../../Toggle/Toggle'
 import Typography from '../../../../Typography/Typography'
 import StepOptions from '../../../CreateValidatorView/StepOptions'
+import CustomValidatorWarningModal from './CustomValidatorWarningModal'
 import SelectTargetRow from './SelectTargetRow'
 
 export interface SelectTargetStepProps {
@@ -32,6 +33,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
   const [useCustomValidator, setUseCustomValidator] = useState(false)
   const [customValidator, setCustomValidator] = useState<ValidatorInfo | null>(null)
   const [previousListSelection, setPreviousListSelection] = useState<ValidatorInfo | null>(null)
+  const [showWarningModal, setShowWarningModal] = useState(false)
 
   const handleCustomValidatorFound = (validator: ValidatorInfo) => {
     setCustomValidator(validator)
@@ -57,7 +59,6 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
     } else {
       // Switching back to list view
       setCustomValidator(null)
-      handleCustomValidatorClear()
       // Restore previous list selection if it exists
       if (previousListSelection) {
         onSelect(previousListSelection)
@@ -65,13 +66,70 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
     }
   }
 
-  const handleSelectFromList = (validator: ValidatorInfo) => {
-    if (!useCustomValidator) {
-      onSelect(validator)
-      // Update the previous selection tracker when selecting from list
-      setPreviousListSelection(validator)
+  // Track if we've ever switched to custom mode to detect when switching back
+  const [hasUsedCustom, setHasUsedCustom] = useState(false)
+
+  // Handle animations when switching back from custom mode
+  useEffect(() => {
+    if (isActive && !useCustomValidator && hasUsedCustom) {
+      const timer = setTimeout(() => {
+        controls.stop()
+        const baseAnim = {
+          y: 0,
+          opacity: 1,
+          transition: { duration: 0 },
+        }
+        controls.start((i) =>
+          i < 100
+            ? {
+                ...baseAnim,
+                transition: { duration: 0.2, delay: i * 0.1 },
+              }
+            : baseAnim,
+        )
+      }, 50)
+
+      return () => clearTimeout(timer)
     }
-  }
+  }, [useCustomValidator, isActive, hasUsedCustom, controls])
+
+  // Track when custom mode is used
+  useEffect(() => {
+    if (useCustomValidator) {
+      setHasUsedCustom(true)
+    }
+  }, [useCustomValidator])
+
+  // Handle next button click - show warning for custom validator
+  const handleNext = useCallback(() => {
+    if (useCustomValidator && customValidator) {
+      setShowWarningModal(true)
+    } else {
+      onNext()
+    }
+  }, [useCustomValidator, customValidator, onNext])
+
+  // Handle modal confirmation
+  const handleWarningAccept = useCallback(() => {
+    setShowWarningModal(false)
+    onNext()
+  }, [onNext])
+
+  // Handle modal cancel
+  const handleWarningCancel = useCallback(() => {
+    setShowWarningModal(false)
+  }, [])
+
+  const handleSelectFromList = useCallback(
+    (validator: ValidatorInfo) => {
+      if (!useCustomValidator) {
+        onSelect(validator)
+        // Update the previous selection tracker when selecting from list
+        setPreviousListSelection(validator)
+      }
+    },
+    [useCustomValidator, onSelect],
+  )
 
   const renderedRows = useMemo(() => {
     return validators.length ? (
@@ -82,7 +140,7 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
           isActive={
             !useCustomValidator && !!targetValidator && targetValidator.pubKey === validator.pubKey
           }
-          key={validator.pubKey}
+          key={`${validator.pubKey}-${useCustomValidator ? 'custom' : 'list'}`}
           onSelect={handleSelectFromList}
           validator={validator}
         />
@@ -119,15 +177,17 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
             </Typography>
           </div>
         </div>
-        <div ref={parentRef} className='space-y-4 flex-1'>
+        <div key={`parent-${useCustomValidator}`} ref={parentRef} className='space-y-4 flex-1'>
           {useCustomValidator ? (
             <CustomValidatorInput
+              key='custom-input'
               onValidatorFound={handleCustomValidatorFound}
               onValidatorClear={handleCustomValidatorClear}
               className='border-style rounded p-4'
             />
           ) : (
             <div
+              key='validator-list'
               ref={targetChildRef}
               style={{ maxHeight: maxHeight }}
               className='w-full flex-1 flex flex-col border-style rounded'
@@ -141,9 +201,14 @@ const SelectTargetStep: FC<SelectTargetStepProps> = ({
               <div className='h-full overflow-auto'>{renderedRows}</div>
             </div>
           )}
-          <StepOptions onNextStep={onNext} isDisabledNext={!targetValidator} />
+          <StepOptions onNextStep={handleNext} isDisabledNext={!targetValidator} />
         </div>
       </div>
+      <CustomValidatorWarningModal
+        isOpen={showWarningModal}
+        onClose={handleWarningCancel}
+        onAccept={handleWarningAccept}
+      />
     </div>
   )
 }
