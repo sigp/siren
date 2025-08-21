@@ -17,3 +17,9 @@ declare module 'i18next'
 declare module '@testing-library/react'
 
 declare module '@leodeslf/perlin-noise'
+
+declare namespace NodeJS {
+  interface ProcessEnv {
+    COMMIT_HASH: string
+  }
+}

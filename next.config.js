@@ -1,7 +1,18 @@
 /** @type {import('next').NextConfig} */
+const { execSync } = require('child_process')
+
 const nextConfig = {
   reactStrictMode: false,
-  webpack(config, { dev }) {
+  env: {
+    COMMIT_HASH: (() => {
+      try {
+        return execSync('git rev-parse --short HEAD').toString().trim()
+      } catch (error) {
+        return 'unknown'
+      }
+    })(),
+  },
+  webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
