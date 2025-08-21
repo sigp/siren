@@ -40,7 +40,7 @@ const AppGreeting: FC<AppGreetingProps> = ({ sirenVersion, userName, ...props })
             {sirenVersion && (
               <div className='flex items-center space-x-2'>
                 <PillIcon bgColor='bg-tertiary' text={`v${sirenVersion}`} />
-                {process.env.NEXT_PUBLIC_COMMIT_HASH && (
+                {process.env.COMMIT_HASH && (
                   <PillIcon bgColor='bg-gray-500' text={process.env.COMMIT_HASH} />
                 )}
               </div>
