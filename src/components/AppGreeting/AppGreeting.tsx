@@ -18,6 +18,7 @@ const AppGreeting: FC<AppGreetingProps> = ({ sirenVersion, userName, ...props })
 
   useEffect(() => {
     setReady(true)
+    console.log('DEBUG - NEXT_PUBLIC_COMMIT_HASH:', process.env.NEXT_PUBLIC_COMMIT_HASH)
   }, [])
 
   return (
