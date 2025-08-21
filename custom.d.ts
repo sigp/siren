@@ -20,6 +20,6 @@ declare module '@leodeslf/perlin-noise'
 
 declare namespace NodeJS {
   interface ProcessEnv {
-    COMMIT_HASH: string
+    NEXT_PUBLIC_COMMIT_HASH: string
   }
 }

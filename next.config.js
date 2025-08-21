@@ -4,7 +4,7 @@ const { execSync } = require('child_process')
 const nextConfig = {
   reactStrictMode: false,
   env: {
-    COMMIT_HASH: (() => {
+    NEXT_PUBLIC_COMMIT_HASH: (() => {
       try {
         return execSync('git rev-parse --short HEAD').toString().trim()
       } catch (error) {
