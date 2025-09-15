@@ -6,7 +6,7 @@ require('dotenv').config()
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3300
 
 const backendUrl = process.env.BACKEND_URL || 'http://127.0.0.1:3001'
 
