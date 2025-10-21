@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useState } from 'react'
+import React, { ChangeEvent, FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useStorageAt } from 'wagmi'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
@@ -36,9 +36,10 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
   const [feeBuffer, setBuffer] = useState<number | undefined>(undefined)
   const [consolidationRequests, setRequests] = useState<ConsolidationTx[]>([])
   const { parentRef, targetChildRef, maxHeight } = useMaxHeight()
+  const transactionScrollRef = useRef<HTMLDivElement>(null)
 
   const setConsolidations = useCallback((request: ConsolidationTx) => {
-    setRequests((prev) => [request, ...prev])
+    setRequests((prev) => [...prev, request])
   }, [])
 
   const updateConsolidationResults = useCallback((id: string | number, status: Status) => {
@@ -83,6 +84,16 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
       clearInterval(interval)
     }
   }, [])
+
+  // Auto-scroll to show new transactions at the bottom
+  useEffect(() => {
+    if (transactionScrollRef.current && consolidationRequests.length > 0) {
+      transactionScrollRef.current.scrollTo({
+        top: transactionScrollRef.current.scrollHeight,
+        behavior: 'smooth',
+      })
+    }
+  }, [consolidationRequests.length])
 
   const renderedRequests = useMemo(
     () =>
@@ -234,7 +245,10 @@ const SubmitConsolidationStep: FC<SubmitConsolidationStepProps> = ({
         </div>
         {consolidationRequests.length ? (
           <div>
-            <div className='w-full lg:max-h-[425px] overflow-scroll space-y-2'>
+            <div
+              ref={transactionScrollRef}
+              className='w-full lg:max-h-[425px] overflow-scroll space-y-2'
+            >
               {renderedTxStatuses}
             </div>
             <Button

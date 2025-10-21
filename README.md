@@ -56,7 +56,7 @@ Navigate to the backend directory `cd backend`. Install all required Node packag
 
 After initializing the backend, return to the root directory. Install all frontend dependencies by executing `yarn`. Build the frontend using `yarn build`. Start the frontend production server with `yarn start`.
 
-This will allow you to access siren at `http://localhost:3000` by default.
+This will allow you to access siren at `http://localhost:3300` by default.
 
 ## Running Local Testnet
 
