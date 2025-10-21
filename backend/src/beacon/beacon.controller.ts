@@ -20,7 +20,7 @@ export class BeaconController {
 
   @Get('heartbeat')
   async getBeaconNodeHeartbeat() {
-    return this.beaconService.fetchBeaconNodeVersionForHeartbeat();
+    return this.beaconService.fetchBeaconNodeVersion(false);
   }
 
   @Get('genesis')

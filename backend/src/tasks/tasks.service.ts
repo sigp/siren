@@ -19,6 +19,7 @@ import { Network } from '../../../src/constants/enums';
 import {
   HOODI_PECTRA_FORK_VERSION,
   MAINNET_PECTRA_FORK_VERSION,
+  BACKEND_RETRY_DELAY,
 } from '../../../src/constants/constants';
 
 @Injectable()
@@ -68,41 +69,11 @@ export class TasksService implements OnApplicationBootstrap {
           'Attempting to connect to beacon node and validator client...',
         );
 
-        // Wrap each async operation individually to catch specific errors
-        try {
-          await this.syncBeaconSpecs();
-        } catch (e) {
-          console.error('Failed to sync beacon specs:', e?.message || e);
-          throw e;
-        }
-
-        try {
-          await this.initValidatorDataScheduler();
-        } catch (e) {
-          console.error('Failed to init validator data scheduler:', e?.message || e);
-          throw e;
-        }
-
-        try {
-          await this.initMetricDataScheduler();
-        } catch (e) {
-          console.error('Failed to init metric data scheduler:', e?.message || e);
-          throw e;
-        }
-
-        try {
-          await this.initPendingDepositsScheduler();
-        } catch (e) {
-          console.error('Failed to init pending deposits scheduler:', e?.message || e);
-          throw e;
-        }
-
-        try {
-          await this.initPendingPartialWithdrawalsScheduler();
-        } catch (e) {
-          console.error('Failed to init pending partial withdrawals scheduler:', e?.message || e);
-          throw e;
-        }
+        await this.syncBeaconSpecs();
+        await this.initValidatorDataScheduler();
+        await this.initMetricDataScheduler();
+        await this.initPendingDepositsScheduler();
+        await this.initPendingPartialWithdrawalsScheduler();
 
         try {
           await this.logsService.startSse(
@@ -110,9 +81,7 @@ export class TasksService implements OnApplicationBootstrap {
             LogType.VALIDATOR,
           );
         } catch (e) {
-          console.error('Failed to start validator SSE:', e?.message || e);
-          console.log('Validator SSE connection will be retried on next connection attempt');
-          // Don't throw - SSE connection failures should not prevent other services from starting
+          console.error('Failed to start validator SSE, will retry on next connection attempt:', e?.message || e);
         }
 
         try {
@@ -121,37 +90,21 @@ export class TasksService implements OnApplicationBootstrap {
             LogType.BEACON,
           );
         } catch (e) {
-          console.error('Failed to start beacon SSE:', e?.message || e);
-          console.log('Beacon SSE connection will be retried on next connection attempt');
-          // Don't throw - SSE connection failures should not prevent other services from starting
+          console.error('Failed to start beacon SSE, will retry on next connection attempt:', e?.message || e);
         }
 
-        try {
-          await this.initMetricsCleaningScheduler();
-        } catch (e) {
-          console.error('Failed to init metrics cleaning scheduler:', e?.message || e);
-          throw e;
-        }
-
-        try {
-          this.initLogCleaningScheduler();
-        } catch (e) {
-          console.error('Failed to init log cleaning scheduler:', e?.message || e);
-          throw e;
-        }
+        await this.initMetricsCleaningScheduler();
+        this.initLogCleaningScheduler();
 
         console.log(
           'Successfully connected to beacon node and validator client',
         );
-        break; // Exit the retry loop on success
+        break;
       } catch (e) {
-        // Extract error information safely
         const errorCode = e?.response?.data?.code || e?.code || 'UNKNOWN';
         const errorMessage = this.utilsService.getErrorMessage(errorCode);
         
-        console.error('Connection failed to beacon node or validator client:');
-        console.error(`Error Code: ${errorCode}`);
-        console.error(`Error Message: ${errorMessage}`);
+        console.error(`Connection failed [${errorCode}]: ${errorMessage}`);
         
         if (errorCode === 'ECONNREFUSED') {
           console.error('Unable to reach beacon node or validator client endpoints');
@@ -162,7 +115,6 @@ export class TasksService implements OnApplicationBootstrap {
           console.error('Detailed error:', e);
         }
 
-        // Clear any existing intervals/schedulers to prevent conflicts on retry
         try {
           this.clearAllSchedulers();
           this.logsService.closeAllSseConnections();
@@ -170,8 +122,8 @@ export class TasksService implements OnApplicationBootstrap {
           console.error('Error clearing schedulers and connections:', clearError);
         }
 
-        console.log('Retrying connection in 30 seconds...');
-        await this.wait(30000); // Wait 30 seconds before retry
+        console.log(`Retrying connection in ${BACKEND_RETRY_DELAY / 1000} seconds...`);
+        await this.wait(BACKEND_RETRY_DELAY);
       }
     }
   }

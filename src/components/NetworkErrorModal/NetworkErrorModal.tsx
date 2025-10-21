@@ -28,14 +28,20 @@ const NetworkErrorModal: FC<NetworkErrorModalProps> = ({
   }
 
   return (
-    <RodalModal isVisible={isBeaconNetworkError || isValidatorNetworkError}>
-      <div className='py-12 px-4 flex flex-col items-center justify-center'>
-        <i className='bi-exclamation-octagon text-error text-h3' />
-        <Typography type='text-subtitle1' isBold>
-          {t('networkErrorModal.title')}
-        </Typography>
-        <div className='max-w-xl mb-8' data-testid='networkText'>
-          <Typography className='text-center mb-4'>
+    <RodalModal
+      styles={{ maxWidth: '600px' }}
+      isVisible={isBeaconNetworkError || isValidatorNetworkError}
+    >
+      <div className='p-6'>
+        <div className='pb-2 border-b mb-6 flex items-center space-x-4'>
+          <i className='bi-exclamation-octagon text-error text-5xl' />
+          <Typography type='text-subtitle3' isUpperCase fontWeight='font-light'>
+            {t('networkErrorModal.title')}
+          </Typography>
+        </div>
+
+        <div className='space-y-4'>
+          <Typography type='text-caption1'>
             <Trans
               i18nKey='networkErrorModal.affectedNetworks'
               components={{ span: <span className='font-bold text-error' /> }}
@@ -43,23 +49,55 @@ const NetworkErrorModal: FC<NetworkErrorModalProps> = ({
             />
           </Typography>
 
+          <div className='mt-4 space-y-2'>
+            <div
+              className={`flex items-center p-3 rounded-lg ${isBeaconNetworkError ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}
+            >
+              <i
+                className={`${isBeaconNetworkError ? 'bi-x-circle text-red-600 dark:text-red-400' : 'bi-check-circle text-green-600 dark:text-green-400'} text-lg mr-3`}
+              />
+              <div className='flex-1'>
+                <Typography className='font-semibold text-sm'>Beacon Node</Typography>
+                <Typography className='text-xs text-gray-600 dark:text-gray-400'>
+                  {isBeaconNetworkError ? 'Connection lost - retrying...' : 'Connected'}
+                </Typography>
+              </div>
+              {isBeaconNetworkError && (
+                <i className='bi-arrow-clockwise animate-spin text-red-600 dark:text-red-400' />
+              )}
+            </div>
+
+            <div
+              className={`flex items-center p-3 rounded-lg ${isValidatorNetworkError ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800'}`}
+            >
+              <i
+                className={`${isValidatorNetworkError ? 'bi-x-circle text-red-600 dark:text-red-400' : 'bi-check-circle text-green-600 dark:text-green-400'} text-lg mr-3`}
+              />
+              <div className='flex-1'>
+                <Typography className='font-semibold text-sm'>Validator Client</Typography>
+                <Typography className='text-xs text-gray-600 dark:text-gray-400'>
+                  {isValidatorNetworkError ? 'Connection lost - retrying...' : 'Connected'}
+                </Typography>
+              </div>
+              {isValidatorNetworkError && (
+                <i className='bi-arrow-clockwise animate-spin text-red-600 dark:text-red-400' />
+              )}
+            </div>
+          </div>
+
           <div className='mt-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg'>
-            <div className='flex items-center justify-center mb-2'>
+            <div className='flex items-center mb-2'>
               <i className='bi-exclamation-triangle text-yellow-600 dark:text-yellow-400 mr-2' />
-              <Typography className='text-center text-sm font-semibold text-yellow-800 dark:text-yellow-200'>
+              <Typography className='text-sm font-semibold text-yellow-800 dark:text-yellow-200'>
                 {t('networkErrorModal.waitingForReconnection')}
               </Typography>
             </div>
-            <Typography className='text-center text-sm text-yellow-700 dark:text-yellow-300'>
-              <i className='bi-arrow-clockwise animate-spin mr-2' />
-              {t('networkErrorModal.retryingConnection')}
-            </Typography>
-            <Typography className='text-center text-xs text-yellow-600 dark:text-yellow-400 mt-2'>
+            <Typography className='text-xs text-yellow-700 dark:text-yellow-300'>
               {t('networkErrorModal.automaticRecovery')}
             </Typography>
           </div>
 
-          <Typography className='text-center mt-6 text-sm text-gray-600 dark:text-gray-400'>
+          <Typography className='text-center mt-4 text-sm text-gray-600 dark:text-gray-400'>
             <Trans i18nKey='networkErrorModal.reconfigureOrContact'>
               <a
                 className='font-bold underline text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200'

@@ -67,26 +67,41 @@ describe('NetworkErrorModal component', () => {
     mockedUseUiMode.mockReturnValue({ mode: UiMode.DARK, toggleUiMode: jest.fn() })
     render(<NetworkErrorModal isValidatorNetworkError isBeaconNetworkError />)
 
-    expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Beacon Node and Validator Client.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
-    )
+    expect(screen.getByText(/Beacon Node and Validator Client/i)).toBeInTheDocument()
+    expect(screen.getByText('Beacon Node')).toBeInTheDocument()
+    expect(screen.getByText('Validator Client')).toBeInTheDocument()
+    expect(screen.getAllByText('Connection lost - retrying...').length).toBe(2)
+    expect(screen.getByText(/Waiting for reconnection to be established/i)).toBeInTheDocument()
   })
 
   it('should render Beacon error', () => {
     mockedUseUiMode.mockReturnValue({ mode: UiMode.DARK, toggleUiMode: jest.fn() })
     render(<NetworkErrorModal isBeaconNetworkError isValidatorNetworkError={false} />)
 
-    expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Beacon Node.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
-    )
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.textContent === 'Beacon Node' && element?.className.includes('font-semibold')
+        )
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Connection lost - retrying...')).toBeInTheDocument()
+    expect(screen.getByText('Connected')).toBeInTheDocument()
   })
 
   it('should render Validator error', () => {
     mockedUseUiMode.mockReturnValue({ mode: UiMode.DARK, toggleUiMode: jest.fn() })
     render(<NetworkErrorModal isValidatorNetworkError isBeaconNetworkError={false} />)
 
-    expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Validator Client.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
-    )
+    expect(
+      screen.getByText((content, element) => {
+        return (
+          element?.textContent === 'Validator Client' &&
+          element?.className.includes('font-semibold')
+        )
+      }),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Connection lost - retrying...')).toBeInTheDocument()
+    expect(screen.getByText('Connected')).toBeInTheDocument()
   })
 })

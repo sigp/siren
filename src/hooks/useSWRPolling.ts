@@ -11,12 +11,12 @@ const useSWRPolling = <T = any>(
     networkError?: boolean
   },
   callBack?: (url: string | null) => void,
-): { data: T } => {
+): { data: T; error: any; lastSuccessTime: number | null } => {
   const { refreshInterval = 12000, fallbackData, errorRetryCount = 2, networkError } = config || {}
   const [errorCount, setErrors] = useState(0)
+  const [lastSuccessTime, setLastSuccessTime] = useState<number | null>(null)
 
   const incrementCount = () => {
-    // Handle infinite retries for network monitoring
     if (errorRetryCount === Infinity) {
       callBack?.(api)
       return
@@ -30,29 +30,34 @@ const useSWRPolling = <T = any>(
     callBack?.(api)
   }
 
-  // Reset error count on successful data fetch
   const onSuccess = (data: T) => {
+    setLastSuccessTime(Date.now())
     if (errorCount > 0) {
       setErrors(0)
     }
     return data
   }
 
-  const { data } = useSWR<T>(
-    [errorCount <= errorRetryCount && !networkError ? api : null],
-    swrGetFetcher,
-    {
-      refreshInterval,
-      fallbackData,
-      errorRetryCount: errorRetryCount === Infinity ? 0 : errorRetryCount, // Let SWR handle finite retries
-      onError: incrementCount,
-      onSuccess,
-      shouldRetryOnError: true,
-      errorRetryInterval: refreshInterval, // Retry at the same interval as refresh
-    },
-  )
+  // For infinite retry (heartbeat monitoring), always poll
+  // For limited retry, stop after max errors or when networkError flag is set
+  const shouldFetch =
+    errorRetryCount === Infinity ? api : errorCount <= errorRetryCount && !networkError ? api : null
 
-  return { data: data as T }
+  const { data, error } = useSWR<T>(shouldFetch, swrGetFetcher, {
+    refreshInterval,
+    fallbackData,
+    onError: incrementCount,
+    onSuccess,
+    shouldRetryOnError: errorRetryCount === Infinity,
+    errorRetryCount: errorRetryCount === Infinity ? Infinity : errorRetryCount,
+    errorRetryInterval: refreshInterval,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+    dedupingInterval: 0,
+    keepPreviousData: false,
+  })
+
+  return { data: data as T, error, lastSuccessTime }
 }
 
 export default useSWRPolling

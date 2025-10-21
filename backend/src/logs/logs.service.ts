@@ -6,6 +6,7 @@ import { LogLevels, LogType, SSELog, LighthouseLog } from '../../../src/types';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './entities/log.entity';
 import { Op } from 'sequelize';
+import { SSE_CONNECTION_TIMEOUT, SSE_MAX_ERRORS, SSE_RECONNECT_DELAY } from '../../../src/constants/constants';
 import { ClientManager } from '../utils/client-manager';
 import { LOG_FETCH_LIMIT } from '../../../src/constants/constants';
 
@@ -172,7 +173,7 @@ export class LogsService {
             this.eventSources.delete(url);
             reject(new Error(`SSE connection timeout for ${url}`));
           }
-        }, 10000); // 10 second timeout
+        }, SSE_CONNECTION_TIMEOUT);
 
       } catch (setupError) {
         console.error(`Error setting up SSE for ${type}:`, setupError);

@@ -22,6 +22,7 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
   const { url, onError, onSuccess, isReady, isStateStore } = options
   const [dataState, setDataState] = useState<T>([] as unknown as T)
   const dataRef = useRef<T>([] as unknown as T)
+  const [reconnectTrigger, setReconnectTrigger] = useState(0)
 
   const updateData = useCallback(
     (event: MessageEvent) => {
@@ -34,7 +35,6 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
         try {
           rawData = JSON.parse(event.data)
         } catch {
-          console.log('error parsing data....')
           rawData = {}
         }
       }
@@ -68,6 +68,15 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
   const eventSourceRef = useRef<EventSource | null>(null)
   const controllerRef = useRef<AbortController | null>(null)
   const errorCountRef = useRef<number>(0)
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isMountedRef = useRef<boolean>(true)
+
+  useEffect(() => {
+    isMountedRef.current = true
+    return () => {
+      isMountedRef.current = false
+    }
+  }, [])
 
   useEffect(() => {
     if (!url || !isReady) return
@@ -81,16 +90,31 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
     eventSource.onmessage = (event) => updateData(event)
 
     eventSource.onerror = () => {
-      if (errorCountRef.current++ >= 2) {
-        controller.abort()
+      errorCountRef.current++
+
+      if (errorCountRef.current >= 3) {
         eventSource.close()
         eventSourceRef.current = null
         onError?.()
+
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current)
+        }
+        reconnectTimeoutRef.current = setTimeout(() => {
+          if (isMountedRef.current) {
+            errorCountRef.current = 0
+            setReconnectTrigger((prev) => prev + 1)
+          }
+        }, 10000)
       }
     }
 
     eventSource.onopen = () => {
       errorCountRef.current = 0
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current)
+        reconnectTimeoutRef.current = null
+      }
       onSuccess?.()
     }
 
@@ -98,8 +122,12 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
       eventSource.close()
       eventSourceRef.current = null
       controllerRef.current = null
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current)
+        reconnectTimeoutRef.current = null
+      }
     }
-  }, [url, updateData, onError, onSuccess, isReady])
+  }, [url, updateData, onError, onSuccess, isReady, reconnectTrigger])
 
   return {
     data: isStateStore ? dataState : dataRef.current,

@@ -60,13 +60,17 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
     return validatorCacheData && activeValidators.length && Object.values(validatorCacheData).length
       ? activeValidators
           .map(({ index, name }) => {
-            const data = validatorCacheData[index as any] || []
+            const data = validatorCacheData[index as any]
+            if (!data || !Array.isArray(data)) {
+              return null
+            }
             return {
               index,
               name,
               data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
             }
           })
+          .filter((item): item is NonNullable<typeof item> => item !== null)
           .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
           .map((data, index) => ({
             ...data,
@@ -77,7 +81,7 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
 
   const timestamps = useMemo(() => {
     const data = validatorCacheData && Object.values(validatorCacheData)[0]
-    return data && genesisTime
+    return data && Array.isArray(data) && genesisTime
       ? data.map(({ epoch }) => {
           const slot = epoch * slotsInEpoc
 
