@@ -18,6 +18,7 @@ jest.mock('react-i18next', () => ({
         'networkErrorModal.retryingConnection': 'Retrying connection...',
         'networkErrorModal.automaticRecovery':
           'Siren will automatically reconnect when services become available.',
+        'networkErrorModal.waitingForReconnection': 'Waiting for reconnection to be established...',
       }
       return translations[key] || key
     },
@@ -67,7 +68,7 @@ describe('NetworkErrorModal component', () => {
     render(<NetworkErrorModal isValidatorNetworkError isBeaconNetworkError />)
 
     expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Beacon Node and Validator Client.Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
+      'Siren failed to maintain connection to the designated Beacon Node and Validator Client.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
     )
   })
 
@@ -76,7 +77,7 @@ describe('NetworkErrorModal component', () => {
     render(<NetworkErrorModal isBeaconNetworkError isValidatorNetworkError={false} />)
 
     expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Beacon Node.Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
+      'Siren failed to maintain connection to the designated Beacon Node.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
     )
   })
 
@@ -85,7 +86,7 @@ describe('NetworkErrorModal component', () => {
     render(<NetworkErrorModal isValidatorNetworkError isBeaconNetworkError={false} />)
 
     expect(screen.getByTestId('networkText')).toHaveTextContent(
-      'Siren failed to maintain connection to the designated Validator Client.Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
+      'Siren failed to maintain connection to the designated Validator Client.Waiting for reconnection to be established...Retrying connection...Siren will automatically reconnect when services become available.Please review and update configuration settings. If this issue persists please contact our team in discord.',
     )
   })
 })

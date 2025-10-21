@@ -29,6 +29,11 @@ describe('useImportValidator hook', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('should successfully import and call onSuccess', async () => {

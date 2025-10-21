@@ -7,8 +7,13 @@ const useNetworkMonitor = () => {
   const [isBeaconError, setBeaconNetworkError] = useRecoilState(beaconNetworkError)
   const [isValidatorError, setValidatorNetworkError] = useRecoilState(validatorNetworkError)
 
-  const notifyBnDisconnect = () => setBeaconNetworkError(true)
-  const notifyValDisconnect = () => setValidatorNetworkError(true)
+  const notifyBnDisconnect = () => {
+    setBeaconNetworkError(true)
+  }
+
+  const notifyValDisconnect = () => {
+    setValidatorNetworkError(true)
+  }
 
   // Monitor heartbeat endpoints with automatic recovery detection
   const { data: beaconData } = useSWRPolling(
@@ -29,20 +34,22 @@ const useNetworkMonitor = () => {
     notifyValDisconnect,
   )
 
-  // Check if we got successful responses and clear error states
+  // Check if we got successful responses and clear error states immediately
   useEffect(() => {
+    console.log('Beacon heartbeat data:', beaconData?.data, 'Error state:', isBeaconError)
     if (beaconData?.data === 'success' && isBeaconError) {
-      console.log('Beacon node connection restored')
+      console.log('Beacon node connection restored - clearing error state')
       setBeaconNetworkError(false)
     }
-  }, [beaconData, isBeaconError])
+  }, [beaconData, isBeaconError, setBeaconNetworkError])
 
   useEffect(() => {
+    console.log('Validator heartbeat data:', validatorData?.data, 'Error state:', isValidatorError)
     if (validatorData?.data === 'success' && isValidatorError) {
-      console.log('Validator client connection restored')
+      console.log('Validator client connection restored - clearing error state')
       setValidatorNetworkError(false)
     }
-  }, [validatorData, isValidatorError])
+  }, [validatorData, isValidatorError, setValidatorNetworkError])
 
   return {
     isBeaconError,

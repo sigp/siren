@@ -42,6 +42,18 @@ export class BeaconService {
     }
   }
 
+  async fetchBeaconNodeVersionForHeartbeat(): Promise<string> {
+    try {
+      const { data } = await this.utilsService.sendHttpRequest({
+        url: `${this.beaconUrl}/eth/v1/node/version`,
+      });
+      return data.data;
+    } catch (e) {
+      console.error(e);
+      throwServerError('Unable to fetch beacon node version');
+    }
+  }
+
   async fetchGenesisData(): Promise<number> {
     try {
       return await this.utilsService.fetchFromCache('genesis', 0, async () => {

@@ -13,12 +13,13 @@ export const defaultLogData = {
 export type sseOptions = {
   url: string
   onError?: () => void
+  onSuccess?: () => void
   isReady: boolean
   isStateStore?: boolean
 }
 
 const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
-  const { url, onError, isReady, isStateStore } = options
+  const { url, onError, onSuccess, isReady, isStateStore } = options
   const [dataState, setDataState] = useState<T>([] as unknown as T)
   const dataRef = useRef<T>([] as unknown as T)
 
@@ -90,6 +91,7 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
 
     eventSource.onopen = () => {
       errorCountRef.current = 0
+      onSuccess?.()
     }
 
     return () => {
@@ -97,7 +99,7 @@ const useSSEData = <T extends unknown[]>(options: sseOptions): sseData<T> => {
       eventSourceRef.current = null
       controllerRef.current = null
     }
-  }, [url, updateData, onError, isReady])
+  }, [url, updateData, onError, onSuccess, isReady])
 
   return {
     data: isStateStore ? dataState : dataRef.current,
