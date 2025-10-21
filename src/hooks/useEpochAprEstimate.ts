@@ -14,9 +14,10 @@ const useEpochAprEstimate = (validatorCacheData: ValidatorCache, indices?: strin
   const filteredValidatorCache = useFilteredValidatorCacheData(validatorCacheData, indices)
 
   const formattedCache = useMemo(() => {
-    return Object.values(filteredValidatorCache).map((cache) =>
-      cache.map(({ total_balance }) => total_balance),
-    )
+    if (!filteredValidatorCache) return []
+    return Object.values(filteredValidatorCache)
+      .filter((cache) => Array.isArray(cache))
+      .map((cache) => cache.map(({ total_balance }) => total_balance))
   }, [filteredValidatorCache])
 
   const isValidEpochCount = formattedCache.every((subArr) => subArr.length > 1)
@@ -29,9 +30,13 @@ const useEpochAprEstimate = (validatorCacheData: ValidatorCache, indices?: strin
   const epochsInYear = (60 * 60 * 24 * 365) / (slotsInEpoch * interval)
 
   const mappedTotalApr = useMemo(() => {
-    return formattedCache?.map((cache) => {
+    if (!formattedCache || formattedCache.length === 0) return []
+    return formattedCache.map((cache) => {
+      if (!cache || cache.length === 0) return 0
       const formattedValues = cache.map((value) => Number(formatUnits(value, 'gwei')))
       const formattedWithdrawalCache = formatForWithdrawal(formattedValues)
+
+      if (formattedWithdrawalCache.length === 0) return 0
 
       const initialBalance = formattedWithdrawalCache[0]
       const currentBalance = formattedWithdrawalCache[formattedWithdrawalCache.length - 1]

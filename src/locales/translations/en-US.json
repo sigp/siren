@@ -650,11 +650,14 @@
     "annualApr": "Combined total Annual Percentage Rate estimate."
   },
   "networkErrorModal": {
-    "title": "Network Error",
+    "title": "Connection Lost",
     "beaconAndValidator": "Beacon Node and Validator Client",
     "beaconNode": "Beacon Node",
     "validatorClient": "Validator Client",
-    "affectedNetworks": "Siren failed to maintain connection to the designated <span>{{network}}</span>. ",
+    "affectedNetworks": "Siren has lost connection to the <span>{{network}}</span>.",
+    "retryingConnection": "Attempting to reconnect every 30 seconds...",
+    "automaticRecovery": "Connection will be restored automatically when the service becomes available.",
+    "waitingForReconnection": "Waiting for reconnection to be established...",
     "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
   },
   "sessionConfiguration": {

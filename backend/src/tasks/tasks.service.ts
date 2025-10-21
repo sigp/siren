@@ -19,17 +19,8 @@ import { Network } from '../../../src/constants/enums';
 import {
   HOODI_PECTRA_FORK_VERSION,
   MAINNET_PECTRA_FORK_VERSION,
+  BACKEND_RETRY_DELAY,
 } from '../../../src/constants/constants';
-
-class CustomError extends Error {
-  public code: any;
-
-  constructor(message, code) {
-    super(message);
-    this.code = code;
-    this.name = this.constructor.name;
-  }
-}
 
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
@@ -52,49 +43,109 @@ export class TasksService implements OnApplicationBootstrap {
   private isDebug = process.env.DEBUG === 'true';
 
   async onApplicationBootstrap(): Promise<void> {
-    try {
-      console.log('Application Bootstrapping....');
-      if (!this.sessionPassword) {
-        throw new CustomError(
-          'No session password found...',
-          'NO_SESSION_PASSWORD',
-        );
-      }
+    console.log('Application Bootstrapping....');
 
-      if (!this.apiToken) {
-        throw new CustomError('No api token found...', 'NO_API_TOKEN');
-      }
-
-      await this.syncBeaconSpecs();
-      await this.initValidatorDataScheduler();
-      await this.initMetricDataScheduler();
-      await this.initPendingDepositsScheduler();
-      await this.initPendingPartialWithdrawalsScheduler();
-
-      await this.logsService.startSse(
-        `${this.validatorUrl}/lighthouse/logs`,
-        LogType.VALIDATOR,
-      );
-      await this.logsService.startSse(
-        `${this.beaconUrl}/lighthouse/logs`,
-        LogType.BEACON,
-      );
-
-      await this.initMetricsCleaningScheduler();
-      this.initLogCleaningScheduler();
-    } catch (e) {
-      console.error('Unable to bootstrap application repositories...');
-      console.error(
-        this.utilsService.getErrorMessage(e?.response?.data.code || e.code),
-      );
-
-      if (this.isDebug) {
-        console.log(e);
-      }
-
-      process.kill(process.pid, 'SIGINT');
-      process.exit(0);
+    // Check required configuration first (these should fail immediately)
+    if (!this.sessionPassword) {
+      console.error('No session password found...');
+      console.error(this.utilsService.getErrorMessage('NO_SESSION_PASSWORD'));
+      process.exit(1);
     }
+
+    if (!this.apiToken) {
+      console.error('No api token found...');
+      console.error(this.utilsService.getErrorMessage('NO_API_TOKEN'));
+      process.exit(1);
+    }
+
+    // Start the connection retry loop
+    this.initConnectionRetryLoop();
+  }
+
+  private async initConnectionRetryLoop(): Promise<void> {
+    while (true) {
+      try {
+        console.log(
+          'Attempting to connect to beacon node and validator client...',
+        );
+
+        await this.syncBeaconSpecs();
+        await this.initValidatorDataScheduler();
+        await this.initMetricDataScheduler();
+        await this.initPendingDepositsScheduler();
+        await this.initPendingPartialWithdrawalsScheduler();
+
+        try {
+          await this.logsService.startSse(
+            `${this.validatorUrl}/lighthouse/logs`,
+            LogType.VALIDATOR,
+          );
+        } catch (e) {
+          console.error('Failed to start validator SSE, will retry on next connection attempt:', e?.message || e);
+        }
+
+        try {
+          await this.logsService.startSse(
+            `${this.beaconUrl}/lighthouse/logs`,
+            LogType.BEACON,
+          );
+        } catch (e) {
+          console.error('Failed to start beacon SSE, will retry on next connection attempt:', e?.message || e);
+        }
+
+        await this.initMetricsCleaningScheduler();
+        this.initLogCleaningScheduler();
+
+        console.log(
+          'Successfully connected to beacon node and validator client',
+        );
+        break;
+      } catch (e) {
+        const errorCode = e?.response?.data?.code || e?.code || 'UNKNOWN';
+        const errorMessage = this.utilsService.getErrorMessage(errorCode);
+        
+        console.error(`Connection failed [${errorCode}]: ${errorMessage}`);
+        
+        if (errorCode === 'ECONNREFUSED') {
+          console.error('Unable to reach beacon node or validator client endpoints');
+          console.error('Please ensure the services are running and accessible');
+        }
+
+        if (this.isDebug) {
+          console.error('Detailed error:', e);
+        }
+
+        try {
+          this.clearAllSchedulers();
+          this.logsService.closeAllSseConnections();
+        } catch (clearError) {
+          console.error('Error clearing schedulers and connections:', clearError);
+        }
+
+        console.log(`Retrying connection in ${BACKEND_RETRY_DELAY / 1000} seconds...`);
+        await this.wait(BACKEND_RETRY_DELAY);
+      }
+    }
+  }
+
+  private clearAllSchedulers(): void {
+    // Clear all existing intervals to prevent conflicts during retry
+    const intervals = ['metricTask', 'pendingDepositsTask', 'pendingPartialWithdrawalTask', 'validatorTask', 'clean-metrics', 'clean-logs'];
+    
+    intervals.forEach(intervalName => {
+      try {
+        if (this.schedulerRegistry.doesExist('interval', intervalName)) {
+          this.schedulerRegistry.deleteInterval(intervalName);
+          console.log(`Cleared existing interval: ${intervalName}`);
+        }
+      } catch (e) {
+        // Ignore errors when clearing non-existent intervals
+      }
+    });
+  }
+
+  private wait(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 
   private initLogCleaningScheduler() {

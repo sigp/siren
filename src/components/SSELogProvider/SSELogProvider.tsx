@@ -59,10 +59,26 @@ const SSELogProvider: FC<SSELogWrapperProps> = React.memo(function ({ children, 
     setValidatorNetworkError(true)
   }, [clearRefreshInterval, setValidatorNetworkError])
 
-  const beaconLogs = useSSEData({ url: '/beacon-logs', onError: handleBeaconLogError, isReady })
+  const handleBeaconLogSuccess = useCallback(() => {
+    // SSE connection restored - let the heartbeat monitor handle clearing the error state
+    // This prevents race conditions between SSE and heartbeat monitoring
+  }, [])
+
+  const handleValidatorLogSuccess = useCallback(() => {
+    // SSE connection restored - let the heartbeat monitor handle clearing the error state
+    // This prevents race conditions between SSE and heartbeat monitoring
+  }, [])
+
+  const beaconLogs = useSSEData({
+    url: '/beacon-logs',
+    onError: handleBeaconLogError,
+    onSuccess: handleBeaconLogSuccess,
+    isReady,
+  })
   const validatorLogs = useSSEData({
     url: '/validator-logs',
     onError: handleValidatorLogError,
+    onSuccess: handleValidatorLogSuccess,
     isReady,
   })
 

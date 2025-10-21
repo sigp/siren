@@ -213,11 +213,11 @@ const Main: FC<MainProps> = (props) => {
     networkError,
   })
 
-  const { beaconSync } = syncData
-  const { isSyncing } = beaconSync
-  const { connected } = peerData
-  const { natOpen } = nodeHealth
-  const warningCount = metrics.warningCount || 0
+  const { beaconSync } = syncData || {}
+  const { isSyncing } = beaconSync || {}
+  const { connected } = peerData || {}
+  const { natOpen } = nodeHealth || {}
+  const warningCount = metrics?.warningCount || 0
 
   // Calculate optimal height ratio based on validator count
   // Metrics must get minimum 35%, so validators can get maximum 65%

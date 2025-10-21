@@ -20,6 +20,11 @@ const mockUseChainSafeKeygen = useChainSafeKeygen as jest.Mock
 describe('useChainSafeKeyStore', () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    jest.spyOn(console, 'error').mockImplementation(() => {})
+  })
+
+  afterEach(() => {
+    jest.restoreAllMocks()
   })
 
   it('generates a keystore and returns KeyStoreData', async () => {
