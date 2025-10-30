@@ -8,50 +8,56 @@ import ViewController from '../../../src/components/Settings/views/ViewControlle
 import Typography from '../../../src/components/Typography/Typography'
 import { SettingsView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
-import useSWRPolling from '../../../src/hooks/useSWRPolling'
-import { ActivityResponse, ExcludedStatus } from '../../../src/types'
-import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
-import { Diagnostics } from '../../../src/types/diagnostic'
+import {
+  useActivities,
+  useBeaconSpec,
+  useBeaconVersion,
+  useNodeHealth,
+  useSyncData,
+  useValidatorExclusionList,
+  useValidatorVersion,
+} from '../../../src/hooks/useSharedData'
 
 export interface MainProps {
-  initNodeHealth: Diagnostics
-  initSyncData: SyncData
-  beaconSpec: BeaconNodeSpecResults
-  bnVersion: string
-  lighthouseVersion: string
-  initActivityData: ActivityResponse
-  initExclusionList: ExcludedStatus[]
+  // All data is now fetched client-side for instant navigation
 }
 
-const Main: FC<MainProps> = (props) => {
+const Main: FC<MainProps> = () => {
   const { t } = useTranslation()
-  const {
-    initNodeHealth,
-    initSyncData,
-    beaconSpec,
-    lighthouseVersion,
-    bnVersion,
-    initActivityData,
-    initExclusionList,
-  } = props
-
-  const { SECONDS_PER_SLOT } = beaconSpec
 
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
   const [view, setView] = useState(SettingsView.GENERAL)
 
   const networkError = isValidatorError || isBeaconError
-  const slotInterval = SECONDS_PER_SLOT * 1000
-  const { data: nodeHealth } = useSWRPolling<Diagnostics>('/api/node-health', {
-    refreshInterval: 6000,
-    fallbackData: initNodeHealth,
-    networkError,
-  })
-  const { data: syncData } = useSWRPolling<SyncData>('/api/node-sync', {
-    refreshInterval: slotInterval,
-    fallbackData: initSyncData,
-    networkError,
-  })
+
+  // Fetch all data client-side from global cache - instant navigation!
+  // Static data (versions, spec) cached infinitely - never refetched
+  const { data: beaconSpec } = useBeaconSpec()
+  const { data: beaconVersionData } = useBeaconVersion()
+  const { data: validatorVersionData } = useValidatorVersion()
+  const { data: nodeHealth } = useNodeHealth(undefined, networkError)
+  const { data: initActivityData } = useActivities()
+  const { data: initExclusionList } = useValidatorExclusionList()
+
+  // Wait for beaconSpec to load before calculating slot interval
+  const slotInterval = beaconSpec ? beaconSpec.SECONDS_PER_SLOT * 1000 : 12000
+  const { data: syncData } = useSyncData(slotInterval, undefined, networkError)
+
+  // Show loading state while critical data loads
+  // On subsequent navigations, data will be instantly available from SWR cache
+  if (
+    !beaconSpec ||
+    !nodeHealth ||
+    !syncData ||
+    !initActivityData ||
+    !beaconVersionData ||
+    !validatorVersionData
+  ) {
+    return <div className='flex items-center justify-center h-screen'>Loading...</div>
+  }
+
+  const bnVersion = beaconVersionData.version
+  const lighthouseVersion = validatorVersionData.version
 
   const viewGeneralSettings = () => setView(SettingsView.GENERAL)
   const viewAboutSettings = () => setView(SettingsView.ABOUT)
@@ -93,7 +99,7 @@ const Main: FC<MainProps> = (props) => {
           </div>
         </div>
         <ViewController
-          initExclusions={initExclusionList}
+          initExclusions={initExclusionList || []}
           bnVersion={bnVersion}
           vcVersion={lighthouseVersion}
           view={view}

@@ -19,6 +19,7 @@ import ValidatorSummary from '../../../src/components/ValidatorSummary/Validator
 import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
 import { ValidatorModalView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
+import { useNodeHealth, useSyncData } from '../../../src/hooks/useSharedData'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import useValidatorExclusionList from '../../../src/hooks/useValidatorExclusionList'
 import {
@@ -182,16 +183,12 @@ const Main: FC<MainProps> = (props) => {
     fallbackData: initValStates,
     networkError,
   })
-  const { data: nodeHealth } = useSWRPolling<Diagnostics>('/api/node-health', {
-    refreshInterval: 6000,
-    fallbackData: initNodeHealth,
-    networkError,
-  })
-  const { data: syncData } = useSWRPolling<SyncData>('/api/node-sync', {
-    refreshInterval: slotInterval,
-    fallbackData: initSyncData,
-    networkError,
-  })
+
+  // Use shared hooks for common data - this enables instant navigation
+  // by reading from SWR's global cache across all pages
+  const { data: nodeHealth } = useNodeHealth(initNodeHealth, networkError)
+  const { data: syncData } = useSyncData(slotInterval, initSyncData, networkError)
+
   const { data: validatorMetrics } = useSWRPolling<ValidatorMetricResult>(
     '/api/validator-metrics',
     { refreshInterval: epochInterval / 2, fallbackData: initValMetrics, networkError },

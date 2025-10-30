@@ -53,8 +53,8 @@ const useSWRPolling = <T = any>(
     errorRetryInterval: refreshInterval,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
-    dedupingInterval: 0,
-    keepPreviousData: false,
+    // Removed dedupingInterval: 0 and keepPreviousData: false
+    // to allow global SWRConfig settings to enable caching
   })
 
   return { data: data as T, error, lastSuccessTime }

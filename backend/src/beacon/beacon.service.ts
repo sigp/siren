@@ -28,7 +28,7 @@ export class BeaconService {
       if (useCache) {
         return await this.utilsService.fetchFromCache(
           'bnVersion',
-          60000,
+          0, // Changed from 60000 to 0 (infinite) - version doesn't change during session
           async () => {
             return await this._fetchBeaconNodeVersion();
           },

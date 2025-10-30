@@ -1,39 +1,11 @@
+'use client'
+
 import '../../../src/global.css'
-import { redirect } from 'next/navigation'
-import getSessionCookie from '../../../utilities/getSessionCookie'
-import { fetchActivities } from '../../api/activities'
-import { fetchBeaconSpec, fetchNodeHealth, fetchSyncData } from '../../api/beacon'
-import {
-  fetchBeaconNodeVersion,
-  fetchValidatorStatusExclusionList,
-  fetchValidatorVersion,
-} from '../../api/config'
 import Wrapper from './Wrapper'
 
-export default async function Page() {
-  try {
-    const token = getSessionCookie()
-
-    const beaconSpec = await fetchBeaconSpec(token)
-    const syncData = await fetchSyncData(token)
-    const nodeHealth = await fetchNodeHealth(token)
-    const bnVersion = await fetchBeaconNodeVersion(token)
-    const lighthouseVersion = await fetchValidatorVersion(token)
-    const activities = await fetchActivities({ token })
-    const exclusions = await fetchValidatorStatusExclusionList(token)
-
-    return (
-      <Wrapper
-        initExclusionList={exclusions}
-        initActivityData={activities}
-        initSyncData={syncData}
-        beaconSpec={beaconSpec}
-        initNodeHealth={nodeHealth}
-        lighthouseVersion={lighthouseVersion.version}
-        bnVersion={bnVersion.version}
-      />
-    )
-  } catch (e) {
-    redirect('/error')
-  }
+export default function Page() {
+  // No server-side fetching or session check needed!
+  // Session was already validated at dashboard level
+  // All data is in SWR cache from dashboard load
+  return <Wrapper />
 }

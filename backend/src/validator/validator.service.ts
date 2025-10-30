@@ -54,11 +54,18 @@ export class ValidatorService {
 
   async fetchValidatorVersion(): Promise<{ version: string }> {
     try {
-      const { data } = await this.utilsService.sendHttpRequest({
-        url: `${this.validatorUrl}/lighthouse/version`,
-        config: this.config,
-      });
-      return data.data;
+      // Cache validator version indefinitely - it doesn't change during session
+      return await this.utilsService.fetchFromCache(
+        'validatorVersion',
+        0, // TTL=0 (infinite) - version is static for the session
+        async () => {
+          const { data } = await this.utilsService.sendHttpRequest({
+            url: `${this.validatorUrl}/lighthouse/version`,
+            config: this.config,
+          });
+          return data.data;
+        },
+      );
     } catch (e) {
       throwServerError('Unable to fetch validator version');
     }

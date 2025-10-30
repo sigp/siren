@@ -20,6 +20,7 @@ import { ALERT_ID, CoinbaseExchangeRateUrl } from '../../src/constants/constants
 import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
 import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
+import { useNodeHealth, useSyncData } from '../../src/hooks/useSharedData'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
 import useValidatorExclusionList from '../../src/hooks/useValidatorExclusionList'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
@@ -185,16 +186,12 @@ const Main: FC<MainProps> = (props) => {
     fallbackData: initValStates,
     networkError,
   })
-  const { data: nodeHealth } = useSWRPolling<Diagnostics>('/api/node-health', {
-    refreshInterval: 6000,
-    fallbackData: initNodeHealth,
-    networkError,
-  })
-  const { data: syncData } = useSWRPolling<SyncData>('/api/node-sync', {
-    refreshInterval: slotInterval,
-    fallbackData: initSyncData,
-    networkError,
-  })
+
+  // Use shared hooks for common data - this enables instant navigation
+  // by reading from SWR's global cache across all pages
+  const { data: nodeHealth } = useNodeHealth(initNodeHealth, networkError)
+  const { data: syncData } = useSyncData(slotInterval, initSyncData, networkError)
+
   const { data: valInclusion } = useSWRPolling<ValidatorInclusionData>('/api/validator-inclusion', {
     refreshInterval: slotInterval,
     fallbackData: initInclusionRate,

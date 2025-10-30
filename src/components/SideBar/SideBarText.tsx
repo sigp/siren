@@ -33,6 +33,7 @@ const SideBarText: FC<SideBarTextProps> = ({ text, isActive, href, isDisabled, c
         className,
       ])}
       href={href}
+      prefetch={true}
     >
       {renderText()}
     </Link>

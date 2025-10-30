@@ -13,6 +13,21 @@ const nextConfig = {
       topLevelAwait: true,
     }
 
+    // Configure output environment to support async/await modules
+    config.output.environment = {
+      ...config.output.environment,
+      asyncFunction: true,
+    }
+
+    // Suppress the @chainsafe/bls async/await warning
+    config.ignoreWarnings = [
+      ...(config.ignoreWarnings || []),
+      {
+        module: /@chainsafe\/bls/,
+        message: /async\/await/,
+      },
+    ]
+
     // Let Next.js handle devtool configuration for optimal performance
     // Overriding devtool can cause performance regressions
 

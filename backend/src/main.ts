@@ -1,7 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { setupGracefulShutdown } from 'nestjs-graceful-shutdown';
-import { BACKEND_PORT } from '../../src/constants/envars';
+
+// Use environment variable directly to avoid importing from frontend
+const BACKEND_PORT = process.env.BACKEND_PORT || 3001;
 
 // Global error handlers to prevent process termination
 process.on('uncaughtException', (error) => {

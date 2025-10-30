@@ -1,4 +1,3 @@
-import { FC, SVGProps } from 'react'
 import { Protocol, Status, WalletPrefix } from '../constants/enums'
 import { BeaconNodeSpecResults, SyncData } from './beacon'
 import { Diagnostics } from './diagnostic'
@@ -173,7 +172,7 @@ export type AddValidatorOption = {
   caption: string
   isDisabled: boolean
   isRecommended: boolean
-  SVG: FC<SVGProps<SVGSVGElement>>
+  SVG: any // React component type - using any to avoid React dependency in backend
   view: ValidatorManagementView
 }
 

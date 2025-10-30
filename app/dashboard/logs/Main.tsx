@@ -4,6 +4,7 @@ import LogControls from '../../../src/components/LogControls/LogControls'
 import LogDisplay from '../../../src/components/LogDisplay/LogDisplay'
 import { OptionType } from '../../../src/components/SelectDropDown/SelectDropDown'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
+import { useNodeHealth, useSyncData } from '../../../src/hooks/useSharedData'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import { ActivityResponse, LogMetric, LogType, Metric } from '../../../src/types'
 import { BeaconNodeSpecResults, SyncData } from '../../../src/types/beacon'
@@ -41,16 +42,10 @@ const Main: FC<MainProps> = ({
     }, 500)
   }, [])
 
-  const { data: syncData } = useSWRPolling<SyncData>('/api/node-sync', {
-    refreshInterval: slotInterval,
-    fallbackData: initSyncData,
-    networkError,
-  })
-  const { data: nodeHealth } = useSWRPolling<Diagnostics>('/api/node-health', {
-    refreshInterval: 6000,
-    fallbackData: initNodeHealth,
-    networkError,
-  })
+  // Use shared hooks for common data - this enables instant navigation
+  // by reading from SWR's global cache across all pages
+  const { data: syncData } = useSyncData(slotInterval, initSyncData, networkError)
+  const { data: nodeHealth } = useNodeHealth(initNodeHealth, networkError)
 
   const { data: logMetrics } = useSWRPolling<Metric>(`/api/log-metrics?type=${logType}`, {
     refreshInterval: slotInterval / 2,

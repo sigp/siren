@@ -20,6 +20,7 @@ const SideItem: FC<SideItemProps> = ({ children, isActive, className, href, isDi
         [className, isActive ? 'text-primary' : 'hover:text-primary text-dark400'],
       )}
       href={href}
+      prefetch={true}
     >
       <li>
         <div
