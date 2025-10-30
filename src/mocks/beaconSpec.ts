@@ -15,7 +15,7 @@ export const mockDiagnostics = {
   diskUtilization: 0,
   totalDiskFree: 123,
   diskStatus: {
-    synced: StatusColor.ERROR,
+    synced: StatusColor.SUCCESS,
     syncing: StatusColor.SUCCESS,
   },
   totalMemory: 123,
@@ -31,11 +31,11 @@ export const mockDiagnostics = {
     validator: '10M 0S',
   },
   healthCondition: {
-    synced: DiagnosticRate.POOR,
+    synced: DiagnosticRate.GOOD,
     syncing: DiagnosticRate.GOOD,
   },
   overallHealthStatus: {
-    synced: StatusColor.ERROR,
+    synced: StatusColor.SUCCESS,
     syncing: StatusColor.SUCCESS,
   },
 }
