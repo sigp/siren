@@ -42,6 +42,7 @@ export type ValidatorInfo = {
   missed: number
   attested: number
   aggregated: number
+  feeRecipient?: string
 }
 
 export type ValidatorBalanceInfo = {

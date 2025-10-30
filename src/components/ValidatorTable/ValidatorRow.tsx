@@ -43,7 +43,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setIsEditValidator = useSetRecoilState(isEditValidator)
   const setValDetail = useSetRecoilState(isValidatorDetail)
-  const { pubKey, index, balance, rewards, status, withdrawalAddress, name } = validator
+  const { pubKey, index, balance, rewards, status, withdrawalAddress, name, feeRecipient } = validator
   const rewardColor = formatBalanceColor(rewards)
   const baseBeaconChaUrl = useRecoilValue(selectBeaconChaBaseUrl)
   const valHrefBase = `/dashboard/validators?id=${index}`
@@ -162,6 +162,19 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
           withdrawalAddress={withdrawalAddress}
           id={pubKey}
         />
+      </th>
+      <th className='px-2'>
+        {feeRecipient ? (
+          <Tooltip id={`fee-${pubKey}`} place='top-start' style={{ fontSize: '12px' }} text={feeRecipient}>
+            <Typography color='text-dark500' type='text-caption1' className='text-center w-fit mx-auto'>
+              {formatEthAddress(feeRecipient)}
+            </Typography>
+          </Tooltip>
+        ) : (
+          <Typography color='text-dark500' type='text-caption1' className='text-center'>
+            -
+          </Typography>
+        )}
       </th>
       <th className='border-r-style500 px-4'>
         <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>

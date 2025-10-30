@@ -82,7 +82,13 @@ export class ValidatorService {
               Number(a.index) - Number(b.index),
           ) as BeaconValidatorResult[];
 
-          return sortedStates.map(({ validator, index, status, balance }) => {
+          // Fetch fee recipients for all validators
+          const feeRecipientPromises = sortedStates.map(({ validator }) =>
+            this.fetchFeeRecipient(validator.pubkey).catch(() => ({ data: { ethaddress: '' } }))
+          );
+          const feeRecipients = await Promise.all(feeRecipientPromises);
+
+          return sortedStates.map(({ validator, index, status, balance }, idx) => {
             const {
               pubkey,
               effective_balance,
@@ -113,6 +119,7 @@ export class ValidatorService {
               missed: 0,
               attested: 0,
               aggregated: 0,
+              feeRecipient: feeRecipients[idx]?.data?.ethaddress || undefined,
             };
           });
         },
@@ -372,6 +379,20 @@ export class ValidatorService {
     } catch (e) {
       console.error(e);
       throwServerError('Unable to import validator aliases');
+    }
+  }
+
+  async fetchFeeRecipient(pubkey: string): Promise<{ data: { ethaddress: string } }> {
+    try {
+      const { data } = await this.utilsService.sendHttpRequest({
+        url: `${this.validatorUrl}/eth/v1/validator/${pubkey}/feerecipient`,
+        config: this.config,
+      });
+
+      return data;
+    } catch (e) {
+      console.error(e);
+      return { data: { ethaddress: '' } };
     }
   }
 }

@@ -116,4 +116,9 @@ export class ValidatorController {
     await this.validatorService.importValidatorAliases(aliases);
     return { success: true };
   }
+
+  @Get('fee-recipient/:pubkey')
+  async getFeeRecipient(@Param('pubkey') pubkey: string) {
+    return this.validatorService.fetchFeeRecipient(pubkey);
+  }
 }
