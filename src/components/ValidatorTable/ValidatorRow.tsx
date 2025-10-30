@@ -43,7 +43,8 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setIsEditValidator = useSetRecoilState(isEditValidator)
   const setValDetail = useSetRecoilState(isValidatorDetail)
-  const { pubKey, index, balance, rewards, status, withdrawalAddress, name, feeRecipient } = validator
+  const { pubKey, index, balance, rewards, status, withdrawalAddress, name, feeRecipient } =
+    validator
   const rewardColor = formatBalanceColor(rewards)
   const baseBeaconChaUrl = useRecoilValue(selectBeaconChaBaseUrl)
   const valHrefBase = `/dashboard/validators?id=${index}`
@@ -165,8 +166,17 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='px-2'>
         {feeRecipient ? (
-          <Tooltip id={`fee-${pubKey}`} place='top-start' style={{ fontSize: '12px' }} text={feeRecipient}>
-            <Typography color='text-dark500' type='text-caption1' className='text-center w-fit mx-auto'>
+          <Tooltip
+            id={`fee-${pubKey}`}
+            place='top-start'
+            style={{ fontSize: '12px' }}
+            text={feeRecipient}
+          >
+            <Typography
+              color='text-dark500'
+              type='text-caption1'
+              className='text-center w-fit mx-auto'
+            >
               {formatEthAddress(feeRecipient)}
             </Typography>
           </Tooltip>
