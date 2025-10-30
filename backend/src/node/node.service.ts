@@ -27,7 +27,7 @@ export class NodeService {
         'specs',
       )) as BeaconNodeSpecResults;
       const isMainnet = CONFIG_NAME?.toLowerCase() === 'mainnet';
-      
+
       return this.utilsService.fetchFromCache(
         'nodeHealth',
         (SECONDS_PER_SLOT * 1000) / 2,
@@ -68,22 +68,30 @@ export class NodeService {
           const totalDiskFree = formatGigBytes(disk_bytes_free);
 
           const diskThresholds = isMainnet
-            ? { synced: { success: 300, warning: 200 }, syncing: { success: 100, warning: 50 } }
-            : { synced: { success: 150, warning: 100 }, syncing: { success: 50, warning: 25 } };
+            ? {
+                synced: { success: 300, warning: 200 },
+                syncing: { success: 100, warning: 50 },
+              }
+            : {
+                synced: { success: 50, warning: 25 },
+                syncing: { success: 50, warning: 25 },
+              };
 
           const diskStatus = {
             synced: this.disableHealthChecks
               ? StatusColor.SUCCESS
               : totalDiskFree > diskThresholds.synced.success
                 ? StatusColor.SUCCESS
-                : totalDiskFree >= diskThresholds.synced.warning && totalDiskFree < diskThresholds.synced.success
+                : totalDiskFree >= diskThresholds.synced.warning &&
+                    totalDiskFree < diskThresholds.synced.success
                   ? StatusColor.WARNING
                   : StatusColor.ERROR,
             syncing: this.disableHealthChecks
               ? StatusColor.SUCCESS
               : totalDiskFree > diskThresholds.syncing.success
                 ? StatusColor.SUCCESS
-                : totalDiskFree >= diskThresholds.syncing.warning && totalDiskFree < diskThresholds.syncing.success
+                : totalDiskFree >= diskThresholds.syncing.warning &&
+                    totalDiskFree < diskThresholds.syncing.success
                   ? StatusColor.WARNING
                   : StatusColor.ERROR,
           };
@@ -104,7 +112,8 @@ export class NodeService {
             ? StatusColor.SUCCESS
             : totalMemoryFree >= ramThresholds.success
               ? StatusColor.SUCCESS
-              : totalMemoryFree > ramThresholds.warning && totalMemoryFree < ramThresholds.success
+              : totalMemoryFree > ramThresholds.warning &&
+                  totalMemoryFree < ramThresholds.success
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 
@@ -112,13 +121,14 @@ export class NodeService {
 
           const cpuThresholds = isMainnet
             ? { success: 80, warning: 90 }
-            : { success: 40, warning: 45 };
+            : { success: 80, warning: 90 };
 
           const cpuStatus = this.disableHealthChecks
             ? StatusColor.SUCCESS
             : sys_loadavg_1 <= cpuThresholds.success
               ? StatusColor.SUCCESS
-              : sys_loadavg_1 > cpuThresholds.success && sys_loadavg_1 < cpuThresholds.warning
+              : sys_loadavg_1 > cpuThresholds.success &&
+                  sys_loadavg_1 < cpuThresholds.warning
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 
