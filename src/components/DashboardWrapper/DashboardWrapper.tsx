@@ -1,7 +1,7 @@
 import React, { FC, MutableRefObject, ReactNode, useEffect, useState } from 'react'
 import { useSetRecoilState } from 'recoil'
 import addClassString from '../../../utilities/addClassString'
-import { Storage } from '../../constants/enums'
+import { Storage, UiMode } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useUiMode from '../../hooks/useUiMode'
 import { beaconNodeSpec } from '../../recoil/atoms'
@@ -51,7 +51,7 @@ const DashboardWrapper: FC<DashboardWrapperProps> = ({
 
   useEffect(() => {
     if (isReady) {
-      toggleUiMode(uiThemeStorage)
+      toggleUiMode(uiThemeStorage ?? UiMode.DARK)
     }
 
     setReady(true)
