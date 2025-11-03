@@ -2,7 +2,6 @@ import React, { FC, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppVersion from '../AppVersion/AppVersion'
 import DashboardOptions from '../DashboardOptions/DashboardOptions'
-import PillIcon from '../PillIcon/PillIcon'
 import Typography from '../Typography/Typography'
 
 export interface AppGreetingProps {
@@ -37,7 +36,19 @@ const AppGreeting: FC<AppGreetingProps> = ({ sirenVersion, userName, ...props })
             <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
               {t('lighthouseUiVersion')}
             </Typography>
-            {sirenVersion && <PillIcon bgColor='bg-tertiary' text={`v${sirenVersion}`} />}
+            {sirenVersion && (
+              <div className='py-1 px-3 rounded-lg w-fit bg-tertiary'>
+                <Typography
+                  isBold
+                  className='text-center'
+                  darkMode='dark:text-white'
+                  color='text-white'
+                  type='text-tiny'
+                >
+                  Siren — {sirenVersion}-{process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'}
+                </Typography>
+              </div>
+            )}
           </div>
           <div>
             <Typography type='text-tiny' family='font-roboto' darkMode='dark:text-white' isBold>
