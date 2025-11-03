@@ -2,7 +2,7 @@
 
 # configure default vars if none provided
 set -a
-PORT=${PORT:-3000}
+PORT=${PORT:-3300}
 BACKEND_URL=${BACKEND_URL:-http://127.0.0.1:3001}
 BEACON_URL=${BEACON_URL:-http://your-BN-ip:5052}
 VALIDATOR_URL=${VALIDATOR_URL:-http://your-VC-ip:5062}

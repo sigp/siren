@@ -19,12 +19,15 @@ export class NodeService {
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
   private beaconUrl = process.env.BEACON_URL;
+  private disableHealthChecks = process.env.DISABLE_HEALTH_CHECKS === 'true';
 
   async fetchNodeHealth(): Promise<Diagnostics> {
     try {
-      const { SECONDS_PER_SLOT } = (await this.cacheManager.get(
+      const { SECONDS_PER_SLOT, CONFIG_NAME } = (await this.cacheManager.get(
         'specs',
       )) as BeaconNodeSpecResults;
+      const isMainnet = CONFIG_NAME?.toLowerCase() === 'mainnet';
+
       return this.utilsService.fetchFromCache(
         'nodeHealth',
         (SECONDS_PER_SLOT * 1000) / 2,
@@ -64,17 +67,31 @@ export class NodeService {
           const totalDiskSpace = formatGigBytes(disk_bytes_total);
           const totalDiskFree = formatGigBytes(disk_bytes_free);
 
+          const diskThresholds = isMainnet
+            ? {
+                synced: { success: 300, warning: 200 },
+                syncing: { success: 100, warning: 50 },
+              }
+            : {
+                synced: { success: 50, warning: 25 },
+                syncing: { success: 50, warning: 25 },
+              };
+
           const diskStatus = {
-            synced:
-              totalDiskFree > 300
+            synced: this.disableHealthChecks
+              ? StatusColor.SUCCESS
+              : totalDiskFree > diskThresholds.synced.success
                 ? StatusColor.SUCCESS
-                : totalDiskFree >= 200 && totalDiskFree < 300
+                : totalDiskFree >= diskThresholds.synced.warning &&
+                    totalDiskFree < diskThresholds.synced.success
                   ? StatusColor.WARNING
                   : StatusColor.ERROR,
-            syncing:
-              totalDiskFree > 100
+            syncing: this.disableHealthChecks
+              ? StatusColor.SUCCESS
+              : totalDiskFree > diskThresholds.syncing.success
                 ? StatusColor.SUCCESS
-                : totalDiskFree >= 50 && totalDiskFree < 100
+                : totalDiskFree >= diskThresholds.syncing.warning &&
+                    totalDiskFree < diskThresholds.syncing.success
                   ? StatusColor.WARNING
                   : StatusColor.ERROR,
           };
@@ -87,19 +104,31 @@ export class NodeService {
 
           const totalMemoryFree = totalMemory - usedMemory;
 
-          const ramStatus =
-            totalMemoryFree >= 3
+          const ramThresholds = isMainnet
+            ? { success: 3, warning: 1 }
+            : { success: 1.5, warning: 0.5 };
+
+          const ramStatus = this.disableHealthChecks
+            ? StatusColor.SUCCESS
+            : totalMemoryFree >= ramThresholds.success
               ? StatusColor.SUCCESS
-              : totalMemoryFree > 1 && totalMemoryFree < 3
+              : totalMemoryFree > ramThresholds.warning &&
+                  totalMemoryFree < ramThresholds.success
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 
           const cpuUtilization = sys_loadavg_1.toFixed(1);
 
-          const cpuStatus =
-            sys_loadavg_1 <= 80
+          const cpuThresholds = isMainnet
+            ? { success: 80, warning: 90 }
+            : { success: 80, warning: 90 };
+
+          const cpuStatus = this.disableHealthChecks
+            ? StatusColor.SUCCESS
+            : sys_loadavg_1 <= cpuThresholds.success
               ? StatusColor.SUCCESS
-              : sys_loadavg_1 > 80 && sys_loadavg_1 < 90
+              : sys_loadavg_1 > cpuThresholds.success &&
+                  sys_loadavg_1 < cpuThresholds.warning
                 ? StatusColor.WARNING
                 : StatusColor.ERROR;
 

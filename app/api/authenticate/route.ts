@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { NextResponse } from 'next/server'
-import { BACKEND_URL, NODE_ENV } from '../../../src/constants/envars'
+import { BACKEND_URL, NODE_ENV, SSL_ENABLED } from '../../../src/constants/envars'
 
 export async function POST(req: Request) {
   try {
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
 
     response.cookies.set('session-token', token, {
       httpOnly: true,
-      secure: NODE_ENV === 'production',
+      secure: NODE_ENV === 'production' && SSL_ENABLED,
       path: '/',
       sameSite: 'strict',
     } as any)

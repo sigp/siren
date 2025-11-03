@@ -18,6 +18,11 @@ export class BeaconController {
     return this.beaconService.fetchBeaconNodeVersion();
   }
 
+  @Get('heartbeat')
+  async getBeaconNodeHeartbeat() {
+    return this.beaconService.fetchBeaconNodeVersion(false);
+  }
+
   @Get('genesis')
   async getNodeGenesis() {
     return this.beaconService.fetchGenesisData();

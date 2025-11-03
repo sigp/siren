@@ -16,10 +16,8 @@ export interface WithdrawalAddressPillProps
 const WithdrawalAddressPill: FC<WithdrawalAddressPillProps> = ({
   id,
   address,
-  hasPadding,
   className,
   containerClassName,
-  ...props
 }) => {
   const { t } = useTranslation()
   const [isCopied, setIsCopied] = useState(false)

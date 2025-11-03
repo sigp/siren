@@ -2,7 +2,7 @@
 
 import axios from 'axios'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AppDescription from '../src/components/AppDescription/AppDescription'
 import AuthPrompt from '../src/components/AuthPrompt/AuthPrompt'
@@ -10,7 +10,11 @@ import ConfigModal from '../src/components/ConfigModal/ConfigModal'
 import LoadingSpinner from '../src/components/LoadingSpinner/LoadingSpinner'
 import Typography from '../src/components/Typography/Typography'
 import VersionModal from '../src/components/VersionModal/VersionModal'
-import { REQUIRED_VALIDATOR_VERSION } from '../src/constants/constants'
+import {
+  REQUIRED_VALIDATOR_VERSION,
+  VERSION_FETCH_RETRY_INTERVAL,
+  MINIMUM_ERROR_DISPLAY_TIME,
+} from '../src/constants/constants'
 import { UiMode } from '../src/constants/enums'
 import useLocalStorage from '../src/hooks/useLocalStorage'
 import { ToastType } from '../src/types'
@@ -24,7 +28,6 @@ const Main = () => {
   const searchParams = useSearchParams()
   const redirect = searchParams.get('redirect')
   const [isLoading, setLoading] = useState(false)
-  const [step] = useState<number>(1)
   const [isReady, setReady] = useState(false)
   const [isVersionError, setVersionError] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
@@ -32,30 +35,89 @@ const Main = () => {
 
   const [beaconNodeVersion, setBeaconVersion] = useState('')
   const [lighthouseVersion, setLighthouseVersion] = useState('')
+  const [beaconError, setBeaconError] = useState(false)
+  const [validatorError, setValidatorError] = useState(false)
+  const retryTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const errorTimestampRef = useRef<number | null>(null)
 
-  const fetchNodeVersion = async () => {
+  const fetchNodeVersion = async (isRetry: boolean = false) => {
     try {
-      const [beaconResults, lightResults] = await Promise.all([
-        axios.get('/api/beacon-version'),
-        axios.get('/api/lighthouse-version'),
+      const results = await Promise.allSettled([
+        axios.get('/api/beacon-version', { timeout: 10000 }),
+        axios.get('/api/lighthouse-version', { timeout: 10000 }),
       ])
 
-      setBeaconVersion(beaconResults.data.version)
-      setLighthouseVersion(lightResults.data.version)
-      setIsAuthenticated(true)
+      const beaconResult = results[0]
+      const validatorResult = results[1]
+
+      if (beaconResult.status === 'fulfilled') {
+        setBeaconVersion(beaconResult.value.data.version)
+        setBeaconError(false)
+      } else {
+        console.error('Failed to fetch beacon version:', beaconResult.reason)
+        setBeaconError(true)
+        if (!errorTimestampRef.current) {
+          errorTimestampRef.current = Date.now()
+        }
+      }
+
+      if (validatorResult.status === 'fulfilled') {
+        setLighthouseVersion(validatorResult.value.data.version)
+        setValidatorError(false)
+      } else {
+        console.error('Failed to fetch validator version:', validatorResult.reason)
+        setValidatorError(true)
+        if (!errorTimestampRef.current) {
+          errorTimestampRef.current = Date.now()
+        }
+      }
+
+      if (beaconResult.status === 'rejected' || validatorResult.status === 'rejected') {
+        if (retryTimerRef.current) {
+          clearTimeout(retryTimerRef.current)
+        }
+        retryTimerRef.current = setTimeout(() => {
+          fetchNodeVersion(true)
+        }, VERSION_FETCH_RETRY_INTERVAL)
+      } else if (isRetry && errorTimestampRef.current) {
+        const errorDuration = Date.now() - errorTimestampRef.current
+        const remainingTime = Math.max(0, MINIMUM_ERROR_DISPLAY_TIME - errorDuration)
+
+        if (remainingTime > 0) {
+          setTimeout(() => {
+            errorTimestampRef.current = null
+          }, remainingTime)
+        } else {
+          errorTimestampRef.current = null
+        }
+      }
     } catch (e) {
-      console.error(e)
-    } finally {
-      setReady(true)
+      console.error('Unexpected error fetching node versions:', e)
+      setBeaconError(true)
+      setValidatorError(true)
+      if (!errorTimestampRef.current) {
+        errorTimestampRef.current = Date.now()
+      }
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current)
+      }
+      retryTimerRef.current = setTimeout(() => {
+        fetchNodeVersion(true)
+      }, VERSION_FETCH_RETRY_INTERVAL)
     }
   }
 
   useEffect(() => {
-    void fetchNodeVersion()
+    setReady(true)
   }, [])
 
   useEffect(() => {
-    if (beaconNodeVersion && lighthouseVersion) {
+    if (beaconNodeVersion && lighthouseVersion && !errorTimestampRef.current) {
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current)
+        retryTimerRef.current = null
+      }
+
       if (!isRequiredVersion(lighthouseVersion, REQUIRED_VALIDATOR_VERSION)) {
         setVersionError(true)
         return
@@ -69,9 +131,17 @@ const Main = () => {
 
       router.push(redirect || nextRoute)
     }
-  }, [beaconNodeVersion, lighthouseVersion, router, redirect])
+  }, [beaconNodeVersion, lighthouseVersion, router, redirect, healthCheck])
 
-  const configError = !beaconNodeVersion || !lighthouseVersion
+  useEffect(() => {
+    return () => {
+      if (retryTimerRef.current) {
+        clearTimeout(retryTimerRef.current)
+      }
+    }
+  }, [])
+
+  const configError = (!beaconNodeVersion || !lighthouseVersion) && (beaconError || validatorError)
   const vcVersion = beaconNodeVersion
     ? formatSemanticVersion(beaconNodeVersion as string)
     : undefined
@@ -82,6 +152,7 @@ const Main = () => {
       const { status } = await axios.post('/api/authenticate', { password })
 
       if (status === 200) {
+        setIsAuthenticated(true)
         await fetchNodeVersion()
       }
     } catch (e: any) {
@@ -97,6 +168,8 @@ const Main = () => {
         isReady={isReady && configError && isAuthenticated}
         beaconNodeVersion={beaconNodeVersion}
         lighthouseVersion={lighthouseVersion}
+        isBeaconError={beaconError}
+        isValidatorError={validatorError}
       />
       {vcVersion && (
         <VersionModal currentVersion={vcVersion} isVisible={isReady && isVersionError} />
@@ -117,24 +190,15 @@ const Main = () => {
             {`${t('initScreen.initializing')}...`}
           </Typography>
           <div className='opacity-40'>
-            {step >= 0 && (
-              <>
-                <Typography isBold type='text-tiny' color='text-dark100'>
-                  {`${t('initScreen.fetchingEndpoints')}...`}
-                </Typography>
-                <Typography isBold type='text-tiny' color='text-dark100'>
-                  {`${t('initScreen.connectingBeacon')}...`}
-                </Typography>
-                <Typography isBold type='text-tiny' color='text-dark100'>
-                  {`${t('initScreen.connectingValidator')}...`}
-                </Typography>
-              </>
-            )}
-            {step > 1 && (
-              <Typography isBold type='text-tiny' color='text-dark100'>
-                {`${t('initScreen.fetchBeaconSync')}...`}
-              </Typography>
-            )}
+            <Typography isBold type='text-tiny' color='text-dark100'>
+              {`${t('initScreen.fetchingEndpoints')}...`}
+            </Typography>
+            <Typography isBold type='text-tiny' color='text-dark100'>
+              {`${t('initScreen.connectingBeacon')}...`}
+            </Typography>
+            <Typography isBold type='text-tiny' color='text-dark100'>
+              {`${t('initScreen.connectingValidator')}...`}
+            </Typography>
             <Typography isBold type='text-tiny' color='text-dark100'>
               - - -
             </Typography>

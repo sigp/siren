@@ -75,6 +75,7 @@
   "continue": "Continue",
   "next": "Next",
   "back": "Back",
+  "cancel": "Cancel",
   "comingSoon": "Coming Soon",
   "viewBeaconCha": "view beacon.cha",
   "suggestedIndex": "Suggested Index",
@@ -94,6 +95,7 @@
   "great": "great",
   "node": "Node",
   "index": "index",
+  "publicKey": "Public Key",
   "amount": "amount",
   "slot": "slot",
   "withdrawableEpoch": "Withdrawable Epoch",
@@ -604,6 +606,26 @@
         "highFees": "Due to very high consolidation request volume, it is not recommended submitting new requests at this time. Request fees will be very high and are not guaranteed to be successful.",
         "mediumFees": "Due to an increase in the number of consolidation requests, the fee to submit a new request is moderately high. Please consider waiting to avoid high fees.",
         "lowFees": "Low Fees and consolidation queue. Please ensure you are using the correct network when making requests."
+      },
+      "customTarget": {
+        "title": "Custom Target Validator",
+        "description": "Enter a validator index or public key to consolidate to a validator not managed by this client.",
+        "inputLabel": "Validator Index or Public Key",
+        "placeholder": "Enter validator index (e.g., 12345) or public key (0x...)",
+        "validate": "Validate",
+        "validated": "Validator Validated",
+        "clear": "Clear",
+        "invalidFormat": "Invalid format. Please enter a validator index or valid public key.",
+        "formatHelp": "Format: Validator index (e.g., 12345) or Public key (0x + 96 hex characters)",
+        "validatorNotFound": "Validator not found. Please check the index/public key and try again.",
+        "notConsolidationCapable": "This validator does not have 0x02 withdrawal credentials and cannot accept consolidations.",
+        "alreadyAtMaxBalance": "This validator already has the maximum effective balance (2048 ETH) and cannot accept consolidations."
+      },
+      "customValidatorWarning": {
+        "title": "Custom Validator Risk Warning",
+        "description": "You are about to consolidate funds to a custom validator that is not managed by this client.",
+        "warning": "⚠️ WARNING: Funds will be transferred to this validator. If you do not own or control this validator, these funds will be permanently lost to the current owner.",
+        "accept": "I Understand & Continue"
       }
     },
 
@@ -628,11 +650,14 @@
     "annualApr": "Combined total Annual Percentage Rate estimate."
   },
   "networkErrorModal": {
-    "title": "Network Error",
+    "title": "Connection Lost",
     "beaconAndValidator": "Beacon Node and Validator Client",
     "beaconNode": "Beacon Node",
     "validatorClient": "Validator Client",
-    "affectedNetworks": "Siren failed to maintain connection to the designated <span>{{network}}</span>. ",
+    "affectedNetworks": "Siren has lost connection to the <span>{{network}}</span>.",
+    "retryingConnection": "Attempting to reconnect every 30 seconds...",
+    "automaticRecovery": "Connection will be restored automatically when the service becomes available.",
+    "waitingForReconnection": "Waiting for reconnection to be established...",
     "reconfigureOrContact": "Please review and update configuration settings. If this issue persists please contact our team in <0>discord</0>."
   },
   "sessionConfiguration": {

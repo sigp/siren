@@ -23,23 +23,29 @@ export class BeaconService {
   private beaconUrl = process.env.BEACON_URL;
   private isDebug = process.env.DEBUG === 'true';
 
-  async fetchBeaconNodeVersion(): Promise<string> {
+  async fetchBeaconNodeVersion(useCache: boolean = true): Promise<string> {
     try {
-      return await this.utilsService.fetchFromCache(
-        'bnVersion',
-        60000,
-        async () => {
-          const { data } = await this.utilsService.sendHttpRequest({
-            url: `${this.beaconUrl}/eth/v1/node/version`,
-          });
-
-          return data.data;
-        },
-      );
+      if (useCache) {
+        return await this.utilsService.fetchFromCache(
+          'bnVersion',
+          60000,
+          async () => {
+            return await this._fetchBeaconNodeVersion();
+          },
+        );
+      }
+      return await this._fetchBeaconNodeVersion();
     } catch (e) {
       console.error(e);
       throwServerError('Unable to fetch beacon node version');
     }
+  }
+
+  private async _fetchBeaconNodeVersion(): Promise<string> {
+    const { data } = await this.utilsService.sendHttpRequest({
+      url: `${this.beaconUrl}/eth/v1/node/version`,
+    });
+    return data.data;
   }
 
   async fetchGenesisData(): Promise<number> {
