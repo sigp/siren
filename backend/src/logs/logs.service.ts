@@ -145,14 +145,6 @@ export class LogsService {
                 if (level === LogLevels.ERRO || level === LogLevels.CRIT) {
                   this.sendMessageToClients(result.dataValues);
                 }
-
-                if (this.isDebug) {
-                  console.log(
-                    newData,
-                    type,
-                    '------------------------------------------ log --------------------------------------',
-                  );
-                }
               } catch (dbError) {
                 console.error(`Database error saving log for ${type}:`, dbError);
               }

@@ -23,9 +23,9 @@ export const secondsInWeek = 604800
 export const VERSION_FETCH_RETRY_INTERVAL = 6000
 export const MINIMUM_ERROR_DISPLAY_TIME = 3000
 export const HEARTBEAT_POLLING_INTERVAL = 6000
-export const SSE_CONNECTION_TIMEOUT = 10000
+export const SSE_CONNECTION_TIMEOUT = 5000 // Reduced from 10s to 5s for faster failure detection
 export const SSE_MAX_ERRORS = 3
-export const SSE_RECONNECT_DELAY = 10000
+export const SSE_RECONNECT_DELAY = 5000 // Reduced from 10s to 5s for faster reconnection attempts
 export const BACKEND_RETRY_DELAY = 30000
 
 export const EARNINGS_OPTIONS = [

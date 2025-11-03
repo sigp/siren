@@ -1,6 +1,6 @@
 services:
   siren:
-    image: siren
+    image: siren-now
     ports:
       - '443:443' # comment this line when using `SSL_ENABLED=false`
     #      - "80:80"  # uncomment this line when using `SSL_ENABLED=false`
