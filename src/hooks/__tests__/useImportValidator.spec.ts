@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import axios from 'axios'
 import displayToast from '../../../utilities/displayToast'
 import { ToastType } from '../../types'

@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const token = getReqAuthToken(req)
     const data = await fetchProposerDuties(token)
     return NextResponse.json(data)
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Failed to fetch proposer data' }, { status: 500 })
   }
 }

@@ -45,7 +45,7 @@ const ActivityNote: FC<ActivityNoteProps> = ({
 
     try {
       return JSON.parse(data)
-    } catch (e) {
+    } catch (_) {
       console.error('invalid json format')
       return null
     }

@@ -12,9 +12,9 @@ const ELEMENT = {
   p: 'p',
 }
 
-const tagsSupported = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'label', 'span'] as const
+const _tagsSupported = ['h1', 'h2', 'h3', 'h4', 'h5', 'p', 'label', 'span'] as const
 
-type TagsSupported = (typeof tagsSupported)[number]
+type TagsSupported = (typeof _tagsSupported)[number]
 
 export type TypographyFamily = 'font-openSauce' | 'font-roboto' | 'font-archivo'
 

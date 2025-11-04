@@ -58,7 +58,7 @@ const ValidatorGraffiti: FC<ValidatorGraffitiProps> = ({ validator }) => {
       } else {
         displayToast(t('validatorEdit.graffiti.unexpectedError'), ToastType.ERROR)
       }
-    } catch (e) {
+    } catch (_) {
       setLoading(false)
       displayToast(t('validatorEdit.graffiti.errorUpdate'), ToastType.ERROR)
     }

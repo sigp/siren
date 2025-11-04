@@ -6,11 +6,11 @@ type Dimensions = {
 }
 
 const useDivDimensions = (): {
-  ref: RefObject<HTMLDivElement | null>
+  ref: RefObject<HTMLDivElement>
   dimensions?: Dimensions
   measure: () => void
 } => {
-  const ref = useRef<HTMLDivElement | null>(null)
+  const ref = useRef<HTMLDivElement>(null)
   const [dimensions, setDimensions] = useState<Dimensions | undefined>(undefined)
 
   const measure = useCallback(() => {

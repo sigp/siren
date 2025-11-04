@@ -67,7 +67,7 @@ const EditValidatorForm: FC<EditValidatorFormProps> = ({ children, validator }) 
       await updateAlias(index, nameString)
       setAlias((prev) => ({ ...prev, [index]: nameString }))
       displayToast(t('validatorEdit.successUpdate'), ToastType.SUCCESS)
-    } catch (error) {
+    } catch (_) {
       displayToast('Failed to update validator name', ToastType.ERROR)
     }
     setLoading(false)

@@ -7,7 +7,7 @@ export async function GET(req: Request) {
     const token = getReqAuthToken(req)
     const { version } = await fetchValidatorVersion(token)
     return NextResponse.json({ version })
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Failed to fetch lighthouse version' }, { status: 500 })
   }
 }

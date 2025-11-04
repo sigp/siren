@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     const token = getReqAuthToken(req)
     const data = await fetchActivities({ token, offset, limit, order, since })
     return NextResponse.json(data)
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Failed to fetch activities' }, { status: 500 })
   }
 }

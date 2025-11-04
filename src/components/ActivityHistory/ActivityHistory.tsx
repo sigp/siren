@@ -61,7 +61,7 @@ const ActivityHistory: FC<ActivityHistoryProps> = ({ initActivityData, depositNe
       const response = await axios.get(`/api/activity?offset=${newPage * 10}`)
       setData((prevData) => addData(prevData, response.data.rows))
       setPage(newPage)
-    } catch (e) {
+    } catch (_) {
       displayToast(t('activityHistory.unableToFetch'), ToastType.ERROR)
     } finally {
       setLoading(false)

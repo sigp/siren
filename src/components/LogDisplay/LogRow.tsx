@@ -53,7 +53,7 @@ const formatTimestamp = (timeString: string): string => {
       minute: '2-digit',
       second: '2-digit',
     })
-  } catch (error) {
+  } catch (_) {
     return timeString.replace(/\.\d{3}$/, '')
   }
 }
@@ -120,12 +120,12 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
               {serviceName}
             </span>
           </div>
-          <div className='text-xs font-roboto leading-tight text-gray-900 dark:text-gray-100'>
+          <div className='block w-full text-xs font-roboto leading-tight text-gray-900 dark:text-gray-100'>
             {msg}
           </div>
           {hasFields && (
             <div
-              className='text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
+              className='block w-full text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
               dangerouslySetInnerHTML={{
                 __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
               }}
@@ -147,15 +147,15 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
             {serviceName}
           </span>
         </div>
-        <div className='hidden lg:table-cell px-3 py-1.5 w-auto min-w-[300px]'>
-          <div className='text-xs font-roboto leading-tight text-gray-900 dark:text-gray-100'>
+        <div className='hidden lg:table-cell px-3 py-1.5 w-auto min-w-[300px] align-top'>
+          <div className='text-xs text-left font-roboto leading-tight text-gray-900 dark:text-gray-100'>
             {msg}
           </div>
         </div>
-        <div className='hidden lg:table-cell px-3 py-1.5 w-auto'>
+        <div className='hidden lg:table-cell px-3 py-1.5 w-auto align-top'>
           {hasFields && (
             <div
-              className='text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
+              className='block w-full text-xs text-left break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
               dangerouslySetInnerHTML={{
                 __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
               }}

@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react'
 import { mockedRecoilState } from '../../../test.helpers'
 import { UiMode } from '../../constants/enums'
 import useUiMode from '../useUiMode'

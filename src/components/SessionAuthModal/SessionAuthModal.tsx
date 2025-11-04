@@ -93,7 +93,7 @@ const SessionAuthModal: FC<SessionAuthModalProps> = ({
       setCount(0)
       setPassword('')
       onSuccess(decryptedToken)
-    } catch (e) {
+    } catch (_) {
       handleError()
     }
   }
