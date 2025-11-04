@@ -6,9 +6,15 @@ import GeneralSettings from './GeneralSettings'
 
 export interface ViewControllerProps extends AboutSettingsProps, DataSettingsProps {
   view: SettingsView
+  sirenVersion?: string
 }
 
-const ViewController: FC<ViewControllerProps> = ({ view, initExclusions, ...props }) => {
+const ViewController: FC<ViewControllerProps> = ({
+  view,
+  initExclusions,
+  sirenVersion,
+  ...props
+}) => {
   if (view === SettingsView.GENERAL) {
     return <GeneralSettings />
   }
@@ -18,7 +24,7 @@ const ViewController: FC<ViewControllerProps> = ({ view, initExclusions, ...prop
   }
 
   if (view === SettingsView.ABOUT) {
-    return <AboutSettings {...props} />
+    return <AboutSettings {...props} sirenVersion={sirenVersion} />
   }
 
   return null

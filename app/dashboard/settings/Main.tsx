@@ -2,6 +2,7 @@
 
 import React, { FC, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import pckJson from '../../../package.json'
 import DashboardWrapper from '../../../src/components/DashboardWrapper/DashboardWrapper'
 import SettingsMenuItem from '../../../src/components/Settings/SettingsMenuItem'
 import ViewController from '../../../src/components/Settings/views/ViewController'
@@ -35,6 +36,7 @@ const Main: FC<MainProps> = (props) => {
     initExclusionList,
   } = props
 
+  const { version } = pckJson
   const { SECONDS_PER_SLOT } = beaconSpec
 
   const { isValidatorError, isBeaconError } = useNetworkMonitor()
@@ -96,6 +98,7 @@ const Main: FC<MainProps> = (props) => {
           initExclusions={initExclusionList}
           bnVersion={bnVersion}
           vcVersion={lighthouseVersion}
+          sirenVersion={version}
           view={view}
         />
       </div>

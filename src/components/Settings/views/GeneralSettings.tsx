@@ -4,12 +4,9 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import displayToast from '../../../../utilities/displayToast'
 import { UiMode } from '../../../constants/enums'
-import useLocalStorage from '../../../hooks/useLocalStorage'
 import useUiMode from '../../../hooks/useUiMode'
-import { OptionalString, ToastType } from '../../../types'
-import { UsernameStorage } from '../../../types/storage'
+import { ToastType } from '../../../types'
 import Button, { ButtonFace } from '../../Button/Button'
-import Input from '../../Input/Input'
 import Toggle from '../../Toggle/Toggle'
 import Typography from '../../Typography/Typography'
 import UiModeIcon from '../../UiModeIcon/UiModeIcon'
@@ -21,8 +18,6 @@ const GeneralSettings = () => {
   const router = useRouter()
   const { mode, toggleUiMode } = useUiMode()
   const [isLoading, setIsLoading] = useState(false)
-  const [userNameError, setError] = useState<OptionalString>()
-  const [username, storeUserName] = useLocalStorage<UsernameStorage>('username', undefined)
 
   const handleError = () => {
     displayToast(t('authPrompt.unexpectedErrorLogout'), ToastType.ERROR)
@@ -45,17 +40,6 @@ const GeneralSettings = () => {
     }
   }
 
-  const handleUserNameChange = (e: any) => {
-    const value = e.target.value
-    setError(undefined)
-
-    if (!value) {
-      setError(t('error.userName.required'))
-    }
-
-    storeUserName(value)
-  }
-
   const toggleTheme = (value: boolean) => toggleUiMode(value ? UiMode.DARK : UiMode.LIGHT)
 
   return (
@@ -76,15 +60,6 @@ const GeneralSettings = () => {
             <UiModeIcon mode={mode} />
             <Toggle id='uiModeToggle' value={mode === UiMode.DARK} onChange={toggleTheme} />
           </div>
-        </SimpleSection>
-        <SimpleSection style='vertical' title={t('display.title')} text={t('display.helperText')}>
-          <Input
-            uiMode={mode}
-            error={userNameError}
-            className='capitalize mt-8 max-w-xl pl-4 pt-2'
-            onChange={handleUserNameChange}
-            value={username}
-          />
         </SimpleSection>
         <SimpleSection style='vertical' title={t('session.title')} text={t('session.helperText')}>
           <div className='pt-8'>
