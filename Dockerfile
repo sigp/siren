@@ -5,6 +5,8 @@ FROM $node_image AS builder
 
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NODE_ENV=development
+# Install git for commit hash generation for docker built image
+RUN apt-get update && apt-get install -y git && apt-get clean && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY . /app/
 

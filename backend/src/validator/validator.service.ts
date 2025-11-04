@@ -30,7 +30,7 @@ export class ValidatorService {
     private validatorAliasRepository: typeof ValidatorAlias,
     private utilsService: UtilsService,
     private activityService: ActivityService,
-  ) {}
+  ) { }
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
   private beaconUrl = process.env.BEACON_URL;
@@ -73,11 +73,20 @@ export class ValidatorService {
           const validatorData = (await this.cacheManager.get(
             'validators',
           )) as ValidatorDetail[];
-          const { data: states } = await this.utilsService.sendHttpRequest({
-            url: `${this.beaconUrl}/eth/v1/beacon/states/head/validators?id=${validatorData.map(({ pubkey }) => pubkey)}`,
-          });
+          // Batch validator state requests to avoid response size limits
+          const BATCH_SIZE = 500;
+          const allStates = [];
 
-          const sortedStates = [...states.data].sort(
+          for (let i = 0; i < validatorData.length; i += BATCH_SIZE) {
+            const batch = validatorData.slice(i, i + BATCH_SIZE);
+            const pubkeys = batch.map(({ pubkey }) => pubkey).join(',');
+            const { data: states } = await this.utilsService.sendHttpRequest({
+              url: `${this.beaconUrl}/eth/v1/beacon/states/head/validators?id=${pubkeys}`,
+            });
+            allStates.push(...states.data);
+          }
+
+          const sortedStates = [...allStates].sort(
             (a: BeaconValidatorResult, b: BeaconValidatorResult) =>
               Number(a.index) - Number(b.index),
           ) as BeaconValidatorResult[];

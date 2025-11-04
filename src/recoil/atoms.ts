@@ -7,7 +7,7 @@ import { HealthDiagnosticResult } from '../types/diagnostic'
 
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
-  default: undefined,
+  default: UiMode.DARK,
 })
 
 export const appView = atom<AppView | undefined>({
