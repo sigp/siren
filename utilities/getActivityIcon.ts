@@ -12,6 +12,8 @@ const getActivityIcon = (type: ActivityType) => {
       return 'bi-intersect'
     case ActivityType.PARTIAL_WITHDRAWAL:
       return 'bi-send'
+    case ActivityType.FEE_RECIPIENT:
+      return 'bi-wallet2'
     default:
       return 'bi-clock-history'
   }

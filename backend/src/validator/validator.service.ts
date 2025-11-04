@@ -404,4 +404,40 @@ export class ValidatorService {
       return { data: { ethaddress: '' } };
     }
   }
+
+  async updateFeeRecipient(data: any) {
+    try {
+      const { status } = await this.utilsService.sendHttpRequest({
+        url: `${this.validatorUrl}/eth/v1/validator/${data.pubKey}/feerecipient`,
+        method: 'POST',
+        config: {
+          data: JSON.stringify({ ethaddress: data.feeRecipient }),
+          headers: {
+            'Content-Type': 'application/json',
+            ...this.config.headers,
+          },
+        },
+      });
+
+      if (status === 202 || status === 200) {
+        await this.activityService.storeActivity(
+          '',
+          data.pubKey,
+          ActivityType.FEE_RECIPIENT,
+          Status.SUCCESS,
+        );
+      }
+
+      return status;
+    } catch (e) {
+      console.error(e);
+      await this.activityService.storeActivity(
+        '',
+        data.pubKey,
+        ActivityType.FEE_RECIPIENT,
+        Status.ERROR,
+      );
+      throwServerError('Unable to update fee recipient');
+    }
+  }
 }

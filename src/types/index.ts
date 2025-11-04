@@ -214,6 +214,7 @@ export enum ActivityType {
   GRAFFITI = 'GRAFFITI',
   PARTIAL_WITHDRAWAL = 'PARTIAL_WITHDRAWAL',
   CONSOLIDATION = 'CONSOLIDATION',
+  FEE_RECIPIENT = 'FEE_RECIPIENT',
 }
 
 export type ActivityResponse = {

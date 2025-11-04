@@ -63,6 +63,10 @@ const ActivityText: React.FC<ActivityTextProps> = ({
         pubKey: formatEthAddress(pubKey),
       }),
     },
+    [ActivityType.FEE_RECIPIENT]: {
+      key: `updateFeeRecipient.${isError ? 'errorText' : 'text'}`,
+      values: () => ({ pubKey: formatEthAddress(pubKey) }),
+    },
   }[type]
 
   if (!config) return null

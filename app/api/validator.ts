@@ -29,3 +29,9 @@ export const fetchPartialWithdrawals = async (token: string) =>
 
 export const fetchPendingDeposits = async (token: string) =>
   await fetchFromApi(`${BACKEND_URL}/validator/pending-deposits`, token)
+
+export const updateFeeRecipient = async (token: string, data: any) =>
+  await fetchFromApi(`${BACKEND_URL}/validator/fee-recipient`, token, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  })
