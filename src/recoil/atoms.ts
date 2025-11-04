@@ -8,6 +8,22 @@ import { HealthDiagnosticResult } from '../types/diagnostic'
 export const uiMode = atom<UiMode>({
   key: 'UiMode',
   default: UiMode.DARK,
+  effects: [
+    ({ setSelf }) => {
+      // Initialize from localStorage on mount (layout.tsx script already set the DOM class)
+      if (typeof window !== 'undefined') {
+        try {
+          const stored = localStorage.getItem('UI')
+          if (stored) {
+            const theme = JSON.parse(stored) as UiMode
+            setSelf(theme)
+          }
+        } catch (_) {
+          // Use default
+        }
+      }
+    },
+  ],
 })
 
 export const appView = atom<AppView | undefined>({

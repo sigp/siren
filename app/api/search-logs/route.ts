@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     const token = getReqAuthToken(req)
     const data = await searchLogData({ token, search, type: type as LogType })
     return NextResponse.json(data)
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Failed to search log data' }, { status: 500 })
   }
 }

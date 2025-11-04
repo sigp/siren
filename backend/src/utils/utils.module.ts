@@ -8,15 +8,15 @@ import * as https from 'https';
 @Module({
   imports: [
     HttpModule.register({
-      httpAgent: new http.Agent({ 
+      httpAgent: new http.Agent({
         keepAlive: false,
-        timeout: 10000,
+        timeout: 5000, // Reduced from 10s to 5s for faster failure detection
       }),
-      httpsAgent: new https.Agent({ 
+      httpsAgent: new https.Agent({
         keepAlive: false,
-        timeout: 10000,
+        timeout: 5000, // Reduced from 10s to 5s for faster failure detection
       }),
-      timeout: 10000,
+      timeout: 5000, // Reduced from 10s to 5s for faster failure detection
     }),
     CacheModule.register(),
   ],

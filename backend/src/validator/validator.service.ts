@@ -30,7 +30,7 @@ export class ValidatorService {
     private validatorAliasRepository: typeof ValidatorAlias,
     private utilsService: UtilsService,
     private activityService: ActivityService,
-  ) { }
+  ) {}
   private validatorUrl = process.env.VALIDATOR_URL;
   private apiToken = process.env.API_TOKEN;
   private beaconUrl = process.env.BEACON_URL;

@@ -81,7 +81,10 @@ export class TasksService implements OnApplicationBootstrap {
             LogType.VALIDATOR,
           );
         } catch (e) {
-          console.error('Failed to start validator SSE, will retry on next connection attempt:', e?.message || e);
+          console.error(
+            'Failed to start validator SSE, will retry on next connection attempt:',
+            e?.message || e,
+          );
         }
 
         try {
@@ -90,7 +93,10 @@ export class TasksService implements OnApplicationBootstrap {
             LogType.BEACON,
           );
         } catch (e) {
-          console.error('Failed to start beacon SSE, will retry on next connection attempt:', e?.message || e);
+          console.error(
+            'Failed to start beacon SSE, will retry on next connection attempt:',
+            e?.message || e,
+          );
         }
 
         await this.initMetricsCleaningScheduler();
@@ -103,12 +109,16 @@ export class TasksService implements OnApplicationBootstrap {
       } catch (e) {
         const errorCode = e?.response?.data?.code || e?.code || 'UNKNOWN';
         const errorMessage = this.utilsService.getErrorMessage(errorCode);
-        
+
         console.error(`Connection failed [${errorCode}]: ${errorMessage}`);
-        
+
         if (errorCode === 'ECONNREFUSED') {
-          console.error('Unable to reach beacon node or validator client endpoints');
-          console.error('Please ensure the services are running and accessible');
+          console.error(
+            'Unable to reach beacon node or validator client endpoints',
+          );
+          console.error(
+            'Please ensure the services are running and accessible',
+          );
         }
 
         if (this.isDebug) {
@@ -119,10 +129,15 @@ export class TasksService implements OnApplicationBootstrap {
           this.clearAllSchedulers();
           this.logsService.closeAllSseConnections();
         } catch (clearError) {
-          console.error('Error clearing schedulers and connections:', clearError);
+          console.error(
+            'Error clearing schedulers and connections:',
+            clearError,
+          );
         }
 
-        console.log(`Retrying connection in ${BACKEND_RETRY_DELAY / 1000} seconds...`);
+        console.log(
+          `Retrying connection in ${BACKEND_RETRY_DELAY / 1000} seconds...`,
+        );
         await this.wait(BACKEND_RETRY_DELAY);
       }
     }
@@ -130,9 +145,16 @@ export class TasksService implements OnApplicationBootstrap {
 
   private clearAllSchedulers(): void {
     // Clear all existing intervals to prevent conflicts during retry
-    const intervals = ['metricTask', 'pendingDepositsTask', 'pendingPartialWithdrawalTask', 'validatorTask', 'clean-metrics', 'clean-logs'];
-    
-    intervals.forEach(intervalName => {
+    const intervals = [
+      'metricTask',
+      'pendingDepositsTask',
+      'pendingPartialWithdrawalTask',
+      'validatorTask',
+      'clean-metrics',
+      'clean-logs',
+    ];
+
+    intervals.forEach((intervalName) => {
       try {
         if (this.schedulerRegistry.doesExist('interval', intervalName)) {
           this.schedulerRegistry.deleteInterval(intervalName);

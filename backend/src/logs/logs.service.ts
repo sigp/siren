@@ -6,7 +6,11 @@ import { LogLevels, LogType, SSELog, LighthouseLog } from '../../../src/types';
 import { InjectModel } from '@nestjs/sequelize';
 import { Log } from './entities/log.entity';
 import { Op } from 'sequelize';
-import { SSE_CONNECTION_TIMEOUT, SSE_MAX_ERRORS, SSE_RECONNECT_DELAY } from '../../../src/constants/constants';
+import {
+  SSE_CONNECTION_TIMEOUT,
+  SSE_MAX_ERRORS,
+  SSE_RECONNECT_DELAY,
+} from '../../../src/constants/constants';
 import { ClientManager } from '../utils/client-manager';
 import { LOG_FETCH_LIMIT } from '../../../src/constants/constants';
 
@@ -74,7 +78,7 @@ export class LogsService {
   public async startSse(url: string, type: LogType): Promise<void> {
     return new Promise((resolve, reject) => {
       console.log(`starting sse ${url}, ${type}...`);
-      
+
       try {
         const eventSource = new EventSource(url);
 
@@ -94,18 +98,24 @@ export class LogsService {
 
         eventSource.onerror = (error) => {
           console.error(`SSE connection error for ${type}: ${url}`, error);
-          
+
           // Clean up on error
           eventSource.close();
           this.sseStreams.delete(url);
           this.eventSources.delete(url);
-          
+
           if (!isConnected) {
             // If we haven't connected yet, reject the promise
-            reject(new Error(`Failed to establish SSE connection to ${url}: ${error}`));
+            reject(
+              new Error(
+                `Failed to establish SSE connection to ${url}: ${error}`,
+              ),
+            );
           } else {
             // If we were connected and lost connection, just log it
-            console.log(`SSE connection lost for ${type}, will retry on next connection attempt`);
+            console.log(
+              `SSE connection lost for ${type}, will retry on next connection attempt`,
+            );
           }
         };
 
@@ -120,7 +130,10 @@ export class LogsService {
               try {
                 rawData = JSON.parse(event.data);
               } catch (parseError) {
-                console.error(`Failed to parse SSE data for ${type}:`, parseError);
+                console.error(
+                  `Failed to parse SSE data for ${type}:`,
+                  parseError,
+                );
                 return;
               }
             }
@@ -138,29 +151,32 @@ export class LogsService {
             if (level !== LogLevels.DEBUG) {
               try {
                 const result = (await this.logRepository.create(
-                  { type, level, data: JSON.stringify(newData), isHidden: false },
+                  {
+                    type,
+                    level,
+                    data: JSON.stringify(newData),
+                    isHidden: false,
+                  },
                   { ignoreDuplicates: true },
                 )) as any;
 
                 if (level === LogLevels.ERRO || level === LogLevels.CRIT) {
                   this.sendMessageToClients(result.dataValues);
                 }
-
-                if (this.isDebug) {
-                  console.log(
-                    newData,
-                    type,
-                    '------------------------------------------ log --------------------------------------',
-                  );
-                }
               } catch (dbError) {
-                console.error(`Database error saving log for ${type}:`, dbError);
+                console.error(
+                  `Database error saving log for ${type}:`,
+                  dbError,
+                );
               }
             }
 
             sseStream.next(event.data);
           } catch (messageError) {
-            console.error(`Error processing SSE message for ${type}:`, messageError);
+            console.error(
+              `Error processing SSE message for ${type}:`,
+              messageError,
+            );
           }
         };
 
@@ -174,7 +190,6 @@ export class LogsService {
             reject(new Error(`SSE connection timeout for ${url}`));
           }
         }, SSE_CONNECTION_TIMEOUT);
-
       } catch (setupError) {
         console.error(`Error setting up SSE for ${type}:`, setupError);
         reject(setupError);
@@ -184,7 +199,7 @@ export class LogsService {
 
   public closeAllSseConnections(): void {
     console.log('Closing all SSE connections...');
-    
+
     this.eventSources.forEach((eventSource, url) => {
       try {
         eventSource.close();
@@ -193,7 +208,7 @@ export class LogsService {
         console.error(`Error closing SSE connection ${url}:`, error);
       }
     });
-    
+
     this.eventSources.clear();
     this.sseStreams.clear();
   }

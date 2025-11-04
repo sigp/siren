@@ -14,13 +14,51 @@ export default async function Page() {
   try {
     const token = getSessionCookie()
 
-    const beaconSpec = await fetchBeaconSpec(token)
-    const syncData = await fetchSyncData(token)
-    const nodeHealth = await fetchNodeHealth(token)
-    const bnVersion = await fetchBeaconNodeVersion(token)
-    const lighthouseVersion = await fetchValidatorVersion(token)
-    const activities = await fetchActivities({ token })
-    const exclusions = await fetchValidatorStatusExclusionList(token)
+    // Use Promise.allSettled to handle temporary connection issues gracefully
+    const results = await Promise.allSettled([
+      fetchBeaconSpec(token),
+      fetchSyncData(token),
+      fetchNodeHealth(token),
+      fetchBeaconNodeVersion(token),
+      fetchValidatorVersion(token),
+      fetchActivities({ token }),
+      fetchValidatorStatusExclusionList(token),
+    ])
+
+    const [
+      beaconSpecResult,
+      syncDataResult,
+      nodeHealthResult,
+      bnVersionResult,
+      lighthouseVersionResult,
+      activitiesResult,
+      exclusionsResult,
+    ] = results
+
+    // Only redirect if critical data (beaconSpec) fails
+    if (beaconSpecResult.status === 'rejected') {
+      console.error('Failed to fetch critical data, redirecting to error page')
+      redirect('/error')
+    }
+
+    // Provide fallback data for non-critical fetches
+    const beaconSpec = beaconSpecResult.value
+    const syncData =
+      syncDataResult.status === 'fulfilled'
+        ? syncDataResult.value
+        : { beaconSync: { isSyncing: false, syncDistance: 0, headSlot: 0 } }
+    const nodeHealth =
+      nodeHealthResult.status === 'fulfilled'
+        ? nodeHealthResult.value
+        : { natOpen: false, upnp: false }
+    const bnVersion =
+      bnVersionResult.status === 'fulfilled' ? bnVersionResult.value : { version: 'Unknown' }
+    const lighthouseVersion =
+      lighthouseVersionResult.status === 'fulfilled'
+        ? lighthouseVersionResult.value
+        : { version: 'Unknown' }
+    const activities = activitiesResult.status === 'fulfilled' ? activitiesResult.value : []
+    const exclusions = exclusionsResult.status === 'fulfilled' ? exclusionsResult.value : []
 
     return (
       <Wrapper
@@ -33,7 +71,7 @@ export default async function Page() {
         bnVersion={bnVersion.version}
       />
     )
-  } catch (e) {
+  } catch (_) {
     redirect('/error')
   }
 }

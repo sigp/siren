@@ -43,8 +43,8 @@ const Main = () => {
   const fetchNodeVersion = async (isRetry: boolean = false) => {
     try {
       const results = await Promise.allSettled([
-        axios.get('/api/beacon-version', { timeout: 10000 }),
-        axios.get('/api/lighthouse-version', { timeout: 10000 }),
+        axios.get('/api/beacon-version', { timeout: 5000 }),
+        axios.get('/api/lighthouse-version', { timeout: 5000 }),
       ])
 
       const beaconResult = results[0]

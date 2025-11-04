@@ -15,10 +15,14 @@ export interface NetworkPeerSpeedometerProps {
 const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) => {
   const { t } = useTranslation()
   const mode = useRecoilValue(uiMode)
-  const { connected } = peerData
+  const { connected } = peerData || {}
 
   // Ensure connected value is a valid number to prevent NaN in transform attributes
-  const safeConnectedValue = typeof connected === 'number' && !isNaN(connected) ? connected : 0
+  const safeConnectedValue =
+    typeof connected === 'number' && !isNaN(connected) && isFinite(connected) ? connected : 0
+
+  // Only render speedometer when mode is initialized (prevents NaN errors during SSR/hydration)
+  const shouldRenderSpeedometer = mode !== undefined
 
   return (
     <Tooltip
@@ -45,31 +49,33 @@ const NetworkPeerSpeedometer: FC<NetworkPeerSpeedometerProps> = ({ peerData }) =
           >
             {safeConnectedValue}
           </Typography>
-          <ReactSpeedometer
-            width={90}
-            height={80}
-            ringWidth={6}
-            needleHeightRatio={0.4}
-            segments={4}
-            maxSegmentLabels={1}
-            customSegmentLabels={[
-              {
-                text: '50',
-                position: CustomSegmentLabelPosition.Outside,
-                color: mode === UiMode.LIGHT ? 'black' : 'white',
-              },
-              {},
-              {},
-              {},
-            ]}
-            needleColor='transparent'
-            labelFontSize='6px'
-            valueTextFontSize='9px'
-            segmentColors={['tomato', 'gold', 'limegreen']}
-            value={safeConnectedValue}
-            maxValue={100}
-            textColor={'transparent'}
-          />
+          {shouldRenderSpeedometer && (
+            <ReactSpeedometer
+              width={90}
+              height={80}
+              ringWidth={6}
+              needleHeightRatio={0.4}
+              segments={4}
+              maxSegmentLabels={1}
+              customSegmentLabels={[
+                {
+                  text: '50',
+                  position: CustomSegmentLabelPosition.Outside,
+                  color: mode === UiMode.LIGHT ? 'black' : 'white',
+                },
+                {},
+                {},
+                {},
+              ]}
+              needleColor='transparent'
+              labelFontSize='6px'
+              valueTextFontSize='9px'
+              segmentColors={['tomato', 'gold', 'limegreen']}
+              value={safeConnectedValue}
+              maxValue={100}
+              textColor={'transparent'}
+            />
+          )}
         </div>
       </div>
     </Tooltip>

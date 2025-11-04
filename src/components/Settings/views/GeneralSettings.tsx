@@ -38,7 +38,7 @@ const GeneralSettings = () => {
         return
       }
       handleError()
-    } catch (e) {
+    } catch (_) {
       handleError()
     } finally {
       setIsLoading(false)

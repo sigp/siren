@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act, waitFor } from '@testing-library/react'
 import axios from 'axios'
 import displayToast from '../../../utilities/displayToast'
 import { ToastType } from '../../types'
@@ -41,14 +41,14 @@ describe('useImportValidator hook', () => {
     mockGenerateKeystore.mockResolvedValueOnce(fakeKeystore)
     mockedAxios.post.mockResolvedValueOnce({ status: 200 })
 
-    const { result, waitForNextUpdate } = renderHook(() => useImportValidator())
+    const { result } = renderHook(() => useImportValidator())
 
     act(() => {
       result.current.importValidator(validParams)
     })
 
     // Wait for hook state updates
-    await waitForNextUpdate()
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
 
     expect(mockGenerateKeystore).toHaveBeenCalledWith(
       validParams.mnemonic,
@@ -65,13 +65,13 @@ describe('useImportValidator hook', () => {
   it('should handle errors and call onError', async () => {
     mockGenerateKeystore.mockRejectedValueOnce(new Error('gen error'))
 
-    const { result, waitForNextUpdate } = renderHook(() => useImportValidator())
+    const { result } = renderHook(() => useImportValidator())
 
     act(() => {
       result.current.importValidator(validParams)
     })
 
-    await waitForNextUpdate()
+    await waitFor(() => expect(result.current.isError).toBe(true))
 
     expect(result.current.isSuccess).toBe(false)
     expect(result.current.isError).toBe(true)

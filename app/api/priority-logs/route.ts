@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     const token = getReqAuthToken(req)
     const data = await fetchPriorityLogs({ token, type, limit, order, since })
     return NextResponse.json(data)
-  } catch (error) {
+  } catch (_) {
     return NextResponse.json({ error: 'Failed to fetch priority logs' }, { status: 500 })
   }
 }

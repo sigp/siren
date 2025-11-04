@@ -102,7 +102,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
           pubKey,
           status: txStatus,
         })
-      } catch (e) {
+      } catch (_) {
         console.error('unable to store withdrawal activity...')
       } finally {
         setIsRecordedActivity(true)

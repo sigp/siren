@@ -1,5 +1,5 @@
 import { create, IKeystore } from '@chainsafe/bls-keystore'
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook, act } from '@testing-library/react'
 import { useRecoilValue } from 'recoil'
 import { blsModuleAtom } from '../../recoil/atoms'
 import useChainSafeKeygen from '../useChainSafeKeygen'

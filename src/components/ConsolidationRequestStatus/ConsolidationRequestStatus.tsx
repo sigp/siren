@@ -55,7 +55,7 @@ const ConsolidationRequestStatus: FC<ConsolidationRequestStatusProps> = ({
           pubKey: targetPubKey,
           status: txStatus,
         })
-      } catch (e) {
+      } catch (_) {
         console.error('unable to store activity')
       }
     })()

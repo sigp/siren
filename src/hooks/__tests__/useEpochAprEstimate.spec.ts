@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks'
+import { renderHook, waitFor } from '@testing-library/react'
 import { useRecoilValue } from 'recoil'
 import useEpochAprEstimate from '../useEpochAprEstimate'
 
@@ -14,7 +14,7 @@ describe('useEpochAprEstimate', () => {
   })
 
   it('should return correct values', async () => {
-    const { result, waitFor } = renderHook(() =>
+    const { result } = renderHook(() =>
       useEpochAprEstimate({
         1234567: [
           { epoch: 12345678, total_balance: '32000000000' },
@@ -36,7 +36,7 @@ describe('useEpochAprEstimate', () => {
   })
 
   it('should return correct filtered values', async () => {
-    const { result, waitFor } = renderHook(() =>
+    const { result } = renderHook(() =>
       useEpochAprEstimate(
         {
           1234567: [
@@ -61,7 +61,7 @@ describe('useEpochAprEstimate', () => {
   })
 
   it('should return default values if not epoch data', async () => {
-    const { result, waitFor } = renderHook(() =>
+    const { result } = renderHook(() =>
       useEpochAprEstimate({
         1234567: [],
         1234568: [],
