@@ -251,20 +251,20 @@ const LogDisplay: FC<LogDisplayProps> = React.memo(function ({ type, isLoading, 
             </div>
 
             {/* Static Column Headers */}
-            <div className='hidden lg:flex border-b border-style500 bg-gray-50 dark:bg-dark800 sticky top-0 z-10'>
-              <div className='px-3 py-2 w-[90px] text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+            <div className='hidden lg:flex w-full border-b border-style500 bg-gray-50 dark:bg-dark800 sticky top-0 z-10'>
+              <div className='px-3 py-2 w-[90px] flex-shrink-0 text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
                 Time
               </div>
-              <div className='px-2 py-2 w-[50px] text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+              <div className='px-2 py-2 w-[50px] flex-shrink-0 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
                 Level
               </div>
-              <div className='px-3 py-2 w-[180px] text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+              <div className='px-3 py-2 w-[180px] flex-shrink-0 text-center text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
                 Service
               </div>
-              <div className='px-3 py-2 w-auto min-w-[300px] text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+              <div className='px-3 py-2 w-[400px] flex-shrink-0 text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
                 Message
               </div>
-              <div className='px-3 py-2 w-auto text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
+              <div className='px-3 py-2 flex-1 text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide'>
                 Details
               </div>
             </div>

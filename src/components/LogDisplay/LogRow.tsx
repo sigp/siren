@@ -101,45 +101,47 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
   }
 
   return (
-    <>
-      <div
-        onClick={toggleExpanded}
-        className={`w-full hover:bg-dark50 dark:hover:bg-dark750 ${
-          isLargeData ? (isExpanded ? 'cursor-row-resize' : 'cursor-nesw-resize') : 'cursor-default'
-        }`}
-      >
-        <div className='lg:hidden table-cell px-3 py-1.5 space-y-0.5'>
-          <div className='flex items-center gap-2 text-xs font-mono'>
-            <span className='text-gray-500 dark:text-gray-400 min-w-[58px] text-xs'>
-              {formattedTime}
-            </span>
-            <span className={`${levelColor} font-medium min-w-[40px] text-center text-xs`}>
-              {level}
-            </span>
-            <span className={`${serviceColor} px-1.5 py-0.5 rounded text-xs font-medium truncate`}>
-              {serviceName}
-            </span>
-          </div>
-          <div className='block w-full text-xs font-roboto leading-tight text-gray-900 dark:text-gray-100'>
-            {msg}
-          </div>
-          {hasFields && (
-            <div
-              className='block w-full text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
-              dangerouslySetInnerHTML={{
-                __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
-              }}
-            />
-          )}
+    <div
+      onClick={toggleExpanded}
+      className={`w-full hover:bg-dark50 dark:hover:bg-dark750 ${
+        isLargeData ? (isExpanded ? 'cursor-row-resize' : 'cursor-nesw-resize') : 'cursor-default'
+      }`}
+    >
+      {/* Mobile view */}
+      <div className='lg:hidden px-3 py-1.5 space-y-0.5'>
+        <div className='flex items-center gap-2 text-xs font-mono'>
+          <span className='text-gray-500 dark:text-gray-400 min-w-[58px] text-xs'>
+            {formattedTime}
+          </span>
+          <span className={`${levelColor} font-medium min-w-[40px] text-center text-xs`}>
+            {level}
+          </span>
+          <span className={`${serviceColor} px-1.5 py-0.5 rounded text-xs font-medium truncate`}>
+            {serviceName}
+          </span>
         </div>
+        <div className='block w-full text-xs font-roboto leading-tight text-gray-900 dark:text-gray-100'>
+          {msg}
+        </div>
+        {hasFields && (
+          <div
+            className='block w-full text-xs break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
+            dangerouslySetInnerHTML={{
+              __html: `${formattedFields}${isLargeData && !isExpanded ? ' <span class="text-gray-500">...</span>' : ''}`,
+            }}
+          />
+        )}
+      </div>
 
-        <div className='hidden lg:table-cell px-3 py-1.5 w-[90px]'>
+      {/* Desktop view - using flex to match headers */}
+      <div className='hidden lg:flex w-full'>
+        <div className='px-3 py-1.5 w-[90px] flex-shrink-0'>
           <div className='text-xs font-mono text-gray-500 dark:text-gray-400'>{formattedTime}</div>
         </div>
-        <div className='hidden lg:table-cell px-2 py-1.5 w-[50px] text-center'>
+        <div className='px-2 py-1.5 w-[50px] flex-shrink-0 text-center'>
           <div className={`${levelColor} font-medium text-xs`}>{level}</div>
         </div>
-        <div className='hidden lg:table-cell px-3 py-1.5 w-[180px] text-center'>
+        <div className='px-3 py-1.5 w-[180px] flex-shrink-0 text-center'>
           <span
             className={`${serviceColor} px-1.5 py-0.5 rounded text-xs font-medium inline-block truncate max-w-full`}
             title={service}
@@ -147,12 +149,12 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
             {serviceName}
           </span>
         </div>
-        <div className='hidden lg:table-cell px-3 py-1.5 w-auto min-w-[300px] align-top'>
+        <div className='px-3 py-1.5 w-[400px] flex-shrink-0'>
           <div className='text-xs text-left font-roboto leading-tight text-gray-900 dark:text-gray-100'>
             {msg}
           </div>
         </div>
-        <div className='hidden lg:table-cell px-3 py-1.5 w-auto align-top'>
+        <div className='px-3 py-1.5 flex-1'>
           {hasFields && (
             <div
               className='block w-full text-xs text-left break-words leading-tight text-gray-600 dark:text-gray-400 font-roboto'
@@ -163,7 +165,7 @@ const LogRow: FC<LogRowProps> = ({ log }) => {
           )}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

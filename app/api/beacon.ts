@@ -1,5 +1,6 @@
 import { BACKEND_URL } from '../../src/constants/envars'
 import fetchFromApi from '../../utilities/fetchFromApi'
+import fetchFromApiWithRetry from '../../utilities/fetchFromApiWithRetry'
 
 export const fetchNodeHealth = async (token: string) =>
   await fetchFromApi(`${BACKEND_URL}/node/health`, token)
@@ -10,7 +11,11 @@ export const fetchInclusionRate = async (token: string) =>
 export const fetchPeerData = async (token: string) =>
   await fetchFromApi(`${BACKEND_URL}/beacon/peer`, token)
 export const fetchBeaconSpec = async (token: string) =>
-  await fetchFromApi(`${BACKEND_URL}/beacon/spec`, token)
+  await fetchFromApiWithRetry(`${BACKEND_URL}/beacon/spec`, token, undefined, {
+    maxRetries: 3,
+    initialDelay: 1000,
+    timeout: 10000,
+  })
 export const fetchValidatorCountData = async (token: string) =>
   await fetchFromApi(`${BACKEND_URL}/beacon/validator-count`, token)
 export const fetchProposerDuties = async (token: string) =>
