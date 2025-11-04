@@ -59,6 +59,7 @@
     "react-window": "^1.8.11",
     "recoil": "^0.7.5",
     "rodal": "^2.0.0",
+    "sharp": "^0.34.4",
     "svg-identicon": "^1.0.1",
     "swr": "^2.2.5",
     "tailwind-scrollbar-hide": "^1.1.7",

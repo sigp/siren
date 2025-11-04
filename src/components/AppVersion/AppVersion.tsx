@@ -25,11 +25,16 @@ const AppVersion: FC<AppVersionProps> = ({ className, vcVersion, bnVersion }) =>
 
   return (
     <div className={className}>
-      <Typography type='text-tiny' color='text-dark400'>
-        Beacon — {beaconVersion && <VersionText data={beaconVersion} />}
+      <Typography
+        type='text-caption1'
+        color='text-dark400'
+        darkMode='dark:text-dark300'
+        className='mb-1'
+      >
+        Beacon Node — {beaconVersion && <VersionText data={beaconVersion} />}
       </Typography>
-      <Typography type='text-tiny' color='text-dark400'>
-        Validator — {vcVersion && <VersionText data={validatorVersion} />}
+      <Typography type='text-caption1' color='text-dark400' darkMode='dark:text-dark300'>
+        Validator Client — {vcVersion && <VersionText data={validatorVersion} />}
       </Typography>
     </div>
   )

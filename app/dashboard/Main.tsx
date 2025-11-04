@@ -82,7 +82,6 @@ const Main: FC<MainProps> = (props) => {
   const { SECONDS_PER_SLOT, SLOTS_PER_EPOCH } = beaconSpec
   const { version } = pckJson
   const { updateAlert, storeAlert, removeAlert } = useDiagnosticAlerts()
-  const [username] = useLocalStorage<string>('username', 'Keeper')
   const [validatorHeightRatio, setValidatorHeightRatio] = useLocalStorage<number>(
     'validatorHeightRatio',
     0.5,
@@ -354,12 +353,7 @@ const Main: FC<MainProps> = (props) => {
     >
       <div className='w-full grid grid-cols-1 lg:grid-cols-12 h-full items-stretch overflow-hidden'>
         <div className='col-span-6 xl:col-span-5 flex flex-col h-full p-4 lg:p-0'>
-          <AppGreeting
-            userName={username}
-            vcVersion={lighthouseVersion}
-            bnVersion={bnVersion}
-            sirenVersion={version}
-          />
+          <AppGreeting vcVersion={lighthouseVersion} bnVersion={bnVersion} sirenVersion={version} />
           <AccountEarning
             validatorCacheData={validatorCache}
             validatorStateInfo={validatorStates}

@@ -20,9 +20,10 @@ import SettingsHeader from '../SettingsHeader'
 export interface AboutSettingsProps {
   bnVersion: string
   vcVersion: string
+  sirenVersion?: string
 }
 
-const AboutSettings: FC<AboutSettingsProps> = ({ bnVersion, vcVersion }) => {
+const AboutSettings: FC<AboutSettingsProps> = ({ bnVersion, vcVersion, sirenVersion }) => {
   const { t } = useTranslation()
   const { mode } = useUiMode()
 
@@ -49,7 +50,39 @@ const AboutSettings: FC<AboutSettingsProps> = ({ bnVersion, vcVersion }) => {
                 </Typography>
               </div>
             </div>
-            <AppVersion bnVersion={bnVersion} vcVersion={vcVersion} className='mt-4' />
+            <div className='mt-6 space-y-4'>
+              {/* Siren Version */}
+              {sirenVersion && (
+                <div>
+                  <Typography
+                    type='text-caption1'
+                    isBold
+                    darkMode='dark:text-white'
+                    className='mb-2'
+                  >
+                    Siren
+                  </Typography>
+                  <div className='py-2 px-4 rounded-lg bg-tertiary w-fit'>
+                    <Typography
+                      type='text-caption1'
+                      isBold
+                      darkMode='dark:text-white'
+                      color='text-white'
+                      family='font-roboto'
+                    >
+                      v{sirenVersion}-{process.env.NEXT_PUBLIC_GIT_HASH || 'unknown'}
+                    </Typography>
+                  </div>
+                </div>
+              )}
+              {/* Lighthouse Versions */}
+              <div>
+                <Typography type='text-caption1' isBold darkMode='dark:text-white' className='mb-2'>
+                  Lighthouse
+                </Typography>
+                <AppVersion bnVersion={bnVersion} vcVersion={vcVersion} />
+              </div>
+            </div>
           </div>
           <div className='flex-1 mt-8 lg:mt-0 lg:px-12'>
             <AppDescription view='settings' />
