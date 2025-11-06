@@ -191,7 +191,7 @@ const EditableFeeRecipient: FC<EditableFeeRecipientProps> = ({
               onClick={handleInputClick}
               placeholder='0x...'
               disabled={isLoading}
-              className='w-32 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-dark750 text-dark500 dark:text-white focus:outline-none focus:border-primary'
+              className='w-80 px-2 py-1 text-xs border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-dark750 text-dark500 dark:text-white focus:outline-none focus:border-primary font-mono'
             />
             <button
               onClick={handleSave}
