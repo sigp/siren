@@ -3,6 +3,7 @@ import {
   BeaconChaValidatorUrl,
   HoleskyBeaconChaValidatorUrl,
   HoodiBeaconChaValidatorUrl,
+  SepoliaBeaconChaValidatorUrl,
   KubernetsValidatorUrl,
 } from '../../constants/constants'
 import { ChainId } from '../../types'
@@ -19,6 +20,8 @@ export const selectBeaconChaBaseUrl = selector({
         return HoleskyBeaconChaValidatorUrl
       case ChainId.HOODI:
         return HoodiBeaconChaValidatorUrl
+      case ChainId.SEPOLIA:
+        return SepoliaBeaconChaValidatorUrl
       default:
         return KubernetsValidatorUrl
     }

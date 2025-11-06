@@ -19,6 +19,7 @@ import { Network } from '../../../src/constants/enums';
 import {
   HOODI_PECTRA_FORK_VERSION,
   MAINNET_PECTRA_FORK_VERSION,
+  SEPOLIA_PECTRA_FORK_VERSION,
   BACKEND_RETRY_DELAY,
 } from '../../../src/constants/constants';
 
@@ -232,7 +233,9 @@ export class TasksService implements OnApplicationBootstrap {
       ? MAINNET_PECTRA_FORK_VERSION
       : config === Network.Hoodi.toLowerCase()
         ? HOODI_PECTRA_FORK_VERSION
-        : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
+        : config === Network.Sepolia.toLowerCase()
+          ? SEPOLIA_PECTRA_FORK_VERSION
+          : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
   }
 
   private async initPendingDepositsScheduler() {
