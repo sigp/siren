@@ -6,6 +6,8 @@ import isEthereumAddress from '../../../utilities/isEthereumAddress'
 import useUiMode from '../../hooks/useUiMode'
 import { ToastType } from '../../types'
 import AuthPrompt from '../AuthPrompt/AuthPrompt'
+import Button, { ButtonFace } from '../Button/Button'
+import RodalModal from '../RodalModal/RodalModal'
 import Tooltip from '../ToolTip/Tooltip'
 import Typography from '../Typography/Typography'
 
@@ -27,6 +29,8 @@ const EditableFeeRecipient: FC<EditableFeeRecipientProps> = ({
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [isAuth, setAuth] = useState(false)
+  const [showConfirmation, setShowConfirmation] = useState(false)
+  const [isConfirmed, setIsConfirmed] = useState(false)
 
   useEffect(() => {
     setEditValue(feeRecipient || '')
@@ -55,7 +59,18 @@ const EditableFeeRecipient: FC<EditableFeeRecipientProps> = ({
     }
 
     setError(null)
+    setShowConfirmation(true)
+  }
+
+  const handleConfirmationProceed = () => {
+    setShowConfirmation(false)
+    setIsConfirmed(false)
     setAuth(true)
+  }
+
+  const handleConfirmationCancel = () => {
+    setShowConfirmation(false)
+    setIsConfirmed(false)
   }
 
   const updateFeeRecipient = async (password: string) => {
@@ -114,6 +129,51 @@ const EditableFeeRecipient: FC<EditableFeeRecipientProps> = ({
 
   return (
     <>
+      <RodalModal
+        isVisible={showConfirmation}
+        onClose={handleConfirmationCancel}
+        styles={{ maxWidth: '500px' }}
+      >
+        <div className='p-6'>
+          <Typography type='text-subtitle1' color='text-dark500' className='mb-4'>
+            {t('validatorEdit.feeRecipient.confirmTitle', 'Confirm fee recipient update')}
+          </Typography>
+          <div className='space-y-4'>
+            <Typography type='text-caption1' color='text-dark500' className='leading-relaxed'>
+              {t(
+                'validatorEdit.feeRecipient.confirmMessage',
+                'Updating fee recipient in Siren will replace the fee recipients set in the validator client and/or beacon node using --suggested-fee-recipient',
+              )}
+            </Typography>
+            <div className='flex items-start gap-2 mt-4'>
+              <input
+                type='checkbox'
+                id='confirm-checkbox'
+                checked={isConfirmed}
+                onChange={(e) => setIsConfirmed(e.target.checked)}
+                className='mt-1 w-4 h-4 text-primary bg-gray-100 border-gray-300 rounded focus:ring-primary dark:focus:ring-primary dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'
+              />
+              <label htmlFor='confirm-checkbox' className='cursor-pointer'>
+                <Typography type='text-caption1' color='text-dark500'>
+                  {t('validatorEdit.feeRecipient.confirmCheckbox', 'I understand and proceed')}
+                </Typography>
+              </label>
+            </div>
+          </div>
+          <div className='flex gap-2 justify-end mt-6'>
+            <Button type={ButtonFace.TERTIARY} onClick={handleConfirmationCancel}>
+              {t('common.cancel', 'Cancel')}
+            </Button>
+            <Button
+              type={ButtonFace.SECONDARY}
+              isDisabled={!isConfirmed}
+              onClick={handleConfirmationProceed}
+            >
+              {t('common.continue', 'Continue')}
+            </Button>
+          </div>
+        </div>
+      </RodalModal>
       <AuthPrompt
         isLoading={isLoading}
         mode={mode}
