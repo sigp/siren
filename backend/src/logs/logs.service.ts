@@ -19,7 +19,7 @@ export class LogsService {
   constructor(
     @InjectModel(Log)
     private logRepository: typeof Log,
-  ) {}
+  ) { }
 
   private isDebug = process.env.DEBUG === 'true';
 
@@ -31,6 +31,18 @@ export class LogsService {
 
   private clientManager = new ClientManager();
 
+
+  // Normalizes Lighthouse log level to Siren's LogLevels
+  private normalizeLogLevel(level: any): LogLevels {
+    // Lighthouse sends 'ERROR' but Siren uses 'ERRO'
+    if (level === 'ERROR') {
+      return LogLevels.ERRO;
+    }
+
+    // Return the level as-is if it's already a valid LogLevels value
+    return level as LogLevels;
+  }
+
   /**
    * Transforms the new Lighthouse log format to the expected SSELog format
    */
@@ -39,7 +51,7 @@ export class LogsService {
     const { message, ...otherFields } = fields;
 
     return {
-      level,
+      level: this.normalizeLogLevel(level),
       msg: message,
       service: target,
       time,
@@ -142,8 +154,11 @@ export class LogsService {
             if (this.isLighthouseFormat(rawData)) {
               newData = this.transformLighthouseLog(rawData);
             } else {
-              // Handle legacy format
+              // Handle legacy format - normalize the level if needed
               newData = rawData as SSELog;
+              if (newData.level) {
+                newData.level = this.normalizeLogLevel(newData.level);
+              }
             }
 
             const { level } = newData;
