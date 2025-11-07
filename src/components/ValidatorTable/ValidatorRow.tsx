@@ -84,6 +84,11 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     router.push(editHref)
   }
 
+  const handleCopyToClipboard = (text: string, e: MouseEvent) => {
+    e.stopPropagation()
+    navigator.clipboard.writeText(text)
+  }
+
   const viewDetail = (e: MouseEvent<HTMLTableRowElement>) => {
     if (e.target instanceof Element && e.target.closest('button')) {
       return
@@ -133,9 +138,15 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
       </th>
       <th className='px-2'>
         <Tooltip id={pubKey} place='top-start' style={{ fontSize: '12px' }} text={pubKey}>
-          <Typography color='text-dark500' type='text-caption1' className='text-left w-fit'>
-            {formatEthAddress(pubKey)}
-          </Typography>
+          <div
+            className='cursor-pointer inline-flex items-center gap-1 group'
+            onClick={(e) => handleCopyToClipboard(pubKey, e)}
+          >
+            <Typography color='text-dark500' type='text-caption1' className='text-left w-fit'>
+              {formatEthAddress(pubKey)}
+            </Typography>
+            <i className='bi-clipboard text-xs text-dark400 opacity-0 group-hover:opacity-100 transition-opacity' />
+          </div>
         </Tooltip>
       </th>
       <th className='px-2'>
@@ -154,14 +165,22 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
         </Typography>
       </th>
       <th className='px-1'>
-        <WithdrawalAddressText
-          tooltipClasses='mx-auto'
-          color='text-dark500'
-          type='text-caption1'
-          className='whitespace-nowrap'
-          withdrawalAddress={withdrawalAddress}
-          id={pubKey}
-        />
+        <div
+          className='cursor-pointer inline-flex items-center gap-1 group justify-center'
+          onClick={(e) => withdrawalAddress && handleCopyToClipboard(withdrawalAddress, e)}
+        >
+          <WithdrawalAddressText
+            tooltipClasses='mx-auto'
+            color='text-dark500'
+            type='text-caption1'
+            className='whitespace-nowrap'
+            withdrawalAddress={withdrawalAddress}
+            id={pubKey}
+          />
+          {withdrawalAddress && (
+            <i className='bi-clipboard text-xs text-dark400 opacity-0 group-hover:opacity-100 transition-opacity' />
+          )}
+        </div>
       </th>
       <th className='border-r-style500 px-4'>
         <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>
