@@ -269,10 +269,9 @@
     "hasRam": "Node has sufficient memory."
   },
   "appDescription": {
-    "developedBy": "Developed & Secured By:",
-    "builtOn": "Built on:",
-    "rustLanguage": "Rust Programming Language",
-    "validatorClient": "Validator Client"
+    "lighthouse": "Lighthouse is an Ethereum consensus client built with Rust.",
+    "siren": "Siren is a Lighthouse UI for monitoring validators.",
+    "developedBy": "Lighthouse and Siren are developed and maintained by Sigma Prime."
   },
   "initScreen": {
     "initializing": "Initializing",
@@ -631,7 +630,6 @@
         "accept": "I Understand & Continue"
       }
     },
-
     "enableElectra": "Enable 0x02",
     "0x02CredTooltip": "Enabling 0x02 withdrawal credentials allows your validator to hold up to 2048 ETH.",
     "effectiveBalanceError": "Effective Balance cannot be lower than 32 or higher than 2048 ETH."
