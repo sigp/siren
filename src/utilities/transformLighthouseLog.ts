@@ -1,4 +1,15 @@
-import { SSELog, LighthouseLog } from '../types'
+import { SSELog, LighthouseLog, LogLevels } from '../types'
+
+// Normalizes Lighthouse log level to Siren's LogLevels
+export function normalizeLogLevel(level: any): LogLevels {
+  // Lighthouse sends 'ERROR' but Siren uses 'ERRO'
+  if (level === 'ERROR') {
+    return LogLevels.ERRO;
+  }
+
+  // Return the level as-is if it's already a valid LogLevels value
+  return level as LogLevels;
+}
 
 /**
  * Transforms the new Lighthouse log format to the expected SSELog format
@@ -8,7 +19,7 @@ export function transformLighthouseLog(rawLog: LighthouseLog): SSELog {
   const { message, ...otherFields } = fields
 
   return {
-    level,
+    level: normalizeLogLevel(level),
     msg: message,
     service: target,
     time,
@@ -41,5 +52,12 @@ export function normalizeLogData(rawData: any): SSELog {
   }
 
   // Handle legacy format or already normalized data
-  return rawData as SSELog
+  const normalizedData = rawData as SSELog
+
+  // Normalize the level if it exists
+  if (normalizedData.level) {
+    normalizedData.level = normalizeLogLevel(normalizedData.level)
+  }
+
+  return normalizedData
 }
