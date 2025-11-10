@@ -4,11 +4,11 @@ import { SSELog, LighthouseLog, LogLevels } from '../types'
 export function normalizeLogLevel(level: any): LogLevels {
   // Lighthouse sends 'ERROR' but Siren uses 'ERRO'
   if (level === 'ERROR') {
-    return LogLevels.ERRO;
+    return LogLevels.ERRO
   }
 
   // Return the level as-is if it's already a valid LogLevels value
-  return level as LogLevels;
+  return level as LogLevels
 }
 
 /**
