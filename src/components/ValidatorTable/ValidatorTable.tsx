@@ -155,6 +155,16 @@ const ValidatorTable: FC<ValidatorTableProps> = ({
                         {t('withdrawalAddress')}
                       </Typography>
                     </th>
+                    <th>
+                      <Typography
+                        color='text-dark500'
+                        type='text-tiny'
+                        isUpperCase
+                        className='text-center'
+                      >
+                        FEE RECIPIENT
+                      </Typography>
+                    </th>
                     <th className={`${view === 'partial' ? 'border-r-style500' : ''} pl-2`}>
                       <Typography
                         color='text-dark500'

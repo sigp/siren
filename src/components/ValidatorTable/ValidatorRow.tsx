@@ -22,6 +22,7 @@ import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBa
 import { ValAliases } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import DisabledTooltip from '../DisabledTooltip/DisabledTooltip'
+import EditableFeeRecipient from '../EditableFeeRecipient/EditableFeeRecipient'
 import IdenticonIcon from '../IdenticonIcon/IdenticonIcon'
 import StatusIcon from '../StatusIcon/StatusIcon'
 import Tooltip from '../ToolTip/Tooltip'
@@ -39,6 +40,7 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   const { t } = useTranslation()
   const router = useRouter()
   const [isReady, setReady] = useState(false)
+  const [currentFeeRecipient, setCurrentFeeRecipient] = useState(validator.feeRecipient)
   const processingValidators = useRecoilValue(processingBlsValidators)
   const setActiveValidatorId = useSetRecoilState(activeValidatorId)
   const setIsEditValidator = useSetRecoilState(isEditValidator)
@@ -69,6 +71,10 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
     setReady(true)
   }, [])
 
+  useEffect(() => {
+    setCurrentFeeRecipient(validator.feeRecipient)
+  }, [validator.feeRecipient])
+
   // Use API aliases if available, fallback to localStorage for migration
   const currentAliases = aliases || localAliases
   const valName = useValidatorName(validator, currentAliases)
@@ -90,8 +96,15 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
   }
 
   const viewDetail = (e: MouseEvent<HTMLTableRowElement>) => {
-    if (e.target instanceof Element && e.target.closest('button')) {
-      return
+    if (e.target instanceof Element) {
+      // Don't trigger if clicking buttons, inputs, or modal overlays
+      if (
+        e.target.closest('button') ||
+        e.target.closest('input') ||
+        e.target.closest('.rodal-dialog')
+      ) {
+        return
+      }
     }
 
     if (view === 'full') {
@@ -181,6 +194,13 @@ const ValidatorRow: FC<ValidatorRowProps> = ({ validator, view }) => {
             <i className='bi-clipboard text-xs text-dark400 opacity-0 group-hover:opacity-100 transition-opacity' />
           )}
         </div>
+      </th>
+      <th className='px-2'>
+        <EditableFeeRecipient
+          feeRecipient={currentFeeRecipient}
+          pubKey={pubKey}
+          onUpdate={setCurrentFeeRecipient}
+        />
       </th>
       <th className='border-r-style500 px-4'>
         <div className='flex items-center mx-auto justify-between flex-wrap w-full max-w-[100px]'>

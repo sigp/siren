@@ -116,4 +116,15 @@ export class ValidatorController {
     await this.validatorService.importValidatorAliases(aliases);
     return { success: true };
   }
+
+  @Get('fee-recipient/:pubkey')
+  async getFeeRecipient(@Param('pubkey') pubkey: string) {
+    return this.validatorService.fetchFeeRecipient(pubkey);
+  }
+
+  @Put('fee-recipient')
+  @UseGuards(AuthGuard)
+  async updateFeeRecipient(@Body() feeRecipientData) {
+    return this.validatorService.updateFeeRecipient(feeRecipientData);
+  }
 }

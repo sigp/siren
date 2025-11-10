@@ -6,6 +6,7 @@ const ACTIVITY_KEY: Record<ActivityType, string> = {
   [ActivityType.GRAFFITI]: 'updateGraffiti',
   [ActivityType.CONSOLIDATION]: 'consolidation',
   [ActivityType.PARTIAL_WITHDRAWAL]: 'partialWithdrawal',
+  [ActivityType.FEE_RECIPIENT]: 'updateFeeRecipient',
 }
 
 const getActivityTitleKey = (type: ActivityType, isError: boolean) => {
