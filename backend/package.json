@@ -34,7 +34,7 @@
     "@nestjs/schedule": "^4.0.2",
     "@nestjs/sequelize": "^10.0.1",
     "@types/validator": "^13.12.0",
-    "axios": "^1.6.8",
+    "axios": "^1.12.0",
     "cache-manager": "^5.5.2",
     "cookie-parser": "^1.4.7",
     "ethers": "^6.13.1",
