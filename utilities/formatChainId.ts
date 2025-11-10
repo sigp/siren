@@ -8,6 +8,8 @@ const formatChainId = (id: string): ChainId => {
       return ChainId.MAINNET
     case '560048':
       return ChainId.HOODI
+    case '11155111':
+      return ChainId.SEPOLIA
     default:
       return ChainId.LOCALTESTNET
   }

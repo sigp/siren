@@ -4,6 +4,7 @@ import {
   HOLESKY_PECTRA_FORK_VERSION,
   HOODI_PECTRA_FORK_VERSION,
   MAINNET_PECTRA_FORK_VERSION,
+  SEPOLIA_PECTRA_FORK_VERSION,
 } from '../constants/constants'
 import { Network } from '../constants/enums'
 import { beaconNodeSpec, forkVersion } from '../recoil/atoms'
@@ -32,6 +33,10 @@ const useElectraStatus = () => {
 
     if (configName === Network.Hoodi.toLowerCase()) {
       return currentVersion === HOODI_PECTRA_FORK_VERSION
+    }
+
+    if (configName === Network.Sepolia.toLowerCase()) {
+      return currentVersion === SEPOLIA_PECTRA_FORK_VERSION
     }
 
     return currentVersion === MAINNET_PECTRA_FORK_VERSION

@@ -1,6 +1,6 @@
 import { defineChain, Chain } from 'viem'
 import { createConfig, http } from 'wagmi'
-import { mainnet, holesky } from 'wagmi/chains'
+import { mainnet, holesky, sepolia } from 'wagmi/chains'
 import { walletConnect } from 'wagmi/connectors'
 
 const localChainId = process.env.NEXT_PUBLIC_TESTNET_CHAIN_ID
@@ -19,10 +19,11 @@ const createWagmiConfig = () => {
     rpcUrls: { default: { http: [altHoodiTestnetRpc || 'https://0xrpc.io/hoodi'] } },
     nativeCurrency,
   })
-  const chains: Chain[] = [mainnet, holesky, hoodi]
+  const chains: Chain[] = [mainnet, holesky, sepolia, hoodi]
   const transports: Record<number, ReturnType<typeof http>> = {
     [mainnet.id]: http(),
     [holesky.id]: http(),
+    [sepolia.id]: http(),
     [hoodi.id]: http(),
   }
 

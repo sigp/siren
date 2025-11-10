@@ -155,6 +155,7 @@ export enum ChainId {
   MAINNET = 'MAINNET',
   HOLESKY = 'HOLESKY',
   HOODI = 'HOODI',
+  SEPOLIA = 'SEPOLIA',
   LOCALTESTNET = 'LOCALTESTNET',
 }
 
@@ -257,6 +258,7 @@ export enum NetworkId {
   HOLESKY = 17000,
   HOODI = 560048,
   MAINNET = 1,
+  SEPOLIA = 11155111,
 }
 
 export type ConsolidationTx = {
