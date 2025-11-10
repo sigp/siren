@@ -11,6 +11,8 @@ export async function PUT(req: Request) {
     return NextResponse.json(res, { status: 200 })
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Failed to update fee recipient'
-    return NextResponse.json({ error: errorMessage }, { status: 500 })
+    // Check if it's a 401 authentication error
+    const status = errorMessage.includes('Status: 401') ? 401 : 500
+    return NextResponse.json({ error: errorMessage }, { status })
   }
 }

@@ -740,7 +740,10 @@
     "feeRecipient": {
       "unexpectedError": "An unexpected error occurred while updating fee recipient. Please try again.",
       "successUpdate": "Successfully updated fee recipient",
-      "errorUpdate": "Unable to update fee recipient. Please check the address format and try again."
+      "errorUpdate": "Unable to update fee recipient. Please check the address format and try again.",
+      "incorrectPassword": "Incorrect password. Please try again.",
+      "confirmTitle": "Confirm fee recipient update",
+      "confirmMessage": "Updating fee recipient in Siren will replace the fee recipients set in the validator client and/or beacon node using --suggested-fee-recipient"
     }
   },
   "deviceSelect": {

@@ -95,13 +95,20 @@ const EditableFeeRecipient: FC<EditableFeeRecipientProps> = ({
         setIsEditing(false)
         onUpdate?.(editValue)
       } else {
-        const data = await response.json().catch(() => ({}))
-        const errorMessage =
-          typeof data.error === 'string'
-            ? data.error
-            : data.message || t('validatorEdit.feeRecipient.errorUpdate')
-        setError(errorMessage)
-        displayToast(t('validatorEdit.feeRecipient.errorUpdate'), ToastType.ERROR)
+        // Check if it's a password authentication error (401)
+        if (response.status === 401) {
+          const errorMessage = t('validatorEdit.feeRecipient.incorrectPassword')
+          setError(errorMessage)
+          displayToast(errorMessage, ToastType.ERROR)
+        } else {
+          const data = await response.json().catch(() => ({}))
+          const errorMessage =
+            typeof data.error === 'string'
+              ? data.error
+              : data.message || t('validatorEdit.feeRecipient.errorUpdate')
+          setError(errorMessage)
+          displayToast(t('validatorEdit.feeRecipient.errorUpdate'), ToastType.ERROR)
+        }
       }
     } catch (err) {
       setIsLoading(false)
