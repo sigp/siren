@@ -1,6 +1,5 @@
 import React, { FC } from 'react'
 import { useTranslation } from 'react-i18next'
-import useElectraStatus from '../../hooks/useElectraStatus'
 import { ValidatorManagementView } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
@@ -41,8 +40,6 @@ const MainView: FC<MainViewProps> = ({
   const viewConsolidateVal = () => onChangeView(ValidatorManagementView.CONSOLIDATE)
   const viewCreateVal = () => onChangeView(ValidatorManagementView.CREATE)
 
-  const { isEnabled } = useElectraStatus()
-
   return (
     <div className='w-full space-y-6 pb-6'>
       <div className='flex flex-col lg:flex-row justify-between lg:items-center'>
@@ -63,7 +60,7 @@ const MainView: FC<MainViewProps> = ({
           />
           <div className='flex justify-center lg:justify-start space-x-4'>
             <Button
-              isDisabled={!isEnabled || !hasConsolidationAction}
+              isDisabled={!hasConsolidationAction}
               onClick={viewConsolidateVal}
               type={ButtonFace.TERTIARY}
             >
