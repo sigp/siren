@@ -13,16 +13,33 @@ const nextConfig = {
       }
     })(),
   },
-  webpack(config, { dev }) {
+  webpack(config, { dev, isServer }) {
     config.module.rules.push({
       test: /\.svg$/,
       use: ['@svgr/webpack'],
     })
 
-    // Enable top-level await support
+    // Enable top-level await and async WASM support
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true,
+      asyncWebAssembly: true,
+    }
+
+    // Handle WASM files
+    config.module.rules.push({
+      test: /\.wasm$/,
+      type: 'webassembly/async',
+    })
+
+    // Resolve fallbacks for Node.js modules in browser
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      }
     }
 
     // Let Next.js handle devtool configuration for optimal performance
