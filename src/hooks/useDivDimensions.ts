@@ -6,7 +6,7 @@ type Dimensions = {
 }
 
 const useDivDimensions = (): {
-  ref: RefObject<HTMLDivElement | null>
+  ref: RefObject<HTMLDivElement>
   dimensions?: Dimensions
   measure: () => void
 } => {
