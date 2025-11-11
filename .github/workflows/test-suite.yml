@@ -8,7 +8,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: lint
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -27,7 +27,7 @@ jobs:
         run: yarn lint
 
   test:
-    name: Tests
+    name: tests
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -46,7 +46,7 @@ jobs:
         run: yarn test
 
   build:
-    name: Build
+    name: build
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
@@ -67,11 +67,8 @@ jobs:
           NODE_ENV: production
 
   backend-test:
-    name: Backend tests
+    name: backend-tests
     runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -81,16 +78,20 @@ jobs:
         with:
           node-version: '20'
           cache: 'yarn'
-          cache-dependency-path: backend/yarn.lock
+
+      - name: Install root dependencies
+        run: yarn --frozen-lockfile --network-timeout 300000
 
       - name: Install backend dependencies
+        working-directory: backend
         run: yarn --frozen-lockfile
 
       - name: Run backend tests
+        working-directory: backend
         run: yarn test
 
   docker-build:
-    name: Docker build test
+    name: docker-build-test
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
