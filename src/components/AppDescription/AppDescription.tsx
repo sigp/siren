@@ -15,13 +15,7 @@ const AppDescription: FC<AppDescriptionProps> = ({ view }) => {
   const opacityText = view === 'init' ? 'opacity-40' : undefined
 
   return (
-    <div
-      className={`flex ${
-        isSettingsView
-          ? 'flex-col md:flex-row space-y-6 md:space-y-0 justify-between'
-          : 'items-center space-x-10 md:space-x-20'
-      }`}
-    >
+    <div className='flex flex-col space-y-4'>
       <div>
         <Typography
           fontWeight='font-light'
@@ -29,16 +23,17 @@ const AppDescription: FC<AppDescriptionProps> = ({ view }) => {
           className={largerText}
           color={lightTextColor}
         >
-          Ethereum Lighthouse
+          {t('appDescription.lighthouse')}
         </Typography>
+      </div>
+      <div className={opacityText}>
         <Typography
           fontWeight='font-light'
           type='text-caption2'
-          isBold={isSettingsView}
           className={largerText}
-          color={lightTextColor}
+          color={darkerTextColor}
         >
-          {t('appDescription.validatorClient')} —
+          {t('appDescription.siren')}
         </Typography>
       </div>
       <div className={opacityText}>
@@ -49,34 +44,6 @@ const AppDescription: FC<AppDescriptionProps> = ({ view }) => {
           color={darkerTextColor}
         >
           {t('appDescription.developedBy')}
-        </Typography>
-        <Typography
-          fontWeight='font-light'
-          type='text-caption2'
-          isBold={isSettingsView}
-          className={largerText}
-          color={darkerTextColor}
-        >
-          Sigma Prime
-        </Typography>
-      </div>
-      <div className={opacityText}>
-        <Typography
-          fontWeight='font-light'
-          type='text-caption2'
-          className={largerText}
-          color={darkerTextColor}
-        >
-          {t('appDescription.builtOn')}
-        </Typography>
-        <Typography
-          fontWeight='font-light'
-          type='text-caption2'
-          isBold={isSettingsView}
-          className={largerText}
-          color={darkerTextColor}
-        >
-          {t('appDescription.rustLanguage')}
         </Typography>
       </div>
     </div>
