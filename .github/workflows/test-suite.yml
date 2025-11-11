@@ -103,7 +103,3 @@ jobs:
       - name: Build Docker image
         run: docker build -f Dockerfile -t siren:test .
 
-      - name: Check image size
-        run: |
-          IMAGE_SIZE=$(docker image inspect siren:test --format='{{.Size}}' | awk '{print $1/1024/1024}')
-          echo "Docker image size: ${IMAGE_SIZE} MB"
