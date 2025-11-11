@@ -1,0 +1,108 @@
+name: test-suite
+
+on:
+  push:
+    branches:
+      - stable
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --network-timeout 300000
+
+      - name: Run ESLint
+        run: yarn lint
+
+  test:
+    name: Tests
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --network-timeout 300000
+
+      - name: Run tests
+        run: yarn test
+
+  build:
+    name: Build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn --frozen-lockfile --network-timeout 300000
+
+      - name: Build frontend
+        run: yarn build
+        env:
+          NODE_ENV: production
+
+  backend-test:
+    name: Backend tests
+    runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+          cache-dependency-path: backend/yarn.lock
+
+      - name: Install backend dependencies
+        run: yarn --frozen-lockfile
+
+      - name: Run backend tests
+        run: yarn test
+
+  docker-build:
+    name: Docker build test
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -f Dockerfile -t siren:test .
+
+      - name: Check image size
+        run: |
+          IMAGE_SIZE=$(docker image inspect siren:test --format='{{.Size}}' | awk '{print $1/1024/1024}')
+          echo "Docker image size: ${IMAGE_SIZE} MB"
