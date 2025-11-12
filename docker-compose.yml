@@ -6,6 +6,7 @@ services:
     #      - "80:80"  # uncomment this line when using `SSL_ENABLED=false`
     env_file:
       - .env
+    # Can be removed. This if for a persistent data across docker restarts
     volumes:
       - siren_data:/app/backend/.db
 
