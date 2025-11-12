@@ -1,15 +1,17 @@
 services:
   siren:
-    image: siren-now
+    image: sigp/siren:latest
     ports:
       - '443:443' # comment this line when using `SSL_ENABLED=false`
     #      - "80:80"  # uncomment this line when using `SSL_ENABLED=false`
-    # Will persist backend data across runs. Remove this folder if Siren fails
-    # to start
-    volumes:
-      - ./backend_data:/app/backend/.db
     env_file:
       - .env
+    volumes:
+      - siren_data:/app/backend/.db
+
 #    uncomment these 2 lines if you use docker on linux and want to use the special host `host.docker.internal` as your BN/VC address
 #    extra_hosts:
 #      - "host.docker.internal:host-gateway"
+
+volumes:
+  siren_data:
