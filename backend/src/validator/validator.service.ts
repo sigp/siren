@@ -73,6 +73,12 @@ export class ValidatorService {
           const validatorData = (await this.cacheManager.get(
             'validators',
           )) as ValidatorDetail[];
+
+          // Return empty array if no validators
+          if (!validatorData || validatorData.length === 0) {
+            return [];
+          }
+
           // Batch validator state requests to avoid response size limits
           const BATCH_SIZE = 500;
           const allStates = [];
@@ -93,44 +99,49 @@ export class ValidatorService {
 
           // Fetch fee recipients for all validators
           const feeRecipientPromises = sortedStates.map(({ validator }) =>
-            this.fetchFeeRecipient(validator.pubkey).catch(() => ({ data: { ethaddress: '' } }))
+            this.fetchFeeRecipient(validator.pubkey).catch(() => ({
+              data: { ethaddress: '' },
+            })),
           );
           const feeRecipients = await Promise.all(feeRecipientPromises);
 
-          return sortedStates.map(({ validator, index, status, balance }, idx) => {
-            const {
-              pubkey,
-              effective_balance,
-              slashed,
-              withdrawal_credentials,
-              activation_epoch,
-            } = validator;
-            let effectiveBalance = Number(
-              formatUnits(effective_balance, 'gwei'),
-            );
+          return sortedStates.map(
+            ({ validator, index, status, balance }, idx) => {
+              const {
+                pubkey,
+                effective_balance,
+                slashed,
+                withdrawal_credentials,
+                activation_epoch,
+              } = validator;
+              let effectiveBalance = Number(
+                formatUnits(effective_balance, 'gwei'),
+              );
 
-            if (status === 'withdrawal_done') {
-              effectiveBalance = 0;
-            }
+              if (status === 'withdrawal_done') {
+                effectiveBalance = 0;
+              }
 
-            return {
-              name: formatDefaultValName(index),
-              pubKey: pubkey,
-              effectiveBalance,
-              balance: Number(formatUnits(balance, 'gwei')),
-              rewards: Number(formatUnits(balance, 'gwei')) - effectiveBalance,
-              index: Number(index),
-              slashed,
-              withdrawalAddress: withdrawal_credentials,
-              activationEpoch: Number(activation_epoch),
-              status: status,
-              processed: 0,
-              missed: 0,
-              attested: 0,
-              aggregated: 0,
-              feeRecipient: feeRecipients[idx]?.data?.ethaddress || undefined,
-            };
-          });
+              return {
+                name: formatDefaultValName(index),
+                pubKey: pubkey,
+                effectiveBalance,
+                balance: Number(formatUnits(balance, 'gwei')),
+                rewards:
+                  Number(formatUnits(balance, 'gwei')) - effectiveBalance,
+                index: Number(index),
+                slashed,
+                withdrawalAddress: withdrawal_credentials,
+                activationEpoch: Number(activation_epoch),
+                status: status,
+                processed: 0,
+                missed: 0,
+                attested: 0,
+                aggregated: 0,
+                feeRecipient: feeRecipients[idx]?.data?.ethaddress || undefined,
+              };
+            },
+          );
         },
       );
     } catch (e) {
@@ -147,6 +158,12 @@ export class ValidatorService {
           const validatorData = (await this.cacheManager.get(
             'validators',
           )) as ValidatorDetail[];
+
+          // Return empty object if no validators
+          if (!validatorData || validatorData.length === 0) {
+            return {};
+          }
+
           const requestData = {
             data: JSON.stringify({
               indices: validatorData.map(({ index }) => index),
@@ -391,7 +408,9 @@ export class ValidatorService {
     }
   }
 
-  async fetchFeeRecipient(pubkey: string): Promise<{ data: { ethaddress: string } }> {
+  async fetchFeeRecipient(
+    pubkey: string,
+  ): Promise<{ data: { ethaddress: string } }> {
     try {
       const { data } = await this.utilsService.sendHttpRequest({
         url: `${this.validatorUrl}/eth/v1/validator/${pubkey}/feerecipient`,

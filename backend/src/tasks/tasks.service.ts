@@ -257,6 +257,15 @@ export class TasksService implements OnApplicationBootstrap {
       'validators',
     )) as ValidatorDetail[];
 
+    // Skip if no validators
+    if (!validatorData || validatorData.length === 0) {
+      if (this.isDebug) {
+        console.log('Skipping pending deposits sync - no validators');
+      }
+      await this.cacheManager.set('pendingDeposits', [], 0);
+      return;
+    }
+
     const { data: fork } = await this.utilsService.sendHttpRequest({
       url: `${this.beaconUrl}/eth/v1/beacon/states/head/fork`,
     });
@@ -307,6 +316,17 @@ export class TasksService implements OnApplicationBootstrap {
       'validators',
     )) as ValidatorDetail[];
 
+    // Skip if no validators
+    if (!validatorData || validatorData.length === 0) {
+      if (this.isDebug) {
+        console.log(
+          'Skipping pending partial withdrawals sync - no validators',
+        );
+      }
+      await this.cacheManager.set('partialWithdrawals', [], 0);
+      return;
+    }
+
     const { data: fork } = await this.utilsService.sendHttpRequest({
       url: `${this.beaconUrl}/eth/v1/beacon/states/head/fork`,
     });
@@ -336,6 +356,15 @@ export class TasksService implements OnApplicationBootstrap {
     const validatorData = (await this.cacheManager.get(
       'validators',
     )) as ValidatorDetail[];
+
+    // Skip if no validators
+    if (!validatorData || validatorData.length === 0) {
+      if (this.isDebug) {
+        console.log('Skipping metric sync - no validators');
+      }
+      return;
+    }
+
     const requestData = {
       data: JSON.stringify({
         indices: validatorData.map(({ index }) => Number(index)),
@@ -382,6 +411,16 @@ export class TasksService implements OnApplicationBootstrap {
         },
       },
     });
+
+    // If there are no validators, set empty array and skip beacon API request
+    if (!data.data || data.data.length === 0) {
+      if (this.isDebug) {
+        console.log('No validators found in validator client');
+      }
+      await this.cacheManager.set('validators', [], 0);
+      return;
+    }
+
     const validatorKeys = data.data
       .map((validator: LighthouseValidatorResult) => validator.voting_pubkey)
       .join(',');
