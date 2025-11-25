@@ -382,6 +382,12 @@ export class TasksService implements OnApplicationBootstrap {
         },
       },
     });
+
+    if(!data?.data.length) {
+      await this.cacheManager.set('validators', [], 0);
+      return;
+    }
+
     const validatorKeys = data.data
       .map((validator: LighthouseValidatorResult) => validator.voting_pubkey)
       .join(',');
