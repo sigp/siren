@@ -19,7 +19,7 @@ export class LogsService {
   constructor(
     @InjectModel(Log)
     private logRepository: typeof Log,
-  ) { }
+  ) {}
 
   private isDebug = process.env.DEBUG === 'true';
 
@@ -30,7 +30,6 @@ export class LogsService {
   private eventSources: Map<string, EventSource> = new Map();
 
   private clientManager = new ClientManager();
-
 
   // Normalizes Lighthouse log level to Siren's LogLevels
   private normalizeLogLevel(level: any): LogLevels {
