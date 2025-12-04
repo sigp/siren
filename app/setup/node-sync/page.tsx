@@ -6,7 +6,11 @@ import Wrapper from './Wrapper'
 
 export default async function Page() {
   try {
-    const token = getSessionCookie()
+    const token = await getSessionCookie()
+
+    if (!token) {
+      redirect('/error')
+    }
 
     // Use Promise.allSettled to handle temporary connection issues gracefully
     const results = await Promise.allSettled([fetchBeaconSpec(token), fetchSyncData(token)])

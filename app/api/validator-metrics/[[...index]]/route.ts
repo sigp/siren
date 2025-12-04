@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../../utilities/getReqAuthToken'
 import { fetchValMetrics } from '../../validator'
 
-export async function GET(req: Request, context: any) {
+export async function GET(req: NextRequest, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!token) {

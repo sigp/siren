@@ -1,11 +1,11 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import { BACKEND_URL } from '../../../../src/constants/envars'
 import fetchFromApi from '../../../../utilities/fetchFromApi'
 import getReqAuthToken from '../../../../utilities/getReqAuthToken'
 
-export async function DELETE(req: Request, context: any) {
+export async function DELETE(req: NextRequest, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!index) {

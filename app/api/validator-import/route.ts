@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { importValidatorKeystore } from '../validator'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const data = await req.json()
     const token = getReqAuthToken(req)

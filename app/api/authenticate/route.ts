@@ -1,8 +1,8 @@
 import axios from 'axios'
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import { BACKEND_URL, NODE_ENV, SSL_ENABLED } from '../../../src/constants/envars'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const { password } = await req.json()
     const res = await axios.post(`${BACKEND_URL}/authenticate`, { password })

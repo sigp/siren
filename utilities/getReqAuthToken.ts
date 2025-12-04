@@ -1,24 +1,7 @@
-const parseCookies = (cookieHeader: string | null) => {
-  if (!cookieHeader) return {}
-  return cookieHeader.split(';').reduce(
-    (acc, cookie) => {
-      const [key, value] = cookie.split('=').map((c) => c.trim())
-      acc[key] = decodeURIComponent(value)
-      return acc
-    },
-    {} as Record<string, string>,
-  )
-}
+import type { NextRequest } from 'next/server'
 
-const getReqAuthToken = (req: Request): string => {
-  try {
-    const cookie = parseCookies(req.headers.get('cookie'))
-    const authToken = cookie['session-token']
-    if (!authToken) return ''
-    return authToken
-  } catch (e) {
-    return ''
-  }
+const getReqAuthToken = (req: NextRequest): string => {
+  return req.cookies.get('session-token')?.value ?? ''
 }
 
 export default getReqAuthToken

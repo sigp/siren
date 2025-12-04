@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../../utilities/getReqAuthToken'
 import { dismissLogAlert } from '../../logs'
 
-export async function PUT(req: Request, context: any) {
+export async function PUT(req: NextRequest, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!index) {

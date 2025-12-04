@@ -1,8 +1,6 @@
-import { NextResponse } from 'next/server'
+import {NextRequest, NextResponse} from 'next/server'
 import { cookies } from 'next/headers'
 import isExpiredToken from './utilities/isExpiredToken'
-
-export const runtime = 'nodejs'
 
 const restrictedEndpoints = [
   '/setup/health-check',
@@ -17,7 +15,7 @@ const redirectToInitPage = (request: any, nextPath: string) => {
   return NextResponse.redirect(new URL(`/?redirect=${nextPath}`, request.url))
 }
 
-export async function middleware(request) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
 
   try {
@@ -25,7 +23,8 @@ export async function middleware(request) {
       return NextResponse.next()
     }
 
-    const token = cookies().get('session-token').value
+    const cookieStore = await cookies();
+    const token = cookieStore.get('session-token')?.value
 
     if (!token) {
       return redirectToInitPage(request, pathname)

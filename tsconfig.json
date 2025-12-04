@@ -1,13 +1,19 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "dom", "dom.iterable"],
+    "lib": [
+      "ES2022",
+      "dom",
+      "dom.iterable"
+    ],
     "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
     "module": "esnext",
@@ -15,10 +21,26 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
-    "plugins": [{ "name": "next" }, { "name": "@typescript-eslint/eslint-plugin" }]
+    "plugins": [
+      {
+        "name": "next"
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin"
+      }
+    ]
   },
-  "include": ["src/**/*", "custom.d.ts", ".next/types/**/*.ts"],
-  "exclude": ["node_modules", "build", "dist"]
+  "include": [
+    "custom.d.ts",
+    "src/**/*",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "build",
+    "dist"
+  ]
 }
