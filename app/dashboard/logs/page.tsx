@@ -9,8 +9,12 @@ import Wrapper from './Wrapper'
 
 export default async function Page() {
   try {
-    const token = getSessionCookie()
+    const token = await getSessionCookie()
     const defaultLogType = LogType.BEACON
+
+    if (!token) {
+      redirect('/error')
+    }
 
     // Use Promise.allSettled to handle temporary connection issues gracefully
     const results = await Promise.allSettled([

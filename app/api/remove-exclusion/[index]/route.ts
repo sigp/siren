@@ -5,7 +5,7 @@ import getReqAuthToken from '../../../../utilities/getReqAuthToken'
 
 export async function DELETE(req: Request, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!index) {

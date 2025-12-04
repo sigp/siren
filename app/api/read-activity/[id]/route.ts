@@ -4,7 +4,7 @@ import { readActivity } from '../../activities'
 
 export async function PUT(req: Request, context: any) {
   try {
-    const { id } = context.params
+    const { id } = await context.params
     const token = getReqAuthToken(req)
 
     if (!id) {

@@ -4,7 +4,7 @@ import { dismissLogAlert } from '../../logs'
 
 export async function PUT(req: Request, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!index) {

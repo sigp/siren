@@ -21,7 +21,7 @@ import { fetchValCaches, fetchValStates } from '../api/validator'
 import Wrapper from './Wrapper'
 
 export default async function Page() {
-  const token = getSessionCookie()
+  const token = await getSessionCookie()
 
   if (!token) {
     redirect('/error')

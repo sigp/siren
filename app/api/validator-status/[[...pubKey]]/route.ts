@@ -4,7 +4,7 @@ import { fetchValidatorStatus } from '../../beacon'
 
 export async function GET(req: Request, context: any) {
   try {
-    const { pubKey } = context.params
+    const { pubKey } = await context.params
     const token = getReqAuthToken(req)
 
     if (!token) {

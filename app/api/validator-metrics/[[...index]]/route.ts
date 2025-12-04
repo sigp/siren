@@ -4,7 +4,7 @@ import { fetchValMetrics } from '../../validator'
 
 export async function GET(req: Request, context: any) {
   try {
-    const { index } = context.params
+    const { index } = await context.params
     const token = getReqAuthToken(req)
 
     if (!token) {
