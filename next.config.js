@@ -21,6 +21,7 @@ const nextConfig = {
             },
         },
     },
+    serverExternalPackages: ['pino-pretty', 'thread-stream', 'pino'],
   webpack(config, { dev, isServer }) {
     // Enable top-level await and async WASM support
     config.experiments = {
