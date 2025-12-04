@@ -19,6 +19,6 @@
     "incremental": true,
     "plugins": [{ "name": "next" }, { "name": "@typescript-eslint/eslint-plugin" }]
   },
-  "include": ["src/**/*", "custom.d.ts", ".next/types/**/*.ts"],
+  "include": ["custom.d.ts", "src/**/*", ".next/types/**/*.ts"],
   "exclude": ["node_modules", "build", "dist"]
 }

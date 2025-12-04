@@ -13,12 +13,15 @@ const nextConfig = {
       }
     })(),
   },
+    turbopack: {
+        rules: {
+            '*.svg': {
+                loaders: ['@svgr/webpack'],
+                as: '*.js',
+            },
+        },
+    },
   webpack(config, { dev, isServer }) {
-    config.module.rules.push({
-      test: /\.svg$/,
-      use: ['@svgr/webpack'],
-    })
-
     // Enable top-level await and async WASM support
     config.experiments = {
       ...config.experiments,
