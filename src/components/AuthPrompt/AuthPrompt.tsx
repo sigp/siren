@@ -25,6 +25,7 @@ const AuthPrompt: FC<AuthModalProps> = ({ onSubmit, isVisible, isLoading, mode, 
 
   return (
     <RodalModal
+      uiMode={{mode: UiMode.LIGHT}}
       onAnimationEnd={showAnim as any}
       styles={{ maxWidth: '500px' }}
       onClose={onClose}
