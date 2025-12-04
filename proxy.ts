@@ -2,8 +2,6 @@ import {NextRequest, NextResponse} from 'next/server'
 import { cookies } from 'next/headers'
 import isExpiredToken from './utilities/isExpiredToken'
 
-export const runtime = 'nodejs'
-
 const restrictedEndpoints = [
   '/setup/health-check',
   '/setup/node-sync',

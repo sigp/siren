@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchValidatorAuthKey } from '../config'
 
 const errorMessage = 'Failed to maintain validator heartbeat'
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const token = getReqAuthToken(req)
     const { token_path } = await fetchValidatorAuthKey(token)

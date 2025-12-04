@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
+import {NextRequest, NextResponse} from 'next/server'
 import { BACKEND_URL } from '../../../src/constants/envars'
 import fetchFromApi from '../../../utilities/fetchFromApi'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     const token = getReqAuthToken(req)

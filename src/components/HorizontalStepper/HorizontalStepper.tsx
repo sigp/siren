@@ -81,7 +81,6 @@ const HorizontalStepper: FC<HorizontalStepperProps> = ({ children, steps }) => {
       </div>
       <div className='flex-1 relative createSlide'>
         <Carousel
-          inert={true}
           swiping={false}
           slideIndex={currentStep}
           adaptiveHeight

@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import { LogType } from '../../../src/types'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchLogData } from '../logs'
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
     const offset = searchParams.get('offset') || undefined

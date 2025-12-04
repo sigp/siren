@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { BACKEND_URL } from '../../../../../src/constants/envars'
 import getReqAuthToken from '../../../../../utilities/getReqAuthToken'
 
-export async function PUT(request: NextRequest, { params }: { params: { index: string } }) {
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ index: string }> }) {
   try {
     const token = getReqAuthToken(request)
     const body = await request.json()
-    const { index } = params
+    const { index } = await params
 
     const response = await fetch(`${BACKEND_URL}/validator/aliases/${index}`, {
       method: 'PUT',
@@ -29,10 +29,10 @@ export async function PUT(request: NextRequest, { params }: { params: { index: s
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { index: string } }) {
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ index: string }> }) {
   try {
     const token = getReqAuthToken(request)
-    const { index } = params
+    const { index } = await params
 
     const response = await fetch(`${BACKEND_URL}/validator/aliases/${index}`, {
       method: 'DELETE',

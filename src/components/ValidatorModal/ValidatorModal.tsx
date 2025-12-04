@@ -146,7 +146,6 @@ const ValidatorModal: FC<ValidatorModalProps> = ({
       {validator ? (
         <ValidatorModalContext.Provider value={{ moveToView, closeModal }}>
           <Carousel
-            inert={true}
             className='validator-modal'
             swiping={false}
             slideIndex={activeIndex}

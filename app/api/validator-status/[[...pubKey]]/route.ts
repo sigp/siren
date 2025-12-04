@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../../utilities/getReqAuthToken'
 import { fetchValidatorStatus } from '../../beacon'
 
-export async function GET(req: Request, context: any) {
+export async function GET(req: NextRequest, context: any) {
   try {
     const { pubKey } = await context.params
     const token = getReqAuthToken(req)

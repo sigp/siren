@@ -1,10 +1,10 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchBeaconNodeHeartbeat } from '../config'
 
 const errorMessage = 'Failed to maintain beacon heartbeat'
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const token = getReqAuthToken(req)
     const version = await fetchBeaconNodeHeartbeat(token)

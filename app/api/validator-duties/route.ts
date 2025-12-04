@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server'
+import {type NextRequest, NextResponse} from 'next/server'
 import getReqAuthToken from '../../../utilities/getReqAuthToken'
 import { fetchProposerDuties } from '../beacon'
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const token = getReqAuthToken(req)
     const data = await fetchProposerDuties(token)
