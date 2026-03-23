@@ -44,10 +44,16 @@ jobs:
 
   build-docker-single-arch:
     name: build-docker-${{ matrix.binary }}
-    runs-on: ubuntu-22.04
+    runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        binary: [aarch64, x86_64]
+        include:
+          - binary: aarch64
+            short_arch: arm64
+            runner: ubuntu-22.04-arm
+          - binary: x86_64
+            short_arch: amd64
+            runner: ubuntu-22.04
 
     needs: [extract-version]
     env:
@@ -57,7 +63,6 @@ jobs:
       VERSION_SUFFIX: ${{ needs.extract-version.outputs.VERSION_SUFFIX }}
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-qemu-action@v3
       - name: Dockerhub login
         run: |
           echo "${DOCKER_PASSWORD}" | docker login --username ${DOCKER_USERNAME} --password-stdin
@@ -70,9 +75,9 @@ jobs:
       - name: Build Dockerfile and push
         run: |
           docker buildx build \
-              --platform=linux/${SHORT_ARCH} \
+              --platform=linux/${{ matrix.short_arch }} \
               --file ./Dockerfile . \
-              --tag ${IMAGE_NAME}:${VERSION}-${SHORT_ARCH}${VERSION_SUFFIX} \
+              --tag ${IMAGE_NAME}:${VERSION}-${{ matrix.short_arch }}${VERSION_SUFFIX} \
               --push
 
   build-docker-multiarch:
