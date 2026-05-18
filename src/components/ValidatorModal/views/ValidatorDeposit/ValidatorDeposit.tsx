@@ -18,6 +18,7 @@ import isValidNetwork from '../../../../../utilities/isValidNetwork'
 import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../../../constants/constants'
 import { Status, ValidatorModalView, WalletPrefix } from '../../../../constants/enums'
 import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
+import { useNetworkProfile } from '../../../../hooks/useNetworkProfile'
 import useProcessEffectiveBalance from '../../../../hooks/useProcessEffectiveBalance'
 import useValidatorTopUp from '../../../../hooks/useValidatorTopUp'
 import { selectUpOffset } from '../../../../recoil/selectors/selectUpOffset'
@@ -31,6 +32,7 @@ import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
 import Input from '../../../Input/Input'
 import TransactionStatusBlock from '../../../TransactionStatus/TransactionStatusBlock'
 import Typography from '../../../Typography/Typography'
+import UnsupportedNetworkNotice from '../../../UnsupportedNetworkNotice/UnsupportedNetworkNotice'
 import WalletActionGuard from '../../../WalletActionGuard/WalletActionGuard'
 import ValidatorInfoTable from '../../ValidatorInfoTable'
 import { ValidatorModalContext } from '../../ValidatorModal'
@@ -52,6 +54,7 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
   chainId,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
   const upOffsetAmount = useRecoilValue(selectUpOffset)
   const headers = ['pubkey', t('amount'), t('slot'), ' ']
   const { pubKey, effectiveBalance, withdrawalAddress, balance, index } = validator
@@ -149,6 +152,15 @@ const ValidatorDeposit: FC<ValidatorDepositProps> = ({
   }, [t, headers, filteredDeposits, headSlot])
 
   const maxAmountClasses = clsx(isMaxedEffectiveBalance && 'opacity-40 pointer-events-none')
+
+  if (!profile.isWriteSupported) {
+    return (
+      <UnsupportedNetworkNotice
+        action={t('validatorManagement.actions.depositFunds')}
+        symbol={profile.nativeSymbol}
+      />
+    )
+  }
 
   return (
     <div className='w-full'>

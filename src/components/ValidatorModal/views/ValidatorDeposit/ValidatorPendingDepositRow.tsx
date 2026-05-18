@@ -2,6 +2,7 @@ import { formatEther, parseUnits } from 'ethers'
 import React, { FC } from 'react'
 import formatEthAddress from '../../../../../utilities/formatEthAddress'
 import formatMoment from '../../../../../utilities/formatMoment'
+import { useNetworkProfile } from '../../../../hooks/useNetworkProfile'
 import { PendingDeposit } from '../../../../types/validator'
 import Typography from '../../../Typography/Typography'
 import 'moment-duration-format'
@@ -12,6 +13,7 @@ export interface ValidatorPendingDepositRowProps {
 }
 
 const ValidatorPendingDepositRow: FC<ValidatorPendingDepositRowProps> = ({ deposit, headSlot }) => {
+  const { nativeSymbol } = useNetworkProfile()
   const { pubkey, amount, slot } = deposit
   const formattedSlot = Number(slot)
   const differenceInSlots = headSlot - formattedSlot
@@ -38,7 +40,7 @@ const ValidatorPendingDepositRow: FC<ValidatorPendingDepositRowProps> = ({ depos
           darkMode='dark:text-dark500'
           type='text-caption1'
         >
-          {Number(formatEther(parseUnits(amount, 'gwei')))} ETH
+          {Number(formatEther(parseUnits(amount, 'gwei')))} {nativeSymbol}
         </Typography>
       </td>
       <td className='p-4'>

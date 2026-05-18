@@ -3,6 +3,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import useValidatorName from '../../hooks/useValidatorName'
 import { selectBeaconChaBaseUrl } from '../../recoil/selectors/selectBeaconChaBaseUrl'
 import { ValAliases } from '../../types'
@@ -20,6 +21,7 @@ export interface ValidatorInfoHeaderProps {
 
 const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimate, animName }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const { pubKey, index, balance } = validator
   const baseUrl = useRecoilValue(selectBeaconChaBaseUrl)
   const [aliases] = useLocalStorage<ValAliases>('val-aliases', {})
@@ -74,7 +76,7 @@ const ValidatorInfoHeader: FC<ValidatorInfoHeaderProps> = ({ validator, isAnimat
                 </Trans>
               </Typography>
               <Typography isBold color='text-primary' darkMode='dark:text-primary'>
-                {balance.toFixed(2)} ETH
+                {balance.toFixed(2)} {nativeSymbol}
               </Typography>
             </div>
           </div>

@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { EFFECTIVE_BALANCE } from '../../../constants/constants'
+import { useNetworkProfile } from '../../../hooks/useNetworkProfile'
 import { beaconNodeSpec, blsModuleAtom } from '../../../recoil/atoms'
 import {
   ValidatorCandidate,
@@ -11,6 +12,7 @@ import {
 import { ValidatorCountResult } from '../../../types/validator'
 import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
 import Spinner from '../../Spinner/Spinner'
+import UnsupportedNetworkNotice from '../../UnsupportedNetworkNotice/UnsupportedNetworkNotice'
 import CreateValidatorStep from './CreateValidatorStep'
 import MaxEbModal from './MaxEbModal'
 import RiskModal from './RiskModal'
@@ -31,6 +33,7 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
   onChangeView,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
   const beaconSpec = useRecoilValue(beaconNodeSpec)
   const blsModule = useRecoilValue(blsModuleAtom)
 
@@ -114,6 +117,15 @@ const CreateValidatorView: FC<CreateValidatorViewProps> = ({
     setHasAcceptRisk(true)
     dismissRiskMessage()
   }, [dismissRiskMessage])
+
+  if (!profile.isWriteSupported) {
+    return (
+      <UnsupportedNetworkNotice
+        action={t('validatorManagement.titles.create')}
+        symbol={profile.nativeSymbol}
+      />
+    )
+  }
 
   return (
     <>

@@ -15,13 +15,8 @@ import { Cache } from 'cache-manager';
 import { LogsService } from '../logs/logs.service';
 import { LogType } from '../../../src/types';
 import { Log } from '../logs/entities/log.entity';
-import { Network } from '../../../src/constants/enums';
-import {
-  HOODI_PECTRA_FORK_VERSION,
-  MAINNET_PECTRA_FORK_VERSION,
-  SEPOLIA_PECTRA_FORK_VERSION,
-  BACKEND_RETRY_DELAY,
-} from '../../../src/constants/constants';
+import { BACKEND_RETRY_DELAY } from '../../../src/constants/constants';
+import { getCachedNetworkProfile } from '../utils/network-profile.helper';
 
 @Injectable()
 export class TasksService implements OnApplicationBootstrap {
@@ -223,19 +218,8 @@ export class TasksService implements OnApplicationBootstrap {
   }
 
   private async getPectraForkVersion() {
-    const { CONFIG_NAME } = (await this.cacheManager.get(
-      'specs',
-    )) as BeaconNodeSpecResults;
-
-    const config = CONFIG_NAME.toLowerCase();
-
-    return config === Network.Mainnet.toLowerCase()
-      ? MAINNET_PECTRA_FORK_VERSION
-      : config === Network.Hoodi.toLowerCase()
-        ? HOODI_PECTRA_FORK_VERSION
-        : config === Network.Sepolia.toLowerCase()
-          ? SEPOLIA_PECTRA_FORK_VERSION
-          : process.env.NEXT_PUBLIC_TESTNET_PECTRA_FORK_VERSION;
+    const profile = await getCachedNetworkProfile(this.cacheManager);
+    return profile.pectraForkVersion;
   }
 
   private async initPendingDepositsScheduler() {

@@ -4,6 +4,7 @@ import { useRecoilValue } from 'recoil'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData'
 import EthLogo from '../../assets/images/eth.svg'
+import GnoLogo from '../../assets/images/gno.svg'
 import LightHouseLogo from '../../assets/images/lightHouse.svg'
 import UsdcLogo from '../../assets/images/usdc.svg'
 import { EARNINGS_OPTIONS } from '../../constants/constants'
@@ -12,6 +13,7 @@ import { Storage } from '../../constants/enums'
 import useEarningsEstimate from '../../hooks/useEarningsEstimate'
 import useEpochAprEstimate from '../../hooks/useEpochAprEstimate'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import { exchangeRates } from '../../recoil/atoms'
 import { ActiveCurrencyStorage } from '../../types/storage'
 import { ValidatorBalanceInfo, ValidatorCache, ValidatorInfo } from '../../types/validator'
@@ -29,6 +31,7 @@ export interface AccountEarningProps {
 
 const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validatorCacheData }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const [activeCurrencyStorage, storeActiveCurrency] = useLocalStorage<ActiveCurrencyStorage>(
     Storage.CURRENCY,
     'USD',
@@ -97,7 +100,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
           </Typography>
           <div className='w-full flex justify-end pr-6 pt-4'>
             <Typography color='text-white' isBold darkMode='dark:text-white' type='text-h2'>
-              {formatLocalCurrency(totalEarnings, { max: 3 })} ETH
+              {formatLocalCurrency(totalEarnings, { max: 3 })} {nativeSymbol}
             </Typography>
           </div>
           <div className='w-full mt-6 flex items-center'>
@@ -115,7 +118,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                     type='text-caption1'
                     className='xl:text-body'
                   >
-                    {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/ETH`}
+                    {`${formattedPrefix}${formatLocalCurrency(formattedRate)} ${currency}/${nativeSymbol}`}
                   </Typography>
                 </div>
                 <div>
@@ -157,18 +160,24 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
           </div>
           <div className='flex justify-between space-x-2 md:space-x-0 mt-6 md:mt-2 md:p-4'>
             <div className='flex space-x-4'>
-              <EthLogo className='h-10 w-10 hidden md:block' />
+              {nativeSymbol === 'GNO' ? (
+                <GnoLogo className='h-10 w-10 hidden md:block text-[#00193C] dark:text-white' />
+              ) : (
+                <EthLogo className='h-10 w-10 hidden md:block' />
+              )}
               <Tooltip
                 className='cursor-pointer'
                 id='ethInfo'
                 maxWidth={200}
                 text={
-                  isEstimate ? t('tooltip.ethEstimate', { time: timeFrame }) : t('tooltip.ethTotal')
+                  isEstimate
+                    ? t('tooltip.ethEstimate', { time: timeFrame, symbol: nativeSymbol })
+                    : t('tooltip.ethTotal', { symbol: nativeSymbol })
                 }
               >
                 <div className='flex space-x-2'>
                   <Typography type='text-caption1' className='uppercase' color='text-dark400'>
-                    ETH
+                    {nativeSymbol}
                   </Typography>
                   <i
                     id='tooltip'
@@ -182,7 +191,7 @@ const AccountEarning: FC<AccountEarningProps> = ({ validatorStateInfo, validator
                   darkMode='dark:text-white'
                   family='font-roboto'
                 >
-                  {formatLocalCurrency(estimate, { max: 4 })} ETH
+                  {formatLocalCurrency(estimate, { max: 4 })} {nativeSymbol}
                 </Typography>
               </Tooltip>
             </div>

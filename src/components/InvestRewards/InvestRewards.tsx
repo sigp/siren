@@ -8,6 +8,7 @@ import formatTimeframe from '../../../utilities/formatTimeframe'
 import { CURRENCY_PREFIX } from '../../constants/currencies'
 import { Storage } from '../../constants/enums'
 import useLocalStorage from '../../hooks/useLocalStorage'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import { exchangeRates } from '../../recoil/atoms'
 import { TimeUnit, ValidatorRewardEstimate } from '../../types'
 import { ActiveCurrencyStorage } from '../../types/storage'
@@ -27,6 +28,7 @@ const InvestRewards: FC<InvestRewardsProps> = ({
   requiredStake,
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const { apr, totalAnnualRewards } = rewardEstimate
   const [activeCurrencyStorage] = useLocalStorage<ActiveCurrencyStorage>(Storage.CURRENCY, 'USD')
   const exchangeData = useRecoilValue(exchangeRates)
@@ -96,7 +98,7 @@ const InvestRewards: FC<InvestRewardsProps> = ({
             darkMode='dark:text-primary'
             isBold
           >
-            {stakeEthAmount} ETH
+            {stakeEthAmount} {nativeSymbol}
           </Typography>
         </div>
         <div className='flex justify-between items-center'>
@@ -145,7 +147,7 @@ const InvestRewards: FC<InvestRewardsProps> = ({
               darkMode='dark:text-primary'
               isBold
             >
-              + {expectedReward} ETH
+              + {expectedReward} {nativeSymbol}
             </Typography>
             <Typography
               className='text-right'

@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { AnimationControls, motion } from 'framer-motion'
 import { FC, memo, useCallback, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import { useNetworkProfile } from '../../../../../hooks/useNetworkProfile'
 import { useValidatorAliases } from '../../../../../hooks/useValidatorAliases'
 import useValidatorName from '../../../../../hooks/useValidatorName'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -20,6 +21,7 @@ interface SelectTargetRowProps {
 const SelectTargetRow: FC<SelectTargetRowProps> = memo(
   ({ validator, onSelect, isActive, animControls, animIndex }) => {
     const { pubKey, withdrawalAddress, effectiveBalance } = validator
+    const { nativeSymbol } = useNetworkProfile()
     const { aliases } = useValidatorAliases()
     const validatorName = useValidatorName(validator, aliases || {})
     const handleSelect = useCallback(() => onSelect(validator), [validator, onSelect])
@@ -95,7 +97,7 @@ const SelectTargetRow: FC<SelectTargetRowProps> = memo(
           darkMode={isActive ? 'dark:text-dark300' : 'dark:text-primary'}
           type='text-caption'
         >
-          {effectiveBalance} ETH
+          {effectiveBalance} {nativeSymbol}
         </Typography>
       </motion.div>
     )

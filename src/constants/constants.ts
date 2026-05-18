@@ -63,6 +63,8 @@ export const SigPTwitter = 'https://twitter.com/sigp_io'
 export const SigPIoUrl = 'https://sigmaprime.io/'
 export const WithdrawalInfoLink = 'https://launchpad.ethereum.org/en/withdrawals'
 export const CoinbaseExchangeRateUrl = 'https://api.coinbase.com/v2/exchange-rates?currency=ETH'
+export const getCoinbaseExchangeRateUrl = (currency: 'ETH' | 'GNO' = 'ETH') =>
+  `https://api.coinbase.com/v2/exchange-rates?currency=${currency}`
 
 export const CURRENCIES = [
   'AUD',
@@ -128,4 +130,5 @@ export const HOLESKY_PECTRA_FORK_VERSION = '0x06017000'
 export const HOODI_PECTRA_FORK_VERSION = '0x60000910'
 export const MAINNET_PECTRA_FORK_VERSION = '0x05000000'
 export const SEPOLIA_PECTRA_FORK_VERSION = '0x90000074'
+export const GNOSIS_PECTRA_FORK_VERSION = '0x05000064'
 export const LOG_FETCH_LIMIT = 120

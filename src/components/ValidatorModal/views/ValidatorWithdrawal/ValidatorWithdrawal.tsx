@@ -17,6 +17,7 @@ import { Status, ValidatorModalView } from '../../../../constants/enums'
 import useCalculateGas from '../../../../hooks/useCalculateGas'
 import useFeeGetter from '../../../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../../../hooks/useHasSufficientBalance'
+import { useNetworkProfile } from '../../../../hooks/useNetworkProfile'
 import useProcessEffectiveBalance from '../../../../hooks/useProcessEffectiveBalance'
 import useResolveTransactionOnce from '../../../../hooks/useResolveTransactionOnce'
 import { ActivityType, ToastType, TxHash } from '../../../../types'
@@ -29,6 +30,7 @@ import InfoBox, { InfoBoxType } from '../../../InfoBox/InfoBox'
 import Input from '../../../Input/Input'
 import TransactionStatusBlock from '../../../TransactionStatus/TransactionStatusBlock'
 import Typography from '../../../Typography/Typography'
+import UnsupportedNetworkNotice from '../../../UnsupportedNetworkNotice/UnsupportedNetworkNotice'
 import WalletActionGuard from '../../../WalletActionGuard/WalletActionGuard'
 import ValidatorInfoTable from '../../ValidatorInfoTable'
 import { ValidatorModalContext } from '../../ValidatorModal'
@@ -50,6 +52,7 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
   partialWithdrawals,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
   const { effectiveBalance, balance, withdrawalAddress, pubKey, index } = validator
   const headers = [t('index'), t('amount'), t('withdrawableEpoch'), ' ']
   const [isLoading, setIsLoading] = useState(false)
@@ -195,6 +198,15 @@ const ValidatorWithdrawal: FC<ValidatorWithdrawalProps> = ({
       </ValidatorInfoTable>
     )
   }, [t, headers, pendingWithdrawals, currentEpoch])
+
+  if (!profile.isWriteSupported) {
+    return (
+      <UnsupportedNetworkNotice
+        action={t('validatorManagement.actions.withdrawValidator')}
+        symbol={profile.nativeSymbol}
+      />
+    )
+  }
 
   return (
     <div className='w-full h-full flex flex-col'>

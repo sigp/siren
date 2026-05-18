@@ -157,6 +157,8 @@ export enum ChainId {
   HOODI = 'HOODI',
   SEPOLIA = 'SEPOLIA',
   LOCALTESTNET = 'LOCALTESTNET',
+  GNOSIS = 'GNOSIS',
+  CHIADO = 'CHIADO',
 }
 
 export enum ValidatorManagementView {
@@ -260,6 +262,8 @@ export enum NetworkId {
   HOODI = 560048,
   MAINNET = 1,
   SEPOLIA = 11155111,
+  GNOSIS = 100,
+  CHIADO = 10200,
 }
 
 export type ConsolidationTx = {

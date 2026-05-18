@@ -10,10 +10,13 @@ import {
 } from '../constants/constants'
 import { beaconNodeSpec } from '../recoil/atoms'
 import { FormattedValidatorCache, ValidatorBalanceInfo } from '../types/validator'
+import { useNetworkProfile } from './useNetworkProfile'
 
 const useValidatorEarnings = (validatorData: ValidatorBalanceInfo) => {
   const spec = useRecoilValue(beaconNodeSpec)
+  const profile = useNetworkProfile()
   const interval = spec?.SECONDS_PER_SLOT || 12
+  const slotsPerEpoch = Number(spec?.SLOTS_PER_EPOCH) || 32
   const { validators, balances } = validatorData || {}
 
   const epochKeys = balances ? Object.keys(balances) : undefined
@@ -34,26 +37,28 @@ const useValidatorEarnings = (validatorData: ValidatorBalanceInfo) => {
   }, [validators])
 
   const hourlyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInHour, interval, epochCaches),
-    [epochCaches, interval],
+    () => calculateEpochEstimate(secondsInHour, interval, epochCaches, profile, slotsPerEpoch),
+    [epochCaches, interval, profile, slotsPerEpoch],
   )
 
   const dailyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInDay, interval, epochCaches),
-    [epochCaches, interval],
+    () => calculateEpochEstimate(secondsInDay, interval, epochCaches, profile, slotsPerEpoch),
+    [epochCaches, interval, profile, slotsPerEpoch],
   )
 
   const weeklyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInWeek, interval, epochCaches),
-    [epochCaches, interval],
+    () => calculateEpochEstimate(secondsInWeek, interval, epochCaches, profile, slotsPerEpoch),
+    [epochCaches, interval, profile, slotsPerEpoch],
   )
 
   const monthlyEstimate = useMemo(
-    () => calculateEpochEstimate(secondsInWeek * 4, interval, epochCaches),
-    [epochCaches, interval],
+    () => calculateEpochEstimate(secondsInWeek * 4, interval, epochCaches, profile, slotsPerEpoch),
+    [epochCaches, interval, profile, slotsPerEpoch],
   )
 
-  const initialEth = (validators?.length || 0) * initialEthDeposit
+  // validator.balance is already in native units (PR2: backend divides by profile.gweiDivisor),
+  // so the initial-deposit baseline used for APR must also be in native units.
+  const initialEth = ((validators?.length || 0) * initialEthDeposit) / profile.gweiDivisor
   const annualizedEarningsPercent = calculateAprPercentage(total, initialEth)
 
   return {

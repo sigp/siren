@@ -1,8 +1,10 @@
 import { FC, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MAX_EFFECTIVE_BALANCE } from '../../../constants/constants'
+import { useNetworkProfile } from '../../../hooks/useNetworkProfile'
 import { PartialWithdrawal, ValidatorInfo } from '../../../types/validator'
 import HorizontalStepper from '../../HorizontalStepper/HorizontalStepper'
+import UnsupportedNetworkNotice from '../../UnsupportedNetworkNotice/UnsupportedNetworkNotice'
 import SelectSourceStep from './Steps/SelectSourceStep/SelectSourceStep'
 import SelectTargetStep from './Steps/SelectTargetStep/SelectTargetStep'
 import SubmitConsolidationStep from './Steps/SubmitConsolidationStep/SubmitConsolidationStep'
@@ -23,6 +25,7 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({
   partialWithdrawals,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
   const [targetValidator, setTargetValidator] = useState<ValidatorInfo | undefined>(undefined)
   const [sourceValidators, setSourceValidators] = useState<ValidatorInfo[]>([])
   const eligibleValidators = useMemo<ValidatorInfo[]>(
@@ -67,6 +70,15 @@ const ConsolidateView: FC<ConsolidateViewProps> = ({
     (validators: ValidatorInfo[]) => setSourceValidators(validators),
     [],
   )
+
+  if (!profile.isWriteSupported) {
+    return (
+      <UnsupportedNetworkNotice
+        action={t('validatorManagement.actions.consolidate')}
+        symbol={profile.nativeSymbol}
+      />
+    )
+  }
 
   return (
     <HorizontalStepper steps={steps}>

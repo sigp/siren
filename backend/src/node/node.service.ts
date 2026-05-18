@@ -9,6 +9,7 @@ import { BeaconNodeSpecResults } from '../../../src/types/beacon';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { Diagnostics } from '../../../src/types/diagnostic';
+import { getCachedNetworkProfile } from '../utils/network-profile.helper';
 
 @Injectable()
 export class NodeService {
@@ -23,10 +24,12 @@ export class NodeService {
 
   async fetchNodeHealth(): Promise<Diagnostics> {
     try {
-      const { SECONDS_PER_SLOT, CONFIG_NAME } = (await this.cacheManager.get(
+      const { SECONDS_PER_SLOT } = (await this.cacheManager.get(
         'specs',
       )) as BeaconNodeSpecResults;
-      const isMainnet = CONFIG_NAME?.toLowerCase() === 'mainnet';
+      const profile = await getCachedNetworkProfile(this.cacheManager);
+      const isProductionChain =
+        profile.key === 'mainnet' || profile.key === 'gnosis';
 
       return this.utilsService.fetchFromCache(
         'nodeHealth',
@@ -67,7 +70,7 @@ export class NodeService {
           const totalDiskSpace = formatGigBytes(disk_bytes_total);
           const totalDiskFree = formatGigBytes(disk_bytes_free);
 
-          const diskThresholds = isMainnet
+          const diskThresholds = isProductionChain
             ? {
                 synced: { success: 300, warning: 200 },
                 syncing: { success: 100, warning: 50 },
@@ -104,7 +107,7 @@ export class NodeService {
 
           const totalMemoryFree = totalMemory - usedMemory;
 
-          const ramThresholds = isMainnet
+          const ramThresholds = isProductionChain
             ? { success: 3, warning: 1 }
             : { success: 1.5, warning: 0.5 };
 
@@ -119,7 +122,7 @@ export class NodeService {
 
           const cpuUtilization = sys_loadavg_1.toFixed(1);
 
-          const cpuThresholds = isMainnet
+          const cpuThresholds = isProductionChain
             ? { success: 80, warning: 90 }
             : { success: 80, warning: 90 };
 
