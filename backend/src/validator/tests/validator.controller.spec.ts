@@ -132,6 +132,10 @@ describe('ValidatorController', () => {
     it('should return correct data from node', async () => {
       mockCacheManager.get.mockResolvedValueOnce({ SECONDS_PER_SLOT: '12' });
       mockCacheManager.get.mockResolvedValueOnce(null);
+      mockCacheManager.get.mockResolvedValueOnce({
+        SECONDS_PER_SLOT: '12',
+        CONFIG_NAME: 'mainnet',
+      });
       mockCacheManager.get.mockResolvedValueOnce([
         {
           index: '1',

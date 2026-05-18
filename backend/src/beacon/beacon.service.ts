@@ -159,6 +159,7 @@ export class BeaconService {
             current_epoch_active_gwei,
           } = data.data;
 
+          // ratio — unit-agnostic, no profile.gweiDivisor needed
           const rate =
             (previous_epoch_target_attesting_gwei / current_epoch_active_gwei) *
             100;

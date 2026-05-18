@@ -20,6 +20,8 @@ async function bootstrap() {
     setupGracefulShutdown({ app });
     await app.listen(BACKEND_PORT);
     console.log(`Backend server is running on port ${BACKEND_PORT}`);
+    console.log(`BEACON_URL: ${process.env.BEACON_URL ?? '(unset)'}`);
+    console.log(`VALIDATOR_URL: ${process.env.VALIDATOR_URL ?? '(unset)'}`);
   } catch (error) {
     console.error('Failed to start backend server:', error);
     console.error('Retrying in 5 seconds...');
