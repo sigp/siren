@@ -28,7 +28,7 @@ export class NodeService {
         'specs',
       )) as BeaconNodeSpecResults;
       const profile = await getCachedNetworkProfile(this.cacheManager);
-      const useStrictThresholds =
+      const isProductionChain =
         profile.key === 'mainnet' || profile.key === 'gnosis';
 
       return this.utilsService.fetchFromCache(
@@ -70,7 +70,7 @@ export class NodeService {
           const totalDiskSpace = formatGigBytes(disk_bytes_total);
           const totalDiskFree = formatGigBytes(disk_bytes_free);
 
-          const diskThresholds = useStrictThresholds
+          const diskThresholds = isProductionChain
             ? {
                 synced: { success: 300, warning: 200 },
                 syncing: { success: 100, warning: 50 },
@@ -107,7 +107,7 @@ export class NodeService {
 
           const totalMemoryFree = totalMemory - usedMemory;
 
-          const ramThresholds = useStrictThresholds
+          const ramThresholds = isProductionChain
             ? { success: 3, warning: 1 }
             : { success: 1.5, warning: 0.5 };
 
@@ -122,7 +122,7 @@ export class NodeService {
 
           const cpuUtilization = sys_loadavg_1.toFixed(1);
 
-          const cpuThresholds = useStrictThresholds
+          const cpuThresholds = isProductionChain
             ? { success: 80, warning: 90 }
             : { success: 80, warning: 90 };
 
