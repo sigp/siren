@@ -54,6 +54,8 @@ export enum Network {
   Hoodi = 'hoodi',
   Holesky = 'Holesky',
   Sepolia = 'Sepolia',
+  Gnosis = 'gnosis',
+  Chiado = 'chiado',
 }
 
 export enum ValidatorModalView {

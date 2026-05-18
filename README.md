@@ -50,7 +50,9 @@ To build from source, ensure that your system has `Node v18.18` and `yarn` insta
 
 #### Build and run the backend
 
-Navigate to the backend directory `cd backend`. Install all required Node packages by running `yarn`. Once the installation is complete, compile the backend with `yarn build`. Deploy the backend in a production environment, `yarn start:production`. This ensures optimal performance.
+You need to run `yarn` in the root first.
+
+Navigate to the backend directory `cd backend`. Install all required Node packages by running `yarn`. Once the installation is complete, compile the backend with `yarn build`. Deploy the backend in a production environment, `yarn start:prod`. This ensures optimal performance.
 
 #### Build and run the frontend
 

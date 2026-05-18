@@ -1,6 +1,7 @@
 import { formatEther, parseUnits } from 'ethers'
 import React, { FC } from 'react'
 import formatMoment from '../../../../../utilities/formatMoment'
+import { useNetworkProfile } from '../../../../hooks/useNetworkProfile'
 import { PartialWithdrawal } from '../../../../types/validator'
 import Typography from '../../../Typography/Typography'
 import 'moment-duration-format'
@@ -11,6 +12,7 @@ export interface PendingWithdrawalRowProps {
 }
 
 const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, currentEpoch }) => {
+  const { nativeSymbol } = useNetworkProfile()
   const { validator_index, amount, withdrawable_epoch } = withdrawal
   const formattedAmount = Number(formatEther(parseUnits(amount, 'gwei')))
   const timeInEpochs = Number(withdrawable_epoch) - currentEpoch
@@ -36,7 +38,7 @@ const PendingWithdrawalRow: FC<PendingWithdrawalRowProps> = ({ withdrawal, curre
           darkMode='dark:text-dark500'
           type='text-caption1'
         >
-          {formattedAmount} ETH
+          {formattedAmount} {nativeSymbol}
         </Typography>
       </td>
       <td className='p-4'>

@@ -16,9 +16,10 @@ import CreateValidatorView from '../../../src/components/ValidatorManagement/Cre
 import MainView from '../../../src/components/ValidatorManagement/MainView'
 import ValidatorModal from '../../../src/components/ValidatorModal/ValidatorModal'
 import ValidatorSummary from '../../../src/components/ValidatorSummary/ValidatorSummary'
-import { CoinbaseExchangeRateUrl } from '../../../src/constants/constants'
+import { getCoinbaseExchangeRateUrl } from '../../../src/constants/constants'
 import { ValidatorModalView } from '../../../src/constants/enums'
 import useNetworkMonitor from '../../../src/hooks/useNetworkMonitor'
+import { useNetworkProfile } from '../../../src/hooks/useNetworkProfile'
 import useSWRPolling from '../../../src/hooks/useSWRPolling'
 import useValidatorExclusionList from '../../../src/hooks/useValidatorExclusionList'
 import {
@@ -122,7 +123,8 @@ const Main: FC<MainProps> = (props) => {
   const validatorIdSearchParam = searchParams.get('id')
   const modalSearchParam = searchParams.get('modal')
   const viewSearchParam = searchParams.get('view')
-  const { data: exchangeData } = useSWRPolling(CoinbaseExchangeRateUrl, {
+  const { coinbaseCurrency } = useNetworkProfile()
+  const { data: exchangeData } = useSWRPolling(getCoinbaseExchangeRateUrl(coinbaseCurrency), {
     refreshInterval: 60 * 1000,
     networkError,
   })

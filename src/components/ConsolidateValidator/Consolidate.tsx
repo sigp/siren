@@ -8,9 +8,11 @@ import { Status } from '../../constants/enums'
 import useCalculateGas from '../../hooks/useCalculateGas'
 import useFeeGetter from '../../hooks/useFeeGetter'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import { ConsolidationTx, ToastType, TxHash } from '../../types'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
+import UnsupportedNetworkNotice from '../UnsupportedNetworkNotice/UnsupportedNetworkNotice'
 import WalletActionGuard from '../WalletActionGuard/WalletActionGuard'
 
 export interface ConsolidateViewProps {
@@ -29,6 +31,7 @@ const Consolidate: FC<ConsolidateViewProps> = ({
   onSubmitRequest,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
   const { index, pubKey: sourcePubKey, withdrawalAddress } = sourceValidator
   const txData = ('0x' + sourcePubKey.substring(2) + targetPubKey.substring(2)) as TxHash
   const { address } = useAccount()
@@ -83,6 +86,15 @@ const Consolidate: FC<ConsolidateViewProps> = ({
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (!profile.isWriteSupported) {
+    return (
+      <UnsupportedNetworkNotice
+        action={t('validatorManagement.actions.consolidate')}
+        symbol={profile.nativeSymbol}
+      />
+    )
   }
 
   return (

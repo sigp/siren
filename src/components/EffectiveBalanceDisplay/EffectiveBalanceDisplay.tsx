@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
 import { EFFECTIVE_BALANCE, MAX_EFFECTIVE_BALANCE } from '../../constants/constants'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import useProcessEffectiveBalance from '../../hooks/useProcessEffectiveBalance'
 import { useValidatorAliases } from '../../hooks/useValidatorAliases'
 import useValidatorName from '../../hooks/useValidatorName'
@@ -30,6 +31,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
   maxEffectiveBalance,
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const { pubKey, withdrawalAddress, effectiveBalance, balance } = validator
   const { aliases } = useValidatorAliases()
   const validatorName = useValidatorName(validator, aliases || {})
@@ -61,7 +63,7 @@ const EffectiveBalanceDisplay: FC<EffectiveBalanceDisplayProps> = ({
         color={isInvalidEffectiveBalance ? 'text-error' : 'text-primary'}
         darkMode={isInvalidEffectiveBalance ? 'dark:text-error' : 'dark:text-primary'}
       >
-        {`${effective}${!isFullDisplay ? ' ETH' : ''}`}
+        {`${effective}${!isFullDisplay ? ` ${nativeSymbol}` : ''}`}
       </Typography>
       {isOverMaxEB && !isFullDisplay ? (
         <Typography

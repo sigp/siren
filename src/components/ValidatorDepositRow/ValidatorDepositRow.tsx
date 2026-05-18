@@ -5,6 +5,7 @@ import addClassString from '../../../utilities/addClassString'
 import displayToast from '../../../utilities/displayToast'
 import { Status } from '../../constants/enums'
 import useHasSufficientBalance from '../../hooks/useHasSufficientBalance'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import useValidatorDeposit, { ValidatorDepositConfig } from '../../hooks/useValidatorDeposit'
 import { DepositData, ToastType, ValidatorCandidate } from '../../types'
 import Button, { ButtonFace } from '../Button/Button'
@@ -27,6 +28,7 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
   data,
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const {
     index,
     effectiveBalance,
@@ -72,7 +74,7 @@ const ValidatorDepositRow: FC<ValidatorDepositRowProps> = ({
           id={`${candidatePubKey}-amount-text`}
           toolTipText={t('validatorManagement.requiredEthHelper')}
           textPrefix={t('required')}
-          displayText={`${formatEther(effectiveBalance)} ETH`}
+          displayText={`${formatEther(effectiveBalance)} ${nativeSymbol}`}
         />
         {!!data ? (
           data.status === Status.PENDING ? (

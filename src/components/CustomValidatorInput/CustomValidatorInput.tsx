@@ -2,6 +2,7 @@ import { FC, useState, useCallback, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatEthAddress from '../../../utilities/formatEthAddress'
 import { MAX_EFFECTIVE_BALANCE } from '../../constants/constants'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import { BeaconValidatorResult } from '../../types/validator'
 import { ValidatorInfo } from '../../types/validator'
 import Button, { ButtonFace } from '../Button/Button'
@@ -20,6 +21,7 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
   className = '',
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const [inputValue, setInputValue] = useState('')
   const [isValidating, setIsValidating] = useState(false)
   const [validationError, setValidationError] = useState('')
@@ -226,7 +228,7 @@ const CustomValidatorInput: FC<CustomValidatorInputProps> = ({
                 {t('effectiveBalance')}:
               </Typography>
               <Typography type='text-caption2'>
-                {validatedValidator.effectiveBalance.toFixed(2)} ETH
+                {validatedValidator.effectiveBalance.toFixed(2)} {nativeSymbol}
               </Typography>
             </div>
           </div>

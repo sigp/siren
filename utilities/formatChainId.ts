@@ -10,6 +10,10 @@ const formatChainId = (id: string): ChainId => {
       return ChainId.HOODI
     case '11155111':
       return ChainId.SEPOLIA
+    case '100':
+      return ChainId.GNOSIS
+    case '10200':
+      return ChainId.CHIADO
     default:
       return ChainId.LOCALTESTNET
   }

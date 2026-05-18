@@ -1,6 +1,7 @@
 import { AnimationControls, motion } from 'framer-motion'
 import { FC, useMemo } from 'react'
 import formatEthAddress from '../../../../../../utilities/formatEthAddress'
+import { useNetworkProfile } from '../../../../../hooks/useNetworkProfile'
 import { useValidatorAliases } from '../../../../../hooks/useValidatorAliases'
 import useValidatorName from '../../../../../hooks/useValidatorName'
 import { ValidatorInfo } from '../../../../../types/validator'
@@ -25,6 +26,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({
   animIndex,
 }) => {
   const { pubKey, balance, withdrawalAddress } = source
+  const { nativeSymbol } = useNetworkProfile()
   const { aliases } = useValidatorAliases()
   const validatorName = useValidatorName(source, aliases || {})
   const selectSource = () => onSelect(source)
@@ -70,7 +72,7 @@ const SelectSourceRow: FC<SelectSourceRowProps> = ({
       </div>
       <div>
         <Typography color='text-primary' darkMode='dark:text-primary' type='text-caption'>
-          {formattedBalance} ETH
+          {formattedBalance} {nativeSymbol}
         </Typography>
       </div>
     </motion.div>

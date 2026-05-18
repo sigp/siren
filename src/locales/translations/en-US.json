@@ -41,6 +41,7 @@
   "copied": "Copied!",
   "wrongNetwork": "You are connected to the wrong chain. Click to switch networks.",
   "switchNetwork": "Switch Network",
+  "unsupportedNetworkNotice": "{{action}} is not available on this network. Wallet actions are supported on Ethereum networks only.",
   "invalidSessionPassword": "Unauthorized. Invalid session password provided.",
   "unexpectedErrorWalletConnect": "Unexpected error occurred while connecting to wallet provider",
   "connect": "Connect",
@@ -644,8 +645,8 @@
     "peerCountMedium": "{{type}}: Peer count reaching low levels"
   },
   "tooltip": {
-    "ethEstimate": "Estimated {{time}} ETH earnings of all validators under current network and device conditions.",
-    "ethTotal": "Total ETH earnings of all validators",
+    "ethEstimate": "Estimated {{time}} {{symbol}} earnings of all validators under current network and device conditions.",
+    "ethTotal": "Total {{symbol}} earnings of all validators",
     "fiatEstimate": "Estimated {{time}} earnings converted to selected fiat currency exchange rate.",
     "fiatTotal": "Total earnings converted to selected fiat currency exchange rate.",
     "annualApr": "Combined total Annual Percentage Rate estimate."
@@ -690,7 +691,7 @@
     }
   },
   "basicValidatorMetrics": {
-    "ethRate": "ETH Rate",
+    "ethRate": "{{symbol}} Rate",
     "validator": "Validator",
     "balance": "Balance"
   },

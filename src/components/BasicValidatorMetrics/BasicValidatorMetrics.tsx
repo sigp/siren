@@ -2,6 +2,7 @@ import { FC } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import { formatLocalCurrency } from '../../../utilities/formatLocalCurrency'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import { exchangeRates } from '../../recoil/atoms'
 import { ValidatorBalanceInfo, ValidatorInfo } from '../../types/validator'
 import Typography from '../Typography/Typography'
@@ -17,6 +18,7 @@ const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({
   validator,
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const data = useRecoilValue(exchangeRates)
   const activeRate = data?.rates.USD
   const { balance } = validator
@@ -25,7 +27,7 @@ const BasicValidatorMetrics: FC<BasicValidatorMetricsProps> = ({
     <div className='flex flex-col lg:space-x-3 shadow lg:flex-row lg:divide-x divide-y lg:divide-y-0 dark:divide-dark600 dark:border dark:border-dark600'>
       <div className='p-3 space-y-2'>
         <Typography type='text-caption2' className='text-left' isUpperCase isBold>
-          {t('basicValidatorMetrics.ethRate')}
+          {t('basicValidatorMetrics.ethRate', { symbol: nativeSymbol })}
         </Typography>
         <div className='flex space-x-2.5'>
           <Typography type='text-caption1' color='text-dark300'>

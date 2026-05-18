@@ -16,10 +16,11 @@ import NetworkStats from '../../src/components/NetworkStats/NetworkStats'
 import Toggle from '../../src/components/Toggle/Toggle'
 import ValidatorBalances from '../../src/components/ValidatorBalances/ValidatorBalances'
 import ValidatorTable from '../../src/components/ValidatorTable/ValidatorTable'
-import { ALERT_ID, CoinbaseExchangeRateUrl } from '../../src/constants/constants'
+import { ALERT_ID, getCoinbaseExchangeRateUrl } from '../../src/constants/constants'
 import useDiagnosticAlerts from '../../src/hooks/useDiagnosticAlerts'
 import useLocalStorage from '../../src/hooks/useLocalStorage'
 import useNetworkMonitor from '../../src/hooks/useNetworkMonitor'
+import { useNetworkProfile } from '../../src/hooks/useNetworkProfile'
 import useSWRPolling from '../../src/hooks/useSWRPolling'
 import useValidatorExclusionList from '../../src/hooks/useValidatorExclusionList'
 import { exchangeRates, proposerDuties } from '../../src/recoil/atoms'
@@ -96,7 +97,8 @@ const Main: FC<MainProps> = (props) => {
   const slotInterval = SECONDS_PER_SLOT * 1000
   const halfEpochInterval = ((Number(SECONDS_PER_SLOT) * Number(SLOTS_PER_EPOCH)) / 2) * 1000
 
-  const { data: exchangeData } = useSWRPolling(CoinbaseExchangeRateUrl, {
+  const { coinbaseCurrency } = useNetworkProfile()
+  const { data: exchangeData } = useSWRPolling(getCoinbaseExchangeRateUrl(coinbaseCurrency), {
     refreshInterval: 60 * 1000,
     networkError,
   })

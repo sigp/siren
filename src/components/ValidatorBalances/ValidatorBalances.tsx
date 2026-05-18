@@ -1,12 +1,13 @@
-import { formatUnits } from 'ethers'
 import moment from 'moment/moment'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRecoilValue } from 'recoil'
 import getAverageValue from '../../../utilities/getAverageValue'
-import { BALANCE_COLORS, slotsInEpoc } from '../../constants/constants'
+import { gweiToNative } from '../../../utilities/gweiToNative'
+import { BALANCE_COLORS } from '../../constants/constants'
 import useLocalStorage from '../../hooks/useLocalStorage'
 import useMediaQuery from '../../hooks/useMediaQuery'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import useUiMode from '../../hooks/useUiMode'
 import { beaconNodeSpec } from '../../recoil/atoms'
 import { ValidatorIndicesStorage } from '../../types/storage'
@@ -30,6 +31,8 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
   genesisTime,
 }) => {
   const { t } = useTranslation()
+  const profile = useNetworkProfile()
+  const { nativeSymbol } = profile
   const { mode } = useUiMode()
   const isTablet = useMediaQuery('(max-width: 1024px)')
   const [hiddenValidators, setHiddenValidators] = useState<string[]>([])
@@ -37,6 +40,7 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
 
   const spec = useRecoilValue(beaconNodeSpec)
   const interval = Number(spec?.SECONDS_PER_SLOT) || 12
+  const slotsPerEpoch = Number(spec?.SLOTS_PER_EPOCH) || 32
 
   const activeValidators = useMemo(() => {
     return validatorStateInfo
@@ -53,7 +57,6 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
         index: String(index),
         name,
       }))
-      .slice(0, 10)
   }, [validatorStateInfo])
 
   const epochs = useMemo(() => {
@@ -67,28 +70,28 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
             return {
               index,
               name,
-              data: data.map(({ total_balance }) => Number(formatUnits(total_balance, 'gwei'))),
+              data: data.map(({ total_balance }) => gweiToNative(total_balance, profile)),
             }
           })
           .filter((item): item is NonNullable<typeof item> => item !== null)
           .sort((a, b) => getAverageValue(a.data) - getAverageValue(b.data))
           .map((data, index) => ({
             ...data,
-            color: BALANCE_COLORS[index],
+            color: BALANCE_COLORS[index % BALANCE_COLORS.length],
           }))
       : []
-  }, [activeValidators, validatorCacheData])
+  }, [activeValidators, validatorCacheData, profile])
 
   const timestamps = useMemo(() => {
     const data = validatorCacheData && Object.values(validatorCacheData)[0]
     return data && Array.isArray(data) && genesisTime
       ? data.map(({ epoch }) => {
-          const slot = epoch * slotsInEpoc
+          const slot = epoch * slotsPerEpoch
 
           return moment((genesisTime + slot * interval) * 1000).format('HH:mm')
         })
       : []
-  }, [validatorCacheData, interval, genesisTime])
+  }, [validatorCacheData, interval, genesisTime, slotsPerEpoch])
 
   const isSufficientData = timestamps.length >= 3
 
@@ -153,7 +156,7 @@ const ValidatorBalances: FC<ValidatorBalancesProps> = ({
           isBold
           className='-rotate-90'
         >
-          ETH
+          {nativeSymbol}
         </Typography>
       </div>
       <div className='relative flex-1 flex flex-col pb-2 items-center justify-center'>

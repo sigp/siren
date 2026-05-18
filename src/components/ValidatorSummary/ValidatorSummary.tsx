@@ -1,6 +1,7 @@
 import { FC, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import formatValidatorEpochData from '../../../utilities/formatValidatorEpochData'
+import { useNetworkProfile } from '../../hooks/useNetworkProfile'
 import {
   ValidatorBalanceInfo,
   ValidatorCache,
@@ -27,6 +28,7 @@ const ValidatorSummary: FC<ValidatorSummaryProps> = ({
   validatorMetricResult,
 }) => {
   const { t } = useTranslation()
+  const { nativeSymbol } = useNetworkProfile()
   const activeValidators = useMemo(() => {
     return validators
       ? validators
@@ -76,7 +78,7 @@ const ValidatorSummary: FC<ValidatorSummaryProps> = ({
             {t('validatorManagement.summary.locked')}
           </Typography>
           <Typography isBold type='text-caption1'>
-            {totalBalance?.toFixed(3) || '0'} ETH
+            {totalBalance?.toFixed(3) || '0'} {nativeSymbol}
           </Typography>
         </div>
       </div>
